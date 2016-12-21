@@ -21,9 +21,8 @@
     </script>
 </head>
 <body>
-    <div id="app">
+	<div class="container">
         <nav class="navbar navbar-default navbar-static-top">
-            <div class="container">
                 <div class="navbar-header">
 
                     <!-- Collapsed Hamburger -->
@@ -75,9 +74,9 @@
                         @endif
                     </ul>
                 </div>
-            </div>
         </nav>
-
+	</div>
+	<div class="container">
         @yield('content')
     </div>
 
