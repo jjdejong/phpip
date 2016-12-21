@@ -13,4 +13,10 @@ class MatterController extends Controller
     	$matters = Matter::take(100)->get();
     	return view('matter.index', compact('matters'));
     }
+    
+    public function show($id)
+    {
+    	$matter = Matter::find($id);
+    	return $matter;
+    }
 }

@@ -20,3 +20,4 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 
 Route::get('matter', 'MatterController@index');
+Route::get('matter/{id}', 'MatterController@show');
