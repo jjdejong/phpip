@@ -14,9 +14,8 @@ class MatterController extends Controller
     	return view('matter.index', compact('matters'));
     }
     
-    public function show($id)
+    public function show(Matter $matter)
     {
-    	$matter = Matter::find($id);
     	return view('matter.show', compact('matter'));
     }
 }
