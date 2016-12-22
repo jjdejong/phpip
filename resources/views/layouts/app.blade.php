@@ -79,7 +79,9 @@
 	<div class="container">
         @yield('content')
     </div>
-
+    <div class="container">
+    	@yield('footer')
+	</div>
     <!-- Scripts -->
     <script src="/js/app.js"></script>
 </body>

@@ -10,12 +10,18 @@ class MatterController extends Controller
 {
     public function index()
     {
-    	$matters = Matter::take(100)->get();
+    	$matters = Matter::where('category_code', 'PAT')
+    	->orderBy('caseref')
+    	->orderBy('container_ID')
+    	->orderBy('origin')
+    	->orderBy('country')
+    	->paginate(25);
     	return view('matter.index', compact('matters'));
     }
     
-    public function show(Matter $matter)
+    public function view(Matter $matter)
     {
-    	return view('matter.show', compact('matter'));
+    	//$this->authorize('view', $matter);
+    	return view('matter.view', compact('matter'));
     }
 }
