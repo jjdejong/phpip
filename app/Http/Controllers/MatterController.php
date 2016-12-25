@@ -16,6 +16,7 @@ class MatterController extends Controller
     	->orderBy('origin')
     	->orderBy('country')
     	->paginate(25);
+    	
     	return view('matter.index', compact('matters'));
     }
     

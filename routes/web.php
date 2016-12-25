@@ -20,4 +20,4 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 
 Route::get('matter', 'MatterController@index')->middleware('auth');
-Route::get('matter/{matter}', 'MatterController@view')->middleware('auth');
+Route::get('matter/{matter}', 'MatterController@view')->middleware('can:view,matter');
