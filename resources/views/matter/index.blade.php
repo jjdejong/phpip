@@ -6,17 +6,17 @@
 		<tr>
 			<th>Ref</th>
 			<th>Cat</th>
-			<th>ID</th>
-			<th>Cont.</th>
-			<th>Parent</th>
-			<th>Responsable</th>
-			<th>Updater</th>
-			<th>Updated</th>
-			<th>Expires</th>
-			<th>Notes</th>
+			<th>Status</th>
+			<th>Status_date</th>
+			<th>Client</th>
+			<th>ClRef</th>
+			<th>Agent</th>
+			<th>AgtRef</th>
+			<th>Title</th>
+			<th>Inventor1</th>
 		</tr>
 		<tr>
-			<td><input class="form-control input-sm" placeholder="Filter"></td>
+			<td><input class="form-control input-sm" placeholder="{{ $matters->sort_id }}"></td>
 			<td><input class="form-control input-sm" placeholder="Filter"></td>
 			<td><input class="form-control input-sm" placeholder="Filter"></td>
 			<td><input class="form-control input-sm" placeholder="Filter"></td>
@@ -33,16 +33,16 @@
 			@else
 				<tr class="info"> 
 			@endif
-				<td>{{ $matter->caseref . $matter->country }}</td>
-				<td>{{ $matter->category_code }}</td>
-				<td>{{ $matter->ID }}</td>
-				<td>{{ $matter->container_ID }}</td>
-				<td>{{ $matter->parent_ID }}</td>
-				<td>{{ $matter->responsible }}</td>
-				<td>{{ $matter->updater }}</td>
-				<td>{{ $matter->updated }}</td>
-				<td>{{ $matter->expires }}</td>
-				<td>{{ $matter->notes }}</td>
+				<td>{{ $matter->Ref }}</td>
+				<td>{{ $matter->Cat }}</td>
+				<td>{{ $matter->Status }}</td>
+				<td>{{ $matter->Status_date }}</td>
+				<td>{{ $matter->Client }}</td>
+				<td>{{ $matter->ClRef }}</td>
+				<td>{{ $matter->Agent }}</td>
+				<td>{{ $matter->AgtRef }}</td>
+				<td>{{ $matter->Title }}</td>
+				<td>{{ $matter->Inventor1 }}</td>
 			</tr>
 		@endforeach
 		<tr><td>&nbsp;</td></tr>
