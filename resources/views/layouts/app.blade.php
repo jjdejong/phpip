@@ -83,6 +83,8 @@
     	@yield('footer')
 	</div>
     <!-- Scripts -->
-    <script src="/js/app.js"></script>
+    <script src="/js/app.js">
+    	@yield('script')
+    </script>
 </body>
 </html>

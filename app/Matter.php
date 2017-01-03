@@ -10,8 +10,8 @@ class Matter extends Model {
 	protected $table = 'matter';
 	protected $primaryKey = 'ID'; // necessary because "id" is expected by default and we have "ID"
 	public $timestamps = false; // removes timestamp updating in the matter table
-	public function list($sortField = 'matter.caseref, matter.container_id, matter.origin, matter.country, matter.type_code, matter.idx', $sortDir = '', $multi_filter = [], $matter_category_display_type = false, $paginated = false) {
-		$query = Matter::select ( DB::raw ( "CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', concat(caseref, matter.country), origin), matter.type_code), idx) AS Ref,
+	public function list($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $matter_category_display_type = false, $paginated = false) {
+		$query = $this->select ( DB::raw ( "CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', concat(caseref, matter.country), origin), matter.type_code), idx) AS Ref,
 			matter.country AS country,
 			matter.category_code AS Cat,
 			matter.origin,
@@ -58,13 +58,11 @@ class Matter extends Model {
 		} );
 		
 		if (array_key_exists ( 'Inventor1', $multi_filter )) {
-			$inventor_filter = ''; // delete when new query fixed
 			$query->leftJoin ( DB::raw ( 'matter_actor_lnk invlnk
 				JOIN actor inv ON inv.ID = invlnk.actor_ID' ), function ($join) {
 				$join->on ( DB::raw ( 'ifnull(matter.container_ID, matter.ID)' ), 'invlnk.matter_ID' )->where ( 'invlnk.role', 'INV' );
 			} );
 		} else {
-			$inventor_filter = 'AND invlnk.display_order = 1'; // delete when new query fixed
 			$query->leftJoin ( DB::raw ( 'matter_actor_lnk invlnk
 				JOIN actor inv ON inv.ID = invlnk.actor_ID' ), function ($join) {
 				$join->on ( DB::raw ( 'ifnull(matter.container_ID, matter.ID)' ), 'invlnk.matter_ID' )->where ( [ 
@@ -136,22 +134,16 @@ class Matter extends Model {
 			$query->where ( 'matter_category.display_with', $matter_category_display_type );
 		}
 		if ($role == 'CLI') {
-			$query->whereIn ( $userid, [ 
-					cli . id,
-					clic . id 
-			] );
+			$query->whereRaw ( $userid . ' IN (cli.id, clic.id)' );
 		}
 		
 		if (! empty ( $multi_filter )) {
 			foreach ( $multi_filter as $key => $value ) {
 				if ($value != '' && $key != 'display' && $key != 'display_style') {
 					if ($key == 'responsible')
-						$query->havingIn ( $value, [ 
-								'responsible',
-								'delegate' 
-						] );
+						$query->havingRaw ( "$value IN ('responsible', 'delegate')" );
 					else
-						$query->having ( $key, 'LIKE', $value . '%' );
+						$query->havingRaw ( "$key LIKE '$value%'" );
 				}
 			}
 		}
@@ -159,23 +151,12 @@ class Matter extends Model {
 		if ($sortField == 'caseref') {
 			if ($sortDir == 'desc') {
 				$query->orderByRaw ( 'matter.caseref DESC, matter.container_id, matter.origin, matter.country, matter.type_code, matter.idx' );
-			} elseif ($sortDir == 'asc') {
-				$query->orderByRaw ( 'matter.caseref ASC, matter.container_id, matter.origin, matter.country, matter.type_code, matter.idx' );
+			} else {
+				$query->orderByRaw ( 'matter.caseref, matter.container_id, matter.origin, matter.country, matter.type_code, matter.idx' );
 			}
-			// $sortDir = '';
 		} else {
-			// $sortDir .= ', matter.caseref, matter.origin, matter.country';
-			$query->orderByRaw ( 'matter.caseref ASC, matter.origin, matter.country' );
+			$query->orderByRaw ( "$sortField $sortDir, matter.caseref, matter.origin, matter.country" );
 		}
-		
-		// $sql .= $where_clause . $having_clause . 'ORDER BY ' . $sortField . ' ' . $sortDir;
-		
-		
-		 if ($paginated) {
-		 	$matters = $query->paginate ( 25 );
-		 } else {
-		 	$matters = $query->get();
-		 }
 		
 		/*
 		 * \Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
@@ -184,6 +165,12 @@ class Matter extends Model {
 		 * });
 		 */
 		
-		return $matters; // view('matter.index', compact('matters'));
+		if ($paginated) {
+			$matters = $query->simplePaginate ( 25 );
+		} else {
+			$matters = $query->get ();
+		}
+		
+		return $matters;
 	}
 }
