@@ -10,6 +10,7 @@ class Matter extends Model {
 	protected $table = 'matter';
 	protected $primaryKey = 'ID'; // necessary because "id" is expected by default and we have "ID"
 	public $timestamps = false; // removes timestamp updating in the matter table
+	
 	public function list($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $matter_category_display_type = false, $paginated = false) {
 		$query = $this->select ( DB::raw ( "CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', concat(caseref, matter.country), origin), matter.type_code), idx) AS Ref,
 			matter.country AS country,
@@ -46,14 +47,8 @@ class Matter extends Model {
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk lclic
 			JOIN actor clic ON clic.ID = lclic.actor_ID' ), function ($join) {
 			$join->on ( 'matter.container_ID', 'lclic.matter_ID' )->where ( [ 
-					[ 
-							'lclic.role',
-							'CLI' 
-					],
-					[ 
-							'lclic.shared',
-							1 
-					] 
+					[ 'lclic.role', 'CLI' ],
+					[ 'lclic.shared', 1 ] 
 			] );
 		} );
 		
@@ -66,14 +61,8 @@ class Matter extends Model {
 			$query->leftJoin ( DB::raw ( 'matter_actor_lnk invlnk
 				JOIN actor inv ON inv.ID = invlnk.actor_ID' ), function ($join) {
 				$join->on ( DB::raw ( 'ifnull(matter.container_ID, matter.ID)' ), 'invlnk.matter_ID' )->where ( [ 
-						[ 
-								'invlnk.role',
-								'INV' 
-						],
-						[ 
-								'invlnk.display_order',
-								1 
-						] 
+						[ 'invlnk.role', 'INV' ],
+						[ 'invlnk.display_order', 1 ] 
 				] );
 			} );
 		}
@@ -81,27 +70,15 @@ class Matter extends Model {
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk agtlnk
 			JOIN actor agt ON agt.ID = agtlnk.actor_ID' ), function ($join) {
 			$join->on ( 'matter.ID', 'agtlnk.matter_ID' )->where ( [ 
-					[ 
-							'agtlnk.role',
-							'AGT' 
-					],
-					[ 
-							'agtlnk.display_order',
-							1 
-					] 
+					[ 'agtlnk.role', 'AGT' ],
+					[ 'agtlnk.display_order', 1 ] 
 			] );
 		} );
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk applnk
 			JOIN actor app ON app.ID = applnk.actor_ID' ), function ($join) {
 			$join->on ( 'matter.ID', 'applnk.matter_ID' )->where ( [ 
-					[ 
-							'applnk.role',
-							'APP' 
-					],
-					[ 
-							'applnk.display_order',
-							1 
-					] 
+					[ 'applnk.role', 'APP' ],
+					[ 'applnk.display_order', 1 ] 
 			] );
 		} );
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk dellnk
@@ -159,18 +136,18 @@ class Matter extends Model {
 		}
 		
 		/*
-		 * \Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
-		 * var_dump($query->sql);
-		 * var_dump($query->bindings);
-		 * });
-		 */
+		\Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
+			var_dump($query->sql);
+		 	var_dump($query->bindings);
+		});
+		*/
 		
 		if ($paginated) {
 			$matters = $query->simplePaginate ( 25 );
 		} else {
 			$matters = $query->get ();
 		}
-		
+
 		return $matters;
 	}
 }
