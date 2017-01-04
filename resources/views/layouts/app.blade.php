@@ -15,9 +15,7 @@
 
     <!-- Scripts -->
     <script>
-        window.Laravel = <?php echo json_encode([
-            'csrfToken' => csrf_token(),
-        ]); ?>
+        window.Laravel = {!! json_encode([ 'csrfToken' => csrf_token(), ]) !!}
     </script>
 </head>
 <body>
@@ -83,8 +81,7 @@
     	@yield('footer')
 	</div>
     <!-- Scripts -->
-    <script src="/js/app.js">
-    	@yield('script')
-    </script>
+    <script src="/js/app.js"></script>
+    @yield('script')
 </body>
 </html>
