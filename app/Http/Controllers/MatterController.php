@@ -39,24 +39,21 @@ class MatterController extends Controller {
 		
 		$matter = new Matter ();
 		$matters = $matter->list ( $sort_field, $sort_dir, $filters, $category_display, true );
-		$matters->appends ( $request->input () )->links (); // Keep URL parameters in the pages
+		$matters->appends ( $request->input () )->links (); // Keep URL parameters in the paginator pages
 		
 		$matters->sort_id = $sort_field;
 		$matters->sort_dir = $sort_dir;
 		$matters->responsible = @$filters ['responsible'];
 		$matters->category_display = $request->input ( 'display' );
 		$matters->display_style = $request->input ( 'display_style' );
+		$matters->filters = $filters;
+		$request->flash (); // Flashes the previous values for storing data typed in forms 
 		
-		if (! empty ( $_SERVER ['HTTP_X_REQUESTED_WITH'] ) && strtolower ( $_SERVER ['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest') {
-			// Don't know what this is for...
-			// ZF1 $this->_helper->layout->disableLayout ();
-			return $matters;
-		} else {
-			$matters->filters = $filters;
-			$request->flash ();
-			// ZF1 $matter->render ( 'index' );
+		//if ( $request->input() == [] ) {
 			return view ( 'matter.index', compact ( 'matters' ) );
-		}
+		//} else {
+		//	return view ( 'matter.filter', compact ( 'matters' ) );
+		//}
 	}
 	
 	public function view (Matter $matter) {
