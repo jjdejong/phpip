@@ -1,0 +1,19 @@
+Synchronize your release with the repository. In a console, go to the folder containing your files, and type:
+git pull
+
+This will upgrade the UI.
+
+To upgrade the database, go into the "install" folder and check whether there are any upgrade scripts having a timestamp above your release.
+
+NEVER apply a phpip_skel-xxx.sql script on a production database - it will wipe your database to recreate a new one.
+
+To upgrade your database structure, apply, in order, ALL the phpip_upgrade-<timestamp>.sql scripts having a timestamp above your current version.
+
+To apply an upgrade, type this in the console within the "install" folder:
+
+mysql -u root -p phpip < phpip_upgrade-<timestamp>.sql
+
+You will be prompted for your mysql root password.
+
+Check the detailed guide at:
+https://code.google.com/p/phpip/wiki/Installing
