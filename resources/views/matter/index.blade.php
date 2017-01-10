@@ -268,7 +268,7 @@ $(document).ready(function(){
 	
 	<div class="btn-group btn-group-sm" id="mine-all" data-toggle="buttons">
 		<label for="show-responsible" class="btn btn-sm btn-primary {{ $matters->responsible ? 'active' : '' }}">
-			<input class="responsible-filter" type="checkbox" id="show-responsible" name="responsible-filter" value="1"> 
+			<input class="responsible-filter" type="checkbox" id="show-responsible" name="responsible" value="{{ Auth::user ()->login }}"> 
 			Show Mine
 		</label>
 	</div>
