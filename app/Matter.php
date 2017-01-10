@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class Matter extends Model {
 	protected $table = 'matter';
 	protected $primaryKey = 'ID'; // necessary because "id" is expected by default and we have "ID"
-	public $timestamps = false; // removes timestamp updating in the matter table
+	public $timestamps = false; // removes timestamp updating in this table (done via MySQL triggers)
 	
 	public function list($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $matter_category_display_type = false, $paginated = false) {
 		$query = $this->select ( DB::raw ( "CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', concat(caseref, matter.country), origin), matter.type_code), idx) AS Ref,
@@ -104,7 +104,7 @@ class Matter extends Model {
 			JOIN classifier_type ON classifier.type_code = classifier_type.code AND classifier_type.main_display = 1 AND classifier_type.display_order = 1' ), DB::raw ( 'IFNULL(matter.container_ID, matter.ID)' ), 'classifier.matter_ID' );
 		$query->where ( 'e2.matter_id', NULL );
 		
-		$role = Auth::user ()->role;
+		$role = Auth::user ()->default_role;
 		$userid = Auth::user ()->id;
 		
 		if ($matter_category_display_type) {
@@ -118,7 +118,7 @@ class Matter extends Model {
 			foreach ( $multi_filter as $key => $value ) {
 				if ($value != '' && $key != 'display' && $key != 'display_style') {
 					if ($key == 'responsible')
-						$query->havingRaw ( "$value IN ('responsible', 'delegate')" );
+						$query->whereRaw ( "'$value' IN (matter.responsible, del.login)" );
 					else
 						$query->havingRaw ( "$key LIKE '$value%'" );
 				}

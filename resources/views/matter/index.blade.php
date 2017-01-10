@@ -6,90 +6,55 @@
      var sortKey = "{{ $matters->sort_id }}";
      var sortDir = "{{ $matters->sort_dir }}";
 
-function getFilterUrl()
-{
-	var ref = $('#filter-ref').val().replace(/\//,"~~");
-	var cat = $('#filter-cat').val();
-	var stat = $('#filter-status').val();
-	var stat_date = $('#filter-status_date').val();
-	var client = $('#filter-client').val();
-	var clref = $('#filter-clref').val().replace(/\//,"~~");
-	var agent = $('#filter-agent').val();
-	var agtref = $('#filter-agtref').val().replace(/\//,"~~");
-	var title = $('#filter-title').val().replace(/\//,"~~");
-	var inventor = $('#filter-inventor').val();
-	var filed = $('#filter-filed').val();
-	var filno = $('#filter-filno').val().replace(/\//,"~~");
-	var published = $('#filter-published').val();
-	var pubno = $('#filter-pubno').val().replace(/\//,"~~");
-	var granted = $('#filter-granted').val();
-	var grtno = $('#filter-grtno').val().replace(/\//,"~~");
-	var display_style = $('input:radio[name=displaystyle]:checked').val();
-	var responsible = $('input[name=responsible-filter]:checked').val();
-	var url = '?';
-	if($('input[name=container-filter]:checked').val() == 1)
-		url = url + 'Ctnr=1&';
-	if(ref != '')
-		url = url + 'Ref=' + ref + '&';
-	if(cat != '')
-		url = url + 'Cat=' + cat + '&';
-	if(stat_date != '')
-		url = url + 'Status_date=' + stat_date + '&';
-	if(stat != '')
-		url = url + 'Status=' + stat + '&';
-	if(client != '')
-		url = url + 'Client=' + client + '&';
-	if(clref != '')
-		url = url + 'ClRef=' + clref + '&';
-	if(agent != '')
-		url = url + 'Agent=' + agent + '&';
-	if(agtref != '')
-		url = url + 'AgtRef=' + agtref + '&';
-	if(title != '')
-		url = url + 'Title=%25' + title + '&';
-	if(inventor != '')
-		url = url + 'Inventor1=' + inventor + '&';
-	if(filed != '')
-		url = url + 'Filed=' + filed + '&';
-	if(filno != '')
-		url = url + 'FilNo=' + filno + '&';
-	if(published != '')
-		url = url + 'Published=' + published + '&';
-	if(pubno != '')
-		url = url + 'PubNo=' + pubno + '&';
-	if(granted != '')
-		url = url + 'Granted=' + granted + '&';
-	if(grtno != '')
-		url = url + 'GrtNo=' + grtno + '&';       
-	if(responsible == 1)
-		url = url + 'responsible=' + '<?=$matters->responsible?>&';
-	url = url + 'sort=' + sortKey + '&dir=' + sortDir + '&';
-	<?php if($matters->category_display):?>
-		url = url + 'display=<?=$matters->category_display?>&';
-	<?php endif;?>
-		url = url + 'display_style=' + display_style;
-	return url;
-}
-
-function matterListJS () {
-	@if ($matters->display_style == 1)
+// This needs to be run the first time and every time the matter list is updated via Ajax
+function matterListJS() {
+	// Select the data to display (actor-related or status-related)
+	if ( {{ $matters->display_style }} == 1 || $('#actor-status input:radio:checked').val() == 1 ) {
 		$('.display_actor, .display_status').hide();
 		$('.display_status').show();
-	@else
+	} else {
 		$('.display_status, .display_actor').hide();
 		$('.display_actor').show();
-	@endif
+	}
 
+	// Open matter details when clicking on the Ref
 	$(".see-matter").click(function(event){
 		var id_array = $(this).attr('data-mid').split('-');
 		var url = '/matter/' + id_array[2];
 		window.open(url);
 	});
+
+	// Ajax pagination
+	/*$('#previouspage').click( function() {
+		var url = '{!! $matters->previousPageUrl() !!}';
+		if (url == '') {
+			this.hide();
+			return;
+		}
+		$('#matter-list').load(url + ' #matter-list > tr', function() {
+			window.history.pushState('', 'phpIP' , url);
+		});
+	});
+	$('#nextpage').click( function() {
+		var url = '{!! $matters->nextPageUrl() !!}';
+		if (url == '') {
+			this.hide();
+			return;
+		}
+		$('#matter-list').load(url + ' #matter-list > tr', function() {
+			window.history.pushState('', 'phpIP' , url);
+		});
+	});*/
+
+	/*if($('.filter-input').val().length != 0)
+		$('.filter-input').css("background-color", "bisque");
+	else
+		$('.filter-input').css("background-color", "white");*/
 };
 
 $(document).ready(function(){
 
-	matterListJS ()
+	matterListJS();
 	
      if(sortDir == 'asc'){
          $('#'+sortKey+'-asc').attr('id', sortKey+"-desc");
@@ -139,101 +104,51 @@ $(document).ready(function(){
          });
      });
 
-
+  // Toggle the data to display
      $('#show-actor, #show-status').change(function(){
          if($('#actor-status input:radio:checked').val() == "1"){
              $('.display_actor').hide();
              $('.display_status').show();
-             //Clear the filters exclusive to actor view
-             $('#filter-agent').val('');
-             $('#filter-agtref').val('');
-             $('#filter-inventor').val('');
-             $('#filter-title').val('');
          }else {
              $('.display_status').hide();
              $('.display_actor').show();
-             //Clear the filters exclusive to status view
-             $('#filter-status_date').val('');
-             $('#filter-filno').val('');
-             $('#filter-published').val('');
-             $('#filter-pubno').val('');
-             $('#filter-granted').val('');
-             $('#filter-grtno').val('');
-         }
-         /*var url = '/matter' + getFilterUrl();                 
-         $.ajax({
-             url: url,
-             type: 'GET',
-             data: {},
-             success: function(data){
-                 $('#matter-list').empty();
-                 $('#matter-list').html(data);
-                 //window.history.pushState('', 'phpIP' , url);
-             }
-         });*/
+		}
+		window.history.pushState( '', 'phpIP' , '/matter?' + $(".btn-toolbar, #filter").find("input").filter(function(){return $(this).val().length > 0}).serialize() );
      });
 
 
 	$('#show-all, #show-containers, #show-responsible').change(function(){
-		var url = '/matter' + getFilterUrl();
-		/*$.ajax({
-			url: url,
-			type: 'GET',
-			data: { },
-			success: function(data){
-				$('#matter-list').empty();
-				$('#matter-list').html(data);
-				//window.history.pushState('', 'phpIP' , url);
-			}
-		});*/
-		//toggleMatterPanel();
-		$('#matter-list').load(url + ' #matter-list > tr', function() {
-			matterListJS ();
-		});
-		window.history.pushState('', 'phpIP' , url); 
+		var url = '/matter?' + $(".btn-toolbar, #filter").find("input").filter(function(){return $(this).val().length > 0}).serialize();
+		$('#matter-list').load(url + ' #matter-list > tr', function() { // Refresh all the tr's in tbody
+			matterListJS();
+			window.history.pushState('', 'phpIP' , url);
+		}); 
 	});
      
     $('#export').click(function(e){
-		var url = '/matter/export' + getFilterUrl();
+		var url = '/matter/export?' + $(".btn-toolbar, #filter").find("input").filter(function(){return $(this).val().length > 0}).serialize();
 		e.preventDefault();  //stop the browser from following
     	window.location.href = url;
      });
 
      $('.filter-input').keyup(function(){
-         if($(this).val().length != 0 && $(this).val().length < 3 && ($(this).attr("id") == "filter-ref" || $(this).attr("id") == "filter-title")){
+         if($(this).val().length != 0 && $(this).val().length < 3 && ($(this).attr("name") == "Ref" || $(this).attr("name") == "Title")){
              return false;
          }
 		if($(this).val().length != 0)
 			$(this).css("background-color", "bisque");
 		else
 			$(this).css("background-color", "white");
-		var url = '/matter' + getFilterUrl();
-         /*$.ajax({
-             url: url,
-             type: 'GET',
-             data: { },
-             success: function(data){
-                 $('#matter-list').empty();
-                 $('#matter-list').html(data).show();
-                 //window.history.pushState('', 'phpIP' , url);
-             }
-         });*/
-		$('#matter-list').load(url + ' #matter-list').show();
+		var url = '/matter?' + $(".btn-toolbar, #filter").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
+		$('#matter-list').load(url + ' #matter-list > tr', function() { // Inject content under tbody
+			matterListJS();
+			window.history.pushState('', 'phpIP' , url);
+		});
      });
-
-	/*if($('.filter-input').val().length != 0)
-		$('.filter-input').css("background-color", "bisque");
-	else
-		$('.filter-input').css("background-color", "white");*/
                   
      $('#clear-matter-filters').click(function(){
     	 window.location.href = '/matter';
      });
-                  
-     /*$( "button, input:submit, input:button").button();
-     $( "#container-all" ).buttonset();
-     $( "#actor-status" ).buttonset();
-     $( "#mine-all" ).buttonset();*/
 
 });
 </script>
@@ -246,22 +161,23 @@ $(document).ready(function(){
 	cursor: pointer;
 }
 </style>
+<div class="panel panel-default"><div class="panel-body">
 <form class="btn-toolbar" role="toolbar">
 	<div class="btn-group btn-group-sm" data-toggle="buttons" id="container-all">
 		<label for="show-all" class="btn btn-primary {{ $matters->filters['Ctnr'] or null ? '' : 'active' }}">
-			<input type="radio" id="show-all" name="container-filter" value="0">Show All 
+			<input type="radio" id="show-all" name="Ctnr" value="0">Show All 
 		</label>
 		<label for="show-containers" class="btn btn-primary {{ $matters->filters['Ctnr'] or null ? 'active' : '' }}"> 
-			<input type="radio" id="show-containers" name="container-filter" value="1">Show Containers
+			<input type="radio" id="show-containers" name="Ctnr" value="1">Show Containers
 		</label>
 	</div>
 	<div class="btn-group btn-group-sm" data-toggle="buttons" id="actor-status">
 		<label for="show-actor" class="btn btn-primary  {{ $matters->display_style == 1 ? '' : 'active' }}">
-			<input type="radio" id="show-actor" name="displaystyle" value="0">
+			<input type="radio" id="show-actor" name="display_style" value="0">
 			Actor View
 		</label>
 		<label for="show-status" class="btn btn-primary {{ $matters->display_style == 1 ? 'active' : '' }}"> 
-			<input type="radio" id="show-status" name="displaystyle" value="1">
+			<input type="radio" id="show-status" name="display_style" value="1">
 			Status View
 		</label>
 	</div>
@@ -272,9 +188,10 @@ $(document).ready(function(){
 			Show Mine
 		</label>
 	</div>
-</form>
+	<input type="hidden" name="sort" value="{{ $matters->sort_id }}">
+	<input type="hidden" name="dir" value="{{ $matters->sort_dir }}">
 	
-	<div class="btn-group btn-group-sm pull-right">
+	<div class="btn-group btn-group-sm pull-right" style="display: inline-block;">
 		<button id="export" name="export" class="btn btn-sm btn-default">
 			<span class="glyphicon glyphicon-download-alt"></span> Export
 		</button>
@@ -282,6 +199,8 @@ $(document).ready(function(){
 			<span class="glyphicon glyphicon-refresh"></span> Clear filters
 		</button>
 	</div>
+</form>
+</div></div>
 
 	<table class="table table-striped table-hover table-condensed">
 	<thead>
@@ -303,23 +222,23 @@ $(document).ready(function(){
 			<th class="display_status">Granted</th>
 			<th class="display_status">Number</th>
 		</tr>
-		<tr>
-			<td><input id="filter-ref" class="filter-input form-control input-sm" name="Ref" value="{{ old ( 'Ref' ) }}" placeholder="Ref"></td>
-			<td><input id="filter-cat" class="filter-input form-control input-sm" name="Cat" placeholder="Cat"></td>
-			<td><input id="filter-status" class="filter-input form-control input-sm" name="Status" placeholder="Status"></td>
-			<td class="display_actor"><input id="filter-client" class="filter-input form-control input-sm" name="Client" placeholder="Client"></td>
-			<td class="display_actor"><input id="filter-clref" class="filter-input form-control input-sm" name="ClRef" placeholder="Cl. Ref"></td>
-			<td class="display_actor"><input id="filter-agent" class="filter-input form-control input-sm" name="Agent" placeholder="Agent"></td>
-			<td class="display_actor"><input id="filter-agtref" class="filter-input form-control input-sm" name="AgtRef" placeholder="Agt. Ref"></td>
-			<td class="display_actor"><input id="filter-title" class="filter-input form-control input-sm" name="Title" placeholder="Title"></td>
-			<td class="display_actor"><input id="filter-inventor" class="filter-input form-control input-sm" name="Inventor1" placeholder="Inventor"></td>
-			<td class="display_status"><input id="filter-status_date" class="filter-input form-control input-sm" name="Status_date" placeholder="Date"></td>
-			<td class="display_status"><input id="filter-filed" class="filter-input form-control input-sm" name="Filed" placeholder="Filed"></td>
-			<td class="display_status"><input id="filter-filno" class="filter-input form-control input-sm" name="FilNo" placeholder="Number"></td>
-			<td class="display_status"><input id="filter-published" class="filter-input form-control input-sm" name="Published" placeholder="Published"></td>
-			<td class="display_status"><input id="filter-pubno" class="filter-input form-control input-sm" name="PubNo" placeholder="Number"></td>
-			<td class="display_status"><input id="filter-granted" class="filter-input form-control input-sm" name="Granted" placeholder="Granted"></td>
-			<td class="display_status"><input id="filter-grtno" class="filter-input form-control input-sm" name="GrtNo" placeholder="Number"></td>
+		<tr id="filter">
+			<td><input id="filter-ref" class="filter-input form-control input-sm" name="Ref" placeholder="Ref" value="{{ old('Ref') }}"></td>
+			<td><input id="filter-cat" class="filter-input form-control input-sm" name="Cat" placeholder="Cat" value="{{ old('Cat') }}"></td>
+			<td><input id="filter-status" class="filter-input form-control input-sm" name="Status" placeholder="Status" value="{{ old('Status') }}"></td>
+			<td class="display_actor"><input class="filter-input form-control input-sm" name="Client" placeholder="Client" value="{{ old('Client') }}"></td>
+			<td class="display_actor"><input class="filter-input form-control input-sm" name="ClRef" placeholder="Cl. Ref" value="{{ old('ClRef') }}"></td>
+			<td class="display_actor"><input class="filter-input form-control input-sm" name="Agent" placeholder="Agent" value="{{ old('Agent') }}"></td>
+			<td class="display_actor"><input class="filter-input form-control input-sm" name="AgtRef" placeholder="Agt. Ref" value="{{ old('AgtRef') }}"></td>
+			<td class="display_actor"><input class="filter-input form-control input-sm" name="Title" placeholder="Title" value="{{ old('Title') }}"></td>
+			<td class="display_actor"><input class="filter-input form-control input-sm" name="Inventor1" placeholder="Inventor" value="{{ old('Inventor1') }}"></td>
+			<td class="display_status"><input class="filter-input form-control input-sm" name="Status_date" placeholder="Date" value="{{ old('Status_date') }}"></td>
+			<td class="display_status"><input class="filter-input form-control input-sm" name="Filed" placeholder="Filed" value="{{ old('Filed') }}"></td>
+			<td class="display_status"><input class="filter-input form-control input-sm" name="FilNo" placeholder="Number" value="{{ old('FilNo') }}"></td>
+			<td class="display_status"><input class="filter-input form-control input-sm" name="Published" placeholder="Published" value="{{ old('Published') }}"></td>
+			<td class="display_status"><input class="filter-input form-control input-sm" name="PubNo" placeholder="Number" value="{{ old('PubNo') }}"></td>
+			<td class="display_status"><input class="filter-input form-control input-sm" name="Granted" placeholder="Granted" value="{{ old('Granted') }}"></td>
+			<td class="display_status"><input class="filter-input form-control input-sm" name="GrtNo" placeholder="Number" value="{{ old('GrtNo') }}"></td>
 		</tr>
 	</thead>
 	<tbody id="matter-list">
@@ -329,7 +248,7 @@ $(document).ready(function(){
 		@else
 		<tr class="info"> 
 		@endif
-			<td class="see-matter" data-mid="edit-matter-{{ $matter->ID }}">{{ $matter->Ref }}</td>
+			<td class="see-matter" data-mid="edit-matter-{{ $matter->ID }}"><button type="button" class="btn btn-default btn-xs btn-block">{{ $matter->Ref }}</button></td>
 			<td style="width: 12px;">{{ $matter->Cat }}</td>
 			<td>{{ $matter->Status }}</td>
 			<td class="display_actor">{{ $matter->Client }}</td>
@@ -348,7 +267,20 @@ $(document).ready(function(){
 		</tr>
 	@endforeach
 		<tr><td>&nbsp;</td></tr>
-		<tr style="position: fixed; bottom: -20px;"><td class="pagination-sm">{{ $matters->links() }}</td></tr>
+		<tr style="position: fixed; bottom: -20px;">
+			<td>
+				<ul class="pagination pagination-sm">
+					<li id="previouspage" onclick="$('#matter-list').load('{!! $matters->previousPageUrl() !!}' + ' #matter-list > tr', function() {
+						matterListJS();
+						window.history.pushState('', 'phpIP' , '{!! $matters->previousPageUrl() !!}');
+					});"><span class="glyphicon glyphicon-chevron-left" rel="prev"></span></li>
+					<li id="nextpage" onclick="$('#matter-list').load('{!! $matters->nextPageUrl() !!}' + ' #matter-list > tr', function() {
+						matterListJS();
+						window.history.pushState('', 'phpIP' , '{!! $matters->nextPageUrl() !!}');
+					});"><span class="glyphicon glyphicon-chevron-right" rel="next"></span></li>
+				</ul>
+			</td>
+		</tr>
 	</tbody>
 
 	</table>

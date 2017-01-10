@@ -28,7 +28,7 @@ class MatterController extends Controller {
 				'dir',
 				'display_style' 
 		] );
-		// dd($request_parameters);
+		//dd($request->input());
 		
 		/*
 		 * $mfs = new Zend_Session_Namespace ( 'matter_filter' );
@@ -45,7 +45,7 @@ class MatterController extends Controller {
 		$matters->sort_dir = $sort_dir;
 		$matters->responsible = @$filters ['responsible'];
 		$matters->category_display = $request->input ( 'display' );
-		$matters->display_style = $request->input ( 'display_style' );
+		$matters->display_style = $request->input ( 'display_style', 0 );
 		$matters->filters = $filters;
 		$request->flash (); // Flashes the previous values for storing data typed in forms 
 		

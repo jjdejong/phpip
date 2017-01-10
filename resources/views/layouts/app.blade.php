@@ -15,12 +15,15 @@
 
     <!-- Scripts -->
     <script>
-        window.Laravel = {!! json_encode([ 'csrfToken' => csrf_token(), ]) !!}
+        window.Laravel = <?php echo json_encode([
+            'csrfToken' => csrf_token(),
+        ]); ?>
     </script>
 </head>
 <body>
-	<div class="container">
+    <div id="app">
         <nav class="navbar navbar-default navbar-static-top">
+            <div class="container">
                 <div class="navbar-header">
 
                     <!-- Collapsed Hamburger -->
@@ -33,7 +36,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'phpIP') }}
+                        {{ config('app.name', 'Laravel') }}
                     </a>
                 </div>
 
@@ -72,12 +75,12 @@
                         @endif
                     </ul>
                 </div>
+            </div>
         </nav>
-	</div>
-	<div class="container">
+
         @yield('content')
     </div>
- 
+
     <!-- Scripts -->
     <script src="/js/app.js"></script>
     @yield('script')
