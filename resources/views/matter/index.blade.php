@@ -3,12 +3,12 @@
 @section('script')
 <script type="text/javascript">
 
-     var sortKey = "{{ $matters->sort_id }}";
-     var sortDir = "{{ $matters->sort_dir }}";
+	var sortKey = "{{ $matters->sort_id }}";
+	var sortDir = "{{ $matters->sort_dir }}";
 
 // This needs to be run the first time and every time the matter list is updated via Ajax
 function contentUpdated() {
-	// Select the data to display (actor-related or status-related)
+	// Show/hide the data depending on the active radio button
 	if ( $('#actor-status label.active input').val() == 1 ) {
 		$('.display_actor').hide();
 		$('.display_status').show();
@@ -16,68 +16,67 @@ function contentUpdated() {
 		$('.display_status').hide();
 		$('.display_actor').show();
 	}
-	console.log($('#actor-status label.active input').val());
 };
 
-$(document).ready(function(){
+$(document).ready(function() {
 
 	contentUpdated();
 	
-     if(sortDir == 'asc'){
-         $('#'+sortKey+'-asc').attr('id', sortKey+"-desc");
-         $('#'+sortKey+'-sort').css('background-position', '0px 0px');
-     }else{
-         $('#'+sortKey+'-sort').css('background-position', '-10px 0px');
-     }
-     $('.sorting-img').css('display', 'none');
-     $('#'+sortKey+'-sort').css('display', 'inline-block');
+	if ( sortDir == 'asc' ) {
+		$('#'+sortKey+'-asc').attr('id', sortKey+"-desc");
+		$('#'+sortKey+'-sort').css('background-position', '0px 0px');
+	} else {
+		$('#'+sortKey+'-sort').css('background-position', '-10px 0px');
+	}
+	$('.sorting-img').css('display', 'none');
+	$('#'+sortKey+'-sort').css('display', 'inline-block');
 
-     if(sortKey == ""){
-         $('#caseref-sort').css('display', 'inline-block');
-     }
+	if(sortKey == ""){
+		$('#caseref-sort').css('display', 'inline-block');
+	}
      
-     $(".see-tasks").click(function(event){
-     	var id_array = $(this).attr('data-mid').split('-');
-        $('#tasklist-pop-up').load('/matter/' + id_array[2] + '/task', function(){
-           	$(this).show();
-        }).css('top', $(this).offset().top).draggable();
-     });
+	$(".see-tasks").click(function(event) {
+		var id_array = $(this).attr('data-mid').split('-');
+		$('#tasklist-pop-up').load('/matter/' + id_array[2] + '/task', function() {
+			$(this).show();
+		}).css('top', $(this).offset().top).draggable();
+	});
 
-     $('.sorting-dirs').click(function(){
-        var sort_id = $(this).attr('id').split('-');
-        sortKey = sort_id[0];
-        sortDir = sort_id[1];
-        var url = '/matter' + getFilterUrl();
-        var objThis = $(this);
-        var objSort = $('#'+sort_id[0]+'-sort');
-        $.ajax({
-             url: url,
-             type: 'GET',
-             data: { },
-             success: function(data){
-                 $('#matter-list').empty();
-                 $('#matter-list').html(data);
-                 if(sort_id[1] == 'asc'){
-                      objThis.attr('id', sort_id[0]+"-desc");
-                      objSort.css('background-position', "0px 0px");
-                 }else{
-                      objThis.attr('id', sort_id[0]+"-asc");
-                      objSort.css('background-position', "-10px 0px");
-                 }
-                 $('.sorting-img').css('display', 'none');
-                 objSort.css('display', 'inline-block');
-                 window.history.pushState('', 'phpIP' , url);
-             }
-         });
-     });
+	$('.sorting-dirs').click(function() {
+		var sort_id = $(this).attr('id').split('-');
+		sortKey = sort_id[0];
+		sortDir = sort_id[1];
+		var url = '/matter' + getFilterUrl();
+		var objThis = $(this);
+		var objSort = $('#'+sort_id[0]+'-sort');
+		$.ajax({
+			url: url,
+			type: 'GET',
+			data: { },
+			success: function(data) {
+				$('#matter-list').empty();
+				$('#matter-list').html(data);
+				if ( sort_id[1] == 'asc' ) {
+					objThis.attr('id', sort_id[0]+"-desc");
+					objSort.css('background-position', "0px 0px");
+				} else {
+					objThis.attr('id', sort_id[0]+"-asc");
+					objSort.css('background-position', "-10px 0px");
+				}
+				$('.sorting-img').css('display', 'none');
+				objSort.css('display', 'inline-block');
+				window.history.pushState('', 'phpIP' , url);
+			}
+		});
+	});
 
-  // Toggle the data to display
-	$("label[for='show-status']").click(function(){
+	// Toggle the data to display
+	$("label[for='show-status']").click(function() {
 		$('.display_actor').hide();
 		$('.display_status').show();
 	});
 
-	$("label[for='show-actor']").click(function(){
+	$("label[for='show-actor']").click(function() {
 		$('.display_status').hide();
 		$('.display_actor').show();
 	});
@@ -94,12 +93,12 @@ $(document).ready(function(){
 		var url = '/matter/export?' + $(".btn-toolbar, #filter").find("input").filter(function(){return $(this).val().length > 0}).serialize();
 		e.preventDefault();  //stop the browser from following
     	window.location.href = url;
-     });
+	});
 
-     $('.filter-input').keyup(function(){
-         if($(this).val().length != 0 && $(this).val().length < 3 && ($(this).attr("name") == "Ref" || $(this).attr("name") == "Title")){
-             return false;
-         }
+	$('.filter-input').keyup(function(){
+		if($(this).val().length != 0 && $(this).val().length < 3 && ($(this).attr("name") == "Ref" || $(this).attr("name") == "Title")){
+			return false;
+		}
 		if($(this).val().length != 0)
 			$(this).css("background-color", "bisque");
 		else
@@ -109,7 +108,7 @@ $(document).ready(function(){
 			contentUpdated();
 			window.history.pushState('', 'phpIP' , url);
 		});
-     });
+	});
 });
 </script>
 @stop
