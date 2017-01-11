@@ -7,54 +7,21 @@
      var sortDir = "{{ $matters->sort_dir }}";
 
 // This needs to be run the first time and every time the matter list is updated via Ajax
-function matterListJS() {
+function contentUpdated() {
 	// Select the data to display (actor-related or status-related)
-	if ( {{ $matters->display_style }} == 1 || $('#actor-status input:radio:checked').val() == 1 ) {
-		$('.display_actor, .display_status').hide();
+	if ( $('#actor-status label.active input').val() == 1 ) {
+		$('.display_actor').hide();
 		$('.display_status').show();
 	} else {
-		$('.display_status, .display_actor').hide();
+		$('.display_status').hide();
 		$('.display_actor').show();
 	}
-
-	// Open matter details when clicking on the Ref
-	$(".see-matter").click(function(event){
-		var id_array = $(this).attr('data-mid').split('-');
-		var url = '/matter/' + id_array[2];
-		window.open(url);
-	});
-
-	// Ajax pagination
-	/*$('#previouspage').click( function() {
-		var url = '{!! $matters->previousPageUrl() !!}';
-		if (url == '') {
-			this.hide();
-			return;
-		}
-		$('#matter-list').load(url + ' #matter-list > tr', function() {
-			window.history.pushState('', 'phpIP' , url);
-		});
-	});
-	$('#nextpage').click( function() {
-		var url = '{!! $matters->nextPageUrl() !!}';
-		if (url == '') {
-			this.hide();
-			return;
-		}
-		$('#matter-list').load(url + ' #matter-list > tr', function() {
-			window.history.pushState('', 'phpIP' , url);
-		});
-	});*/
-
-	/*if($('.filter-input').val().length != 0)
-		$('.filter-input').css("background-color", "bisque");
-	else
-		$('.filter-input').css("background-color", "white");*/
+	console.log($('#actor-status label.active input').val());
 };
 
 $(document).ready(function(){
 
-	matterListJS();
+	contentUpdated();
 	
      if(sortDir == 'asc'){
          $('#'+sortKey+'-asc').attr('id', sortKey+"-desc");
@@ -71,7 +38,7 @@ $(document).ready(function(){
      
      $(".see-tasks").click(function(event){
      	var id_array = $(this).attr('data-mid').split('-');
-        $('#tasklist-pop-up').load("/matter/tasklist/matter_id/"+id_array[2], function(){
+        $('#tasklist-pop-up').load('/matter/' + id_array[2] + '/task', function(){
            	$(this).show();
         }).css('top', $(this).offset().top).draggable();
      });
@@ -105,22 +72,20 @@ $(document).ready(function(){
      });
 
   // Toggle the data to display
-     $('#show-actor, #show-status').change(function(){
-         if($('#actor-status input:radio:checked').val() == "1"){
-             $('.display_actor').hide();
-             $('.display_status').show();
-         }else {
-             $('.display_status').hide();
-             $('.display_actor').show();
-		}
-		window.history.pushState( '', 'phpIP' , '/matter?' + $(".btn-toolbar, #filter").find("input").filter(function(){return $(this).val().length > 0}).serialize() );
-     });
+	$("label[for='show-status']").click(function(){
+		$('.display_actor').hide();
+		$('.display_status').show();
+	});
 
+	$("label[for='show-actor']").click(function(){
+		$('.display_status').hide();
+		$('.display_actor').show();
+	});
 
 	$('#show-all, #show-containers, #show-responsible').change(function(){
 		var url = '/matter?' + $(".btn-toolbar, #filter").find("input").filter(function(){return $(this).val().length > 0}).serialize();
-		$('#matter-list').load(url + ' #matter-list > tr', function() { // Refresh all the tr's in tbody
-			matterListJS();
+		$('tbody#matter-list').load(url + ' tbody#matter-list > tr', function() { // Refresh all the tr's in tbody
+			contentUpdated();
 			window.history.pushState('', 'phpIP' , url);
 		}); 
 	});
@@ -141,43 +106,33 @@ $(document).ready(function(){
 			$(this).css("background-color", "white");
 		var url = '/matter?' + $(".btn-toolbar, #filter").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
 		$('#matter-list').load(url + ' #matter-list > tr', function() { // Inject content under tbody
-			matterListJS();
+			contentUpdated();
 			window.history.pushState('', 'phpIP' , url);
 		});
      });
-                  
-     $('#clear-matter-filters').click(function(){
-    	 window.location.href = '/matter';
-     });
-
 });
 </script>
 @stop
 
 @section('content')
 
-<style>
-.see-matter {
-	cursor: pointer;
-}
-</style>
 <div class="panel panel-default"><div class="panel-body">
 <form class="btn-toolbar" role="toolbar">
 	<div class="btn-group btn-group-sm" data-toggle="buttons" id="container-all">
-		<label for="show-all" class="btn btn-primary {{ $matters->filters['Ctnr'] or null ? '' : 'active' }}">
+		<label for="show-all" class="btn btn-primary active">
 			<input type="radio" id="show-all" name="Ctnr" value="0">Show All 
 		</label>
-		<label for="show-containers" class="btn btn-primary {{ $matters->filters['Ctnr'] or null ? 'active' : '' }}"> 
+		<label for="show-containers" class="btn btn-primary"> 
 			<input type="radio" id="show-containers" name="Ctnr" value="1">Show Containers
 		</label>
 	</div>
 	<div class="btn-group btn-group-sm" data-toggle="buttons" id="actor-status">
-		<label for="show-actor" class="btn btn-primary  {{ $matters->display_style == 1 ? '' : 'active' }}">
-			<input type="radio" id="show-actor" name="display_style" value="0">
+		<label for="show-actor" class="btn btn-primary active">
+			<input type="radio" id="show-actor" value="0">
 			Actor View
 		</label>
-		<label for="show-status" class="btn btn-primary {{ $matters->display_style == 1 ? 'active' : '' }}"> 
-			<input type="radio" id="show-status" name="display_style" value="1">
+		<label for="show-status" class="btn btn-primary"> 
+			<input type="radio" id="show-status" value="1">
 			Status View
 		</label>
 	</div>
@@ -195,7 +150,9 @@ $(document).ready(function(){
 		<button id="export" name="export" class="btn btn-sm btn-default">
 			<span class="glyphicon glyphicon-download-alt"></span> Export
 		</button>
-		<button id="clear-matter-filters" name="clear-filters" class="btn btn-sm btn-default">
+		<button id="clear-filters" name="clear-filters" class="btn btn-sm btn-default" onclick="$('#matter-list').load('/matter #matter-list > tr', function() {
+				window.history.pushState('', 'phpIP' , '/matter');
+			});">
 			<span class="glyphicon glyphicon-refresh"></span> Clear filters
 		</button>
 	</div>
@@ -243,14 +200,38 @@ $(document).ready(function(){
 	</thead>
 	<tbody id="matter-list">
 	@foreach ($matters as $matter)
-		@if ($matter->container_ID)
+	<?php // Format the publication number for searching on Espacenet
+		$published = 0;
+		if ( $matter->PubNo || $matter->GrtNo) {
+			$published = 1;
+			if ( $matter->origin == 'EP' )
+				$CC = 'EP';
+			else
+				$CC = $matter->country;
+			$removethese = [ "/^$matter->country/", '/ /', '/,/', '/-/', '/\//' ]; 
+			$pubno = preg_replace ( $removethese, '', $matter->PubNo );
+			if ( $CC == 'US' ) {
+				if ( $matter->GrtNo )
+					$pubno = preg_replace ( $removethese, '', $matter->GrtNo );
+				else
+					$pubno = substr ( $pubno, 0, 4 ) . substr ( $pubno, - 6 );
+			}
+		}
+	?>
+		@if ( $matter->container_ID )
 		<tr>
 		@else
 		<tr class="info"> 
 		@endif
-			<td class="see-matter" data-mid="edit-matter-{{ $matter->ID }}"><button type="button" class="btn btn-default btn-xs btn-block">{{ $matter->Ref }}</button></td>
+			<td {!! $matter->dead ? 'style="text-decoration: line-through"' : '' !!}><a href="/matter/{{ $matter->ID }}" target="_blank">{{ $matter->Ref }}</a></td>
 			<td style="width: 12px;">{{ $matter->Cat }}</td>
-			<td>{{ $matter->Status }}</td>
+			<td>
+			@if ( $published )
+				<a href="http://worldwide.espacenet.com/publicationDetails/biblio?DB=EPODOC&CC={{ $CC }}&NR={{ $pubno }}" target="_blank">{{ $matter->Status }}</a>
+			@else
+				{{ $matter->Status }}
+			@endif
+			</td>
 			<td class="display_actor">{{ $matter->Client }}</td>
 			<td class="display_actor">{{ $matter->ClRef }}</td>
 			<td class="display_actor">{{ $matter->Agent }}</td>
@@ -270,14 +251,14 @@ $(document).ready(function(){
 		<tr style="position: fixed; bottom: -20px;">
 			<td>
 				<ul class="pagination pagination-sm">
-					<li id="previouspage" onclick="$('#matter-list').load('{!! $matters->previousPageUrl() !!}' + ' #matter-list > tr', function() {
-						matterListJS();
+					<li onclick="$('#matter-list').load('{!! $matters->previousPageUrl() !!}' + ' #matter-list > tr', function() {
+						contentUpdated();
 						window.history.pushState('', 'phpIP' , '{!! $matters->previousPageUrl() !!}');
-					});"><span class="glyphicon glyphicon-chevron-left" rel="prev"></span></li>
-					<li id="nextpage" onclick="$('#matter-list').load('{!! $matters->nextPageUrl() !!}' + ' #matter-list > tr', function() {
-						matterListJS();
+					});"><a href=# rel="prev"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+					<li onclick="$('#matter-list').load('{!! $matters->nextPageUrl() !!}' + ' #matter-list > tr', function() {
+						contentUpdated();
 						window.history.pushState('', 'phpIP' , '{!! $matters->nextPageUrl() !!}');
-					});"><span class="glyphicon glyphicon-chevron-right" rel="next"></span></li>
+					});"><a href=# rel="next"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
 				</ul>
 			</td>
 		</tr>

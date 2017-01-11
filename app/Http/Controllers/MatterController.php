@@ -30,13 +30,6 @@ class MatterController extends Controller {
 		] );
 		//dd($request->input());
 		
-		/*
-		 * $mfs = new Zend_Session_Namespace ( 'matter_filter' );
-		 * $mfs->sort_field = $sort_field;
-		 * $mfs->sort_dir = $sort_dir;
-		 * $mfs->multi_sort = $request_parameters;
-		 */
-		
 		$matter = new Matter ();
 		$matters = $matter->list ( $sort_field, $sort_dir, $filters, $category_display, true );
 		$matters->appends ( $request->input () )->links (); // Keep URL parameters in the paginator pages
@@ -45,15 +38,11 @@ class MatterController extends Controller {
 		$matters->sort_dir = $sort_dir;
 		$matters->responsible = @$filters ['responsible'];
 		$matters->category_display = $request->input ( 'display' );
-		$matters->display_style = $request->input ( 'display_style', 0 );
+		//$matters->display_style = $request->input ( 'display_style', 0 );
 		$matters->filters = $filters;
 		$request->flash (); // Flashes the previous values for storing data typed in forms 
 		
-		//if ( $request->input() == [] ) {
-			return view ( 'matter.index', compact ( 'matters' ) );
-		//} else {
-		//	return view ( 'matter.filter', compact ( 'matters' ) );
-		//}
+		return view ( 'matter.index', compact ( 'matters' ) );
 	}
 	
 	public function view (Matter $matter) {
