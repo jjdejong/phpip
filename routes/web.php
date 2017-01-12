@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::any('/register','HomeController@index');
 
 Route::get('/home', 'HomeController@index');
 
