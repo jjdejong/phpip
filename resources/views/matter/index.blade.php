@@ -157,12 +157,12 @@ input.input-xs {
 		</tr>
 		<tr id="filter">
 			<td><input class="filter-input form-control input-sm" name="Ref" placeholder="Ref" value="{{ old('Ref') }}"></td>
-			<td><input class="filter-input form-control input-sm" name="Cat" placeholder="Cat" value="{{ old('Cat') }}"></td>
+			<td><input class="filter-input form-control input-sm" size="3" name="Cat" placeholder="Cat" value="{{ old('Cat') }}"></td>
 			<td><input class="filter-input form-control input-sm" name="Status" placeholder="Status" value="{{ old('Status') }}"></td>
 			<td class="display_actor"><input class="filter-input form-control input-sm" name="Client" placeholder="Client" value="{{ old('Client') }}"></td>
-			<td class="display_actor"><input class="filter-input form-control input-sm" name="ClRef" placeholder="Cl. Ref" value="{{ old('ClRef') }}"></td>
+			<td class="display_actor"><input class="filter-input form-control input-sm" size="8" name="ClRef" placeholder="Cl. Ref" value="{{ old('ClRef') }}"></td>
 			<td class="display_actor"><input class="filter-input form-control input-sm" name="Agent" placeholder="Agent" value="{{ old('Agent') }}"></td>
-			<td class="display_actor"><input class="filter-input form-control input-sm" name="AgtRef" placeholder="Agt. Ref" value="{{ old('AgtRef') }}"></td>
+			<td class="display_actor"><input class="filter-input form-control input-sm" size="16" name="AgtRef" placeholder="Agt. Ref" value="{{ old('AgtRef') }}"></td>
 			<td class="display_actor"><input class="filter-input form-control input-sm" name="Title" placeholder="Title" value="{{ old('Title') }}"></td>
 			<td class="display_actor"><input class="filter-input form-control input-sm" name="Inventor1" placeholder="Inventor" value="{{ old('Inventor1') }}"></td>
 			<td class="display_status"><input class="filter-input form-control input-sm" name="Status_date" placeholder="Date" value="{{ old('Status_date') }}"></td>
@@ -200,7 +200,7 @@ input.input-xs {
 		<tr class="info"> 
 		@endif
 			<td {!! $matter->dead ? 'style="text-decoration: line-through"' : '' !!}><a href="/matter/{{ $matter->ID }}" target="_blank">{{ $matter->Ref }}</a></td>
-			<td style="width: 12px;">{{ $matter->Cat }}</td>
+			<td>{{ $matter->Cat }}</td>
 			<td>
 			@if ( $published )
 				<a href="http://worldwide.espacenet.com/publicationDetails/biblio?DB=EPODOC&CC={{ $CC }}&NR={{ $pubno }}" target="_blank">{{ $matter->Status }}</a>
