@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'phpIP') }}</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
@@ -52,6 +52,17 @@
                         @if (Auth::guest())
                             <li><a href="{{ url('/login') }}">Login</a></li>
                         @else
+                            <li class="dropdown">
+                            	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            		Matters  <span class="caret"></span>
+                            	</a>
+                            	
+                            	<ul class="dropdown-menu" role="menu">
+                            		<li><a href="{{ url('/matter/') }}">All</a></li>
+                            		<li><a href="{{ url('/matter?display=PAT') }}">Patents</a></li>
+                            		<li><a href="{{ url('/matter?display=TM') }}">Trademarks</a></li>
+                            	</ul>
+                            </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>

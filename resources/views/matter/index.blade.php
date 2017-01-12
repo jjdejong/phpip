@@ -7,10 +7,10 @@
 function contentUpdated() {
 	// Show/hide the data depending on the active radio button
 	if ( $('#actor-status label.active input').val() == 1 ) {
-		$('.display_actor').hide();
+		$('.display_actor, .display_status').hide();
 		$('.display_status').show();
 	} else {
-		$('.display_status').hide();
+		$('.display_status, .display_actor').hide();
 		$('.display_actor').show();
 	}
 };
@@ -18,13 +18,6 @@ function contentUpdated() {
 $(document).ready(function() {
 
 	contentUpdated();
-     
-	/*$(".see-tasks").click(function(event) {
-		var id_array = $(this).attr('data-mid').split('-');
-		$('#tasklist-pop-up').load('/matter/' + id_array[2] + '/task', function() {
-			$(this).show();
-		}).css('top', $(this).offset().top).draggable();
-	});*/
 
 	$('.sortable').click(function() {
 		$('#sort_id').val( $(this).data('sortkey') );
@@ -125,6 +118,7 @@ input.input-xs {
 	</div>
 	<input type="hidden" id="sort_id" name="sort" value="{{ $matters->sort_id }}">
 	<input type="hidden" id="sort_dir" name="dir" value="{{ $matters->sort_dir }}">
+	<input type="hidden" id="display" name="display" value="{{ $matters->category_display }}">
 	
 	<div class="btn-group pull-right">
 		<button id="export" type="button" class="btn btn-default">
