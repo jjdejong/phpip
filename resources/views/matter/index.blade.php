@@ -79,73 +79,65 @@ $(document).ready(function() {
 @stop
 
 @section('content')
+<div class="panel panel-default" style="margin-bottom: 0px;">
+	<div class="panel-heading">
+		<form class="btn-toolbar" role="toolbar">
+			<div class="btn-group" data-toggle="buttons" id="container-all">
+				<label for="show-all" class="btn btn-primary active">
+					<input type="radio" id="show-all" name="Ctnr" value="">Show All 
+				</label>
+				<label for="show-containers" class="btn btn-primary"> 
+					<input type="radio" id="show-containers" name="Ctnr" value="1">Show Containers
+				</label>
+			</div>
+			<div class="btn-group" data-toggle="buttons" id="actor-status">
+				<label for="show-actor" class="btn btn-primary active">
+					<input type="radio" id="show-actor" value="0">
+					Actor View
+				</label>
+				<label for="show-status" class="btn btn-primary"> 
+					<input type="radio" id="show-status" value="1">
+					Status View
+				</label>
+			</div>
+			
+			<div class="btn-group" id="mine-all" data-toggle="buttons">
+				<label for="show-responsible" class="btn btn-primary {{ $matters->responsible ? 'active' : '' }}">
+					<input class="responsible-filter" type="checkbox" id="show-responsible" name="responsible" value="{{ Auth::user ()->login }}"> 
+					Show Mine
+				</label>
+			</div>
+			<input type="hidden" id="sort_id" name="sort" value="{{ $matters->sort_id }}">
+			<input type="hidden" id="sort_dir" name="dir" value="{{ $matters->sort_dir }}">
+			<input type="hidden" id="display" name="display" value="{{ $matters->category_display }}">
+			
+			<div class="btn-group pull-right">
+				<button id="export" type="button" class="btn btn-default">
+					<span class="glyphicon glyphicon-download-alt"></span> Export
+				</button>
+				<button id="clear-filters" type="button" class="btn btn-default" onclick="$('#matter-list').load('/matter #matter-list > tr', function() {
+						$('#filter').find('input').val('').css('background-color', '#fff');
+						contentUpdated();
+						window.history.pushState('', 'phpIP' , '/matter');
+					});">
+					<span class="glyphicon glyphicon-refresh"></span> Clear filters
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
 
-<style>
-input.input-xs {
-	height: 22px;
-	padding: 2px 5px !important;
-	font-size: 12px;
-	border-radius: 3px;
-}
-</style>
-
-<div class="panel panel-default"><div class="panel-body">
-<form class="btn-toolbar" role="toolbar">
-	<div class="btn-group" data-toggle="buttons" id="container-all">
-		<label for="show-all" class="btn btn-primary active">
-			<input type="radio" id="show-all" name="Ctnr" value="">Show All 
-		</label>
-		<label for="show-containers" class="btn btn-primary"> 
-			<input type="radio" id="show-containers" name="Ctnr" value="1">Show Containers
-		</label>
-	</div>
-	<div class="btn-group" data-toggle="buttons" id="actor-status">
-		<label for="show-actor" class="btn btn-primary active">
-			<input type="radio" id="show-actor" value="0">
-			Actor View
-		</label>
-		<label for="show-status" class="btn btn-primary"> 
-			<input type="radio" id="show-status" value="1">
-			Status View
-		</label>
-	</div>
-	
-	<div class="btn-group" id="mine-all" data-toggle="buttons">
-		<label for="show-responsible" class="btn btn-primary {{ $matters->responsible ? 'active' : '' }}">
-			<input class="responsible-filter" type="checkbox" id="show-responsible" name="responsible" value="{{ Auth::user ()->login }}"> 
-			Show Mine
-		</label>
-	</div>
-	<input type="hidden" id="sort_id" name="sort" value="{{ $matters->sort_id }}">
-	<input type="hidden" id="sort_dir" name="dir" value="{{ $matters->sort_dir }}">
-	<input type="hidden" id="display" name="display" value="{{ $matters->category_display }}">
-	
-	<div class="btn-group pull-right">
-		<button id="export" type="button" class="btn btn-default">
-			<span class="glyphicon glyphicon-download-alt"></span> Export
-		</button>
-		<button id="clear-filters" type="button" class="btn btn-default" onclick="$('#matter-list').load('/matter #matter-list > tr', function() {
-				$('#filter').find('input').val('').css('background-color', '#fff');
-				contentUpdated();
-				window.history.pushState('', 'phpIP' , '/matter');
-			});">
-			<span class="glyphicon glyphicon-refresh"></span> Clear filters
-		</button>
-	</div>
-</form>
-</div></div>
-
-	<table class="table table-striped table-hover table-condensed">
+<table class="table table-striped table-hover table-condensed">
 	<thead>
 		<tr>
-			<th><a href="javascript:void(0);" class="sortable" data-sortkey="caseref" data-sortdir="desc">Ref</a></th>
-			<th>Cat</th>
+			<th><a href="javascript:void(0);" class="sortable" data-sortkey="caseref" data-sortdir="desc">Reference</a></th>
+			<th>Cat.</th>
 			<th><a href="javascript:void(0);" class="sortable" data-sortkey="Status" data-sortdir="asc">Status</a></th>
 			<th class="display_actor"><a href="javascript:void(0);" class="sortable" data-sortkey="Client" data-sortdir="asc">Client</a></th>
-			<th class="display_actor">ClRef</th>
+			<th class="display_actor">Client Ref.</th>
 			<th class="display_actor"><a href="javascript:void(0);" class="sortable" data-sortkey="Agent" data-sortdir="asc">Agent</a></th>
-			<th class="display_actor">AgtRef</th>
-			<th class="display_actor">Title</th>
+			<th class="display_actor">Agent Ref.</th>
+			<th class="display_actor">Title/Detail</th>
 			<th class="display_actor"><a href="javascript:void(0);" class="sortable" data-sortkey="Inventor1" data-sortdir="asc">Inventor</a></th>
 			<th class="display_status"><a href="javascript:void(0);" class="sortable" data-sortkey="Status_date" data-sortdir="asc">Date</a></th>
 			<th class="display_status"><a href="javascript:void(0);" class="sortable" data-sortkey="Filed" data-sortdir="asc">Filed</a></th>
@@ -239,7 +231,6 @@ input.input-xs {
 			</td>
 		</tr>
 	</tbody>
-
-	</table>
+</table>
 	
 @stop

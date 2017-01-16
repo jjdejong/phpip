@@ -19,6 +19,7 @@
             'csrfToken' => csrf_token(),
         ]); ?>
     </script>
+    @yield('style')
 </head>
 <body>
     <div id="app">
@@ -87,8 +88,9 @@
                 </div>
             </div>
         </nav>
-
-        @yield('content')
+		<div class="container-fluid">
+        	@yield('content')
+        </div>
     </div>
 
     <!-- Scripts -->

@@ -32,7 +32,7 @@ class MatterController extends Controller {
 		
 		$matter = new Matter ();
 		$matters = $matter->list ( $sort_field, $sort_dir, $filters, $category_display, true );
-		$matters->appends ( $request->input () )->links (); // Keep URL parameters in the paginator pages
+		$matters->appends ( $request->input () )->links (); // Keep URL parameters in the paginator links
 		
 		$matters->sort_id = $sort_field;
 		$matters->sort_dir = $sort_dir;
