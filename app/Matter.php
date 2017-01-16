@@ -11,7 +11,7 @@ class Matter extends Model {
 	protected $primaryKey = 'ID'; // necessary because "id" is expected by default and we have "ID"
 	public $timestamps = false; // removes timestamp updating in this table (done via MySQL triggers)
 	
-	public function list($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $matter_category_display_type = false, $paginated = false) {
+	public function filter ($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $matter_category_display_type = false, $paginated = false) {
 		$query = $this->select ( DB::raw ( "CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', concat(caseref, matter.country), origin), matter.type_code), idx) AS Ref,
 			matter.country AS country,
 			matter.category_code AS Cat,

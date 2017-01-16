@@ -31,7 +31,7 @@ class MatterController extends Controller {
 		//dd($request->input());
 		
 		$matter = new Matter ();
-		$matters = $matter->list ( $sort_field, $sort_dir, $filters, $category_display, true );
+		$matters = $matter->filter ( $sort_field, $sort_dir, $filters, $category_display, true );
 		$matters->appends ( $request->input () )->links (); // Keep URL parameters in the paginator links
 		
 		$matters->sort_id = $sort_field;
@@ -74,7 +74,7 @@ class MatterController extends Controller {
 		//dd($request);
 	
 		$matter = new Matter ();
-		$export = $matter->list( $sort_field, $sort_dir, $filters, $category_display, false )->toArray ();
+		$export = $matter->filter ( $sort_field, $sort_dir, $filters, $category_display, false )->toArray ();
 	
 		$captions = array (
 				'Omnipat',
