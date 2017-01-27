@@ -39,7 +39,7 @@ class MatterController extends Controller {
 		$matters->responsible = @$filters ['responsible'];
 		$matters->category_display = $request->input ( 'display' );
 		//$matters->display_style = $request->input ( 'display_style', 0 );
-		$matters->filters = $filters;
+		//$matters->filters = $filters;
 		$request->flash (); // Flashes the previous values for storing data typed in forms 
 		
 		return view ( 'matter.index', compact ( 'matters' ) );

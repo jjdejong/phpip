@@ -15,6 +15,14 @@ function contentUpdated() {
 	}
 };
 
+function refreshMatterList() {
+	var url = '/matter?' + $(".btn-toolbar, #filter").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
+	$('#matter-list').load(url + ' #matter-list > tr', function() { // Refresh all the tr's in tbody#matter-list
+		contentUpdated();
+		window.history.pushState('', 'phpIP' , url);
+	})
+}
+
 $(document).ready(function() {
 
 	contentUpdated();
@@ -28,11 +36,7 @@ $(document).ready(function() {
 			$(this).data('sortdir', 'asc');
 			
 		}
-		var url = '/matter?' + $(".btn-toolbar, #filter").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
-		$('#matter-list').load(url + ' #matter-list > tr', function() { // Refresh all the tr's in tbody
-			contentUpdated();
-			window.history.pushState('', 'phpIP' , url);
-		});
+		refreshMatterList();
 	});
 
 	// Toggle the data to display
@@ -47,11 +51,7 @@ $(document).ready(function() {
 	});
 
 	$('#show-all, #show-containers, #show-responsible').change(function(){
-		var url = '/matter?' + $(".btn-toolbar, #filter").find("input").filter(function(){return $(this).val().length > 0}).serialize();
-		$('#matter-list').load(url + ' #matter-list > tr', function() { // Refresh all the tr's in tbody
-			contentUpdated();
-			window.history.pushState('', 'phpIP' , url);
-		}); 
+		refreshMatterList(); 
 	});
      
     $('#export').click(function(e){
@@ -68,11 +68,7 @@ $(document).ready(function() {
 			$(this).css("background-color", "bisque");
 		else
 			$(this).css("background-color", "white");
-		var url = '/matter?' + $(".btn-toolbar, #filter").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
-		$('#matter-list').load(url + ' #matter-list > tr', function() { // Inject content under tbody
-			contentUpdated();
-			window.history.pushState('', 'phpIP' , url);
-		});
+		refreshMatterList();
 	});
 });
 </script>
@@ -148,22 +144,22 @@ $(document).ready(function() {
 			<th class="display_status">Number</th>
 		</tr>
 		<tr id="filter">
-			<td><input class="filter-input form-control input-sm" name="Ref" placeholder="Ref" value="{{ old('Ref') }}"></td>
-			<td><input class="filter-input form-control input-sm" size="3" name="Cat" placeholder="Cat" value="{{ old('Cat') }}"></td>
-			<td><input class="filter-input form-control input-sm" name="Status" placeholder="Status" value="{{ old('Status') }}"></td>
-			<td class="display_actor"><input class="filter-input form-control input-sm" name="Client" placeholder="Client" value="{{ old('Client') }}"></td>
-			<td class="display_actor"><input class="filter-input form-control input-sm" size="8" name="ClRef" placeholder="Cl. Ref" value="{{ old('ClRef') }}"></td>
-			<td class="display_actor"><input class="filter-input form-control input-sm" name="Agent" placeholder="Agent" value="{{ old('Agent') }}"></td>
-			<td class="display_actor"><input class="filter-input form-control input-sm" size="16" name="AgtRef" placeholder="Agt. Ref" value="{{ old('AgtRef') }}"></td>
-			<td class="display_actor"><input class="filter-input form-control input-sm" name="Title" placeholder="Title" value="{{ old('Title') }}"></td>
-			<td class="display_actor"><input class="filter-input form-control input-sm" name="Inventor1" placeholder="Inventor" value="{{ old('Inventor1') }}"></td>
-			<td class="display_status"><input class="filter-input form-control input-sm" name="Status_date" placeholder="Date" value="{{ old('Status_date') }}"></td>
-			<td class="display_status"><input class="filter-input form-control input-sm" name="Filed" placeholder="Filed" value="{{ old('Filed') }}"></td>
-			<td class="display_status"><input class="filter-input form-control input-sm" name="FilNo" placeholder="Number" value="{{ old('FilNo') }}"></td>
-			<td class="display_status"><input class="filter-input form-control input-sm" name="Published" placeholder="Published" value="{{ old('Published') }}"></td>
-			<td class="display_status"><input class="filter-input form-control input-sm" name="PubNo" placeholder="Number" value="{{ old('PubNo') }}"></td>
-			<td class="display_status"><input class="filter-input form-control input-sm" name="Granted" placeholder="Granted" value="{{ old('Granted') }}"></td>
-			<td class="display_status"><input class="filter-input form-control input-sm" name="GrtNo" placeholder="Number" value="{{ old('GrtNo') }}"></td>
+			<td><input class="filter-input form-control input-sm" name="Ref" placeholder="Ref" value="{{ old('Ref') }}" autocomplete="off"></td>
+			<td><input class="filter-input form-control input-sm" size="3" name="Cat" placeholder="Cat" value="{{ old('Cat') }}" autocomplete="off"></td>
+			<td><input class="filter-input form-control input-sm" name="Status" placeholder="Status" value="{{ old('Status') }}" autocomplete="off"></td>
+			<td class="display_actor"><input class="filter-input form-control input-sm" name="Client" placeholder="Client" value="{{ old('Client') }}" autocomplete="off"></td>
+			<td class="display_actor"><input class="filter-input form-control input-sm" size="8" name="ClRef" placeholder="Cl. Ref" value="{{ old('ClRef') }}" autocomplete="off"></td>
+			<td class="display_actor"><input class="filter-input form-control input-sm" name="Agent" placeholder="Agent" value="{{ old('Agent') }}" autocomplete="off"></td>
+			<td class="display_actor"><input class="filter-input form-control input-sm" size="16" name="AgtRef" placeholder="Agt. Ref" value="{{ old('AgtRef') }}" autocomplete="off"></td>
+			<td class="display_actor"><input class="filter-input form-control input-sm" name="Title" placeholder="Title" value="{{ old('Title') }}" autocomplete="off"></td>
+			<td class="display_actor"><input class="filter-input form-control input-sm" name="Inventor1" placeholder="Inventor" value="{{ old('Inventor1') }}" autocomplete="off"></td>
+			<td class="display_status"><input class="filter-input form-control input-sm" name="Status_date" placeholder="Date" value="{{ old('Status_date') }}" autocomplete="off"></td>
+			<td class="display_status"><input class="filter-input form-control input-sm" name="Filed" placeholder="Filed" value="{{ old('Filed') }}" autocomplete="off"></td>
+			<td class="display_status"><input class="filter-input form-control input-sm" name="FilNo" placeholder="Number" value="{{ old('FilNo') }}" autocomplete="off"></td>
+			<td class="display_status"><input class="filter-input form-control input-sm" name="Published" placeholder="Published" value="{{ old('Published') }}" autocomplete="off"></td>
+			<td class="display_status"><input class="filter-input form-control input-sm" name="PubNo" placeholder="Number" value="{{ old('PubNo') }}" autocomplete="off"></td>
+			<td class="display_status"><input class="filter-input form-control input-sm" name="Granted" placeholder="Granted" value="{{ old('Granted') }}" autocomplete="off"></td>
+			<td class="display_status"><input class="filter-input form-control input-sm" name="GrtNo" placeholder="Number" value="{{ old('GrtNo') }}" autocomplete="off"></td>
 		</tr>
 	</thead>
 	<tbody id="matter-list">
