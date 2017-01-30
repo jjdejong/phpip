@@ -8,14 +8,14 @@
   	url('OpenSans-CondLight.ttf') format('ttf');
 }
 
-@font-face {
+/*@font-face {
   font-family: 'Open Sans Condensed';
   font-style: bold;
   font-weight: 700;
   src: url('OpenSans-CondBold.woff2') format('woff2'),
   	url('OpenSans-CondBold.woff') format('woff'),
   	url('OpenSans-CondBold.ttf') format('ttf');
-}
+}*/
 
 @font-face {
   font-family: 'Open Sans Condensed';
