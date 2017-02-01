@@ -25,8 +25,7 @@ class MatterController extends Controller {
 				'filter',
 				'value',
 				'sort',
-				'dir',
-				'display_style' 
+				'dir' 
 		] );
 		//dd($request->input());
 		
@@ -38,8 +37,6 @@ class MatterController extends Controller {
 		$matters->sort_dir = $sort_dir;
 		$matters->responsible = @$filters ['responsible'];
 		$matters->category_display = $request->input ( 'display' );
-		//$matters->display_style = $request->input ( 'display_style', 0 );
-		//$matters->filters = $filters;
 		$request->flash (); // Flashes the previous values for storing data typed in forms 
 		
 		return view ( 'matter.index', compact ( 'matters' ) );
@@ -68,8 +65,7 @@ class MatterController extends Controller {
 				'filter',
 				'value',
 				'sort',
-				'dir',
-				'display_style'
+				'dir'
 		] );
 		//dd($request);
 	
