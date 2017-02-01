@@ -60,16 +60,13 @@ $(document).ready(function() {
     	window.location.href = url;
 	});
 
-	$('.filter-input').keyup(function(){
-		if($(this).val().length != 0 && $(this).val().length < 3 && ($(this).attr("name") == "Ref" || $(this).attr("name") == "Title")){
-			return false;
-		}
+	$('.filter-input').keyup(_.debounce(function(){
 		if($(this).val().length != 0)
 			$(this).css("background-color", "bisque");
 		else
 			$(this).css("background-color", "white");
 		refreshMatterList();
-	});
+	}, 500));
 });
 </script>
 @stop
