@@ -11,7 +11,8 @@ use Illuminate\Http\Request;
 
 class MatterController extends Controller {
 
-	public function index (Request $request) {
+	public function index (Request $request) 
+	{
 		$category_display = $request->input ( 'display' );
 		$get_sort = $request->input ( 'sort' );
 		$get_dir = $request->input ( 'dir' );
@@ -42,7 +43,8 @@ class MatterController extends Controller {
 		return view ( 'matter.index', compact ( 'matters' ) );
 	}
 	
-	public function view (Matter $matter) {
+	public function view (Matter $matter) 
+	{
 		// $this->authorize('view', $matter);
 		// return view('matter.view', compact('matter'));
 		return $matter;
@@ -52,7 +54,8 @@ class MatterController extends Controller {
 	 * Exports Matters list
 	 * *
 	 */
-	public function export (Request $request) {
+	public function export (Request $request) 
+	{
 		$category_display = $request->input ( 'display' );
 		$get_sort = $request->input ( 'sort' );
 		$get_dir = $request->input ( 'dir' );

@@ -19,7 +19,7 @@ class MatterPolicy
      */
     public function view(User $user, Matter $matter)
     {
-        return $user->default_role == 'DBA';
+        return $user->default_role === 'DBA';
     }
 
     /**

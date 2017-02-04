@@ -8,10 +8,31 @@ use Illuminate\Support\Facades\Auth;
 
 class Matter extends Model {
 	protected $table = 'matter';
-	protected $primaryKey = 'ID'; // necessary because "id" is expected by default and we have "ID"
 	public $timestamps = false; // removes timestamp updating in this table (done via MySQL triggers)
+	protected $hidden = ['creator', 'updated', 'updater'];
+
+	public function actors() 
+	{
+		return $this->belongsToMany('App\Actor', 'matter_actor_lnk', 'matter_id', 'actor_id')->withPivot('role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date');
+	}
+
+	public function events() 
+	{
+		return $this->belongsToMany('App\EventName', 'event', 'matter_id', 'code')->withPivot('event_date', 'detail', 'notes', 'alt_matter_id');
+	}
+
+	public function tasks() 
+	{
+		return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id');
+	}
+
+	public function classifiers() 
+	{
+		return $this->hasMany('App\Classifier');
+	}
 	
-	public function filter ($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $matter_category_display_type = false, $paginated = false) {
+	public function filter ($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $matter_category_display_type = false, $paginated = false) 
+	{
 		$query = $this->select ( DB::raw ( "CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', concat(caseref, matter.country), origin), matter.type_code), idx) AS Ref,
 			matter.country AS country,
 			matter.category_code AS Cat,
@@ -150,4 +171,5 @@ class Matter extends Model {
 
 		return $matters;
 	}
+
 }
