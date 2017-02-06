@@ -22,9 +22,8 @@ Route::get('/home', 'HomeController@index');
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('matter', 'MatterController@index');
-	Route::get('matter/filter', 'MatterController@index');
 	Route::get('matter/export', 'MatterController@export');
-	Route::get('matter/{matter}', 'MatterController@view')->middleware('can:view,matter');
+	Route::get('matter/{matter}', 'MatterController@view'); // ->middleware('can:view,matter');
 
 	Route::get('matter/{id}/events', function ($id) {
 		$matter = App\Matter::find($id);
@@ -33,7 +32,12 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('matter/{id}/tasks', function ($id) {
 		$matter = App\Matter::find($id);
-	    return $matter->tasks;
+	    return $matter->tasks->where('code', '!=', 'REN'); // Renewals excluded
+	});
+	
+	Route::get('matter/{id}/renewals', function ($id) {
+		$matter = App\Matter::find($id);
+		return $matter->tasks->where('code', 'REN'); // Renewals
 	});
 
 	Route::get('matter/{id}/actors', function ($id) {
@@ -49,6 +53,30 @@ Route::group(['middleware' => 'auth'], function () {
 	    	->sortBy('pivot.display_order');
 	    }
 	});
+	
+	Route::get('matter/{id}/classifiers', function ($id) {
+		$matter = App\Matter::find($id);
+		return $matter->classifiers;
+	});
+	
+	Route::get('matter/{id}/category', function ($id) {
+		$matter = App\Matter::find($id);
+		return $matter->category;
+	});
+	
+	Route::get('matter/{id}/type', function ($id) {
+		$matter = App\Matter::find($id);
+		return $matter->type;
+	});
+
+	Route::get('matter/{id}/country', function ($id) {
+		$matter = App\Matter::find($id);
+		return $matter->countryInfo;
+	});
+	
+	Route::get('matter/{id}/origin', function ($id) {
+		$matter = App\Matter::find($id);
+		return $matter->originInfo;
 	});
 
 	Route::get('actor/{id}', function ($id) {
@@ -57,5 +85,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('actor/search/{term}', function ($term) {
 		return App\Actor::where('name', 'like', "%$term%")->simplePaginate(25);
+	});
+	
+	Route::get('role', function () {
+		return App\Role::all();
 	});
 });

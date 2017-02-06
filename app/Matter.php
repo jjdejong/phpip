@@ -16,17 +16,43 @@ class Matter extends Model {
 		return $this->belongsTo('App\Matter', 'container_id');
 	}
 	
+	public function parent()
+	{
+		return $this->belongsTo('App\Matter', 'parent_id');
+	}
+	
+	public function getUidAttribute() // Defines "uid" as an attribute
+	{
+		$uid = $this->caseref . $this->country;
+		if ($this->origin) $uid .= '/' . $this->origin;
+		if ($this->type_code) $uid .= '-' . $this->type_code;
+		return  $uid . $this->idx;
+	}
 	
 	public function actors() {
 		return $this->belongsToMany('App\Actor', 'matter_actor_lnk')
 		->withPivot('id', 'role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date');
 	}
 	
+	public function actorsAll() 
+	{
+		if ( $this->container_id )
+			return $this->container->belongsToMany('App\Actor', 'matter_actor_lnk')
+				->withPivot('role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date')
+				->wherePivot('shared', 1)
+				->unionAll( 
+					$this->belongsToMany('App\Actor', 'matter_actor_lnk')
+					->withPivot('role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date') 
+				);
+		else 
+			return $this->belongsToMany('App\Actor', 'matter_actor_lnk')
+				->withPivot('role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date');
 	}
 
 	public function events() 
 	{
-		return $this->belongsToMany('App\EventName', 'event', 'matter_id', 'code')->withPivot('event_date', 'detail', 'notes', 'alt_matter_id');
+		return $this->belongsToMany('App\EventName', 'event', 'matter_id', 'code')
+			->withPivot('event_date', 'detail', 'notes', 'alt_matter_id');
 	}
 
 	public function tasks() 
@@ -36,7 +62,30 @@ class Matter extends Model {
 
 	public function classifiers() 
 	{
-		return $this->hasMany('App\Classifier');
+		if ( $this->container_id )
+			return $this->container->hasMany('App\Classifier');
+		else 
+			return $this->hasMany('App\Classifier');
+	}
+	
+	public function countryInfo()
+	{
+		return $this->belongsTo('App\Country', 'country');
+	}
+	
+	public function originInfo()
+	{
+			return $this->belongsTo('App\Country', 'origin');
+	}
+	
+	public function category()
+	{
+		return $this->belongsTo('App\Category');
+	}
+	
+	public function type()
+	{
+		return $this->belongsTo('App\Type');
 	}
 	
 	public function filter ($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $matter_category_display_type = false, $paginated = false) 
@@ -60,22 +109,22 @@ class Matter extends Model {
 			pub.detail AS PubNo,
 			grt.event_date AS Granted,
 			grt.detail AS GrtNo,
-			matter.ID,
-			matter.container_ID,
-			matter.parent_ID,
+			matter.id,
+			matter.container_id,
+			matter.parent_id,
 			matter.responsible,
 			del.login AS delegate,
 			matter.dead,
-			IF(isnull(matter.container_ID),1,0) AS Ctnr" ) );
+			IF(isnull(matter.container_id),1,0) AS Ctnr" ) );
 		
 		$query->join ( 'matter_category', 'matter.category_code', 'matter_category.code' );
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk clilnk
-			JOIN actor cli ON cli.ID = clilnk.actor_ID' ), function ($join) {
-			$join->on ( 'matter.ID', 'clilnk.matter_ID' )->where ( 'clilnk.role', 'CLI' );
+			JOIN actor cli ON cli.id = clilnk.actor_id' ), function ($join) {
+			$join->on ( 'matter.id', 'clilnk.matter_id' )->where ( 'clilnk.role', 'CLI' );
 		} );
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk lclic
-			JOIN actor clic ON clic.ID = lclic.actor_ID' ), function ($join) {
-			$join->on ( 'matter.container_ID', 'lclic.matter_ID' )->where ( [ 
+			JOIN actor clic ON clic.id = lclic.actor_id' ), function ($join) {
+			$join->on ( 'matter.container_id', 'lclic.matter_id' )->where ( [ 
 					[ 'lclic.role', 'CLI' ],
 					[ 'lclic.shared', 1 ] 
 			] );
@@ -83,13 +132,13 @@ class Matter extends Model {
 		
 		if (array_key_exists ( 'Inventor1', $multi_filter )) {
 			$query->leftJoin ( DB::raw ( 'matter_actor_lnk invlnk
-				JOIN actor inv ON inv.ID = invlnk.actor_ID' ), function ($join) {
-				$join->on ( DB::raw ( 'ifnull(matter.container_ID, matter.ID)' ), 'invlnk.matter_ID' )->where ( 'invlnk.role', 'INV' );
+				JOIN actor inv ON inv.id = invlnk.actor_id' ), function ($join) {
+				$join->on ( DB::raw ( 'ifnull(matter.container_id, matter.id)' ), 'invlnk.matter_id' )->where ( 'invlnk.role', 'INV' );
 			} );
 		} else {
 			$query->leftJoin ( DB::raw ( 'matter_actor_lnk invlnk
-				JOIN actor inv ON inv.ID = invlnk.actor_ID' ), function ($join) {
-				$join->on ( DB::raw ( 'ifnull(matter.container_ID, matter.ID)' ), 'invlnk.matter_ID' )->where ( [ 
+				JOIN actor inv ON inv.id = invlnk.actor_id' ), function ($join) {
+				$join->on ( DB::raw ( 'ifnull(matter.container_id, matter.id)' ), 'invlnk.matter_id' )->where ( [ 
 						[ 'invlnk.role', 'INV' ],
 						[ 'invlnk.display_order', 1 ] 
 				] );
@@ -97,40 +146,40 @@ class Matter extends Model {
 		}
 		
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk agtlnk
-			JOIN actor agt ON agt.ID = agtlnk.actor_ID' ), function ($join) {
-			$join->on ( 'matter.ID', 'agtlnk.matter_ID' )->where ( [ 
+			JOIN actor agt ON agt.id = agtlnk.actor_id' ), function ($join) {
+			$join->on ( 'matter.id', 'agtlnk.matter_id' )->where ( [ 
 					[ 'agtlnk.role', 'AGT' ],
 					[ 'agtlnk.display_order', 1 ] 
 			] );
 		} );
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk applnk
-			JOIN actor app ON app.ID = applnk.actor_ID' ), function ($join) {
-			$join->on ( 'matter.ID', 'applnk.matter_ID' )->where ( [ 
+			JOIN actor app ON app.id = applnk.actor_id' ), function ($join) {
+			$join->on ( 'matter.id', 'applnk.matter_id' )->where ( [ 
 					[ 'applnk.role', 'APP' ],
 					[ 'applnk.display_order', 1 ] 
 			] );
 		} );
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk dellnk
-			JOIN actor del ON del.ID = dellnk.actor_ID' ), function ($join) {
-			$join->on ( DB::raw ( 'ifnull(matter.container_ID,matter.ID)' ), 'dellnk.matter_ID' )->where ( 'dellnk.role', 'DEL' );
+			JOIN actor del ON del.id = dellnk.actor_id' ), function ($join) {
+			$join->on ( DB::raw ( 'ifnull(matter.container_id,matter.id)' ), 'dellnk.matter_id' )->where ( 'dellnk.role', 'DEL' );
 		} );
 		$query->leftJoin ( 'event AS fil', function ($join) {
-			$join->on ( 'matter.ID', 'fil.matter_ID' )->where ( 'fil.code', 'FIL' );
+			$join->on ( 'matter.id', 'fil.matter_id' )->where ( 'fil.code', 'FIL' );
 		} );
 		$query->leftJoin ( 'event AS pub', function ($join) {
-			$join->on ( 'matter.ID', 'pub.matter_ID' )->where ( 'pub.code', 'PUB' );
+			$join->on ( 'matter.id', 'pub.matter_id' )->where ( 'pub.code', 'PUB' );
 		} );
 		$query->leftJoin ( 'event AS grt', function ($join) {
-			$join->on ( 'matter.ID', 'grt.matter_ID' )->where ( 'grt.code', 'GRT' );
+			$join->on ( 'matter.id', 'grt.matter_id' )->where ( 'grt.code', 'GRT' );
 		} );
 		$query->leftJoin ( DB::raw ( 'event status
-			JOIN event_name ON event_name.code = status.code AND event_name.status_event = 1' ), 'matter.ID', 'status.matter_ID' );
+			JOIN event_name ON event_name.code = status.code AND event_name.status_event = 1' ), 'matter.id', 'status.matter_id' );
 		$query->leftJoin ( DB::raw ( 'event e2
 			JOIN event_name en2 ON e2.code=en2.code AND en2.status_event = 1' ), function ($join) {
 			$join->on ( 'status.matter_id', 'e2.matter_id' )->whereColumn ( 'status.event_date', '<', 'e2.event_date' );
 		} );
 		$query->leftJoin ( DB::raw ( 'classifier
-			JOIN classifier_type ON classifier.type_code = classifier_type.code AND classifier_type.main_display = 1 AND classifier_type.display_order = 1' ), DB::raw ( 'IFNULL(matter.container_ID, matter.ID)' ), 'classifier.matter_ID' );
+			JOIN classifier_type ON classifier.type_code = classifier_type.code AND classifier_type.main_display = 1 AND classifier_type.display_order = 1' ), DB::raw ( 'IFNULL(matter.container_id, matter.id)' ), 'classifier.matter_id' );
 		$query->where ( 'e2.matter_id', NULL );
 		
 		$role = Auth::user ()->default_role;
@@ -163,13 +212,6 @@ class Matter extends Model {
 		} else {
 			$query->orderByRaw ( "$sortField $sortDir, matter.caseref, matter.origin, matter.country" );
 		}
-		
-		/*
-		\Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
-			var_dump($query->sql);
-		 	var_dump($query->bindings);
-		});
-		*/
 		
 		if ($paginated) {
 			$matters = $query->simplePaginate ( 25 );

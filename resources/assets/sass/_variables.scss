@@ -35,9 +35,16 @@ $input-color-placeholder: lighten($text-color, 30%);
 
 // Panels
 $panel-default-heading-bg: #fff;*/
+$panel-body-padding: 8px;
+$panel-heading-padding: 5px 8px;
+
+// Grid
+$grid-gutter-width: 8px;
 
 // Input fields (custom). Also affects buttons
 $padding-base-vertical: 3px;
 $padding-base-horizontal: 6px;
 $padding-small-vertical: 2px;
 $padding-small-horizontal: 5px;
+$padding-large-vertical: 5px;
+$padding-large-horizontal: 8px;

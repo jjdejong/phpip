@@ -46,8 +46,8 @@ class MatterController extends Controller {
 	public function view (Matter $matter) 
 	{
 		// $this->authorize('view', $matter);
-		// return view('matter.view', compact('matter'));
-		return $matter;
+		return view('matter.view', compact('matter'));
+		//return $matter;
 	}
 	
 	/**

@@ -179,12 +179,12 @@ $(document).ready(function() {
 			}
 		}
 	?>
-		@if ( $matter->container_ID )
+		@if ( $matter->container_id )
 		<tr>
 		@else
 		<tr class="info"> 
 		@endif
-			<td {!! $matter->dead ? 'style="text-decoration: line-through"' : '' !!}><a href="/matter/{{ $matter->ID }}" target="_blank">{{ $matter->Ref }}</a></td>
+			<td {!! $matter->dead ? 'style="text-decoration: line-through"' : '' !!}><a href="/matter/{{ $matter->id }}" target="_blank">{{ $matter->Ref }}</a></td>
 			<td>{{ $matter->Cat }}</td>
 			<td>
 			@if ( $published )
@@ -197,7 +197,7 @@ $(document).ready(function() {
 			<td class="display_actor">{{ $matter->ClRef }}</td>
 			<td class="display_actor">{{ $matter->Agent }}</td>
 			<td class="display_actor">{{ $matter->AgtRef }}</td>
-			<td class="display_actor" style="font-size: small;">{{ $matter->Title }}</td>
+			<td class="display_actor small">{{ $matter->Title }}</td>
 			<td class="display_actor">{{ $matter->Inventor1 }}</td>
 			<td class="display_status">{{ $matter->Status_date }}</td>
 			<td class="display_status">{{ $matter->Filed }}</td>
