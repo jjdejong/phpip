@@ -11,9 +11,17 @@ class Matter extends Model {
 	public $timestamps = false; // removes timestamp updating in this table (done via MySQL triggers)
 	protected $hidden = ['creator', 'updated', 'updater'];
 
-	public function actors() 
+	public function container()
 	{
-		return $this->belongsToMany('App\Actor', 'matter_actor_lnk', 'matter_id', 'actor_id')->withPivot('role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date');
+		return $this->belongsTo('App\Matter', 'container_id');
+	}
+	
+	
+	public function actors() {
+		return $this->belongsToMany('App\Actor', 'matter_actor_lnk')
+		->withPivot('id', 'role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date');
+	}
+	
 	}
 
 	public function events() 

@@ -38,7 +38,17 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('matter/{id}/actors', function ($id) {
 		$matter = App\Matter::find($id);
-	    return $matter->actors;
+	    if ( $matter->container_id ) {
+			return $matter->actors->toBase()
+			->merge( $matter->container->actors->where('pivot.shared', 1) )
+			->groupBy('pivot.role')
+			->sortBy('pivot.display_order');
+	    } else {
+	    	return $matter->actors
+	    	->groupBy('pivot.role')
+	    	->sortBy('pivot.display_order');
+	    }
+	});
 	});
 
 	Route::get('actor/{id}', function ($id) {
