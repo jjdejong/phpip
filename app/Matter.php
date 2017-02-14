@@ -29,43 +29,96 @@ class Matter extends Model {
 		return  $uid . $this->idx;
 	}
 	
-	public function actors() {
+	/*public function actors() {
 		return $this->belongsToMany('App\Actor', 'matter_actor_lnk')
 		->withPivot('id', 'role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date');
+	}*/
+	
+	public function roles() {
+		return $this->belongsToMany('App\Role', 'matter_actor_lnk', 'matter_id', 'role')
+		->withPivot('id', 'role', 'shared');
 	}
 	
-	public function actorsAll() 
+	public function actors()
 	{
-		if ( $this->container_id )
-			return $this->container->belongsToMany('App\Actor', 'matter_actor_lnk')
-				->withPivot('role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date')
-				->wherePivot('shared', 1)
-				->unionAll( 
-					$this->belongsToMany('App\Actor', 'matter_actor_lnk')
-					->withPivot('role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date') 
-				);
-		else 
-			return $this->belongsToMany('App\Actor', 'matter_actor_lnk')
-				->withPivot('role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date');
+		$actors = DB::table('matter_actor_lnk as ma')
+			->select( DB::raw ( "COALESCE(actor.display_name, CONCAT_WS(' ', actor.name, actor.first_name)) as name" ), 
+					'ar.name as role_name', 
+					'ma.actor_id',
+					'ma.role',
+					'ma.shared',
+					'ma.actor_ref',
+					'ma.company_id',
+					'actor.company_id as default_company_id',
+					'ma.date',
+					'ma.rate',
+					'ar.display_order as role_order',
+					'ma.display_order',
+					'ar.show_ref',
+					'ar.show_company',
+					'ar.show_rate',
+					'ar.show_date',
+					'ma.id',
+					DB::raw ("IF(ma.matter_id = '$this->container_id', 1, 0) AS inherited"))
+			->where('matter_id', $this->id)
+			->orWhere(function ($query) {
+            	$query->where('matter_id', $this->container_id)
+                	->where('ma.shared', 1);
+            })
+			->join('actor', 'actor.id', 'ma.actor_id')
+			->join('actor_role as ar', 'ar.code', 'ma.role')
+            ->orderBy('ar.display_order')->orderBy('ma.display_order');
+		return $actors->get();
 	}
-
-	public function events() 
+	
+	public function events()
 	{
-		return $this->belongsToMany('App\EventName', 'event', 'matter_id', 'code')
-			->withPivot('event_date', 'detail', 'notes', 'alt_matter_id');
+		return $this->hasMany('App\Event')
+			->orderBy('event_date');
 	}
-
-	public function tasks() 
+	
+	public function tasks() // Excludes renewals 
 	{
-		return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id');
+		return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
+			->where('task.code', '!=', 'REN')
+			->orderBy('due_date');
+	}
+	
+	public function tasksPending() // Excludes renewals
+	{
+		return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
+		->where('task.code', '!=', 'REN')
+		->where('done', 0)
+		->orderBy('due_date');
+	}
+	
+	public function renewals()
+	{
+		return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
+		->where('task.code', 'REN')
+		->orderBy('due_date');
+	}
+	
+	public function renewalsPending()
+	{
+		return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
+		->where('task.code', 'REN')
+		->where('done', 0)
+		->orderBy('due_date');
 	}
 
 	public function classifiers() 
 	{
-		if ( $this->container_id )
-			return $this->container->hasMany('App\Classifier');
-		else 
 			return $this->hasMany('App\Classifier');
+	}
+	
+	public function linkedBy()
+	{
+		/*\Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
+		 var_dump($query->sql);
+		 var_dump($query->bindings);
+		 });*/
+		return $this->hasMany('App\Classifier', 'lnk_matter_id');
 	}
 	
 	public function countryInfo()
@@ -90,32 +143,32 @@ class Matter extends Model {
 	
 	public function filter ($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $matter_category_display_type = false, $paginated = false) 
 	{
-		$query = $this->select ( DB::raw ( "CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', concat(caseref, matter.country), origin), matter.type_code), idx) AS Ref,
-			matter.country AS country,
-			matter.category_code AS Cat,
-			matter.origin,
-			event_name.name AS Status,
-			status.event_date AS Status_date,
-			COALESCE(cli.display_name, clic.display_name, cli.name, clic.name) AS Client,
-			COALESCE(clilnk.actor_ref, lclic.actor_ref) AS ClRef,
-			COALESCE(app.display_name, app.name) AS Applicant,
-			COALESCE(agt.display_name, agt.name) AS Agent,
-			agtlnk.actor_ref AS AgtRef,
-			classifier.value AS Title,
-			CONCAT_WS(' ', inv.name, inv.first_name) as Inventor1,
-			fil.event_date AS Filed,
-			fil.detail AS FilNo,
-			pub.event_date AS Published,
-			pub.detail AS PubNo,
-			grt.event_date AS Granted,
-			grt.detail AS GrtNo,
-			matter.id,
-			matter.container_id,
-			matter.parent_id,
-			matter.responsible,
-			del.login AS delegate,
-			matter.dead,
-			IF(isnull(matter.container_id),1,0) AS Ctnr" ) );
+		$query = $this->select ( DB::raw ( "CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', concat(caseref, matter.country), origin), matter.type_code), idx) AS Ref" ),
+			'matter.country AS country',
+			'matter.category_code AS Cat',
+			'matter.origin',
+			'event_name.name AS Status',
+			'status.event_date AS Status_date',
+			DB::raw ( "COALESCE(cli.display_name, clic.display_name, cli.name, clic.name) AS Client" ),
+			DB::raw ( "COALESCE(clilnk.actor_ref, lclic.actor_ref) AS ClRef" ),
+			DB::raw ( "COALESCE(app.display_name, app.name) AS Applicant" ),
+			DB::raw ( "COALESCE(agt.display_name, agt.name) AS Agent" ),
+			'agtlnk.actor_ref AS AgtRef',
+			'classifier.value AS Title',
+			DB::raw ( "CONCAT_WS(' ', inv.name, inv.first_name) as Inventor1" ),
+			'fil.event_date AS Filed',
+			'fil.detail AS FilNo',
+			'pub.event_date AS Published',
+			'pub.detail AS PubNo',
+			'grt.event_date AS Granted',
+			'grt.detail AS GrtNo',
+			'matter.id',
+			'matter.container_id',
+			'matter.parent_id',
+			'matter.responsible',
+			'del.login AS delegate',
+			'matter.dead',
+			DB::raw ( "IF(isnull(matter.container_id),1,0) AS Ctnr" ));
 		
 		$query->join ( 'matter_category', 'matter.category_code', 'matter_category.code' );
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk clilnk

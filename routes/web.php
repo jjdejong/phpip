@@ -23,35 +23,32 @@ Route::get('/home', 'HomeController@index');
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('matter', 'MatterController@index');
 	Route::get('matter/export', 'MatterController@export');
-	Route::get('matter/{matter}', 'MatterController@view'); // ->middleware('can:view,matter');
+	//Route::get('matter/{matter}', 'MatterController@view'); // ->middleware('can:view,matter');
+	
+	Route::get('matter/{matter}', function ($id) {
+		$matter = App\Matter::with('tasksPending.info', 'renewalsPending', 'events.info', 'classifiers.type', 'container.classifiers.type')->find($id);
+	    //return $matter;
+	    return view('matter.view', compact('matter'));
+	});
 
 	Route::get('matter/{id}/events', function ($id) {
-		$matter = App\Matter::find($id);
+		$matter = App\Matter::with('events.info')->find($id);
 	    return $matter->events;
 	});
 
 	Route::get('matter/{id}/tasks', function ($id) {
-		$matter = App\Matter::find($id);
-	    return $matter->tasks->where('code', '!=', 'REN'); // Renewals excluded
+		$matter = App\Matter::with('events.tasks.info')->find($id);
+	    return $matter->events;
 	});
 	
 	Route::get('matter/{id}/renewals', function ($id) {
 		$matter = App\Matter::find($id);
-		return $matter->tasks->where('code', 'REN'); // Renewals
+		return $matter->renewals;
 	});
 
 	Route::get('matter/{id}/actors', function ($id) {
 		$matter = App\Matter::find($id);
-	    if ( $matter->container_id ) {
-			return $matter->actors->toBase()
-			->merge( $matter->container->actors->where('pivot.shared', 1) )
-			->groupBy('pivot.role')
-			->sortBy('pivot.display_order');
-	    } else {
-	    	return $matter->actors
-	    	->groupBy('pivot.role')
-	    	->sortBy('pivot.display_order');
-	    }
+		return $matter->actors()->groupBy('role_name');
 	});
 	
 	Route::get('matter/{id}/classifiers', function ($id) {
@@ -90,4 +87,40 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('role', function () {
 		return App\Role::all();
 	});
+	
+	// Testing
+		Route::get('task/{id}/event', function ($id) {
+			$task = App\Task::find($id);
+			return $task->event;
+		});
+		
+		Route::get('event/{id}/tasks', function ($id) {
+			$event = App\Event::find($id);
+			return $event->tasks;
+		});
+		
+		Route::get('event/{id}/link', function ($id) {
+			$event = App\Event::find($id);
+			return $event->link;
+		});
+		
+		Route::get('events/withlinks', function () {
+			$event = App\Event::has('link')->first();
+			return $event->link;
+		});
+		
+		Route::get('event/{id}/retrolink', function ($id) {
+			$event = App\Event::find($id);
+			return $event->retroLink;
+		});
+		
+		Route::get('matter/{id}/container', function ($id) {
+			$matter = App\Matter::find($id);
+			return $matter->container;
+		});
+		
+		Route::get('matter/{id}/linked_by', function ($id) {
+			$matter = App\Matter::find($id);
+			return $matter->linkedBy;
+		});
 });

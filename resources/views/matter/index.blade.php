@@ -76,26 +76,26 @@ $(document).ready(function() {
 	<div class="panel-heading">
 		<form class="btn-toolbar" role="toolbar">
 			<div class="btn-group" data-toggle="buttons" id="container-all">
-				<label for="show-all" class="btn btn-primary active">
+				<label for="show-all" class="btn btn-info active">
 					<input type="radio" id="show-all" name="Ctnr" value="">Show All 
 				</label>
-				<label for="show-containers" class="btn btn-primary"> 
+				<label for="show-containers" class="btn btn-info"> 
 					<input type="radio" id="show-containers" name="Ctnr" value="1">Show Containers
 				</label>
 			</div>
 			<div class="btn-group" data-toggle="buttons" id="actor-status">
-				<label for="show-actor" class="btn btn-primary active">
+				<label for="show-actor" class="btn btn-info active">
 					<input type="radio" id="show-actor" value="0">
 					Actor View
 				</label>
-				<label for="show-status" class="btn btn-primary"> 
+				<label for="show-status" class="btn btn-info"> 
 					<input type="radio" id="show-status" value="1">
 					Status View
 				</label>
 			</div>
 			
 			<div class="btn-group" id="mine-all" data-toggle="buttons">
-				<label for="show-responsible" class="btn btn-primary {{ $matters->responsible ? 'active' : '' }}">
+				<label for="show-responsible" class="btn btn-info {{ $matters->responsible ? 'active' : '' }}">
 					<input class="responsible-filter" type="checkbox" id="show-responsible" name="responsible" value="{{ Auth::user ()->login }}"> 
 					Show Mine
 				</label>
@@ -105,10 +105,10 @@ $(document).ready(function() {
 			<input type="hidden" id="display" name="display" value="{{ $matters->category_display }}">
 			
 			<div class="btn-group pull-right">
-				<button id="export" type="button" class="btn btn-default">
+				<button id="export" type="button" class="btn btn-primary">
 					<span class="glyphicon glyphicon-download-alt"></span> Export
 				</button>
-				<button id="clear-filters" type="button" class="btn btn-default" onclick="$('#matter-list').load('/matter #matter-list > tr', function() {
+				<button id="clear-filters" type="button" class="btn btn-primary" onclick="$('#matter-list').load('/matter #matter-list > tr', function() {
 						$('#filter').find('input').val('').css('background-color', '#fff');
 						contentUpdated();
 						window.history.pushState('', 'phpIP' , '/matter');

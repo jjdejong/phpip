@@ -12,6 +12,12 @@ class Classifier extends Model
     
     public function type()
     {
-    	return $this->hasOne('App\ClassifierType');
+    	return $this->belongsTo('App\ClassifierType', 'type_code');
+    }
+    
+    public function linkedMatter()
+    {
+    	return $this->belongsTo('App\Matter', 'lnk_matter_id');
+    		//->union( $this->hasManyThrough('App\Matter', 'App\Classifier', 'id', 'lnk_matter_id', 'matter_id') );
     }
 }

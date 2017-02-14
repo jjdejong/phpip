@@ -10,4 +10,14 @@ class EventName extends Model
     protected $primaryKey = 'code';
     public $incrementing = false;
     public $timestamps = false;
+    
+    public function events()
+    {
+    	return $this->hasMany('App\Event', 'code');
+    }
+    
+    public function tasks()
+    {
+    	return $this->hasMany('App\Task', 'code');
+    }
 }

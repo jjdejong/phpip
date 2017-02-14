@@ -70,7 +70,6 @@ class MatterController extends Controller {
 				'sort',
 				'dir'
 		] );
-		//dd($request);
 	
 		$matter = new Matter ();
 		$export = $matter->filter ( $sort_field, $sort_dir, $filters, $category_display, false )->toArray ();

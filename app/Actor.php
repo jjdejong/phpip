@@ -11,6 +11,6 @@ class Actor extends Model
     protected $hidden = ['login', 'last_login', 'password', 'remember_token', 'creator', 'updated', 'updater'];
     
     public function company() {
-    	return $this->hasOne('App\Actor', 'company_id');
+    	return $this->belongsTo('App\Actor', 'company_id');
     }
 }
