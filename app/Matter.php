@@ -11,6 +11,11 @@ class Matter extends Model {
 	public $timestamps = false; // removes timestamp updating in this table (done via MySQL triggers)
 	protected $hidden = ['creator', 'updated', 'updater'];
 
+	public function family() // Gets other family members (where clause is ignored by eager loading)
+	{
+		return $this->hasMany('App\Matter', 'caseref', 'caseref')->where('id', '!=', $this->id);
+	}
+	
 	public function container()
 	{
 		return $this->belongsTo('App\Matter', 'container_id');
@@ -21,12 +26,30 @@ class Matter extends Model {
 		return $this->belongsTo('App\Matter', 'parent_id');
 	}
 	
+	public function children()
+	{
+		return $this->hasMany('App\Matter', 'parent_id');
+	}
+	
+	public function priorityTo() // Gets external matters claiming priority on this one (where clause is ignored by eager loading)
+	{
+		/*\Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
+		 var_dump($query->sql);
+		 var_dump($query->bindings);
+		 });*/
+		return $this->belongsToMany('App\Matter', 'event', 'alt_matter_id')->where('caseref', '!=', $this->caseref);
+	}
+	
 	public function getUidAttribute() // Defines "uid" as an attribute
 	{
-		$uid = $this->caseref . $this->country;
-		if ($this->origin) $uid .= '/' . $this->origin;
-		if ($this->type_code) $uid .= '-' . $this->type_code;
-		return  $uid . $this->idx;
+		$suffix = $this->country;
+		if ($this->origin)
+			$suffix .= '/' . $this->origin;
+		if ($this->type_code) 
+			$suffix .= '-' . $this->type_code;
+		$suffix .= $this->idx;
+		$uid = $this->caseref . $suffix;
+		return  $uid;
 	}
 	
 	/*public function actors() {
@@ -50,6 +73,7 @@ class Matter extends Model {
 					'ma.actor_ref',
 					'ma.company_id',
 					'actor.company_id as default_company_id',
+					'actor.warn',
 					'ma.date',
 					'ma.rate',
 					'ar.display_order as role_order',
@@ -114,11 +138,7 @@ class Matter extends Model {
 	
 	public function linkedBy()
 	{
-		/*\Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
-		 var_dump($query->sql);
-		 var_dump($query->bindings);
-		 });*/
-		return $this->hasMany('App\Classifier', 'lnk_matter_id');
+		return $this->belongsToMany('App\Matter', 'classifier', 'lnk_matter_id');
 	}
 	
 	public function countryInfo()
