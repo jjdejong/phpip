@@ -43,11 +43,12 @@ class MatterController extends Controller {
 		return view ( 'matter.index', compact ( 'matters' ) );
 	}
 	
-	public function view (Matter $matter) 
+	public function show ($id) 
 	{
 		// $this->authorize('view', $matter);
-		return view('matter.view', compact('matter'));
+		$matter = Matter::with('tasksPending.info', 'renewalsPending', 'events.info', 'classifiers.type', 'container.classifiers.type')->find($id);
 		//return $matter;
+		return view('matter.show', compact('matter'));
 	}
 	
 	/**
@@ -74,7 +75,7 @@ class MatterController extends Controller {
 		$matter = new Matter ();
 		$export = $matter->filter ( $sort_field, $sort_dir, $filters, $category_display, false )->toArray ();
 	
-		$captions = array (
+		$captions = [
 				'Omnipat',
 				'Country',
 				'Cat',
@@ -101,7 +102,7 @@ class MatterController extends Controller {
 				'Delegate',
 				'Dead',
 				'Ctnr'
-		);
+		];
 		
 		$export_csv = fopen ( 'php://memory', 'w' );
 		fputcsv ( $export_csv, $captions, ';' );

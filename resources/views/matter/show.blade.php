@@ -15,7 +15,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 	<div class="col-sm-3">
 		<div class="panel panel-primary" style="min-height: 96px">
 			<div class="panel-heading panel-title">
-				<a href="/matter?Ref={{ $matter->caseref }}" data-toggle="tooltip" data-placement="right" title="See family">{{ $matter->uid }}</a>
+				<a href="/matter?Ref={{ $matter->caseref }}" data-toggle="tooltip" data-placement="right" title="See family">{{ $matter->caseref . $matter->suffix }}</a>
 				({{ $matter->category->category }})
 				<a href="/matter/{{ $matter->id }}/edit">
 				<span class="glyphicon glyphicon-edit pull-right" data-toggle="tooltip" data-placement="right" title="Avanced edit"></span>
@@ -25,12 +25,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<ul>
 					@if ($matter->container_id)
 					<li><a href="/matter/{{ $matter->container_id }}" data-toggle="tooltip" data-placement="right" title="See container">
-						{{ $matter->container->uid }}
+						{{ $matter->container->caseref . $matter->container->suffix }}
 					</a></li>
 					@endif
 					@if ($matter->parent_id)
 					<li><a href="/matter/{{ $matter->parent_id }}" data-toggle="tooltip" data-placement="right" title="See parent">
-						{{ $matter->parent->uid }}
+						{{ $matter->parent->caseref . $matter->parent->suffix }}
 					</a></li>
 				@endif
 				</ul>
@@ -100,7 +100,10 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					<div class="col-sm-12">
 					<div class="panel panel-default">
 						<div class="panel-heading panel-title">
-							{{ $key }}<span class="glyphicon glyphicon-plus pull-right" data-role="{{ $role_group[0]->role }}"></span>
+							{{ $key }}
+							<a class="pull-right" data-toggle="modal" href="#addActor" title="Add Actor" data-role="{{ $role_group[0]->role }}">
+								<span class="glyphicon glyphicon-plus-sign"></span>
+							</a>
 						</div>
 						<div class="panel-body" style="max-height: 80px; overflow: auto;">
 							<ul class = "list-unstyled">
@@ -152,11 +155,17 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							@if ( $event->alt_matter_id )
 								<span class="col-xs-3">{{ $event->link->event_date }}</span>
 								<span class="col-xs-4">
-									<a href="/matter/{{ $event->alt_matter_id }}">{{ $event->link->matter->country }}{{ $event->link->detail }}</a>
+									<a href="/matter/{{ $event->alt_matter_id }}" target="_blank">{{ $event->link->matter->country . $event->link->detail }}</a>
 								</span>
 							@else
 								<span class="col-xs-3">{{ $event->event_date }}</span>
-								<span class="col-xs-4">{{ $event->detail }}</span>
+								<span class="col-xs-4">
+								@if ( $event->publicUrl() )
+									<a href="{{ $event->publicUrl() }}" target="_blank">{{ $event->detail }}</a>
+								@else
+									{{ $event->detail }}
+								@endif
+								</span>
 							@endif
 						</div>
 						@endforeach
@@ -189,7 +198,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					<div class="panel-heading panel-title">
 						<div class="row">
 							<span class="col-xs-6">Renewals</span>
-							<span class="col-xs-6">Due<span class="glyphicon glyphicon-open pull-right"></span></span>
+							<span class="col-xs-6">
+								Due
+								<a class="pull-right" data-toggle="modal" href="#allRenewals" title="All renewals">
+									<span class="glyphicon glyphicon-open" style="color: white;"></span>
+								</a>
 						</div>
 					</div>
 					<div class="panel-body" id="renewal-panel" style="height: 100px; overflow: auto;">
@@ -216,14 +229,14 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 								@if ( $classifier->url )
 									<a href="{{ $classifier->url }}" target="_blank">{{ $classifier->value }}</a>
 								@elseif ( $classifier->lnk_matter_id )
-									<a href="/matter/{{ $classifier->lnk_matter_id }}">{{ $classifier->linkedMatter->uid }}</a>
+									<a href="/matter/{{ $classifier->lnk_matter_id }}">{{ $classifier->linkedMatter->caseref . $classifier->linkedMatter->suffix }}</a>
 								@else
 									{{ $classifier->value }}
 								@endif
 							@endforeach
 							@if ( $key == 'Link' )
 								@foreach ( $matter->linkedBy as $linkedBy )
-									<a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
+									<a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->caseref . $linkedBy->suffix }}</a>
 								@endforeach
 							@endif
 							</span>
@@ -234,7 +247,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 								<span class="col-xs-1"><strong>Link</strong></span>
 								<span class="col-xs-11">
 								@foreach ( $matter->linkedBy as $linkedBy )
-									<a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
+									<a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->caseref . $linkedBy->suffix }}</a>
 								@endforeach
 								</span>
 							</div>
@@ -243,20 +256,24 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				</div>
 			</div>
 			<div class="col-sm-4">
-				<div class="panel panel-default">
+				<div class="panel panel-info">
 					<div class="panel-heading panel-title">
 						Related Matters
 					</div>
 					<div class="panel-body" id="notes-panel" style="height: 100px; overflow: auto;">
 						<div class="row">
+						@if ( $matter->has('family') )
+							<strong>{{ $matter->caseref }}</strong>
+						@endif
 						@foreach ( $matter->family as $member )
-							<a href="/matter/{{ $member->id }}">{{ $member->uid }}</a>
+							<a href="/matter/{{ $member->id }}">{{ $member->suffix }}</a>
 						@endforeach
 						</div>
-						@foreach ( $matter->priorityTo->sortBy('caseref')->groupBy('caseref') as $family )
+						@foreach ( $matter->priorityTo->sortBy('caseref')->groupBy('caseref') as $caseref => $family )
 							<div class="row">
+								<strong>{{ $caseref }}</strong>
 							@foreach ( $family as $rmatter )
-								<a href="/matter/{{ $rmatter->id }}">{{ $rmatter->uid }}</a>
+								<a href="/matter/{{ $rmatter->id }}">{{ $rmatter->suffix }}</a>
 							@endforeach
 							</div>
 						@endforeach
@@ -278,6 +295,30 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 		</div>
 	</div>
 </div>
+
+<!-- Modals -->
+
+<div id="allRenewals" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+	    <!-- Modal content-->
+	    <div class="modal-content">
+		    <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4>Renewals</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<span class="col-xs-6">Renewals</span>
+					<span class="col-xs-6">Due</span>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+	    </div>
+	</div>
+</div>
+
 @stop
 
 @section('script')

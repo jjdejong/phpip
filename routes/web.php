@@ -11,6 +11,8 @@
 |
 */
 
+use App\Matter;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -23,56 +25,56 @@ Route::get('/home', 'HomeController@index');
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('matter', 'MatterController@index');
 	Route::get('matter/export', 'MatterController@export');
-	//Route::get('matter/{matter}', 'MatterController@view'); // ->middleware('can:view,matter');
+	Route::get('matter/{id}', 'MatterController@show'); //->middleware('can:view,matter');
 	
-	Route::get('matter/{matter}', function ($id) {
+	/*Route::get('matter/{matter}', function ($id) {
 		$matter = App\Matter::with('tasksPending.info', 'renewalsPending', 'events.info', 'classifiers.type', 'container.classifiers.type')->find($id);
 	    //return $matter;
 	    return view('matter.view', compact('matter'));
-	});
+	});*/
 
 	Route::get('matter/{id}/events', function ($id) {
-		$matter = App\Matter::with('events.info')->find($id);
+		$matter = Matter::with('events.info')->find($id);
 	    return $matter->events;
 	});
 
 	Route::get('matter/{id}/tasks', function ($id) {
-		$matter = App\Matter::with('events.tasks.info')->find($id);
-	    return $matter->events;
+		$matter = Matter::with('tasks.info', 'tasks.trigger.info')->find($id);
+	    return $matter->tasks->groupBy('trigger.info.name')->sortBy('trigger.event_date');
 	});
 	
 	Route::get('matter/{id}/renewals', function ($id) {
-		$matter = App\Matter::find($id);
+		$matter = Matter::find($id);
 		return $matter->renewals;
 	});
 
 	Route::get('matter/{id}/actors', function ($id) {
-		$matter = App\Matter::find($id);
+		$matter = Matter::find($id);
 		return $matter->actors()->groupBy('role_name');
 	});
 	
 	Route::get('matter/{id}/classifiers', function ($id) {
-		$matter = App\Matter::find($id);
+		$matter = Matter::find($id);
 		return $matter->classifiers;
 	});
 	
 	Route::get('matter/{id}/category', function ($id) {
-		$matter = App\Matter::find($id);
+		$matter = Matter::find($id);
 		return $matter->category;
 	});
 	
 	Route::get('matter/{id}/type', function ($id) {
-		$matter = App\Matter::find($id);
+		$matter = Matter::find($id);
 		return $matter->type;
 	});
 
 	Route::get('matter/{id}/country', function ($id) {
-		$matter = App\Matter::find($id);
+		$matter = Matter::find($id);
 		return $matter->countryInfo;
 	});
 	
 	Route::get('matter/{id}/origin', function ($id) {
-		$matter = App\Matter::find($id);
+		$matter = Matter::find($id);
 		return $matter->originInfo;
 	});
 
