@@ -188,7 +188,7 @@ $(document).ready(function() {
 			<td>{{ $matter->Cat }}</td>
 			<td>
 			@if ( $published )
-				<a href="http://worldwide.espacenet.com/publicationDetails/biblio?DB=EPODOC&CC={{ $CC }}&NR={{ $pubno }}" target="_blank">{{ $matter->Status }}</a>
+				<a href="http://worldwide.espacenet.com/publicationDetails/biblio?DB=EPODOC&CC={{ $CC }}&NR={{ $pubno }}" target="_blank" title="Open in Espacenet">{{ $matter->Status }}</a>
 			@else
 				{{ $matter->Status }}
 			@endif

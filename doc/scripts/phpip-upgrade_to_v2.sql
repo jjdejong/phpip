@@ -6,6 +6,10 @@ CHANGE COLUMN `password` `password` VARCHAR(60) NULL DEFAULT NULL;
 ALTER TABLE `actor`
 ADD COLUMN `remember_token` VARCHAR(100) NULL DEFAULT NULL AFTER `updater`;
 
+-- Virtual suffix column for creating unique human readable references
+ALTER TABLE matter 
+ADD COLUMN suffix VARCHAR(16) AFTER idx AS ( CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', country, origin), type_code), idx) );
+
 -- Uncapitalizing all the ID fields
 ALTER TABLE `actor` 
 DROP FOREIGN KEY `fk_actor_company`,

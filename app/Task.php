@@ -15,7 +15,7 @@ class Task extends Model
 		return $this->belongsTo('App\EventName', 'code');
 	}
 	
-	public function event()
+	public function trigger()
 	{
 		return $this->belongsTo('App\Event', 'trigger_id');
 	}

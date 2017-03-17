@@ -101,6 +101,30 @@ class Matter extends Model {
 			->orderBy('event_date');
 	}
 	
+	public function filing()
+	{
+		return $this->hasOne('App\Event')
+		->where('code', 'FIL');
+	}
+	
+	public function publication()
+	{
+		return $this->hasOne('App\Event')
+		->where('code', 'PUB');
+	}
+	
+	public function grant()
+	{
+		return $this->hasOne('App\Event')
+		->where('code', 'GRT');
+	}
+	
+	public function priority()
+	{
+		return $this->hasMany('App\Event')
+		->where('code', 'PRI');
+	}
+	
 	public function tasks() // Excludes renewals 
 	{
 		return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
