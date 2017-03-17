@@ -8,7 +8,7 @@ ADD COLUMN `remember_token` VARCHAR(100) NULL DEFAULT NULL AFTER `updater`;
 
 -- Virtual suffix column for creating unique human readable references
 ALTER TABLE matter 
-ADD COLUMN suffix VARCHAR(16) AFTER idx AS ( CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', country, origin), type_code), idx) );
+ADD COLUMN suffix VARCHAR(16) AS ( CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', country, origin), type_code), idx) ) AFTER idx;
 
 -- Uncapitalizing all the ID fields
 ALTER TABLE `actor` 
