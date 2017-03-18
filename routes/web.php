@@ -25,7 +25,7 @@ Route::get('/home', 'HomeController@index');
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('matter', 'MatterController@index');
 	Route::get('matter/export', 'MatterController@export');
-	Route::get('matter/{id}', 'MatterController@show'); //->middleware('can:view,matter');
+	Route::get('matter/{id}', 'MatterController@show')->middleware('can:view-noclient');
 	
 	/*Route::get('matter/{matter}', function ($id) {
 		$matter = App\Matter::with('tasksPending.info', 'renewalsPending', 'events.info', 'classifiers.type', 'container.classifiers.type')->find($id);

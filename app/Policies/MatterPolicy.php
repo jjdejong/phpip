@@ -17,9 +17,9 @@ class MatterPolicy
      * @param  \App\Matter  $matter
      * @return mixed
      */
-    public function view(User $user, Matter $matter)
+    public function view(User $user)
     {
-        return $user->default_role === 'DBA';
+        return $user->default_role !== 'CLI';
     }
 
     /**
@@ -30,7 +30,7 @@ class MatterPolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -42,7 +42,7 @@ class MatterPolicy
      */
     public function update(User $user, Matter $matter)
     {
-        //
+    	return true;
     }
 
     /**
@@ -54,6 +54,6 @@ class MatterPolicy
      */
     public function delete(User $user, Matter $matter)
     {
-        //
+    	return true;
     }
 }

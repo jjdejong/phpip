@@ -37,6 +37,8 @@ class Event extends Model
 			->orderBy('due_date');
 	}
 	
+// 	Produces a link to official published information
+	
 	public function publicUrl()
 	{
 		if ( !in_array($this->code, ['FIL', 'PUB', 'GRT']) )
@@ -48,14 +50,7 @@ class Event extends Model
 			$CC = $this->matter->country;
 		$country_code = $this->matter->country;
 		$category = $this->matter->category_code;
-		$removethese = [
-				"/^$country_code/",
-				'/ /',
-				'/,/',
-				'/-/',
-				'/\//',
-				'/\.[0-9]/'
-		];
+		$removethese = [ "/^$country_code/", '/ /', '/,/', '/-/', '/\//', '/\.[0-9]/' ];
 		$cleanednumber = preg_replace ( $removethese, '', $this->detail );
 		$href = '';
 		if (($this->code == 'PUB' || $this->code == 'GRT') && $category == 'PAT') {

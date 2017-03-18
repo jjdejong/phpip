@@ -62,7 +62,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					data-origin="{{ $matter->origin }}"
 					data-type="{{ $matter->type_code }}"
 					data-code="{{ $matter->category->category }}-{{ $matter->category_code }}">
-					<span class="glyphicon glyphicon-duplicate" style="float: left;"></span>
+					<span class="glyphicon glyphicon-duplicate pull-left"></span>
 					Clone Matter
 				</button>
 				<button id="child-matter-link" type="button" class="btn btn-info btn-block"
@@ -71,7 +71,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					data-origin="{{ $matter->origin }}"
 					data-type="{{ $matter->type_code }}"
 					data-code="{{ $matter->category->category }}-{{ $matter->category_code }}">
-					<span class="glyphicon glyphicon-link" style="float: left;"></span> 
+					<span class="glyphicon glyphicon-link pull-left"></span> 
 					New Child
 				</button>
 				@if ( $matter->countryInfo->goesnational )
@@ -81,7 +81,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					data-origin="{{ $matter->origin }}"
 					data-type="{{ $matter->type_code }}"
 					data-code="{{ $matter->category->category }}-{{ $matter->category_code }}">
-					<span class="glyphicon glyphicon-flag" style="float: left;"></span>
+					<span class="glyphicon glyphicon-flag pull-left"></span>
 					Enter Nat. Phase
 				</button>
 				@endif
@@ -269,7 +269,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<a href="/matter/{{ $member->id }}">{{ $member->suffix }}</a>
 						@endforeach
 						</div>
-						@foreach ( $matter->priorityTo->sortBy('caseref')->groupBy('caseref') as $caseref => $family )
+						@foreach ( $matter->priorityTo->groupBy('caseref') as $caseref => $family )
 							<div class="row">
 								<strong>{{ $caseref }}</strong>
 							@foreach ( $family as $rmatter )

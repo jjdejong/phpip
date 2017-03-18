@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
+//use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -14,8 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
-        'App\Matter' => 'App\Policies\MatterPolicy',
+        App\Matter::class => App\Policies\MatterPolicy::class,
     ];
 
     /**
@@ -23,8 +22,12 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(GateContract $gate)
+    public function boot()
     {
-        $this->registerPolicies($gate);
+        $this->registerPolicies();
+        
+        Gate::define ( 'view-noclient', function ($user) {
+        	return $user->default_role !== 'CLI';
+        });
     }
 }

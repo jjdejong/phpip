@@ -13,7 +13,10 @@ class Matter extends Model {
 
 	public function family() // Gets other family members (where clause is ignored by eager loading)
 	{
-		return $this->hasMany('App\Matter', 'caseref', 'caseref')->where('id', '!=', $this->id);
+		return $this->hasMany('App\Matter', 'caseref', 'caseref')
+		->where('id', '!=', $this->id)
+		->orderBy('origin')
+		->orderBy('country');
 	}
 	
 	public function container()
@@ -28,28 +31,18 @@ class Matter extends Model {
 	
 	public function children()
 	{
-		return $this->hasMany('App\Matter', 'parent_id');
+		return $this->hasMany('App\Matter', 'parent_id')
+		->orderBy('origin')
+		->orderBy('country');
 	}
 	
 	public function priorityTo() // Gets external matters claiming priority on this one (where clause is ignored by eager loading)
 	{
-		/*\Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
-		 var_dump($query->sql);
-		 var_dump($query->bindings);
-		 });*/
-		return $this->belongsToMany('App\Matter', 'event', 'alt_matter_id')->where('caseref', '!=', $this->caseref);
-	}
-	
-	public function getUidAttribute() // Defines "uid" as an attribute
-	{
-		$suffix = $this->country;
-		if ($this->origin)
-			$suffix .= '/' . $this->origin;
-		if ($this->type_code) 
-			$suffix .= '-' . $this->type_code;
-		$suffix .= $this->idx;
-		$uid = $this->caseref . $suffix;
-		return  $uid;
+		return $this->belongsToMany('App\Matter', 'event', 'alt_matter_id')
+		->where('caseref', '!=', $this->caseref)
+		->orderBy('caseref')
+		->orderBy('origin')
+		->orderBy('country');
 	}
 	
 	/*public function actors() {
@@ -117,6 +110,16 @@ class Matter extends Model {
 	{
 		return $this->hasOne('App\Event')
 		->where('code', 'GRT');
+	}
+	
+	public function status()
+	{
+		/*\Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
+		 var_dump($query->sql);
+		 var_dump($query->bindings);
+		 });*/
+		return $this->hasOne('App\Event')
+		->latest('event_date');
 	}
 	
 	public function priority()
