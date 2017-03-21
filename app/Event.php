@@ -33,6 +33,10 @@ class Event extends Model
 	
 	public function tasks()
 	{
+		/*\Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
+		 var_dump($query->sql);
+		 var_dump($query->bindings);
+		 });*/
 		return $this->hasMany('App\Task', 'trigger_id')
 			->orderBy('due_date');
 	}

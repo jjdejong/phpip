@@ -145,7 +145,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 						<div class="row">
 							<span class="col-xs-5">Status</span>
 							<span class="col-xs-3">Date</span>
-							<span class="col-xs-4">Number<span class="glyphicon glyphicon-open pull-right"></span></span>
+							<span class="col-xs-4">
+								Number
+								<a href="/matter/{{ $matter->id }}/events" class="pull-right" data-toggle="modal" data-target="#allEvents" data-remote="false" title="All tasks">
+									<span class="glyphicon glyphicon-open" style="color: white;"></span>
+								</a>
+							</span>
 						</div>
 					</div>
 					<div class="panel-body" id="status-panel" style="height: 100px; overflow: auto;">
@@ -177,7 +182,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					<div class="panel-heading panel-title">
 						<div class="row">
 							<span class="col-xs-9">Open Tasks</span>
-							<span class="col-xs-3">Due<span class="glyphicon glyphicon-open pull-right"></span></span>
+							<span class="col-xs-3">
+								Due
+								<a href="/matter/{{ $matter->id }}/tasks" class="pull-right" data-toggle="modal" data-target="#taskList" data-remote="false" title="All tasks">
+									<span class="glyphicon glyphicon-open" style="color: white;"></span>
+								</a>
+							</span>
 						</div>
 					</div>
 					<div class="panel-body" id="opentask-panel" style="height: 100px; overflow: auto;">
@@ -200,9 +210,10 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-6">Renewals</span>
 							<span class="col-xs-6">
 								Due
-								<a class="pull-right" data-toggle="modal" href="#allRenewals" title="All renewals">
+								<a href="/matter/{{ $matter->id }}/renewals" class="pull-right" data-toggle="modal" data-target="#taskList" data-remote="false" title="All renewals">
 									<span class="glyphicon glyphicon-open" style="color: white;"></span>
 								</a>
+							</span>
 						</div>
 					</div>
 					<div class="panel-body" id="renewal-panel" style="height: 100px; overflow: auto;">
@@ -298,24 +309,63 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 <!-- Modals -->
 
-<div id="allRenewals" class="modal fade" role="dialog">
-	<div class="modal-dialog">
+<div id="taskList" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-lg">
 	    <!-- Modal content-->
 	    <div class="modal-content">
 		    <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>Renewals</h4>
+				<h4>Tasks</h4>
 			</div>
 			<div class="modal-body">
-				<div class="row">
-					<span class="col-xs-6">Renewals</span>
-					<span class="col-xs-6">Due</span>
-				</div>
+				
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 	    </div>
+	</div>
+</div>
+
+<div id="addTaskToEvent" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+	    <!-- Modal content-->
+	    <div class="modal-content">
+		    <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4>New Task</h4>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" name="trigger_id" value="" id="trigger_id" />
+				<label for="task_name"><b>Task Name</b></label>
+				<input type="text" name="task_name" id="task_name" value="" style="width: 120px;" />
+				<input type="hidden" name="task_id" id="task_id" value="" />
+				<label for="task_duedate"><b>Due date</b></label>
+				<input type="text" name="task_duedate" id="task_duedate" value="" style="width: 120px;" />
+				<br>
+				<label for="task_detail">Detail </label>
+				<input type="text" name="task_detail" id="task_detail" value="" style="width: 120px;" />
+				<label for="task_cost">Cost </label>
+				<input type="text" name="task_cost" id="task_cost" value="" style="width: 120px;" />
+				<br>
+				<label for="task_fee">Fee </label>
+				<input type="text" name="task_fee" id="task_fee" value="" style="width: 120px;" />
+				<label for="task_currency">Currency </label>
+				<input type="text" name="task_currency" id="task_currency" value="" style="width: 120px;" />
+				<br>
+				<label for="task_time">Time spent</label>
+				<input type="text" name="task_time" id="task_time" value="" style="width: 120px;" />
+				<label for="task_assigned_to">Assigned to </label>
+				<input type="text" name="task_assigned_to" id="task_assigned_to" value="" style="width: 120px;" />
+				<br> 
+				<label for="task_notes">Notes</label>
+				<textarea name="task_notes" id="task_notes" rows=2 cols=45></textarea>
+			</div>
+			<div class="modal-footer">
+				<button name="add_task_submit" id="add-task-submit" style="float: right;">Add task</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -326,6 +376,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 <script>
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
+
+    $("#taskList").on("show.bs.modal", function(e) {
+        var link = $(e.relatedTarget);
+        $(this).find(".modal-body").load(link.attr("href"));
+    });
 });
 </script>
 

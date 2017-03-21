@@ -46,7 +46,6 @@ class MatterController extends Controller {
 	public function show ($id) 
 	{
 		$matter = Matter::with('tasksPending.info', 'renewalsPending', 'events.info', 'classifiers.type', 'container.classifiers.type')->find($id);
-		//$this->authorize('view', $matter);
 		return view('matter.show', compact('matter'));
 	}
 	

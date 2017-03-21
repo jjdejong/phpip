@@ -128,12 +128,16 @@ class Matter extends Model {
 		->where('code', 'PRI');
 	}
 	
-	public function tasks() // Excludes renewals 
+	/*public function tasks($renewals = 0) 
 	{
 		return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
-			->where('task.code', '!=', 'REN')
+			->when($renewals, function ($query) {
+                    return $query->where('task.code', 'REN');
+			}, function ($query) {
+                    return $query->where('task.code', '!=', 'REN');
+			})
 			->orderBy('due_date');
-	}
+	}*/
 	
 	public function tasksPending() // Excludes renewals
 	{
@@ -143,12 +147,12 @@ class Matter extends Model {
 		->orderBy('due_date');
 	}
 	
-	public function renewals()
+	/*public function renewals()
 	{
 		return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
 		->where('task.code', 'REN')
 		->orderBy('due_date');
-	}
+	}*/
 	
 	public function renewalsPending()
 	{
