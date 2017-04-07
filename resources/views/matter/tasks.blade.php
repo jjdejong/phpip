@@ -4,13 +4,13 @@ $(document).ready(function() {
 	$('input[type="date"]').datepicker({
 		dateFormat: 'yy-mm-dd',
 		showButtonPanel: true,
-		onClose: function(date, instance) {
+		onSelect: function(date, instance) {
 			$(this).focus();
-			$(this).parent("td").addClass("alert alert-warning");
+			$(this).parent("td").addClass("bg-warning");
 		}
 	});
 	
-	$("#taskListModal").on("keypress", "input.noformat", function (e) {
+	$('input.noformat').keypress(function (e) {
 		if (e.which == 13) {
 			e.preventDefault();
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
@@ -24,10 +24,10 @@ $(document).ready(function() {
 				});
 			});
 		}
-		$(this).parent().addClass("bg-warning");   
+		$(this).parent("td").addClass("bg-warning");   
 	});
 
-	$("#taskListModal").on("click", 'input[type="checkbox"]', function() {
+	$('input[type="checkbox"]').click(function() {
 		var flag = 0;
 		if ( $(this).is(":checked") ) flag = 1;
 		$.post('/task/'+ $(this).closest("tr").data("task_id"), { _token: "{{ csrf_token() }}", _method: "PUT", done: flag })
@@ -64,40 +64,6 @@ $(document).ready(function() {
 
 	$("#addTaskToEvent").on("shown.bs.modal", function(event) {
 		$("#task_name").focus();
-	});
-
-	$("#taskListModal").on("click", "#add-task-submit", function() {
-		var request = $("form").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
-		$.post('/task', request)
-		.done(function() {
-			$("#addTaskToEvent").modal("hide");
-			$("#taskListModal").find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
-		}).fail(function(errors) {
-			$.each(errors.responseJSON, function (key, item) {
-				$("#addTaskToEvent").find('input[name=' + key + ']').attr("placeholder", item).closest('.form-group').addClass('has-error');
-			});
-		});
-	});
-
-	$("#taskListModal").on("click", "#deleteTask", function() {
-		if( confirm("Do you want to delete task?") ){
-			$.post('/task/' + $(this).data('id'),
-				{ _token: "{{ csrf_token() }}", _method: "DELETE" }
-			).done(function() {
-				$("#taskListModal").find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
-			});
-		}
-	});
-
-	$("#taskListModal").on("click", "#deleteEvent", function() {
-		if ( confirm("Deleting the event will also delete the linked tasks") ) {
-			$.post('/event/' + $(this).data('id'),
-				{ _token: "{{ csrf_token() }}", _method: "DELETE" },
-				function() {
-					$('#taskListModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
-				}
-			);
-		}
 	});
 
 	$("#addTaskToEvent").on("hide.bs.modal", function(event) {
@@ -183,79 +149,3 @@ $(document).ready(function() {
 	@endforeach
 	</tbody>
 </table>
-
-<div id="addTaskToEvent" class="modal fade">
-	<div class="modal-dialog modal-sm">
-	    <!-- Modal content-->
-	    <div class="modal-content">
-		    <div class="modal-header bg-info">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>New Task</h4>
-			</div>
-			<div class="modal-body bg-info">
-				<form class="form-horizontal">
-					<input type="hidden" name="trigger_id" value="" id="trigger_id" />
-  					<div class="form-group">
-						<label class="control-label col-sm-3" for="name">Task Name</label>
-						<div class="col-sm-9 ui-front">
-							<input class="form-control" type="text" name="name" id="task_name" value="" />
-						</div>
-					</div>
-					<input type="hidden" name="code" value="" id="task_code" />
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="due_date">Due date</label>
-						<div class="col-sm-9">
-							<input class="form-control" type="date" name="due_date" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="detail">Detail</label>
-						<div class="col-sm-9">
-							<input class="form-control" type="text" name="detail" id="task_detail" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="cost">Cost</label>
-						<div class="col-sm-9">
-							<input class="form-control" type="text" name="cost" id="task_cost" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="fee">Fee</label>
-						<div class="col-sm-9">
-							<input class="form-control" type="text" name="fee" id="task_fee" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="currency">Currency</label>
-						<div class="col-sm-9">
-							<input class="form-control" type="text" name="currency" id="task_currency" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="time_spent">Time spent</label>
-						<div class="col-sm-9">
-							<input class="form-control" type="text" name="time_spent" id="task_time" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="assigned_to">Assigned to</label>
-						<div class="col-sm-9 ui-front">
-							<input class="form-control" type="text" name="assigned_to" id="task_assigned_to" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="notes">Notes</label>
-						<div class="col-sm-9">
-							<textarea class="form-control" name="notes" id="task_notes"></textarea>
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer bg-info">
-				<button type="button" class="btn btn-primary" name="add_task_submit" id="add-task-submit">Add task</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>

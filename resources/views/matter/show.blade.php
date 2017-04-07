@@ -385,81 +385,81 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 	</div>
 </div>
 
-<!-- <div id="addTaskToEvent" class="modal fade"> -->
-<!-- 	<div class="modal-dialog modal-sm"> -->
+<div id="addTaskToEvent" class="modal fade">
+	<div class="modal-dialog modal-sm">
 	    <!-- Modal content-->
-<!-- 	    <div class="modal-content"> -->
-<!-- 		    <div class="modal-header bg-info"> -->
-<!-- 				<button type="button" class="close" data-dismiss="modal">&times;</button> -->
-<!-- 				<h4>New Task</h4> -->
-<!-- 			</div> -->
-<!-- 			<div class="modal-body bg-info"> -->
-<!-- 				<form class="form-horizontal"> -->
-<!-- 					<input type="hidden" name="trigger_id" value="" id="trigger_id" /> -->
-<!--   					<div class="form-group"> -->
-<!-- 						<label class="control-label col-sm-3" for="name">Task Name</label> -->
-<!-- 						<div class="col-sm-9 ui-front"> -->
-<!-- 							<input class="form-control" type="text" name="name" id="task_name" value="" /> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 					<input type="hidden" name="code" value="" id="task_code" /> -->
-<!-- 					<div class="form-group"> -->
-<!-- 						<label class="control-label col-sm-3" for="due_date">Due date</label> -->
-<!-- 						<div class="col-sm-9"> -->
-<!-- 							<input class="form-control" type="date" name="due_date" value="" /> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 					<div class="form-group"> -->
-<!-- 						<label class="control-label col-sm-3" for="detail">Detail</label> -->
-<!-- 						<div class="col-sm-9"> -->
-<!-- 							<input class="form-control" type="text" name="detail" id="task_detail" value="" /> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 					<div class="form-group"> -->
-<!-- 						<label class="control-label col-sm-3" for="cost">Cost</label> -->
-<!-- 						<div class="col-sm-9"> -->
-<!-- 							<input class="form-control" type="text" name="cost" id="task_cost" value="" /> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 					<div class="form-group"> -->
-<!-- 						<label class="control-label col-sm-3" for="fee">Fee</label> -->
-<!-- 						<div class="col-sm-9"> -->
-<!-- 							<input class="form-control" type="text" name="fee" id="task_fee" value="" /> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 					<div class="form-group"> -->
-<!-- 						<label class="control-label col-sm-3" for="currency">Currency</label> -->
-<!-- 						<div class="col-sm-9"> -->
-<!-- 							<input class="form-control" type="text" name="currency" id="task_currency" value="" /> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 					<div class="form-group"> -->
-<!-- 						<label class="control-label col-sm-3" for="time_spent">Time spent</label> -->
-<!-- 						<div class="col-sm-9"> -->
-<!-- 							<input class="form-control" type="text" name="time_spent" id="task_time" value="" /> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 					<div class="form-group"> -->
-<!-- 						<label class="control-label col-sm-3" for="assigned_to">Assigned to</label> -->
-<!-- 						<div class="col-sm-9 ui-front"> -->
-<!-- 							<input class="form-control" type="text" name="assigned_to" id="task_assigned_to" value="" /> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 					<div class="form-group"> -->
-<!-- 						<label class="control-label col-sm-3" for="notes">Notes</label> -->
-<!-- 						<div class="col-sm-9"> -->
-<!-- 							<textarea class="form-control" name="notes" id="task_notes"></textarea> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 				</form> -->
-<!-- 			</div> -->
-<!-- 			<div class="modal-footer bg-info"> -->
-<!-- 				<button type="button" class="btn btn-primary" name="add_task_submit" id="add-task-submit">Add task</button> -->
-<!-- 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
-<!-- </div> -->
+	    <div class="modal-content">
+		    <div class="modal-header bg-info">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4>New Task</h4>
+			</div>
+			<div class="modal-body bg-info">
+				<form class="form-horizontal">
+					<input type="hidden" name="trigger_id" value="" id="trigger_id" />
+  					<div class="form-group">
+						<label class="control-label col-sm-3" for="name">Task Name</label>
+						<div class="col-sm-9 ui-front">
+							<input class="form-control" type="text" name="name" id="task_name" value="" />
+						</div>
+					</div>
+					<input type="hidden" name="code" value="" id="task_code" />
+					<div class="form-group">
+						<label class="control-label col-sm-3" for="due_date">Due date</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="date" name="due_date" value="" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-3" for="detail">Detail</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" name="detail" id="task_detail" value="" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-3" for="cost">Cost</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" name="cost" id="task_cost" value="" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-3" for="fee">Fee</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" name="fee" id="task_fee" value="" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-3" for="currency">Currency</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" name="currency" id="task_currency" value="" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-3" for="time_spent">Time spent</label>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" name="time_spent" id="task_time" value="" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-3" for="assigned_to">Assigned to</label>
+						<div class="col-sm-9 ui-front">
+							<input class="form-control" type="text" name="assigned_to" id="task_assigned_to" value="" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-3" for="notes">Notes</label>
+						<div class="col-sm-9">
+							<textarea class="form-control" name="notes" id="task_notes"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer bg-info">
+				<button type="button" class="btn btn-primary" name="add_task_submit" id="add-task-submit">Add task</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 @stop
 
@@ -492,7 +492,7 @@ $(document).ready(function() {
 	});
 });
 
-/*$(document).on("click", "#add-task-submit", function() {
+$(document).on("click", "#add-task-submit", function() {
 	var request = $("form").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
 	$.post('/task', request)
 	.done(function() {
@@ -524,7 +524,7 @@ $(document).on("click","#deleteEvent", function() {
 			}
 		);
 	}
-});*/
+});
 </script>
 
 @stop
