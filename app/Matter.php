@@ -10,7 +10,13 @@ class Matter extends Model {
 	protected $table = 'matter';
 	public $timestamps = false; // removes timestamp updating in this table (done via MySQL triggers)
 	protected $hidden = ['creator', 'updated', 'updater'];
+	protected $guarded = ['id', 'creator', 'updated', 'updater'];
 
+	public function getNotesAttribute($value)
+	{
+		return nl2br($value);
+	}
+	
 	public function family() // Gets other family members (where clause is ignored by eager loading)
 	{
 		return $this->hasMany('App\Matter', 'caseref', 'caseref')
@@ -91,7 +97,7 @@ class Matter extends Model {
 	public function events()
 	{
 		return $this->hasMany('App\Event')
-			->orderBy('event_date');
+		->orderBy('event_date');
 	}
 	
 	public function filing()
@@ -128,17 +134,6 @@ class Matter extends Model {
 		->where('code', 'PRI');
 	}
 	
-	/*public function tasks($renewals = 0) 
-	{
-		return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
-			->when($renewals, function ($query) {
-                    return $query->where('task.code', 'REN');
-			}, function ($query) {
-                    return $query->where('task.code', '!=', 'REN');
-			})
-			->orderBy('due_date');
-	}*/
-	
 	public function tasksPending() // Excludes renewals
 	{
 		return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
@@ -146,13 +141,6 @@ class Matter extends Model {
 		->where('done', 0)
 		->orderBy('due_date');
 	}
-	
-	/*public function renewals()
-	{
-		return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
-		->where('task.code', 'REN')
-		->orderBy('due_date');
-	}*/
 	
 	public function renewalsPending()
 	{

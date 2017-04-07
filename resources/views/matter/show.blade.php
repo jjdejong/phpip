@@ -1,6 +1,28 @@
 @extends('layouts.app')
 
+@section('style')
+
+<style>
+.hidden-action {
+	display: none;
+}
+.reveal-hidden:hover .hidden-action {
+	display: inline-block;
+}
+.noformat {
+    border: none;
+    background: transparent;
+    color: inherit;
+    padding: 0px;
+    height: inherit;
+    display: inline;
+}
+</style>
+
+@stop
+
 @section('content')
+
 <?php
 if ( $matter->container_id )
 	$classifiers = $matter->container->classifiers;
@@ -18,7 +40,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<a href="/matter?Ref={{ $matter->caseref }}" data-toggle="tooltip" data-placement="right" title="See family">{{ $matter->caseref . $matter->suffix }}</a>
 				({{ $matter->category->category }})
 				<a href="/matter/{{ $matter->id }}/edit">
-				<span class="glyphicon glyphicon-edit pull-right" data-toggle="tooltip" data-placement="right" title="Avanced edit"></span>
+					<span class="glyphicon glyphicon-edit pull-right" data-toggle="tooltip" data-placement="right" title="Avanced edit"></span>
 				</a>
 			</div>
 			<div class="panel-body">
@@ -46,7 +68,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					<span class="col-xs-2"><strong>{{ $key }}</strong></span>
 					<span class="col-xs-10">
 					@foreach ( $title_group as $title )
-						{{ $title->value }}
+						<span id="titleItem" data-id="{{ $title->id }}" contenteditable="true">{{ $title->value }}</span>
 					@endforeach
 					</span>
 				</div>
@@ -93,17 +115,27 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 <div class="row">
 	<div class="col-sm-3">
 		<div class="panel panel-primary">
-			<div class="panel-heading panel-title">Actors</div>
+			<div class="panel-heading panel-title reveal-hidden">
+				Actors
+				<a class="hidden-action pull-right" data-toggle="modal" href="#addActor" title="Add Actor" data-role="">
+					<span class="glyphicon glyphicon-plus-sign bg-primary"></span>
+				</a>
+			</div>
 			<div class="panel-body panel-group" id="actor-panel">
 				@foreach ( $matter->actors()->groupBy('role_name') as $key => $role_group )
 				<div class="row">
 					<div class="col-sm-12">
-					<div class="panel panel-default">
+					<div class="panel panel-default reveal-hidden">
 						<div class="panel-heading panel-title">
-							{{ $key }}
-							<a class="pull-right" data-toggle="modal" href="#addActor" title="Add Actor" data-role="{{ $role_group[0]->role }}">
-								<span class="glyphicon glyphicon-plus-sign"></span>
-							</a>
+							<div class="row">
+								<span class="col-xs-9">{{ $key }}</span>
+								<a class="hidden-action col-xs-2" data-toggle="modal" href="#editRoleGroup" title="Edit group" data-role="{{ $role_group[0]->role }}">
+									<span class="glyphicon glyphicon-edit text-success"></span>
+								</a>
+								<a class="hidden-action col-xs-1" data-toggle="modal" href="#addActor" title="Add Actor as {{ $key }}" data-role="{{ $role_group[0]->role }}">
+									<span class="glyphicon glyphicon-plus-sign text-info"></span>
+								</a>
+							</div>
 						</div>
 						<div class="panel-body" style="max-height: 80px; overflow: auto;">
 							<ul class = "list-unstyled">
@@ -140,15 +172,15 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 	<div class="col-sm-9">
 		<div class="row">
 			<div class="col-sm-6">
-				<div class="panel panel-primary">
+				<div class="panel panel-primary reveal-hidden">
 					<div class="panel-heading panel-title">
 						<div class="row">
 							<span class="col-xs-5">Status</span>
 							<span class="col-xs-3">Date</span>
 							<span class="col-xs-4">
 								Number
-								<a href="/matter/{{ $matter->id }}/events" class="pull-right" data-toggle="modal" data-target="#allEvents" data-remote="false" title="All tasks">
-									<span class="glyphicon glyphicon-open" style="color: white;"></span>
+								<a href="/matter/{{ $matter->id }}/events" class="hidden-action pull-right" data-toggle="modal" data-target="#allEventsModal" data-remote="false">
+									<span class="glyphicon glyphicon-open bg-primary" data-toggle="tooltip" title="All events"></span>
 								</a>
 							</span>
 						</div>
@@ -178,14 +210,14 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				</div>	
 			</div>
 			<div class="col-sm-6">
-				<div class="panel panel-primary">
+				<div class="panel panel-primary reveal-hidden">
 					<div class="panel-heading panel-title">
 						<div class="row">
 							<span class="col-xs-9">Open Tasks</span>
 							<span class="col-xs-3">
 								Due
-								<a href="/matter/{{ $matter->id }}/tasks" class="pull-right" data-toggle="modal" data-target="#taskList" data-remote="false" title="All tasks">
-									<span class="glyphicon glyphicon-open" style="color: white;"></span>
+								<a href="/matter/{{ $matter->id }}/tasks" class="hidden-action pull-right" data-toggle="modal" data-target="#taskListModal" data-remote="false" title="All tasks">
+									<span class="glyphicon glyphicon-open bg-primary"></span>
 								</a>
 							</span>
 						</div>
@@ -204,14 +236,14 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 		
 		<div class="row">
 			<div class="col-sm-3">
-				<div class="panel panel-primary">
+				<div class="panel panel-primary reveal-hidden">
 					<div class="panel-heading panel-title">
 						<div class="row">
 							<span class="col-xs-6">Renewals</span>
 							<span class="col-xs-6">
 								Due
-								<a href="/matter/{{ $matter->id }}/renewals" class="pull-right" data-toggle="modal" data-target="#taskList" data-remote="false" title="All renewals">
-									<span class="glyphicon glyphicon-open" style="color: white;"></span>
+								<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action pull-right" data-toggle="modal" data-target="#taskListModal" data-remote="false" title="All renewals">
+									<span class="glyphicon glyphicon-open bg-primary"></span>
 								</a>
 							</span>
 						</div>
@@ -227,9 +259,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				</div>
 			</div>
 			<div class="col-sm-5">
-				<div class="panel panel-primary">
+				<div class="panel panel-primary reveal-hidden">
 					<div class="panel-heading panel-title">
 						Classifiers
+						<a href="/matter/{{ $matter->id }}/classifiers" class="hidden-action pull-right" data-toggle="modal" data-target="#classifierDetail" data-remote="false" title="Classifier detail">
+							<span class="glyphicon glyphicon-open bg-primary"></span>
+						</a>
 					</div>
 					<div class="panel-body" id="classifier-panel" style="height: 100px; overflow: auto;">
 						@foreach ( $classifiers as $key => $classifier_group )
@@ -271,7 +306,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					<div class="panel-heading panel-title">
 						Related Matters
 					</div>
-					<div class="panel-body" id="notes-panel" style="height: 100px; overflow: auto;">
+					<div class="panel-body" id="related-panel" style="height: 100px; overflow: auto;">
 						<div class="row">
 						@if ( $matter->has('family') )
 							<strong>{{ $matter->caseref }}</strong>
@@ -297,9 +332,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<div class="panel panel-default">
 					<div class="panel-heading panel-title">
 						Notes
+						<a href="#" class="hidden-action" id="updateNotes" title="Update notes">
+							<span class="glyphicon glyphicon-flash text-danger"></span>
+						</a>
 					</div>
 					<div class="panel-body" id="notes-panel" style="height: 100px; overflow: auto;">
-						{{ $matter->notes }}
+						<span id="notes" contenteditable="true">{!! $matter->notes or '...' !!}</span>
 					</div>
 				</div>
 			</div>
@@ -309,16 +347,16 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 <!-- Modals -->
 
-<div id="taskList" class="modal fade" role="dialog">
+<div id="allEventsModal" class="modal fade" role="dialog">
 	<div class="modal-dialog modal-lg">
 	    <!-- Modal content-->
 	    <div class="modal-content">
 		    <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>Tasks</h4>
+				<h4>Events</h4>
 			</div>
 			<div class="modal-body">
-				
+				Ajax placeholder
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -327,61 +365,166 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 	</div>
 </div>
 
-<div id="addTaskToEvent" class="modal fade" role="dialog">
-	<div class="modal-dialog">
+<div id="taskListModal" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-lg">
 	    <!-- Modal content-->
 	    <div class="modal-content">
 		    <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>New Task</h4>
+				<h4>Tasks</h4>
+				<mark>Values are editable. Click on a value to change it and press Enter to save changes</mark>
 			</div>
 			<div class="modal-body">
-				<input type="hidden" name="trigger_id" value="" id="trigger_id" />
-				<label for="task_name"><b>Task Name</b></label>
-				<input type="text" name="task_name" id="task_name" value="" style="width: 120px;" />
-				<input type="hidden" name="task_id" id="task_id" value="" />
-				<label for="task_duedate"><b>Due date</b></label>
-				<input type="text" name="task_duedate" id="task_duedate" value="" style="width: 120px;" />
-				<br>
-				<label for="task_detail">Detail </label>
-				<input type="text" name="task_detail" id="task_detail" value="" style="width: 120px;" />
-				<label for="task_cost">Cost </label>
-				<input type="text" name="task_cost" id="task_cost" value="" style="width: 120px;" />
-				<br>
-				<label for="task_fee">Fee </label>
-				<input type="text" name="task_fee" id="task_fee" value="" style="width: 120px;" />
-				<label for="task_currency">Currency </label>
-				<input type="text" name="task_currency" id="task_currency" value="" style="width: 120px;" />
-				<br>
-				<label for="task_time">Time spent</label>
-				<input type="text" name="task_time" id="task_time" value="" style="width: 120px;" />
-				<label for="task_assigned_to">Assigned to </label>
-				<input type="text" name="task_assigned_to" id="task_assigned_to" value="" style="width: 120px;" />
-				<br> 
-				<label for="task_notes">Notes</label>
-				<textarea name="task_notes" id="task_notes" rows=2 cols=45></textarea>
+				Ajax placeholder
 			</div>
 			<div class="modal-footer">
-				<button name="add_task_submit" id="add-task-submit" style="float: right;">Add task</button>
+				<span class="alert pull-left"></span>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
-		</div>
+	    </div>
 	</div>
 </div>
+
+<!-- <div id="addTaskToEvent" class="modal fade"> -->
+<!-- 	<div class="modal-dialog modal-sm"> -->
+	    <!-- Modal content-->
+<!-- 	    <div class="modal-content"> -->
+<!-- 		    <div class="modal-header bg-info"> -->
+<!-- 				<button type="button" class="close" data-dismiss="modal">&times;</button> -->
+<!-- 				<h4>New Task</h4> -->
+<!-- 			</div> -->
+<!-- 			<div class="modal-body bg-info"> -->
+<!-- 				<form class="form-horizontal"> -->
+<!-- 					<input type="hidden" name="trigger_id" value="" id="trigger_id" /> -->
+<!--   					<div class="form-group"> -->
+<!-- 						<label class="control-label col-sm-3" for="name">Task Name</label> -->
+<!-- 						<div class="col-sm-9 ui-front"> -->
+<!-- 							<input class="form-control" type="text" name="name" id="task_name" value="" /> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<input type="hidden" name="code" value="" id="task_code" /> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label class="control-label col-sm-3" for="due_date">Due date</label> -->
+<!-- 						<div class="col-sm-9"> -->
+<!-- 							<input class="form-control" type="date" name="due_date" value="" /> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label class="control-label col-sm-3" for="detail">Detail</label> -->
+<!-- 						<div class="col-sm-9"> -->
+<!-- 							<input class="form-control" type="text" name="detail" id="task_detail" value="" /> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label class="control-label col-sm-3" for="cost">Cost</label> -->
+<!-- 						<div class="col-sm-9"> -->
+<!-- 							<input class="form-control" type="text" name="cost" id="task_cost" value="" /> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label class="control-label col-sm-3" for="fee">Fee</label> -->
+<!-- 						<div class="col-sm-9"> -->
+<!-- 							<input class="form-control" type="text" name="fee" id="task_fee" value="" /> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label class="control-label col-sm-3" for="currency">Currency</label> -->
+<!-- 						<div class="col-sm-9"> -->
+<!-- 							<input class="form-control" type="text" name="currency" id="task_currency" value="" /> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label class="control-label col-sm-3" for="time_spent">Time spent</label> -->
+<!-- 						<div class="col-sm-9"> -->
+<!-- 							<input class="form-control" type="text" name="time_spent" id="task_time" value="" /> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label class="control-label col-sm-3" for="assigned_to">Assigned to</label> -->
+<!-- 						<div class="col-sm-9 ui-front"> -->
+<!-- 							<input class="form-control" type="text" name="assigned_to" id="task_assigned_to" value="" /> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="form-group"> -->
+<!-- 						<label class="control-label col-sm-3" for="notes">Notes</label> -->
+<!-- 						<div class="col-sm-9"> -->
+<!-- 							<textarea class="form-control" name="notes" id="task_notes"></textarea> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</form> -->
+<!-- 			</div> -->
+<!-- 			<div class="modal-footer bg-info"> -->
+<!-- 				<button type="button" class="btn btn-primary" name="add_task_submit" id="add-task-submit">Add task</button> -->
+<!-- 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- </div> -->
 
 @stop
 
 @section('script')
 
 <script>
-$(document).ready(function(){
+$(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
 
-    $("#taskList").on("show.bs.modal", function(e) {
-        var link = $(e.relatedTarget);
-        $(this).find(".modal-body").load(link.attr("href"));
+    $("#taskListModal, #allEventsModal").on("show.bs.modal", function(event) {
+        $(this).find(".modal-body").load( $(event.relatedTarget).attr("href") );
     });
+
+    $("#taskListModal").on("hide.bs.modal", function(event) {
+        $("#opentask-panel").load("/matter/{{ $matter->id }} #opentask-panel > div");
+    });
+
+	$("#notes").keyup(function() {
+		$("#updateNotes").removeClass('hidden-action');
+		$(this).addClass('changed');
+	});
+
+	$("#notes").blur(function() {
+		if ( $(this).hasClass('changed') ) {
+			$.post("/matter/{{ $matter->id }}", 
+				{ notes: $("#notes").text(), _token: "{{ csrf_token() }}", _method: "PUT" });
+			$("#updateNotes").addClass('hidden-action');
+			$(this).removeClass('changed');
+		}
+	});
 });
+
+/*$(document).on("click", "#add-task-submit", function() {
+	var request = $("form").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
+	$.post('/task', request)
+	.done(function() {
+		$("#addTaskToEvent").modal("hide");
+		$('#taskListModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
+	}).fail(function(errors) {
+		$.each(errors.responseJSON, function (key, item) {
+			$("#addTaskToEvent").find('input[name=' + key + ']').attr("placeholder", item).closest('.form-group').addClass('has-error');
+		});
+	});
+});
+
+$(document).on("click", "#deleteTask", function() {
+	if( confirm("Do you want to delete task?") ){
+		$.post('/task/' + $(this).data('id'),
+			{ _token: "{{ csrf_token() }}", _method: "DELETE" }
+		).done(function() {
+			$('#taskListModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
+		});
+	}
+});
+
+$(document).on("click","#deleteEvent", function() {
+	if ( confirm("Deleting the event will also delete the linked tasks") ) {
+		$.post('/event/' + $(this).data('id'),
+			{ _token: "{{ csrf_token() }}", _method: "DELETE" },
+			function() {
+				$('#taskListModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
+			}
+		);
+	}
+});*/
 </script>
 
 @stop

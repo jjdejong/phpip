@@ -12,13 +12,7 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
-    {
-    	$events = Event::with('info')
-    		->where('matter_id', $id)
-    		->orderBy('event_date');
-    	return $events->get();
-    }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -38,7 +32,13 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+    	$this->validate($request, [
+			'name' => 'required',
+			'matter_id' => 'required|numeric',
+			'event_date' => 'required|date'
+    	]);
+    	 
+    	Event::create($request->except(['_token', '_method', 'name']));
     }
 
     /**
@@ -72,7 +72,12 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        //
+    	$this->validate($request, [
+    		'event_date' => 'date',
+    		'alt_matter_id' => 'nullable|numeric'
+    	]);
+    	 
+    	$event->update($request->except(['_token', '_method']));
     }
 
     /**
@@ -83,6 +88,6 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
-        //
+    	$event->delete();
     }
 }

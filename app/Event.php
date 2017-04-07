@@ -10,6 +10,7 @@ class Event extends Model
     protected $table = 'event';
     public $timestamps = false;
     protected $hidden = ['creator', 'updated', 'updater'];
+    protected $guarded = ['id', 'creator', 'updated', 'updater'];
 
     public function info() 
     {

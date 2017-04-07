@@ -12,6 +12,7 @@
 */
 
 use App\Matter;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,16 +24,32 @@ Route::any('/register','HomeController@index');
 Route::get('/home', 'HomeController@index');
 
 Route::group(['middleware' => 'auth'], function () {
+	// Matter Controller
 	Route::get('matter', 'MatterController@index');
 	Route::get('matter/export', 'MatterController@export');
-	Route::get('matter/{id}', 'MatterController@show')->middleware('can:view-noclient');
-
-	Route::get('matter/{id}/events', 'EventController@index'); // Not used yet
-
-	Route::get('matter/{id}/tasks', 'TaskController@tasks');
+	Route::get('matter/{matter}', 'MatterController@show')->middleware('can:view-noclient');
+	Route::get('matter/{matter}/events', 'MatterController@events');
+	Route::get('matter/{matter}/tasks', 'MatterController@tasks');
+	Route::get('matter/{matter}/renewals', 'MatterController@renewals');
+	Route::put('matter/{matter}', 'MatterController@update');
 	
-	Route::get('matter/{id}/renewals', 'TaskController@renewals');
+	Route::get('event-name/search', function (Request $request) {
+		$term = $request->input('term');
+		$results = App\EventName::select('name as value', 'code as id')
+			->where('name', 'like', "%$term%");
+		if ( $request->input('is_task') )
+				$results->where('is_task', 1);
+		return $results->take(10)->get();
+	});
 
+	Route::get('user/search', function (Request $request) {
+		$term = $request->input('term');
+		return App\User::select('id', 'name as label', 'login as value')
+			->whereNotNull('login')
+			->where('name', 'like', "%$term%")
+			->take(10)->get();
+	});
+	
 	Route::get('actor/{id}', function ($id) {
 		return App\Actor::find($id);
 	});
@@ -44,6 +61,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('role', function () {
 		return App\Role::all();
 	});
+	
+	Route::resource('task', 'TaskController');
+	Route::resource('event', 'EventController');
+	Route::resource('actor', 'ActorController');
 	
 	// Testing - not used
 		Route::get('matter/{id}/actors', function ($id) {

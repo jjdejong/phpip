@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Task;
-use App\Event;
+//use App\Event;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -13,22 +13,7 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function tasks($id) // All events and their tasks, excepting renewals
-    {
-    	$events = Event::with(['tasks' => function($query) {
-    		$query->where('code', '!=', 'REN');
-    	}])->where('matter_id', $id)
-    	->orderBy('event_date')->get();
-    	return view('matter.tasks', compact('events'));
-    }
     
-    public function renewals($id) // The renewal trigger event and its renewals
-    {
-    	$events = Event::with('tasks')->whereHas('tasks', function($query) {
-    		$query->where('code', 'REN');
-	    })->where('matter_id', $id)->get();
-	    return view('matter.tasks', compact('events'));
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -48,7 +33,16 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+    	$this->validate($request, [
+			'trigger_id' => 'required|numeric',
+			'name' => 'required',
+			'due_date' => 'required|date',
+			'done_date' => 'nullable|date',
+			'cost' => 'nullable|numeric',
+			'fee' => 'nullable|numeric'
+    	]);
+    	
+    	Task::create($request->except(['_token', '_method', 'name']));
     }
 
     /**
@@ -82,7 +76,14 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        //
+    	$this->validate($request, [
+			'due_date' => 'date',
+			'done_date' => 'nullable|date',
+			'cost' => 'nullable|numeric',
+			'fee' => 'nullable|numeric'
+    	]);
+    	
+    	$task->update($request->except(['_token', '_method']));
     }
 
     /**
@@ -93,6 +94,6 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
     }
 }

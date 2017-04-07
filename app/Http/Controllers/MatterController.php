@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Matter;
+use App\Event;
 // use Illuminate\Support\Facades\Auth;
 // use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -47,6 +48,29 @@ class MatterController extends Controller {
 	{
 		$matter = Matter::with('tasksPending.info', 'renewalsPending', 'events.info', 'classifiers.type', 'container.classifiers.type')->find($id);
 		return view('matter.show', compact('matter'));
+	}
+	
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  \App\Matter  $matter
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit(Matter $matter)
+	{
+		//
+	}
+	
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \App\Matter  $matter
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, Matter $matter)
+	{
+		$matter->update($request->except(['_token', '_method']));		
 	}
 	
 	/**
@@ -115,5 +139,32 @@ class MatterController extends Controller {
 			200,
 			[ 'Content-Type' => 'application/csv', 'Content-disposition' => 'attachment; filename=' . $filename ] 
 		);
+	}
+	
+	public function events(Matter $matter)
+	{
+		$events = Event::with('info')
+		->where('matter_id', $matter->id)
+		->orderBy('event_date')->get();
+		return $events;
+	}
+	
+	public function tasks(Matter $matter) // All events and their tasks, excepting renewals
+	{
+		$events = Event::with(['tasks' => function($query) {
+			$query->where('code', '!=', 'REN');
+		}])->where('matter_id', $matter->id)
+		->orderBy('event_date')->get();
+		return view('matter.tasks', compact('events', 'matter'));
+	}
+	
+	public function renewals(Matter $matter) // The renewal trigger event and its renewals
+	{
+		$events = Event::with(['tasks' => function($query) {
+			$query->where('code', 'REN');
+		}])->whereHas('tasks', function($query) {
+			$query->where('code', 'REN');
+		})->where('matter_id', $matter->id)->get();
+		return view('matter.tasks', compact('events', 'matter'));
 	}
 }

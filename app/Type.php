@@ -11,4 +11,5 @@ class Type extends Model
     public $incrementing = false;
     public $timestamps = false;
     protected $hidden = ['creator', 'updated', 'updater'];
+    protected $guarded = ['code', 'creator', 'updated', 'updater'];
 }
