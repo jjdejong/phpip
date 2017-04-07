@@ -372,7 +372,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 		    <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4>Tasks</h4>
-				<mark>Values are editable. Click on a value to change it and press Enter to save changes</mark>
+				<mark>Values are editable. Click on a value to change it and press <code>Enter</code> to save changes</mark>
 			</div>
 			<div class="modal-body">
 				Ajax placeholder
@@ -382,82 +382,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 	    </div>
-	</div>
-</div>
-
-<div id="addTaskToEvent" class="modal fade">
-	<div class="modal-dialog modal-sm">
-	    <!-- Modal content-->
-	    <div class="modal-content">
-		    <div class="modal-header bg-info">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>New Task</h4>
-			</div>
-			<div class="modal-body bg-info">
-				<form class="form-horizontal">
-					<input type="hidden" name="trigger_id" value="" id="trigger_id" />
-  					<div class="form-group">
-						<label class="control-label col-sm-3" for="name">Task Name</label>
-						<div class="col-sm-9 ui-front">
-							<input class="form-control" type="text" name="name" id="task_name" value="" />
-						</div>
-					</div>
-					<input type="hidden" name="code" value="" id="task_code" />
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="due_date">Due date</label>
-						<div class="col-sm-9">
-							<input class="form-control" type="date" name="due_date" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="detail">Detail</label>
-						<div class="col-sm-9">
-							<input class="form-control" type="text" name="detail" id="task_detail" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="cost">Cost</label>
-						<div class="col-sm-9">
-							<input class="form-control" type="text" name="cost" id="task_cost" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="fee">Fee</label>
-						<div class="col-sm-9">
-							<input class="form-control" type="text" name="fee" id="task_fee" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="currency">Currency</label>
-						<div class="col-sm-9">
-							<input class="form-control" type="text" name="currency" id="task_currency" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="time_spent">Time spent</label>
-						<div class="col-sm-9">
-							<input class="form-control" type="text" name="time_spent" id="task_time" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="assigned_to">Assigned to</label>
-						<div class="col-sm-9 ui-front">
-							<input class="form-control" type="text" name="assigned_to" id="task_assigned_to" value="" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="notes">Notes</label>
-						<div class="col-sm-9">
-							<textarea class="form-control" name="notes" id="task_notes"></textarea>
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer bg-info">
-				<button type="button" class="btn btn-primary" name="add_task_submit" id="add-task-submit">Add task</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-		</div>
 	</div>
 </div>
 
@@ -492,20 +416,54 @@ $(document).ready(function() {
 	});
 });
 
-$(document).on("click", "#add-task-submit", function() {
+$("#taskListModal").on("click", "#addTaskToEvent", function() {
+	var template = $("#addTaskForm").html();
+	$(this).parents("tbody").append('<tr><td colspan="11">' + template + "</td></tr>");
+   	$('input[name="trigger_id"]').val( $(this).data("id") );
+   	$('input[name="name"]').autocomplete({
+		minLength: 2,
+		source: "/event-name/search?is_task=1",
+		select: function( event, ui ) {
+			$('input[name="code"]').val( ui.item.id );
+		},
+		change: function (event, ui) {
+			if (!ui.item) $(this).val("");
+		}
+	});
+   	$('input[name="assigned_to"]').autocomplete({
+		minLength: 2,
+		source: "/user/search",
+		change: function (event, ui) {
+			if (!ui.item) $(this).val("");
+		}
+	});
+   	$('input[type="date"]').datepicker({
+		dateFormat: 'yy-mm-dd',
+		showButtonPanel: true,
+		onSelect: function(date, instance) {
+			$(this).focus();
+			$(this).parent("td").addClass("bg-warning");
+		}
+	});
+});
+
+$("#taskListModal").on("click", "#addTaskSubmit", function() {
 	var request = $("form").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
 	$.post('/task', request)
 	.done(function() {
-		$("#addTaskToEvent").modal("hide");
 		$('#taskListModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
 	}).fail(function(errors) {
 		$.each(errors.responseJSON, function (key, item) {
-			$("#addTaskToEvent").find('input[name=' + key + ']').attr("placeholder", item).closest('.form-group').addClass('has-error');
+			$("form").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("has-error");
 		});
 	});
 });
 
-$(document).on("click", "#deleteTask", function() {
+$("#taskListModal").on("click", "#addTaskCancel", function() {
+	$("#addTaskCancel").parents("tr").html("");
+});
+
+$("#taskListModal").on("click", "#deleteTask", function() {
 	if( confirm("Do you want to delete task?") ){
 		$.post('/task/' + $(this).data('id'),
 			{ _token: "{{ csrf_token() }}", _method: "DELETE" }
@@ -515,7 +473,7 @@ $(document).on("click", "#deleteTask", function() {
 	}
 });
 
-$(document).on("click","#deleteEvent", function() {
+$("#taskListModal").on("click","#deleteEvent", function() {
 	if ( confirm("Deleting the event will also delete the linked tasks") ) {
 		$.post('/event/' + $(this).data('id'),
 			{ _token: "{{ csrf_token() }}", _method: "DELETE" },

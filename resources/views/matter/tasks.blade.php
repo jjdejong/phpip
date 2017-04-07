@@ -36,39 +36,14 @@ $(document).ready(function() {
 			$("#taskListModal").find(".alert").removeClass("alert-danger").html("");
 		})
 	});
-
-	$("#task_name").autocomplete({
-		minLength: 2,
-		source: "/event-name/search?is_task=1",
-		select: function( event, ui ) {
-			$( "#task_code" ).val( ui.item.id );
-		},
-		change: function (event, ui) {
-			if (!ui.item) $(this).val("");
-		}
-	});
 	
-	$('#task_assigned_to, input[name="assigned_to"]').autocomplete({
+	$('input[name="assigned_to"]').autocomplete({
 		minLength: 2,
 		source: "/user/search",
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
-			$(this).parent().addClass("alert alert-warning");
+			if ($(this).hasClass("noformat")) $(this).parent().addClass("alert alert-warning");
 		}
-	});
-	
-	$("#addTaskToEvent").on("show.bs.modal", function(event) {
-	   	$("#trigger_id").val( $(event.relatedTarget).data("id") );
-		$(this).find("h4").html( $(event.relatedTarget).attr("title") );
-	});
-
-	$("#addTaskToEvent").on("shown.bs.modal", function(event) {
-		$("#task_name").focus();
-	});
-
-	$("#addTaskToEvent").on("hide.bs.modal", function(event) {
-		$(this).find("input").val(""); // Empty input fields when modal is closed
-		$(this).find(".has-error").removeClass("has-error");
 	});
 });
 </script>
@@ -91,15 +66,15 @@ $(document).ready(function() {
 			<th style="width: 24px;">&nbsp;</th>
 		</tr>
 	</thead>
-	<tbody>
 	@foreach ( $events as $event )
+	<tbody>
 		<tr class="reveal-hidden">
 			<td colspan="3">
 				<span style="position: relative; left: -10px; margin-right: 10px;" class="text-warning"><strong>{{ $event->info->name . ": " . $event->event_date }}</strong></span>
-				<a href="#addTaskToEvent" class="hidden-action" data-toggle="modal" data-id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
+				<a href="javascript:void(0);" id="addTaskToEvent" class="hidden-action" data-id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
 					<span class="glyphicon glyphicon-plus-sign"></span>
 				</a>
-				<a href="#" class="hidden-action" id="deleteEvent" data-id="{{ $event->id }}" title="Delete event" style="margin-left: 15px;">
+				<a href="javascript:void(0);" class="hidden-action" id="deleteEvent" data-id="{{ $event->id }}" title="Delete event" style="margin-left: 15px;">
 					<span class="glyphicon glyphicon-trash text-danger"></span>
 				</a>
 			</td>
@@ -140,12 +115,42 @@ $(document).ready(function() {
 				<input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"/>
 			</td>
 			<td>
-				<a href="#" class="hidden-action" id="deleteTask" data-id="{{ $task->id }}" title="Delete task">
+				<a href="javascript:void(0);" class="hidden-action" id="deleteTask" data-id="{{ $task->id }}" title="Delete task">
 					<span class="glyphicon glyphicon-trash text-danger"></span>
 				</a>
 			</td>
 		</tr>
 		@endforeach
-	@endforeach
 	</tbody>
+	@endforeach
 </table>
+
+<template id="addTaskForm">
+	<form class="form-inline">
+			<input type="hidden" name="trigger_id" value="" id="trigger_id" />
+			<input type="hidden" name="code" value="" id="task_code" />
+		<div class="form-group form-group-sm ui-front">
+			<input type="text" class="form-control" name="name" placeholder="Name"/>
+		</div>
+		<div class="form-group form-group-sm">
+			<input type="text" class="form-control" name="detail" placeholder="Detail"/>
+		</div>
+		<div class="form-group form-group-sm ui-front">
+			<input type="date" class="form-control" size="10" name="due_date" placeholder="Date"/>
+		</div>
+		<div class="form-group form-group-sm">
+			<input type="text" class="form-control" size="6" name="cost" placeholder="Cost"/>
+		</div>
+		<div class="form-group form-group-sm">
+			<input type="text" class="form-control" size="6" name="fee" placeholder="Fee"/>
+		</div>
+		<div class="form-group form-group-sm ui-front">
+			<input type="text" class="form-control" size="3" name="currency" placeholder="EUR"/>
+			<input type="time" class="form-control" size="6" name="time_spent" placeholder="Time"/>
+			<input type="text" class="form-control" size="12" name="assigned_to" placeholder="Assigned to"/>
+			<input type="text" class="form-control" name="notes" placeholder="Notes"/>
+			<button type="button" class="btn btn-primary" id="addTaskSubmit"><span class="glyphicon glyphicon-ok"></span></button>
+			<button type="button" class="btn btn-primary" id="addTaskCancel"><span class="glyphicon glyphicon-remove"></span></button>
+		</div>
+	</form>
+</template>
