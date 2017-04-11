@@ -12,9 +12,9 @@ class Matter extends Model {
 	protected $hidden = ['creator', 'updated', 'updater'];
 	protected $guarded = ['id', 'creator', 'updated', 'updater'];
 
-	public function getNotesAttribute($value)
+	public function getUidAttribute()
 	{
-		return nl2br($value);
+		return $this->caseref . $this->suffix;
 	}
 	
 	public function family() // Gets other family members (where clause is ignored by eager loading)

@@ -146,7 +146,7 @@ class MatterController extends Controller {
 		$events = Event::with('info')
 		->where('matter_id', $matter->id)
 		->orderBy('event_date')->get();
-		return $events;
+		return view('matter.events', compact('events', 'matter'));
 	}
 	
 	public function tasks(Matter $matter) // All events and their tasks, excepting renewals

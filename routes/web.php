@@ -25,6 +25,12 @@ Route::get('/home', 'HomeController@index');
 
 Route::group(['middleware' => 'auth'], function () {
 	// Matter Controller
+	Route::get('matter/search', function (Request $request) {
+		$term = $request->input('term');
+		return App\Matter::with('filing')->selectRaw('id as value, CONCAT(caseref, suffix) as label')
+		->where('caseref', 'like', "$term%")
+		->take(10)->get();
+	});
 	Route::get('matter', 'MatterController@index');
 	Route::get('matter/export', 'MatterController@export');
 	Route::get('matter/{matter}', 'MatterController@show')->middleware('can:view-noclient');
@@ -41,6 +47,15 @@ Route::group(['middleware' => 'auth'], function () {
 				$results->where('is_task', 1);
 		return $results->take(10)->get();
 	});
+	
+	Route::get('classifier-type/search', function (Request $request) {
+		$term = $request->input('term');
+		$results = App\ClassifierType::select('type as value', 'code as id')
+		->where('type', 'like', "%$term%");
+		if ( $request->input('main_display') )
+			$results->where('main_display', 1);
+		return $results->take(5)->get();
+	});
 
 	Route::get('user/search', function (Request $request) {
 		$term = $request->input('term');
@@ -49,13 +64,12 @@ Route::group(['middleware' => 'auth'], function () {
 			->where('name', 'like', "%$term%")
 			->take(10)->get();
 	});
-	
-	Route::get('actor/{id}', function ($id) {
-		return App\Actor::find($id);
-	});
 
-	Route::get('actor/search/{term}', function ($term) {
-		return App\Actor::where('name', 'like', "%$term%")->take(25)->get();
+	Route::get('actor/search', function (Request $request) {
+		$term = $request->input('term');
+		return App\Actor::select('id as value', 'name as label')
+			->where('name', 'like', "%$term%")
+			->take(25)->get();
 	});
 	
 	Route::get('role', function () {
@@ -65,6 +79,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('task', 'TaskController');
 	Route::resource('event', 'EventController');
 	Route::resource('actor', 'ActorController');
+	Route::resource('classifier', 'ClassifierController');
 	
 	// Testing - not used
 		Route::get('matter/{id}/actors', function ($id) {

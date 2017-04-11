@@ -10,13 +10,13 @@ $(document).ready(function() {
 		}
 	});
 	
-	$('input.noformat').keypress(function (e) {
+	$("#taskListModal").find('input.noformat').keypress(function (e) {
 		if (e.which == 13) {
 			e.preventDefault();
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
 			$.post('/task/'+ $(this).closest("tr").data("task_id"), data)
 			.done(function () {
-				$("#taskListModal").find(".modal-body").load("/matter/{{ $events[0]->matter_id }}/tasks");
+				$("#taskListModal").find(".modal-body").load("/matter/{{ $matter->id }}/" + tasksOrRenewals);
 				$("#taskListModal").find(".alert").removeClass("alert-danger").html("");
 			}).fail(function(errors) {
 				$.each(errors.responseJSON, function (key, item) {
@@ -27,12 +27,12 @@ $(document).ready(function() {
 		$(this).parent("td").addClass("bg-warning");   
 	});
 
-	$('input[type="checkbox"]').click(function() {
+	$("#taskListModal").find('input[type="checkbox"]').click(function() {
 		var flag = 0;
 		if ( $(this).is(":checked") ) flag = 1;
 		$.post('/task/'+ $(this).closest("tr").data("task_id"), { _token: "{{ csrf_token() }}", _method: "PUT", done: flag })
 		.done(function () {
-			$("#taskListModal").find(".modal-body").load("/matter/{{ $events[0]->matter_id }}/tasks");
+			$("#taskListModal").find(".modal-body").load("/matter/{{ $matter->id }}/" + tasksOrRenewals);
 			$("#taskListModal").find(".alert").removeClass("alert-danger").html("");
 		})
 	});
@@ -125,32 +125,37 @@ $(document).ready(function() {
 	@endforeach
 </table>
 
-<template id="addTaskForm">
-	<form class="form-inline">
-			<input type="hidden" name="trigger_id" value="" id="trigger_id" />
-			<input type="hidden" name="code" value="" id="task_code" />
-		<div class="form-group form-group-sm ui-front">
-			<input type="text" class="form-control" name="name" placeholder="Name"/>
-		</div>
-		<div class="form-group form-group-sm">
-			<input type="text" class="form-control" name="detail" placeholder="Detail"/>
-		</div>
-		<div class="form-group form-group-sm ui-front">
-			<input type="date" class="form-control" size="10" name="due_date" placeholder="Date"/>
-		</div>
-		<div class="form-group form-group-sm">
-			<input type="text" class="form-control" size="6" name="cost" placeholder="Cost"/>
-		</div>
-		<div class="form-group form-group-sm">
-			<input type="text" class="form-control" size="6" name="fee" placeholder="Fee"/>
-		</div>
-		<div class="form-group form-group-sm ui-front">
-			<input type="text" class="form-control" size="3" name="currency" placeholder="EUR"/>
-			<input type="time" class="form-control" size="6" name="time_spent" placeholder="Time"/>
-			<input type="text" class="form-control" size="12" name="assigned_to" placeholder="Assigned to"/>
-			<input type="text" class="form-control" name="notes" placeholder="Notes"/>
-			<button type="button" class="btn btn-primary" id="addTaskSubmit"><span class="glyphicon glyphicon-ok"></span></button>
-			<button type="button" class="btn btn-primary" id="addTaskCancel"><span class="glyphicon glyphicon-remove"></span></button>
-		</div>
-	</form>
+<template id="addTaskFormTemplate">
+	<tr>
+		<td colspan="11">
+			<form id="addTaskForm" class="form-inline">
+				{{ csrf_field() }}
+				<input type="hidden" name="trigger_id" value="" id="trigger_id" />
+				<input type="hidden" name="code" value="" id="task_code" />
+				<div class="form-group form-group-sm ui-front">
+					<input type="text" class="form-control" name="name" placeholder="Name"/>
+				</div>
+				<div class="form-group form-group-sm">
+					<input type="text" class="form-control" name="detail" placeholder="Detail"/>
+				</div>
+				<div class="form-group form-group-sm ui-front">
+					<input type="date" class="form-control" size="10" name="due_date" placeholder="Date"/>
+				</div>
+				<div class="form-group form-group-sm">
+					<input type="text" class="form-control" size="6" name="cost" placeholder="Cost"/>
+				</div>
+				<div class="form-group form-group-sm">
+					<input type="text" class="form-control" size="6" name="fee" placeholder="Fee"/>
+				</div>
+				<div class="form-group form-group-sm ui-front">
+					<input type="text" class="form-control" size="3" name="currency" placeholder="EUR"/>
+					<input type="time" class="form-control" size="6" name="time_spent" placeholder="Time"/>
+					<input type="text" class="form-control" size="12" name="assigned_to" placeholder="Assigned to"/>
+					<input type="text" class="form-control" name="notes" placeholder="Notes"/>
+					<button type="button" class="btn btn-primary" id="addTaskSubmit"><span class="glyphicon glyphicon-ok"></span></button>
+					<button type="button" class="btn btn-primary" id="addTaskCancel"><span class="glyphicon glyphicon-remove"></span></button>
+				</div>
+			</form>
+		</td>
+	</tr>
 </template>

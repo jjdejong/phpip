@@ -14,4 +14,8 @@ class Actor extends Model
     public function company() {
     	return $this->belongsTo('App\Actor', 'company_id');
     }
+    
+    public function parent() {
+    	return $this->belongsTo('App\Actor', 'parent_id');
+    }
 }

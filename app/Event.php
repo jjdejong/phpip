@@ -21,7 +21,12 @@ class Event extends Model
 	{
 		return $this->belongsTo('App\Matter');
 	}
-
+	
+	public function altMatter()
+	{
+		return $this->belongsTo('App\Matter', 'alt_matter_id');
+	}
+	
 	public function link() 
 	{
 		return $this->hasOne('App\Event', 'matter_id', 'alt_matter_id')->where('code', 'FIL');
@@ -73,11 +78,11 @@ class Event extends Model
 				case 'FR':
 					if ( $category == 'PAT' && $pubno )
 						$href = 'http://bases-brevets.inpi.fr/fr/document/' . $CC . $pubno . '.html';
-					else if ( $category == 'TM' ) {
-						if (substr ($this->event_date, -4 ) >= '2000')
-							$cleanednumber = substr ( $cleanednumber, - 7 );
+					/*else if ( $category == 'TM' ) {
+						if (substr ($this->event_date, 0, 4 ) >= '2000')
+							$cleanednumber = substr ( $cleanednumber, -7 );
 						$href = 'http://bases-marques.inpi.fr/Typo3_INPI_Marques/marques_resultats_liste.html?baseFr=on&baseCommu=on&baseInter=on&rechercher=Rechercher&recherche=recherche&numero=' . $cleanednumber;
-					}
+					}*/
 					break;
 				case 'US':
 					$year = substr ($this->event_date, -4 );

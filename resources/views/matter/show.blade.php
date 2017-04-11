@@ -37,7 +37,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 	<div class="col-sm-3">
 		<div class="panel panel-primary" style="min-height: 96px">
 			<div class="panel-heading panel-title">
-				<a href="/matter?Ref={{ $matter->caseref }}" data-toggle="tooltip" data-placement="right" title="See family">{{ $matter->caseref . $matter->suffix }}</a>
+				<a href="/matter?Ref={{ $matter->caseref }}" data-toggle="tooltip" data-placement="right" title="See family">{{ $matter->uid }}</a>
 				({{ $matter->category->category }})
 				<a href="/matter/{{ $matter->id }}/edit">
 					<span class="glyphicon glyphicon-edit pull-right" data-toggle="tooltip" data-placement="right" title="Avanced edit"></span>
@@ -47,12 +47,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<ul>
 					@if ($matter->container_id)
 					<li><a href="/matter/{{ $matter->container_id }}" data-toggle="tooltip" data-placement="right" title="See container">
-						{{ $matter->container->caseref . $matter->container->suffix }}
+						{{ $matter->container->uid }}
 					</a></li>
 					@endif
 					@if ($matter->parent_id)
 					<li><a href="/matter/{{ $matter->parent_id }}" data-toggle="tooltip" data-placement="right" title="See parent">
-						{{ $matter->parent->caseref . $matter->parent->suffix }}
+						{{ $matter->parent->uid }}
 					</a></li>
 				@endif
 				</ul>
@@ -62,17 +62,40 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 	</div>
 	<div class="col-sm-7">
 		<div class="panel panel-primary" style="min-height: 96px">
-			<div class="panel-body">
+			<div id="titlePanel" class="panel-body">
 			@foreach ( $titles as $key => $title_group )
 				<div class="row">
-					<span class="col-xs-2"><strong>{{ $key }}</strong></span>
-					<span class="col-xs-10">
+					<div class="col-xs-2"><strong class="pull-right">{{ $key }}</strong></div>
+					<div class="col-xs-10">
 					@foreach ( $title_group as $title )
-						<span id="titleItem" data-id="{{ $title->id }}" contenteditable="true">{{ $title->value }}</span>
+						<span id="{{ $title->id }}" class="titleItem" contenteditable="true">{{ $title->value }}</span>
 					@endforeach
-					</span>
+					</div>
 				</div>
 			@endforeach
+				<div class="row">
+					<div class="col-xs-1">
+						<a data-toggle="collapse" data-target="#addTitleForm" href="javascript:void(0);">
+							<span class="glyphicon glyphicon-plus-sign text-info"></span>
+						</a>
+					</div>
+					<div class="col-xs-11">
+						<span id="addTitleForm" class="collapse width">
+							<form class="form-inline">
+								{{ csrf_field() }}
+								<input type="hidden" name="matter_id" value="{{ $matter->container_id or $matter->id }}" />
+								<input type="hidden" name="type_code" />
+								<div class="form-group">
+									<input type="text" class="form-control" size="12" name="type" placeholder="Type" />
+								</div>
+								<div class="form-group">
+									<input type="text" class="form-control" size="60" name="value" placeholder="Value" />
+									<button type="button" class="btn btn-primary" id="addTitleSubmit"><span class="glyphicon glyphicon-ok"></span></button>
+								</div>
+							</form>
+						</span>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -180,7 +203,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-4">
 								Number
 								<a href="/matter/{{ $matter->id }}/events" class="hidden-action pull-right" data-toggle="modal" data-target="#allEventsModal" data-remote="false">
-									<span class="glyphicon glyphicon-open bg-primary" data-toggle="tooltip" title="All events"></span>
+									<i class="glyphicon glyphicon-zoom-in bg-primary" data-toggle="tooltip" title="All events"></i>
 								</a>
 							</span>
 						</div>
@@ -192,7 +215,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							@if ( $event->alt_matter_id )
 								<span class="col-xs-3">{{ $event->link->event_date }}</span>
 								<span class="col-xs-4">
-									<a href="/matter/{{ $event->alt_matter_id }}" target="_blank">{{ $event->link->matter->country . $event->link->detail }}</a>
+									<a href="/matter/{{ $event->alt_matter_id }}" target="_blank">{{ $event->altMatter->country . $event->link->detail }}</a>
 								</span>
 							@else
 								<span class="col-xs-3">{{ $event->event_date }}</span>
@@ -217,7 +240,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-3">
 								Due
 								<a href="/matter/{{ $matter->id }}/tasks" class="hidden-action pull-right" data-toggle="modal" data-target="#taskListModal" data-remote="false" title="All tasks">
-									<span class="glyphicon glyphicon-open bg-primary"></span>
+									<span class="glyphicon glyphicon-zoom-in bg-primary"></span>
 								</a>
 							</span>
 						</div>
@@ -242,8 +265,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-6">Renewals</span>
 							<span class="col-xs-6">
 								Due
-								<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action pull-right" data-toggle="modal" data-target="#taskListModal" data-remote="false" title="All renewals">
-									<span class="glyphicon glyphicon-open bg-primary"></span>
+								<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action pull-right" data-toggle="modal" data-target="#taskListModal" data-remote="false" data-renewals="1" title="All renewals">
+									<span class="glyphicon glyphicon-zoom-in bg-primary"></span>
 								</a>
 							</span>
 						</div>
@@ -263,26 +286,26 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					<div class="panel-heading panel-title">
 						Classifiers
 						<a href="/matter/{{ $matter->id }}/classifiers" class="hidden-action pull-right" data-toggle="modal" data-target="#classifierDetail" data-remote="false" title="Classifier detail">
-							<span class="glyphicon glyphicon-open bg-primary"></span>
+							<span class="glyphicon glyphicon-zoom-in bg-primary"></span>
 						</a>
 					</div>
 					<div class="panel-body" id="classifier-panel" style="height: 100px; overflow: auto;">
 						@foreach ( $classifiers as $key => $classifier_group )
 						<div class="row">
-							<span class="col-xs-1"><strong>{{ $key }}</strong></span>
-							<span class="col-xs-11">
+							<span class="col-xs-2"><strong>{{ $key }}</strong></span>
+							<span class="col-xs-10">
 							@foreach ( $classifier_group as $classifier )
 								@if ( $classifier->url )
 									<a href="{{ $classifier->url }}" target="_blank">{{ $classifier->value }}</a>
 								@elseif ( $classifier->lnk_matter_id )
-									<a href="/matter/{{ $classifier->lnk_matter_id }}">{{ $classifier->linkedMatter->caseref . $classifier->linkedMatter->suffix }}</a>
+									<a href="/matter/{{ $classifier->lnk_matter_id }}">{{ $classifier->linkedMatter->uid }}</a>
 								@else
 									{{ $classifier->value }}
 								@endif
 							@endforeach
 							@if ( $key == 'Link' )
 								@foreach ( $matter->linkedBy as $linkedBy )
-									<a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->caseref . $linkedBy->suffix }}</a>
+									<a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
 								@endforeach
 							@endif
 							</span>
@@ -293,7 +316,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 								<span class="col-xs-1"><strong>Link</strong></span>
 								<span class="col-xs-11">
 								@foreach ( $matter->linkedBy as $linkedBy )
-									<a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->caseref . $linkedBy->suffix }}</a>
+									<a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
 								@endforeach
 								</span>
 							</div>
@@ -332,12 +355,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<div class="panel panel-default">
 					<div class="panel-heading panel-title">
 						Notes
-						<a href="#" class="hidden-action" id="updateNotes" title="Update notes">
-							<span class="glyphicon glyphicon-flash text-danger"></span>
+						<a href="javascript:void(0);" class="hidden-action" id="updateNotes" title="Update notes">
+							<span class="glyphicon glyphicon-save text-danger"></span>
 						</a>
 					</div>
 					<div class="panel-body" id="notes-panel" style="height: 100px; overflow: auto;">
-						<span id="notes" contenteditable="true">{!! $matter->notes or '...' !!}</span>
+						<textarea id="notes" class="form-control noformat" style="width:100%; height:100%; box-sizing: border-box;" name="notes">{{ $matter->notes }}</textarea>
 					</div>
 				</div>
 			</div>
@@ -353,7 +376,10 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 	    <div class="modal-content">
 		    <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>Events</h4>
+				<h4>Events
+				<a href="javascript:void(0);" id="addEvent" title="Add event">
+					<span class="glyphicon glyphicon-plus-sign"></span>
+				</a></h4>
 			</div>
 			<div class="modal-body">
 				Ajax placeholder
@@ -390,15 +416,60 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 @section('script')
 
 <script>
+var tasksOrRenewals = 'tasks'; // Identifies what to display in the tasks modal. Set through the data-renewals attribute of the button for opening the renewals panel
+
 $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
 
+	$(".titleItem").keypress(function (e) {
+		if (e.which == 13) {
+			e.preventDefault();
+			$.post('/classifier/' + $(this).attr("id"), 
+				{ _token: "{{ csrf_token() }}", _method: "PUT", value: $(this).text() }
+			).done(function() {
+				$(".titleItem").removeClass("bg-warning");
+			});
+		}
+		$(this).addClass("bg-warning");   
+	});
+
+	$("#addTitleForm").on("shown.bs.collapse", function() {
+	   	$(this).find('input[name="type"]').focus().autocomplete({
+			minLength: 0,
+			source: "/classifier-type/search?main_display=1",
+			select: function( event, ui ) {
+				$("#addTitleForm").find('input[name="type_code"]').val( ui.item.id );
+			},
+			change: function (event, ui) {
+				if (!ui.item) $(this).val("");
+			}
+		});
+	});
+
+	$("#addTitleSubmit").click(function() {
+		var request = $("#addTitleForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
+		$.post('/classifier', request)
+		.done(function() {
+			$('#titlePanel').load("/matter/{{ $matter->id }} #titlePanel > div");
+		}).fail(function(errors) {
+			$.each(errors.responseJSON, function (key, item) {
+				$("#addTitleForm").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("has-error");
+			});
+		});
+	});
+    
     $("#taskListModal, #allEventsModal").on("show.bs.modal", function(event) {
         $(this).find(".modal-body").load( $(event.relatedTarget).attr("href") );
+        // Are we calling the tasks panel or renewals panel?
+		if ( $(event.relatedTarget).data("renewals") ) tasksOrRenewals = 'renewals';
+		else tasksOrRenewals = 'tasks';
     });
 
     $("#taskListModal").on("hide.bs.modal", function(event) {
-        $("#opentask-panel").load("/matter/{{ $matter->id }} #opentask-panel > div");
+        if (tasksOrRenewals == 'tasks')
+        	$("#opentask-panel").load("/matter/{{ $matter->id }} #opentask-panel > div");
+        else
+        	$("#renewal-panel").load("/matter/{{ $matter->id }} #renewal-panel > div");
     });
 
 	$("#notes").keyup(function() {
@@ -406,10 +477,10 @@ $(document).ready(function() {
 		$(this).addClass('changed');
 	});
 
-	$("#notes").blur(function() {
-		if ( $(this).hasClass('changed') ) {
+	$("#updateNotes").click(function() {
+		if ( $("#notes").hasClass('changed') ) {
 			$.post("/matter/{{ $matter->id }}", 
-				{ notes: $("#notes").text(), _token: "{{ csrf_token() }}", _method: "PUT" });
+				{ _token: "{{ csrf_token() }}", _method: "PUT", notes: $("#notes").val() });
 			$("#updateNotes").addClass('hidden-action');
 			$(this).removeClass('changed');
 		}
@@ -417,27 +488,27 @@ $(document).ready(function() {
 });
 
 $("#taskListModal").on("click", "#addTaskToEvent", function() {
-	var template = $("#addTaskForm").html();
-	$(this).parents("tbody").append('<tr><td colspan="11">' + template + "</td></tr>");
-   	$('input[name="trigger_id"]').val( $(this).data("id") );
-   	$('input[name="name"]').autocomplete({
+	var template = $("#addTaskFormTemplate").html();
+	$(this).parents("tbody").append(template);
+   	$("#addTaskForm").find('input[name="trigger_id"]').val( $(this).data("id") );
+   	$("#addTaskForm").find('input[name="name"]').autocomplete({
 		minLength: 2,
 		source: "/event-name/search?is_task=1",
 		select: function( event, ui ) {
-			$('input[name="code"]').val( ui.item.id );
+			$("#addTaskForm").find('input[name="code"]').val( ui.item.id );
 		},
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
 		}
 	});
-   	$('input[name="assigned_to"]').autocomplete({
+   	$("#addTaskForm").find('input[name="assigned_to"]').autocomplete({
 		minLength: 2,
 		source: "/user/search",
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
 		}
 	});
-   	$('input[type="date"]').datepicker({
+   	$("#addTaskForm").find('input[type="date"]').datepicker({
 		dateFormat: 'yy-mm-dd',
 		showButtonPanel: true,
 		onSelect: function(date, instance) {
@@ -448,13 +519,13 @@ $("#taskListModal").on("click", "#addTaskToEvent", function() {
 });
 
 $("#taskListModal").on("click", "#addTaskSubmit", function() {
-	var request = $("form").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
+	var request = $("#addTaskForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
 	$.post('/task', request)
 	.done(function() {
 		$('#taskListModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
 	}).fail(function(errors) {
 		$.each(errors.responseJSON, function (key, item) {
-			$("form").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("has-error");
+			$("#addTaskForm").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("has-error");
 		});
 	});
 });
@@ -468,7 +539,7 @@ $("#taskListModal").on("click", "#deleteTask", function() {
 		$.post('/task/' + $(this).data('id'),
 			{ _token: "{{ csrf_token() }}", _method: "DELETE" }
 		).done(function() {
-			$('#taskListModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
+			$('#taskListModal').find(".modal-body").load("/matter/{{ $matter->id }}/" + tasksOrRenewals);
 		});
 	}
 });
