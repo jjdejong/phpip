@@ -1,16 +1,20 @@
 <script>
 $(document).ready(function() {
 
-	$('input[type="date"]').datepicker({
+	$('input[type="date"].noformat').datepicker({
 		dateFormat: 'yy-mm-dd',
 		showButtonPanel: true,
 		onSelect: function(date, instance) {
-			$(this).focus();
-			$(this).parent("td").addClass("bg-warning");
+			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
+			$.post('/event/'+ $(this).closest("tr").data("event_id"), data)
+			.done(function () {
+				$("#allEventsModal").find(".modal-body").load("/matter/{{ $matter->id }}/events");
+				$("#allEventsModal").find(".alert").removeClass("alert-danger").html("");
+			});
 		}
 	});
 	
-	$("#allEventsModal").find('input.noformat').keypress(function (e) {
+	$('input.noformat').keypress(function (e) {
 		if (e.which == 13) {
 			e.preventDefault();
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
@@ -27,12 +31,20 @@ $(document).ready(function() {
 		$(this).parent("td").addClass("bg-warning");   
 	});
 	
-	$('input[name="alt_matter_id"]').autocomplete({
+	$('input[name="alt_matter_id"].noformat').autocomplete({
 		minLength: 2,
 		source: "/matter/search",
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
-			if ($(this).hasClass("noformat")) $(this).parent().addClass("alert alert-warning");
+		},
+		select: function(event, ui) {
+			this.value = ui.item.value;
+			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
+			$.post('/event/'+ $(this).closest("tr").data("event_id"), data)
+			.done(function () {
+				$("#allEventsModal").find(".modal-body").load("/matter/{{ $matter->id }}/events");
+				$("#allEventsModal").find(".alert").removeClass("alert-danger").html("");
+			});
 		}
 	});
 });
@@ -41,17 +53,20 @@ $(document).ready(function() {
 <table class="table table-hover table-condensed">
 	<thead>
 		<tr>
-			<th>Event</th>
+			<th>Event
+				<a href="javascript:void(0);" id="addEvent" title="Add event">
+					<span class="glyphicon glyphicon-plus-sign"></span>
+				</a>
+			</th>
 			<th>Date</th>
 			<th>Number</th> 
 			<th>Notes</th> 
 			<th>Refers to</th> 
-			<th style="width: 24px;">&nbsp;</th>
 		</tr>
 	</thead>
 	<tbody>
 	@foreach ( $events as $event )
-		<tr class="reveal-hidden" data-event_id="{{ $event->id }}">
+		<tr data-event_id="{{ $event->id }}">
 			<td>
 				{{ $event->info->name }}
 			</td> 
@@ -67,11 +82,6 @@ $(document).ready(function() {
 			<td class="ui-front">
 				<input type="text" class="form-control noformat" size="10" name="alt_matter_id" value="{{ $event->altMatter ? $event->altMatter->uid : '' }}"/>
 			</td>
-			<td>
-				<a href="javascript:void(0);" class="hidden-action" id="deleteEvent" data-id="{{ $event->id }}" title="Delete event">
-					<span class="glyphicon glyphicon-trash text-danger"></span>
-				</a>
-			</td>
 		</tr>
 	@endforeach
 	</tbody>
@@ -79,20 +89,21 @@ $(document).ready(function() {
 
 <template id="addEventFormTemplate">
 	<tr>
-		<td colspan="6">
+		<td colspan="5">
 			<form id="addEventForm" class="form-inline">
 				{{ csrf_field() }}
-				<input type="hidden" name="code" value="" id="event_code" />
+				<input type="hidden" name="matter_id" value="{{ $matter->id }}"/>
+				<input type="hidden" name="code" value="" id="event_code"/>
 				<div class="form-group form-group-sm ui-front">
-					<input type="text" class="form-control" name="name" placeholder="Name"/>
+					<input type="text" class="form-control" size="16" name="name" placeholder="Name"/>
 				</div>
 				<div class="form-group form-group-sm ui-front">
-					<input type="date" class="form-control" name="event_date" placeholder="Date"/>
+					<input type="date" class="form-control" size="10" name="event_date" placeholder="Date"/>
 				</div>
-				<div class="form-group form-group-sm">
-					<input type="text" class="form-control" name="detail" placeholder="Detail"/>
+				<div class="form-group form-group-sm ui-front">
+					<input type="text" class="form-control" size="16" name="detail" placeholder="Detail"/>
 					<input type="text" class="form-control" name="notes" placeholder="Notes"/>
-					<input type="text" class="form-control" name="alt_matter_id" placeholder="Linked to"/>
+					<input type="text" class="form-control" size="10" name="alt_matter_id" placeholder="Linked to"/>
 					<button type="button" class="btn btn-primary" id="addEventSubmit"><span class="glyphicon glyphicon-ok"></span></button>
 					<button type="button" class="btn btn-primary" id="addEventCancel"><span class="glyphicon glyphicon-remove"></span></button>
 				</div>

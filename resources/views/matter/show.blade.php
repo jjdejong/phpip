@@ -371,20 +371,18 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 <!-- Modals -->
 
 <div id="allEventsModal" class="modal fade" role="dialog">
-	<div class="modal-dialog modal-lg">
+	<div class="modal-dialog">
 	    <!-- Modal content-->
 	    <div class="modal-content">
 		    <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>Events
-				<a href="javascript:void(0);" id="addEvent" title="Add event">
-					<span class="glyphicon glyphicon-plus-sign"></span>
-				</a></h4>
+				<h4>Events</h4>
 			</div>
 			<div class="modal-body">
 				Ajax placeholder
 			</div>
 			<div class="modal-footer">
+				<span class="alert pull-left"></span>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 	    </div>
@@ -472,6 +470,11 @@ $(document).ready(function() {
         	$("#renewal-panel").load("/matter/{{ $matter->id }} #renewal-panel > div");
     });
 
+    $("#allEventsModal").on("hide.bs.modal", function(event) {
+        $("#opentask-panel").load("/matter/{{ $matter->id }} #opentask-panel > div");
+        $("#renewal-panel").load("/matter/{{ $matter->id }} #renewal-panel > div");
+    });
+
 	$("#notes").keyup(function() {
 		$("#updateNotes").removeClass('hidden-action');
 		$(this).addClass('changed');
@@ -488,8 +491,7 @@ $(document).ready(function() {
 });
 
 $("#taskListModal").on("click", "#addTaskToEvent", function() {
-	var template = $("#addTaskFormTemplate").html();
-	$(this).parents("tbody").append(template);
+	$(this).parents("tbody").append( $("#addTaskFormTemplate").html() );
    	$("#addTaskForm").find('input[name="trigger_id"]').val( $(this).data("id") );
    	$("#addTaskForm").find('input[name="name"]').autocomplete({
 		minLength: 2,
@@ -511,10 +513,6 @@ $("#taskListModal").on("click", "#addTaskToEvent", function() {
    	$("#addTaskForm").find('input[type="date"]').datepicker({
 		dateFormat: 'yy-mm-dd',
 		showButtonPanel: true,
-		onSelect: function(date, instance) {
-			$(this).focus();
-			$(this).parent("td").addClass("bg-warning");
-		}
 	});
 });
 
@@ -553,6 +551,48 @@ $("#taskListModal").on("click","#deleteEvent", function() {
 			}
 		);
 	}
+});
+
+$("#allEventsModal").on("click", "#addEvent", function() {
+	//var template = $("#addEventFormTemplate").html();
+	$("tbody").append( $("#addEventFormTemplate").html() );
+   	$("#addEventForm").find('input[name="name"]').autocomplete({
+		minLength: 2,
+		source: "/event-name/search",
+		select: function( event, ui ) {
+			$("#addEventForm").find('input[name="code"]').val( ui.item.id );
+		},
+		change: function (event, ui) {
+			if (!ui.item) $(this).val("");
+		}
+	});
+   	$("#addEventForm").find('input[name="alt_matter_id"]').autocomplete({
+		minLength: 2,
+		source: "/matter/search",
+		change: function (event, ui) {
+			if (!ui.item) $(this).val("");
+		}
+	});
+   	$("#addEventForm").find('input[type="date"]').datepicker({
+		dateFormat: 'yy-mm-dd',
+		showButtonPanel: true,
+	});
+});
+
+$("#allEventsModal").on("click", "#addEventSubmit", function() {
+	var request = $("#addEventForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
+	$.post('/event', request)
+	.done(function() {
+		$('#allEventsModal').find(".modal-body").load("/matter/{{ $matter->id }}/events");
+	}).fail(function(errors) {
+		$.each(errors.responseJSON, function (key, item) {
+			$("#addEventForm").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("has-error");
+		});
+	});
+});
+
+$("#allEventsModal").on("click", "#addEventCancel", function() {
+	$("#addEventCancel").parents("tr").html("");
 });
 </script>
 

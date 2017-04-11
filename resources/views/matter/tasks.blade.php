@@ -1,16 +1,20 @@
 <script>
 $(document).ready(function() {
 
-	$('input[type="date"]').datepicker({
+	$('input[type="date"].noformat').datepicker({
 		dateFormat: 'yy-mm-dd',
 		showButtonPanel: true,
 		onSelect: function(date, instance) {
-			$(this).focus();
-			$(this).parent("td").addClass("bg-warning");
+			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
+			$.post('/task/'+ $(this).closest("tr").data("task_id"), data)
+			.done(function () {
+				$("#taskListModal").find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
+				$("#taskListModal").find(".alert").removeClass("alert-danger").html("");
+			});
 		}
 	});
 	
-	$("#taskListModal").find('input.noformat').keypress(function (e) {
+	$('input.noformat').keypress(function (e) {
 		if (e.which == 13) {
 			e.preventDefault();
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
@@ -27,7 +31,7 @@ $(document).ready(function() {
 		$(this).parent("td").addClass("bg-warning");   
 	});
 
-	$("#taskListModal").find('input[type="checkbox"]').click(function() {
+	$('input[type="checkbox"]').click(function() {
 		var flag = 0;
 		if ( $(this).is(":checked") ) flag = 1;
 		$.post('/task/'+ $(this).closest("tr").data("task_id"), { _token: "{{ csrf_token() }}", _method: "PUT", done: flag })
@@ -37,12 +41,21 @@ $(document).ready(function() {
 		})
 	});
 	
-	$('input[name="assigned_to"]').autocomplete({
+	$('input[name="assigned_to"].noformat').autocomplete({
 		minLength: 2,
 		source: "/user/search",
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
 			if ($(this).hasClass("noformat")) $(this).parent().addClass("alert alert-warning");
+		},
+		select: function(event, ui) {
+			this.value = ui.item.value;
+			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
+			$.post('/task/'+ $(this).closest("tr").data("task_id"), data)
+			.done(function () {
+				$("#taskListModal").find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
+				$("#taskListModal").find(".alert").removeClass("alert-danger").html("");
+			});
 		}
 	});
 });
@@ -70,7 +83,7 @@ $(document).ready(function() {
 	<tbody>
 		<tr class="reveal-hidden">
 			<td colspan="3">
-				<span style="position: relative; left: -10px; margin-right: 10px;" class="text-warning"><strong>{{ $event->info->name . ": " . $event->event_date }}</strong></span>
+				<span style="position: relative; left: -10px; margin-right: 10px;"><strong>{{ $event->info->name . ": " . $event->event_date }}</strong></span>
 				<a href="javascript:void(0);" id="addTaskToEvent" class="hidden-action" data-id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
 					<span class="glyphicon glyphicon-plus-sign"></span>
 				</a>
