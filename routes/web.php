@@ -25,7 +25,7 @@ Route::get('/home', 'HomeController@index');
 
 Route::group(['middleware' => 'auth'], function () {
 	// Matter Controller
-	Route::get('matter/search', function (Request $request) {
+	Route::get('matter/autocomplete', function (Request $request) {
 		$term = $request->input('term');
 		return App\Matter::with('filing')->selectRaw('id as value, CONCAT(caseref, suffix) as label')
 		->where('caseref', 'like', "$term%")
@@ -39,7 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('matter/{matter}/renewals', 'MatterController@renewals');
 	Route::put('matter/{matter}', 'MatterController@update');
 	
-	Route::get('event-name/search', function (Request $request) {
+	Route::get('event-name/autocomplete', function (Request $request) {
 		$term = $request->input('term');
 		$results = App\EventName::select('name as value', 'code as id')
 			->where('name', 'like', "%$term%");
@@ -48,7 +48,7 @@ Route::group(['middleware' => 'auth'], function () {
 		return $results->take(10)->get();
 	});
 	
-	Route::get('classifier-type/search', function (Request $request) {
+	Route::get('classifier-type/autocomplete', function (Request $request) {
 		$term = $request->input('term');
 		$results = App\ClassifierType::select('type as value', 'code as id')
 		->where('type', 'like', "%$term%");
@@ -57,7 +57,7 @@ Route::group(['middleware' => 'auth'], function () {
 		return $results->take(5)->get();
 	});
 
-	Route::get('user/search', function (Request $request) {
+	Route::get('user/autocomplete', function (Request $request) {
 		$term = $request->input('term');
 		return App\User::select('id', 'name as label', 'login as value')
 			->whereNotNull('login')
@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
 			->take(10)->get();
 	});
 
-	Route::get('actor/search', function (Request $request) {
+	Route::get('actor/autocomplete', function (Request $request) {
 		$term = $request->input('term');
 		return App\Actor::select('id as value', 'name as label')
 			->where('name', 'like', "%$term%")

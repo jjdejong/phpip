@@ -192,7 +192,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 		</div>
 	</div>
 
-	<div class="col-sm-9">
+	<div id="multiPanel" class="col-sm-9">
 		<div class="row">
 			<div class="col-sm-6">
 				<div class="panel panel-primary reveal-hidden">
@@ -434,7 +434,7 @@ $(document).ready(function() {
 	$("#addTitleForm").on("shown.bs.collapse", function() {
 	   	$(this).find('input[name="type"]').focus().autocomplete({
 			minLength: 0,
-			source: "/classifier-type/search?main_display=1",
+			source: "/classifier-type/autocomplete?main_display=1",
 			select: function( event, ui ) {
 				$("#addTitleForm").find('input[name="type_code"]').val( ui.item.id );
 			},
@@ -456,6 +456,7 @@ $(document).ready(function() {
 		});
 	});
     
+	// Ajax fill the opened task list modal. This modal is used both for the tasks and the renewals
     $("#taskListModal, #allEventsModal").on("show.bs.modal", function(event) {
         $(this).find(".modal-body").load( $(event.relatedTarget).attr("href") );
         // Are we calling the tasks panel or renewals panel?
@@ -463,16 +464,24 @@ $(document).ready(function() {
 		else tasksOrRenewals = 'tasks';
     });
 
+	// Ajax refresh the status, open tasks, and renewals panels when the task list modal is closed
     $("#taskListModal").on("hide.bs.modal", function(event) {
-        if (tasksOrRenewals == 'tasks')
-        	$("#opentask-panel").load("/matter/{{ $matter->id }} #opentask-panel > div");
-        else
-        	$("#renewal-panel").load("/matter/{{ $matter->id }} #renewal-panel > div");
+        $.get("/matter/{{ $matter->id }}", function(data) { // "data" receives the updated matter view
+	        if (tasksOrRenewals == 'tasks') {
+	        	$("#opentask-panel").html( $(data).find("#opentask-panel > div") );
+	        	$("#status-panel").html( $(data).find("#status-panel > div") );
+	        } else
+	        	$("#renewal-panel").html( $(data).find("#renewal-panel > div") );
+        });
     });
 
+	// Ajax refresh the status and open tasks panel when the event list modal is closed        
     $("#allEventsModal").on("hide.bs.modal", function(event) {
-        $("#opentask-panel").load("/matter/{{ $matter->id }} #opentask-panel > div");
-        $("#renewal-panel").load("/matter/{{ $matter->id }} #renewal-panel > div");
+    	$.get("/matter/{{ $matter->id }}", function(data) { // "data" receives the updated matter view
+        	$("#opentask-panel").html( $(data).find("#opentask-panel > div") );
+        	$("#status-panel").html( $(data).find("#status-panel > div") );
+        	$("#renewal-panel").html( $(data).find("#renewal-panel > div") );
+        });
     });
 
 	$("#notes").keyup(function() {
@@ -495,7 +504,7 @@ $("#taskListModal").on("click", "#addTaskToEvent", function() {
    	$("#addTaskForm").find('input[name="trigger_id"]').val( $(this).data("id") );
    	$("#addTaskForm").find('input[name="name"]').autocomplete({
 		minLength: 2,
-		source: "/event-name/search?is_task=1",
+		source: "/event-name/autocomplete?is_task=1",
 		select: function( event, ui ) {
 			$("#addTaskForm").find('input[name="code"]').val( ui.item.id );
 		},
@@ -505,7 +514,7 @@ $("#taskListModal").on("click", "#addTaskToEvent", function() {
 	});
    	$("#addTaskForm").find('input[name="assigned_to"]').autocomplete({
 		minLength: 2,
-		source: "/user/search",
+		source: "/user/autocomplete",
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
 		}
@@ -558,7 +567,7 @@ $("#allEventsModal").on("click", "#addEvent", function() {
 	$("tbody").append( $("#addEventFormTemplate").html() );
    	$("#addEventForm").find('input[name="name"]').autocomplete({
 		minLength: 2,
-		source: "/event-name/search",
+		source: "/event-name/autocomplete",
 		select: function( event, ui ) {
 			$("#addEventForm").find('input[name="code"]').val( ui.item.id );
 		},
@@ -568,7 +577,7 @@ $("#allEventsModal").on("click", "#addEvent", function() {
 	});
    	$("#addEventForm").find('input[name="alt_matter_id"]').autocomplete({
 		minLength: 2,
-		source: "/matter/search",
+		source: "/matter/autocomplete",
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
 		}

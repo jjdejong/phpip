@@ -182,7 +182,7 @@ class Matter extends Model {
 	
 	public function filter ($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $matter_category_display_type = false, $paginated = false) 
 	{
-		$query = $this->select ( DB::raw ( "CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', concat(caseref, matter.country), origin), matter.type_code), idx) AS Ref" ),
+		$query = $this->select ( DB::raw ( "CONCAT_WS('', caseref, suffix) AS Ref" ),
 			'matter.country AS country',
 			'matter.category_code AS Cat',
 			'matter.origin',

@@ -43,7 +43,7 @@ $(document).ready(function() {
 	
 	$('input[name="assigned_to"].noformat').autocomplete({
 		minLength: 2,
-		source: "/user/search",
+		source: "/user/autocomplete",
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
 			if ($(this).hasClass("noformat")) $(this).parent().addClass("alert alert-warning");

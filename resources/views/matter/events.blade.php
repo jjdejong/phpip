@@ -33,7 +33,7 @@ $(document).ready(function() {
 	
 	$('input[name="alt_matter_id"].noformat').autocomplete({
 		minLength: 2,
-		source: "/matter/search",
+		source: "/matter/autocomplete",
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
 		},
