@@ -19,9 +19,11 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+//Disable registration functionality
 Route::any('/register','HomeController@index');
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
 	// Matter Controller

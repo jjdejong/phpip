@@ -85,7 +85,7 @@ class Event extends Model
 					}*/
 					break;
 				case 'US':
-					$year = substr ($this->event_date, -4 );
+					$year = substr ($this->event_date, 0, 4 );
 					$href = 'https://register.epo.org/ipfwretrieve?apn=US.' . $year . $cleanednumber . '.A';
 					break;
 				case 'GB':

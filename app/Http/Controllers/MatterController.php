@@ -44,9 +44,9 @@ class MatterController extends Controller {
 		return view ( 'matter.index', compact ( 'matters' ) );
 	}
 	
-	public function show ($id) 
+	public function show (Matter $matter) 
 	{
-		$matter = Matter::with('tasksPending.info', 'renewalsPending', 'events.info', 'classifiers.type', 'container.classifiers.type')->find($id);
+		$matter->with('tasksPending.info', 'renewalsPending', 'events.info', 'classifiers.type', 'container.classifiers.type');
 		return view('matter.show', compact('matter'));
 	}
 	
