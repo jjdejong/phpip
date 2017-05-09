@@ -74,7 +74,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 						<span id="{{ $title->id }}" class="titleItem" contenteditable="true">{{ $title->value }}</span>
 					@endforeach
 						@if ($title == $title_group->last()  && $type == $titles->keys()->last())
-						<a data-toggle="collapse" data-target="#addTitleForm" href="javascript:void(0);">
+						<a data-toggle="collapse" href="#addTitleForm">
 							<i class="glyphicon glyphicon-plus-sign text-info pull-right"></i>
 						</a>
 						@endif
@@ -488,42 +488,8 @@ var tasksOrRenewals = 'tasks'; // Identifies what to display in the tasks modal.
 $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
 
-	$(".titleItem").keypress(function (e) {
-		if (e.which == 13) {
-			e.preventDefault();
-			$.post('/classifier/' + $(this).attr("id"), 
-				{ _token: "{{ csrf_token() }}", _method: "PUT", value: $(this).text() }
-			).done(function() {
-				$(".titleItem").removeClass("bg-warning");
-			});
-		}
-		$(this).addClass("bg-warning");   
-	});
-
-	$("#addTitleForm").on("shown.bs.collapse", function() {
-	   	$(this).find('input[name="type"]').focus().autocomplete({
-			minLength: 0,
-			source: "/classifier-type/autocomplete?main_display=1",
-			select: function( event, ui ) {
-				$("#addTitleForm").find('input[name="type_code"]').val( ui.item.id );
-			},
-			change: function (event, ui) {
-				if (!ui.item) $(this).val("");
-			}
-		});
-	});
-
-	$("#addTitleSubmit").click(function() {
-		var request = $("#addTitleForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
-		$.post('/classifier', request)
-		.done(function() {
-			$('#titlePanel').load("/matter/{{ $matter->id }} #titlePanel > div");
-		}).fail(function(errors) {
-			$.each(errors.responseJSON, function (key, item) {
-				$("#addTitleForm").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("has-error");
-			});
-		});
-	});
+    if ({{ sizeof($titles) }} == 0)
+        $("#addTitleForm").collapse("show");
     
 	// Ajax fill the opened modal
     $("#taskListModal, #allEventsModal").on("show.bs.modal", function(event) {
@@ -550,6 +516,43 @@ $(document).ready(function() {
 			$("#updateNotes").addClass('hidden-action');
 			$(this).removeClass('changed');
 		}
+	});
+});
+
+$("#titlePanel").on("keypress", ".titleItem", function (e) {
+	if (e.which == 13) {
+		e.preventDefault();
+		$.post('/classifier/' + $(this).attr("id"), 
+			{ _token: "{{ csrf_token() }}", _method: "PUT", value: $(this).text() }
+		).done(function() {
+			$(".titleItem").removeClass("bg-warning");
+		});
+	}
+	$(this).addClass("bg-warning");   
+});
+
+$("#titlePanel").on("shown.bs.collapse", "#addTitleForm", function() {
+   	$(this).find('input[name="type"]').focus().autocomplete({
+		minLength: 0,
+		source: "/classifier-type/autocomplete?main_display=1",
+		select: function( event, ui ) {
+			$("#addTitleForm").find('input[name="type_code"]').val( ui.item.id );
+		},
+		change: function (event, ui) {
+			if (!ui.item) $(this).val("");
+		}
+	});
+});
+
+$("#titlePanel").on("click", "#addTitleSubmit", function() {
+	var request = $("#addTitleForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
+	$.post('/classifier', request)
+	.done(function() {
+		$('#titlePanel').load("/matter/{{ $matter->id }} #titlePanel > div");
+	}).fail(function(errors) {
+		$.each(errors.responseJSON, function (key, item) {
+			$("#addTitleForm").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("has-error");
+		});
 	});
 });
 
