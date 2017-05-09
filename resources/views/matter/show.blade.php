@@ -40,11 +40,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<a href="/matter?Ref={{ $matter->caseref }}" data-toggle="tooltip" data-placement="right" title="See family">{{ $matter->uid }}</a>
 				({{ $matter->category->category }})
 				<a href="/matter/{{ $matter->id }}/edit">
-					<span class="glyphicon glyphicon-edit pull-right" data-toggle="tooltip" data-placement="right" title="Avanced edit"></span>
+					<i class="glyphicon glyphicon-edit pull-right" data-toggle="tooltip" data-placement="right" title="Avanced edit"></i>
 				</a>
 			</div>
 			<div class="panel-body">
-				<ul>
+				<ul class="list-unstyled">
 					@if ($matter->container_id)
 					<li><a href="/matter/{{ $matter->container_id }}" data-toggle="tooltip" data-placement="right" title="See container">
 						{{ $matter->container->uid }}
@@ -56,45 +56,50 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					</a></li>
 				@endif
 				</ul>
-				<span class="pull-right"><strong>Expiry:</strong> {{ $matter->expire_date }}</span>
+				@if ($matter->expire_date)
+					<span class="pull-right"><strong>Expiry:</strong> {{ $matter->expire_date }}</span>
+				@endif
 			</div>
 		</div>
 	</div>
 	<div class="col-sm-7">
 		<div class="panel panel-primary" style="min-height: 96px">
 			<div id="titlePanel" class="panel-body">
-			@foreach ( $titles as $key => $title_group )
+			@foreach ( $titles as $type => $title_group )
 				<div class="row">
-					<div class="col-xs-2"><strong class="pull-right">{{ $key }}</strong></div>
+					<div class="col-xs-2"><strong class="pull-right">{{ $type }}</strong></div>
 					<div class="col-xs-10">
 					@foreach ( $title_group as $title )
+						@if ($title != $title_group->first()) <br> @endif
 						<span id="{{ $title->id }}" class="titleItem" contenteditable="true">{{ $title->value }}</span>
 					@endforeach
+						@if ($title == $title_group->last()  && $type == $titles->keys()->last())
+						<a data-toggle="collapse" data-target="#addTitleForm" href="javascript:void(0);">
+							<i class="glyphicon glyphicon-plus-sign text-info pull-right"></i>
+						</a>
+						@endif
 					</div>
 				</div>
 			@endforeach
-				<div class="row">
-					<div class="col-xs-1">
-						<a data-toggle="collapse" data-target="#addTitleForm" href="javascript:void(0);">
-							<span class="glyphicon glyphicon-plus-sign text-info"></span>
-						</a>
-					</div>
-					<div class="col-xs-11">
-						<span id="addTitleForm" class="collapse width">
-							<form class="form-inline">
-								{{ csrf_field() }}
-								<input type="hidden" name="matter_id" value="{{ $matter->container_id or $matter->id }}" />
-								<input type="hidden" name="type_code" />
-								<div class="form-group">
-									<input type="text" class="form-control" size="12" name="type" placeholder="Type" />
+				<div id="addTitleForm" class="row collapse">
+					<form class="form-horizontal">
+						{{ csrf_field() }}
+						<input type="hidden" name="matter_id" value="{{ $matter->container_id or $matter->id }}" />
+						<input type="hidden" name="type_code" />
+						<div class="col-xs-2">
+							<div class="input-group">
+								<input type="text" class="form-control" name="type" placeholder="Type" />
+							</div>
+						</div>
+						<div class="col-xs-10">
+							<div class="input-group">
+								<input type="text" class="form-control" name="value" placeholder="Value" />
+								<div class="input-group-btn">
+									<button type="button" class="btn btn-primary" id="addTitleSubmit"><i class="glyphicon glyphicon-ok"></i></button>
 								</div>
-								<div class="form-group">
-									<input type="text" class="form-control" size="60" name="value" placeholder="Value" />
-									<button type="button" class="btn btn-primary" id="addTitleSubmit"><span class="glyphicon glyphicon-ok"></span></button>
-								</div>
-							</form>
-						</span>
-					</div>
+							</div>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -107,7 +112,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					data-origin="{{ $matter->origin }}"
 					data-type="{{ $matter->type_code }}"
 					data-code="{{ $matter->category->category }}-{{ $matter->category_code }}">
-					<span class="glyphicon glyphicon-duplicate pull-left"></span>
+					<i class="glyphicon glyphicon-duplicate pull-left"></i>
 					Clone Matter
 				</button>
 				<button id="child-matter-link" type="button" class="btn btn-info btn-block"
@@ -116,7 +121,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					data-origin="{{ $matter->origin }}"
 					data-type="{{ $matter->type_code }}"
 					data-code="{{ $matter->category->category }}-{{ $matter->category_code }}">
-					<span class="glyphicon glyphicon-link pull-left"></span> 
+					<i class="glyphicon glyphicon-link pull-left"></i> 
 					New Child
 				</button>
 				@if ( $matter->countryInfo->goesnational )
@@ -126,7 +131,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					data-origin="{{ $matter->origin }}"
 					data-type="{{ $matter->type_code }}"
 					data-code="{{ $matter->category->category }}-{{ $matter->category_code }}">
-					<span class="glyphicon glyphicon-flag pull-left"></span>
+					<i class="glyphicon glyphicon-flag pull-left"></i>
 					Enter Nat. Phase
 				</button>
 				@endif
@@ -137,26 +142,26 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 <div class="row">
 	<div class="col-sm-3">
-		<div class="panel panel-primary">
+		<div class="panel panel-primary" style="min-height: 410px">
 			<div class="panel-heading panel-title reveal-hidden">
 				Actors
 				<a class="hidden-action pull-right" data-toggle="modal" href="#addActor" title="Add Actor" data-role="">
-					<span class="glyphicon glyphicon-plus-sign bg-primary"></span>
+					<i class="glyphicon glyphicon-plus-sign bg-primary"></i>
 				</a>
 			</div>
 			<div class="panel-body panel-group" id="actor-panel">
-				@foreach ( $matter->actors()->groupBy('role_name') as $key => $role_group )
+				@foreach ( $matter->actors()->groupBy('role_name') as $role_name => $role_group )
 				<div class="row">
 					<div class="col-sm-12">
 					<div class="panel panel-default reveal-hidden">
 						<div class="panel-heading panel-title">
 							<div class="row">
-								<span class="col-xs-9">{{ $key }}</span>
+								<span class="col-xs-9">{{ $role_name }}</span>
 								<a class="hidden-action col-xs-2" data-toggle="modal" href="#editRoleGroup" title="Edit group" data-role="{{ $role_group[0]->role }}">
-									<span class="glyphicon glyphicon-edit text-success"></span>
+									<i class="glyphicon glyphicon-edit text-success"></i>
 								</a>
-								<a class="hidden-action col-xs-1" data-toggle="modal" href="#addActor" title="Add Actor as {{ $key }}" data-role="{{ $role_group[0]->role }}">
-									<span class="glyphicon glyphicon-plus-sign text-info"></span>
+								<a class="hidden-action col-xs-1" data-toggle="modal" href="#addActor" title="Add Actor as {{ $role_name }}" data-role="{{ $role_group[0]->role }}">
+									<i class="glyphicon glyphicon-plus-sign text-info"></i>
 								</a>
 							</div>
 						</div>
@@ -164,8 +169,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<ul class = "list-unstyled">
 							@foreach ( $role_group as $actor)
 								<li {!! $actor->inherited ? 'style="font-style: italic;"' : '' !!}>
-									@if ( $actor->warn && $key == 'Client' )
-										<span class="glyphicon glyphicon-exclamation-sign text-danger" data-toggle="tooltip" title="Payment Difficulties"></span>
+									@if ( $actor->warn && $role_name == 'Client' )
+										<i class="glyphicon glyphicon-exclamation-sign text-danger" data-toggle="tooltip" title="Payment Difficulties"></i>
 									@endif
 									{{ $actor->name }}
 									@if ( $actor->show_ref && $actor->actor_ref )
@@ -203,7 +208,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-4">
 								Number
 								<a href="/matter/{{ $matter->id }}/events" class="hidden-action pull-right" data-toggle="modal" data-target="#allEventsModal" data-remote="false">
-									<i class="glyphicon glyphicon-zoom-in bg-primary" data-toggle="tooltip" title="All events"></i>
+									<i class="glyphicon glyphicon-list bg-primary" data-toggle="tooltip" title="All events"></i>
 								</a>
 							</span>
 						</div>
@@ -240,7 +245,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-3">
 								Due
 								<a href="/matter/{{ $matter->id }}/tasks" class="hidden-action pull-right" data-toggle="modal" data-target="#taskListModal" data-remote="false" title="All tasks">
-									<span class="glyphicon glyphicon-zoom-in bg-primary"></span>
+									<i class="glyphicon glyphicon-list bg-primary"></i>
 								</a>
 							</span>
 						</div>
@@ -258,7 +263,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 		</div>
 		
 		<div class="row">
-			<div class="col-sm-3">
+			<div class="col-sm-2">
 				<div class="panel panel-primary reveal-hidden">
 					<div class="panel-heading panel-title">
 						<div class="row">
@@ -266,7 +271,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-6">
 								Due
 								<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action pull-right" data-toggle="modal" data-target="#taskListModal" data-remote="false" data-renewals="1" title="All renewals">
-									<span class="glyphicon glyphicon-zoom-in bg-primary"></span>
+									<i class="glyphicon glyphicon-list bg-primary"></i>
 								</a>
 							</span>
 						</div>
@@ -281,18 +286,18 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-5">
+			<div class="col-sm-6">
 				<div class="panel panel-primary reveal-hidden">
 					<div class="panel-heading panel-title">
 						Classifiers
-						<a href="/matter/{{ $matter->id }}/classifiers" class="hidden-action pull-right" data-toggle="modal" data-target="#classifierDetail" data-remote="false" title="Classifier detail">
-							<span class="glyphicon glyphicon-zoom-in bg-primary"></span>
+						<a href="#classifiersModal" class="hidden-action pull-right" data-toggle="modal" title="Classifier detail">
+							<i class="glyphicon glyphicon-list bg-primary"></i>
 						</a>
 					</div>
 					<div class="panel-body" id="classifier-panel" style="height: 100px; overflow: auto;">
-						@foreach ( $classifiers as $key => $classifier_group )
+						@foreach ( $classifiers as $type => $classifier_group )
 						<div class="row">
-							<span class="col-xs-2"><strong>{{ $key }}</strong></span>
+							<span class="col-xs-2"><strong>{{ $type }}</strong></span>
 							<span class="col-xs-10">
 							@foreach ( $classifier_group as $classifier )
 								@if ( $classifier->url )
@@ -303,7 +308,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 									{{ $classifier->value }}
 								@endif
 							@endforeach
-							@if ( $key == 'Link' )
+							@if ( $type == 'Link' )
 								@foreach ( $matter->linkedBy as $linkedBy )
 									<a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
 								@endforeach
@@ -356,7 +361,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					<div class="panel-heading panel-title">
 						Notes
 						<a href="javascript:void(0);" class="hidden-action" id="updateNotes" title="Update notes">
-							<span class="glyphicon glyphicon-save text-danger"></span>
+							<i class="glyphicon glyphicon-save text-danger"></i>
 						</a>
 					</div>
 					<div class="panel-body" id="notes-panel" style="height: 100px; overflow: auto;">
@@ -383,6 +388,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 			</div>
 			<div class="modal-footer">
 				<span class="alert pull-left"></span>
+				<mark>Values are editable. Click on a value to change it and press <kbd>&crarr;</kbd> to save changes</mark>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 	    </div>
@@ -395,14 +401,77 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 	    <div class="modal-content">
 		    <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>Tasks</h4>
-				<mark>Values are editable. Click on a value to change it and press <code>Enter</code> to save changes</mark>
+				<h4>Tasks per event</h4>
 			</div>
 			<div class="modal-body">
 				Ajax placeholder
 			</div>
 			<div class="modal-footer">
 				<span class="alert pull-left"></span>
+				<mark>Values are editable. Click on a value to change it and press <kbd>&crarr;</kbd> to save changes</mark>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+	    </div>
+	</div>
+</div>
+
+<div id="classifiersModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+	    <!-- Modal content-->
+	    <div class="modal-content">
+		    <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4>Classifier Detail</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th>Type/Value</th>
+							<th>URL</th>
+							<th>Link to matter</th>
+							<th>
+								<a href="javascript:void(0);" id="addClassifier">
+									<span class="glyphicon glyphicon-plus-sign pull-right" title="Add classifier"></span>
+								</a>
+							</th>
+						</tr>
+					</thead>
+					@foreach ($classifiers as $type => $classifier_group)
+						<tbody>
+						<tr class="reveal-hidden">
+							<td class="text-warning">{{ $type }}</td>
+							<td colspan="3">
+								<a href="javascript:void(0);" id="addClassifierToType" class="hidden-action" data-type="{{ $classifier_group[0]->type_code }}">
+									<span class="glyphicon glyphicon-plus-sign" title="Add classifier"></span>
+								</a>
+								<a href="javascript:void(0);" id="deleteClassifierGroup" class="hidden-action" data-type="{{ $classifier_group[0]->type_code }}">
+									<span class="glyphicon glyphicon-trash text-danger" title="Delete classifier group"></span>
+								</a>
+							</td>
+						</tr>
+						</tbody>
+						<tbody class="sortable">
+						@foreach($classifier_group as $classifier)
+							<tr class="reveal-hidden" data-id="{{ $classifier->id }}">
+								<td><input type="text" class="form-control noformat" name="value" value="{{ $classifier->value }}"/></td>
+								<td><input type="text" class="form-control noformat" name="url" value="{{ $classifier->url }}"/></td>
+								<td><input type="text" class="form-control noformat" name="lnk_matter_id" value="{{ $classifier->lnkTo }}"></td>
+								<td>
+									<input type="hidden" name="display_order" value="{{ $classifier->display_order }}"/>
+									<a href="javascript:void(0);" class="hidden-action" id="deleteClassifier" data-id="{{ $classifier->id }}" title="Delete classifier">
+										<span class="glyphicon glyphicon-trash text-danger"></span>
+									</a>
+								</td>
+							</tr>
+						@endforeach
+						</tbody>
+					@endforeach
+				</table>
+			</div>
+			<div class="modal-footer">
+				<span class="alert pull-left"></span>
+				<mark>Values are editable. Click on a value to change it and press <kbd>&crarr;</kbd> to save changes</mark>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 	    </div>
@@ -456,7 +525,7 @@ $(document).ready(function() {
 		});
 	});
     
-	// Ajax fill the opened task list modal. This modal is used both for the tasks and the renewals
+	// Ajax fill the opened modal
     $("#taskListModal, #allEventsModal").on("show.bs.modal", function(event) {
         $(this).find(".modal-body").load( $(event.relatedTarget).attr("href") );
         // Are we calling the tasks panel or renewals panel?
@@ -464,24 +533,9 @@ $(document).ready(function() {
 		else tasksOrRenewals = 'tasks';
     });
 
-	// Ajax refresh the status, open tasks, and renewals panels when the task list modal is closed
-    $("#taskListModal").on("hide.bs.modal", function(event) {
-        $.get("/matter/{{ $matter->id }}", function(data) { // "data" receives the updated matter view
-	        if (tasksOrRenewals == 'tasks') {
-	        	$("#opentask-panel").html( $(data).find("#opentask-panel > div") );
-	        	$("#status-panel").html( $(data).find("#status-panel > div") );
-	        } else
-	        	$("#renewal-panel").html( $(data).find("#renewal-panel > div") );
-        });
-    });
-
-	// Ajax refresh the status and open tasks panel when the event list modal is closed        
-    $("#allEventsModal").on("hide.bs.modal", function(event) {
-    	$.get("/matter/{{ $matter->id }}", function(data) { // "data" receives the updated matter view
-        	$("#opentask-panel").html( $(data).find("#opentask-panel > div") );
-        	$("#status-panel").html( $(data).find("#status-panel > div") );
-        	$("#renewal-panel").html( $(data).find("#renewal-panel > div") );
-        });
+	// Ajax refresh the status and task-dependant panels when the tasks or events modal is closed
+    $("#taskListModal, #allEventsModal").on("hide.bs.modal", function(event) {
+        $("#multiPanel").load("/matter/{{ $matter->id }} #multiPanel > div");
     });
 
 	$("#notes").keyup(function() {
@@ -563,7 +617,6 @@ $("#taskListModal").on("click","#deleteEvent", function() {
 });
 
 $("#allEventsModal").on("click", "#addEvent", function() {
-	//var template = $("#addEventFormTemplate").html();
 	$("tbody").append( $("#addEventFormTemplate").html() );
    	$("#addEventForm").find('input[name="name"]').autocomplete({
 		minLength: 2,

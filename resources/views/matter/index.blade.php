@@ -106,7 +106,7 @@ $(document).ready(function() {
 			
 			<div class="btn-group pull-right">
 				<button id="export" type="button" class="btn btn-primary">
-					<span class="glyphicon glyphicon-download-alt"></span> Export
+					<span class="glyphicon glyphicon-export"></span> Export
 				</button>
 				<button id="clear-filters" type="button" class="btn btn-primary" onclick="$('#matter-list').load('/matter #matter-list > tr', function() {
 						$('#filter').find('input').val('').css('background-color', '#fff');

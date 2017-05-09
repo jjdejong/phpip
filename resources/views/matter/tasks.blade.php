@@ -156,17 +156,19 @@ $(document).ready(function() {
 				</div>
 				<div class="form-group form-group-sm">
 					<input type="text" class="form-control" size="6" name="cost" placeholder="Cost"/>
-				</div>
-				<div class="form-group form-group-sm">
 					<input type="text" class="form-control" size="6" name="fee" placeholder="Fee"/>
-				</div>
-				<div class="form-group form-group-sm ui-front">
 					<input type="text" class="form-control" size="3" name="currency" placeholder="EUR"/>
 					<input type="time" class="form-control" size="6" name="time_spent" placeholder="Time"/>
+				</div>
+				<div class="form-group form-group-sm ui-front">
 					<input type="text" class="form-control" size="12" name="assigned_to" placeholder="Assigned to"/>
-					<input type="text" class="form-control" name="notes" placeholder="Notes"/>
-					<button type="button" class="btn btn-primary" id="addTaskSubmit"><span class="glyphicon glyphicon-ok"></span></button>
-					<button type="button" class="btn btn-primary" id="addTaskCancel"><span class="glyphicon glyphicon-remove"></span></button>
+				</div>
+				<div class="input-group input-group-sm">
+					<input type="text" class="form-control" size="40" name="notes" placeholder="Notes"/>
+					<div class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="addTaskSubmit"><span class="glyphicon glyphicon-ok"></span></button>
+						<button type="button" class="btn btn-default" id="addTaskCancel"><span class="glyphicon glyphicon-remove"></span></button>
+					</div>
 				</div>
 			</form>
 		</td>
