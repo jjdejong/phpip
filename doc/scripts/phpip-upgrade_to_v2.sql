@@ -7,9 +7,16 @@ CHANGE COLUMN `password` `password` VARCHAR(60) DEFAULT NULL;
 ALTER TABLE `actor`
 ADD COLUMN `remember_token` VARCHAR(100) DEFAULT NULL AFTER `updater`;
 
--- Virtual suffix column for creating unique human readable references
+-- Adding virtual suffix column for creating unique human readable references (UIDs) and base the UID index on the suffix
+ALTER TABLE matter
+DROP KEY `UID`;
+
 ALTER TABLE matter 
 ADD COLUMN suffix VARCHAR(16) AS ( CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', country, origin), type_code), idx) ) AFTER idx;
+
+	-- This will throw a unique constraint error if the UIDs are not unique in the matter table. Check the error message and repair where necessary
+ALTER TABLE matter 
+ADD UNIQUE KEY `UID` (`category_code`, `caseref`, `suffix`);
 
 	/*
  	 * Uncapitalize all the ID fields and set ID's to UNSIGNED
