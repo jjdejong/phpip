@@ -8,8 +8,8 @@ $(document).ready(function() {
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
 			$.post('/task/'+ $(this).closest("tr").data("task_id"), data)
 			.done(function () {
-				$("#taskListModal").find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
-				$("#taskListModal").find(".alert").removeClass("alert-danger").html("");
+				$("#listModal").find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
+				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			});
 		}
 	});
@@ -20,11 +20,11 @@ $(document).ready(function() {
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
 			$.post('/task/'+ $(this).closest("tr").data("task_id"), data)
 			.done(function () {
-				$("#taskListModal").find(".modal-body").load("/matter/{{ $matter->id }}/" + tasksOrRenewals);
-				$("#taskListModal").find(".alert").removeClass("alert-danger").html("");
+				$("#listModal").find(".modal-body").load("/matter/{{ $matter->id }}/" + tasksOrRenewals);
+				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			}).fail(function(errors) {
 				$.each(errors.responseJSON, function (key, item) {
-					$("#taskListModal").find(".modal-footer .alert").html(item).addClass("alert-danger");
+					$("#listModal").find(".modal-footer .alert").html(item).addClass("alert-danger");
 				});
 			});
 		}
@@ -36,8 +36,8 @@ $(document).ready(function() {
 		if ( $(this).is(":checked") ) flag = 1;
 		$.post('/task/'+ $(this).closest("tr").data("task_id"), { _token: "{{ csrf_token() }}", _method: "PUT", done: flag })
 		.done(function () {
-			$("#taskListModal").find(".modal-body").load("/matter/{{ $matter->id }}/" + tasksOrRenewals);
-			$("#taskListModal").find(".alert").removeClass("alert-danger").html("");
+			$("#listModal").find(".modal-body").load("/matter/{{ $matter->id }}/" + tasksOrRenewals);
+			$("#listModal").find(".alert").removeClass("alert-danger").html("");
 		})
 	});
 	
@@ -53,8 +53,8 @@ $(document).ready(function() {
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
 			$.post('/task/'+ $(this).closest("tr").data("task_id"), data)
 			.done(function () {
-				$("#taskListModal").find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
-				$("#taskListModal").find(".alert").removeClass("alert-danger").html("");
+				$("#listModal").find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
+				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			});
 		}
 	});

@@ -8,8 +8,8 @@ $(document).ready(function() {
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
 			$.post('/event/'+ $(this).closest("tr").data("event_id"), data)
 			.done(function () {
-				$("#allEventsModal").find(".modal-body").load("/matter/{{ $matter->id }}/events");
-				$("#allEventsModal").find(".alert").removeClass("alert-danger").html("");
+				$("#listModal").find(".modal-body").load("/matter/{{ $matter->id }}/events");
+				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			});
 		}
 	});
@@ -21,10 +21,10 @@ $(document).ready(function() {
 			$.post('/event/'+ $(this).closest("tr").data("event_id"), data)
 			.done(function () {
 				$("td.bg-warning").removeClass("bg-warning");
-				$("#allEventsModal").find(".alert").removeClass("alert-danger").html("");
+				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			}).fail(function(errors) {
 				$.each(errors.responseJSON, function (key, item) {
-					$("#allEventsModal").find(".modal-footer .alert").html(item).addClass("alert-danger");
+					$("#listModal").find(".modal-footer .alert").html(item).addClass("alert-danger");
 				});
 			});
 		} else
@@ -42,8 +42,8 @@ $(document).ready(function() {
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
 			$.post('/event/'+ $(this).closest("tr").data("event_id"), data)
 			.done(function () {
-				$("#allEventsModal").find(".modal-body").load("/matter/{{ $matter->id }}/events");
-				$("#allEventsModal").find(".alert").removeClass("alert-danger").html("");
+				$("#listModal").find(".modal-body").load("/matter/{{ $matter->id }}/events");
+				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			});
 		}
 	});

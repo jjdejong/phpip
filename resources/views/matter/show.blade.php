@@ -37,21 +37,21 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 	<div class="col-sm-3">
 		<div class="panel panel-primary" style="min-height: 96px">
 			<div class="panel-heading panel-title">
-				<a href="/matter?Ref={{ $matter->caseref }}" data-toggle="tooltip" data-placement="right" title="See family">{{ $matter->uid }}</a>
+				<a href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
 				({{ $matter->category->category }})
-				<a href="/matter/{{ $matter->id }}/edit">
-					<i class="glyphicon glyphicon-edit pull-right" data-toggle="tooltip" data-placement="right" title="Avanced edit"></i>
+				<a href="/matter/{{ $matter->id }}/edit" title="Advanced edit">
+					<i class="glyphicon glyphicon-edit pull-right"></i>
 				</a>
 			</div>
 			<div class="panel-body">
 				<ul class="list-unstyled">
 					@if ($matter->container_id)
-					<li><a href="/matter/{{ $matter->container_id }}" data-toggle="tooltip" data-placement="right" title="See container">
+					<li><a href="/matter/{{ $matter->container_id }}" title="See container">
 						{{ $matter->container->uid }}
 					</a></li>
 					@endif
 					@if ($matter->parent_id)
-					<li><a href="/matter/{{ $matter->parent_id }}" data-toggle="tooltip" data-placement="right" title="See parent">
+					<li><a href="/matter/{{ $matter->parent_id }}" title="See parent">
 						{{ $matter->parent->uid }}
 					</a></li>
 				@endif
@@ -170,7 +170,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							@foreach ( $role_group as $actor)
 								<li {!! $actor->inherited ? 'style="font-style: italic;"' : '' !!}>
 									@if ( $actor->warn && $role_name == 'Client' )
-										<i class="glyphicon glyphicon-exclamation-sign text-danger" data-toggle="tooltip" title="Payment Difficulties"></i>
+										<i class="glyphicon glyphicon-exclamation-sign text-danger" title="Payment Difficulties"></i>
 									@endif
 									{{ $actor->name }}
 									@if ( $actor->show_ref && $actor->actor_ref )
@@ -207,8 +207,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-3">Date</span>
 							<span class="col-xs-4">
 								Number
-								<a href="/matter/{{ $matter->id }}/events" class="hidden-action pull-right" data-toggle="modal" data-target="#allEventsModal" data-remote="false">
-									<i class="glyphicon glyphicon-list bg-primary" data-toggle="tooltip" title="All events"></i>
+								<a href="/matter/{{ $matter->id }}/events" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All events">
+									<i class="glyphicon glyphicon-list bg-primary"></i>
 								</a>
 							</span>
 						</div>
@@ -244,7 +244,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-9">Open Tasks</span>
 							<span class="col-xs-3">
 								Due
-								<a href="/matter/{{ $matter->id }}/tasks" class="hidden-action pull-right" data-toggle="modal" data-target="#taskListModal" data-remote="false" title="All tasks">
+								<a href="/matter/{{ $matter->id }}/tasks" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All tasks">
 									<i class="glyphicon glyphicon-list bg-primary"></i>
 								</a>
 							</span>
@@ -270,7 +270,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-6">Renewals</span>
 							<span class="col-xs-6">
 								Due
-								<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action pull-right" data-toggle="modal" data-target="#taskListModal" data-remote="false" data-renewals="1" title="All renewals">
+								<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" data-renewals="1" title="All renewals">
 									<i class="glyphicon glyphicon-list bg-primary"></i>
 								</a>
 							</span>
@@ -375,33 +375,13 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 <!-- Modals -->
 
-<div id="allEventsModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-	    <!-- Modal content-->
-	    <div class="modal-content">
-		    <div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>Events</h4>
-			</div>
-			<div class="modal-body">
-				Ajax placeholder
-			</div>
-			<div class="modal-footer">
-				<span class="alert pull-left"></span>
-				<mark>Values are editable. Click on a value to change it and press <kbd>&crarr;</kbd> to save changes</mark>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-	    </div>
-	</div>
-</div>
-
-<div id="taskListModal" class="modal fade" role="dialog">
+<div id="listModal" class="modal fade" role="dialog">
 	<div class="modal-dialog modal-lg">
 	    <!-- Modal content-->
 	    <div class="modal-content">
 		    <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>Tasks per event</h4>
+				<h4 class="modal-title">Title placeholder</h4>
 			</div>
 			<div class="modal-body">
 				Ajax placeholder
@@ -507,13 +487,13 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 var tasksOrRenewals = 'tasks'; // Identifies what to display in the tasks modal. Set through the data-renewals attribute of the button for opening the renewals panel
 
 $(document).ready(function() {
-    $('[data-toggle="tooltip"]').tooltip();
 
     if ({{ sizeof($titles) }} == 0)
         $("#addTitleForm").collapse("show");
     
 	// Ajax fill the opened modal
-    $("#taskListModal, #allEventsModal").on("show.bs.modal", function(event) {
+    $("#listModal").on("show.bs.modal", function(event) {
+    	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
         $(this).find(".modal-body").load( $(event.relatedTarget).attr("href") );
         // Are we calling the tasks panel or renewals panel?
 		if ( $(event.relatedTarget).data("renewals") ) tasksOrRenewals = 'renewals';
@@ -521,7 +501,7 @@ $(document).ready(function() {
     });
 
 	// Ajax refresh various panels when a modal is closed
-    $("#taskListModal, #allEventsModal, #classifiersModal").on("hide.bs.modal", function(event) {
+    $("#listModal, #classifiersModal").on("hide.bs.modal", function(event) {
     	//$(this).removeData('bs.modal');
         $("#multiPanel").load("/matter/{{ $matter->id }} #multiPanel > div");
     });
@@ -584,7 +564,7 @@ $("#titlePanel").on("click", "#addTitleSubmit", function() {
 	});
 });
 
-$("#taskListModal").on("click", "#addTaskToEvent", function() {
+$("#listModal").on("click", "#addTaskToEvent", function() {
 	$(this).parents("tbody").append( $("#addTaskFormTemplate").html() );
    	$("#addTaskForm").find('input[name="trigger_id"]').val( $(this).data("event_id") );
    	$("#addTaskForm").find('input[name="name"]').focus().autocomplete({
@@ -610,11 +590,11 @@ $("#taskListModal").on("click", "#addTaskToEvent", function() {
 	});
 });
 
-$("#taskListModal").on("click", "#addTaskSubmit", function() {
+$("#listModal").on("click", "#addTaskSubmit", function() {
 	var request = $("#addTaskForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
 	$.post('/task', request)
 	.done(function() {
-		$('#taskListModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
+		$('#listModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
 	}).fail(function(errors) {
 		$.each(errors.responseJSON, function (key, item) {
 			$("#addTaskForm").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("has-error");
@@ -622,27 +602,27 @@ $("#taskListModal").on("click", "#addTaskSubmit", function() {
 	});
 });
 
-$("#taskListModal").on("click", "#deleteTask", function() {
+$("#listModal").on("click", "#deleteTask", function() {
 	$.post('/task/' + $(this).closest("tr").data("task_id"),
 		{ _token: "{{ csrf_token() }}", _method: "DELETE" }
 	).done(function() {
-		$('#taskListModal').find(".modal-body").load("/matter/{{ $matter->id }}/" + tasksOrRenewals);
+		$('#listModal').find(".modal-body").load("/matter/{{ $matter->id }}/" + tasksOrRenewals);
 	});
 });
 
-$("#taskListModal").on("click","#deleteEvent", function() {
-	if ( confirm("Deleting the event will also delete the linked tasks") ) {
+$("#listModal").on("click","#deleteEvent", function() {
+	if ( confirm("Deleting the event will also delete the linked tasks.Continue anyway?") ) {
 		$.post('/event/' + $(this).data('event_id'),
 			{ _token: "{{ csrf_token() }}", _method: "DELETE" },
 			function() {
-				$('#taskListModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
+				$('#listModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
 			}
 		);
 	}
 });
 
-$("#allEventsModal").on("click", "#addEvent", function() {
-	$("#allEventsModal").find("tbody").append( $("#addEventFormTemplate").html() );
+$("#listModal").on("click", "#addEvent", function() {
+	$("#listModal").find("tbody").append( $("#addEventFormTemplate").html() );
    	$("#addEventForm").find('input[name="name"]').focus().autocomplete({
 		minLength: 2,
 		source: "/event-name/autocomplete",
@@ -666,11 +646,11 @@ $("#allEventsModal").on("click", "#addEvent", function() {
 	});
 });
 
-$("#allEventsModal").on("click", "#addEventSubmit", function() {
+$("#listModal").on("click", "#addEventSubmit", function() {
 	var request = $("#addEventForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
 	$.post('/event', request)
 	.done(function() {
-		$('#allEventsModal').find(".modal-body").load("/matter/{{ $matter->id }}/events");
+		$('#listModal').find(".modal-body").load("/matter/{{ $matter->id }}/events");
 	}).fail(function(errors) {
 		$.each(errors.responseJSON, function (key, item) {
 			$("#addEventForm").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("has-error");
