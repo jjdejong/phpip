@@ -446,7 +446,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<td colspan="5">
 								<form class="form-inline">
 									{{ csrf_field() }}
-									<input type="hidden" name="matter_id" value="{{ $matter->id }}"/>
+									<input type="hidden" name="matter_id" value="{{ $matter->container_id or $matter->id }}"/>
 									<input type="hidden" name="type_code" value=""/>
 									<div class="form-group form-group-sm ui-front">
 										<input type="text" class="form-control" size="16" name="type" placeholder="Type"/>
