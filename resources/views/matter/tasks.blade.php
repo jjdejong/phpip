@@ -6,9 +6,9 @@ $(document).ready(function() {
 		showButtonPanel: true,
 		onSelect: function(date, instance) {
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
-			$.post('/task/'+ $(this).closest("tr").data("task_id"), data)
+			$.post('/task/'+ $(this).closest("tr").data("id"), data)
 			.done(function () {
-				$("#listModal").find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
+				$("#listModal").find(".modal-body").load(relatedUrl);
 				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			});
 		}
@@ -18,9 +18,9 @@ $(document).ready(function() {
 		if (e.which == 13) {
 			e.preventDefault();
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
-			$.post('/task/'+ $(this).closest("tr").data("task_id"), data)
+			$.post('/task/'+ $(this).closest("tr").data("id"), data)
 			.done(function () {
-				$("#listModal").find(".modal-body").load("/matter/{{ $matter->id }}/" + tasksOrRenewals);
+				$("#listModal").find(".modal-body").load(relatedUrl);
 				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			}).fail(function(errors) {
 				$.each(errors.responseJSON, function (key, item) {
@@ -34,9 +34,9 @@ $(document).ready(function() {
 	$('input[type="checkbox"]').click(function() {
 		var flag = 0;
 		if ( $(this).is(":checked") ) flag = 1;
-		$.post('/task/'+ $(this).closest("tr").data("task_id"), { _token: "{{ csrf_token() }}", _method: "PUT", done: flag })
+		$.post('/task/'+ $(this).closest("tr").data("id"), { _token: "{{ csrf_token() }}", _method: "PUT", done: flag })
 		.done(function () {
-			$("#listModal").find(".modal-body").load("/matter/{{ $matter->id }}/" + tasksOrRenewals);
+			$("#listModal").find(".modal-body").load(relatedUrl);
 			$("#listModal").find(".alert").removeClass("alert-danger").html("");
 		})
 	});
@@ -51,9 +51,9 @@ $(document).ready(function() {
 		select: function(event, ui) {
 			this.value = ui.item.value;
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
-			$.post('/task/'+ $(this).closest("tr").data("task_id"), data)
+			$.post('/task/'+ $(this).closest("tr").data("id"), data)
 			.done(function () {
-				$("#listModal").find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
+				$("#listModal").find(".modal-body").load(relatedUrl);
 				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			});
 		}
@@ -91,7 +91,7 @@ $(document).ready(function() {
 			</td>
 		</tr>
 		@foreach ($event->tasks as $task)
-		<tr class="reveal-hidden text-{{ $task->done ? 'success' : 'danger' }}" data-task_id="{{ $task->id }}">
+		<tr class="reveal-hidden text-{{ $task->done ? 'success' : 'danger' }}" data-id="{{ $task->id }}">
 			<td nowrap>
 				{{ $task->info->name }} <input type="text" class="form-control noformat" name="detail" value="{{ $task->detail }}"/>
 			</td> 

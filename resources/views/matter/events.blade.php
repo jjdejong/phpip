@@ -6,9 +6,9 @@ $(document).ready(function() {
 		showButtonPanel: true,
 		onSelect: function(date, instance) {
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
-			$.post('/event/'+ $(this).closest("tr").data("event_id"), data)
+			$.post('/event/'+ $(this).closest("tr").data("id"), data)
 			.done(function () {
-				$("#listModal").find(".modal-body").load("/matter/{{ $matter->id }}/events");
+				$("#listModal").find(".modal-body").load(relatedUrl);
 				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			});
 		}
@@ -18,7 +18,7 @@ $(document).ready(function() {
 		if (e.which == 13) {
 			e.preventDefault();
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
-			$.post('/event/'+ $(this).closest("tr").data("event_id"), data)
+			$.post('/event/'+ $(this).closest("tr").data("id"), data)
 			.done(function () {
 				$("td.bg-warning").removeClass("bg-warning");
 				$("#listModal").find(".alert").removeClass("alert-danger").html("");
@@ -40,9 +40,9 @@ $(document).ready(function() {
 		select: function(event, ui) {
 			this.value = ui.item.value;
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
-			$.post('/event/'+ $(this).closest("tr").data("event_id"), data)
+			$.post('/event/'+ $(this).closest("tr").data("id"), data)
 			.done(function () {
-				$("#listModal").find(".modal-body").load("/matter/{{ $matter->id }}/events");
+				$("#listModal").find(".modal-body").load(relatedUrl);
 				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			});
 		}
@@ -67,7 +67,7 @@ $(document).ready(function() {
 	</thead>
 	<tbody>
 	@foreach ( $events as $event )
-		<tr data-event_id="{{ $event->id }}">
+		<tr data-id="{{ $event->id }}">
 			<td>
 				{{ $event->info->name }}
 			</td> 

@@ -270,7 +270,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-6">Renewals</span>
 							<span class="col-xs-6">
 								Due
-								<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" data-renewals="1" title="All renewals">
+								<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All renewals">
 									<i class="glyphicon glyphicon-list bg-primary"></i>
 								</a>
 							</span>
@@ -484,7 +484,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 @section('script')
 
 <script>
-var tasksOrRenewals = 'tasks'; // Identifies what to display in the tasks modal. Set through the data-renewals attribute of the button for opening the renewals panel
+var relatedUrl = "/matter/{{ $matter->id }}"; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used triggering the modal
 
 $(document).ready(function() {
 
@@ -493,11 +493,9 @@ $(document).ready(function() {
     
 	// Ajax fill the opened modal
     $("#listModal").on("show.bs.modal", function(event) {
+    	relatedUrl = $(event.relatedTarget).attr("href");
     	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
-        $(this).find(".modal-body").load( $(event.relatedTarget).attr("href") );
-        // Are we calling the tasks panel or renewals panel?
-		if ( $(event.relatedTarget).data("renewals") ) tasksOrRenewals = 'renewals';
-		else tasksOrRenewals = 'tasks';
+        $(this).find(".modal-body").load(relatedUrl);
     });
 
 	// Ajax refresh various panels when a modal is closed
@@ -603,10 +601,10 @@ $("#listModal").on("click", "#addTaskSubmit", function() {
 });
 
 $("#listModal").on("click", "#deleteTask", function() {
-	$.post('/task/' + $(this).closest("tr").data("task_id"),
+	$.post('/task/' + $(this).closest("tr").data("id"),
 		{ _token: "{{ csrf_token() }}", _method: "DELETE" }
 	).done(function() {
-		$('#listModal').find(".modal-body").load("/matter/{{ $matter->id }}/" + tasksOrRenewals);
+		$('#listModal').find(".modal-body").load(relatedUrl);
 	});
 });
 
@@ -615,7 +613,7 @@ $("#listModal").on("click","#deleteEvent", function() {
 		$.post('/event/' + $(this).data('event_id'),
 			{ _token: "{{ csrf_token() }}", _method: "DELETE" },
 			function() {
-				$('#listModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
+				$('#listModal').find(".modal-body").load(relatedUrl);
 			}
 		);
 	}
