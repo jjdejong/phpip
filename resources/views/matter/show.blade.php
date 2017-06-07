@@ -290,7 +290,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<div class="panel panel-primary reveal-hidden">
 					<div class="panel-heading panel-title">
 						Classifiers
-						<a href="#classifiersModal" class="hidden-action pull-right" data-toggle="modal" title="Classifier detail">
+						<a href="#classifiersModal" class="hidden-action pull-right" data-toggle="modal" title="Classifier detail" data-resource="/classifier/">
 							<i class="glyphicon glyphicon-list bg-primary"></i>
 						</a>
 					</div>
@@ -564,6 +564,91 @@ $("#titlePanel").on("click", "#addTitleSubmit", function() {
 	});
 });
 
+// Generic in-place edition of fields in a listModal
+
+$("#listModal").on("keypress", "input.noformat", function (e) {
+	if (e.which == 13) {
+		e.preventDefault();
+		var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
+		$.post(resource + $(this).closest("tr").data("id"), data)
+		.done(function () {
+			$("#listModal").find(".modal-body").load(relatedUrl);
+			$("#listModal").find(".alert").removeClass("alert-danger").html("");
+		}).fail(function(errors) {
+			$.each(errors.responseJSON, function (key, item) {
+				$("#listModal").find(".modal-footer .alert").html(item).addClass("alert-danger");
+			});
+		});
+	} else
+		$(this).parent("td").addClass("bg-warning");
+});
+
+$('#listModal').on("focus", 'input[type="date"].noformat', function() {
+	$(this).datepicker({
+		dateFormat: 'yy-mm-dd',
+		showButtonPanel: true,
+		onSelect: function(date, instance) {
+			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
+			$.post(resource + $(this).closest("tr").data("id"), data)
+			.done(function () {
+				$("#listModal").find(".modal-body").load(relatedUrl);
+				$("#listModal").find(".alert").removeClass("alert-danger").html("");
+			});
+		}
+	});
+});
+
+$('#listModal').on("click", 'input[name="assigned_to"].noformat', function() {
+	$(this).autocomplete({
+		minLength: 2,
+		source: "/user/autocomplete",
+		change: function (event, ui) {
+			if (!ui.item) $(this).val("");
+			if ($(this).hasClass("noformat")) $(this).parent().addClass("alert alert-warning");
+		},
+		select: function(event, ui) {
+			this.value = ui.item.value;
+			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
+			$.post(resource + $(this).closest("tr").data("id"), data)
+			.done(function () {
+				$("#listModal").find(".modal-body").load(relatedUrl);
+				$("#listModal").find(".alert").removeClass("alert-danger").html("");
+			});
+		}
+	});
+});
+
+$('#listModal').on("click",'input[type="checkbox"]', function() {
+	var flag = 0;
+	if ( $(this).is(":checked") ) flag = 1;
+	$.post(resource + $(this).closest("tr").data("id"), { _token: "{{ csrf_token() }}", _method: "PUT", done: flag })
+	.done(function () {
+		$("#listModal").find(".modal-body").load(relatedUrl);
+		$("#listModal").find(".alert").removeClass("alert-danger").html("");
+	})
+});
+
+$('#listModal').on("click", 'input[name="alt_matter_id"].noformat', function() {
+	$(this).autocomplete({
+		minLength: 2,
+		source: "/matter/autocomplete",
+		change: function (event, ui) {
+			if (!ui.item) $(this).val("");
+		},
+		select: function(event, ui) {
+			this.value = ui.item.value;
+			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
+			$.post(resource + $(this).closest("tr").data("id"), data)
+			.done(function () {
+				$("#listModal").find(".modal-body").load(relatedUrl);
+				$("#listModal").find(".alert").removeClass("alert-danger").html("");
+			});
+		}
+	});
+});
+
+// Specific processing in the task list modal
+
 $("#listModal").on("click", "#addTaskToEvent", function() {
 	$(this).parents("tbody").append( $("#addTaskFormTemplate").html() );
    	$("#addTaskForm").find('input[name="trigger_id"]').val( $(this).data("event_id") );
@@ -621,6 +706,8 @@ $("#listModal").on("click","#deleteEvent", function() {
 	}
 });
 
+// Specific processing in the event list modal
+
 $("#listModal").on("click", "#addEvent", function() {
 	$("#listModal").find("tbody").append( $("#addEventFormTemplate").html() );
    	$("#addEventForm").find('input[name="name"]').focus().autocomplete({
@@ -658,6 +745,8 @@ $("#listModal").on("click", "#addEventSubmit", function() {
 	});
 });
 
+// Classifiers modal processing
+
 $('#classifiersModal').on("keypress", "input.noformat", function (e) {
 	if (e.which == 13) {
 		e.preventDefault();
@@ -675,8 +764,8 @@ $('#classifiersModal').on("keypress", "input.noformat", function (e) {
 		$(this).parent("td").addClass("bg-warning");   
 });
 
-$('#classifiersModal').on("shown.bs.modal", function() {
-	$('#classifiersModal').find('input[name="lnk_matter_id"].noformat').autocomplete({
+$('#classifiersModal').on("click", 'input[name="lnk_matter_id"].noformat', function() {
+	$(this).autocomplete({
 		minLength: 2,
 		source: "/matter/autocomplete",
 		change: function (event, ui) {

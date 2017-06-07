@@ -35,7 +35,7 @@ class EventController extends Controller
     	$this->validate($request, [
 			'name' => 'required',
 			'matter_id' => 'required|numeric',
-			'event_date' => 'required|date'
+			'event_date' => 'required_without:alt_matter_id|date'
     	]);
     	 
     	Event::create($request->except(['_token', '_method', 'name']));
