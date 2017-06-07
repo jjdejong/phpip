@@ -41,21 +41,20 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('matter/{matter}/renewals', 'MatterController@renewals');
 	Route::put('matter/{matter}', 'MatterController@update');
 	
-	Route::get('event-name/autocomplete', function (Request $request) {
+	Route::get('event-name/{is_task}/autocomplete', function (Request $request, $is_task) {
 		$term = $request->input('term');
 		$results = App\EventName::select('name as value', 'code as id')
-			->where('name', 'like', "%$term%");
-		if ( $request->input('is_task') )
-				$results->where('is_task', 1);
+			->where('name', 'like', "%$term%")
+			->where('is_task', $is_task);
 		return $results->take(10)->get();
 	});
 	
-	Route::get('classifier-type/autocomplete', function (Request $request) {
+	Route::get('classifier-type/{main_display}/autocomplete', function (Request $request, $main_display) {
 		$term = $request->input('term');
 		$results = App\ClassifierType::select('type as value', 'code as id')
-		->where('type', 'like', "%$term%");
-		if ( $request->input('main_display') )
-			$results->where('main_display', $request->input('main_display'));
+			->where('type', 'like', "%$term%")
+			->where('main_display', $main_display)
+			->orderBy('type');
 		return $results->take(10)->get();
 	});
 

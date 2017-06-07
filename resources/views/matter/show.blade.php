@@ -207,7 +207,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-3">Date</span>
 							<span class="col-xs-4">
 								Number
-								<a href="/matter/{{ $matter->id }}/events" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All events">
+								<a href="/matter/{{ $matter->id }}/events" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All events" data-resource="/event/">
 									<i class="glyphicon glyphicon-list bg-primary"></i>
 								</a>
 							</span>
@@ -244,7 +244,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-9">Open Tasks</span>
 							<span class="col-xs-3">
 								Due
-								<a href="/matter/{{ $matter->id }}/tasks" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All tasks">
+								<a href="/matter/{{ $matter->id }}/tasks" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All tasks" data-resource="/task/">
 									<i class="glyphicon glyphicon-list bg-primary"></i>
 								</a>
 							</span>
@@ -270,7 +270,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-6">Renewals</span>
 							<span class="col-xs-6">
 								Due
-								<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All renewals">
+								<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All renewals"  data-resource="/task/">
 									<i class="glyphicon glyphicon-list bg-primary"></i>
 								</a>
 							</span>
@@ -485,15 +485,17 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 <script>
 var relatedUrl = "/matter/{{ $matter->id }}"; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used triggering the modal
+var resource = ""; // Identifies the REST resource for CRUD operations
 
 $(document).ready(function() {
 
     if ({{ sizeof($titles) }} == 0)
         $("#addTitleForm").collapse("show");
     
-	// Ajax fill the opened modal
+	// Ajax fill the opened modal and set global parameters
     $("#listModal").on("show.bs.modal", function(event) {
     	relatedUrl = $(event.relatedTarget).attr("href");
+    	resource = $(event.relatedTarget).data("resource");
     	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
         $(this).find(".modal-body").load(relatedUrl);
     });
@@ -538,7 +540,7 @@ $("#titlePanel").on("keypress", ".titleItem", function (e) {
 $("#titlePanel").on("shown.bs.collapse", "#addTitleForm", function() {
    	$(this).find('input[name="type"]').autocomplete({
 		minLength: 0,
-		source: "/classifier-type/autocomplete?main_display=1",
+		source: "/classifier-type/1/autocomplete",
 		select: function( event, ui ) {
 			$("#addTitleForm").find('input[name="type_code"]').val( ui.item.id );
 		},
@@ -567,7 +569,7 @@ $("#listModal").on("click", "#addTaskToEvent", function() {
    	$("#addTaskForm").find('input[name="trigger_id"]').val( $(this).data("event_id") );
    	$("#addTaskForm").find('input[name="name"]').focus().autocomplete({
 		minLength: 2,
-		source: "/event-name/autocomplete?is_task=1",
+		source: "/event-name/1/autocomplete",
 		select: function( event, ui ) {
 			$("#addTaskForm").find('input[name="code"]').val( ui.item.id );
 		},
@@ -623,7 +625,7 @@ $("#listModal").on("click", "#addEvent", function() {
 	$("#listModal").find("tbody").append( $("#addEventFormTemplate").html() );
    	$("#addEventForm").find('input[name="name"]').focus().autocomplete({
 		minLength: 2,
-		source: "/event-name/autocomplete",
+		source: "/event-name/0/autocomplete",
 		select: function( event, ui ) {
 			$("#addEventForm").find('input[name="code"]').val( ui.item.id );
 		},
@@ -695,7 +697,7 @@ $('#classifiersModal').on("shown.bs.modal", function() {
 $("#classifiersModal").on("shown.bs.collapse", "#addClassifierForm", function() {
    	$("#addClassifierForm").find('input[name="type"]').autocomplete({
 		minLength: 0,
-		source: "/classifier-type/autocomplete?main_display=0",
+		source: "/classifier-type/0/autocomplete",
 		select: function( event, ui ) {
 			$("#addClassifierForm").find('input[name="type_code"]').val( ui.item.id );
 		},
