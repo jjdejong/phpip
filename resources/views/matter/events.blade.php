@@ -20,15 +20,15 @@ $(document).ready(function() {
 			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
 			$.post('/event/'+ $(this).closest("tr").data("event_id"), data)
 			.done(function () {
-				$("#allEventsModal").find(".modal-body").load("/matter/{{ $matter->id }}/events");
+				$("td.bg-warning").removeClass("bg-warning");
 				$("#allEventsModal").find(".alert").removeClass("alert-danger").html("");
 			}).fail(function(errors) {
 				$.each(errors.responseJSON, function (key, item) {
 					$("#allEventsModal").find(".modal-footer .alert").html(item).addClass("alert-danger");
 				});
 			});
-		}
-		$(this).parent("td").addClass("bg-warning");   
+		} else
+			$(this).parent("td").addClass("bg-warning");   
 	});
 	
 	$('input[name="alt_matter_id"].noformat').autocomplete({
@@ -53,15 +53,16 @@ $(document).ready(function() {
 <table class="table table-hover table-condensed">
 	<thead>
 		<tr>
-			<th>Event
-				<a href="javascript:void(0);" id="addEvent" title="Add event">
-					<span class="glyphicon glyphicon-plus-sign"></span>
-				</a>
-			</th>
+			<th>Event</th>
 			<th>Date</th>
 			<th>Number</th> 
 			<th>Notes</th> 
-			<th>Refers to</th> 
+			<th>
+				Refers to
+				<a href="javascript:void(0);" id="addEvent" title="Add event">
+					<span class="glyphicon glyphicon-plus-sign pull-right"></span>
+				</a>
+			</th> 
 		</tr>
 	</thead>
 	<tbody>
@@ -93,19 +94,23 @@ $(document).ready(function() {
 			<form id="addEventForm" class="form-inline">
 				{{ csrf_field() }}
 				<input type="hidden" name="matter_id" value="{{ $matter->id }}"/>
-				<input type="hidden" name="code" value="" id="event_code"/>
+				<input type="hidden" name="code" value=""/>
 				<div class="form-group form-group-sm ui-front">
 					<input type="text" class="form-control" size="16" name="name" placeholder="Name"/>
 				</div>
 				<div class="form-group form-group-sm ui-front">
 					<input type="date" class="form-control" size="10" name="event_date" placeholder="Date"/>
 				</div>
-				<div class="form-group form-group-sm ui-front">
+				<div class="form-group form-group-sm">
 					<input type="text" class="form-control" size="16" name="detail" placeholder="Detail"/>
 					<input type="text" class="form-control" name="notes" placeholder="Notes"/>
-					<input type="text" class="form-control" size="10" name="alt_matter_id" placeholder="Linked to"/>
-					<button type="button" class="btn btn-primary" id="addEventSubmit"><span class="glyphicon glyphicon-ok"></span></button>
-					<button type="button" class="btn btn-primary" id="addEventCancel"><span class="glyphicon glyphicon-remove"></span></button>
+				</div>
+				<div class="input-group input-group-sm ui-front">
+					<input type="text" class="form-control" size="16" name="alt_matter_id" placeholder="Linked to"/>
+					<div class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="addEventSubmit"><span class="glyphicon glyphicon-ok"></span></button>
+						<button type="button" class="btn btn-default" onClick="$(this).parents('tr').html('')"><span class="glyphicon glyphicon-remove"></span></button>
+					</div>
 				</div>
 			</form>
 		</td>

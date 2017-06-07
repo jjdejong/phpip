@@ -1,3 +1,13 @@
+<?php
+if ( $matter->container_id )
+	$classifiers = $matter->container->classifiers;
+else
+	$classifiers = $matter->classifiers;
+$titles = $classifiers->where('type.main_display', 1)->sortBy('type.display_order')->groupBy('type.type');
+$classifiers = $classifiers->where('type.main_display', 0)->sortBy('type.display_order')->groupBy('type.type');
+$linkedBy = $matter->linkedBy->groupBy('type_code');
+?>
+
 @extends('layouts.app')
 
 @section('style')
@@ -22,16 +32,6 @@
 @stop
 
 @section('content')
-
-<?php
-if ( $matter->container_id )
-	$classifiers = $matter->container->classifiers;
-else
-	$classifiers = $matter->classifiers;
-$titles = $classifiers->where('type.main_display', 1)->sortBy('type.display_order')->groupBy('type.type');
-$classifiers = $classifiers->where('type.main_display', 0)->sortBy('type.display_order')->groupBy('type.type');
-$linkedBy = $matter->linkedBy->groupBy('type_code');
-?>
 
 <div class="row">
 	<div class="col-sm-3">
@@ -71,7 +71,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					<div class="col-xs-10">
 					@foreach ( $title_group as $title )
 						@if ($title != $title_group->first()) <br> @endif
-						<span id="{{ $title->id }}" class="titleItem" contenteditable="true">{{ $title->value }}</span>
+						<span id="{{ $title->id }}" class="titleItem" contenteditable="true">{{ $title->value }}</span>&nbsp;
 					@endforeach
 						@if ($title == $title_group->last()  && $type == $titles->keys()->last())
 						<a data-toggle="collapse" href="#addTitleForm">

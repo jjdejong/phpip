@@ -63,7 +63,7 @@ class Event extends Model
 		$removethese = [ "/^$country_code/", '/ /', '/,/', '/-/', '/\//', '/\.[0-9]/' ];
 		$cleanednumber = preg_replace ( $removethese, '', $this->detail );
 		$href = '';
-		if (($this->code == 'PUB' || $this->code == 'GRT') && $category == 'PAT') {
+		if ($this->code == 'PUB' || $this->code == 'GRT') {
 			// Fix US pub number for Espacenet by keeping the last 6 digits after the year
 			if ($CC == 'US' && $this->code == 'PUB')
 				$cleanednumber = substr ( $cleanednumber, 0, 4 ) . substr ( $cleanednumber, - 6 );

@@ -71,9 +71,7 @@ $(document).ready(function() {
 			<th>Cost</th> 
 			<th>Fee</th>
 			<th>Cur.</th>
-			@if (true)
-				<th>Time</th>
-			@endif
+			<th>Time</th>
 			<th>Assigned To</th> 
 			<th>Notes</th>
 			<th style="width: 24px;">&nbsp;</th>
@@ -82,16 +80,15 @@ $(document).ready(function() {
 	@foreach ( $events as $event )
 	<tbody>
 		<tr class="reveal-hidden">
-			<td colspan="3">
-				<span style="position: relative; left: -10px; margin-right: 10px;"><strong>{{ $event->info->name . ": " . $event->event_date }}</strong></span>
-				<a href="javascript:void(0);" id="addTaskToEvent" class="hidden-action" data-id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
+			<td colspan="11">
+				<span style="position: relative; left: -10px; margin-right: 10px;">{{ $event->info->name . ": " . $event->event_date }}</span>
+				<a href="javascript:void(0);" id="addTaskToEvent" class="hidden-action" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
 					<span class="glyphicon glyphicon-plus-sign"></span>
 				</a>
-				<a href="javascript:void(0);" class="hidden-action" id="deleteEvent" data-id="{{ $event->id }}" title="Delete event" style="margin-left: 15px;">
+				<a href="javascript:void(0);" class="hidden-action" id="deleteEvent" data-event_id="{{ $event->id }}" title="Delete event" style="margin-left: 15px;">
 					<span class="glyphicon glyphicon-trash text-danger"></span>
 				</a>
 			</td>
-			<td colspan="8"></td>
 		</tr>
 		@foreach ($event->tasks as $task)
 		<tr class="reveal-hidden text-{{ $task->done ? 'success' : 'danger' }}" data-task_id="{{ $task->id }}">
@@ -99,7 +96,7 @@ $(document).ready(function() {
 				{{ $task->info->name }} <input type="text" class="form-control noformat" name="detail" value="{{ $task->detail }}"/>
 			</td> 
 			<td>
-				<input type="date" class="form-control noformat" size="10" name="due_date" value="{{ $task->due_date }}" data-rule_id="{{ $task->rule_used }}"/>
+				<input type="date" class="form-control noformat" size="10" name="due_date" value="{{ $task->due_date }}"/>
 			</td>
 			<td>
 				<input type="checkbox" name="done" {{ $task->done ? 'checked' : '' }}>
@@ -116,11 +113,9 @@ $(document).ready(function() {
 			<td>
 				<input type="text" class="form-control noformat" size="3" name="currency" value="{{ $task->currency }}"/>
 			</td>
-			@if (true)
 			<td>
 				<input type="time" class="form-control noformat" size="6" name="time_spent" value="{{ $task->time_spent }}"/>
 			</td>
-			@endif
 			<td class="ui-front">
 				<input type="text" class="form-control noformat" size="12" name="assigned_to" value="{{ $task->assigned_to }}"/>
 			</td>
@@ -128,7 +123,7 @@ $(document).ready(function() {
 				<input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"/>
 			</td>
 			<td>
-				<a href="javascript:void(0);" class="hidden-action" id="deleteTask" data-id="{{ $task->id }}" title="Delete task">
+				<a href="javascript:void(0);" class="hidden-action" id="deleteTask" title="Delete task">
 					<span class="glyphicon glyphicon-trash text-danger"></span>
 				</a>
 			</td>
@@ -167,7 +162,7 @@ $(document).ready(function() {
 					<input type="text" class="form-control" size="40" name="notes" placeholder="Notes"/>
 					<div class="input-group-btn">
 						<button type="button" class="btn btn-primary" id="addTaskSubmit"><span class="glyphicon glyphicon-ok"></span></button>
-						<button type="button" class="btn btn-default" id="addTaskCancel"><span class="glyphicon glyphicon-remove"></span></button>
+						<button type="button" class="btn btn-default" onClick="$(this).parents('tr').html('')"><span class="glyphicon glyphicon-remove"></span></button>
 					</div>
 				</div>
 			</form>

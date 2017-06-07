@@ -39,7 +39,7 @@ class ClassifierController extends Controller
     		'matter_id' => 'required',
     		'type' => 'required',
     		'type_code' => 'required',
-    		'value' => 'required'
+    		'value' => 'required_without:lnk_matter_id'
     	]);
     	
     	Classifier::create($request->except(['_token', '_method', 'type']));
@@ -76,10 +76,7 @@ class ClassifierController extends Controller
      */
     public function update(Request $request, Classifier $classifier)
     {	
-    	if ( trim($request->input('value')) == '' )
-    		$classifier->delete();
-    	else
-    		$classifier->update($request->except(['_token', '_method']));
+    	$classifier->update($request->except(['_token', '_method']));
     }
 
     /**

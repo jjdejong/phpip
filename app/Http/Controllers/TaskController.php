@@ -83,6 +83,10 @@ class TaskController extends Controller
 			'fee' => 'nullable|numeric'
     	]);
     	
+    	// Remove task rule when due date is manually changed
+    	if ($request->has('due_date'))
+    		$request->request->add(['rule_used' => null]);
+    	
     	$task->update($request->except(['_token', '_method']));
     }
 

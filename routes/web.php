@@ -71,7 +71,7 @@ Route::group(['middleware' => 'auth'], function () {
 		$term = $request->input('term');
 		return App\Actor::select('id as value', 'name as label')
 			->where('name', 'like', "%$term%")
-			->take(25)->get();
+			->take(10)->get();
 	});
 	
 	Route::get('role', function () {

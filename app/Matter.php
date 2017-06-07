@@ -56,10 +56,10 @@ class Matter extends Model {
 		->withPivot('id', 'role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date');
 	}*/
 	
-	public function roles() {
+	/*public function roles() {
 		return $this->belongsToMany('App\Role', 'matter_actor_lnk', 'matter_id', 'role')
 		->withPivot('id', 'role', 'shared');
-	}
+	}*/
 	
 	public function actors()
 	{
