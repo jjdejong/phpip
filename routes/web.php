@@ -55,8 +55,8 @@ Route::group(['middleware' => 'auth'], function () {
 		$results = App\ClassifierType::select('type as value', 'code as id')
 		->where('type', 'like', "%$term%");
 		if ( $request->input('main_display') )
-			$results->where('main_display', 1);
-		return $results->take(5)->get();
+			$results->where('main_display', $request->input('main_display'));
+		return $results->take(10)->get();
 	});
 
 	Route::get('user/autocomplete', function (Request $request) {

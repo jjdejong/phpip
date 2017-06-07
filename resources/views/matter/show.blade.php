@@ -431,7 +431,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<th>URL</th>
 							<th>Link to matter</th>
 							<th>
-								<a href="javascript:void(0);" id="addClassifier">
+								<a href="#addClassifierForm" data-toggle="collapse">
 									<span class="glyphicon glyphicon-plus-sign pull-right" title="Add classifier"></span>
 								</a>
 							</th>
@@ -439,24 +439,18 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					</thead>
 					@foreach ($classifiers as $type => $classifier_group)
 						<tbody>
-						<tr class="reveal-hidden">
-							<td class="text-warning">{{ $type }}</td>
-							<td colspan="3">
-								<a href="javascript:void(0);" id="addClassifierToType" class="hidden-action" data-type="{{ $classifier_group[0]->type_code }}">
-									<span class="glyphicon glyphicon-plus-sign" title="Add classifier"></span>
-								</a>
-								<a href="javascript:void(0);" id="deleteClassifierGroup" class="hidden-action" data-type="{{ $classifier_group[0]->type_code }}">
-									<span class="glyphicon glyphicon-trash text-danger" title="Delete classifier group"></span>
-								</a>
+						<tr>
+							<td colspan="4" class="text-warning">
+								{{ $type }}
 							</td>
 						</tr>
 						</tbody>
 						<tbody class="sortable">
 						@foreach($classifier_group as $classifier)
-							<tr class="reveal-hidden" data-id="{{ $classifier->id }}">
+							<tr class="reveal-hidden" data-classifier_id="{{ $classifier->id }}">
 								<td><input type="text" class="form-control noformat" name="value" value="{{ $classifier->value }}"/></td>
 								<td><input type="text" class="form-control noformat" name="url" value="{{ $classifier->url }}"/></td>
-								<td><input type="text" class="form-control noformat" name="lnk_matter_id" value="{{ $classifier->lnkTo }}"></td>
+								<td class="ui-front"><input type="text" class="form-control noformat" name="lnk_matter_id" value="{{ $classifier->lnk_matter_id ? $classifier->linkedMatter->uid : '' }}"></td>
 								<td>
 									<input type="hidden" name="display_order" value="{{ $classifier->display_order }}"/>
 									<a href="javascript:void(0);" class="hidden-action" id="deleteClassifier" data-id="{{ $classifier->id }}" title="Delete classifier">
@@ -467,6 +461,33 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 						@endforeach
 						</tbody>
 					@endforeach
+					<tbody>
+						<tr id="addClassifierForm" class="collapse">
+							<td colspan="5">
+								<form class="form-inline">
+									{{ csrf_field() }}
+									<input type="hidden" name="matter_id" value="{{ $matter->id }}"/>
+									<input type="hidden" name="type_code" value=""/>
+									<div class="form-group form-group-sm ui-front">
+										<input type="text" class="form-control" size="16" name="type" placeholder="Type"/>
+									</div>
+									<div class="form-group form-group-sm">
+										<input type="text" class="form-control" size="10" name="value" placeholder="Value"/>
+									</div>
+									<div class="form-group form-group-sm">
+										<input type="url" class="form-control" size="16" name="url" placeholder="URL"/>
+									</div>
+									<div class="input-group input-group-sm ui-front">
+										<input type="text" class="form-control" size="16" name="lnk_matter_id" placeholder="Linked to"/>
+										<div class="input-group-btn">
+											<button type="button" class="btn btn-primary" id="addClassifierSubmit"><span class="glyphicon glyphicon-ok"></span></button>
+											<button type="button" class="btn btn-default" onClick="$('#addClassifierForm').collapse('hide')"><span class="glyphicon glyphicon-remove"></span></button>
+										</div>
+									</div>
+								</form>
+							</td>
+						</tr>
+					</tbody>
 				</table>
 			</div>
 			<div class="modal-footer">
@@ -499,8 +520,9 @@ $(document).ready(function() {
 		else tasksOrRenewals = 'tasks';
     });
 
-	// Ajax refresh the status and task-dependant panels when the tasks or events modal is closed
-    $("#taskListModal, #allEventsModal").on("hide.bs.modal", function(event) {
+	// Ajax refresh various panels when a modal is closed
+    $("#taskListModal, #allEventsModal, #classifiersModal").on("hide.bs.modal", function(event) {
+    	//$(this).removeData('bs.modal');
         $("#multiPanel").load("/matter/{{ $matter->id }} #multiPanel > div");
     });
 
@@ -522,17 +544,21 @@ $(document).ready(function() {
 $("#titlePanel").on("keypress", ".titleItem", function (e) {
 	if (e.which == 13) {
 		e.preventDefault();
+		var method = "PUT";
+		var title = $(this).text().trim();
+		if (!title)
+			method = "DELETE";
 		$.post('/classifier/' + $(this).attr("id"), 
-			{ _token: "{{ csrf_token() }}", _method: "PUT", value: $(this).text() }
+			{ _token: "{{ csrf_token() }}", _method: method, value: title }
 		).done(function() {
-			$(".titleItem").removeClass("bg-warning");
+			$('#titlePanel').load("/matter/{{ $matter->id }} #titlePanel > div");
 		});
-	}
-	$(this).addClass("bg-warning");   
+	} else
+		$(this).addClass("bg-warning");   
 });
 
 $("#titlePanel").on("shown.bs.collapse", "#addTitleForm", function() {
-   	$(this).find('input[name="type"]').focus().autocomplete({
+   	$(this).find('input[name="type"]').autocomplete({
 		minLength: 0,
 		source: "/classifier-type/autocomplete?main_display=1",
 		select: function( event, ui ) {
@@ -541,7 +567,9 @@ $("#titlePanel").on("shown.bs.collapse", "#addTitleForm", function() {
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
 		}
-	});
+	}).focus(function () {
+        $(this).autocomplete("search", "");
+    });
 });
 
 $("#titlePanel").on("click", "#addTitleSubmit", function() {
@@ -558,8 +586,8 @@ $("#titlePanel").on("click", "#addTitleSubmit", function() {
 
 $("#taskListModal").on("click", "#addTaskToEvent", function() {
 	$(this).parents("tbody").append( $("#addTaskFormTemplate").html() );
-   	$("#addTaskForm").find('input[name="trigger_id"]').val( $(this).data("id") );
-   	$("#addTaskForm").find('input[name="name"]').autocomplete({
+   	$("#addTaskForm").find('input[name="trigger_id"]').val( $(this).data("event_id") );
+   	$("#addTaskForm").find('input[name="name"]').focus().autocomplete({
 		minLength: 2,
 		source: "/event-name/autocomplete?is_task=1",
 		select: function( event, ui ) {
@@ -594,23 +622,17 @@ $("#taskListModal").on("click", "#addTaskSubmit", function() {
 	});
 });
 
-$("#taskListModal").on("click", "#addTaskCancel", function() {
-	$("#addTaskCancel").parents("tr").html("");
-});
-
 $("#taskListModal").on("click", "#deleteTask", function() {
-	if( confirm("Do you want to delete task?") ){
-		$.post('/task/' + $(this).data('id'),
-			{ _token: "{{ csrf_token() }}", _method: "DELETE" }
-		).done(function() {
-			$('#taskListModal').find(".modal-body").load("/matter/{{ $matter->id }}/" + tasksOrRenewals);
-		});
-	}
+	$.post('/task/' + $(this).closest("tr").data("task_id"),
+		{ _token: "{{ csrf_token() }}", _method: "DELETE" }
+	).done(function() {
+		$('#taskListModal').find(".modal-body").load("/matter/{{ $matter->id }}/" + tasksOrRenewals);
+	});
 });
 
 $("#taskListModal").on("click","#deleteEvent", function() {
 	if ( confirm("Deleting the event will also delete the linked tasks") ) {
-		$.post('/event/' + $(this).data('id'),
+		$.post('/event/' + $(this).data('event_id'),
 			{ _token: "{{ csrf_token() }}", _method: "DELETE" },
 			function() {
 				$('#taskListModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
@@ -620,8 +642,8 @@ $("#taskListModal").on("click","#deleteEvent", function() {
 });
 
 $("#allEventsModal").on("click", "#addEvent", function() {
-	$("tbody").append( $("#addEventFormTemplate").html() );
-   	$("#addEventForm").find('input[name="name"]').autocomplete({
+	$("#allEventsModal").find("tbody").append( $("#addEventFormTemplate").html() );
+   	$("#addEventForm").find('input[name="name"]').focus().autocomplete({
 		minLength: 2,
 		source: "/event-name/autocomplete",
 		select: function( event, ui ) {
@@ -656,8 +678,82 @@ $("#allEventsModal").on("click", "#addEventSubmit", function() {
 	});
 });
 
-$("#allEventsModal").on("click", "#addEventCancel", function() {
-	$("#addEventCancel").parents("tr").html("");
+$('#classifiersModal').on("keypress", "input.noformat", function (e) {
+	if (e.which == 13) {
+		e.preventDefault();
+		var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
+		$.post('/classifier/'+ $(this).closest("tr").data("classifier_id"), data)
+		.done(function () {
+			$("td.bg-warning").removeClass("bg-warning");
+			$("#classifiersModal").find(".alert").removeClass("alert-danger").html("");
+		}).fail(function(errors) {
+			$.each(errors.responseJSON, function (key, item) {
+				$("#classifiersModal").find(".modal-footer .alert").html(item).addClass("alert-danger");
+			});
+		});
+	} else
+		$(this).parent("td").addClass("bg-warning");   
+});
+
+$('#classifiersModal').on("shown.bs.modal", function() {
+	$('#classifiersModal').find('input[name="lnk_matter_id"].noformat').autocomplete({
+		minLength: 2,
+		source: "/matter/autocomplete",
+		change: function (event, ui) {
+			if (!ui.item) $(this).val("");
+		},
+		select: function(event, ui) {
+			this.value = ui.item.value;
+			var data = $.param({ _token: "{{ csrf_token() }}", _method: "PUT" }) + "&" + $(this).serialize();
+			$.post('/classifier/'+ $(this).closest("tr").data("classifier_id"), data)
+			.done(function () {
+				$('#classifiersModal').load("/matter/{{ $matter->id }} #classifiersModal > div");
+				$("#classifiersModal").find(".alert").removeClass("alert-danger").html("");
+			});
+		}
+	});
+});
+
+$("#classifiersModal").on("shown.bs.collapse", "#addClassifierForm", function() {
+   	$("#addClassifierForm").find('input[name="type"]').autocomplete({
+		minLength: 0,
+		source: "/classifier-type/autocomplete?main_display=0",
+		select: function( event, ui ) {
+			$("#addClassifierForm").find('input[name="type_code"]').val( ui.item.id );
+		},
+		change: function (event, ui) {
+			if (!ui.item) $(this).val("");
+		}
+	}).focus(function () {
+        $(this).autocomplete("search", "");
+    });
+   	$("#addClassifierForm").find('input[name="lnk_matter_id"]').autocomplete({
+		minLength: 2,
+		source: "/matter/autocomplete",
+		change: function (event, ui) {
+			if (!ui.item) $(this).val("");
+		}
+	});
+});
+
+$("#classifiersModal").on("click", "#addClassifierSubmit", function() {
+	var request = $("#addClassifierForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
+	$.post('/classifier', request)
+	.done(function() {
+		$('#classifiersModal').load("/matter/{{ $matter->id }} #classifiersModal > div");
+	}).fail(function(errors) {
+		$.each(errors.responseJSON, function (key, item) {
+			$("#addClassifierForm").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("has-error");
+		});
+	});
+});
+
+$("#classifiersModal").on("click", "#deleteClassifier", function() {
+	$.post('/classifier/' + $(this).closest("tr").data("classifier_id"),
+		{ _token: "{{ csrf_token() }}", _method: "DELETE" }
+	).done(function() {
+		$('#classifiersModal').load("/matter/{{ $matter->id }} #classifiersModal > div");
+	});
 });
 </script>
 
