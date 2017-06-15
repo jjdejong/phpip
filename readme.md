@@ -4,7 +4,7 @@ To use it, you need to apply the database update script in `/doc/scripts` to an 
 
 Logins are based on the `login` and `password` fields in the `actor` table only (they are no loger replicated in the MySQL users table). Authorizations will be implemented through the `default_role` field of the users - set this field to "DBA" to get full permissions in the future.
 
-The passwords are hashed with _bcrypt_ instead of _md5_, and don't use salt. So you need to change all the md5+salt passwords to _bcrypt_ ones. You can use the password reset functionality of the UI or change the password hashes manually in the `actor` table with a bcrypt hash using a hash generator such as https://www.bcrypt.fr.
+The passwords are hashed with _bcrypt_ instead of _md5_, and don't use a user-provided salt. So you need to change all the md5+salt passwords to _bcrypt_ ones. You can use the password reset functionality of the UI or change the password hashes manually in the `actor` table with a bcrypt hash. You can generate a bcrypt hash using the command `php -r 'echo password_hash("your password",PASSWORD_BCRYPT) . "\n";'`.
 
 The back-end for operating v2 is identical to that for v1 (Apache, PHP, MySQL, and a virtual host setup pointing to the `public` sub-folder...). See the [v1 instructions](https://github.com/jjdejong/phpip/wiki/Installing). 
 
