@@ -1,4 +1,4 @@
-var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used triggering the modal
+var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
 var resource = ""; // Identifies the REST resource for CRUD operations
 var matter_id = $('input[name="matter_id"]').val();
 var csrf_token = $('input[name="_token"]').val();
