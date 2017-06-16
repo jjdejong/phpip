@@ -180,7 +180,7 @@ class Matter extends Model {
 		return $this->belongsTo('App\Type');
 	}
 	
-	public function filter ($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $matter_category_display_type = false, $paginated = false) 
+	public function filter ($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $display_with = false, $paginated = false) 
 	{
 		$query = $this->select ( DB::raw ( "CONCAT_WS('', caseref, suffix) AS Ref" ),
 			'matter.country AS country',
@@ -274,14 +274,14 @@ class Matter extends Model {
 			JOIN classifier_type ON classifier.type_code = classifier_type.code AND classifier_type.main_display = 1 AND classifier_type.display_order = 1' ), DB::raw ( 'IFNULL(matter.container_id, matter.id)' ), 'classifier.matter_id' );
 		$query->where ( 'e2.matter_id', NULL );
 		
-		$role = Auth::user ()->default_role;
-		$userid = Auth::user ()->id;
+		$authUserRole = Auth::user ()->default_role;
+		$authUserId = Auth::user ()->id;
 		
-		if ($matter_category_display_type) {
-			$query->where ( 'matter_category.display_with', $matter_category_display_type );
+		if ($display_with) {
+			$query->where ( 'matter_category.display_with', $display_with );
 		}
-		if ($role == 'CLI') {
-			$query->whereRaw ( $userid . ' IN (cli.id, clic.id)' );
+		if ($authUserRole == 'CLI') {
+			$query->whereRaw ( $authUserId . ' IN (cli.id, clic.id)' );
 		}
 		
 		if (! empty ( $multi_filter )) {
