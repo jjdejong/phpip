@@ -360,7 +360,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<div class="panel panel-default">
 					<div class="panel-heading panel-title">
 						Notes
-						<a href="javascript:void(0);" class="hidden-action" id="updateNotes" title="Update notes">
+						<a href="#" class="hidden-action" id="updateNotes" title="Update notes">
 							<i class="glyphicon glyphicon-save text-danger"></i>
 						</a>
 					</div>
@@ -433,7 +433,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 								<td class="ui-front"><input type="text" class="form-control noformat" name="lnk_matter_id" value="{{ $classifier->lnk_matter_id ? $classifier->linkedMatter->uid : '' }}"></td>
 								<td>
 									<input type="hidden" name="display_order" value="{{ $classifier->display_order }}"/>
-									<a href="javascript:void(0);" class="hidden-action" id="deleteClassifier" data-id="{{ $classifier->id }}" title="Delete classifier">
+									<a href="#" class="hidden-action" id="deleteClassifier" data-id="{{ $classifier->id }}" title="Delete classifier">
 										<span class="glyphicon glyphicon-trash text-danger"></span>
 									</a>
 								</td>
@@ -518,6 +518,7 @@ $(document).ready(function() {
 			$("#updateNotes").addClass('hidden-action');
 			$(this).removeClass('changed');
 		}
+		return false;
 	});
 });
 
@@ -823,6 +824,7 @@ $("#classifiersModal").on("click", "#deleteClassifier", function() {
 	).done(function() {
 		$('#classifiersModal').load("/matter/{{ $matter->id }} #classifiersModal > div");
 	});
+	return false;
 });
 </script>
 

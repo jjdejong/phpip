@@ -123,21 +123,21 @@ $(document).ready(function() {
 <table class="table table-striped table-hover table-condensed">
 	<thead>
 		<tr>
-			<th><a href="javascript:void(0);" class="sortable" data-sortkey="caseref" data-sortdir="desc">Reference</a></th>
+			<th><a href="#" class="sortable" data-sortkey="caseref" data-sortdir="desc">Reference</a></th>
 			<th>Cat.</th>
-			<th><a href="javascript:void(0);" class="sortable" data-sortkey="Status" data-sortdir="asc">Status</a></th>
-			<th class="display_actor"><a href="javascript:void(0);" class="sortable" data-sortkey="Client" data-sortdir="asc">Client</a></th>
+			<th><a href="#" class="sortable" data-sortkey="Status" data-sortdir="asc">Status</a></th>
+			<th class="display_actor"><a href="#" class="sortable" data-sortkey="Client" data-sortdir="asc">Client</a></th>
 			<th class="display_actor">Client Ref.</th>
-			<th class="display_actor"><a href="javascript:void(0);" class="sortable" data-sortkey="Agent" data-sortdir="asc">Agent</a></th>
+			<th class="display_actor"><a href="#" class="sortable" data-sortkey="Agent" data-sortdir="asc">Agent</a></th>
 			<th class="display_actor">Agent Ref.</th>
 			<th class="display_actor">Title/Detail</th>
-			<th class="display_actor"><a href="javascript:void(0);" class="sortable" data-sortkey="Inventor1" data-sortdir="asc">Inventor</a></th>
-			<th class="display_status"><a href="javascript:void(0);" class="sortable" data-sortkey="Status_date" data-sortdir="asc">Date</a></th>
-			<th class="display_status"><a href="javascript:void(0);" class="sortable" data-sortkey="Filed" data-sortdir="asc">Filed</a></th>
+			<th class="display_actor"><a href="#" class="sortable" data-sortkey="Inventor1" data-sortdir="asc">Inventor</a></th>
+			<th class="display_status"><a href="#" class="sortable" data-sortkey="Status_date" data-sortdir="asc">Date</a></th>
+			<th class="display_status"><a href="#" class="sortable" data-sortkey="Filed" data-sortdir="asc">Filed</a></th>
 			<th class="display_status">Number</th>
-			<th class="display_status"><a href="javascript:void(0);" class="sortable" data-sortkey="Published" data-sortdir="asc">Published</a></th>
+			<th class="display_status"><a href="#" class="sortable" data-sortkey="Published" data-sortdir="asc">Published</a></th>
 			<th class="display_status">Number</th>
-			<th class="display_status"><a href="javascript:void(0);" class="sortable" data-sortkey="Granted" data-sortdir="asc">Granted</a></th>
+			<th class="display_status"><a href="#" class="sortable" data-sortkey="Granted" data-sortdir="asc">Granted</a></th>
 			<th class="display_status">Number</th>
 		</tr>
 		<tr id="filter">
@@ -215,11 +215,11 @@ $(document).ready(function() {
 					<li class="previous" onclick="$('#matter-list').load('{!! $matters->previousPageUrl() !!}' + ' #matter-list > tr', function() {
 						contentUpdated();
 						window.history.pushState('', 'phpIP' , '{!! $matters->previousPageUrl() !!}');
-					});"><a href="javascript:void(0);"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+					});"><button type="button"><i class="glyphicon glyphicon-chevron-left"></i></button></li>
 					<li class="next" onclick="$('#matter-list').load('{!! $matters->nextPageUrl() !!}' + ' #matter-list > tr', function() {
 						contentUpdated();
 						window.history.pushState('', 'phpIP' , '{!! $matters->nextPageUrl() !!}');
-					});"><a href="javascript:void(0);"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+					});"><button type="button"><i class="glyphicon glyphicon-chevron-right"></i></button></li>
 				</ul>
 			</td>
 		</tr>
