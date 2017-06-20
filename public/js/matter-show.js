@@ -59,7 +59,7 @@ $("#titlePanel").on("shown.bs.collapse", "#addTitleForm", function() {
 		minLength: 0,
 		source: "/classifier-type/autocomplete/1",
 		select: function( event, ui ) {
-			$("#addTitleForm").find('input[name="type_code"]').val( ui.item.id );
+			$("#addTitleForm").find('input[name="type_code"]').val( ui.item.code );
 		},
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
@@ -173,7 +173,7 @@ $("#listModal").on("click", "#addTaskToEvent", function() {
 		minLength: 2,
 		source: "/event-name/autocomplete/1",
 		select: function( event, ui ) {
-			$("#addTaskForm").find('input[name="code"]').val( ui.item.id );
+			$("#addTaskForm").find('input[name="code"]').val( ui.item.code );
 		},
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
@@ -231,7 +231,7 @@ $("#listModal").on("click", "#addEvent", function() {
 		minLength: 2,
 		source: "/event-name/autocomplete/0",
 		select: function( event, ui ) {
-			$("#addEventForm").find('input[name="code"]').val( ui.item.id );
+			$("#addEventForm").find('input[name="code"]').val( ui.item.code );
 		},
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
@@ -305,7 +305,7 @@ $("#classifiersModal").on("shown.bs.collapse", "#addClassifierForm", function() 
 		minLength: 0,
 		source: "/classifier-type/autocomplete/0",
 		select: function( event, ui ) {
-			$("#addClassifierForm").find('input[name="type_code"]').val( ui.item.id );
+			$("#addClassifierForm").find('input[name="type_code"]').val( ui.item.code );
 		},
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
