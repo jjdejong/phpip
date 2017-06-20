@@ -57,7 +57,7 @@ $("#titlePanel").on("keypress", ".titleItem", function (e) {
 $("#titlePanel").on("shown.bs.collapse", "#addTitleForm", function() {
    	$(this).find('input[name="type"]').autocomplete({
 		minLength: 0,
-		source: "/classifier-type/1/autocomplete",
+		source: "/classifier-type/autocomplete/1",
 		select: function( event, ui ) {
 			$("#addTitleForm").find('input[name="type_code"]').val( ui.item.id );
 		},
@@ -171,7 +171,7 @@ $("#listModal").on("click", "#addTaskToEvent", function() {
    	$("#addTaskForm").find('input[name="trigger_id"]').val( $(this).data("event_id") );
    	$("#addTaskForm").find('input[name="name"]').focus().autocomplete({
 		minLength: 2,
-		source: "/event-name/1/autocomplete",
+		source: "/event-name/autocomplete/1",
 		select: function( event, ui ) {
 			$("#addTaskForm").find('input[name="code"]').val( ui.item.id );
 		},
@@ -229,7 +229,7 @@ $("#listModal").on("click", "#addEvent", function() {
 	$("#listModal").find("tbody").append( $("#addEventFormTemplate").html() );
    	$("#addEventForm").find('input[name="name"]').focus().autocomplete({
 		minLength: 2,
-		source: "/event-name/0/autocomplete",
+		source: "/event-name/autocomplete/0",
 		select: function( event, ui ) {
 			$("#addEventForm").find('input[name="code"]').val( ui.item.id );
 		},
@@ -303,7 +303,7 @@ $('#classifiersModal').on("click", 'input[name="lnk_matter_id"].noformat', funct
 $("#classifiersModal").on("shown.bs.collapse", "#addClassifierForm", function() {
    	$("#addClassifierForm").find('input[name="type"]').autocomplete({
 		minLength: 0,
-		source: "/classifier-type/0/autocomplete",
+		source: "/classifier-type/autocomplete/0",
 		select: function( event, ui ) {
 			$("#addClassifierForm").find('input[name="type_code"]').val( ui.item.id );
 		},

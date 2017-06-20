@@ -21,11 +21,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 }
 .noformat {
     border: none;
-    background: transparent;
+    background: white;
     color: inherit;
     padding: 0px;
     height: inherit;
     display: inline;
+    box-shadow: none;
 }
 </style>
 
