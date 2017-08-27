@@ -146,23 +146,21 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 		<div class="panel panel-primary" style="min-height: 410px">
 			<div class="panel-heading panel-title reveal-hidden">
 				Actors
-				<a class="hidden-action pull-right" data-toggle="modal" href="#addActor" title="Add Actor" data-role="">
+				<a class="hidden-action pull-right" data-toggle="collapse" href="#addActorForm" title="Add Actor" data-role="">
 					<i class="glyphicon glyphicon-plus-sign bg-primary"></i>
 				</a>
 			</div>
 			<div class="panel-body panel-group" id="actor-panel">
 				@foreach ( $matter->actors()->groupBy('role_name') as $role_name => $role_group )
-				<div class="row">
-					<div class="col-sm-12">
 					<div class="panel panel-default reveal-hidden">
 						<div class="panel-heading panel-title">
 							<div class="row">
 								<span class="col-xs-9">{{ $role_name }}</span>
-								<a class="hidden-action col-xs-2" data-toggle="modal" href="#editRoleGroup" title="Edit group" data-role="{{ $role_group[0]->role }}">
-									<i class="glyphicon glyphicon-edit text-success"></i>
+								<a class="hidden-action col-xs-2" data-toggle="modal" href="#actorsModal" title="Edit group" data-role="{{ $role_group[0]->role }}">
+									<i class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></i>
 								</a>
-								<a class="hidden-action col-xs-1" data-toggle="modal" href="#addActor" title="Add Actor as {{ $role_name }}" data-role="{{ $role_group[0]->role }}">
-									<i class="glyphicon glyphicon-plus-sign text-info"></i>
+								<a class="hidden-action col-xs-1" data-toggle="collapse" href="#addActorForm" title="Add Actor as {{ $role_name }}" data-role="{{ $role_group[0]->role }}">
+									<i class="glyphicon glyphicon-plus-sign text-info" style="font-size: 14px;"></i>
 								</a>
 							</div>
 						</div>
@@ -191,9 +189,31 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							</ul>
 						</div>
 					</div>
-					</div>				
-				</div>
 				@endforeach
+				<form class="form-inline">
+					<div id="addActorForm" class="panel panel-warning collapse">
+						{{ csrf_field() }}
+						<div class="panel-heading panel-title">
+							<div class="form-group ui-front">
+								<input type="text" class="form-control" name="role" placeholder="Role" />
+							</div>
+						</div>
+						<div class="panel-body">
+							<div class="form-group ui-front">
+								<input type="text" class="form-control" name="actor_id" placeholder="Name" />
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" name="actor_ref" placeholder="Reference" />
+							</div>
+							<div class="form-group">
+								<label class="radio-inline"><input type="radio" name="matter_id" value="{{ $matter->container_id or $matter->id }}">Shared</label>
+								<label class="radio-inline"><input type="radio" name="matter_id" value="{{ $matter->id }}">Not shared</label>
+								<button type="button" class="btn btn-primary" id="addActorSubmit"><i class="glyphicon glyphicon-ok"></i></button>
+								<button type="reset" class="btn btn-default" onClick="$('#addActorForm').collapse('hide')"><span class="glyphicon glyphicon-remove"></span></button>
+							</div>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -209,7 +229,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-4">
 								Number
 								<a href="/matter/{{ $matter->id }}/events" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All events" data-resource="/event/">
-									<i class="glyphicon glyphicon-list bg-primary"></i>
+									<i class="glyphicon glyphicon-tasks bg-primary" style="font-size: 14px;"></i>
 								</a>
 							</span>
 						</div>
@@ -246,7 +266,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-3">
 								Due
 								<a href="/matter/{{ $matter->id }}/tasks" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All tasks" data-resource="/task/">
-									<i class="glyphicon glyphicon-list bg-primary"></i>
+									<i class="glyphicon glyphicon-tasks bg-primary" style="font-size: 14px;"></i>
 								</a>
 							</span>
 						</div>
@@ -272,7 +292,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-xs-6">
 								Due
 								<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All renewals"  data-resource="/task/">
-									<i class="glyphicon glyphicon-list bg-primary"></i>
+									<i class="glyphicon glyphicon-tasks bg-primary" style="font-size: 14px;"></i>
 								</a>
 							</span>
 						</div>
@@ -280,8 +300,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					<div class="panel-body" id="renewal-panel" style="height: 100px; overflow: auto;">
 						@foreach ( $matter->renewalsPending->take(3) as $task )
 						<div class="row">
-							<span class="col-xs-6">{{ $task->detail }}</span>
-							<span class="col-xs-6">{{ $task->due_date }}</span>
+							<span class="col-xs-5">{{ $task->detail }}</span>
+							<span class="col-xs-7">{{ $task->due_date }}</span>
 						</div>
 						@endforeach
 					</div>
@@ -292,7 +312,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					<div class="panel-heading panel-title">
 						Classifiers
 						<a href="#classifiersModal" class="hidden-action pull-right" data-toggle="modal" title="Classifier detail" data-resource="/classifier/">
-							<i class="glyphicon glyphicon-list bg-primary"></i>
+							<i class="glyphicon glyphicon-tasks bg-primary"></i>
 						</a>
 					</div>
 					<div class="panel-body" id="classifier-panel" style="height: 100px; overflow: auto;">
@@ -334,6 +354,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<div class="panel panel-info">
 					<div class="panel-heading panel-title">
 						Related Matters
+						<i class="glyphicon glyphicon-info-sign pull-right"></i>
 					</div>
 					<div class="panel-body" id="related-panel" style="height: 100px; overflow: auto;">
 						<div class="row">
@@ -361,9 +382,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<div class="panel panel-default">
 					<div class="panel-heading panel-title">
 						Notes
-						<a href="#" class="hidden-action" id="updateNotes" title="Update notes">
-							<i class="glyphicon glyphicon-save text-danger"></i>
-						</a>
+						<button type="button" class="hidden-action btn btn-warning btn-xs" id="updateNotes"><i class="glyphicon glyphicon-exclamation-sign"></i> Save</button>	
 					</div>
 					<div class="panel-body" id="notes-panel" style="height: 100px; overflow: auto;">
 						<textarea id="notes" class="form-control noformat" style="width:100%; height:100%; box-sizing: border-box;" name="notes">{{ $matter->notes }}</textarea>

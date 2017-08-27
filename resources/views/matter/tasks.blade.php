@@ -99,7 +99,7 @@
 					<input type="text" class="form-control" size="40" name="notes" placeholder="Notes"/>
 					<div class="input-group-btn">
 						<button type="button" class="btn btn-primary" id="addTaskSubmit"><span class="glyphicon glyphicon-ok"></span></button>
-						<button type="button" class="btn btn-default" onClick="$(this).parents('tr').html('')"><span class="glyphicon glyphicon-remove"></span></button>
+						<button type="reset" class="btn btn-default" onClick="$(this).parents('tr').html('')"><span class="glyphicon glyphicon-remove"></span></button>
 					</div>
 				</div>
 			</form>

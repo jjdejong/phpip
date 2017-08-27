@@ -84,7 +84,7 @@
 										<input type="text" class="form-control" size="16" name="lnk_matter_id" placeholder="Linked to"/>
 										<div class="input-group-btn">
 											<button type="button" class="btn btn-primary" id="addClassifierSubmit"><span class="glyphicon glyphicon-ok"></span></button>
-											<button type="button" class="btn btn-default" onClick="$('#addClassifierForm').collapse('hide')"><span class="glyphicon glyphicon-remove"></span></button>
+											<button type="reset" class="btn btn-default" onClick="$('#addClassifierForm').collapse('hide')"><span class="glyphicon glyphicon-remove"></span></button>
 										</div>
 									</div>
 								</form>

@@ -57,7 +57,7 @@
 					<input type="text" class="form-control" size="16" name="alt_matter_id" placeholder="Linked to"/>
 					<div class="input-group-btn">
 						<button type="button" class="btn btn-primary" id="addEventSubmit"><span class="glyphicon glyphicon-ok"></span></button>
-						<button type="button" class="btn btn-default" onClick="$(this).parents('tr').html('')"><span class="glyphicon glyphicon-remove"></span></button>
+						<button type="reset" class="btn btn-default" onClick="$(this).parents('tr').html('')"><span class="glyphicon glyphicon-remove"></span></button>
 					</div>
 				</div>
 			</form>

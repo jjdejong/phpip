@@ -20,7 +20,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-//Disable registration functionality
+// Re-route registration requests to the home controller (thus disabling registration)
 Route::any('/register','HomeController@index');
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -60,7 +60,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('user/autocomplete', function (Request $request) {
 		$term = $request->input('term');
-		return App\User::select('id', 'name as label', 'login as value')
+		return App\User::select('name as label', 'login as value')
 			->whereNotNull('login')
 			->where('name', 'like', "%$term%")
 			->take(10)->get();
@@ -68,13 +68,14 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('actor/autocomplete', function (Request $request) {
 		$term = $request->input('term');
-		return App\Actor::select('id as value', 'name as label')
+		return App\Actor::select('name as label', 'id as value', 'company_id')
 			->where('name', 'like', "%$term%")
 			->take(10)->get();
 	});
 	
-	Route::get('role', function () {
-		return App\Role::all();
+	Route::get('role/autocomplete', function () {
+		return App\Role::select('name as label', 'code as value')
+		->where('name', 'like', "%$term%")->get();
 	});
 	
 	Route::resource('task', 'TaskController');
