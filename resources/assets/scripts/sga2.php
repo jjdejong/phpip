@@ -40,15 +40,15 @@ $pn=NULL;				// publication number / patent number (String START)
 $entity=NULL;			// may be SMALL or LARGE (String STRICT)
 $updtime_start = NULL; //date('Y-m-d', time() - (30*86400)); // -30 days or $myPatent['lastupdate'] or YYYY-MM-DD;
 $updtime_end = NULL; //date('Y-m-d');
-$renewal->DUEDATE_start=NULL;	// duedate (Date)
-$renewal->DUEDATE_end=NULL;		// duedate (Date)
+$duedate_start=NULL;	// duedate (Date)
+$duedate_end=NULL;		// duedate (Date)
 $receipt_start=NULL;	// receipt date (Date)
 $receipt_end=NULL;		// receipt date (Date)
 $limit_offset=NULL;		// starting position
 $limit_count=NULL;		// maximum number of records
 $sort_order=NULL;		// Tag_name-{a|d}
 
-$result = $client->PgetCalendar($sga2['aqs_user'], $sga2['aqs_pwd'], $clientcase, $refcli, $uid, $refsga2, $country, $div, $orig, $title, $nature, $mandate, $apd_start, $apd_end, $ap, $pd_start, $pd_end, $pn, $entity, $updtime_start, $updtime_end, $renewal->DUEDATE_start, $renewal->DUEDATE_end, $receipt_start, $receipt_end, $limit_offset, $limit_count, $sort_order);
+$result = $client->PgetCalendar($sga2['aqs_user'], $sga2['aqs_pwd'], $clientcase, $refcli, $uid, $refsga2, $country, $div, $orig, $title, $nature, $mandate, $apd_start, $apd_end, $ap, $pd_start, $pd_end, $pn, $entity, $updtime_start, $updtime_end, $duedate_start, $duedate_end, $receipt_start, $receipt_end, $limit_offset, $limit_count, $sort_order);
 
 $xml = new SimpleXMLElement($result);
 //print_r($xml); exit;
@@ -63,43 +63,36 @@ $ambiguous = 0;		// counts patents that have multiple matches
 
 foreach ($xml->PATENT as $AQSpatent) {
 	$patsprocessed++;
-	$UID = $AQSpatent->UID;
-	$refsga2 = $AQSpatent->REFSGA2;
-	$caseref = $AQSpatent->REFCLI;
-	$country = $AQSpatent->COUNTRY;
-	$orig = $AQSpatent->ORIG; 
-	$div = $AQSpatent->DIV;
-	//$mandate = $AQSpatent->MANDATE;
   
-	if ($UID != '') { 
+	if ($AQSpatent->UID != '') { 
 		// Check case with SGA2's UID
 		$q = "SELECT caseref, country, ifnull(origin,'') as origin, concat(ifnull(type_code,''), ifnull(idx,'')) as 'div', actor_ref
 		FROM matter, matter_actor_lnk
 		WHERE matter.id=matter_actor_lnk.matter_id
 		AND matter_actor_lnk.role='ANN'
-		AND matter.id='$UID'";
+		AND matter.id='$AQSpatent->UID'";
 		$result = $db->query($q);
 		if (!$result) {
 			echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 		}
 		$myPatent = $result->fetch_assoc();
-		if (strpos($caseref, $myPatent['caseref']) === FALSE) {
-			echo "\r\nWARNING: REFCLI=$caseref ($refsga2-$country-$orig-$div) does not match UID=$UID";
+		if (strpos($AQSpatent->REFCLI, $myPatent['caseref']) === FALSE) {
+			echo "\r\nWARNING: REFCLI=$AQSpatent->REFCLI ($AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV) does not match UID=$AQSpatent->UID";
 			$unrecognized++;
 			//This case is OK but the reference needs to be checked
 		}
-		if ($myPatent['country'] != $country) {
-			echo "\r\nCOUNTRY=$country ($caseref) does not match UID=$UID";
+		if ($myPatent['country'] != $AQSpatent->COUNTRY) {
+			echo "\r\nCOUNTRY=$AQSpatent->COUNTRY ($AQSpatent->REFCLI) does not match UID=$AQSpatent->UID";
 			$unrecognized++;
 			continue; // This case is wrong, go to next
 		}
-		/*if ($myPatent['origin'] != $orig) {
-			echo "\r\nORIG=$orig ($caseref$country-$orig) does not match UID=$UID";
+		/*if ($myPatent['origin'] != $AQSpatent->ORIG) {
+			echo "\r\nORIG=$AQSpatent->ORIG ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG) does not match UID=$AQSpatent->UID";
 			$unrecognized++;
 			continue;
 		}*/
-		/*if ($myPatent['div'] != $div) {
-			echo "\r\nDIV=$div ($caseref$country-$div) does not match UID=$UID";
+		/*if ($myPatent['div'] != $AQSpatent->DIV) {
+			echo "\r\nDIV=$AQSpatent->DIV ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->DIV) does not match UID=$AQSpatent->UID";
 			$unrecognized++;
 			continue;
 		}*/
@@ -108,11 +101,11 @@ foreach ($xml->PATENT as $AQSpatent) {
 		FROM matter, matter_actor_lnk
 		WHERE matter.id=matter_actor_lnk.matter_id
 		AND matter_actor_lnk.role='ANN'
-		AND country='$country'
-		AND caseref='$caseref'
-		AND ifnull(origin,'')='$orig'
-		AND if(type_code IS NULL, 1, 2) + ifnull(idx, 0) = CAST('$div' AS UNSIGNED)";
-		// AND concat(ifnull(type_code,''), ifnull(idx,''))='$div'";
+		AND country='$AQSpatent->COUNTRY'
+		AND caseref='$AQSpatent->REFCLI'
+		AND ifnull(origin,'')='$AQSpatent->ORIG'
+		AND if(type_code IS NULL, 1, 2) + ifnull(idx, 0) = CAST('$AQSpatent->DIV' AS UNSIGNED)";
+		// AND concat(ifnull(type_code,''), ifnull(idx,''))='$AQSpatent->DIV'";
 		$result = $db->query($q);
 		if (!$result) {
 			echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
@@ -120,24 +113,24 @@ foreach ($xml->PATENT as $AQSpatent) {
 	
 		$myPatent = $result->fetch_assoc();
 		if ($myPatent2 = $result->fetch_assoc()) {
-			echo "\r\nSGA2 case $refsga2-$country-$orig-$div ($caseref) has multiple matches - ignored";
+			echo "\r\nSGA2 case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) has multiple matches - ignored";
 			$ambiguous++;
 			continue;
 		}
-		$UID = $myPatent['id'];
-		/*if ($UID != '') {
-			echo "\r\nSGA2 case $refsga2-$country-$orig-$div ($caseref) had no UID, identified it as $UID";
+		$AQSpatent->UID = $myPatent['id'];
+		/*if ($AQSpatent->UID != '') {
+			echo "\r\nSGA2 case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) had no UID, identified it as $AQSpatent->UID";
 		}*/
 	}
-	if ($UID == '') { // No matching id found
-		echo "\r\nCould not find SGA2's $refsga2-$country-$orig-$div ($caseref$country-$orig-$div ?)";
+	if ($AQSpatent->UID == '') { // No matching id found
+		echo "\r\nCould not find SGA2's $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ?)";
 		$unrecognized++;
 		continue; // Patent not found in phpIP, go to next
 	}
 	
-	if ($myPatent['actor_ref'] != $refsga2.$country.'-'.$orig.'-'.$div) { // Case found and SGA² ref needs updating
-		$q = "UPDATE matter_actor_lnk SET actor_ref='$refsga2$country-$orig-$div'
-		WHERE matter_ID='$UID'
+	if ($myPatent['actor_ref'] != $AQSpatent->REFSGA2.$AQSpatent->COUNTRY.'-'.$AQSpatent->ORIG.'-'.$AQSpatent->DIV) { // Case found and SGA² ref needs updating
+		$q = "UPDATE matter_actor_lnk SET actor_ref='$AQSpatent->REFSGA2$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV'
+		WHERE matter_ID='$AQSpatent->UID'
 		AND role='ANN'";
 		$result = $db->query($q);	
 		if (!$result) {
@@ -154,7 +147,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 		$q = "SELECT task.id, cost, task.notes, task.done_date, task.due_date FROM task, event
 		WHERE task.trigger_id=event.id
 		AND task.code='REN'
-		AND event.matter_id='$UID'
+		AND event.matter_id='$AQSpatent->UID'
 		AND CAST(task.detail AS UNSIGNED)='$renewal->YEAR'";
 		$result = $db->query($q);
 		if (!$result) {
@@ -183,14 +176,14 @@ foreach ($xml->PATENT as $AQSpatent) {
 				WHERE id='$myPatent[id]'";
 				$result = $db->query($q);    
 				if (!$result) {
-					echo "\r\nInvalid query for invoiced cost in $UID: (error " . $db->errno . ") " . $db->error;
+					echo "\r\nInvalid query for invoiced cost in $AQSpatent->UID: (error " . $db->errno . ") " . $db->error;
 				} else $somethingupdated = "invoiced cost $renewal->INVOICED_COST";		
 			} elseif ($renewal->ESTIMATED_COST != '' && $renewal->INVOICED_COST == '' && $myPatent['notes'] != 'Estimated') { // Estimate provided, not invoiced: event not up to date - update cost with estimate
 				$q = "UPDATE task SET cost='$renewal->ESTIMATED_COST', currency='$renewal->CURRENCY', notes='Estimated'
 				WHERE id='$myPatent[id]'";
 				$result = $db->query($q);    
 				if (!$result) {
-					echo "\r\nInvalid query for estimated cost in $UID: (error " . $db->errno . ") " . $db->error;
+					echo "\r\nInvalid query for estimated cost in $AQSpatent->UID: (error " . $db->errno . ") " . $db->error;
 				} else $somethingupdated = "cost estimate $renewal->ESTIMATED_COST";
 			
 			} elseif ($renewal->DATE_PAID != '' && $myPatent['notes'] != 'Invoiced by SGA2') { // Paid but no cost provided - update without cost information
@@ -210,16 +203,16 @@ foreach ($xml->PATENT as $AQSpatent) {
 			}
 	  
 			if ($somethingupdated != '') {
-				echo "\r\nUpdated $somethingupdated for annuity $renewal->YEAR in $UID ($caseref-$country)";
+				echo "\r\nUpdated $somethingupdated for annuity $renewal->YEAR in $AQSpatent->UID ($AQSpatent->REFCLI-$AQSpatent->COUNTRY)";
 				$updated++;
 			}
 		} else { // The annuity is not present, create it (same data as for update above), with due date from SGA2 (!= real due date)
 			$somethingupdated = '';
 		  
 			// First find the trigger event depending on the country
-			if (in_array($country, array("US","JP","KR","TW"))) {
+			if (in_array($AQSpatent->COUNTRY, array("US","JP","KR","TW"))) {
 				$q = "SELECT id from event
-				WHERE matter_id='$UID'
+				WHERE matter_id='$AQSpatent->UID'
 				AND code='GRT'";
 				$result = $db->query($q);    
 				if (!$result) {
@@ -229,7 +222,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 				$trigger_id = $myPatent['id'];
 			} else { 
 				$q = "SELECT id from event
-				WHERE matter_id='$UID'
+				WHERE matter_id='$AQSpatent->UID'
 				AND code='FIL'";
 				$result = $db->query($q);    
 				if (!$result) {
@@ -240,7 +233,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 			}
 		  
 			if ($trigger_id == '') { // No trigger event found
-				echo "\r\nCould not find trigger event for renewal $renewal->YEAR ($renewal->DUEDATE) in $caseref$country-$orig-$div - Aborted";
+				echo "\r\nCould not find trigger event for renewal $renewal->YEAR ($renewal->DUEDATE) in $AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV - Aborted";
 				continue;
 			}
 		  
@@ -283,7 +276,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 			}
 		  
 			if ($somethingupdated != '') {
-				echo "\r\nInserted annuity $renewal->YEAR with $somethingupdated in $UID ($caseref$country-$orig-$div)";
+				echo "\r\nInserted annuity $renewal->YEAR with $somethingupdated in $AQSpatent->UID ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV)";
 				$inserted++;
 			}
 		}
