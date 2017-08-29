@@ -18,7 +18,7 @@ $result = $db->query($q);
 if (!$result) {
 	echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 }
-$myPatent = $result->fetch_assoc();
+$myRenewal = $result->fetch_assoc();
 */
 
 $clientcase=NULL;		// reference to a group of patent (String START)
@@ -38,7 +38,7 @@ $pd_start=NULL;			// publication date (Date)
 $pd_end=NULL;			// publication date (Date)
 $pn=NULL;				// publication number / patent number (String START)
 $entity=NULL;			// may be SMALL or LARGE (String STRICT)
-$updtime_start = NULL; //date('Y-m-d', time() - (30*86400)); // -30 days or $myPatent['lastupdate'] or YYYY-MM-DD;
+$updtime_start = NULL; //date('Y-m-d', time() - (30*86400)); // -30 days or $myRenewal['lastupdate'] or YYYY-MM-DD;
 $updtime_end = NULL; //date('Y-m-d');
 $duedate_start=NULL;	// duedate (Date)
 $duedate_end=NULL;		// duedate (Date)
@@ -75,23 +75,23 @@ foreach ($xml->PATENT as $AQSpatent) {
 		if (!$result) {
 			echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 		}
-		$myPatent = $result->fetch_assoc();
-		if (strpos($AQSpatent->REFCLI, $myPatent['caseref']) === FALSE) {
+		$myRenewal = $result->fetch_assoc();
+		if (strpos($AQSpatent->REFCLI, $myRenewal['caseref']) === FALSE) {
 			echo "\r\nWARNING: REFCLI=$AQSpatent->REFCLI ($AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV) does not match UID=$AQSpatent->UID";
 			$unrecognized++;
 			//This case is OK but the reference needs to be checked
 		}
-		if ($myPatent['country'] != $AQSpatent->COUNTRY) {
+		if ($myRenewal['country'] != $AQSpatent->COUNTRY) {
 			echo "\r\nCOUNTRY=$AQSpatent->COUNTRY ($AQSpatent->REFCLI) does not match UID=$AQSpatent->UID";
 			$unrecognized++;
 			continue; // This case is wrong, go to next
 		}
-		/*if ($myPatent['origin'] != $AQSpatent->ORIG) {
+		/*if ($myRenewal['origin'] != $AQSpatent->ORIG) {
 			echo "\r\nORIG=$AQSpatent->ORIG ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG) does not match UID=$AQSpatent->UID";
 			$unrecognized++;
 			continue;
 		}*/
-		/*if ($myPatent['div'] != $AQSpatent->DIV) {
+		/*if ($myRenewal['div'] != $AQSpatent->DIV) {
 			echo "\r\nDIV=$AQSpatent->DIV ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->DIV) does not match UID=$AQSpatent->UID";
 			$unrecognized++;
 			continue;
@@ -111,13 +111,13 @@ foreach ($xml->PATENT as $AQSpatent) {
 			echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 		}
 	
-		$myPatent = $result->fetch_assoc();
-		if ($myPatent2 = $result->fetch_assoc()) {
+		$myRenewal = $result->fetch_assoc();
+		if ($myRenewal2 = $result->fetch_assoc()) {
 			echo "\r\nSGA2 case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) has multiple matches - ignored";
 			$ambiguous++;
 			continue;
 		}
-		$AQSpatent->UID = $myPatent['id'];
+		$AQSpatent->UID = $myRenewal['id'];
 		/*if ($AQSpatent->UID != '') {
 			echo "\r\nSGA2 case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) had no UID, identified it as $AQSpatent->UID";
 		}*/
@@ -128,7 +128,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 		continue; // Patent not found in phpIP, go to next
 	}
 	
-	if ($myPatent['actor_ref'] != $AQSpatent->REFSGA2.$AQSpatent->COUNTRY.'-'.$AQSpatent->ORIG.'-'.$AQSpatent->DIV) { // Case found and SGA² ref needs updating
+	if ($myRenewal['actor_ref'] != $AQSpatent->REFSGA2.$AQSpatent->COUNTRY.'-'.$AQSpatent->ORIG.'-'.$AQSpatent->DIV) { // Case found and SGA² ref needs updating
 		$q = "UPDATE matter_actor_lnk SET actor_ref='$AQSpatent->REFSGA2$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV'
 		WHERE matter_ID='$AQSpatent->UID'
 		AND role='ANN'";
@@ -153,112 +153,84 @@ foreach ($xml->PATENT as $AQSpatent) {
 		if (!$result) {
 			echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 		}
-		$myPatent = $result->fetch_assoc();
+		$myRenewal = $result->fetch_assoc();
 	
-		if ($myPatent['id'] != '') { // The annuity event is present
-			$somethingupdated = '';
-			if ($renewal->DUEDATE != $myPatent['due_date']) { // Due date is wrong
-				$q = "UPDATE task SET due_date='$renewal->DUEDATE'
-				WHERE id='$myPatent[id]'";
-				$result = $db->query($q);    
-				if (!$result) {
-					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
-				} else $somethingupdated = "due date $renewal->DUEDATE";
-			}
-			// Update payment details
-			if ($renewal->INVOICED_COST == '' && $renewal->DATE_PAID != '') {
-				$renewal->INVOICED_COST = $renewal->ESTIMATED_COST; // Do this when there is a paid date but no invoiced cost
-				if ($renewal->INVOICED_COST == '')
-					$renewal->INVOICED_COST = 0;
-			}
-			if ($renewal->DATE_PAID != '' && !$renewal->CANCELLED && ($myPatent['notes'] != 'Invoiced by SGA2' || $renewal->INVOICED_COST != $myPatent['cost'] || $renewal->DATE_PAID != $myPatent['done_date'])) { // Paid date provided, event not up to date
-				$q = "UPDATE task SET done_date='$renewal->DATE_PAID', done=1, notes='Invoiced by SGA2', currency='$renewal->CURRENCY', cost='$renewal->INVOICED_COST'
-				WHERE id='$myPatent[id]'";
-				$result = $db->query($q);    
-				if (!$result) {
-					echo "\r\nInvalid query for invoiced cost in $AQSpatent->UID: (error " . $db->errno . ") " . $db->error;
-				} else $somethingupdated = "invoiced cost $renewal->INVOICED_COST";		
-			} elseif ($renewal->ESTIMATED_COST != '' && $renewal->INVOICED_COST == '' && $myPatent['notes'] != 'Estimated') { // Estimate provided, not invoiced: event not up to date - update cost with estimate
-				$q = "UPDATE task SET cost='$renewal->ESTIMATED_COST', currency='$renewal->CURRENCY', notes='Estimated'
-				WHERE id='$myPatent[id]'";
-				$result = $db->query($q);    
-				if (!$result) {
-					echo "\r\nInvalid query for estimated cost in $AQSpatent->UID: (error " . $db->errno . ") " . $db->error;
-				} else $somethingupdated = "cost estimate $renewal->ESTIMATED_COST";
+		if ($myRenewal['id']) { // The annuity event is present
+			$set = [];
 			
-			} elseif ($renewal->DATE_PAID != '' && $myPatent['notes'] != 'Invoiced by SGA2') { // Paid but no cost provided - update without cost information
-				$q = "UPDATE task SET done_date='$renewal->DATE_PAID', done=1
-				WHERE id='$myPatent[id]'";
-				$result = $db->query($q);    
-				if (!$result) {
-					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
-				} else $somethingupdated = "paid date $renewal->DATE_PAID without cost";			
-			} elseif ($renewal->CANCELLED && $myPatent['notes'] != 'Cancelled') { // Payment cancelled or unnecessary
-				$q = "UPDATE task SET done=1, notes='Cancelled'
-				WHERE id='$myPatent[id]'";
-				$result = $db->query($q);    
-				if (!$result) {
-					echo "\r\nInvalid query: (" . $db->errno . ") " . $db->error;
-				} else $somethingupdated = "cancelled";
+			if ($renewal->DUEDATE != $myRenewal['due_date']) {
+				$set[] = "due_date='$renewal->DUEDATE'";
+			}
+			if ($renewal->ESTIMATED_COST && $renewal->ESTIMATED_COST != $myRenewal['cost'] && !$renewal->INVOICED_COST) {
+				$set[] = "cost='$renewal->ESTIMATED_COST'";
+				$set[] = "currency='$renewal->CURRENCY'";
+				$set[] = "notes='Estimated'";
+			}
+			if ($renewal->INVOICED_COST && $renewal->INVOICED_COST != $myRenewal['cost']) {
+				$set[] = "cost='$renewal->INVOICED_COST'";
+				$set[] = "currency='$renewal->CURRENCY'";
+				$set[] = "notes='Invoiced by SGA2'";
+			}
+			if ($renewal->DATE_PAID && $renewal->DATE_PAID != $myRenewal['done_date']) {
+				$set[] = "done_date='$renewal->DATE_PAID'";		
+			} 
+			if ($renewal->CANCELLED && $myRenewal['notes'] != 'Cancelled') { // Payment cancelled or unnecessary
+				$set[] = "notes='Cancelled'";
 			}
 	  
-			if ($somethingupdated != '') {
-				echo "\r\nUpdated $somethingupdated for annuity $renewal->YEAR in $AQSpatent->UID ($AQSpatent->REFCLI-$AQSpatent->COUNTRY)";
+			if ($set) {
+				$q = "UPDATE task SET " . implode(',', $set) . " WHERE id='$myRenewal[id]'";
+				$result = $db->query($q);    
+				if (!$result) {
+					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
+				}
+				echo "\r\nUpdated " . implode(',', $set) . " for annuity $renewal->YEAR in $AQSpatent->UID ($AQSpatent->REFCLI-$AQSpatent->COUNTRY)";
 				$updated++;
 			}
 		} else { // The annuity is not present, create it (same data as for update above), with due date from SGA2 (!= real due date)
 			$somethingupdated = '';
-		  
 			// First find the trigger event depending on the country
-			if (in_array($AQSpatent->COUNTRY, array("US","JP","KR","TW"))) {
+			if (in_array($AQSpatent->COUNTRY, ["US","JP","KR","TW"])) {
 				$q = "SELECT id from event
 				WHERE matter_id='$AQSpatent->UID'
 				AND code='GRT'";
-				$result = $db->query($q);    
-				if (!$result) {
-					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
-				}
-				$myPatent = $result->fetch_assoc();
-				$trigger_id = $myPatent['id'];
 			} else { 
 				$q = "SELECT id from event
 				WHERE matter_id='$AQSpatent->UID'
 				AND code='FIL'";
-				$result = $db->query($q);    
-				if (!$result) {
-					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
-				}
-				$myPatent = $result->fetch_assoc();
-				$trigger_id = $myPatent['id'];
 			}
-		  
-			if ($trigger_id == '') { // No trigger event found
+			$result = $db->query($q);    
+			if (!$result) {
+				echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
+			}
+			$myRenewal = $result->fetch_assoc();
+			if (!$myRenewal) { // No trigger event found
 				echo "\r\nCould not find trigger event for renewal $renewal->YEAR ($renewal->DUEDATE) in $AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV - Aborted";
 				continue;
 			}
-		  
-			if ($renewal->INVOICED_COST != '' && $renewal->DATE_PAID !='') { // Cost provided - insert with costs
-				$q = "INSERT INTO task (code,detail,done_date,due_date,done,currency,cost,notes,trigger_id) VALUES ('REN','$renewal->YEAR','$renewal->DATE_PAID','$renewal->DUEDATE',1,'$renewal->CURRENCY','$renewal->INVOICED_COST',
-				'Invoiced by SGA2','$trigger_id')";
+			$trigger_id = $myRenewal['id'];
+		  	if ($renewal->INVOICED_COST && $renewal->DATE_PAID) { // Cost provided - insert with costs
+				$q = "INSERT INTO task (code,detail,done_date,due_date,currency,cost,notes,trigger_id) 
+				VALUES ('REN','$renewal->YEAR','$renewal->DATE_PAID','$renewal->DUEDATE','$renewal->CURRENCY','$renewal->INVOICED_COST','Invoiced by SGA2','$trigger_id')";
 				$result = $db->query($q);    
 				if (!$result) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 				} else $somethingupdated = "invoiced cost $renewal->INVOICED_COST";
-			} elseif ($renewal->ESTIMATED_COST !='' && $renewal->DATE_PAID =='') { // Estimate provided
+			} elseif ($renewal->ESTIMATED_COST && !$renewal->DATE_PAID) { // Estimate provided
 				$q = "INSERT INTO task (code,detail,due_date,cost,notes,trigger_id)
 				VALUES ('REN','$renewal->YEAR','$renewal->DUEDATE','$renewal->ESTIMATED_COST','Estimated','$trigger_id')";
 				$result = $db->query($q);    
 				if (!$result) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 				} else $somethingupdated = "estimated cost $renewal->ESTIMATED_COST";			
-			} elseif ($renewal->INVOICED_COST =='' && $renewal->DATE_PAID !='') { // No costs provided but paid
-				$q = "INSERT INTO task (code,detail,done_date,due_date,done,trigger_id)
-				VALUES ('REN','$renewal->YEAR','$renewal->DATE_PAID','$renewal->DUEDATE',1,'$trigger_id')";
+			} elseif (!$renewal->INVOICED_COST && $renewal->DATE_PAID) { // No costs provided but paid
+				$q = "INSERT INTO task (code,detail,done_date,due_date,trigger_id)
+				VALUES ('REN','$renewal->YEAR','$renewal->DATE_PAID','$renewal->DUEDATE','$trigger_id')";
 				$result = $db->query($q);    
 				if (!$result) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 				} else $somethingupdated = "paid on $renewal->DATE_PAID but not invoiced";		
-			} elseif ($renewal->INVOICED_COST != '' && $renewal->DATE_PAID == '') { // Invoiced but no payment date
+			} elseif ($renewal->INVOICED_COST && !$renewal->DATE_PAID) { // Invoiced but no payment date
 				$q = "INSERT INTO task (code,detail,due_date,currency,cost,notes,trigger_id)
 				VALUES ('REN','$renewal->YEAR','$renewal->DUEDATE','$renewal->CURRENCY','$renewal->INVOICED_COST',
 				'Invoiced by SGA2','$trigger_id')";
@@ -266,7 +238,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 				if (!$result) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 				} else $somethingupdated = "invoiced cost $renewal->INVOICED_COST (but no payment date)";
-			} elseif ($renewal->CANCELLED == '1') { // Payment cancelled or unnecessary
+			} elseif ($renewal->CANCELLED) { // Payment cancelled or unnecessary
 				$q = "INSERT INTO task (code,detail,due_date,done,notes,trigger_id)
 				VALUES ('REN','$renewal->YEAR','$renewal->DUEDATE',1,'Cancelled','$trigger_id')";
 				$result = $db->query($q);    
@@ -275,7 +247,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 				} else $somethingupdated = "cancelled";
 			}
 		  
-			if ($somethingupdated != '') {
+			if ($somethingupdated) {
 				echo "\r\nInserted annuity $renewal->YEAR with $somethingupdated in $AQSpatent->UID ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV)";
 				$inserted++;
 			}
