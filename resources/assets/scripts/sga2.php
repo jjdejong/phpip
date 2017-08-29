@@ -6,7 +6,7 @@ $params = [ 'encoding' => 'UTF-8', 'soap_version' => SOAP_1_2, 'stream_context' 
 $client = new SoapClient('https://client.anaqua.com/WebServices/WebService_12.04/', $params);
 $sga2 = parse_ini_file('sga2.ini');
 //print_r($sga2); break;
-$db = new mysqli('localhost', $sga2['mysql_user'], $sga2['mysql_pwd'], $sga2['mysql_db'], NULL, '/tmp/mysql.sock'); // Connect to database
+$db = new mysqli($sga2['mysql_host'], $sga2['mysql_user'], $sga2['mysql_pwd'], $sga2['mysql_db'], NULL, $sga2['mysql_socket']); // Connect to database
 if ($db->connect_errno) {
     echo "Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
     exit;
