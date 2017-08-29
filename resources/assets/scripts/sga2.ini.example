@@ -1,0 +1,5 @@
+aqs_user = AnaquaServicesUserName
+aqs_pwd = AnaquaServicesPassword
+mysql_user = phpipUserName
+mysql_pwd = phpipPassword
+mysql_db = phpipDatabase
