@@ -207,7 +207,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							</div>
 							<div class="form-group">
 								<label class="radio-inline"><input type="radio" name="matter_id" value="{{ $matter->container_id or $matter->id }}">Shared</label>
-								<label class="radio-inline"><input type="radio" name="matter_id" value="{{ $matter->id }}">Not shared</label>
+								<label class="radio-inline"><input type="radio" name="matter_id" value="{{ $matter->id }}" id="matter_id">Not shared</label>
 								<button type="button" class="btn btn-primary" id="addActorSubmit"><i class="glyphicon glyphicon-ok"></i></button>
 								<button type="reset" class="btn btn-default" onClick="$('#addActorForm').collapse('hide')"><span class="glyphicon glyphicon-remove"></span></button>
 							</div>
