@@ -210,8 +210,8 @@ foreach ($xml->PATENT as $AQSpatent) {
 			}
 			$trigger_id = $myRenewal['id'];
 		  	if ($renewal->INVOICED_COST && $renewal->DATE_PAID) { // Cost provided - insert with costs
-				$q = "INSERT INTO task (code,detail,done_date,due_date,currency,cost,notes,trigger_id) 
-				VALUES ('REN','$renewal->YEAR','$renewal->DATE_PAID','$renewal->DUEDATE','$renewal->CURRENCY','$renewal->INVOICED_COST','Invoiced by SGA2','$trigger_id')";
+				$q = "INSERT INTO task (code,detail,done_date,done,due_date,currency,cost,notes,trigger_id) 
+				VALUES ('REN','$renewal->YEAR','$renewal->DATE_PAID',1,'$renewal->DUEDATE','$renewal->CURRENCY','$renewal->INVOICED_COST','Invoiced by SGA2','$trigger_id')";
 				$result = $db->query($q);    
 				if (!$result) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
@@ -224,8 +224,8 @@ foreach ($xml->PATENT as $AQSpatent) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 				} else $somethingupdated = "estimated cost $renewal->ESTIMATED_COST";			
 			} elseif (!$renewal->INVOICED_COST && $renewal->DATE_PAID) { // No costs provided but paid
-				$q = "INSERT INTO task (code,detail,done_date,due_date,trigger_id)
-				VALUES ('REN','$renewal->YEAR','$renewal->DATE_PAID','$renewal->DUEDATE','$trigger_id')";
+				$q = "INSERT INTO task (code,detail,done_date,done,due_date,trigger_id)
+				VALUES ('REN','$renewal->YEAR','$renewal->DATE_PAID',1,'$renewal->DUEDATE','$trigger_id')";
 				$result = $db->query($q);    
 				if (!$result) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
@@ -239,8 +239,8 @@ foreach ($xml->PATENT as $AQSpatent) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 				} else $somethingupdated = "invoiced cost $renewal->INVOICED_COST (but no payment date)";
 			} elseif ($renewal->CANCELLED) { // Payment cancelled or unnecessary
-				$q = "INSERT INTO task (code,detail,due_date,done,notes,trigger_id)
-				VALUES ('REN','$renewal->YEAR','$renewal->DUEDATE',1,'Cancelled','$trigger_id')";
+				$q = "INSERT INTO task (code,detail,due_date,notes,trigger_id)
+				VALUES ('REN','$renewal->YEAR','$renewal->DUEDATE','Cancelled','$trigger_id')";
 				$result = $db->query($q);    
 				if (!$result) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
