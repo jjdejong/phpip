@@ -100,7 +100,7 @@ $("#listModal").on("keypress", "input.noformat", function (e) {
 		$(this).parent("td").addClass("bg-warning");
 });
 
-$('#listModal').on("focus", 'input[type="date"].noformat', function() {
+$('#listModal').on("focus", 'input[name$="date"].noformat', function() {
 	$(this).datepicker({
 		dateFormat: 'yy-mm-dd',
 		showButtonPanel: true,
@@ -186,7 +186,7 @@ $("#listModal").on("click", "#addTaskToEvent", function() {
 			if (!ui.item) $(this).val("");
 		}
 	});
-   	$("#addTaskForm").find('input[type="date"]').datepicker({
+   	$("#addTaskForm").find('input[name$="date"]').datepicker({
 		dateFormat: 'yy-mm-dd',
 		showButtonPanel: true,
 	});
@@ -244,7 +244,7 @@ $("#listModal").on("click", "#addEvent", function() {
 			if (!ui.item) $(this).val("");
 		}
 	});
-   	$("#addEventForm").find('input[type="date"]').datepicker({
+   	$("#addEventForm").find('input[name$="date"]').datepicker({
 		dateFormat: 'yy-mm-dd',
 		showButtonPanel: true,
 	});

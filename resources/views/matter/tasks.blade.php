@@ -33,13 +33,13 @@
 				{{ $task->info->name }} <input type="text" class="form-control noformat" name="detail" value="{{ $task->detail }}"/>
 			</td> 
 			<td>
-				<input type="date" class="form-control noformat" size="10" name="due_date" value="{{ $task->due_date }}"/>
+				<input type="text" class="form-control noformat" size="10" name="due_date" value="{{ $task->due_date }}"/>
 			</td>
 			<td>
 				<input type="checkbox" name="done" {{ $task->done ? 'checked' : '' }}>
 			</td> 
 			<td>
-				<input type="date" class="form-control noformat" size="10" name="done_date" value="{{ $task->done_date }}"/>
+				<input type="text" class="form-control noformat" size="10" name="done_date" value="{{ $task->done_date }}"/>
 			</td>
 			<td>
 				<input type="text" class="form-control noformat" size="6" name="cost" value="{{ $task->cost }}"/>
@@ -51,7 +51,7 @@
 				<input type="text" class="form-control noformat" size="3" name="currency" value="{{ $task->currency }}"/>
 			</td>
 			<td>
-				<input type="time" class="form-control noformat" size="6" name="time_spent" value="{{ $task->time_spent }}"/>
+				<input type="text" class="form-control noformat" size="6" name="time_spent" value="{{ $task->time_spent }}"/>
 			</td>
 			<td class="ui-front">
 				<input type="text" class="form-control noformat" size="12" name="assigned_to" value="{{ $task->assigned_to }}"/>
@@ -84,13 +84,13 @@
 					<input type="text" class="form-control" name="detail" placeholder="Detail"/>
 				</div>
 				<div class="form-group form-group-sm ui-front">
-					<input type="date" class="form-control" size="10" name="due_date" placeholder="Date"/>
+					<input type="text" class="form-control" size="10" name="due_date" placeholder="Date"/>
 				</div>
 				<div class="form-group form-group-sm">
 					<input type="text" class="form-control" size="6" name="cost" placeholder="Cost"/>
 					<input type="text" class="form-control" size="6" name="fee" placeholder="Fee"/>
 					<input type="text" class="form-control" size="3" name="currency" placeholder="EUR"/>
-					<input type="time" class="form-control" size="6" name="time_spent" placeholder="Time"/>
+					<input type="text" class="form-control" size="6" name="time_spent" placeholder="Time"/>
 				</div>
 				<div class="form-group form-group-sm ui-front">
 					<input type="text" class="form-control" size="12" name="assigned_to" placeholder="Assigned to"/>
