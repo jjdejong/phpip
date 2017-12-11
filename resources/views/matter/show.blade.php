@@ -300,8 +300,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					<div class="panel-body" id="renewal-panel" style="height: 100px; overflow: auto;">
 						@foreach ( $matter->renewalsPending->take(3) as $task )
 						<div class="row">
-							<span class="col-xs-5">{{ $task->detail }}</span>
-							<span class="col-xs-7">{{ $task->due_date }}</span>
+							<span class="col-xs-4">{{ $task->detail }}</span>
+							<span class="col-xs-8">{{ $task->due_date }}</span>
 						</div>
 						@endforeach
 					</div>

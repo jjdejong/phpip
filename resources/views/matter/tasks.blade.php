@@ -20,10 +20,10 @@
 			<td colspan="11">
 				<span style="position: relative; left: -10px; margin-right: 10px;">{{ $event->info->name . ": " . $event->event_date }}</span>
 				<a href="javascript:void(0);" id="addTaskToEvent" class="hidden-action" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
-					<span class="glyphicon glyphicon-plus-sign"></span>
+					<span class="glyphicon glyphicon-plus-sign" style="font-size: 14px;"></span>
 				</a>
 				<a href="javascript:void(0);" class="hidden-action" id="deleteEvent" data-event_id="{{ $event->id }}" title="Delete event" style="margin-left: 15px;">
-					<span class="glyphicon glyphicon-trash text-danger"></span>
+					<span class="glyphicon glyphicon-trash text-danger" style="font-size: 14px;"></span>
 				</a>
 			</td>
 		</tr>
