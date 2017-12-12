@@ -400,6 +400,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 @section('script')
 
-<script src="{{ asset('js/matter-show.js') }}"></script>
+@include('matter.show-js')
 
 @stop

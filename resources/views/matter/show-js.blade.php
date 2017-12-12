@@ -1,3 +1,4 @@
+<script>
 var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
 var resource = ""; // Identifies the REST resource for CRUD operations
 var matter_id = $('#matter_id').val();
@@ -7,7 +8,7 @@ $(document).ready(function() {
 
     if (!$("#titlePanel").text().trim())
         $("#addTitleForm").collapse("show");
-    
+
 	// Ajax fill the opened modal and set global parameters
     $("#listModal").on("show.bs.modal", function(event) {
     	relatedUrl = $(event.relatedTarget).attr("href");
@@ -29,7 +30,7 @@ $(document).ready(function() {
 
 	$("#updateNotes").click(function() {
 		if ( $("#notes").hasClass('changed') ) {
-			$.post("/matter/" + matter_id, 
+			$.post("/matter/" + matter_id,
 				{ _token: csrf_token, _method: "PUT", notes: $("#notes").val() });
 			$("#updateNotes").addClass('hidden-action');
 			$(this).removeClass('changed');
@@ -45,13 +46,13 @@ $("#titlePanel").on("keypress", ".titleItem", function (e) {
 		var title = $(this).text().trim();
 		if (!title)
 			method = "DELETE";
-		$.post('/classifier/' + $(this).attr("id"), 
+		$.post('/classifier/' + $(this).attr("id"),
 			{ _token: csrf_token, _method: method, value: title }
 		).done(function() {
 			$('#titlePanel').load("/matter/" + matter_id + " #titlePanel > div");
 		});
 	} else
-		$(this).addClass("bg-warning");   
+		$(this).addClass("bg-warning");
 });
 
 $("#titlePanel").on("shown.bs.collapse", "#addTitleForm", function() {
@@ -278,7 +279,7 @@ $('#classifiersModal').on("keypress", "input.noformat", function (e) {
 			});
 		});
 	} else
-		$(this).parent("td").addClass("bg-warning");   
+		$(this).parent("td").addClass("bg-warning");
 });
 
 $('#classifiersModal').on("click", 'input[name="lnk_matter_id"].noformat', function() {
@@ -342,3 +343,4 @@ $("#classifiersModal").on("click", "#deleteClassifier", function() {
 	});
 	return false;
 });
+</script>
