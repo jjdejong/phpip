@@ -49,6 +49,14 @@ Route::group(['middleware' => 'auth'], function () {
 		return $results->take(10)->get();
 	});
 	
+	Route::get('task-name/autocomplete/{is_task}', function (Request $request, $is_task) {
+		$term = $request->input('term');
+		$results = App\EventName::select('name as label', 'code as value')
+			->where('name', 'like', "%$term%")
+			->where('is_task', $is_task);
+		return $results->take(10)->get();
+	});
+
 	Route::get('classifier-type/autocomplete/{main_display}', function (Request $request, $main_display) {
 		$term = $request->input('term');
 		$results = App\ClassifierType::select('type as value', 'code')
@@ -77,7 +85,38 @@ Route::group(['middleware' => 'auth'], function () {
 		return App\Role::select('name as label', 'code as value')
 		->where('name', 'like', "%$term%")->get();
 	});
+
+	Route::get('country/autocomplete', function (Request $request) {
+		$term = $request->input('term');
+		$list = App\Country::select('name as label', 'iso as value')
+		->where('name', 'like', "$term%")->get();
+		return $list;
+	});
 	
+	Route::get('category/autocomplete', function (Request $request) {
+		$term = $request->input('term');
+		return App\Category::select('category as label', 'code as value')
+		->where('category', 'like', "$term%")->get();
+	});
+
+	Route::get('type/autocomplete', function (Request $request) {
+		$term = $request->input('term');
+		return App\Type::select('type as label', 'code as value')
+		->where('type', 'like', "$term%")->get();
+	});
+
+	Route::get('event/autocomplete', function (Request $request) {
+		$term = $request->input('term');
+		return App\EventName::select('name as label', 'code as value')
+		->where('name', 'like', "$term%")->get();
+	});
+
+	Route::get('rule','RuleController@index');
+	Route::put('rule/{rule}/delete','RuleController@delete');
+	Route::get('ruleinfo/{rule}','RuleController@show');
+	Route::put('ruleinfo/{rule}','RuleController@update');
+	Route::get('ruleadd','RuleController@add');
+
 	Route::resource('task', 'TaskController');
 	Route::resource('event', 'EventController');
 	Route::resource('actor', 'ActorController');
