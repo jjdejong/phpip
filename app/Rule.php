@@ -63,10 +63,10 @@ class Rule extends Model
 			->leftJoin('event_name as tn', 'r.task', '=', 'tn.code')                
             ->leftJoin('event_name as cn', 'cn.code','=', 'r.condition_event')
             ->leftJoin('event_name as an','an.code', '=', 'r.abort_on')
-            ->leftJoin('actor as a', 'a.id', '=', 'r.responsible')
+            ->leftJoin('actor as a', 'a.login', '=', 'r.responsible')
             ->select(           'c.name as country_name',
                                 'o.name as origin_name',
-                                'a.login as responsible_name',
+                                'a.name as responsible_name',
                                 'mt.type as for_type_name', 
                                 'mc.category as category_name', 
                                 'en.name as trigger_event_name',
