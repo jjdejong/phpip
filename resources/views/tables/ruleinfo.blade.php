@@ -139,7 +139,7 @@ $(document).ready(function(){
 						<input class="rule-input-wide" name="abort_on" value="{{ $ruleInfo->abort_on_name }}">
                 </td><td><label type='text' for="responsible" title="{{ $ruleComments['responsible'] }}">Responsible</label>
                 </td><td class="ui-front">
-						<input class="rule-input-narrow" name="responsible" value="{{ $ruleInfo->responsible_name }}">
+						<input class="rule-input-narrow noformat" name="responsible" value="{{ $ruleInfo->responsible_name }}">
 				</tr><tr><td><label for="days" title="{{ $ruleComments['days'] }}">Days</label>
                 </td><td><input type='number' min="0" class="noformat rule-input-wide" name="days" value="{{ $ruleInfo->days }}">
                 </td><td><label for="cost" title="{{ $ruleComments['cost'] }}">Cost</label> 

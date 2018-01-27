@@ -115,7 +115,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('rule/{rule}/delete','RuleController@delete');
 	Route::get('ruleinfo/{rule}','RuleController@show');
 	Route::put('ruleinfo/{rule}','RuleController@update');
-	Route::get('ruleadd','RuleController@add');
+	Route::get('ruleadd','RuleController@addShow');
+	Route::put('ruleadd','RuleController@store');
 
 	Route::resource('task', 'TaskController');
 	Route::resource('event', 'EventController');

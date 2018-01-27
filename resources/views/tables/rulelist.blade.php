@@ -27,7 +27,7 @@
 
 @section('content')
 <div id="rules-tab">Rules</div>
-<a href="ruleadd"  data-toggle="modal" data-target="#infoModal" data-remote="false" title="Rule data" data-resource="/ruleadd/">Add a new rule</a>
+<a href="ruleadd"  data-toggle="modal" data-target="#addModal" data-remote="false" title="Rule data" data-resource="/ruleadd/">Add a new rule</a>
 <div id="rules-box" class="place-card">
 <table class="table table-striped table-hover table-condensed">
 	<thead>
@@ -69,6 +69,7 @@
 </div>
 <!-- Modals -->
 @include('partials.table-show-modals')
+@include('partials.table-add-modals')
 
 @endsection 
 
