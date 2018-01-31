@@ -206,6 +206,7 @@ $('.delete-from-list').click(function() {
 	$.post('/rule/' + $(this).closest("tr").data("id"), data).done(function(){
 		$('#listModal').find(".modal-body").load(relatedUrl);
 		});
+	refreshRuleList();
     }
     return false;
 });
