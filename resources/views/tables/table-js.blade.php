@@ -202,11 +202,14 @@ $('#infoModal').on("click", 'input[name="responsible"].noformat', function() {
 $('.delete-from-list').click(function() {
     var del_conf = confirm("Deleting rule from table.");
     if(del_conf == 1) {
-	var data = $.param({ _token: csrf_token, _method: "PUT" }) ;
-	$.post('/rule/' + $(this).attr("id")+'/delete', data)
+	var data = $.param({ _token: csrf_token, _method: "DELETE" }) ;
+	$.post('/rule/' + $(this).closest("tr").data("id"), data).done(function(){
+		$('#listModal').find(".modal-body").load(relatedUrl);
+		});
     }
     return false;
 });
+
 
 // Edition of fields in new rule modal window
 
