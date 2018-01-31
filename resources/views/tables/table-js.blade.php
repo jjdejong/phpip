@@ -11,7 +11,6 @@ function refreshRuleList() {
 
 $(document).ready(function() {
 
-
 	// Ajax fill the opened modal and set global parameters
     $("#infoModal").on("show.bs.modal", function(event) {
     	relatedUrl = $(event.relatedTarget).attr("href");
@@ -20,6 +19,11 @@ $(document).ready(function() {
     	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
         $(this).find(".modal-body").load(relatedUrl);
     });
+    // Reload the rules list when closing the modal window
+    $("#infoModal").on("hide.bs.modal", function(event) {
+    	refreshRuleList();
+    });
+    
 	// Display the modal view for creation of rule
     $("#addModal").on("show.bs.modal", function(event) {
     	relatedUrl = $(event.relatedTarget).attr("href");
@@ -27,6 +31,10 @@ $(document).ready(function() {
 
     	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
         $(this).find(".modal-body").load(relatedUrl);
+    });
+    // Reload the rules list when closing the modal window
+    $("#infoModal").on("hidden.bs.modal", function(event) {
+    	refreshRuleList();
     });
 
 });
