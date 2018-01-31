@@ -54,21 +54,6 @@ input {
 }
 </style>
 
-<script type="text/javascript">
-$(document).ready(function(){
-
-
-    $('.close-button').click(function(){
-        $('#rule-details-popup').hide();
-        $('#rule-details-used-in').hide();
-        $('#facade').hide();
-    });
-    
-    $( "button, input:button" ).button();
-
-});
-</script>
-
 <div id="edit-rule-content">
 	<input type="hidden" name="rule_id" id="rule-id"
 		value="{{ $ruleInfo->rule_id }}" />   
