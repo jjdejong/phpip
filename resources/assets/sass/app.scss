@@ -1,3 +1,4 @@
+
 // Fonts
 //@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300i,700');
 @import "/fonts/fonts.css";
@@ -6,7 +7,10 @@
 @import "variables";
 
 // Bootstrap
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import '~bootstrap/scss/bootstrap';
 
-// jQuery UI
-@import "../../../node_modules/jquery-ui-bundle/jquery-ui.css";
+@import "~jquery-ui-bundle/jquery-ui.css";
+.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
