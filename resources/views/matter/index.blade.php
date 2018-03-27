@@ -92,7 +92,7 @@ $(document).ready(function() {
 				</label>
       </div>
       <div class="btn-group-toggle mr-3" id="mine-all" data-toggle="buttons">
-        <label class="btn btn-info {{ $matters->responsible ? 'active' : '' }}">
+        <label class="btn btn-info {{ @$_GET['responsible'] ? 'active' : '' }}">
           <input class="responsible-filter" type="checkbox" id="show-responsible" name="responsible" value="{{ Auth::user ()->login }}"> Show Mine
 				</label>
       </div>
@@ -106,6 +106,7 @@ $(document).ready(function() {
         <button id="clear-filters" type="button" class="btn btn-primary" onclick="$('#matter-list').load('/matter #matter-list > tr', function() {
 					$('#filter').find('input').val('').css('background-color', '#fff');
 					contentUpdated();
+					$('#mine-all > label').removeClass('active');
 					window.history.pushState('', 'phpIP' , '/matter');
 				});">
 				&circlearrowright; Clear filters</button>
@@ -133,7 +134,7 @@ $(document).ready(function() {
       <th class="display_status"><a href="#" class="sortable" data-sortkey="Granted" data-sortdir="asc">Granted</a></th>
       <th class="display_status">Number</th>
     </tr>
-    <tr id="filter">
+    <tr class="sticky-top" id="filter">
       <td><input class="filter-input form-control form-control-sm" name="Ref" placeholder="Ref" value="{{ old('Ref') }}"></td>
       <td><input class="filter-input form-control form-control-sm" size="3" name="Cat" placeholder="Cat" value="{{ old('Cat') }}"></td>
       <td><input class="filter-input form-control form-control-sm" name="Status" placeholder="Status" value="{{ old('Status') }}"></td>
@@ -203,7 +204,7 @@ $(document).ready(function() {
 		@endforeach
 		<tr>
 			<td colspan="9">
-				<nav style="position: fixed; bottom: 0px;">
+				<nav class="fixed-bottom">
 					<ul class="pagination justify-content-center">
 						<li class="page-item">
 							<a class="page-link" href="#" onclick="$('#matter-list').load('{!! $matters->previousPageUrl() !!}' + ' #matter-list > tr', function() {

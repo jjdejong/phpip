@@ -9,6 +9,17 @@ $(document).ready(function() {
     if (!$("#titlePanel").text().trim())
         $("#addTitleForm").collapse("show");
 
+    $('[data-toggle="popover"]').popover({
+      content: function() { return $('#addActorForm').html(); }
+    });
+
+    $('body').on('click', function (e) {
+      if ($(e.target).data('toggle') !== 'popover'
+        && $(e.target).parents('.popover').length === 0) {
+        $('[data-toggle="popover"]').popover('hide');
+      }
+    });
+
 	// Ajax fill the opened modal and set global parameters
     $("#listModal").on("show.bs.modal", function(event) {
     	relatedUrl = $(event.relatedTarget).attr("href");
