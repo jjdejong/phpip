@@ -1,4 +1,4 @@
-<?php
+@php
 if ( $matter->container_id )
 	$classifiers = $matter->container->classifiers;
 else
@@ -6,7 +6,7 @@ else
 $titles = $classifiers->where('type.main_display', 1)->sortBy('type.display_order')->groupBy('type.type');
 $classifiers = $classifiers->where('type.main_display', 0)->sortBy('type.display_order')->groupBy('type.type');
 $linkedBy = $matter->linkedBy->groupBy('type_code');
-?>
+@endphp
 
 @extends('layouts.app')
 
@@ -66,7 +66,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 		<div id="titlePanel" class="card-body p-1">
 		@foreach ( $titles as $type => $title_group )
 			<div class="row">
-				<div class="col-2"><strong class="float-right">{{ $type }}</strong></div>
+				<div class="col-2 text-right font-weight-bold">{{ $type }}</div>
 				<div class="col-10">
 				@foreach ( $title_group as $title )
 					@if ($title != $title_group->first()) <br> @endif
@@ -90,8 +90,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 						<div class="col-10">
 							<div class="input-group">
 								<input type="text" class="form-control form-control-sm" name="value" placeholder="Value" />
-								<div class="input-group-btn">
-									<button type="button" class="btn btn-outline-success btn-sm" id="addTitleSubmit">&check;</button>
+								<div class="input-group-append">
+									<button type="button" class="btn btn-primary btn-sm" id="addTitleSubmit">&check;</button>
 								</div>
 							</div>
 						</div>
@@ -135,8 +135,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 </div>
 
 <div class="row card-deck">
-	<div class="card col-3 border-dark p-0">
-		<div class="card-header reveal-hidden text-white bg-dark p-1">
+	<div id="actorPanel" class="card col-3 border-secondary p-0">
+		<div class="card-header reveal-hidden text-white bg-secondary p-1">
 			Actors
 			<a class="badge badge-pill badge-light hidden-action float-right" data-toggle="collapse" href="#addActorForm" title="Add Actor" data-role="">+</a>
 		</div>
@@ -153,7 +153,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							data-toggle="popover"
 							data-html="true"
 							href="#"
-							title="Add Actor as {{ $role_name }} ({{ $role_group[0]->role }})">
+							title="Add Actor as {{ $role_name }} <span class='d-none'>{{ $role_group[0]->role }}</span>">
 							&oplus;
 						</a>
 					</div>
@@ -187,11 +187,9 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<form>
 					@csrf
 					<input id="rolePlaceHolder" type="hidden" name="role" value="">
-					<div class="form-group ui-front">
+					<div class="ui-front">
 						<input type="text" class="form-control form-control-sm" name="role" placeholder="Role" />
 						<input type="text" class="form-control form-control-sm" name="actor_id" placeholder="Name" />
-					</div>
-					<div class="form-group">
 						<input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference" />
 					</div>
 					<div class="form-check form-check-inline">
@@ -202,7 +200,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 						<input class="form-check-input" type="radio" name="matter_id" value="{{ $matter->id }}" id="matter_id">
 						<label class="form-check-label">Not shared</label>
 					</div>
-					<button type="button" class="btn btn-primary btn-sm" id="addActorSubmit">&check;</button>
+					<button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
 				</form>
 			</div>
 		</div>
@@ -218,7 +216,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-4">
 								Number
 								<a href="/matter/{{ $matter->id }}/events" class="hidden-action float-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All events" data-resource="/event/">
-									&dbkarow;
+									<span class="badge badge-primary">&vellip;</span>
 								</a>
 							</span>
 						</div>
@@ -253,7 +251,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 						<span class="col-3">
 							Due
 							<a href="/matter/{{ $matter->id }}/tasks" class="hidden-action float-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All tasks" data-resource="/task/">
-								&dbkarow;
+								<span class="badge badge-primary">&vellip;</span>
 							</a>
 						</span>
 					</div>
@@ -276,7 +274,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 						<span class="col-6">
 							Due
 							<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action float-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All renewals"  data-resource="/task/">
-								&dbkarow;
+								<span class="badge badge-primary">&vellip;</span>
 							</a>
 						</span>
 					</div>
@@ -294,7 +292,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<div class="card-header p-1">
 					Classifiers
 					<a href="#classifiersModal" class="hidden-action float-right" data-toggle="modal" title="Classifier detail" data-resource="/classifier/">
-						&dbkarow;
+						<span class="badge badge-primary">&vellip;</span>
 					</a>
 				</div>
 				<div class="card-body p-1" id="classifier-panel" style="overflow: auto;">

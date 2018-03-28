@@ -10,7 +10,8 @@ $(document).ready(function() {
         $("#addTitleForm").collapse("show");
 
     $('[data-toggle="popover"]').popover({
-      content: function() { return $('#addActorForm').html(); }
+      content: function() { return $('#addActorForm').html(); },
+      template: '<div class="popover border-info" role="tooltip"><div class="arrow"></div><h3 class="popover-header bg-info text-white"></h3><div class="popover-body"></div></div>'
     });
 
     $('body').on('click', function (e) {

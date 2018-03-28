@@ -77,29 +77,25 @@
 				@csrf
 				<input type="hidden" name="trigger_id" value="" id="trigger_id" />
 				<input type="hidden" name="code" value="" id="task_code" />
-				<div class="form-group ui-front">
-					<input type="text" class="form-control form-control-sm" size="12" name="name" placeholder="Name"/>
-				</div>
-				<div class="form-group">
+				<div class="input-group">
+					<div class="ui-front">
+						<input type="text" class="form-control form-control-sm" size="12" name="name" placeholder="Name"/>
+					</div>
 					<input type="text" class="form-control form-control-sm" size="16" name="detail" placeholder="Detail"/>
-				</div>
-				<div class="form-group ui-front">
-					<input type="text" class="form-control form-control-sm" size="10" name="due_date" placeholder="Date"/>
-				</div>
-				<div class="form-group">
+					<div class="ui-front">
+						<input type="text" class="form-control form-control-sm" size="10" name="due_date" placeholder="Date"/>
+					</div>
 					<input type="text" class="form-control form-control-sm" size="6" name="cost" placeholder="Cost"/>
 					<input type="text" class="form-control form-control-sm" size="6" name="fee" placeholder="Fee"/>
 					<input type="text" class="form-control form-control-sm" size="3" name="currency" placeholder="EUR"/>
 					<input type="text" class="form-control form-control-sm" size="6" name="time_spent" placeholder="Time"/>
-				</div>
-				<div class="form-group ui-front">
-					<input type="text" class="form-control form-control-sm" size="10" name="assigned_to" placeholder="Assigned to"/>
-				</div>
-				<div class="input-group input-group-sm">
-					<input type="text" class="form-control form-control-sm" size="24" name="notes" placeholder="Notes"/>
-					<div class="input-group-btn">
+					<div class="ui-front">
+						<input type="text" class="form-control form-control-sm" size="10" name="assigned_to" placeholder="Assigned to"/>
+					</div>
+					<input type="text" class="form-control form-control-sm" size="20" name="notes" placeholder="Notes"/>
+					<div class="input-group-append">
 						<button type="button" class="btn btn-primary btn-sm" id="addTaskSubmit">&check;</button>
-						<button type="reset" class="btn btn-secondary btn-sm" onClick="$(this).parents('tr').html('')">&times;</button>
+						<button type="reset" class="btn btn-outline-primary btn-sm" onClick="$(this).parents('tr').html('')">&times;</button>
 					</div>
 				</div>
 			</form>

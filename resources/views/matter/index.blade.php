@@ -155,7 +155,7 @@ $(document).ready(function() {
 	</thead>
   <tbody id="matter-list">
 	@foreach ($matters as $matter)
-	<?php // Format the publication number for searching on Espacenet
+		@php // Format the publication number for searching on Espacenet
 		$published = 0;
 		if ( $matter->PubNo || $matter->GrtNo) {
 			$published = 1;
@@ -172,7 +172,7 @@ $(document).ready(function() {
 					$pubno = substr ( $pubno, 0, 4 ) . substr ( $pubno, - 6 );
 			}
 		}
-	?>
+		@endphp
 		@if ( $matter->container_id )
 		<tr>
 		@else

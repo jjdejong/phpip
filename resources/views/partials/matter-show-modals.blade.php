@@ -71,20 +71,18 @@
 									@csrf
 									<input type="hidden" name="matter_id" value="{{ $matter->container_id or $matter->id }}"/>
 									<input type="hidden" name="type_code" value=""/>
-									<div class="form-group ui-front">
-										<input type="text" class="form-control form-control-sm" size="16" name="type" placeholder="Type"/>
-									</div>
-									<div class="form-group">
+									<div class="input-group">
+										<div class="ui-front">
+											<input type="text" class="form-control form-control-sm" size="16" name="type" placeholder="Type"/>
+										</div>
 										<input type="text" class="form-control form-control-sm" size="10" name="value" placeholder="Value"/>
-									</div>
-									<div class="form-group">
 										<input type="url" class="form-control form-control-sm" size="16" name="url" placeholder="URL"/>
-									</div>
-									<div class="input-group input-group-sm ui-front">
-										<input type="text" class="form-control form-control-sm" size="16" name="lnk_matter_id" placeholder="Linked to"/>
-										<div class="input-group-btn">
+										<div class="ui-front">
+											<input type="text" class="form-control form-control-sm" size="16" name="lnk_matter_id" placeholder="Linked to"/>
+										</div>
+										<div class="input-group-append">
 											<button type="button" class="btn btn-primary btn-sm" id="addClassifierSubmit">&check;</button>
-											<button type="reset" class="btn btn-secondary btn-sm" onClick="$('#addClassifierForm').collapse('hide')">&times;</button>
+											<button type="reset" class="btn btn-outline-primary btn-sm" onClick="$('#addClassifierForm').collapse('hide')">&times;</button>
 										</div>
 									</div>
 								</form>

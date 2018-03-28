@@ -40,24 +40,22 @@
 	<tr>
 		<td colspan="5">
 			<form id="addEventForm" class="form-inline">
-				{{ csrf_field() }}
+				@csrf
 				<input type="hidden" name="matter_id" value="{{ $matter->id }}"/>
 				<input type="hidden" name="code" value=""/>
-				<div class="form-group ui-front">
-					<input type="text" class="form-control form-control-sm" name="name" placeholder="Name"/>
-				</div>
-				<div class="form-group ui-front">
-					<input type="text" class="form-control form-control-sm" name="event_date" placeholder="Date"/>
-				</div>
-				<div class="form-group">
+				<div class="input-group">
+					<div class="ui-front">
+						<input type="text" class="form-control form-control-sm" name="name" placeholder="Name"/>
+						<input type="text" class="form-control form-control-sm" name="event_date" placeholder="Date"/>
+					</div>
 					<input type="text" class="form-control form-control-sm" name="detail" placeholder="Detail"/>
 					<input type="text" class="form-control form-control-sm" name="notes" placeholder="Notes"/>
-				</div>
-				<div class="input-group input-group-sm ui-front">
-					<input type="text" class="form-control form-control-sm" name="alt_matter_id" placeholder="Linked to"/>
-					<div class="input-group-btn">
+					<div class="ui-front">
+						<input type="text" class="form-control form-control-sm" name="alt_matter_id" placeholder="Linked to"/>
+					</div>
+					<div class="input-group-append">
 						<button type="button" class="btn btn-primary btn-sm" id="addEventSubmit">&check;</button>
-						<button type="reset" class="btn btn-secondary btn-sm" onClick="$(this).parents('tr').html('')">&times;</button>
+						<button type="reset" class="btn btn-outline-primary btn-sm" onClick="$(this).parents('tr').html('')">&times;</button>
 					</div>
 				</div>
 			</form>
