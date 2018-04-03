@@ -7,45 +7,43 @@ var csrf_token = $('input[name="_token"]').val();
 $(document).ready(function() {
 
     // Show the title creation form when the title panel is empty
-    if (!$("#titlePanel").text().trim())
-        $("#addTitleForm").collapse("show");
-
-    // Initialize popovers with custom template
-    $('body').popover({
-      selector: '[rel="popover"]',
-      template: '<div class="popover border-info" role="tooltip"><div class="arrow"></div><h3 class="popover-header bg-info text-white"></h3><div class="popover-body"></div></div>'
-    });
-
-    // Close popovers by clicking outside
-    $('body').on('click', function (e) {
-      $('[rel="popover"]').each(function () {
-        //the 'is' for buttons that trigger popups
-        //the 'has' for icons within a button that triggers a popup
-        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-          $(this).popover('dispose');
-        }
-      });
-    });
+    if (!$("#titlePanel").text().trim()) {
+      $("#addTitleForm").collapse("show");
+    }
 
     // Actor creation popovers
 
-    $('[rel="popover"]').on("shown.bs.popover", function(event) {
-      $("#addActorForm").find('input[name="actor_id"]').autocomplete({
+    // Initialize popovers with custom template
+    var popoverTemplate = '<div class="popover border-info" role="tooltip"><div class="arrow"></div><h3 class="popover-header bg-info text-white"></h3><div class="popover-body"></div></div>';
+
+    $('body').popover({
+      selector: '[rel="popover"]',
+      template: popoverTemplate
+    });
+
+    // Close popovers by clicking the cancel button
+    $('body').on('click', "#popoverCancel", function (e) {
+      $(this).parents('.popover').popover('hide');
+    });
+
+    $('body').on("shown.bs.popover", '[rel="popover"]', function() {
+      $(".popover:last").find('input[name="actor_id"]').autocomplete({
     		minLength: 2,
     		source: "/actor/autocomplete",
     		change: function (event, ui) {
     			if (!ui.item) $(this).val("");
     		}
       });
-      $("#addActorForm").find('input[placeholder="Role"]').autocomplete({
+
+      $(".popover:last").find('input[name="role"]').autocomplete({
     		minLength: 0,
     		source: "/role/autocomplete",
         select: function( event, ui ) {
-          $("#addActorForm").find('input[name="shared"]').val(ui.item.shareable);
+          $(this).parents('form').find('input[name="shared"]').val(ui.item.shareable);
           if (ui.item.shareable) {
-    			  $("#actorShared").prop('checked', true);
+    			  $(this).parents('form').find("#actorShared").prop('checked', true);
           } else {
-            $("#actorNotShared").prop('checked', true);
+            $(this).parents('form').find("#actorNotShared").prop('checked', true);
           }
     		},
     		change: function (event, ui) {
@@ -56,28 +54,38 @@ $(document).ready(function() {
         // Triggers autocomplete search with 0 characters upon focus
         $(this).autocomplete("search", "");
       });
-      $("body").on("change", '#addActorForm input[name="matter_id"]', function() {
-        $("#addActorForm").find('input[name="shared"]').val(function( index, value ) {
-          if (value == 1) {
-            return 0;
-          } else {
-            return 1;
-          }
-        });
+
+      $("body").on("change", '.popover input[name="matter_id"]', function() {
+        if ( $(this).prop('checked') ) {
+          $(this).parents('form').find('input[name="shared"]').val(function( index, value ) {
+            if (value == 1) {
+              return 0;
+            } else {
+              return 1;
+            }
+          });
+        }
       });
-      $("body").on("click", "#addActorSubmit", function() {
-      	var request = $("#addActorForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
+
+      $("#addActorSubmit").click( function() {
+        var currentForm = $(this).parents('form');
+      	var request = currentForm.find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
       	$.post('/actor-pivot', request)
       	.fail(function(errors) {
       		$.each(errors.responseJSON.errors, function (key, item) {
-      			$("#addActorForm").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("bg-danger");
+      			currentForm.find('input[name=' + key + ']').attr("placeholder", item);
       		});
+          currentForm.parents(".popover-body").find(".alert").html(errors.responseJSON.message).removeClass("d-none");
     	  })
         .done(function() {
-          $('.popover').popover('dispose');
+          currentForm.parents('.popover').popover('hide');
           $("#actorPanel").load("/matter/" + matter_id + " #actorPanel > div");
         });
       });
+
+      /*$('body').on('click', "#popoverCancel", function () {
+        $(this).parents(".popover").popover('hide');
+      });*/
     });
 
 

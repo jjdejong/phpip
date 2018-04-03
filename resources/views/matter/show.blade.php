@@ -151,20 +151,26 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 						@csrf
 						<input type="hidden" name="shared" value="1" />
 						<div class="ui-front">
-							<input type="text" class="form-control form-control-sm" name="code" placeholder="Role" />
+							<input type="text" class="form-control form-control-sm" name="role" placeholder="Role" />
 							<input type="text" class="form-control form-control-sm" name="actor_id" placeholder="Name" />
 							<input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference" />
 						</div>
-						<div class="form-check">
-							<input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id or $matter->id }}">
-							<label class="form-check-label" for="actorShared">Add to container and share</label>
+						<div class="form-group">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id or $matter->id }}">
+								<label class="form-check-label" for="actorShared">Add to container and share</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
+								<label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
+							</div>
 						</div>
-						<div class="form-check">
-							<input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
-							<label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
+						<div class="btn-group" role="group">
+							<button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
+							<button type="button" class="btn btn-outline-info btn-sm" id="popoverCancel">&times;</button>
 						</div>
-						<button type="button" class="btn btn-info btn-sm float-right" id="addActorSubmit">&check;</button>
-					</form>'>
+					</form>
+					<div class="alert alert-danger d-none" role="alert"></div>'>
 				+
 			</a>
 		</div>
@@ -184,22 +190,28 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							title='Add {{ $role_name }}'
 							data-content='<form id="addActorForm">
 									@csrf
-									<input type="hidden" name="code" value="{{ $role_group[0]->role }}" />
+									<input type="hidden" name="role" value="{{ $role_group[0]->role }}" />
 									<input type="hidden" name="shared" value="{{ $role_group[0]->shareable }}" />
 									<div class="ui-front">
 										<input type="text" class="form-control form-control-sm" name="actor_id" placeholder="Name" />
 										<input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference" />
 									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id or $matter->id }}" {{ $role_group[0]->shareable ? "checked" : "" }}>
-										<label class="form-check-label" for="actorShared">Add to container and share</label>
+									<div class="form-group">
+										<div class="form-check">
+											<input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id or $matter->id }}" {{ $role_group[0]->shareable ? "checked" : "" }}>
+											<label class="form-check-label" for="actorShared">Add to container and share</label>
+										</div>
+										<div class="form-check">
+											<input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}" {{ $role_group[0]->shareable ? "" : "checked" }}>
+											<label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
+										</div>
 									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}" {{ $role_group[0]->shareable ? "" : "checked" }}>
-										<label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
+									<div class="btn-group" role="group">
+										<button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
+										<button type="button" class="btn btn-outline-info btn-sm" id="popoverCancel">&times;</button>
 									</div>
-									<button type="button" class="btn btn-info btn-sm float-right" id="addActorSubmit">&check;</button>
-								</form>'
+								</form>
+								<div class="alert alert-danger d-none" role="alert"></div>'
 							href="#">
 							&oplus;
 						</a>

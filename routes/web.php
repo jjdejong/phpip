@@ -122,6 +122,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('task', 'TaskController');
 	Route::resource('event', 'EventController');
 	Route::resource('actor', 'ActorController');
+  Route::resource('actor-pivot', 'ActorPivotController');
 	Route::resource('classifier', 'ClassifierController');
 
 	// Testing - not used
