@@ -34,12 +34,14 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 @section('content')
 
+<div id="matter_id" class="d-none">{{ $matter->id }}</div>
+
 <div class="row card-deck mb-1">
 	<div class="card border-primary col-3 p-0">
-		<div class="card-header bg-primary text-white lead p-1">
+		<div class="card-header bg-primary text-white reveal-hidden lead p-1">
 			<a class="bg-primary text-white" href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
 			({{ $matter->category->category }})
-			<a class="bg-primary text-white float-right" href="/matter/{{ $matter->id }}/edit" title="Advanced edit">
+			<a class="bg-primary text-white float-right hidden-action" href="/matter/{{ $matter->id }}/edit" title="Advanced edit">
 				&#9998;
 			</a>
 		</div>
@@ -138,9 +140,35 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 	<div id="actorPanel" class="card col-3 border-secondary p-0">
 		<div class="card-header reveal-hidden text-white bg-secondary p-1">
 			Actors
-			<a class="badge badge-pill badge-light hidden-action float-right" data-toggle="collapse" href="#addActorForm" title="Add Actor" data-role="">+</a>
+			<a id="addActorPopover"
+				class="badge badge-pill badge-light hidden-action float-right"
+				rel="popover"
+				data-placement="right"
+				href="#"
+				data-html="true"
+				title="Add Actor"
+				data-content='<form id="addActorForm">
+						@csrf
+						<input type="hidden" name="shared" value="1" />
+						<div class="ui-front">
+							<input type="text" class="form-control form-control-sm" name="code" placeholder="Role" />
+							<input type="text" class="form-control form-control-sm" name="actor_id" placeholder="Name" />
+							<input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference" />
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id or $matter->id }}">
+							<label class="form-check-label" for="actorShared">Add to container and share</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
+							<label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
+						</div>
+						<button type="button" class="btn btn-info btn-sm float-right" id="addActorSubmit">&check;</button>
+					</form>'>
+				+
+			</a>
 		</div>
-		<div class="card-body p-1" id="actor-panel">
+		<div class="card-body p-1">
 			@foreach ( $matter->actors()->groupBy('role_name') as $role_name => $role_group )
 				<div class="card reveal-hidden border-secondary mb-1">
 					<div class="card-header p-1">
@@ -148,12 +176,31 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 						<a class="hidden-action float-right ml-2" data-toggle="modal" href="#actorsModal" title="Edit group" data-role="{{ $role_group[0]->role }}">
 							&#9998;
 						</a>
-						<a class="hidden-action float-right"
+						<a id="addActorPopover"
+							class="hidden-action float-right"
 							data-placement="right"
-							data-toggle="popover"
+							rel="popover"
 							data-html="true"
-							href="#"
-							title="Add Actor as {{ $role_name }} <span class='d-none'>{{ $role_group[0]->role }}</span>">
+							title='Add {{ $role_name }}'
+							data-content='<form id="addActorForm">
+									@csrf
+									<input type="hidden" name="code" value="{{ $role_group[0]->role }}" />
+									<input type="hidden" name="shared" value="{{ $role_group[0]->shareable }}" />
+									<div class="ui-front">
+										<input type="text" class="form-control form-control-sm" name="actor_id" placeholder="Name" />
+										<input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference" />
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id or $matter->id }}" {{ $role_group[0]->shareable ? "checked" : "" }}>
+										<label class="form-check-label" for="actorShared">Add to container and share</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}" {{ $role_group[0]->shareable ? "" : "checked" }}>
+										<label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
+									</div>
+									<button type="button" class="btn btn-info btn-sm float-right" id="addActorSubmit">&check;</button>
+								</form>'
+							href="#">
 							&oplus;
 						</a>
 					</div>
@@ -183,29 +230,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					</div>
 				</div>
 			@endforeach
-			<div id="addActorForm" class="d-none">
-				<form>
-					@csrf
-					<input id="rolePlaceHolder" type="hidden" name="role" value="">
-					<div class="ui-front">
-						<input type="text" class="form-control form-control-sm" name="role" placeholder="Role" />
-						<input type="text" class="form-control form-control-sm" name="actor_id" placeholder="Name" />
-						<input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference" />
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="matter_id" value="{{ $matter->container_id or $matter->id }}">
-						<label class="form-check-label">Shared</label>
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="matter_id" value="{{ $matter->id }}" id="matter_id">
-						<label class="form-check-label">Not shared</label>
-					</div>
-					<button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
-				</form>
-			</div>
 		</div>
 	</div>
-
 	<div id="multiPanel" class="card col-9 p-0">
 		<div class="row card-deck mb-1">
 				<div class="card col-6 p-0 reveal-hidden">
@@ -335,19 +361,19 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 					<span class="float-right">&#9432;</span>
 				</div>
 				<div class="card-body p-1" id="related-panel" style="overflow: auto;">
-					<p>
 					@if ( $matter->has('family') )
-						<strong>{{ $matter->caseref }}</strong>
+						<p>
+						<strong>Fam</strong>
+						@foreach ( $matter->family as $member )
+							<a class="badge badge-primary" href="/matter/{{ $member->id }}">{{ $member->suffix }}</a>
+						@endforeach
+						</p>
 					@endif
-					@foreach ( $matter->family as $member )
-						<a href="/matter/{{ $member->id }}">{{ $member->suffix }}</a>
-					@endforeach
-					</p>
 					@foreach ( $matter->priorityTo->groupBy('caseref') as $caseref => $family )
 						<p>
 							<strong>{{ $caseref }}</strong>
 						@foreach ( $family as $rmatter )
-							<a href="/matter/{{ $rmatter->id }}">{{ $rmatter->suffix }}</a>
+							<a class="badge badge-primary" href="/matter/{{ $rmatter->id }}">{{ $rmatter->suffix }}</a>
 						@endforeach
 						</p>
 					@endforeach

@@ -13,7 +13,7 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -33,15 +33,15 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-    	$this->validate($request, [
-			'trigger_id' => 'required|numeric',
-			'name' => 'required',
-			'due_date' => 'required|date',
-			'done_date' => 'nullable|date',
-			'cost' => 'nullable|numeric',
-			'fee' => 'nullable|numeric'
+    	$request->validate([
+  			'trigger_id' => 'required|numeric',
+  			'name' => 'required',
+  			'due_date' => 'required|date',
+  			'done_date' => 'nullable|date',
+  			'cost' => 'nullable|numeric',
+  			'fee' => 'nullable|numeric'
     	]);
-    	
+
     	Task::create($request->except(['_token', '_method', 'name']));
     }
 
@@ -77,16 +77,16 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
     	$this->validate($request, [
-			'due_date' => 'date',
-			'done_date' => 'nullable|date',
-			'cost' => 'nullable|numeric',
-			'fee' => 'nullable|numeric'
+  			'due_date' => 'date',
+  			'done_date' => 'nullable|date',
+  			'cost' => 'nullable|numeric',
+  			'fee' => 'nullable|numeric'
     	]);
-    	
+
     	// Remove task rule when due date is manually changed
     	if ($request->has('due_date'))
     		$request->request->add(['rule_used' => null]);
-    	
+
     	$task->update($request->except(['_token', '_method']));
     }
 
