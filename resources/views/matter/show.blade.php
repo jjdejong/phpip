@@ -138,7 +138,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 <div class="row card-deck">
 	<div id="actorPanel" class="card col-3 border-secondary p-0">
-		<div class="card-header reveal-hidden text-white bg-secondary p-1">
+		<div class="card-header reveal-hidden text-white bg-secondary font-weight-bold p-1">
 			Actors
 			<a id="addActorPopover"
 				class="badge badge-pill badge-light hidden-action float-right"
@@ -177,7 +177,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 		<div class="card-body p-1">
 			@foreach ( $matter->actors()->groupBy('role_name') as $role_name => $role_group )
 				<div class="card reveal-hidden border-secondary mb-1">
-					<div class="card-header p-1">
+					<div class="card-header font-weight-bold p-1">
 						{{ $role_name }}
 						<a class="hidden-action float-right ml-2" data-toggle="modal" href="#actorsModal" title="Edit group" data-role="{{ $role_group[0]->role }}">
 							&#9998;
@@ -249,7 +249,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<div class="card col-6 p-0 reveal-hidden">
 					<div class="card-header p-1">
 						<div class="row">
-							<span class="col-5">Status</span>
+							<span class="font-weight-bold col-5">Status</span>
 							<span class="col-3">Date</span>
 							<span class="col-4">
 								Number
@@ -285,7 +285,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 			<div class="card col-6 p-0 reveal-hidden">
 				<div class="card-header p-1">
 					<div class="row">
-						<span class="col-9">Open Tasks</span>
+						<span class="font-weight-bold col-9">Open Tasks</span>
 						<span class="col-3">
 							Due
 							<a href="/matter/{{ $matter->id }}/tasks" class="hidden-action float-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All tasks" data-resource="/task/">
@@ -308,7 +308,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 			<div class="card col-2 p-0 reveal-hidden">
 				<div class="card-header p-1">
 					<div class="row">
-						<span class="col-6">Renewals</span>
+						<span class="font-weight-bold col-6">Renewals</span>
 						<span class="col-6">
 							Due
 							<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action float-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All renewals"  data-resource="/task/">
@@ -327,7 +327,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				</div>
 			</div>
 			<div class="card col-6 p-0 reveal-hidden">
-				<div class="card-header p-1">
+				<div class="card-header font-weight-bold p-1">
 					Classifiers
 					<a href="#classifiersModal" class="hidden-action float-right" data-toggle="modal" title="Classifier detail" data-resource="/classifier/">
 						<span class="badge badge-primary">&vellip;</span>
@@ -368,7 +368,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				</div>
 			</div>
 			<div class="card border-info col-4 p-0">
-				<div class="card-header bg-info text-white p-1">
+				<div class="card-header font-weight-bold bg-info text-white p-1">
 					Related Matters
 					<span class="float-right">&#9432;</span>
 				</div>
@@ -394,7 +394,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 		</div>
 		<div class="row card-deck">
 			<div class="card col-12 p-0">
-				<div class="card-header p-1">
+				<div class="card-header font-weight-bold p-1">
 					Notes
 					<button type="button" class="hidden-action btn btn-warning btn-sm" id="updateNotes">&#9432; Save</button>
 				</div>

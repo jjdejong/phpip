@@ -67,7 +67,7 @@ $(document).ready(function() {
         }
       });
 
-      $("#addActorSubmit").click( function() {
+      $(".popover:last").find("#addActorSubmit").click( function() {
         var currentForm = $(this).parents('form');
       	var request = currentForm.find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
       	$.post('/actor-pivot', request)
@@ -82,10 +82,6 @@ $(document).ready(function() {
           $("#actorPanel").load("/matter/" + matter_id + " #actorPanel > div");
         });
       });
-
-      /*$('body').on('click', "#popoverCancel", function () {
-        $(this).parents(".popover").popover('hide');
-      });*/
     });
 
 
