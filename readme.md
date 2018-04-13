@@ -1,59 +1,20 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+A port of phpIP from Zend Framework 1 to Laravel has begun here. It includes login functionality, the matter list page, and the matter detail page. It's lighting fast!
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+To use it, you need to apply the database update script in `/doc/scripts` to an existing `phpip` schema (the original or a copy - the changes are minor).
 
-## About Laravel
+Logins are based on the `login` and `password` fields in the `actor` table only (they are no loger replicated in the MySQL users table). Authorizations will be implemented through the `default_role` field of the users - set this field to "DBA" to get full permissions in the future.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+The passwords are hashed with _bcrypt_ instead of _md5_, and don't use a user-provided salt. So you need to change all the md5+salt passwords to _bcrypt_ ones. You can use the password reset functionality of the UI or change the password hashes manually in the `actor` table with a bcrypt hash. You can generate a bcrypt hash using the command `php -r 'echo password_hash("your password",PASSWORD_BCRYPT) . "\n";'`.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The back-end for operating v2 is identical to that for v1 (Apache, PHP, MySQL, and a virtual host setup pointing to the `public` sub-folder...). See the [v1 instructions](https://github.com/jjdejong/phpip/wiki/Installing). 
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+## To get going
+* Start from an existing v1 installation.
+* Copy the `phpip` MySQL schema to a new one (say `phpipv2`).
+* Clone the `phpip-v2` Git repository to a folder, say `phpip-v2`.
+* Install [composer](https://getcomposer.org/), then run `composer update` in the `phpip-v2` folder.
+* Upgrade the `phpipv2` schema with the script provided in `/doc/scripts`.
+* Create an `.env` file with your database credentials (copy and tailor the provided `.env.example` file).
+* Run `php artisan key:generate; php artisan config:clear` (a command-line php is required).
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
-
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Pulse Storm](http://www.pulsestorm.net/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+To fire a quick test, run `php artisan serve`, and point your browser to http://localhost:8000.
