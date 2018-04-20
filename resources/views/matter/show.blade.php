@@ -1,10 +1,7 @@
 @php
-if ( $matter->container_id )
-	$classifiers = $matter->container->classifiers;
-else
-	$classifiers = $matter->classifiers;
-$titles = $classifiers->where('type.main_display', 1)->sortBy('type.display_order')->groupBy('type.type');
-$classifiers = $classifiers->where('type.main_display', 0)->sortBy('type.display_order')->groupBy('type.type');
+$titles = $matter->titles->groupBy('type_name');
+$classifiers = $matter->classifiers->groupBy('type_name');
+$actors = $matter->actors->groupBy('role_name');
 $linkedBy = $matter->linkedBy->groupBy('type_code');
 @endphp
 
@@ -150,6 +147,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				data-content='<form id="addActorForm">
 						@csrf
 						<input type="hidden" name="shared" value="1" />
+						<input type="hidden" name="company_id" value="" />
 						<div class="ui-front">
 							<input type="text" class="form-control form-control-sm" name="role" placeholder="Role" />
 							<input type="text" class="form-control form-control-sm" name="actor_id" placeholder="Name" />
@@ -175,11 +173,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 			</a>
 		</div>
 		<div class="card-body p-1">
-			@foreach ( $matter->actors()->groupBy('role_name') as $role_name => $role_group )
+			@foreach ( $actors as $role_name => $role_group )
 				<div class="card reveal-hidden border-secondary mb-1">
 					<div class="card-header font-weight-bold p-1">
 						{{ $role_name }}
-						<a class="hidden-action float-right ml-2" data-toggle="modal" href="#actorsModal" title="Edit group" data-role="{{ $role_group[0]->role }}">
+						<a class="hidden-action float-right ml-2" data-toggle="modal" href="#actorsModal" title="Edit group" data-role="{{ $role_group[0]->role_code }}">
 							&#9998;
 						</a>
 						<a id="addActorPopover"
@@ -190,8 +188,9 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							title='Add {{ $role_name }}'
 							data-content='<form id="addActorForm">
 									@csrf
-									<input type="hidden" name="role" value="{{ $role_group[0]->role }}" />
+									<input type="hidden" name="role" value="{{ $role_group[0]->role_code }}" />
 									<input type="hidden" name="shared" value="{{ $role_group[0]->shareable }}" />
+									<input type="hidden" name="company_id" value="" />
 									<div class="ui-front">
 										<input type="text" class="form-control form-control-sm" name="actor_id" placeholder="Name" />
 										<input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference" />
@@ -223,12 +222,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 								@if ( $actor->warn && $role_name == 'Client' )
 									<span title="Payment Difficulties">&#9888;</span>
 								@endif
-								{{ $actor->name }}
+								{{ $actor->display_name }}
 								@if ( $actor->show_ref && $actor->actor_ref )
 									({{ $actor->actor_ref }})
 								@endif
-								@if ( $actor->show_company && $actor->company_id )
-									&nbsp;- {{ App\Actor::find($actor->company_id)->display_name }}
+								@if ( $actor->show_company && $actor->company )
+									&nbsp;- {{ $actor->company }}
 								@endif
 								@if ( $actor->show_date && $actor->date )
 									({{ $actor->date }})

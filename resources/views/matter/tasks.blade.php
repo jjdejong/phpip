@@ -1,24 +1,24 @@
 <table class="table table-hover table-sm">
-	<thead>
+	<thead class="thead-light">
 		<tr>
-			<th>Event/Tasks</th>
-			<th>Due date</th>
-			<th>Done</th>
-			<th>Done date</th>
-			<th>Cost</th>
-			<th>Fee</th>
-			<th>Cur.</th>
-			<th>Time</th>
-			<th>Assigned To</th>
-			<th>Notes</th>
-			<th style="width: 24px;">&nbsp;</th>
+			<th class="border-top-0">Event/Tasks</th>
+			<th class="border-top-0">Due date</th>
+			<th class="border-top-0">Done</th>
+			<th class="border-top-0">Date</th>
+			<th class="border-top-0">Cost</th>
+			<th class="border-top-0">Fee</th>
+			<th class="border-top-0">Cur.</th>
+			<th class="border-top-0">Time</th>
+			<th class="border-top-0">Assigned To</th>
+			<th class="border-top-0">Notes</th>
+			<th class="border-top-0" style="width: 24px;">&nbsp;</th>
 		</tr>
 	</thead>
 	@foreach ( $events as $event )
 	<tbody>
 		<tr class="reveal-hidden">
 			<td colspan="11">
-				<span class="font-weight-bold" style="position: relative; left: -10px; margin-right: 10px;">{{ $event->info->name . ": " . $event->event_date }}</span>
+				<span style="position: relative; left: -10px; margin-right: 10px;">{{ $event->info->name . ": " . $event->event_date }}</span>
 				<a href="javascript:void(0);" id="addTaskToEvent" class="hidden-action" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
 					&oplus;
 				</a>

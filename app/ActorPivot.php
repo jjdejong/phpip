@@ -10,4 +10,16 @@ class ActorPivot extends Model
     public $timestamps = false;
     protected $hidden = ['creator', 'updated', 'updater'];
     protected $guarded = ['id', 'creator', 'updated', 'updater'];
+
+    public function matter() {
+  		return $this->belongsTo('App\Matter');
+  	}
+
+    public function actor() {
+  		return $this->belongsTo('App\Actor');
+  	}
+
+    public function role() {
+  		return $this->belongsTo('App\Role', 'role');
+  	}
 }

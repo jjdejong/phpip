@@ -51,17 +51,22 @@ class Matter extends Model {
 		->orderBy('country');
 	}
 
+
 	/*public function actors() {
 		return $this->belongsToMany('App\Actor', 'matter_actor_lnk')
 		->withPivot('id', 'role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date');
 	}*/
+
+	public function actors() {
+		return $this->hasMany('App\MatterActors');
+	}
 
 	/*public function roles() {
 		return $this->belongsToMany('App\Role', 'matter_actor_lnk', 'matter_id', 'role')
 		->withPivot('id', 'role', 'shared');
 	}*/
 
-	public function actors()
+	/*public function actors()
 	{
 		$actors = DB::table('matter_actor_lnk as ma')
 			->select( DB::raw ( "COALESCE(actor.display_name, CONCAT_WS(' ', actor.name, actor.first_name)) as name" ),
@@ -71,7 +76,6 @@ class Matter extends Model {
 					'ma.shared',
 					'ma.actor_ref',
 					'ma.company_id',
-					'actor.company_id as default_company_id',
 					'actor.warn',
 					'ma.date',
 					'ma.rate',
@@ -93,7 +97,7 @@ class Matter extends Model {
 			->join('actor_role as ar', 'ar.code', 'ma.role')
             ->orderBy('ar.display_order')->orderBy('ma.display_order');
 		return $actors->get();
-	}
+	}*/
 
 	public function events()
 	{
@@ -153,7 +157,14 @@ class Matter extends Model {
 
 	public function classifiers()
 	{
-			return $this->hasMany('App\Classifier');
+			return $this->hasMany('App\MatterClassifiers')
+			->where('main_display', 0);
+	}
+
+	public function titles()
+	{
+			return $this->hasMany('App\MatterClassifiers')
+			->where('main_display', 1);
 	}
 
 	public function linkedBy()
@@ -195,6 +206,7 @@ class Matter extends Model {
 			DB::raw ( "COALESCE(agt.display_name, agt.name) AS Agent" ),
 			'agtlnk.actor_ref AS AgtRef',
 			'classifier.value AS Title',
+			'classifier2.value AS Title2',
 			DB::raw ( "CONCAT_WS(' ', inv.name, inv.first_name) as Inventor1" ),
 			'fil.event_date AS Filed',
 			'fil.detail AS FilNo',
@@ -273,6 +285,8 @@ class Matter extends Model {
 		} );
 		$query->leftJoin ( DB::raw ( 'classifier
 			JOIN classifier_type ON classifier.type_code = classifier_type.code AND classifier_type.main_display = 1 AND classifier_type.display_order = 1' ), DB::raw ( 'IFNULL(matter.container_id, matter.id)' ), 'classifier.matter_id' );
+		$query->leftJoin ( DB::raw ( 'classifier classifier2
+			JOIN classifier_type ct2 ON classifier2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2' ), DB::raw ( 'IFNULL(matter.container_id, matter.id)' ), 'classifier2.matter_id' );
 		$query->where ( 'e2.matter_id', NULL );
 
 		$authUserRole = Auth::user ()->default_role;

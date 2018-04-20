@@ -126,48 +126,44 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('classifier', 'ClassifierController');
 
 	// Testing - not used
-		Route::get('matter/{id}/actors', function ($id) {
-			$matter = Matter::find($id);
-			return $matter->actors()->groupBy('role_name');
+		Route::get('matter/{matter}/actors', function (App\Matter $matter) {
+      //$actors = $matter->with('container.actors.actor:id,name,display_name,company_id', 'actors.actor:id,name,display_name,company_id')->get();
+      return $matter->actors;
 		});
 
-		Route::get('matter/{id}/classifiers', function ($id) {
-			$matter = Matter::find($id);
-			return $matter->classifiers;
+		Route::get('matter/{matter}/classifiers', function (App\Matter $matter) {
+      return $matter->classifiers->where('main_display', 0);
 		});
 
-		Route::get('matter/{id}/category', function ($id) {
-			$matter = Matter::find($id);
+    Route::get('matter/{matter}/titles', function (App\Matter $matter) {
+      return $matter->classifiers->where('main_display', 1);
+		});
+
+		Route::get('matter/{matter}/category', function (App\Matter $matter) {
 			return $matter->category;
 		});
 
-		Route::get('matter/{id}/type', function ($id) {
-			$matter = Matter::find($id);
+		Route::get('matter/{matter}/type', function (App\Matter $matter) {
 			return $matter->type;
 		});
 
-		Route::get('matter/{id}/country', function ($id) {
-			$matter = Matter::find($id);
+		Route::get('matter/{matter}/country', function (App\Matter $matter) {
 			return $matter->countryInfo;
 		});
 
-		Route::get('matter/{id}/origin', function ($id) {
-			$matter = Matter::find($id);
+		Route::get('matter/{matter}/origin', function (App\Matter $matter) {
 			return $matter->originInfo;
 		});
 
-		Route::get('task/{id}/event', function ($id) {
-			$task = App\Task::find($id);
+		Route::get('task/{task}/event', function (App\Task $task) {
 			return $task->event;
 		});
 
-		Route::get('event/{id}/tasks', function ($id) {
-			$event = App\Event::find($id);
+		Route::get('event/{event}/tasks', function (App\Event $event) {
 			return $event->tasks;
 		});
 
-		Route::get('event/{id}/link', function ($id) {
-			$event = App\Event::find($id);
+		Route::get('event/{event}/link', function (App\Event $event) {
 			return $event->link;
 		});
 
@@ -181,13 +177,11 @@ Route::group(['middleware' => 'auth'], function () {
 			return $event->retroLink;
 		});
 
-		Route::get('matter/{id}/container', function ($id) {
-			$matter = Matter::find($id);
+		Route::get('matter/{matter}/container', function (App\Matter $matter) {
 			return $matter->container;
 		});
 
-		Route::get('matter/{id}/status', function ($id) {
-			$matter = Matter::find($id);
+		Route::get('matter/{matter}/status', function (App\Matter $matter) {
 			return $matter->status;
 		});
 

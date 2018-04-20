@@ -30,6 +30,9 @@ $(document).ready(function() {
       $(".popover:last").find('input[name="actor_id"]').autocomplete({
     		minLength: 2,
     		source: "/actor/autocomplete",
+        select: function( event, ui ) {
+          $(this).parents('form').find('input[name="company_id"]').val(ui.item.company_id);
+    		},
     		change: function (event, ui) {
     			if (!ui.item) $(this).val("");
     		}
@@ -56,15 +59,13 @@ $(document).ready(function() {
       });
 
       $("body").on("change", '.popover input[name="matter_id"]', function() {
-        if ( $(this).prop('checked') ) {
-          $(this).parents('form').find('input[name="shared"]').val(function( index, value ) {
-            if (value == 1) {
-              return 0;
-            } else {
-              return 1;
-            }
-          });
-        }
+        $(this).parents('form').find('input[name="shared"]').val(function( index, value ) {
+          if (value == 1) {
+            return 0;
+          } else {
+            return 1;
+          }
+        });
       });
 
       $(".popover:last").find("#addActorSubmit").click( function() {

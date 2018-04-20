@@ -1,11 +1,11 @@
 <table class="table table-hover table-sm">
-	<thead>
+	<thead class="thead-light">
 		<tr>
-			<th>Event</th>
-			<th>Date</th>
-			<th>Number</th>
-			<th>Notes</th>
-			<th>
+			<th class="border-top-0">Event</th>
+			<th class="border-top-0">Date</th>
+			<th class="border-top-0">Number</th>
+			<th class="border-top-0">Notes</th>
+			<th class="border-top-0">
 				Refers to
 				<a href="javascript:void(0);" id="addEvent" title="Add event">
 					<span class="float-right">&oplus;</span>

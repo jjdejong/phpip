@@ -48,12 +48,12 @@
 			</div>
 			<div class="modal-body">
 				<table class="table table-sm">
-					<thead>
+					<thead class="thead-light">
 						<tr>
-							<th>Type/Value</th>
-							<th>URL</th>
-							<th>Link to matter</th>
-							<th>
+							<th class="border-top-0">Type/Value</th>
+							<th class="border-top-0">URL</th>
+							<th class="border-top-0">Link to matter</th>
+							<th class="border-top-0">
 								<a href="#addClassifierForm" data-toggle="collapse">
 									<span class="pull-right" title="Add classifier">&oplus;</span>
 								</a>
