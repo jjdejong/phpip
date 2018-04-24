@@ -7,8 +7,8 @@
 			<th class="border-top-0">Notes</th>
 			<th class="border-top-0">
 				Refers to
-				<a href="javascript:void(0);" id="addEvent" title="Add event">
-					<span class="float-right">&oplus;</span>
+				<a href="javascript:void(0);" class="badge badge-info float-right" id="addEvent" title="Add event">
+					&plus;
 				</a>
 			</th>
 		</tr>

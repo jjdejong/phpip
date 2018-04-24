@@ -144,9 +144,10 @@ class MatterController extends Controller {
 
 	public function events(Matter $matter)
 	{
-		$events = Event::with('info')
+		$events = $matter->events->load('info');
+		/*= Event::with('info')
 		->where('matter_id', $matter->id)
-		->orderBy('event_date')->get();
+		->orderBy('event_date')->get();*/
 		return view('matter.events', compact('events', 'matter'));
 	}
 
@@ -167,5 +168,11 @@ class MatterController extends Controller {
 			$query->where('code', 'REN');
 		})->where('matter_id', $matter->id)->get();
 		return view('matter.tasks', compact('events', 'matter'));
+	}
+
+	public function actors(Matter $matter, $role)
+	{
+		$role_group = $matter->actors->where('role_code', $role);
+		return view('matter.roleActors', compact('role_group', 'matter'));
 	}
 }

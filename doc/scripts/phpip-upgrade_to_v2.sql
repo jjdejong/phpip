@@ -213,6 +213,8 @@ VIEW `matter_actors` AS
         `matter`.`id` AS `matter_id`,
         `actor`.`warn` AS `warn`,
         `pivot`.`actor_ref` AS `actor_ref`,
+        `pivot`.`date` AS `date`,
+        `pivot`.`rate` AS `rate`,
         `pivot`.`shared` AS `shared`,
         `co`.`name` AS `company`,
         IF((`pivot`.`matter_id` = `matter`.`container_id`),

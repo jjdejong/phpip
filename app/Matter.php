@@ -51,53 +51,9 @@ class Matter extends Model {
 		->orderBy('country');
 	}
 
-
-	/*public function actors() {
-		return $this->belongsToMany('App\Actor', 'matter_actor_lnk')
-		->withPivot('id', 'role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date');
-	}*/
-
 	public function actors() {
 		return $this->hasMany('App\MatterActors');
 	}
-
-	/*public function roles() {
-		return $this->belongsToMany('App\Role', 'matter_actor_lnk', 'matter_id', 'role')
-		->withPivot('id', 'role', 'shared');
-	}*/
-
-	/*public function actors()
-	{
-		$actors = DB::table('matter_actor_lnk as ma')
-			->select( DB::raw ( "COALESCE(actor.display_name, CONCAT_WS(' ', actor.name, actor.first_name)) as name" ),
-					'ar.name as role_name',
-					'ma.actor_id',
-					'ma.role',
-					'ma.shared',
-					'ma.actor_ref',
-					'ma.company_id',
-					'actor.warn',
-					'ma.date',
-					'ma.rate',
-					'ar.display_order as role_order',
-					'ma.display_order',
-					'ar.show_ref',
-					'ar.show_company',
-					'ar.show_rate',
-					'ar.show_date',
-					'ar.shareable',
-					'ma.id',
-					DB::raw ("IF(ma.matter_id = '$this->container_id', 1, 0) AS inherited"))
-			->where('matter_id', $this->id)
-			->orWhere(function ($query) {
-            	$query->where('matter_id', $this->container_id)
-                	->where('ma.shared', 1);
-            })
-			->join('actor', 'actor.id', 'ma.actor_id')
-			->join('actor_role as ar', 'ar.code', 'ma.role')
-            ->orderBy('ar.display_order')->orderBy('ma.display_order');
-		return $actors->get();
-	}*/
 
 	public function events()
 	{

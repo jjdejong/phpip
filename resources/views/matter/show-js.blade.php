@@ -6,12 +6,7 @@ var csrf_token = $('input[name="_token"]').val();
 
 $(document).ready(function() {
 
-    // Show the title creation form when the title panel is empty
-    if (!$("#titlePanel").text().trim()) {
-      $("#addTitleForm").collapse("show");
-    }
-
-    // Actor creation popovers
+    // Actor processing
 
     // Initialize popovers with custom template
     var popoverTemplate = '<div class="popover border-info" role="tooltip"><div class="arrow"></div><h3 class="popover-header bg-info text-white"></h3><div class="popover-body"></div></div>';
@@ -85,7 +80,6 @@ $(document).ready(function() {
       });
     });
 
-
 	// Ajax fill the opened modal and set global parameters
     $("#listModal").on("show.bs.modal", function(event) {
     	relatedUrl = $(event.relatedTarget).attr("href");
@@ -96,16 +90,20 @@ $(document).ready(function() {
 
 	// Ajax refresh various panels when a modal is closed
     $("#listModal, #classifiersModal").on("hide.bs.modal", function(event) {
-    	//$(this).removeData('bs.modal');
+      if ( resource == '/actor-pivot/') {
+        $("#actorPanel").load("/matter/" + matter_id + " #actorPanel > div");
+      } else {
         $("#multiPanel").load("/matter/" + matter_id + " #multiPanel > div");
+      }
     });
 
-	$("#notes").keyup(function() {
+  // Notes edition
+  $("#notes").keyup(function() {
 		$("#updateNotes").removeClass('hidden-action');
 		$(this).addClass('changed');
 	});
 
-	$("#updateNotes").click(function() {
+  $("#updateNotes").click(function() {
 		if ( $("#notes").hasClass('changed') ) {
 			$.post("/matter/" + matter_id,
 				{ _token: csrf_token, _method: "PUT", notes: $("#notes").val() });
@@ -115,6 +113,14 @@ $(document).ready(function() {
 		return false;
 	});
 });
+
+
+// Titles processing
+
+// Show the title creation form when the title panel is empty
+if (!$("#titlePanel").text().trim()) {
+  $("#addTitleForm").collapse("show");
+}
 
 $("#titlePanel").on("keypress", ".titleItem", function (e) {
 	if (e.which == 13) {
@@ -213,10 +219,31 @@ $('#listModal').on("click", 'input[name="assigned_to"].noformat', function() {
 	});
 });
 
+$('#listModal').on("click", 'input[name="actor_id"].noformat, input[name="company_id"].noformat', function() {
+	$(this).autocomplete({
+		minLength: 2,
+		source: "/actor/autocomplete",
+		change: function (event, ui) {
+			if (!ui.item) $(this).val("");
+			if ($(this).hasClass("noformat")) $(this).parent().addClass("alert alert-warning");
+		},
+		select: function(event, ui) {
+			this.value = ui.item.value;
+			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
+			$.post(resource + $(this).closest("tr").data("id"), data)
+			.done(function () {
+				$("#listModal").find(".modal-body").load(relatedUrl);
+				$("#listModal").find(".alert").removeClass("alert-danger").html("");
+			});
+		}
+	});
+});
+
 $('#listModal').on("click",'input[type="checkbox"]', function() {
 	var flag = 0;
 	if ( $(this).is(":checked") ) flag = 1;
-	$.post(resource + $(this).closest("tr").data("id"), { _token: csrf_token, _method: "PUT", done: flag })
+  var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).attr("name") + "=" + flag;
+	$.post(resource + $(this).closest("tr").data("id"), data)
 	.done(function () {
 		$("#listModal").find(".modal-body").load(relatedUrl);
 		$("#listModal").find(".alert").removeClass("alert-danger").html("");
@@ -240,6 +267,18 @@ $('#listModal').on("click", 'input[name="alt_matter_id"].noformat', function() {
 			});
 		}
 	});
+});
+
+
+// Specific processing in the actor/role list modal
+
+$("#listModal").on("click", "#removeActor", function() {
+  $.post('/actor-pivot/' + $(this).closest("tr").data("id"),
+    { _token: csrf_token, _method: "DELETE" }
+  ).done(function() {
+    $('#listModal').find(".modal-body").load(relatedUrl);
+  });
+  return false;
 });
 
 // Specific processing in the task list modal

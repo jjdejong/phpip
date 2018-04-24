@@ -41,6 +41,22 @@ class ActorPivotController extends Controller
         'role'      => 'required'
       ]);
 
+      // Fix display order indexes if wrong
+      $roleGroup = ActorPivot::where('matter_id', $request->matter_id)->where('role', $request->role);
+      $max = $roleGroup->max('display_order');
+      $count = $roleGroup->count();
+      if ( $count < $max ) {
+        $i = 0;
+        $actors = $roleGroup->orderBy('display_order')->get();
+        foreach ( $actors as $actor ) {
+          $i++;
+          $actor->display_order = $i;
+          $actor->save();
+        }
+        $max = $i;
+      }
+
+      $request->request->add(['display_order' => $max + 1]);
       ActorPivot::create($request->except(['_token', '_method']));
     }
 
@@ -75,7 +91,7 @@ class ActorPivotController extends Controller
      */
     public function update(Request $request, ActorPivot $actorPivot)
     {
-        //
+    	$actorPivot->update($request->except(['_token', '_method']));
     }
 
     /**
@@ -86,6 +102,18 @@ class ActorPivotController extends Controller
      */
     public function destroy(ActorPivot $actorPivot)
     {
-        //
+      $matter_id = $actorPivot->matter_id;
+      $role = $actorPivot->role;
+
+      $actorPivot->delete();
+
+      // Reorganize remaining items in role
+      $actors = ActorPivot::where('matter_id', $matter_id)->where('role', $role)->orderBy('display_order')->get();
+      $i = 0;
+      foreach ( $actors as $actor ) {
+        $i++;
+        $actor->display_order = $i;
+        $actor->save();
+      }
     }
 }

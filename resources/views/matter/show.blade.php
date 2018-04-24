@@ -18,6 +18,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 }
 .noformat {
     border: none;
+		border-radius: 0;
     background: white;
     color: inherit;
     padding: 0px;
@@ -169,7 +170,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 						</div>
 					</form>
 					<div class="alert alert-danger d-none" role="alert"></div>'>
-				+
+				&plus;
 			</a>
 		</div>
 		<div class="card-body p-1">
@@ -177,7 +178,13 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				<div class="card reveal-hidden border-secondary mb-1">
 					<div class="card-header font-weight-bold p-1">
 						{{ $role_name }}
-						<a class="hidden-action float-right ml-2" data-toggle="modal" href="#actorsModal" title="Edit group" data-role="{{ $role_group[0]->role_code }}">
+						<a class="hidden-action float-right ml-2"
+							data-toggle="modal"
+							data-target="#listModal"
+							data-remote="false"
+							title="Edit actors in {{ $role_group[0]->role_name }} group"
+							href="/matter/{{ $matter->id }}/roleActors/{{ $role_group[0]->role_code }}"
+							data-resource="/actor-pivot/">
 							&#9998;
 						</a>
 						<a id="addActorPopover"
@@ -252,7 +259,13 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							<span class="col-3">Date</span>
 							<span class="col-4">
 								Number
-								<a href="/matter/{{ $matter->id }}/events" class="hidden-action float-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All events" data-resource="/event/">
+								<a class="hidden-action float-right"
+									href="/matter/{{ $matter->id }}/events"
+									data-toggle="modal"
+									data-target="#listModal"
+									data-remote="false"
+									title="All events"
+									data-resource="/event/">
 									<span class="badge badge-primary">&vellip;</span>
 								</a>
 							</span>
@@ -287,7 +300,13 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 						<span class="font-weight-bold col-9">Open Tasks</span>
 						<span class="col-3">
 							Due
-							<a href="/matter/{{ $matter->id }}/tasks" class="hidden-action float-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All tasks" data-resource="/task/">
+							<a class="hidden-action float-right"
+								href="/matter/{{ $matter->id }}/tasks"
+								data-toggle="modal"
+								data-target="#listModal"
+								data-remote="false"
+								title="All tasks"
+								data-resource="/task/">
 								<span class="badge badge-primary">&vellip;</span>
 							</a>
 						</span>
@@ -310,7 +329,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 						<span class="font-weight-bold col-6">Renewals</span>
 						<span class="col-6">
 							Due
-							<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action float-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All renewals"  data-resource="/task/">
+							<a class="hidden-action float-right"
+								href="/matter/{{ $matter->id }}/renewals"
+								data-toggle="modal" data-target="#listModal"
+								data-remote="false"
+								title="All renewals"
+								data-resource="/task/">
 								<span class="badge badge-primary">&vellip;</span>
 							</a>
 						</span>
@@ -328,7 +352,10 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 			<div class="card col-6 p-0 reveal-hidden">
 				<div class="card-header font-weight-bold p-1">
 					Classifiers
-					<a href="#classifiersModal" class="hidden-action float-right" data-toggle="modal" title="Classifier detail" data-resource="/classifier/">
+					<a class="hidden-action float-right"
+						href="#classifiersModal"
+						data-toggle="modal"
+						title="Classifier detail">
 						<span class="badge badge-primary">&vellip;</span>
 					</a>
 				</div>

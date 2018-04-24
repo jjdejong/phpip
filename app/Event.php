@@ -7,36 +7,36 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-    protected $table = 'event';
-    public $timestamps = false;
-    protected $hidden = ['creator', 'updated', 'updater'];
-    protected $guarded = ['id', 'creator', 'updated', 'updater'];
+  protected $table = 'event';
+  public $timestamps = false;
+  protected $hidden = ['creator', 'updated', 'updater'];
+  protected $guarded = ['id', 'creator', 'updated', 'updater'];
 
-    public function info() 
-    {
+  public function info()
+  {
 		return $this->belongsTo('App\EventName', 'code');
 	}
-	
+
 	public function matter()
 	{
 		return $this->belongsTo('App\Matter');
 	}
-	
+
 	public function altMatter()
 	{
 		return $this->belongsTo('App\Matter', 'alt_matter_id');
 	}
-	
-	public function link() 
+
+	public function link()
 	{
 		return $this->hasOne('App\Event', 'matter_id', 'alt_matter_id')->where('code', 'FIL');
 	}
-	
+
 	public function retroLink()
 	{
 		return $this->belongsTo('App\Event', 'matter_id', 'alt_matter_id');
 	}
-	
+
 	public function tasks()
 	{
 		/*\Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
@@ -46,14 +46,14 @@ class Event extends Model
 		return $this->hasMany('App\Task', 'trigger_id')
 			->orderBy('due_date');
 	}
-	
+
 // 	Produces a link to official published information
-	
+
 	public function publicUrl()
 	{
 		if ( !in_array($this->code, ['FIL', 'PUB', 'GRT']) )
 			return false;
-		
+
 		if ($this->matter->origin == 'EP')
 			$CC = 'EP';
 		else
