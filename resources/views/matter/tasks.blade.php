@@ -54,7 +54,7 @@
 				<input type="text" class="form-control noformat" size="6" name="time_spent" value="{{ $task->time_spent }}"/>
 			</td>
 			<td class="ui-front">
-				<input type="text" class="form-control noformat" size="12" name="assigned_to" value="{{ $task->assigned_to }}"/>
+				<input type="text" class="form-control noformat" size="12" name="assigned_to" placeholder="{{ $task->assigned_to }}"/>
 			</td>
 			<td>
 				<input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"/>

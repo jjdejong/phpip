@@ -81,7 +81,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 			<div id="addTitleForm" class="collapse">
 				<form>
 					<div class="form-row">
-						@csrf
 						<input type="hidden" name="matter_id" value="{{ $matter->container_id or $matter->id }}" />
 						<input type="hidden" name="type_code" />
 						<div class="col-2">
@@ -146,7 +145,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				data-html="true"
 				title="Add Actor"
 				data-content='<form id="addActorForm">
-						@csrf
 						<input type="hidden" name="shared" value="1" />
 						<input type="hidden" name="company_id" value="" />
 						<div class="ui-front">
@@ -194,7 +192,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							data-html="true"
 							title='Add {{ $role_name }}'
 							data-content='<form id="addActorForm">
-									@csrf
 									<input type="hidden" name="role" value="{{ $role_group[0]->role_code }}" />
 									<input type="hidden" name="shared" value="{{ $role_group[0]->shareable }}" />
 									<input type="hidden" name="company_id" value="" />

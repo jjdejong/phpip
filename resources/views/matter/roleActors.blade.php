@@ -54,7 +54,11 @@
 		axis: 'y',
 		update: function (event, ui) {
 			$.each( $(this).sortable('toArray'), function(index, value) {
-				$.post('/actor-pivot/' + value, { _token: csrf_token, _method: "PUT", display_order: index+1 });
+				$.ajax({
+	        url: '/actor-pivot/' + value,
+	        type: 'PUT',
+	        data: { display_order: index+1 },
+	      })
 			});
 			$('#listModal').find(".modal-body").delay(100).load(relatedUrl);
 		},

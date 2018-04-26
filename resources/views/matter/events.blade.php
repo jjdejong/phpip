@@ -29,7 +29,7 @@
 				<input type="text" class="form-control noformat" name="notes" value="{{ $event->notes }}"/>
 			</td>
 			<td class="ui-front">
-				<input type="text" class="form-control noformat" size="10" name="alt_matter_id" value="{{ $event->altMatter ? $event->altMatter->uid : '' }}"/>
+				<input type="text" class="form-control noformat" size="10" name="alt_matter_id" placeholder="{{ $event->altMatter ? $event->altMatter->uid : '' }}"/>
 			</td>
 		</tr>
 	@endforeach

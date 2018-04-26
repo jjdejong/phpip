@@ -105,8 +105,11 @@ $(document).ready(function() {
 
   $("#updateNotes").click(function() {
 		if ( $("#notes").hasClass('changed') ) {
-			$.post("/matter/" + matter_id,
-				{ _token: csrf_token, _method: "PUT", notes: $("#notes").val() });
+      $.ajax({
+        type: 'PUT',
+        url: "/matter/" + matter_id,
+        data: { notes: $("#notes").val() }
+      });
 			$("#updateNotes").addClass('hidden-action');
 			$(this).removeClass('changed');
 		}
@@ -129,9 +132,11 @@ $("#titlePanel").on("keypress", ".titleItem", function (e) {
 		var title = $(this).text().trim();
 		if (!title)
 			method = "DELETE";
-		$.post('/classifier/' + $(this).attr("id"),
-			{ _token: csrf_token, _method: method, value: title }
-		).done(function() {
+    $.ajax({
+      type: method,
+      url: '/classifier/' + $(this).attr("id"),
+      data: { value: title }
+    }).done(function() {
 			$('#titlePanel').load("/matter/" + matter_id + " #titlePanel > div");
 		});
 	} else
@@ -170,9 +175,11 @@ $("#titlePanel").on("click", "#addTitleSubmit", function() {
 $("#listModal").on("keypress", "input.noformat", function (e) {
 	if (e.which == 13) {
 		e.preventDefault();
-		var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
-		$.post(resource + $(this).closest("tr").data("id"), data)
-		.done(function () {
+    $.ajax({
+      url: resource + $(this).closest("tr").data("id"),
+      type: 'PUT',
+      data: $(this).serialize(),
+    }).done(function () {
 			$("#listModal").find(".modal-body").load(relatedUrl);
 			$("#listModal").find(".alert").removeClass("alert-danger").html("");
 		}).fail(function(errors) {
@@ -189,9 +196,11 @@ $('#listModal').on("focus", 'input[name$="date"].noformat', function() {
 		dateFormat: 'yy-mm-dd',
 		showButtonPanel: true,
 		onSelect: function(date, instance) {
-			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
-			$.post(resource + $(this).closest("tr").data("id"), data)
-			.done(function () {
+      $.ajax({
+        url: resource + $(this).closest("tr").data("id"),
+        type: 'PUT',
+        data: $(this).serialize(),
+      }).done(function () {
 				$("#listModal").find(".modal-body").load(relatedUrl);
 				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			});
@@ -209,9 +218,11 @@ $('#listModal').on("click", 'input[name="assigned_to"].noformat', function() {
 		},
 		select: function(event, ui) {
 			this.value = ui.item.value;
-			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
-			$.post(resource + $(this).closest("tr").data("id"), data)
-			.done(function () {
+			$.ajax({
+        url: resource + $(this).closest("tr").data("id"),
+        type: 'PUT',
+        data: $(this).serialize(),
+      }).done(function () {
 				$("#listModal").find(".modal-body").load(relatedUrl);
 				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			});
@@ -229,9 +240,11 @@ $('#listModal').on("click", 'input[name="actor_id"].noformat, input[name="compan
 		},
 		select: function(event, ui) {
 			this.value = ui.item.value;
-			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
-			$.post(resource + $(this).closest("tr").data("id"), data)
-			.done(function () {
+			$.ajax({
+        url: resource + $(this).closest("tr").data("id"),
+        type: 'PUT',
+        data: $(this).serialize(),
+      }).done(function () {
 				$("#listModal").find(".modal-body").load(relatedUrl);
 				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			});
@@ -242,9 +255,12 @@ $('#listModal').on("click", 'input[name="actor_id"].noformat, input[name="compan
 $('#listModal').on("click",'input[type="checkbox"]', function() {
 	var flag = 0;
 	if ( $(this).is(":checked") ) flag = 1;
-  var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).attr("name") + "=" + flag;
-	$.post(resource + $(this).closest("tr").data("id"), data)
-	.done(function () {
+  var data = $(this).attr("name") + "=" + flag;
+	$.ajax({
+    url: resource + $(this).closest("tr").data("id"),
+    type: 'PUT',
+    data: data,
+  }).done(function () {
 		$("#listModal").find(".modal-body").load(relatedUrl);
 		$("#listModal").find(".alert").removeClass("alert-danger").html("");
 	})
@@ -259,9 +275,11 @@ $('#listModal').on("click", 'input[name="alt_matter_id"].noformat', function() {
 		},
 		select: function(event, ui) {
 			this.value = ui.item.value;
-			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
-			$.post(resource + $(this).closest("tr").data("id"), data)
-			.done(function () {
+      $.ajax({
+        url: resource + $(this).closest("tr").data("id"),
+        type: 'PUT',
+        data: $(this).serialize(),
+      }).done(function () {
 				$("#listModal").find(".modal-body").load(relatedUrl);
 				$("#listModal").find(".alert").removeClass("alert-danger").html("");
 			});
@@ -273,9 +291,10 @@ $('#listModal').on("click", 'input[name="alt_matter_id"].noformat', function() {
 // Specific processing in the actor/role list modal
 
 $("#listModal").on("click", "#removeActor", function() {
-  $.post('/actor-pivot/' + $(this).closest("tr").data("id"),
-    { _token: csrf_token, _method: "DELETE" }
-  ).done(function() {
+  $.ajax({
+    url: '/actor-pivot/' + $(this).closest("tr").data("id"),
+    type: 'DELETE',
+  }).done(function() {
     $('#listModal').find(".modal-body").load(relatedUrl);
   });
   return false;
@@ -322,21 +341,22 @@ $("#listModal").on("click", "#addTaskSubmit", function() {
 });
 
 $("#listModal").on("click", "#deleteTask", function() {
-	$.post('/task/' + $(this).closest("tr").data("id"),
-		{ _token: csrf_token, _method: "DELETE" }
-	).done(function() {
+	$.ajax({
+    url: '/task/' + $(this).closest("tr").data("id"),
+    type: 'DELETE',
+  }).done(function() {
 		$('#listModal').find(".modal-body").load(relatedUrl);
 	});
 });
 
 $("#listModal").on("click","#deleteEvent", function() {
 	if ( confirm("Deleting the event will also delete the linked tasks. Continue anyway?") ) {
-		$.post('/event/' + $(this).data('event_id'),
-			{ _token: csrf_token, _method: "DELETE" },
-			function() {
-				$('#listModal').find(".modal-body").load(relatedUrl);
-			}
-		);
+    $.ajax({
+      url: '/event/' + $(this).data('event_id'),
+      type: 'DELETE',
+    }).done(function() {
+  		$('#listModal').find(".modal-body").load(relatedUrl);
+  	});
 	}
 });
 
@@ -384,9 +404,11 @@ $("#listModal").on("click", "#addEventSubmit", function() {
 $('#classifiersModal').on("keypress", "input.noformat", function (e) {
 	if (e.which == 13) {
 		e.preventDefault();
-		var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
-		$.post('/classifier/'+ $(this).closest("tr").data("classifier_id"), data)
-		.done(function () {
+    $.ajax({
+      url: '/classifier/'+ $(this).closest("tr").data("classifier_id"),
+      type: 'PUT',
+      data: $(this).serialize(),
+    }).done(function () {
 			$("td.bg-warning").removeClass("bg-warning");
 			$("#classifiersModal").find(".alert").removeClass("alert-danger").html("");
 		}).fail(function(errors) {
@@ -407,9 +429,11 @@ $('#classifiersModal').on("click", 'input[name="lnk_matter_id"].noformat', funct
 		},
 		select: function(event, ui) {
 			this.value = ui.item.value;
-			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
-			$.post('/classifier/'+ $(this).closest("tr").data("classifier_id"), data)
-			.done(function () {
+      $.ajax({
+        url: '/classifier/'+ $(this).closest("tr").data("classifier_id"),
+        type: 'PUT',
+        data: $(this).serialize(),
+      }).done(function () {
 				$('#classifiersModal').load("/matter/" + matter_id + " #classifiersModal > div");
 				$("#classifiersModal").find(".alert").removeClass("alert-danger").html("");
 			});
@@ -453,9 +477,10 @@ $("#classifiersModal").on("click", "#addClassifierSubmit", function() {
 });
 
 $("#classifiersModal").on("click", "#deleteClassifier", function() {
-	$.post('/classifier/' + $(this).closest("tr").data("classifier_id"),
-		{ _token: csrf_token, _method: "DELETE" }
-	).done(function() {
+	$.ajax({
+    url: '/classifier/' + $(this).closest("tr").data("classifier_id"),
+    type: 'DELETE',
+  }).done(function() {
 		$('#classifiersModal').load("/matter/" + matter_id + " #classifiersModal > div");
 	});
 	return false;
