@@ -213,8 +213,10 @@ $('#listModal').on("click", 'input[name="assigned_to"].noformat', function() {
 		minLength: 2,
 		source: "/user/autocomplete",
 		change: function (event, ui) {
-			if (!ui.item) $(this).val("");
-			if ($(this).hasClass("noformat")) $(this).parent().addClass("alert alert-warning");
+      if (!ui.item) {
+        $(this).val("");
+        $(this).parent().removeClass("bg-warning");
+      }
 		},
 		select: function(event, ui) {
 			this.value = ui.item.value;
@@ -235,8 +237,10 @@ $('#listModal').on("click", 'input[name="actor_id"].noformat, input[name="compan
 		minLength: 2,
 		source: "/actor/autocomplete",
 		change: function (event, ui) {
-			if (!ui.item) $(this).val("");
-			if ($(this).hasClass("noformat")) $(this).parent().addClass("alert alert-warning");
+			if (!ui.item) {
+        $(this).val("");
+        $(this).parent().removeClass("bg-warning");
+      }
 		},
 		select: function(event, ui) {
 			this.value = ui.item.value;
@@ -271,7 +275,10 @@ $('#listModal').on("click", 'input[name="alt_matter_id"].noformat', function() {
 		minLength: 2,
 		source: "/matter/autocomplete",
 		change: function (event, ui) {
-			if (!ui.item) $(this).val("");
+      if (!ui.item) {
+        $(this).val("");
+        $(this).parent().removeClass("bg-warning");
+      }
 		},
 		select: function(event, ui) {
 			this.value = ui.item.value;
@@ -425,7 +432,10 @@ $('#classifiersModal').on("click", 'input[name="lnk_matter_id"].noformat', funct
 		minLength: 2,
 		source: "/matter/autocomplete",
 		change: function (event, ui) {
-			if (!ui.item) $(this).val("");
+      if (!ui.item) {
+        $(this).val("");
+        $(this).parent().removeClass("bg-warning");
+      }
 		},
 		select: function(event, ui) {
 			this.value = ui.item.value;
