@@ -33,14 +33,12 @@ Route::group(['middleware' => 'auth'], function () {
 		->where('caseref', 'like', "$term%")
 		->take(10)->get();
 	});
-	Route::get('matter', 'MatterController@index');
 	Route::get('matter/export', 'MatterController@export');
-	Route::get('matter/{matter}', 'MatterController@show')->middleware('can:view-noclient');
+	//Route::get('matter/{matter}', 'MatterController@show')->middleware('can:view-noclient'); // Breaks the Route::resource method
 	Route::get('matter/{matter}/events', 'MatterController@events');
 	Route::get('matter/{matter}/tasks', 'MatterController@tasks');
 	Route::get('matter/{matter}/renewals', 'MatterController@renewals');
   Route::get('matter/{matter}/roleActors/{role}', 'MatterController@actors');
-	Route::put('matter/{matter}', 'MatterController@update');
 
 	Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
 		$term = $request->input('term');
@@ -120,14 +118,15 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('ruleadd','RuleController@addShow');
 	Route::put('ruleadd','RuleController@store');
 
-	Route::resource('task', 'TaskController');
-	Route::resource('event', 'EventController');
+  Route::resource('matter', 'MatterController');
+  Route::apiResource('task', 'TaskController');
+	Route::apiResource('event', 'EventController');
 	Route::resource('actor', 'ActorController');
-  Route::resource('actor-pivot', 'ActorPivotController');
-	Route::resource('classifier', 'ClassifierController');
+  Route::apiResource('actor-pivot', 'ActorPivotController');
+	Route::apiResource('classifier', 'ClassifierController');
 
 	// Testing - not used
-		Route::get('matter/{matter}/actors', function (App\Matter $matter) {
+		/*Route::get('matter/{matter}/actors', function (App\Matter $matter) {
       //$actors = $matter->with('container.actors.actor:id,name,display_name,company_id', 'actors.actor:id,name,display_name,company_id')->get();
       return $matter->actors;
 		});
@@ -196,5 +195,5 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('matter/{id}/priority_to', function ($id) {
 			$matter = Matter::with('priorityTo.children.children')->find($id);
 			return $matter->priorityTo->where('parent_id', null)->groupBy('caseref');
-		});
+		});*/
 });

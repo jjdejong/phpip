@@ -8,23 +8,6 @@ use Illuminate\Http\Request;
 class EventController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -37,7 +20,7 @@ class EventController extends Controller
 			'matter_id' => 'required|numeric',
 			'event_date' => 'required_without:alt_matter_id|date'
     	]);
-    	 
+
     	Event::create($request->except(['_token', '_method', 'name']));
     }
 
@@ -48,17 +31,6 @@ class EventController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Event $event)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Event $event)
     {
         //
     }
@@ -76,7 +48,7 @@ class EventController extends Controller
     		'event_date' => 'date',
     		'alt_matter_id' => 'nullable|numeric'
     	]);
-    	 
+
     	$event->update($request->except(['_token', '_method']));
     }
 

@@ -102,32 +102,33 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 	<div class="card border-info col-2 p-0">
 		<div class="card-body">
-			<button id="clone-matter-link" type="button" class="btn btn-outline-info btn-block btn-sm"
-				data-country="{{ $matter->countryInfo->name }}-{{ $matter->country }}"
-				data-origin="{{ $matter->origin }}"
-				data-type="{{ $matter->type_code }}"
-				data-code="{{ $matter->category->category }}-{{ $matter->category_code }}">
+			<a class="btn btn-outline-info btn-block btn-sm"
+				href="/matter/create?matter_id={{ $matter->id }}&operation=clone"
+				data-toggle="modal"
+				data-target="#createMatterModal"
+				data-remote="false"
+				title="Clone {{ $matter->category->category }}">
 				&boxbox; Clone Matter
-			</button>
-			<button id="child-matter-link" type="button" class="btn btn-outline-info btn-block btn-sm"
-				data-caseref="{{ $matter->caseref }}"
-				data-country="{{ $matter->countryInfo->name }}-{{ $matter->country }}"
-				data-origin="{{ $matter->origin }}"
-				data-type="{{ $matter->type_code }}"
-				data-code="{{ $matter->category->category }}-{{ $matter->category_code }}">
+			</a>
+			<a class="btn btn-outline-info btn-block btn-sm"
+				href="/matter/create?matter_id={{ $matter->id }}&operation=child"
+				data-toggle="modal"
+				data-target="#createMatterModal"
+				data-remote="false"
+				title="Create child {{ $matter->category->category }}">
 				&oplus;
 				New Child
-			</button>
+			</a>
 			@if ( $matter->countryInfo->goesnational )
-			<button id="national-matter-link"
-				data-caseref="{{ $matter->caseref }}" type="button" class="btn btn-outline-info btn-block btn-sm"
-				data-country="{{ $matter->countryInfo->name }}-{{ $matter->country }}"
-				data-origin="{{ $matter->origin }}"
-				data-type="{{ $matter->type_code }}"
-				data-code="{{ $matter->category->category }}-{{ $matter->category_code }}">
+			<a class="btn btn-outline-info btn-block btn-sm"
+				href="/matter/create?matter_id={{ $matter->id }}&operation=national"
+				data-toggle="modal"
+				data-target="#createMatterModal"
+				data-remote="false"
+				title="Enter {{ $matter->category->category }} in national phase">
 				&#9872;
 				Enter Nat. Phase
-			</button>
+			</a>
 			@endif
 		</div>
 	</div>
@@ -137,8 +138,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 	<div id="actorPanel" class="card col-3 border-secondary p-0">
 		<div class="card-header reveal-hidden text-white bg-secondary font-weight-bold p-1">
 			Actors
-			<a id="addActorPopover"
-				class="badge badge-pill badge-light hidden-action float-right"
+			<a class="badge badge-pill badge-light hidden-action float-right"
 				rel="popover"
 				data-placement="right"
 				href="#"
@@ -185,8 +185,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							data-resource="/actor-pivot/">
 							&#9998;
 						</a>
-						<a id="addActorPopover"
-							class="hidden-action float-right"
+						<a class="hidden-action float-right"
 							data-placement="right"
 							rel="popover"
 							data-html="true"

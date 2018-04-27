@@ -18,16 +18,6 @@ class ActorPivotController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -67,17 +57,6 @@ class ActorPivotController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(ActorPivot $actorPivot)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\ActorPivot  $actorPivot
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ActorPivot $actorPivot)
     {
         //
     }

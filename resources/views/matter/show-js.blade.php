@@ -2,7 +2,6 @@
 var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
 var resource = ""; // Identifies the REST resource for CRUD operations
 var matter_id = $('#matter_id').text();
-var csrf_token = $('input[name="_token"]').val();
 
 $(document).ready(function() {
 
@@ -81,7 +80,7 @@ $(document).ready(function() {
     });
 
 	// Ajax fill the opened modal and set global parameters
-    $("#listModal").on("show.bs.modal", function(event) {
+    $("#listModal, #createMatterModal").on("show.bs.modal", function(event) {
     	relatedUrl = $(event.relatedTarget).attr("href");
     	resource = $(event.relatedTarget).data("resource");
     	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );

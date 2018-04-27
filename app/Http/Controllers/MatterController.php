@@ -51,6 +51,41 @@ class MatterController extends Controller {
 	}
 
 	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create(Request $request)
+	{
+		$operation = $request->input ( 'operation', 'new' ); // new, clone, child or national
+		if ( $operation != 'new' ) {
+			$matter = Matter::find($request->input ( 'matter_id' ));
+			if ( $operation == 'clone') {
+				$matter->caseref = Matter::where('caseref', 'like', $matter->category->ref_prefix . '%')->max('caseref') + 1;
+			}
+		}
+
+		return view('matter.create', compact('matter', 'operation'));
+	}
+
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request)
+	{
+		$this->validate($request, [
+			'caseref' => 'required',
+			'country' => 'required'
+		]);
+
+		Matter::create($request->except(['_token', '_method']));
+	}
+
+	/**
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  \App\Matter  $matter
