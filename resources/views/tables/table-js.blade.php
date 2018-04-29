@@ -207,7 +207,7 @@ $('#infoModal').on("click", 'input[name="responsible"].noformat', function() {
         });
 });
 
-$('.delete-from-list').click(function() {
+$('#rule-list').on("click",'.delete-from-list',function() {
     var del_conf = confirm("Deleting rule from table.");
     if(del_conf == 1) {
 	var data = $.param({ _token: csrf_token, _method: "DELETE" }) ;
