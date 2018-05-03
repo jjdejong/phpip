@@ -112,7 +112,7 @@ Route::group(['middleware' => 'auth'], function () {
 	});
 
 	Route::get('rule','RuleController@index');
-	Route::put('rule/{rule}/delete','RuleController@delete');
+	Route::delete('rule/{rule}','RuleController@delete');
 	Route::get('ruleinfo/{rule}','RuleController@show');
 	Route::put('ruleinfo/{rule}','RuleController@update');
 	Route::get('ruleadd','RuleController@addShow');

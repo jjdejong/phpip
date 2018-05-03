@@ -11,7 +11,6 @@ function refreshRuleList() {
 
 $(document).ready(function() {
 
-
 	// Ajax fill the opened modal and set global parameters
     $("#infoModal").on("show.bs.modal", function(event) {
     	relatedUrl = $(event.relatedTarget).attr("href");
@@ -20,6 +19,11 @@ $(document).ready(function() {
     	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
         $(this).find(".modal-body").load(relatedUrl);
     });
+    // Reload the rules list when closing the modal window
+    $("#infoModal").on("hide.bs.modal", function(event) {
+    	refreshRuleList();
+    });
+    
 	// Display the modal view for creation of rule
     $("#addModal").on("show.bs.modal", function(event) {
     	relatedUrl = $(event.relatedTarget).attr("href");
@@ -27,6 +31,10 @@ $(document).ready(function() {
 
     	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
         $(this).find(".modal-body").load(relatedUrl);
+    });
+    // Reload the rules list when closing the modal window
+    $("#infoModal").on("hidden.bs.modal", function(event) {
+    	refreshRuleList();
     });
 
 });
@@ -199,14 +207,18 @@ $('#infoModal').on("click", 'input[name="responsible"].noformat', function() {
         });
 });
 
-$('.delete-from-list').click(function() {
+$('#rule-list').on("click",'.delete-from-list',function() {
     var del_conf = confirm("Deleting rule from table.");
     if(del_conf == 1) {
-	var data = $.param({ _token: csrf_token, _method: "PUT" }) ;
-	$.post('/rule/' + $(this).attr("id")+'/delete', data)
+	var data = $.param({ _token: csrf_token, _method: "DELETE" }) ;
+	$.post('/rule/' + $(this).closest("tr").data("id"), data).done(function(){
+		$('#listModal').find(".modal-body").load(relatedUrl);
+		});
+	refreshRuleList();
     }
     return false;
 });
+
 
 // Edition of fields in new rule modal window
 

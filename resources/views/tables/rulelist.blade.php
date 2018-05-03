@@ -47,7 +47,7 @@
   <tbody id="rule-list">
 
 @foreach ($ruleslist as $rule)
-    <tr class="rule-list-row" id="{{ $rule->rule_id }}">
+    <tr class="rule-list-row" data-id="{{ $rule->rule_id }}">
     	<td class="col-task"><a href="/ruleinfo/{{ $rule->rule_id }}" class="hidden-action" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Rule data" data-resource="/ruleinfo/">
 								{{ $rule->task_name }}</a></td>
       <td class="col-notes">{{ $rule->detail }}</td>
