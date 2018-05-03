@@ -1,12 +1,9 @@
-<?php
-if ( $matter->container_id )
-	$classifiers = $matter->container->classifiers;
-else
-	$classifiers = $matter->classifiers;
-$titles = $classifiers->where('type.main_display', 1)->sortBy('type.display_order')->groupBy('type.type');
-$classifiers = $classifiers->where('type.main_display', 0)->sortBy('type.display_order')->groupBy('type.type');
+@php
+$titles = $matter->titles->groupBy('type_name');
+$classifiers = $matter->classifiers->groupBy('type_name');
+$actors = $matter->actors->groupBy('role_name');
 $linkedBy = $matter->linkedBy->groupBy('type_code');
-?>
+@endphp
 
 @extends('layouts.app')
 
@@ -21,6 +18,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 }
 .noformat {
     border: none;
+		border-radius: 0;
     background: white;
     color: inherit;
     padding: 0px;
@@ -34,182 +32,66 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 @section('content')
 
-<div class="row">
-	<div class="col-sm-3">
-		<div class="panel panel-primary" style="min-height: 96px">
-			<div class="panel-heading panel-title">
-				<a href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
-				({{ $matter->category->category }})
-				<a href="/matter/{{ $matter->id }}/edit" title="Advanced edit">
-					<i class="glyphicon glyphicon-edit pull-right"></i>
-				</a>
-			</div>
-			<div class="panel-body">
-				<ul class="list-unstyled">
-					@if ($matter->container_id)
-					<li><a href="/matter/{{ $matter->container_id }}" title="See container">
-						{{ $matter->container->uid }}
-					</a></li>
-					@endif
-					@if ($matter->parent_id)
-					<li><a href="/matter/{{ $matter->parent_id }}" title="See parent">
-						{{ $matter->parent->uid }}
-					</a></li>
+<div id="matter_id" class="d-none">{{ $matter->id }}</div>
+
+<div class="row card-deck mb-1">
+	<div class="card border-primary col-3 p-0">
+		<div class="card-header bg-primary text-white reveal-hidden lead p-1">
+			<a class="bg-primary text-white" href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
+			({{ $matter->category->category }})
+			<a class="bg-primary text-white float-right hidden-action" href="/matter/{{ $matter->id }}/edit" title="Advanced edit">
+				&#9998;
+			</a>
+		</div>
+		<div class="card-body p-1">
+			<ul class="list-unstyled">
+				@if ($matter->container_id)
+				<li><a href="/matter/{{ $matter->container_id }}" title="See container">
+					{{ $matter->container->uid }}
+				</a></li>
 				@endif
-				</ul>
-				@if ($matter->expire_date)
-					<span class="pull-right"><strong>Expiry:</strong> {{ $matter->expire_date }}</span>
-				@endif
-			</div>
+				@if ($matter->parent_id)
+				<li><a href="/matter/{{ $matter->parent_id }}" title="See parent">
+					{{ $matter->parent->uid }}
+				</a></li>
+			@endif
+			</ul>
+			@if ($matter->expire_date)
+				<span class="float-right"><strong>Expiry:</strong> {{ $matter->expire_date }}</span>
+			@endif
 		</div>
 	</div>
-	<div class="col-sm-7">
-		<div class="panel panel-primary" style="min-height: 96px">
-			<div id="titlePanel" class="panel-body">
-			@foreach ( $titles as $type => $title_group )
-				<div class="row">
-					<div class="col-xs-2"><strong class="pull-right">{{ $type }}</strong></div>
-					<div class="col-xs-10">
-					@foreach ( $title_group as $title )
-						@if ($title != $title_group->first()) <br> @endif
-						<span id="{{ $title->id }}" class="titleItem" contenteditable="true">{{ $title->value }}</span>&nbsp;
-					@endforeach
-						@if ($title == $title_group->last()  && $type == $titles->keys()->last())
-						<a data-toggle="collapse" href="#addTitleForm">
-							<i class="glyphicon glyphicon-plus-sign text-info pull-right"></i>
-						</a>
-						@endif
-					</div>
+
+	<div class="card col-7 border-secondary p-0">
+		<div id="titlePanel" class="card-body p-1">
+		@foreach ( $titles as $type => $title_group )
+			<div class="row">
+				<div class="col-2 text-right font-weight-bold">{{ $type }}</div>
+				<div class="col-10">
+				@foreach ( $title_group as $title )
+					@if ($title != $title_group->first()) <br> @endif
+					<span id="{{ $title->id }}" class="titleItem" contenteditable="true">{{ $title->value }}</span>&nbsp;
+				@endforeach
+					@if ($title == $title_group->last() && $type == $titles->keys()->last())
+					<a class="badge badge-pill badge-primary float-right" data-toggle="collapse" href="#addTitleForm">+</a>
+					@endif
 				</div>
-			@endforeach
-				<div id="addTitleForm" class="row collapse">
-					<form class="form-horizontal">
-						{{ csrf_field() }}
+			</div>
+		@endforeach
+			<div id="addTitleForm" class="collapse">
+				<form>
+					<div class="form-row">
 						<input type="hidden" name="matter_id" value="{{ $matter->container_id or $matter->id }}" />
 						<input type="hidden" name="type_code" />
-						<div class="col-xs-2">
-							<div class="input-group">
-								<input type="text" class="form-control" name="type" placeholder="Type" />
-							</div>
+						<div class="col-2">
+							<input type="text" class="form-control form-control-sm" name="type" placeholder="Type" />
 						</div>
-						<div class="col-xs-10">
+						<div class="col-10">
 							<div class="input-group">
-								<input type="text" class="form-control" name="value" placeholder="Value" />
-								<div class="input-group-btn">
-									<button type="button" class="btn btn-primary" id="addTitleSubmit"><i class="glyphicon glyphicon-ok"></i></button>
+								<input type="text" class="form-control form-control-sm" name="value" placeholder="Value" />
+								<div class="input-group-append">
+									<button type="button" class="btn btn-primary btn-sm" id="addTitleSubmit">&check;</button>
 								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-2">
-		<div class="panel panel-primary" style="min-height: 96px">
-			<div class="panel-body">
-				<button id="clone-matter-link" type="button" class="btn btn-info btn-block"
-					data-country="{{ $matter->countryInfo->name }}-{{ $matter->country }}"
-					data-origin="{{ $matter->origin }}"
-					data-type="{{ $matter->type_code }}"
-					data-code="{{ $matter->category->category }}-{{ $matter->category_code }}">
-					<i class="glyphicon glyphicon-duplicate pull-left"></i>
-					Clone Matter
-				</button>
-				<button id="child-matter-link" type="button" class="btn btn-info btn-block"
-					data-caseref="{{ $matter->caseref }}"
-					data-country="{{ $matter->countryInfo->name }}-{{ $matter->country }}"
-					data-origin="{{ $matter->origin }}"
-					data-type="{{ $matter->type_code }}"
-					data-code="{{ $matter->category->category }}-{{ $matter->category_code }}">
-					<i class="glyphicon glyphicon-link pull-left"></i> 
-					New Child
-				</button>
-				@if ( $matter->countryInfo->goesnational )
-				<button id="national-matter-link"
-					data-caseref="{{ $matter->caseref }}" type="button" class="btn btn-info btn-block"
-					data-country="{{ $matter->countryInfo->name }}-{{ $matter->country }}"
-					data-origin="{{ $matter->origin }}"
-					data-type="{{ $matter->type_code }}"
-					data-code="{{ $matter->category->category }}-{{ $matter->category_code }}">
-					<i class="glyphicon glyphicon-flag pull-left"></i>
-					Enter Nat. Phase
-				</button>
-				@endif
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-sm-3">
-		<div class="panel panel-primary" style="min-height: 410px">
-			<div class="panel-heading panel-title reveal-hidden">
-				Actors
-				<a class="hidden-action pull-right" data-toggle="collapse" href="#addActorForm" title="Add Actor" data-role="">
-					<i class="glyphicon glyphicon-plus-sign bg-primary"></i>
-				</a>
-			</div>
-			<div class="panel-body panel-group" id="actor-panel">
-				@foreach ( $matter->actors()->groupBy('role_name') as $role_name => $role_group )
-					<div class="panel panel-default reveal-hidden">
-						<div class="panel-heading panel-title">
-							<div class="row">
-								<span class="col-xs-9">{{ $role_name }}</span>
-								<a class="hidden-action col-xs-2" data-toggle="modal" href="#actorsModal" title="Edit group" data-role="{{ $role_group[0]->role }}">
-									<i class="glyphicon glyphicon-edit text-success" style="font-size: 14px;"></i>
-								</a>
-								<a class="hidden-action col-xs-1" data-toggle="collapse" href="#addActorForm" title="Add Actor as {{ $role_name }}" data-role="{{ $role_group[0]->role }}">
-									<i class="glyphicon glyphicon-plus-sign text-info" style="font-size: 14px;"></i>
-								</a>
-							</div>
-						</div>
-						<div class="panel-body" style="max-height: 80px; overflow: auto;">
-							<ul class = "list-unstyled">
-							@foreach ( $role_group as $actor)
-								<li {!! $actor->inherited ? 'style="font-style: italic;"' : '' !!}>
-									@if ( $actor->warn && $role_name == 'Client' )
-										<i class="glyphicon glyphicon-exclamation-sign text-danger" title="Payment Difficulties"></i>
-									@endif
-									{{ $actor->name }}
-									@if ( $actor->show_ref && $actor->actor_ref )
-										({{ $actor->actor_ref }})
-									@endif
-									@if ( $actor->show_company && $actor->company_id )
-										&nbsp;- {{ App\Actor::find($actor->company_id)->display_name }}
-									@endif
-									@if ( $actor->show_date && $actor->date )
-										({{ $actor->date }})
-									@endif
-									@if ( $actor->show_rate && $actor->rate )
-										&nbsp;- {{ $actor->rate }}
-									@endif
-								</li>
-							@endforeach
-							</ul>
-						</div>
-					</div>
-				@endforeach
-				<form class="form-inline">
-					<div id="addActorForm" class="panel panel-warning collapse">
-						{{ csrf_field() }}
-						<div class="panel-heading panel-title">
-							<div class="form-group ui-front">
-								<input type="text" class="form-control" name="role" placeholder="Role" />
-							</div>
-						</div>
-						<div class="panel-body">
-							<div class="form-group ui-front">
-								<input type="text" class="form-control" name="actor_id" placeholder="Name" />
-							</div>
-							<div class="form-group">
-								<input type="text" class="form-control" name="actor_ref" placeholder="Reference" />
-							</div>
-							<div class="form-group">
-								<label class="radio-inline"><input type="radio" name="matter_id" value="{{ $matter->container_id or $matter->id }}">Shared</label>
-								<label class="radio-inline"><input type="radio" name="matter_id" value="{{ $matter->id }}" id="matter_id">Not shared</label>
-								<button type="button" class="btn btn-primary" id="addActorSubmit"><i class="glyphicon glyphicon-ok"></i></button>
-								<button type="reset" class="btn btn-default" onClick="$('#addActorForm').collapse('hide')"><span class="glyphicon glyphicon-remove"></span></button>
 							</div>
 						</div>
 					</div>
@@ -218,34 +100,185 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 		</div>
 	</div>
 
-	<div id="multiPanel" class="col-sm-9">
-		<div class="row">
-			<div class="col-sm-6">
-				<div class="panel panel-primary reveal-hidden">
-					<div class="panel-heading panel-title">
+	<div class="card border-info col-2 p-0">
+		<div class="card-body">
+			<a class="btn btn-outline-info btn-block btn-sm"
+				href="/matter/create?matter_id={{ $matter->id }}&operation=clone"
+				data-toggle="modal"
+				data-target="#createMatterModal"
+				data-remote="false"
+				title="Clone {{ $matter->category->category }}">
+				&boxbox; Clone Matter
+			</a>
+			<a class="btn btn-outline-info btn-block btn-sm"
+				href="/matter/create?matter_id={{ $matter->id }}&operation=child"
+				data-toggle="modal"
+				data-target="#createMatterModal"
+				data-remote="false"
+				title="Create child {{ $matter->category->category }}">
+				&oplus;
+				New Child
+			</a>
+			@if ( $matter->countryInfo->goesnational )
+			<a class="btn btn-outline-info btn-block btn-sm"
+				href="/matter/create?matter_id={{ $matter->id }}&operation=national"
+				data-toggle="modal"
+				data-target="#createMatterModal"
+				data-remote="false"
+				title="Enter {{ $matter->category->category }} in national phase">
+				&#9872;
+				Enter Nat. Phase
+			</a>
+			@endif
+		</div>
+	</div>
+</div>
+
+<div class="row card-deck">
+	<div id="actorPanel" class="card col-3 border-secondary p-0">
+		<div class="card-header reveal-hidden text-white bg-secondary font-weight-bold p-1">
+			Actors
+			<a class="badge badge-pill badge-light hidden-action float-right"
+				rel="popover"
+				data-placement="right"
+				href="#"
+				data-html="true"
+				title="Add Actor"
+				data-content='<form id="addActorForm">
+						<input type="hidden" name="shared" value="1" />
+						<input type="hidden" name="company_id" value="" />
+						<div class="ui-front">
+							<input type="text" class="form-control form-control-sm" name="role" placeholder="Role" />
+							<input type="text" class="form-control form-control-sm" name="actor_id" placeholder="Name" />
+							<input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference" />
+						</div>
+						<div class="form-group">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id or $matter->id }}">
+								<label class="form-check-label" for="actorShared">Add to container and share</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
+								<label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
+							</div>
+						</div>
+						<div class="btn-group" role="group">
+							<button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
+							<button type="button" class="btn btn-outline-info btn-sm" id="popoverCancel">&times;</button>
+						</div>
+					</form>
+					<div class="alert alert-danger d-none" role="alert"></div>'>
+				&plus;
+			</a>
+		</div>
+		<div class="card-body p-1">
+			@foreach ( $actors as $role_name => $role_group )
+				<div class="card reveal-hidden border-secondary mb-1">
+					<div class="card-header font-weight-bold p-1">
+						{{ $role_name }}
+						<a class="hidden-action float-right ml-2"
+							data-toggle="modal"
+							data-target="#listModal"
+							data-remote="false"
+							title="Edit actors in {{ $role_group[0]->role_name }} group"
+							href="/matter/{{ $matter->id }}/roleActors/{{ $role_group[0]->role_code }}"
+							data-resource="/actor-pivot/">
+							&#9998;
+						</a>
+						<a class="hidden-action float-right"
+							data-placement="right"
+							rel="popover"
+							data-html="true"
+							title='Add {{ $role_name }}'
+							data-content='<form id="addActorForm">
+									<input type="hidden" name="role" value="{{ $role_group[0]->role_code }}" />
+									<input type="hidden" name="shared" value="{{ $role_group[0]->shareable }}" />
+									<input type="hidden" name="company_id" value="" />
+									<div class="ui-front">
+										<input type="text" class="form-control form-control-sm" name="actor_id" placeholder="Name" />
+										<input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference" />
+									</div>
+									<div class="form-group">
+										<div class="form-check">
+											<input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id or $matter->id }}" {{ $role_group[0]->shareable ? "checked" : "" }}>
+											<label class="form-check-label" for="actorShared">Add to container and share</label>
+										</div>
+										<div class="form-check">
+											<input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}" {{ $role_group[0]->shareable ? "" : "checked" }}>
+											<label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
+										</div>
+									</div>
+									<div class="btn-group" role="group">
+										<button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
+										<button type="button" class="btn btn-outline-info btn-sm" id="popoverCancel">&times;</button>
+									</div>
+								</form>
+								<div class="alert alert-danger d-none" role="alert"></div>'
+							href="#">
+							&oplus;
+						</a>
+					</div>
+					<div class="card-body p-1" style="max-height: 80px; overflow: auto;">
+						<ul class = "list-unstyled">
+						@foreach ( $role_group as $actor)
+							<li {!! $actor->inherited ? 'style="font-style: italic;"' : '' !!}>
+								@if ( $actor->warn && $role_name == 'Client' )
+									<span title="Payment Difficulties">&#9888;</span>
+								@endif
+								{{ $actor->display_name }}
+								@if ( $actor->show_ref && $actor->actor_ref )
+									({{ $actor->actor_ref }})
+								@endif
+								@if ( $actor->show_company && $actor->company )
+									&nbsp;- {{ $actor->company }}
+								@endif
+								@if ( $actor->show_date && $actor->date )
+									({{ $actor->date }})
+								@endif
+								@if ( $actor->show_rate && $actor->rate )
+									&nbsp;- {{ $actor->rate }}
+								@endif
+							</li>
+						@endforeach
+						</ul>
+					</div>
+				</div>
+			@endforeach
+		</div>
+	</div>
+	<div id="multiPanel" class="card col-9 p-0">
+		<div class="row card-deck mb-1">
+				<div class="card col-6 p-0 reveal-hidden">
+					<div class="card-header p-1">
 						<div class="row">
-							<span class="col-xs-5">Status</span>
-							<span class="col-xs-3">Date</span>
-							<span class="col-xs-4">
+							<span class="font-weight-bold col-5">Status</span>
+							<span class="col-3">Date</span>
+							<span class="col-4">
 								Number
-								<a href="/matter/{{ $matter->id }}/events" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All events" data-resource="/event/">
-									<i class="glyphicon glyphicon-tasks bg-primary" style="font-size: 14px;"></i>
+								<a class="hidden-action float-right"
+									href="/matter/{{ $matter->id }}/events"
+									data-toggle="modal"
+									data-target="#listModal"
+									data-remote="false"
+									title="All events"
+									data-resource="/event/">
+									<span class="badge badge-primary">&vellip;</span>
 								</a>
 							</span>
 						</div>
 					</div>
-					<div class="panel-body" id="status-panel" style="height: 100px; overflow: auto;">
+					<div class="card-body p-1" id="status-panel" style="overflow: auto;">
 						@foreach ( $matter->events->where('info.status_event', 1) as $event )
 						<div class="row">
-							<span class="col-xs-5">{{ $event->info->name }}</span>
+							<span class="col-5">{{ $event->info->name }}</span>
 							@if ( $event->alt_matter_id )
-								<span class="col-xs-3">{{ $event->link->event_date }}</span>
-								<span class="col-xs-4">
+								<span class="col-3">{{ $event->link->event_date }}</span>
+								<span class="col">
 									<a href="/matter/{{ $event->alt_matter_id }}" target="_blank">{{ $event->altMatter->country . $event->link->detail }}</a>
 								</span>
 							@else
-								<span class="col-xs-3">{{ $event->event_date }}</span>
-								<span class="col-xs-4">
+								<span class="col-3">{{ $event->event_date }}</span>
+								<span class="col">
 								@if ( $event->publicUrl() )
 									<a href="{{ $event->publicUrl() }}" target="_blank">{{ $event->detail }}</a>
 								@else
@@ -256,137 +289,139 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 						</div>
 						@endforeach
 					</div>
-				</div>	
 			</div>
-			<div class="col-sm-6">
-				<div class="panel panel-primary reveal-hidden">
-					<div class="panel-heading panel-title">
-						<div class="row">
-							<span class="col-xs-9">Open Tasks</span>
-							<span class="col-xs-3">
-								Due
-								<a href="/matter/{{ $matter->id }}/tasks" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All tasks" data-resource="/task/">
-									<i class="glyphicon glyphicon-tasks bg-primary" style="font-size: 14px;"></i>
-								</a>
-							</span>
-						</div>
+			<div class="card col-6 p-0 reveal-hidden">
+				<div class="card-header p-1">
+					<div class="row">
+						<span class="font-weight-bold col-9">Open Tasks</span>
+						<span class="col-3">
+							Due
+							<a class="hidden-action float-right"
+								href="/matter/{{ $matter->id }}/tasks"
+								data-toggle="modal"
+								data-target="#listModal"
+								data-remote="false"
+								title="All tasks"
+								data-resource="/task/">
+								<span class="badge badge-primary">&vellip;</span>
+							</a>
+						</span>
 					</div>
-					<div class="panel-body" id="opentask-panel" style="height: 100px; overflow: auto;">
-						@foreach ( $matter->tasksPending as $task )
-						<div class="row">
-							<span class="col-xs-9">{{ $task->info->name }}: {{ $task->detail }}</span>
-							<span class="col-xs-3">{{ $task->due_date }}</span>
-						</div>
-						@endforeach
+				</div>
+				<div class="card-body p-1" id="opentask-panel" style="overflow: auto;">
+					@foreach ( $matter->tasksPending as $task )
+					<div class="row">
+						<span class="col-9">{{ $task->info->name }}: {{ $task->detail }}</span>
+						<span class="col-3">{{ $task->due_date }}</span>
 					</div>
+					@endforeach
 				</div>
 			</div>
 		</div>
-		
-		<div class="row">
-			<div class="col-sm-2">
-				<div class="panel panel-primary reveal-hidden">
-					<div class="panel-heading panel-title">
-						<div class="row">
-							<span class="col-xs-6">Renewals</span>
-							<span class="col-xs-6">
-								Due
-								<a href="/matter/{{ $matter->id }}/renewals" class="hidden-action pull-right" data-toggle="modal" data-target="#listModal" data-remote="false" title="All renewals"  data-resource="/task/">
-									<i class="glyphicon glyphicon-tasks bg-primary" style="font-size: 14px;"></i>
-								</a>
-							</span>
-						</div>
-					</div>
-					<div class="panel-body" id="renewal-panel" style="height: 100px; overflow: auto;">
-						@foreach ( $matter->renewalsPending->take(3) as $task )
-						<div class="row">
-							<span class="col-xs-4">{{ $task->detail }}</span>
-							<span class="col-xs-8">{{ $task->due_date }}</span>
-						</div>
-						@endforeach
+		<div class="row card-deck mb-1">
+			<div class="card col-2 p-0 reveal-hidden">
+				<div class="card-header p-1">
+					<div class="row">
+						<span class="font-weight-bold col-6">Renewals</span>
+						<span class="col-6">
+							Due
+							<a class="hidden-action float-right"
+								href="/matter/{{ $matter->id }}/renewals"
+								data-toggle="modal" data-target="#listModal"
+								data-remote="false"
+								title="All renewals"
+								data-resource="/task/">
+								<span class="badge badge-primary">&vellip;</span>
+							</a>
+						</span>
 					</div>
 				</div>
-			</div>
-			<div class="col-sm-6">
-				<div class="panel panel-primary reveal-hidden">
-					<div class="panel-heading panel-title">
-						Classifiers
-						<a href="#classifiersModal" class="hidden-action pull-right" data-toggle="modal" title="Classifier detail" data-resource="/classifier/">
-							<i class="glyphicon glyphicon-tasks bg-primary"></i>
-						</a>
+				<div class="card-body p-1" id="renewal-panel" style="overflow: auto;">
+					@foreach ( $matter->renewalsPending->take(3) as $task )
+					<div class="row">
+						<span class="col-4">{{ $task->detail }}</span>
+						<span class="col-8">{{ $task->due_date }}</span>
 					</div>
-					<div class="panel-body" id="classifier-panel" style="height: 100px; overflow: auto;">
-						@foreach ( $classifiers as $type => $classifier_group )
-						<div class="row">
-							<span class="col-xs-2"><strong>{{ $type }}</strong></span>
-							<span class="col-xs-10">
-							@foreach ( $classifier_group as $classifier )
-								@if ( $classifier->url )
-									<a href="{{ $classifier->url }}" target="_blank">{{ $classifier->value }}</a>
-								@elseif ( $classifier->lnk_matter_id )
-									<a href="/matter/{{ $classifier->lnk_matter_id }}">{{ $classifier->linkedMatter->uid }}</a>
-								@else
-									{{ $classifier->value }}
-								@endif
-							@endforeach
-							@if ( $type == 'Link' )
-								@foreach ( $matter->linkedBy as $linkedBy )
-									<a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
-								@endforeach
+					@endforeach
+				</div>
+			</div>
+			<div class="card col-6 p-0 reveal-hidden">
+				<div class="card-header font-weight-bold p-1">
+					Classifiers
+					<a class="hidden-action float-right"
+						href="#classifiersModal"
+						data-toggle="modal"
+						title="Classifier detail">
+						<span class="badge badge-primary">&vellip;</span>
+					</a>
+				</div>
+				<div class="card-body p-1" id="classifier-panel" style="overflow: auto;">
+					@foreach ( $classifiers as $type => $classifier_group )
+					<div class="row">
+						<span class="col-2"><strong>{{ $type }}</strong></span>
+						<span class="col-10">
+						@foreach ( $classifier_group as $classifier )
+							@if ( $classifier->url )
+								<a href="{{ $classifier->url }}" target="_blank">{{ $classifier->value }}</a>
+							@elseif ( $classifier->lnk_matter_id )
+								<a href="/matter/{{ $classifier->lnk_matter_id }}">{{ $classifier->linkedMatter->uid }}</a>
+							@else
+								{{ $classifier->value }}
 							@endif
+						@endforeach
+						@if ( $type == 'Link' )
+							@foreach ( $matter->linkedBy as $linkedBy )
+								<a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
+							@endforeach
+						@endif
+						</span>
+					</div>
+					@endforeach
+					@if ( !in_array('Link', $classifiers->keys()->all()) && !$matter->linkedBy->isEmpty() )
+						<div class="row">
+							<span class="col-1"><strong>Link</strong></span>
+							<span class="col-11">
+							@foreach ( $matter->linkedBy as $linkedBy )
+								<a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
+							@endforeach
 							</span>
 						</div>
-						@endforeach
-						@if ( !in_array('Link', $classifiers->keys()->all()) && !$matter->linkedBy->isEmpty() )
-							<div class="row">
-								<span class="col-xs-1"><strong>Link</strong></span>
-								<span class="col-xs-11">
-								@foreach ( $matter->linkedBy as $linkedBy )
-									<a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
-								@endforeach
-								</span>
-							</div>
-						@endif
-					</div>
+					@endif
 				</div>
 			</div>
-			<div class="col-sm-4">
-				<div class="panel panel-info">
-					<div class="panel-heading panel-title">
-						Related Matters
-						<i class="glyphicon glyphicon-info-sign pull-right"></i>
-					</div>
-					<div class="panel-body" id="related-panel" style="height: 100px; overflow: auto;">
-						<div class="row">
-						@if ( $matter->has('family') )
-							<strong>{{ $matter->caseref }}</strong>
-						@endif
+			<div class="card border-info col-4 p-0">
+				<div class="card-header font-weight-bold bg-info text-white p-1">
+					Related Matters
+					<span class="float-right">&#9432;</span>
+				</div>
+				<div class="card-body p-1" id="related-panel" style="overflow: auto;">
+					@if ( $matter->has('family') )
+						<p>
+						<strong>Fam</strong>
 						@foreach ( $matter->family as $member )
-							<a href="/matter/{{ $member->id }}">{{ $member->suffix }}</a>
+							<a class="badge badge-primary" href="/matter/{{ $member->id }}">{{ $member->suffix }}</a>
 						@endforeach
-						</div>
-						@foreach ( $matter->priorityTo->groupBy('caseref') as $caseref => $family )
-							<div class="row">
-								<strong>{{ $caseref }}</strong>
-							@foreach ( $family as $rmatter )
-								<a href="/matter/{{ $rmatter->id }}">{{ $rmatter->suffix }}</a>
-							@endforeach
-							</div>
+						</p>
+					@endif
+					@foreach ( $matter->priorityTo->groupBy('caseref') as $caseref => $family )
+						<p>
+							<strong>{{ $caseref }}</strong>
+						@foreach ( $family as $rmatter )
+							<a class="badge badge-primary" href="/matter/{{ $rmatter->id }}">{{ $rmatter->suffix }}</a>
 						@endforeach
-					</div>
+						</p>
+					@endforeach
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-sm-12">
-				<div class="panel panel-default">
-					<div class="panel-heading panel-title">
-						Notes
-						<button type="button" class="hidden-action btn btn-warning btn-xs" id="updateNotes"><i class="glyphicon glyphicon-exclamation-sign"></i> Save</button>	
-					</div>
-					<div class="panel-body" id="notes-panel" style="height: 100px; overflow: auto;">
-						<textarea id="notes" class="form-control noformat" style="width:100%; height:100%; box-sizing: border-box;" name="notes">{{ $matter->notes }}</textarea>
-					</div>
+		<div class="row card-deck">
+			<div class="card col-12 p-0">
+				<div class="card-header font-weight-bold p-1">
+					Notes
+					<button type="button" class="hidden-action btn btn-warning btn-sm" id="updateNotes">&#9432; Save</button>
+				</div>
+				<div class="card-body p-1" id="notes-panel" style="overflow: auto;">
+					<textarea id="notes" class="form-control noformat" style="width:100%; height:100%; box-sizing: border-box;" name="notes">{{ $matter->notes }}</textarea>
 				</div>
 			</div>
 		</div>

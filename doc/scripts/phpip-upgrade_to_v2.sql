@@ -191,3 +191,66 @@ ADD CONSTRAINT `fk_task_rule`
   ON DELETE SET NULL 
   ON UPDATE CASCADE;
 
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `matter_actors` AS
+    SELECT 
+        `pivot`.`id` AS `id`,
+        `actor`.`id` AS `actor_id`,
+        IFNULL(`actor`.`display_name`, `actor`.`name`) AS `display_name`,
+        `actor`.`name` AS `name`,
+        `actor`.`first_name` AS `first_name`,
+        `pivot`.`display_order` AS `display_order`,
+        `pivot`.`role` AS `role_code`,
+        `actor_role`.`name` AS `role_name`,
+        `actor_role`.`shareable` AS `shareable`,
+        `actor_role`.`show_ref` AS `show_ref`,
+        `actor_role`.`show_company` AS `show_company`,
+        `actor_role`.`show_rate` AS `show_rate`,
+        `actor_role`.`show_date` AS `show_date`,
+        `matter`.`id` AS `matter_id`,
+        `actor`.`warn` AS `warn`,
+        `pivot`.`actor_ref` AS `actor_ref`,
+        `pivot`.`date` AS `date`,
+        `pivot`.`rate` AS `rate`,
+        `pivot`.`shared` AS `shared`,
+        `co`.`name` AS `company`,
+        IF((`pivot`.`matter_id` = `matter`.`container_id`),
+            1,
+            0) AS `inherited`
+    FROM
+        ((((`matter_actor_lnk` `pivot`
+        JOIN `matter` ON (((`pivot`.`matter_id` = `matter`.`id`)
+            OR ((`pivot`.`shared` = 1)
+            AND (`pivot`.`matter_id` = `matter`.`container_id`)))))
+        JOIN `actor` ON ((`pivot`.`actor_id` = `actor`.`id`)))
+        LEFT JOIN `actor` `co` ON ((`co`.`id` = `pivot`.`company_id`)))
+        JOIN `actor_role` ON ((`pivot`.`role` = `actor_role`.`code`)))
+    ORDER BY `actor_role`.`display_order` , `pivot`.`display_order`;
+    
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `matter_classifiers` AS
+    SELECT 
+        `classifier`.`id` AS `id`,
+        `matter`.`id` AS `matter_id`,
+        `classifier`.`type_code` AS `type_code`,
+        `classifier_type`.`type` AS `type_name`,
+        `classifier_type`.`main_display` AS `main_display`,
+        IF(ISNULL(`classifier`.`value_id`),
+            `classifier`.`value`,
+            `classifier_value`.`value`) AS `value`,
+        `classifier`.`url` AS `url`,
+        `classifier`.`lnk_matter_id` AS `lnk_matter_id`,
+        `classifier`.`display_order` AS `display_order`
+    FROM
+        (((`classifier`
+        JOIN `classifier_type` ON ((`classifier`.`type_code` = `classifier_type`.`code`)))
+        JOIN `matter` ON ((IFNULL(`matter`.`container_id`, `matter`.`id`) = `classifier`.`matter_id`)))
+        LEFT JOIN `classifier_value` ON ((`classifier_value`.`id` = `classifier`.`value_id`)))
+    ORDER BY `classifier_type`.`display_order` , `classifier`.`display_order`;
+

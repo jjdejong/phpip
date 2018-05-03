@@ -33,14 +33,13 @@ Route::group(['middleware' => 'auth'], function () {
 		->where('caseref', 'like', "$term%")
 		->take(10)->get();
 	});
-	Route::get('matter', 'MatterController@index');
 	Route::get('matter/export', 'MatterController@export');
-	Route::get('matter/{matter}', 'MatterController@show')->middleware('can:view-noclient');
+	//Route::get('matter/{matter}', 'MatterController@show')->middleware('can:view-noclient'); // Breaks the Route::resource method
 	Route::get('matter/{matter}/events', 'MatterController@events');
 	Route::get('matter/{matter}/tasks', 'MatterController@tasks');
 	Route::get('matter/{matter}/renewals', 'MatterController@renewals');
-	Route::put('matter/{matter}', 'MatterController@update');
-	
+  Route::get('matter/{matter}/roleActors/{role}', 'MatterController@actors');
+
 	Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
 		$term = $request->input('term');
 		$results = App\EventName::select('name as value', 'code')
@@ -48,7 +47,7 @@ Route::group(['middleware' => 'auth'], function () {
 			->where('is_task', $is_task);
 		return $results->take(10)->get();
 	});
-	
+
 	Route::get('task-name/autocomplete/{is_task}', function (Request $request, $is_task) {
 		$term = $request->input('term');
 		$results = App\EventName::select('name as label', 'code as value')
@@ -80,28 +79,29 @@ Route::group(['middleware' => 'auth'], function () {
 			->where('name', 'like', "%$term%")
 			->take(10)->get();
 	});
-	
-	Route::get('role/autocomplete', function () {
-		return App\Role::select('name as label', 'code as value')
+
+	Route::get('role/autocomplete', function (Request $request) {
+    $term = $request->input('term');
+		return App\Role::select('name as label', 'code as value', 'shareable')
 		->where('name', 'like', "%$term%")->get();
 	});
 
 	Route::get('country/autocomplete', function (Request $request) {
 		$term = $request->input('term');
-		$list = App\Country::select('name as label', 'iso as value')
+		$list = App\Country::select('name as value', 'iso as id')
 		->where('name', 'like', "$term%")->get();
 		return $list;
 	});
-	
+
 	Route::get('category/autocomplete', function (Request $request) {
 		$term = $request->input('term');
-		return App\Category::select('category as label', 'code as value')
+		return App\Category::select('category as value', 'code as id')
 		->where('category', 'like', "$term%")->get();
 	});
 
 	Route::get('type/autocomplete', function (Request $request) {
 		$term = $request->input('term');
-		return App\Type::select('type as label', 'code as value')
+		return App\Type::select('type as value', 'code as id')
 		->where('type', 'like', "$term%")->get();
 	});
 
@@ -118,86 +118,82 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('ruleadd','RuleController@addShow');
 	Route::put('ruleadd','RuleController@store');
 
-	Route::resource('task', 'TaskController');
-	Route::resource('event', 'EventController');
+  Route::resource('matter', 'MatterController');
+  Route::apiResource('task', 'TaskController');
+	Route::apiResource('event', 'EventController');
 	Route::resource('actor', 'ActorController');
-	Route::resource('classifier', 'ClassifierController');
-	
+  Route::apiResource('actor-pivot', 'ActorPivotController');
+	Route::apiResource('classifier', 'ClassifierController');
+
 	// Testing - not used
-		Route::get('matter/{id}/actors', function ($id) {
-			$matter = Matter::find($id);
-			return $matter->actors()->groupBy('role_name');
+		/*Route::get('matter/{matter}/actors', function (App\Matter $matter) {
+      //$actors = $matter->with('container.actors.actor:id,name,display_name,company_id', 'actors.actor:id,name,display_name,company_id')->get();
+      return $matter->actors;
 		});
-		
-		Route::get('matter/{id}/classifiers', function ($id) {
-			$matter = Matter::find($id);
-			return $matter->classifiers;
+
+		Route::get('matter/{matter}/classifiers', function (App\Matter $matter) {
+      return $matter->classifiers->where('main_display', 0);
 		});
-	
-		Route::get('matter/{id}/category', function ($id) {
-			$matter = Matter::find($id);
+
+    Route::get('matter/{matter}/titles', function (App\Matter $matter) {
+      return $matter->classifiers->where('main_display', 1);
+		});
+
+		Route::get('matter/{matter}/category', function (App\Matter $matter) {
 			return $matter->category;
 		});
 
-		Route::get('matter/{id}/type', function ($id) {
-			$matter = Matter::find($id);
+		Route::get('matter/{matter}/type', function (App\Matter $matter) {
 			return $matter->type;
 		});
 
-		Route::get('matter/{id}/country', function ($id) {
-			$matter = Matter::find($id);
+		Route::get('matter/{matter}/country', function (App\Matter $matter) {
 			return $matter->countryInfo;
 		});
 
-		Route::get('matter/{id}/origin', function ($id) {
-			$matter = Matter::find($id);
+		Route::get('matter/{matter}/origin', function (App\Matter $matter) {
 			return $matter->originInfo;
 		});
-							
-		Route::get('task/{id}/event', function ($id) {
-			$task = App\Task::find($id);
+
+		Route::get('task/{task}/event', function (App\Task $task) {
 			return $task->event;
 		});
-		
-		Route::get('event/{id}/tasks', function ($id) {
-			$event = App\Event::find($id);
+
+		Route::get('event/{event}/tasks', function (App\Event $event) {
 			return $event->tasks;
 		});
-		
-		Route::get('event/{id}/link', function ($id) {
-			$event = App\Event::find($id);
+
+		Route::get('event/{event}/link', function (App\Event $event) {
 			return $event->link;
 		});
-		
+
 		Route::get('events/withlinks', function () {
 			$event = App\Event::has('link')->first();
 			return $event->link;
 		});
-		
+
 		Route::get('event/{id}/retrolink', function ($id) {
 			$event = App\Event::find($id);
 			return $event->retroLink;
 		});
-		
-		Route::get('matter/{id}/container', function ($id) {
-			$matter = Matter::find($id);
+
+		Route::get('matter/{matter}/container', function (App\Matter $matter) {
 			return $matter->container;
 		});
-		
-		Route::get('matter/{id}/status', function ($id) {
-			$matter = Matter::find($id);
+
+		Route::get('matter/{matter}/status', function (App\Matter $matter) {
 			return $matter->status;
 		});
-		
+
 		Route::get('matter/status/{term}', function ($term) {
 			$matters = Matter::with('status')->whereHas('status', function($q) use ($term) {
 				$q->where('name', 'LIKE', "$term%");
 			})->take(25)->get();
 			return $matters;
 		});
-		
+
 		Route::get('matter/{id}/priority_to', function ($id) {
 			$matter = Matter::with('priorityTo.children.children')->find($id);
 			return $matter->priorityTo->where('parent_id', null)->groupBy('caseref');
-		});
+		});*/
 });

@@ -18,16 +18,6 @@ class ClassifierController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -41,7 +31,7 @@ class ClassifierController extends Controller
     		'type_code' => 'required',
     		'value' => 'required_without:lnk_matter_id'
     	]);
-    	
+
     	Classifier::create($request->except(['_token', '_method', 'type']));
     }
 
@@ -57,17 +47,6 @@ class ClassifierController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Classifier  $classifier
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Classifier $classifier)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -75,7 +54,7 @@ class ClassifierController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Classifier $classifier)
-    {	
+    {
     	$classifier->update($request->except(['_token', '_method']));
     }
 

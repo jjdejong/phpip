@@ -12,11 +12,17 @@ class Matter extends Model {
 	protected $hidden = ['creator', 'updated', 'updater'];
 	protected $guarded = ['id', 'creator', 'updated', 'updater'];
 
+	use \Venturecraft\Revisionable\RevisionableTrait;
+  protected $revisionEnabled = true;
+  protected $revisionCreationsEnabled = true;
+  protected $revisionCleanup = true; //Remove old revisions (works only when used with $historyLimit)
+  protected $historyLimit = 500; //Maintain a maximum of 500 changes at any point of time, while cleaning up old revisions.
+
 	public function getUidAttribute()
 	{
 		return $this->caseref . $this->suffix;
 	}
-	
+
 	public function family() // Gets other family members (where clause is ignored by eager loading)
 	{
 		return $this->hasMany('App\Matter', 'caseref', 'caseref')
@@ -24,24 +30,24 @@ class Matter extends Model {
 		->orderBy('origin')
 		->orderBy('country');
 	}
-	
+
 	public function container()
 	{
 		return $this->belongsTo('App\Matter', 'container_id');
 	}
-	
+
 	public function parent()
 	{
 		return $this->belongsTo('App\Matter', 'parent_id');
 	}
-	
+
 	public function children()
 	{
 		return $this->hasMany('App\Matter', 'parent_id')
 		->orderBy('origin')
 		->orderBy('country');
 	}
-	
+
 	public function priorityTo() // Gets external matters claiming priority on this one (where clause is ignored by eager loading)
 	{
 		return $this->belongsToMany('App\Matter', 'event', 'alt_matter_id')
@@ -50,74 +56,35 @@ class Matter extends Model {
 		->orderBy('origin')
 		->orderBy('country');
 	}
-	
-	/*public function actors() {
-		return $this->belongsToMany('App\Actor', 'matter_actor_lnk')
-		->withPivot('id', 'role', 'display_order', 'shared', 'actor_ref', 'company_id', 'rate', 'date');
-	}*/
-	
-	/*public function roles() {
-		return $this->belongsToMany('App\Role', 'matter_actor_lnk', 'matter_id', 'role')
-		->withPivot('id', 'role', 'shared');
-	}*/
-	
-	public function actors()
-	{
-		$actors = DB::table('matter_actor_lnk as ma')
-			->select( DB::raw ( "COALESCE(actor.display_name, CONCAT_WS(' ', actor.name, actor.first_name)) as name" ), 
-					'ar.name as role_name', 
-					'ma.actor_id',
-					'ma.role',
-					'ma.shared',
-					'ma.actor_ref',
-					'ma.company_id',
-					'actor.company_id as default_company_id',
-					'actor.warn',
-					'ma.date',
-					'ma.rate',
-					'ar.display_order as role_order',
-					'ma.display_order',
-					'ar.show_ref',
-					'ar.show_company',
-					'ar.show_rate',
-					'ar.show_date',
-					'ma.id',
-					DB::raw ("IF(ma.matter_id = '$this->container_id', 1, 0) AS inherited"))
-			->where('matter_id', $this->id)
-			->orWhere(function ($query) {
-            	$query->where('matter_id', $this->container_id)
-                	->where('ma.shared', 1);
-            })
-			->join('actor', 'actor.id', 'ma.actor_id')
-			->join('actor_role as ar', 'ar.code', 'ma.role')
-            ->orderBy('ar.display_order')->orderBy('ma.display_order');
-		return $actors->get();
+
+	public function actors() {
+		return $this->hasMany('App\MatterActors');
 	}
-	
+
 	public function events()
 	{
 		return $this->hasMany('App\Event')
 		->orderBy('event_date');
 	}
-	
+
 	public function filing()
 	{
 		return $this->hasOne('App\Event')
 		->where('code', 'FIL');
 	}
-	
+
 	public function publication()
 	{
 		return $this->hasOne('App\Event')
 		->where('code', 'PUB');
 	}
-	
+
 	public function grant()
 	{
 		return $this->hasOne('App\Event')
 		->where('code', 'GRT');
 	}
-	
+
 	public function status()
 	{
 		/*\Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
@@ -127,13 +94,13 @@ class Matter extends Model {
 		return $this->hasOne('App\Event')
 		->latest('event_date');
 	}
-	
+
 	public function priority()
 	{
 		return $this->hasMany('App\Event')
 		->where('code', 'PRI');
 	}
-	
+
 	public function tasksPending() // Excludes renewals
 	{
 		return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
@@ -141,7 +108,7 @@ class Matter extends Model {
 		->where('done', 0)
 		->orderBy('due_date');
 	}
-	
+
 	public function renewalsPending()
 	{
 		return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
@@ -150,37 +117,44 @@ class Matter extends Model {
 		->orderBy('due_date');
 	}
 
-	public function classifiers() 
+	public function classifiers()
 	{
-			return $this->hasMany('App\Classifier');
+			return $this->hasMany('App\MatterClassifiers')
+			->where('main_display', 0);
 	}
-	
+
+	public function titles()
+	{
+			return $this->hasMany('App\MatterClassifiers')
+			->where('main_display', 1);
+	}
+
 	public function linkedBy()
 	{
 		return $this->belongsToMany('App\Matter', 'classifier', 'lnk_matter_id');
 	}
-	
+
 	public function countryInfo()
 	{
 		return $this->belongsTo('App\Country', 'country');
 	}
-	
+
 	public function originInfo()
 	{
 			return $this->belongsTo('App\Country', 'origin');
 	}
-	
+
 	public function category()
 	{
 		return $this->belongsTo('App\Category');
 	}
-	
+
 	public function type()
 	{
 		return $this->belongsTo('App\Type');
 	}
-	
-	public function filter ($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $display_with = false, $paginated = false) 
+
+	public function filter ($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $display_with = false, $paginated = false)
 	{
 		$query = $this->select ( DB::raw ( "CONCAT_WS('', caseref, suffix) AS Ref" ),
 			'matter.country AS country',
@@ -194,6 +168,7 @@ class Matter extends Model {
 			DB::raw ( "COALESCE(agt.display_name, agt.name) AS Agent" ),
 			'agtlnk.actor_ref AS AgtRef',
 			'classifier.value AS Title',
+			'classifier2.value AS Title2',
 			DB::raw ( "CONCAT_WS(' ', inv.name, inv.first_name) as Inventor1" ),
 			'fil.event_date AS Filed',
 			'fil.detail AS FilNo',
@@ -208,7 +183,7 @@ class Matter extends Model {
 			'del.login AS delegate',
 			'matter.dead',
 			DB::raw ( "IF(isnull(matter.container_id),1,0) AS Ctnr" ));
-		
+
 		$query->join ( 'matter_category', 'matter.category_code', 'matter_category.code' );
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk clilnk
 			JOIN actor cli ON cli.id = clilnk.actor_id' ), function ($join) {
@@ -216,12 +191,12 @@ class Matter extends Model {
 		} );
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk lclic
 			JOIN actor clic ON clic.id = lclic.actor_id' ), function ($join) {
-			$join->on ( 'matter.container_id', 'lclic.matter_id' )->where ( [ 
+			$join->on ( 'matter.container_id', 'lclic.matter_id' )->where ( [
 					[ 'lclic.role', 'CLI' ],
-					[ 'lclic.shared', 1 ] 
+					[ 'lclic.shared', 1 ]
 			] );
 		} );
-		
+
 		if (array_key_exists ( 'Inventor1', $multi_filter )) {
 			$query->leftJoin ( DB::raw ( 'matter_actor_lnk invlnk
 				JOIN actor inv ON inv.id = invlnk.actor_id' ), function ($join) {
@@ -230,25 +205,25 @@ class Matter extends Model {
 		} else {
 			$query->leftJoin ( DB::raw ( 'matter_actor_lnk invlnk
 				JOIN actor inv ON inv.id = invlnk.actor_id' ), function ($join) {
-				$join->on ( DB::raw ( 'ifnull(matter.container_id, matter.id)' ), 'invlnk.matter_id' )->where ( [ 
+				$join->on ( DB::raw ( 'ifnull(matter.container_id, matter.id)' ), 'invlnk.matter_id' )->where ( [
 						[ 'invlnk.role', 'INV' ],
-						[ 'invlnk.display_order', 1 ] 
+						[ 'invlnk.display_order', 1 ]
 				] );
 			} );
 		}
-		
+
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk agtlnk
 			JOIN actor agt ON agt.id = agtlnk.actor_id' ), function ($join) {
-			$join->on ( 'matter.id', 'agtlnk.matter_id' )->where ( [ 
+			$join->on ( 'matter.id', 'agtlnk.matter_id' )->where ( [
 					[ 'agtlnk.role', 'AGT' ],
-					[ 'agtlnk.display_order', 1 ] 
+					[ 'agtlnk.display_order', 1 ]
 			] );
 		} );
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk applnk
 			JOIN actor app ON app.id = applnk.actor_id' ), function ($join) {
-			$join->on ( 'matter.id', 'applnk.matter_id' )->where ( [ 
+			$join->on ( 'matter.id', 'applnk.matter_id' )->where ( [
 					[ 'applnk.role', 'APP' ],
-					[ 'applnk.display_order', 1 ] 
+					[ 'applnk.display_order', 1 ]
 			] );
 		} );
 		$query->leftJoin ( DB::raw ( 'matter_actor_lnk dellnk
@@ -272,18 +247,20 @@ class Matter extends Model {
 		} );
 		$query->leftJoin ( DB::raw ( 'classifier
 			JOIN classifier_type ON classifier.type_code = classifier_type.code AND classifier_type.main_display = 1 AND classifier_type.display_order = 1' ), DB::raw ( 'IFNULL(matter.container_id, matter.id)' ), 'classifier.matter_id' );
+		$query->leftJoin ( DB::raw ( 'classifier classifier2
+			JOIN classifier_type ct2 ON classifier2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2' ), DB::raw ( 'IFNULL(matter.container_id, matter.id)' ), 'classifier2.matter_id' );
 		$query->where ( 'e2.matter_id', NULL );
-		
+
 		$authUserRole = Auth::user ()->default_role;
 		$authUserId = Auth::user ()->id;
-		
+
 		if ($display_with) {
 			$query->where ( 'matter_category.display_with', $display_with );
 		}
 		if ($authUserRole == 'CLI') {
 			$query->whereRaw ( $authUserId . ' IN (cli.id, clic.id)' );
 		}
-		
+
 		if (! empty ( $multi_filter )) {
 			foreach ( $multi_filter as $key => $value ) {
 				if ($value != '' && $key != 'display' && $key != 'display_style') {
@@ -294,7 +271,7 @@ class Matter extends Model {
 				}
 			}
 		}
-		
+
 		if ($sortField == 'caseref') {
 			if ($sortDir == 'desc') {
 				$query->orderByRaw ( 'matter.caseref DESC, matter.container_id, matter.origin, matter.country, matter.type_code, matter.idx' );
@@ -304,7 +281,7 @@ class Matter extends Model {
 		} else {
 			$query->orderByRaw ( "$sortField $sortDir, matter.caseref, matter.origin, matter.country" );
 		}
-		
+
 		if ($paginated) {
 			$matters = $query->simplePaginate ( 25 );
 		} else {

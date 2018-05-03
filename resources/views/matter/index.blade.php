@@ -34,27 +34,27 @@ $(document).ready(function() {
 			$(this).data('sortdir', 'desc');
 		} else {
 			$(this).data('sortdir', 'asc');
-			
+
 		}
 		refreshMatterList();
 	});
 
 	// Toggle the data to display
-	$("label[for='show-status']").click(function() {
+	$('#show-status').change(function() {
 		$('.display_actor').hide();
 		$('.display_status').show();
 	});
 
-	$("label[for='show-actor']").click(function() {
+	$('#show-actor').change(function() {
 		$('.display_status').hide();
 		$('.display_actor').show();
 	});
 
 	$('#show-all, #show-containers, #show-responsible').change(function(){
-		refreshMatterList(); 
+		refreshMatterList();
 	});
-     
-    $('#export').click(function(e){
+
+  $('#export').click(function(e){
 		var url = '/matter/export?' + $(".btn-toolbar, #filter").find("input").filter(function(){return $(this).val().length > 0}).serialize();
 		e.preventDefault();  //stop the browser from following
     	window.location.href = url;
@@ -72,96 +72,90 @@ $(document).ready(function() {
 @stop
 
 @section('content')
-<div class="panel panel-default" style="margin-bottom: 0px;">
-	<div class="panel-heading">
-		<form class="btn-toolbar" role="toolbar">
-			<div class="btn-group" data-toggle="buttons" id="container-all">
-				<label for="show-all" class="btn btn-info active">
-					<input type="radio" id="show-all" name="Ctnr" value="">Show All 
+<div class="card" style="margin-bottom: 0px;">
+	<div class="card-header">
+    <form class="btn-toolbar" role="toolbar">
+      <div class="btn-group btn-group-toggle mr-3" data-toggle="buttons" id="container-all">
+        <label class="btn btn-info active">
+          <input type="radio" id="show-all" name="Ctnr" value=""> Show All
 				</label>
-				<label for="show-containers" class="btn btn-info"> 
-					<input type="radio" id="show-containers" name="Ctnr" value="1">Show Containers
+        <label class="btn btn-info">
+          <input type="radio" id="show-containers" name="Ctnr" value="1"> Show Containers
 				</label>
+      </div>
+      <div class="btn-group btn-group-toggle mr-3" data-toggle="buttons" id="actor-status">
+        <label class="btn btn-info active">
+          <input type="radio" id="show-actor" value="0"> Actor View
+				</label>
+        <label class="btn btn-info">
+          <input type="radio" id="show-status" value="1"> Status View
+				</label>
+      </div>
+      <div class="btn-group-toggle mr-3" id="mine-all" data-toggle="buttons">
+        <label class="btn btn-info {{ @$_GET['responsible'] ? 'active' : '' }}">
+          <input class="responsible-filter" type="checkbox" id="show-responsible" name="responsible" value="{{ Auth::user ()->login }}"> Show Mine
+				</label>
+      </div>
+      <input type="hidden" id="sort_id" name="sort" value="{{ $matters->sort_id }}">
+      <input type="hidden" id="sort_dir" name="dir" value="{{ $matters->sort_dir }}">
+      <input type="hidden" id="display" name="display" value="{{ $matters->category_display }}">
+      <div class="btn-group mr-3">
+        <button id="export" type="button" class="btn btn-primary"> &DownArrowBar; Export</button>
 			</div>
-			<div class="btn-group" data-toggle="buttons" id="actor-status">
-				<label for="show-actor" class="btn btn-info active">
-					<input type="radio" id="show-actor" value="0">
-					Actor View
-				</label>
-				<label for="show-status" class="btn btn-info"> 
-					<input type="radio" id="show-status" value="1">
-					Status View
-				</label>
-			</div>
-			
-			<div class="btn-group" id="mine-all" data-toggle="buttons">
-				<label for="show-responsible" class="btn btn-info {{ $matters->responsible ? 'active' : '' }}">
-					<input class="responsible-filter" type="checkbox" id="show-responsible" name="responsible" value="{{ Auth::user ()->login }}"> 
-					Show Mine
-				</label>
-			</div>
-			<input type="hidden" id="sort_id" name="sort" value="{{ $matters->sort_id }}">
-			<input type="hidden" id="sort_dir" name="dir" value="{{ $matters->sort_dir }}">
-			<input type="hidden" id="display" name="display" value="{{ $matters->category_display }}">
-			
-			<div class="btn-group pull-right">
-				<button id="export" type="button" class="btn btn-primary">
-					<span class="glyphicon glyphicon-export"></span> Export
-				</button>
-				<button id="clear-filters" type="button" class="btn btn-primary" onclick="$('#matter-list').load('/matter #matter-list > tr', function() {
-						$('#filter').find('input').val('').css('background-color', '#fff');
-						contentUpdated();
-						window.history.pushState('', 'phpIP' , '/matter');
-					});">
-					<span class="glyphicon glyphicon-refresh"></span> Clear filters
-				</button>
-			</div>
-		</form>
+			<div class="button-group">
+        <button id="clear-filters" type="button" class="btn btn-primary" onclick="$('#matter-list').load('/matter #matter-list > tr', function() {
+					$('#filter').find('input').val('').css('background-color', '#fff');
+					contentUpdated();
+					$('#mine-all > label').removeClass('active');
+					window.history.pushState('', 'phpIP' , '/matter');
+				});">
+				&circlearrowright; Clear filters</button>
+      </div>
+    </form>
 	</div>
 </div>
-
-<table class="table table-striped table-hover table-condensed">
-	<thead>
-		<tr>
-			<th><a href="#" class="sortable" data-sortkey="caseref" data-sortdir="desc">Reference</a></th>
-			<th>Cat.</th>
-			<th><a href="#" class="sortable" data-sortkey="Status" data-sortdir="asc">Status</a></th>
-			<th class="display_actor"><a href="#" class="sortable" data-sortkey="Client" data-sortdir="asc">Client</a></th>
-			<th class="display_actor">Client Ref.</th>
-			<th class="display_actor"><a href="#" class="sortable" data-sortkey="Agent" data-sortdir="asc">Agent</a></th>
-			<th class="display_actor">Agent Ref.</th>
-			<th class="display_actor">Title/Detail</th>
-			<th class="display_actor"><a href="#" class="sortable" data-sortkey="Inventor1" data-sortdir="asc">Inventor</a></th>
-			<th class="display_status"><a href="#" class="sortable" data-sortkey="Status_date" data-sortdir="asc">Date</a></th>
-			<th class="display_status"><a href="#" class="sortable" data-sortkey="Filed" data-sortdir="asc">Filed</a></th>
-			<th class="display_status">Number</th>
-			<th class="display_status"><a href="#" class="sortable" data-sortkey="Published" data-sortdir="asc">Published</a></th>
-			<th class="display_status">Number</th>
-			<th class="display_status"><a href="#" class="sortable" data-sortkey="Granted" data-sortdir="asc">Granted</a></th>
-			<th class="display_status">Number</th>
-		</tr>
-		<tr id="filter">
-			<td><input class="filter-input form-control input-sm" name="Ref" placeholder="Ref" value="{{ old('Ref') }}"></td>
-			<td><input class="filter-input form-control input-sm" size="3" name="Cat" placeholder="Cat" value="{{ old('Cat') }}"></td>
-			<td><input class="filter-input form-control input-sm" name="Status" placeholder="Status" value="{{ old('Status') }}"></td>
-			<td class="display_actor"><input class="filter-input form-control input-sm" name="Client" placeholder="Client" value="{{ old('Client') }}"></td>
-			<td class="display_actor"><input class="filter-input form-control input-sm" size="8" name="ClRef" placeholder="Cl. Ref" value="{{ old('ClRef') }}"></td>
-			<td class="display_actor"><input class="filter-input form-control input-sm" name="Agent" placeholder="Agent" value="{{ old('Agent') }}"></td>
-			<td class="display_actor"><input class="filter-input form-control input-sm" size="16" name="AgtRef" placeholder="Agt. Ref" value="{{ old('AgtRef') }}"></td>
-			<td class="display_actor"><input class="filter-input form-control input-sm" name="Title" placeholder="Title" value="{{ old('Title') }}"></td>
-			<td class="display_actor"><input class="filter-input form-control input-sm" name="Inventor1" placeholder="Inventor" value="{{ old('Inventor1') }}"></td>
-			<td class="display_status"><input class="filter-input form-control input-sm" name="Status_date" placeholder="Date" value="{{ old('Status_date') }}"></td>
-			<td class="display_status"><input class="filter-input form-control input-sm" name="Filed" placeholder="Filed" value="{{ old('Filed') }}"></td>
-			<td class="display_status"><input class="filter-input form-control input-sm" name="FilNo" placeholder="Number" value="{{ old('FilNo') }}"></td>
-			<td class="display_status"><input class="filter-input form-control input-sm" name="Published" placeholder="Published" value="{{ old('Published') }}"></td>
-			<td class="display_status"><input class="filter-input form-control input-sm" name="PubNo" placeholder="Number" value="{{ old('PubNo') }}"></td>
-			<td class="display_status"><input class="filter-input form-control input-sm" name="Granted" placeholder="Granted" value="{{ old('Granted') }}"></td>
-			<td class="display_status"><input class="filter-input form-control input-sm" name="GrtNo" placeholder="Number" value="{{ old('GrtNo') }}"></td>
-		</tr>
+<table class="table table-striped table-hover table-sm">
+  <thead>
+    <tr>
+      <th><a href="#" class="sortable" data-sortkey="caseref" data-sortdir="desc">Reference</a></th>
+      <th>Cat.</th>
+      <th><a href="#" class="sortable" data-sortkey="Status" data-sortdir="asc">Status</a></th>
+      <th class="display_actor"><a href="#" class="sortable" data-sortkey="Client" data-sortdir="asc">Client</a></th>
+      <th class="display_actor">Client Ref.</th>
+      <th class="display_actor"><a href="#" class="sortable" data-sortkey="Agent" data-sortdir="asc">Agent</a></th>
+      <th class="display_actor">Agent Ref.</th>
+      <th class="display_actor">Title/Detail</th>
+      <th class="display_actor"><a href="#" class="sortable" data-sortkey="Inventor1" data-sortdir="asc">Inventor</a></th>
+      <th class="display_status"><a href="#" class="sortable" data-sortkey="Status_date" data-sortdir="asc">Date</a></th>
+      <th class="display_status"><a href="#" class="sortable" data-sortkey="Filed" data-sortdir="asc">Filed</a></th>
+      <th class="display_status">Number</th>
+      <th class="display_status"><a href="#" class="sortable" data-sortkey="Published" data-sortdir="asc">Published</a></th>
+      <th class="display_status">Number</th>
+      <th class="display_status"><a href="#" class="sortable" data-sortkey="Granted" data-sortdir="asc">Granted</a></th>
+      <th class="display_status">Number</th>
+    </tr>
+    <tr class="sticky-top" id="filter">
+      <td><input class="filter-input form-control form-control-sm" name="Ref" placeholder="Ref" value="{{ old('Ref') }}"></td>
+      <td><input class="filter-input form-control form-control-sm" size="3" name="Cat" placeholder="Cat" value="{{ old('Cat') }}"></td>
+      <td><input class="filter-input form-control form-control-sm" name="Status" placeholder="Status" value="{{ old('Status') }}"></td>
+      <td class="display_actor"><input class="filter-input form-control form-control-sm" name="Client" placeholder="Client" value="{{ old('Client') }}"></td>
+      <td class="display_actor"><input class="filter-input form-control form-control-sm" size="8" name="ClRef" placeholder="Cl. Ref" value="{{ old('ClRef') }}"></td>
+      <td class="display_actor"><input class="filter-input form-control form-control-sm" name="Agent" placeholder="Agent" value="{{ old('Agent') }}"></td>
+      <td class="display_actor"><input class="filter-input form-control form-control-sm" size="16" name="AgtRef" placeholder="Agt. Ref" value="{{ old('AgtRef') }}"></td>
+      <td class="display_actor"><input class="filter-input form-control form-control-sm" name="Title" placeholder="Title" value="{{ old('Title') }}"></td>
+      <td class="display_actor"><input class="filter-input form-control form-control-sm" name="Inventor1" placeholder="Inventor" value="{{ old('Inventor1') }}"></td>
+      <td class="display_status"><input class="filter-input form-control form-control-sm" name="Status_date" placeholder="Date" value="{{ old('Status_date') }}"></td>
+      <td class="display_status"><input class="filter-input form-control form-control-sm" name="Filed" placeholder="Filed" value="{{ old('Filed') }}"></td>
+      <td class="display_status"><input class="filter-input form-control form-control-sm" name="FilNo" placeholder="Number" value="{{ old('FilNo') }}"></td>
+      <td class="display_status"><input class="filter-input form-control form-control-sm" name="Published" placeholder="Published" value="{{ old('Published') }}"></td>
+      <td class="display_status"><input class="filter-input form-control form-control-sm" name="PubNo" placeholder="Number" value="{{ old('PubNo') }}"></td>
+      <td class="display_status"><input class="filter-input form-control form-control-sm" name="Granted" placeholder="Granted" value="{{ old('Granted') }}"></td>
+      <td class="display_status"><input class="filter-input form-control form-control-sm" name="GrtNo" placeholder="Number" value="{{ old('GrtNo') }}"></td>
+    </tr>
 	</thead>
-	<tbody id="matter-list">
+  <tbody id="matter-list">
 	@foreach ($matters as $matter)
-	<?php // Format the publication number for searching on Espacenet
+		@php // Format the publication number for searching on Espacenet
 		$published = 0;
 		if ( $matter->PubNo || $matter->GrtNo) {
 			$published = 1;
@@ -169,7 +163,7 @@ $(document).ready(function() {
 				$CC = 'EP';
 			else
 				$CC = $matter->country;
-			$removethese = [ "/^$matter->country/", '/ /', '/,/', '/-/', '/\//' ]; 
+			$removethese = [ "/^$matter->country/", '/ /', '/,/', '/-/', '/\//' ];
 			$pubno = preg_replace ( $removethese, '', $matter->PubNo );
 			if ( $CC == 'US' ) {
 				if ( $matter->GrtNo )
@@ -178,11 +172,11 @@ $(document).ready(function() {
 					$pubno = substr ( $pubno, 0, 4 ) . substr ( $pubno, - 6 );
 			}
 		}
-	?>
+		@endphp
 		@if ( $matter->container_id )
 		<tr>
 		@else
-		<tr class="info"> 
+		<tr class="table-info">
 		@endif
 			<td {!! $matter->dead ? 'style="text-decoration: line-through"' : '' !!}><a href="/matter/{{ $matter->id }}" target="_blank">{{ $matter->Ref }}</a></td>
 			<td>{{ $matter->Cat }}</td>
@@ -207,23 +201,28 @@ $(document).ready(function() {
 			<td class="display_status">{{ $matter->Granted }}</td>
 			<td class="display_status">{{ $matter->GrtNo }}</td>
 		</tr>
-	@endforeach
-		<tr><td colspan="9">&nbsp;</td></tr>
+		@endforeach
 		<tr>
-			<td colspan="9" style="position: fixed; bottom: 0px;">
-				<ul class="pager" style="margin: 0px;">
-					<li class="previous" onclick="$('#matter-list').load('{!! $matters->previousPageUrl() !!}' + ' #matter-list > tr', function() {
-						contentUpdated();
-						window.history.pushState('', 'phpIP' , '{!! $matters->previousPageUrl() !!}');
-					});"><button type="button"><i class="glyphicon glyphicon-chevron-left"></i></button></li>
-					<li class="next" onclick="$('#matter-list').load('{!! $matters->nextPageUrl() !!}' + ' #matter-list > tr', function() {
-						contentUpdated();
-						window.history.pushState('', 'phpIP' , '{!! $matters->nextPageUrl() !!}');
-					});"><button type="button"><i class="glyphicon glyphicon-chevron-right"></i></button></li>
-				</ul>
+			<td colspan="9">
+				<nav class="fixed-bottom">
+					<ul class="pagination justify-content-center">
+						<li class="page-item">
+							<a class="page-link" href="#" onclick="$('#matter-list').load('{!! $matters->previousPageUrl() !!}' + ' #matter-list > tr', function() {
+								contentUpdated();
+								window.history.pushState('', 'phpIP' , '{!! $matters->previousPageUrl() !!}');
+							});">&laquo;</a>
+						</li>
+						<li class="page-item">
+							<a class="page-link" href="#" onclick="$('#matter-list').load('{!! $matters->nextPageUrl() !!}' + ' #matter-list > tr', function() {
+								contentUpdated();
+								window.history.pushState('', 'phpIP' , '{!! $matters->nextPageUrl() !!}');
+							});">&raquo;</a>
+						</li>
+					</ul>
+				</nav>
 			</td>
 		</tr>
 	</tbody>
 </table>
-	
+
 @stop
