@@ -88,20 +88,20 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('country/autocomplete', function (Request $request) {
 		$term = $request->input('term');
-		$list = App\Country::select('name as label', 'iso as value')
+		$list = App\Country::select('name as value', 'iso as id')
 		->where('name', 'like', "$term%")->get();
 		return $list;
 	});
 
 	Route::get('category/autocomplete', function (Request $request) {
 		$term = $request->input('term');
-		return App\Category::select('category as label', 'code as value')
+		return App\Category::select('category as value', 'code as id')
 		->where('category', 'like', "$term%")->get();
 	});
 
 	Route::get('type/autocomplete', function (Request $request) {
 		$term = $request->input('term');
-		return App\Type::select('type as label', 'code as value')
+		return App\Type::select('type as value', 'code as id')
 		->where('type', 'like', "$term%")->get();
 	});
 

@@ -1,4 +1,4 @@
-<form id="createMatterForm">
+<form id="createMatterForm" class="ui-front">
   <div class="form-group row">
     <label for="category" class="col-3 col-form-label font-weight-bold">Category</label>
     <div class="col-9">
@@ -30,7 +30,7 @@
   <div class="form-group row">
     <label for="caseref" class="col-3 col-form-label font-weight-bold">Caseref</label>
     <div class="col-9">
-      @if ( $operation == 'child' )
+      @if ( $operation == 'child' || $operation == 'national')
         <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $matter->caseref or '' }}" disabled />
       @else
         <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $matter->caseref or '' }}" onFocus="this.select()" />
@@ -73,3 +73,59 @@
     <button type="button" id="createMatterSubmit" class="btn btn-primary float-right">Create</button>
   </div>
 </form>
+
+<script>
+	$('input#category').autocomplete({
+		minLength: 2,
+		source: "/category/autocomplete",
+    change: function (event, ui) {
+      if (!ui.item) {
+        $(this).val("");
+      }
+		},
+		select: function(event, ui) {
+      $(this).parent().find('[name="category_code"]').val(ui.item.id);
+		}
+	});
+
+  $('input#country, input#origin').autocomplete({
+		minLength: 2,
+		source: "/country/autocomplete",
+    change: function (event, ui) {
+      if (!ui.item) {
+        $(this).val("");
+      }
+		},
+		select: function(event, ui) {
+      $(this).parent().find('[type="hidden"]').val(ui.item.id);
+		}
+	});
+
+  $('input#type_code').autocomplete({
+		minLength: 0,
+		source: "/type/autocomplete",
+    change: function (event, ui) {
+      if (!ui.item) {
+        $(this).val("");
+      }
+		},
+		select: function(event, ui) {
+      $(this).parent().find('[name="type_code"]').val(ui.item.id);
+		}
+	}).focus(function () {
+    $(this).autocomplete("search", "");
+  });
+
+  $('input#responsible').autocomplete({
+		minLength: 2,
+		source: "/user/autocomplete",
+		change: function (event, ui) {
+      if (!ui.item) {
+        $(this).val("");
+      }
+		},
+		select: function(event, ui) {
+			this.value = ui.item.value;
+		}
+  });
+</script>
