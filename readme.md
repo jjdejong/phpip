@@ -1,4 +1,4 @@
-A port of phpIP from Zend Framework 1 to Laravel has begun here. It includes login functionality, the matter list page, and the matter detail page. It's lighting fast!
+A port of phpIP from Zend Framework 1 to Laravel is ongoing here.
 
 To use it, you need to apply the database update script in `/doc/scripts` to an existing `phpip` schema (the original or a copy - the changes are minor).
 
