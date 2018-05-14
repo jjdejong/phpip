@@ -82,18 +82,38 @@ class MatterController extends Controller {
 			'country' => 'required'
 		]);
 
-		$new_matter = Matter::create( $request->except(['_token', '_method', 'operation', 'origin_id', 'origin_container_id', 'priority']) );
-		//$origin = Matter::find($request->origin_id);
+		// Unique UID handling
+		$matters = Matter::where([
+			[ 'caseref', $request->caseref ],
+			[ 'country', $request->country ],
+			[ 'category_code', $request->category_code ],
+			[ 'origin', $request->origin ],
+			[ 'type_code', $request->type_code ]
+		]);
+
+		$idx = $matters->count();
+
+		if ($idx > 0) {
+			$request->request->add(['idx' => $idx + 1]);
+		}
+
+		try {
+			$new_matter = Matter::create( $request->except(['_token', '_method', 'operation', 'origin_id', 'origin_container_id', 'priority']) );
+		} catch (Exception $e) {
+			report($e);
+			return false;
+		}
 
 		if ( $request->operation != 'new' ) {
 			$origin_id = $request->origin_id;
-			// Copy all actors from original matter
+			$from_origin = [ $new_matter->id, $origin_id ];
+			// Copy non-shared actors from original matter
 			DB::statement("INSERT IGNORE INTO matter_actor_lnk (matter_id, actor_id, display_order, role, shared, actor_ref, company_id, rate, date)
 				SELECT ?, actor_id, display_order, role, shared, actor_ref, company_id, rate, date
 				FROM matter_actor_lnk
-				WHERE matter_id=?", [ $new_matter->id, $origin_id ]);
+				WHERE matter_id=? AND shared=0", $from_origin);
 
-			// Copy all classifiers (from original matter's container)
+			// Copy classifiers (from original matter's container)
 			DB::statement("INSERT INTO classifier (matter_id, type_code, value, url, value_id, display_order, lnk_matter_id)
 				SELECT ?, type_code, value, url, value_id, display_order, lnk_matter_id
 				FROM classifier WHERE matter_id=?", [ $new_matter->id, $request->input('origin_container_id', $origin_id) ]);
@@ -101,7 +121,7 @@ class MatterController extends Controller {
 			// Copy priority claims from original matter
 			DB::statement("INSERT INTO event (code, matter_id, event_date, alt_matter_id, detail, notes)
 				SELECT 'PRI', ?, event_date, alt_matter_id, detail, notes
-				FROM event WHERE matter_id=? AND code='PRI'", [ $new_matter->id, $origin_id ]);
+				FROM event WHERE matter_id=? AND code='PRI'", $from_origin);
 
 			if ( $request->operation == 'child' ) {
 				$new_matter->container_id = $request->input('origin_container_id', $origin_id);
@@ -118,12 +138,17 @@ class MatterController extends Controller {
 				$new_matter->save();
 			}
 
-			if ( $request->operation == 'clone' && $request->has('origin_container_id') ) {
-				// Copy all shared actors from original matter's container
+			if ( $request->operation == 'clone' ) {
+				// Copy shared actors from original matter or its container
+				if ( $request->has('origin_container_id') ) {
+					$from_matter = [ $new_matter->id, $request->origin_container_id ];
+				} else {
+					$from_matter = $from_origin;
+				}
 				DB::statement("INSERT IGNORE INTO matter_actor_lnk (matter_id, actor_id, display_order, role, shared, actor_ref, company_id, rate, date)
-					SELECT $new_matter->id, actor_id, display_order, role, shared, actor_ref, company_id, rate, date
+					SELECT ?, actor_id, display_order, role, shared, actor_ref, company_id, rate, date
 					FROM matter_actor_lnk
-					WHERE matter_id=$request->origin_container_id AND shared=1");
+					WHERE matter_id=? AND shared=1", $from_matter);
 			}
 		}
 
