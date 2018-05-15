@@ -2,7 +2,7 @@
 <style>
 .rule-input-wide {
 	display: inline-block;
-	width: 255px;
+	width: 200px;
 	border: 1px solid #FFF;
 	background: #FFF;
 	padding: 1px 2px;
@@ -144,13 +144,11 @@ input {
                 </span>
                 </td></tr>
         </table>
-		<button title="Delete rule" class="delete-rule" id="{{ $ruleInfo->rule_id }}" style="float: right; margin-top: 10px; margin-right: 16px;">
+		<button title="Delete rule" id="delete-rule" data-dismiss="modal" data-id="{{ $ruleInfo->rule_id }}" style="float: right; margin-top: 10px; margin-right: 16px;">
 			<span class="ui-icon ui-icon-trash" style="float: left;"></span>
 			Delete
 		</button>
 	</fieldset>
-
-	<input type="hidden" value="" id="country-code" name="country-code" /> 
 	
 </div>
 

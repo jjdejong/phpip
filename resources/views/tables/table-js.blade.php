@@ -138,7 +138,7 @@ $('#infoModal').on("click", 'input[name="for_category"]', function() {
                         if (!ui.item) $(this).val("");
                 },
                 select: function(event, ui) {
-                        this.value = ui.item.value;
+                        this.value = ui.item.id;
                         var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
                         $.post(resource + $(this).closest("table").data("id"), data)
                         .done(function () {
@@ -158,7 +158,7 @@ $('#infoModal').on("click", 'input[name="for_type"]', function() {
                         if (!ui.item) $(this).val("");
                 },
                 select: function(event, ui) {
-                        this.value = ui.item.value;
+                        this.value = ui.item.id;
                         var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
                         $.post(resource + $(this).closest("table").data("id"), data)
                         .done(function () {
@@ -207,11 +207,40 @@ $('#infoModal').on("click", 'input[name="responsible"].noformat', function() {
         });
 });
 
+$('#infoModal').on("focus", 'input[name$="date"].noformat', function() {
+	$(this).datepicker({
+		dateFormat: 'yy-mm-dd',
+		showButtonPanel: true,
+		onSelect: function(date, instance) {
+      $.ajax({
+        url: resource + $(this).closest("table").data("id"),
+        type: 'PUT',
+        data: $(this).serialize(),
+      }).done(function () {
+				$("#infoModal").find(".modal-body").load(relatedUrl);
+				$("#infoModal").find(".alert").removeClass("alert-danger").html("");
+			});
+		}
+	});
+});
+
 $('#rule-list').on("click",'.delete-from-list',function() {
-    var del_conf = confirm("Deleting rule from table.");
+    var del_conf = confirm("Deleting rule from table?");
     if(del_conf == 1) {
 	var data = $.param({ _token: csrf_token, _method: "DELETE" }) ;
 	$.post('/rule/' + $(this).closest("tr").data("id"), data).done(function(){
+		$('#listModal').find(".modal-body").load(relatedUrl);
+		});
+	refreshRuleList();
+    }
+    return false;
+});
+
+$('#infoModal').on("click",'#delete-rule',function() {
+    var del_conf = confirm("Deleting rule from table?");
+    if(del_conf == 1) {
+	var data = $.param({ _token: csrf_token, _method: "DELETE" }) ;
+	$.post('/rule/' + $(this).data("id"), data).done(function(){
 		$('#listModal').find(".modal-body").load(relatedUrl);
 		});
 	refreshRuleList();
@@ -270,7 +299,7 @@ $('#infoModal').on("click", 'input[name="for_country"],input[name="for_origin"]'
 			if (!ui.item) $(this).val("");
 		},
 		select: function(event, ui) {
-			this.value = ui.item.value;
+			this.value = ui.item.id;
 			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
 			$.post(resource + $(this).closest("table").data("id"), data)
 			.done(function () {
@@ -308,7 +337,7 @@ $('#infoModal').on("click", 'input[name="for_category"]', function() {
                         if (!ui.item) $(this).val("");
                 },
                 select: function(event, ui) {
-                        this.value = ui.item.value;
+                        this.value = ui.item.id;
                         var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
                         $.post(resource + $(this).closest("table").data("id"), data)
                         .done(function () {
@@ -328,7 +357,7 @@ $('#infoModal').on("click", 'input[name="for_type"]', function() {
                         if (!ui.item) $(this).val("");
                 },
                 select: function(event, ui) {
-                        this.value = ui.item.value;
+                        this.value = ui.item.id;
                         var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
                         $.post(resource + $(this).closest("table").data("id"), data)
                         .done(function () {
@@ -384,8 +413,8 @@ $('#addModal').on("click", 'input[name="for_country_new"]', function() {
                 },
                 select: function (event, ui) {
                         event.preventDefault();
-                        $(this).val(ui.item.label);
-                        $("input[name='for_country']").val( ui.item.value);
+                        $(this).val(ui.item.value);
+                        $("input[name='for_country']").val( ui.item.id);
                 }
         });
 });
@@ -399,8 +428,8 @@ $('#addModal').on("click", 'input[name="for_origin_new"]', function() {
                 },
                 select: function (event, ui) {
                         event.preventDefault();
-                        $(this).val(ui.item.label);
-                        $("input[name='for_origin']").val( ui.item.value);
+                        $(this).val(ui.item.value);
+                        $("input[name='for_origin']").val( ui.item.id);
                 }
         });
 });
@@ -414,8 +443,8 @@ $('#addModal').on("click", 'input[name="for_category_new"]', function() {
                 },
                 select: function (event, ui) {
                         event.preventDefault();
-                        $(this).val(ui.item.label);
-                        $("input[name='for_category']").val( ui.item.value);
+                        $(this).val(ui.item.value);
+                        $("input[name='for_category']").val( ui.item.id);
                 }
         });
 });
@@ -429,8 +458,8 @@ $('#addModal').on("click", 'input[name="for_type_new"]', function() {
                 },
                 select: function (event, ui) {
                         event.preventDefault();
-                        $(this).val(ui.item.label);
-                        $("input[name='for_type']").val( ui.item.value);
+                        $(this).val(ui.item.value);
+                        $("input[name='for_type']").val( ui.item.id);
                 }
         });
 });

@@ -57,7 +57,7 @@
       <td class="col-origin">{{ $rule->origin_name }}</td>
       <td class="col-type">{{ $rule->for_type_name }}</td>
     	<td class="col-delete" >
-    		<span class="float-right text-danger" id="{{ $rule->rule_id }}" title="Delete rule">&ominus;</span>
+    		<span class="delete-from-list float-right text-danger" id="{{ $rule->rule_id }}" title="Delete rule">&ominus;</span>
     	</td>
     </tr>
 @endforeach
