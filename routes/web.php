@@ -117,6 +117,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('ruleinfo/{rule}','RuleController@update');
 	Route::get('ruleadd','RuleController@addShow');
 	Route::put('ruleadd','RuleController@store');
+	
+	Route::get('actors','ActorController@index');
+	Route::delete('actors/{actor}','ActorController@delete');
+	Route::get('actorinfo/{actor}','ActorController@show');
+	Route::put('actorinfo/{actor}','ActorController@update');
+	Route::get('actoradd','ActorController@addShow');
+	Route::put('actoradd','ActorController@store');
 
   Route::resource('matter', 'MatterController');
   Route::apiResource('task', 'TaskController');

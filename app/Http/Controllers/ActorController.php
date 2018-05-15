@@ -12,9 +12,13 @@ class ActorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $Name = $request->input ( 'Name' );
+        $Phy_person = $request->input ( 'Phy_person' );
+        $actor = new Actor ;
+        $actorslist = $actor->actorsList($Name, $Phy_person);
+        return view('tables.actorlist', compact('actorslist') );
     }
 
     /**
@@ -44,9 +48,13 @@ class ActorController extends Controller
      * @param  \App\Actor  $actor
      * @return \Illuminate\Http\Response
      */
-    public function show(Actor $actor)
+    public function show($n)
     {
-        //
+		$actor = new Actor ;
+        $actorInfo = $actor->getActorInfo($n);
+        //dd($actorInfo);
+        $actorComments = $actor->getTableComments('actor');
+        return view('tables.actorinfo', compact('actorInfo', 'actorComments') );
     }
 
     /**
@@ -69,9 +77,9 @@ class ActorController extends Controller
      */
     public function update(Request $request, Actor $actor)
     {
-        //
+   	    	
+    	$actor->update($request->except(['_token', '_method']));
     }
-
     /**
      * Remove the specified resource from storage.
      *
