@@ -191,7 +191,11 @@ $(document).ready(function() {
 			<td class="display_actor">{{ $matter->ClRef }}</td>
 			<td class="display_actor">{{ $matter->Agent }}</td>
 			<td class="display_actor">{{ $matter->AgtRef }}</td>
-			<td class="display_actor small">{{ $matter->Title }}</td>
+			@if ( $matter->container_id )
+				<td class="display_actor small">{{ $matter->Title2 }}</td>
+			@else
+				<td class="display_actor small">{{ $matter->Title }}</td>
+			@endif
 			<td class="display_actor">{{ $matter->Inventor1 }}</td>
 			<td class="display_status">{{ $matter->Status_date }}</td>
 			<td class="display_status">{{ $matter->Filed }}</td>

@@ -116,18 +116,16 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 				data-target="#createMatterModal"
 				data-remote="false"
 				title="Create child {{ $matter->category->category }}">
-				&oplus;
-				New Child
+				&oplus; New Child
 			</a>
 			@if ( $matter->countryInfo->goesnational )
 			<a class="btn btn-outline-info btn-block btn-sm"
-				href="/matter/create?matter_id={{ $matter->id }}&operation=national"
+				href="/matter/{{ $matter->id }}/createN"
 				data-toggle="modal"
 				data-target="#createMatterModal"
 				data-remote="false"
 				title="Enter {{ $matter->category->category }} in national phase">
-				&#9872;
-				Enter Nat. Phase
+				&#9872; Enter Nat. Phase
 			</a>
 			@endif
 		</div>
