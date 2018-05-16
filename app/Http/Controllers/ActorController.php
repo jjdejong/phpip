@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Actor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Response;
 
 class ActorController extends Controller
 {
@@ -39,7 +41,22 @@ class ActorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+    	$validator = Validator::make($request->all(), [
+			'name' => 'required'
+    	]);
+    	$input = $request->all();
+    	$to_retain = ['_token', '_method'];
+    	if($validator->passes()){
+			foreach ($input as $i =>$value) {				
+				if (strpos($i, '_new')) {
+					array_push($to_retain,$i);
+				}
+			}
+			
+			Actor::create($request->except($to_retain));
+			return Response::json(['success' => '1']);
+		}
+		return Response::json(['errors' => $validator->errors()]);
     }
 
     /**
@@ -55,6 +72,18 @@ class ActorController extends Controller
         //dd($actorInfo);
         $actorComments = $actor->getTableComments('actor');
         return view('tables.actorinfo', compact('actorInfo', 'actorComments') );
+    }
+
+    /**
+     * Display the content of modal view to add an actor.
+     */
+    public function addShow()
+
+    {
+        $actor = new Actor ;
+        //TODO getTableComments is the same as in Rule.php. To render common
+        $tableComments = $actor->getTableComments('actor');
+        return view('tables.actoradd',compact('tableComments'));
     }
 
     /**
@@ -86,8 +115,9 @@ class ActorController extends Controller
      * @param  \App\Actor  $actor
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Actor $actor)
+    public function delete(Actor $actor)
     {
-        //
+    	$actor->delete();
     }
+
 }

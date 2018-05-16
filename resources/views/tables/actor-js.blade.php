@@ -39,7 +39,7 @@ $(document).ready(function() {
 
 });
 
-// Generic in-place edition of fields in a listModal
+// Generic in-place edition of fields in a infoModal
 
 $("#infoModal").on("keypress", "input.noformat", function (e) {
 	if (e.which == 13) {
@@ -105,7 +105,7 @@ $('#infoModal').on("click", 'input[name="company_id"],input[name="parent_id"],in
 			if (!ui.item) $(this).val("");
 		},
 		select: function(event, ui) {
-			this.value = ui.item.value;
+			this.value = ui.item.id;
 			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
 			$.post(resource + $(this).closest("table").data("id"), data)
 			.done(function () {
@@ -118,7 +118,7 @@ $('#infoModal').on("click", 'input[name="company_id"],input[name="parent_id"],in
 $('#actor-list').on("click",'.delete-from-list',function() {
     var del_conf = confirm("Deleting actor from table?");
     if(del_conf == 1) {
-	var data = $.param({ _token: csrf_token, _method: "DELETE" }) ;
+	var data = $.param({ _method: "DELETE" }) ;
 	$.post('/actors/' + $(this).closest("tr").data("id"), data).done(function(){
 		$('#listModal').find(".modal-body").load(relatedUrl);
 		});
@@ -127,9 +127,20 @@ $('#actor-list').on("click",'.delete-from-list',function() {
     return false;
 });
 
+$('#infoModal').on("click",'.delete-actor',function() {
+    var del_conf = confirm("Deleting actor from table?");
+    if(del_conf == 1) {
+	var data = $.param({ _method: "DELETE" }) ;
+	$.post('/actors/' + $(this).data("id"), data).done(function(){
+		$('#listModal').find(".modal-body").load(relatedUrl);
+		});
+    }
+    return false;
+});
+
 // For creation rule modal view
 
-$('#addModal').on("click", 'input[name^="country"],input[name="nationality"]', function() {
+$('#addModal').on("click", 'input[name="nationality_new"]', function() {
          $(this).autocomplete({
                 minLength: 1,
                 source: "/country/autocomplete",
@@ -138,13 +149,13 @@ $('#addModal').on("click", 'input[name^="country"],input[name="nationality"]', f
                 },
                 select: function (event, ui) {
                         event.preventDefault();
-                        $(this).val(ui.item.label);
-                        $("input[name='for_country']").val( ui.item.value);
+                        $(this).val(ui.item.value);
+                        $('input[name="nationality"]').val(ui.item.id);
                 }
         });
 });
 
-$('#addModal').on("click", 'input[name="for_origin_new"]', function() {
+$('#addModal').on("click", 'input[name="country_new"]', function() {
          $(this).autocomplete({
                 minLength: 1,
                 source: "/country/autocomplete",
@@ -153,111 +164,112 @@ $('#addModal').on("click", 'input[name="for_origin_new"]', function() {
                 },
                 select: function (event, ui) {
                         event.preventDefault();
-                        $(this).val(ui.item.label);
-                        $("input[name='for_origin']").val( ui.item.value);
+                        $(this).val(ui.item.value);
+                        $('input[name="country"]').val(ui.item.id);
                 }
         });
 });
 
-$('#addModal').on("click", 'input[name="for_category_new"]', function() {
+$('#addModal').on("click", 'input[name="country_mailing_new"]', function() {
          $(this).autocomplete({
                 minLength: 1,
-                source: "/category/autocomplete",
+                source: "/country/autocomplete",
                 change: function (event, ui) {
                         if (!ui.item) $(this).val("");
                 },
                 select: function (event, ui) {
                         event.preventDefault();
-                        $(this).val(ui.item.label);
-                        $("input[name='for_category']").val( ui.item.value);
+                        $(this).val(ui.item.value);
+                        $('input[name="country_mailing"]').val(ui.item.id);
                 }
         });
 });
 
-$('#addModal').on("click", 'input[name="for_type_new"]', function() {
+$('#addModal').on("click", 'input[name="country_billing_new"]', function() {
          $(this).autocomplete({
                 minLength: 1,
-                source: "/type/autocomplete",
+                source: "/country/autocomplete",
                 change: function (event, ui) {
                         if (!ui.item) $(this).val("");
                 },
                 select: function (event, ui) {
                         event.preventDefault();
-                        $(this).val(ui.item.label);
-                        $("input[name='for_type']").val( ui.item.value);
+                        $(this).val(ui.item.value);
+                        $('input[name="country_billing"]').val(ui.item.id);
                 }
         });
 });
 
-$('#addModal').on("click", 'input[name="trigger_event_new"]', function() {
+$('#addModal').on("click", 'input[name="drole_new"]', function() {
          $(this).autocomplete({
                 minLength: 1,
-                source: "/task-name/autocomplete/0",
+                source: "/role/autocomplete",
                 change: function (event, ui) {
                         if (!ui.item) $(this).val("");
                 },
                 select: function (event, ui) {
                         event.preventDefault();
                         $(this).val(ui.item.label);
-                        $("input[name='trigger_event']").val( ui.item.value);
+                        $('input[name="default_role"]').val(ui.item.value);
                 }
         });
 });
-
-$('#addModal').on("click", 'input[name="condition_event_new"]', function() {
+$('#addModal').on("click", 'input[name="parent_new"]', function() {
          $(this).autocomplete({
                 minLength: 1,
-                source: "/task-name/autocomplete/0",
+                source: "/actor/autocomplete",
                 change: function (event, ui) {
                         if (!ui.item) $(this).val("");
                 },
                 select: function (event, ui) {
                         event.preventDefault();
                         $(this).val(ui.item.label);
-                        $("input[name='condition_event']").val( ui.item.value);
-                }
-        });
-});
-$('#addModal').on("click", 'input[name="responsible_new"]', function() {
-         $(this).autocomplete({
-                minLength: 2,
-                source: "/user/autocomplete",
-                change: function (event, ui) {
-                        if (!ui.item) $(this).val("");
-                },
-                select: function (event, ui) {
-                        event.preventDefault();
-                        $(this).val(ui.item.label);
-                        $("input[name='responsible']").val( ui.item.value);
+                        $('input[name="parent_id"]').val(ui.item.value);
                 }
         });
 });
 
-$('#addModal').on("click", 'input[name="abort_on_new"]', function() {
+$('#addModal').on("click", 'input[name="company_new"]', function() {
          $(this).autocomplete({
                 minLength: 1,
-                source: "/event/autocomplete",
+                source: "/actor/autocomplete",
                 change: function (event, ui) {
                         if (!ui.item) $(this).val("");
                 },
                 select: function (event, ui) {
                         event.preventDefault();
                         $(this).val(ui.item.label);
-                        $("input[name='abort_on']").val( ui.item.value);
+                        $('input[name="company_id"]').val(ui.item.value);
                 }
         });
 });
 
-$(document).on("submit", "#createRuleForm", function(e) {
+$('#addModal').on("click", 'input[name="site_new"]', function() {
+         $(this).autocomplete({
+                minLength: 1,
+                source: "/actor/autocomplete",
+                change: function (event, ui) {
+                        if (!ui.item) $(this).val("");
+                },
+                select: function (event, ui) {
+                        event.preventDefault();
+                        $(this).val(ui.item.label);
+                        $('input[name="site_id"]').val(ui.item.value);
+                }
+        });
+});
+
+$(document).on("submit", "#createActorForm", function(e) {
 	e.preventDefault();
 	var $form = $(this);
-	var request = $("#createRuleForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
+	var request = $("#createActorForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
 	var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + request;
 	console.log(request);
-	$.post('/ruleadd', data,function(response) {
+	$.post('/actoradd', data,function(response) {
 		if(response.success) {
-			window.alert("Rule created.");
-			$('#addModal').modal("hide");}
+			window.alert("Actor created.");
+			$('#addModal').modal("hide");
+			refreshActorList();}
 		else {
 		associate_errors(response['errors'],$form);
 		}
@@ -270,7 +282,7 @@ function associate_errors(errors,$form) {
 	for(index in errors) {
 		value = errors[index][0];
 		console.log(index, value);
-		document.getElementById('error-box').innerHTML+=ivalue + '<BR />';
+		document.getElementById('error-box').innerHTML+=value + '<BR />';
 	};
 }
 </script>

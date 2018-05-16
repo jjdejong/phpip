@@ -45,7 +45,7 @@
   <tbody id="actor-list">
 
 @foreach ($actorslist as $actor)
-    <tr class="rule-list-row" data-id="{{ $actor->id }}">
+    <tr class="actor-list-row" data-id="{{ $actor->id }}">
     	<td class="col-name"><a href="/actorinfo/{{ $actor->id }}" class="hidden-action" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Actor data" data-resource="/actorinfo/">
 								{{ $actor->name }}</a></td>
     	<td class="col-trigger">{{ $actor->first_name }}</td>
@@ -59,7 +59,7 @@
 			@endif
 		</td>
     	<td class="col-delete" >
-    		<span class="float-right text-danger" id="{{ $actor->id }}" title="Delete actor">&ominus;</span>
+    		<span class="delete-from-list float-right text-danger" data-id="{{ $actor->id }}" title="Delete actor">&ominus;</span>
     	</td>
     </tr>
 @endforeach

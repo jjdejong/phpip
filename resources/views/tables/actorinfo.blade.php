@@ -2,7 +2,7 @@
 <style>
 .actor-input-wide {
 	display: inline-block;
-	width: 230px;
+	width: 200px;
 	border: 1px solid #FFF;
 	background: #FFF;
 	padding: 1px 2px;
@@ -77,7 +77,7 @@ input {
                 		<input type="text" class="actor-input-wide" id="company_id" name="company_id" value="{{ $actorInfo->company_name }}">
                 <td><label for="parent_id" title="{{ $actorComments['parent_id'] }}">Parent company</label>
                 </td><td class="ui-front">
-                		<input type="text" class="actor-input-wide" id="parent_id" name="parent_id" value="{{ $actorInfo->parent_name }}">
+                		<input type="text" class="actor-input-narrow" id="parent_id" name="parent_id" value="{{ $actorInfo->parent_name }}">
                 </tr><tr><td><label for="site_id" title="{{ $actorComments['site_id'] }}">Work site</label>
                 </td><td class="ui-front">
                 		<input type="text" class="actor-input-wide" id="site_id" name="site_id" value="{{ $actorInfo->site_name }}">
@@ -130,27 +130,26 @@ input {
         <fieldset class="actor-info-set">
               <legend>Contact details</legend>
               <table data-id="{{ $actorInfo->id }}">
-				<tr><td><label for="warn" title="{{ $actorComments['warn'] }}">Warn</label>
+				<tr><td><label for="VAT_number" title="{{ $actorComments['VAT_number'] }}" >VAT no.</label>
+                </td><td><input type='text' class="actor-input-wide noformat" name="VAT_number" value="{{ $actorInfo->VAT_number }}">
+                </td><td><label for="warn" title="{{ $actorComments['warn'] }}">Warn</label>
                 </td><td><span class="actor-input-narrow" name="warn">
                         <input type="radio" name="warn" value="1" {{ $actorInfo->warn ? 'checked=checked' : "" }}/>YES&nbsp;&nbsp;
                         <input type="radio" name="warn" value="0" {{ $actorInfo->warn ? "" : 'checked=checked' }}/>NO
                 </span>
-                </td><td><label for="VAT_number" title="{{ $actorComments['VAT_number'] }}">VAT no.</label>
-                </td><td class="ui-front">
-						<input type='text' class="actor-input-narrow  noformat" name="VAT_number" value="{{ $actorInfo->VAT_number }}">
-                </td></tr>
-				</tr><tr><td><label for="notes" title="{{ $actorComments['notes'] }}">Notes</label>
-                </td><td class="ui-front">
-					<input type='text' class="actor-input-wide" name="notes" value="{{ $actorInfo->notes }}">
+                </td></tr><tr><td><label for="registration_no" title="{{ $actorComments['registration_no'] }}" >Registration no.</label>
+                </td><td><input type='text' class="actor-input-wide noformat" name="registration_no" value="{{ $actorInfo->registration_no }}">
+                </td><td><label for="registration_no" title="{{ $actorComments['legal_form'] }}" >Legal form</label>
+                </td><td><input type='text' class="actor-input-wide noformat" name="legal_form" value="{{ $actorInfo->legal_form }}">
+                </td></tr><tr><td><label for="notes" title="{{ $actorComments['notes'] }}">Notes</label>
+                </td><td><input type='text' class="actor-input-wide" name="notes" value="{{ $actorInfo->notes }}">
                 </td></tr>
         </table>
-		<button title="Delete actor" class="delete-actor" id="{{ $actorInfo->id }}" style="float: right; margin-top: 10px; margin-right: 16px;">
+		<button title="Delete actor" class="delete-actor" data-dismiss="modal" data-id="{{ $actorInfo->id }}" style="float: right; margin-top: 10px; margin-right: 16px;">
 			<span class="ui-icon ui-icon-trash" style="float: left;"></span>
 			Delete
 		</button>
 	</fieldset>
-
-	<input type="hidden" value="" id="country-code" name="country-code" /> 
 	
 </div>
 
