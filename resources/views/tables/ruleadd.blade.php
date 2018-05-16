@@ -2,7 +2,7 @@
 <style>
 .rule-input-wide {
 	display: inline-block;
-	width: 255px;
+	width: 200px;
 	border: 1px solid #FFF;
 	background: #FFF;
 	padding: 1px 2px;
@@ -32,16 +32,6 @@
 	padding: 2px 4px 0px;
 	cursor: pointer;
 	font-family: arial;
-}
-
-.validation-errors {
-	color: #F00;
-	padding: 5px;
-}
-
-#valid-error {
-	display: block;
-	margin: 0px 0px 5px 10px;
 }
 
 .rule-info-set {
