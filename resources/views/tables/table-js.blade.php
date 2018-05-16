@@ -266,6 +266,15 @@ $('#addModal').on("click", 'input[name="task_new"]', function() {
         });
 });
 
+$('#addModal').on("focus", 'input[name^="use"].noformat', function() {
+    $(this).datepicker({
+	dateFormat: 'yy-mm-dd',
+	showButtonPanel: true,
+	onSelect: function(date) {
+                        $(this).val(date);
+	}
+    });
+});
 $('#addModal').on("click", 'input[name="for_country_new"]', function() {
          $(this).autocomplete({
                 minLength: 1,
