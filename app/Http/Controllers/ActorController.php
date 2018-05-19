@@ -17,7 +17,7 @@ class ActorController extends Controller
     public function index(Request $request)
     {
         $Name = $request->input ( 'Name' );
-        $Phy_person = $request->input ( 'Phy_person' );
+        $Phy_person = $request->input ( 'phy_person' );
         $actor = new Actor ;
         $actorslist = $actor->actorsList($Name, $Phy_person);
         return view('tables.actorlist', compact('actorslist') );

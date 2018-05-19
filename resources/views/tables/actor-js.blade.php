@@ -58,6 +58,12 @@ $("#infoModal").on("keypress", "input.noformat", function (e) {
 		$(this).parent("td").addClass("bg-warning");
 });
 
+//$('.filter-input:input').onclick( function() {
+$('.filter-input').on('click','input[type="radio"]', function() {
+	refreshActorList();
+	}
+);
+	
 $('.filter-input').keyup(_.debounce(function(){
 	if($(this).val().length != 0)
 	    $(this).css("background-color", "bisque");

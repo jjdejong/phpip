@@ -36,7 +36,11 @@
     	<th>First name</th>
     	<th>Display name</th>
     	<th>Company</th>
-    	<th><input class="filter-input form-control form-control-sm" name="Phy_person" placeholder="Person" value="{{ old('Phy_person') }}"></th>
+    	<th><label for="phy_person" name="phy_person">Person</label>
+                <br />
+                        <input class="filter-input" type="radio" name="phy_person" value="1" />Physical&nbsp;
+                        <input class="filter-input" type="radio" name="phy_person" value="0" />Legal&nbsp;
+                        <input class="filter-input" type="radio" name="phy_person" value="" checked=checked />Both
     	<th>Delete</th>
     </tr>
   </thead>
