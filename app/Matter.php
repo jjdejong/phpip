@@ -61,6 +61,10 @@ class Matter extends Model {
 		return $this->hasMany('App\MatterActors');
 	}
 
+	public function actorsCtnr() {
+		return $this->belongsToMany('App\Actor', 'matter_actor_lnk')->withPivot('role', 'display_order', 'actor_ref', 'company_id', 'shared', 'date', 'rate');
+	}
+
 	public function events()
 	{
 		return $this->hasMany('App\Event')
@@ -87,10 +91,6 @@ class Matter extends Model {
 
 	public function status()
 	{
-		/*\Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
-		 var_dump($query->sql);
-		 var_dump($query->bindings);
-		 });*/
 		return $this->hasOne('App\Event')
 		->latest('event_date');
 	}
@@ -121,6 +121,11 @@ class Matter extends Model {
 	{
 			return $this->hasMany('App\MatterClassifiers')
 			->where('main_display', 0);
+	}
+
+	public function classifiersCtnr()
+	{
+			return $this->hasMany('App\Classifier');
 	}
 
 	public function titles()
@@ -287,6 +292,11 @@ class Matter extends Model {
 		} else {
 			$matters = $query->get ();
 		}
+
+		/*\Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
+		 var_dump($query->sql);
+		 var_dump($query->bindings);
+		 });*/
 
 		return $matters;
 	}

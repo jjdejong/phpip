@@ -78,8 +78,10 @@ class MatterController extends Controller {
 	public function store(Request $request)
 	{
 		$this->validate($request, [
+			'category_code' => 'required',
 			'caseref' => 'required',
-			'country' => 'required'
+			'country' => 'required',
+			'responsible' => 'required'
 		]);
 
 		// Unique UID handling

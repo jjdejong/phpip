@@ -39,6 +39,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('matter/{matter}/tasks', 'MatterController@tasks');
 	Route::get('matter/{matter}/renewals', 'MatterController@renewals');
   Route::get('matter/{matter}/roleActors/{role}', 'MatterController@actors');
+  Route::get('matter/{matter}/createN', function (Matter $matter) {
+    return view('matter.createN', compact('matter'));
+  });
 
 	Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
 		$term = $request->input('term');

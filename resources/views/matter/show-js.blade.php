@@ -68,7 +68,7 @@ $(document).ready(function() {
       	$.post('/actor-pivot', request)
       	.fail(function(errors) {
       		$.each(errors.responseJSON.errors, function (key, item) {
-      			currentForm.find('input[name=' + key + ']').attr("placeholder", item);
+      			currentForm.find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
       		});
           currentForm.parents(".popover-body").find(".alert").html(errors.responseJSON.message).removeClass("d-none");
     	  })
@@ -164,7 +164,7 @@ $("#titlePanel").on("click", "#addTitleSubmit", function() {
 		$('#titlePanel').load("/matter/" + matter_id + " #titlePanel > div");
 	}).fail(function(errors) {
 		$.each(errors.responseJSON.errors, function (key, item) {
-			$("#addTitleForm").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("bg-danger");
+			$("#addTitleForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
 		});
 	});
 });
@@ -341,7 +341,7 @@ $("#listModal").on("click", "#addTaskSubmit", function() {
 		$('#listModal').find(".modal-body").load("/matter/" + matter_id + "/tasks");
 	}).fail(function(errors) {
 		$.each(errors.responseJSON.errors, function (key, item) {
-      $("#addTaskForm").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("bg-danger");
+      $("#addTaskForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
 		});
 	});
 });
@@ -400,7 +400,7 @@ $("#listModal").on("click", "#addEventSubmit", function() {
 		$('#listModal').find(".modal-body").load("/matter/" + matter_id + "/events");
 	}).fail(function(errors) {
 		$.each(errors.responseJSON.errors, function (key, item) {
-			$("#addEventForm").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("bg-danger");
+			$("#addEventForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
 		});
 	});
 });
@@ -419,7 +419,7 @@ $('#classifiersModal').on("keypress", "input.noformat", function (e) {
 			$("#classifiersModal").find(".alert").removeClass("alert-danger").html("");
 		}).fail(function(errors) {
 			$.each(errors.responseJSON.errors, function (key, item) {
-				$("#classifiersModal").find(".modal-footer .alert").html(item).addClass("bg-danger");
+				$("#classifiersModal").find(".modal-footer .alert").html(item).addClass('alert-danger');
 			});
 		});
 	} else
@@ -480,7 +480,7 @@ $("#classifiersModal").on("click", "#addClassifierSubmit", function() {
 		$('#classifiersModal').load("/matter/" + matter_id + " #classifiersModal > div");
 	}).fail(function(errors) {
 		$.each(errors.responseJSON.errors, function (key, item) {
-			$("#addClassifierForm").find('input[name=' + key + ']').attr("placeholder", item).parent().addClass("bg-danger");
+			$("#addClassifierForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
 		});
 	});
 });

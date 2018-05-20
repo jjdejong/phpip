@@ -33,13 +33,17 @@
   <div class="form-group row">
     <label for="caseref" class="col-3 col-form-label font-weight-bold">Caseref</label>
     <div class="col-9">
-      <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $matter->caseref or '' }}" onFocus="this.select()" />
+      @if ( $operation == 'child' )
+        <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $matter->caseref or '' }}" readonly />
+      @else
+        <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $matter->caseref or '' }}" onFocus="this.select()" />
+      @endif
     </div>
   </div>
   <div class="form-group row">
     <label for="responsible" class="col-3 col-form-label font-weight-bold">Responsible</label>
     <div class="col-9">
-      <input type="text" class="form-control" id="responsible" name="responsible" value="{{ $matter->responsible or '' }}" required onFocus="this.select()" />
+      <input type="text" class="form-control" id="responsible" name="responsible" value="{{ $matter->responsible or '' }}" onFocus="this.select()" />
     </div>
   </div>
 
@@ -133,7 +137,7 @@
     $.post('/matter', request)
     .fail(function(errors) {
       $.each(errors.responseJSON.errors, function (key, item) {
-        $("#createMatterForm").find('input[name=' + key + ']').attr("placeholder", item).css('background-color', '#f8d7da');
+        $("#createMatterForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
       });
       $("#createMatterForm").after('<div class="alert alert-danger" role="alert">' + errors.responseJSON.message + '</div>');
     })
