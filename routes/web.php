@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('matter/{matter}/createN', function (Matter $matter) {
     return view('matter.createN', compact('matter'));
   });
+  Route::post('matter/storeN', 'MatterController@storeN');
 
 	Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
 		$term = $request->input('term');
@@ -120,7 +121,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('ruleinfo/{rule}','RuleController@update');
 	Route::get('ruleadd','RuleController@addShow');
 	Route::put('ruleadd','RuleController@store');
-	
+
 	Route::get('actors','ActorController@index');
 	Route::delete('actors/{actor}','ActorController@delete');
 	Route::get('actorinfo/{actor}','ActorController@show');

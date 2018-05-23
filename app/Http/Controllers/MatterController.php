@@ -96,7 +96,7 @@ class MatterController extends Controller {
 		$idx = $matters->count();
 
 		if ($idx > 0) {
-			$request->request->add(['idx' => $idx + 1]);
+			$request->merge(['idx' => $idx + 1]);
 		}
 
 		try {
@@ -155,6 +155,68 @@ class MatterController extends Controller {
 		}
 
 		return route('matter.show', [$new_matter]);
+	}
+
+	/**
+	 * Store multiple newly created resources in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function storeN(Request $request)
+	{
+		$this->validate($request, [
+			'ncountry' => 'required:array'
+		]);
+
+
+		foreach ($request->ncountry as $country) {
+
+			$request->merge(['country' => $country]);
+
+			try {
+				$new_matter = Matter::create( $request->except(['_token', '_method', 'ncountry', 'origin_id', 'origin_container_id']) );
+			} catch (Exception $e) {
+				report($e);
+				return false;
+			}
+
+			$origin_id = $request->origin_id;
+			$from_origin = [ $new_matter->id, $origin_id ];
+			// Copy non-shared actors from original matter
+			DB::statement("INSERT IGNORE INTO matter_actor_lnk (matter_id, actor_id, display_order, role, shared, actor_ref, company_id, rate, date)
+				SELECT ?, actor_id, display_order, role, shared, actor_ref, company_id, rate, date
+				FROM matter_actor_lnk
+				WHERE matter_id=? AND shared=0", $from_origin);
+
+			// Copy classifiers (from original matter's container, or from original matter if there is no container)
+			DB::statement("INSERT INTO classifier (matter_id, type_code, value, url, value_id, display_order, lnk_matter_id)
+				SELECT ?, type_code, value, url, value_id, display_order, lnk_matter_id
+				FROM classifier WHERE matter_id=?", [ $new_matter->id, $request->input('origin_container_id', $origin_id) ]);
+
+			// Copy priority claims from original matter
+			DB::statement("INSERT INTO event (code, matter_id, event_date, alt_matter_id, detail, notes)
+				SELECT 'PRI', ?, event_date, alt_matter_id, detail, notes
+				FROM event WHERE matter_id=? AND code='PRI'", $from_origin);
+
+			// Copy filing from original matter
+			DB::statement("INSERT INTO event (code, matter_id, event_date, detail, notes)
+				SELECT 'FIL', ?, event_date, detail, notes
+				FROM event WHERE matter_id=? AND code='FIL'", $from_origin);
+
+			// Insert "entered" event
+			$entered = new Event;
+			$entered->matter_id = $new_matter->id;
+			$entered->code = 'ENT';
+			$entered->event_date = date('Y-m-d');
+			$entered->save();
+
+			$new_matter->parent_id = $origin_id;
+			$new_matter->container_id = $request->input('origin_container_id', $origin_id);
+			$new_matter->save();
+		}
+
+		return "/matter?Ref=$request->caseref";
 	}
 
 	/**

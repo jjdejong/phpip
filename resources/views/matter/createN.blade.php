@@ -1,77 +1,31 @@
-{{-- <form id="nationalizeMatterForm" class="ui-front">
-  <div class="form-group row">
-    <label for="category" class="col-3 col-form-label font-weight-bold">Category</label>
-    <div class="col-9">
-      <input type="hidden" name="category_code" value="{{ $matter->category_code }}" />
-      <input type="text" class="form-control" id="category" value="{{ $matter->category->category }}" readonly />
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="country" class="col-3 col-form-label font-weight-bold">Country</label>
-    <div class="col-9">
-      <input type="hidden" name="country" value="{{ $matter->country }}" />
-      <input type="text" class="form-control" id="country" value="{{ $matter->countryInfo->name }}" onFocus="this.select()" />
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="origin" class="col-3 col-form-label">Origin</label>
-    <div class="col-9">
-      <input type="hidden" name="origin" value="{{ $matter->country }}" />
-      <input type="text" class="form-control" id="origin" value="{{ $matter->countryInfo->name }}" readonly />
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="type_code" class="col-3 col-form-label">Type</label>
-    <div class="col-9">
-      <input type="hidden" name="type_code" value="{{ $matter->type_code or '' }}" />
-      <input type="text" class="form-control" id="type_code" value="{{ @$matter->type->type or '' }}" onFocus="this.select()" />
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="caseref" class="col-3 col-form-label font-weight-bold">Caseref</label>
-    <div class="col-9">
-      <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $matter->caseref }}" readonly />
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="responsible" class="col-3 col-form-label font-weight-bold">Responsible</label>
-    <div class="col-9">
-      <input type="text" class="form-control" id="responsible" name="responsible" value="{{ $matter->responsible or '' }}" required onFocus="this.select()" />
-    </div>
-  </div>
-
-  <div>
-    <button type="button" id="createMatterSubmit" class="btn btn-primary float-right">Create</button>
-  </div>
-</form> --}}
-
-<form id="natMatterForm">
+<form id="natMatterForm" class="ui-front">
 	<input type="hidden" name="caseref" value="{{ $matter->caseref }}" />
 	<input type="hidden" name="category_code" value="{{ $matter->category_code }}" />
-	<input type="hidden" name="origin" value="{{ $matter->country_code }}" />
+	<input type="hidden" name="origin" value="{{ $matter->country }}" />
   <input type="hidden" name="type_code" value="{{ $matter->type_code }}" />
   <input type="hidden" name="idx" value="{{ $matter->idx }}" />
-	<label>Country</label>
-	<label>Entered date</label>
-	<div id="national-phases">
-@foreach( $matter->countryInfo->natcountries as $iso => $name )
-		<div id="nmp-{{ $iso }}">
-			<input type="hidden" name="ncountry[{{ $iso }}]" value="{{ $name }}" />
-			<span class="national-countries">{{ $name }}</span>
-			<input type="text" name="entered_date[{{ $iso }}]" class="entered-date" id="{{ $iso }}" />
-			<input type="hidden" name="alt_entered_date[{{ $iso }}]" id="alt-entered-date-{{ $iso }}" />
-			<span class="national-matter-remove" id="{{ $iso }}" title="Remove">&minus;</span>
-		</div>
-@endforeach
+	<input type="hidden" name="origin_id" value="{{ $matter->id }}" />
+  <input type="hidden" name="origin_container_id" value="{{ $matter->container_id or '' }}" />
+  <input type="hidden" name="responsible" value="{{ $matter->responsible }}" />
+	<div id="ncountries">
+    @foreach( $matter->countryInfo->natcountries as $iso => $name )
+      <div class="input-group" id="country-{{ $iso }}">
+        <input type="hidden" name="ncountry[]" value="{{ $iso }}" />
+    		<input type="text" class="form-control" readonly value="{{ $name }}" />
+        <div class="input-group-append">
+          <button class="btn btn-outline-danger" type="button" id="{{ $iso }}" title="Remove {{ $iso }}">&CircleMinus;</button>
+        </div>
+      </div>
+    @endforeach
 	</div>
-	<div id="nmp-add">
-		<span title="Add">&plus;</span>
-		<label for="additional-country"></label>
-		<input type="text" id="additional-country" value="" />
+	<div class="input-group">
+    <input type="text" class="form-control" placeholder="Add country" id="country" />
+    <div class="input-group-append">
+      <span class="input-group-text">&oplus;</span>
+    </div>
 	</div>
 	<div id="add-matter-actions">
-		<input type="button" name="national-matter-cancel" id="national-matter-cancel" value="Cancel" />
-		<input type="button" name="national-matter-submit" id="national-matter-submit" value="Submit" />
+		<button type="button" class="btn btn-primary" id="nationalizeSubmit">Submit</button>
 	</div>
 </form>
 
@@ -80,41 +34,37 @@
   $('input#country').autocomplete({
 		minLength: 2,
 		source: "/country/autocomplete",
-    change: function (event, ui) {
-      if (!ui.item) {
-        $(this).val("");
-      }
-		},
 		select: function(event, ui) {
-      $(this).parent().find('[type="hidden"]').val(ui.item.id);
+			var new_country = '<div class="input-group" id="country-' + ui.item.id + '"> \
+        <input type="hidden" name="ncountry[]" value="' + ui.item.id + '" /> \
+    		<input type="text" class="form-control" readonly value="' + ui.item.value + '" /> \
+        <div class="input-group-append"> \
+          <button class="btn btn-outline-danger" type="button" id="' + ui.item.id + '" title="Remove ' + ui.item.id + '">&CircleMinus;</button> \
+        </div> \
+      </div>';
+			$('#ncountries').append(new_country);
+		},
+		close: function (event, ui) {
+      $(this).val("");
 		}
 	});
 
-  $('input#type_code').autocomplete({
-		minLength: 0,
-		source: "/type/autocomplete",
-    change: function (event, ui) {
-      if (!ui.item) {
-        $(this).val("");
-      }
-		},
-		select: function(event, ui) {
-      $(this).parent().find('[name="type_code"]').val(ui.item.id);
-		}
-	}).focus(function () {
-    $(this).autocomplete("search", "");
+	$("#nationalizeSubmit").click( function() {
+    var request = $("#natMatterForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
+    $.post('/matter/storeN', request)
+    .fail(function(errors) {
+      $("#natMatterForm").after('<div class="alert alert-danger" role="alert">' + errors.responseJSON.message + '</div>');
+			$.each(errors.responseJSON.errors, function (key, item) {
+        $(".alert-danger").append("<br>- " + item);
+      });
+    })
+    .done(function(data) {
+      $(location).attr("href", data);
+    });
   });
 
-  $('input#responsible').autocomplete({
-		minLength: 2,
-		source: "/user/autocomplete",
-		change: function (event, ui) {
-      if (!ui.item) {
-        $(this).val("");
-      }
-		},
-		select: function(event, ui) {
-			this.value = ui.item.value;
-		}
-  });
+	$("#ncountries").on("click", ".btn-outline-danger", function(){
+		$('#country-' + $(this).attr('id')).remove();
+	});
+
 </script>
