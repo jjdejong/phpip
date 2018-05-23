@@ -1,9 +1,9 @@
 <script>
 var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
 var csrf_token = $('input[name="_token"]').val();
-
+var sourceUrl = "";  // Identifies what to reload when refreshing the list
 function refreshRuleList() {
-    var url = '/rule?' + $("#filter").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
+    var url = sourceUrl + $("#filter").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
     $('#rule-list').load(url + ' #rule-list > tr', function() { // Refresh all the tr's in tbody#matter-list
 	window.history.pushState('', 'phpIP' , url);
     })
@@ -14,19 +14,7 @@ $(document).ready(function() {
 	// Ajax fill the opened modal and set global parameters
     $("#infoModal").on("show.bs.modal", function(event) {
     	relatedUrl = $(event.relatedTarget).attr("href");
-    	resource = $(event.relatedTarget).data("resource");
-
-    	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
-        $(this).find(".modal-body").load(relatedUrl);
-    });
-    // Reload the rules list when closing the modal window
-    $("#infoModal").on("hide.bs.modal", function(event) {
-    	refreshRuleList();
-    });
-    
-	// Display the modal view for creation of rule
-    $("#addModal").on("show.bs.modal", function(event) {
-    	relatedUrl = $(event.relatedTarget).attr("href");
+    	sourceUrl = $(event.relatedTarget).data("source");  // Used to refresh the list
     	resource = $(event.relatedTarget).data("resource");
 
     	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
@@ -34,6 +22,20 @@ $(document).ready(function() {
     });
     // Reload the rules list when closing the modal window
     $("#infoModal").on("hidden.bs.modal", function(event) {
+    	refreshRuleList();
+    });
+    
+	// Display the modal view for creation of record
+    $("#addModal").on("show.bs.modal", function(event) {
+    	relatedUrl = $(event.relatedTarget).attr("href");
+    	sourceUrl = $(event.relatedTarget).data("source");   // Used to refresh the list
+    	resource = $(event.relatedTarget).data("resource");
+
+    	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
+        $(this).find(".modal-body").load(relatedUrl);
+    });
+    // Reload the rules list when closing the modal window
+    $("#addModal").on("hidden.bs.modal", function(event) {
     	refreshRuleList();
     });
 
@@ -92,7 +94,7 @@ $('#infoModal').on("click",'input[type="radio"]', function() {
 	})
 });
 
-$('#infoModal').on("click", 'input[name="for_country"],input[name="for_origin"]', function() {
+$('#infoModal').on("click", 'input[name="for_country"],input[name="country"],input[name="for_origin"]', function() {
 	$(this).autocomplete({
 		minLength: 2,
 		source: "/country/autocomplete",
@@ -101,7 +103,7 @@ $('#infoModal').on("click", 'input[name="for_country"],input[name="for_origin"]'
 		},
 		select: function(event, ui) {
 			this.value = ui.item.id;
-			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
+			var data = $.param({ _method: "PUT" }) + "&" + $(this).serialize();
 			$.post(resource + $(this).closest("table").data("id"), data)
 			.done(function () {
 				$("#infoModal").find(".modal-body").load(relatedUrl);
@@ -130,7 +132,7 @@ $('#infoModal').on("click", 'input[name="task"]', function() {
 	});
 });
 
-$('#infoModal').on("click", 'input[name="for_category"]', function() {
+$('#infoModal').on("click", 'input[name$="category"]', function() {
         $(this).autocomplete({
                 minLength: 2,
                 source: "/category/autocomplete",
@@ -188,7 +190,7 @@ $('#infoModal').on("click", "input[name$='event'],input[name='abort_on']", funct
         });
 });
 
-$('#infoModal').on("click", 'input[name="responsible"].noformat', function() {
+$('#infoModal').on("click", 'input[name$="responsible"].noformat', function() {
          $(this).autocomplete({
                 minLength: 2,
                 source: "/user/autocomplete",
@@ -227,10 +229,24 @@ $('#infoModal').on("focus", 'input[name$="date"].noformat', function() {
 $('#rule-list').on("click",'.delete-from-list',function() {
     var del_conf = confirm("Deleting rule from table?");
     if(del_conf == 1) {
-	var data = $.param({ _token: csrf_token, _method: "DELETE" }) ;
+	var data = $.param({ _method: "DELETE" }) ;
 	$.post('/rule/' + $(this).closest("tr").data("id"), data).done(function(){
 		$('#listModal').find(".modal-body").load(relatedUrl);
 		});
+	sourceUrl = $(this).data("source");  // Used to refresh the list
+	refreshRuleList();
+    }
+    return false;
+});
+
+$('#rule-list').on("click",'.delete-event-name',function(event) {
+    var del_conf = confirm("Deleting event name from table?");
+    if(del_conf == 1) {
+	var data = $.param({ _method: "DELETE" }) ;
+	$.post('/eventname/' + $(this).closest("tr").data("id"), data).done(function(){
+		$('#listModal').find(".modal-body").load(relatedUrl);
+		});
+	sourceUrl = $(this).data("source");  // Used to refresh the list
 	refreshRuleList();
     }
     return false;
@@ -243,11 +259,21 @@ $('#infoModal').on("click",'#delete-rule',function() {
 	$.post('/rule/' + $(this).data("id"), data).done(function(){
 		$('#listModal').find(".modal-body").load(relatedUrl);
 		});
-	refreshRuleList();
     }
     return false;
 });
 
+
+$('#infoModal').on("click",'#delete-ename',function() {
+    var del_conf = confirm("Deleting event name from table?");
+    if(del_conf == 1) {
+	var data = $.param({ _method: "DELETE" }) ;
+	$.post('/eventname/' + $(this).data("id"), data).done(function(){
+		$('#listModal').find(".modal-body").load(relatedUrl);
+		});
+    }
+    return false;
+});
 
 // For creation rule modal view
 
@@ -275,7 +301,7 @@ $('#addModal').on("focus", 'input[name^="use"].noformat', function() {
 	}
     });
 });
-$('#addModal').on("click", 'input[name="for_country_new"]', function() {
+$('#addModal').on("click", 'input[name$="country_new"]', function() {
          $(this).autocomplete({
                 minLength: 1,
                 source: "/country/autocomplete",
@@ -285,7 +311,7 @@ $('#addModal').on("click", 'input[name="for_country_new"]', function() {
                 select: function (event, ui) {
                         event.preventDefault();
                         $(this).val(ui.item.value);
-                        $("input[name='for_country']").val( ui.item.id);
+                        $("input[name$='country']").val( ui.item.id);
                 }
         });
 });
@@ -305,7 +331,7 @@ $('#addModal').on("click", 'input[name="for_origin_new"]', function() {
         });
 });
 
-$('#addModal').on("click", 'input[name="for_category_new"]', function() {
+$('#addModal').on("click", 'input[name$="category_new"]', function() {
          $(this).autocomplete({
                 minLength: 1,
                 source: "/category/autocomplete",
@@ -315,7 +341,7 @@ $('#addModal').on("click", 'input[name="for_category_new"]', function() {
                 select: function (event, ui) {
                         event.preventDefault();
                         $(this).val(ui.item.value);
-                        $("input[name='for_category']").val( ui.item.id);
+                        $("input[name$='category']").val( ui.item.id);
                 }
         });
 });
@@ -374,7 +400,7 @@ $('#addModal').on("click", 'input[name="responsible_new"]', function() {
                 select: function (event, ui) {
                         event.preventDefault();
                         $(this).val(ui.item.label);
-                        $("input[name='responsible']").val( ui.item.value);
+                        $("input[name$='responsible']").val( ui.item.value);
                 }
         });
 });
@@ -405,7 +431,23 @@ $(document).on("submit", "#createRuleForm", function(e) {
 			window.alert("Rule created.");
 			$('#addModal').modal("hide");}
 		else {
-		associate_errors(response['errors'],$form);
+		   associate_errors(response['errors'],$form);
+		}
+	});
+});
+
+
+$(document).on("submit", "#createEventForm", function(e) {
+	e.preventDefault();
+	var $form = $(this);
+	var request = $("#createEventForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
+	var data = $.param({ _token: csrf_token }) + "&" + request;
+	$.post('/eventname', data,function(response) {
+		if(response.success) {
+			window.alert("Event name created.");
+			$('#addModal').modal("hide");}
+		else {
+		    associate_errors(response['errors'],$form);
 		}
 	});
 });
@@ -416,7 +458,7 @@ function associate_errors(errors,$form) {
 	for(index in errors) {
 		value = errors[index][0];
 		console.log(index, value);
-		document.getElementById('error-box').innerHTML+=ivalue + '<BR />';
+		document.getElementById('error-box').innerHTML+=value + '<BR />';
 	};
 }
 </script>

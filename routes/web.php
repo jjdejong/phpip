@@ -128,12 +128,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('actorinfo/{actor}','ActorController@update');
 	Route::get('actoradd','ActorController@addShow');
 	Route::put('actoradd','ActorController@store');
-
-  Route::resource('matter', 'MatterController');
-  Route::apiResource('task', 'TaskController');
+	
+    Route::resource('matter', 'MatterController');
+    Route::apiResource('task', 'TaskController');
 	Route::apiResource('event', 'EventController');
 	Route::resource('actor', 'ActorController');
-  Route::apiResource('actor-pivot', 'ActorPivotController');
+	Route::resource('eventname', 'EventNameController');
+    Route::apiResource('actor-pivot', 'ActorPivotController');
 	Route::apiResource('classifier', 'ClassifierController');
 
 	// Testing - not used

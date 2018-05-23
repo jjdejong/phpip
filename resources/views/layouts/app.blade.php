@@ -63,7 +63,7 @@
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
                                     <a class="dropdown-item" href="{{ url('/rule/') }}">Edit rules</a>
-                                    <a class="dropdown-item" href="{{ url('/event/') }}">Edit event names</a>
+                                    <a class="dropdown-item" href="{{ url('/eventname/') }}">Edit event names</a>
                                     <a class="dropdown-item" href="{{ url('/actors/') }}">Actors</a>
                                 </ul>
                             </li>
