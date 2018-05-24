@@ -69,18 +69,18 @@ input {
                 </td><td><input id="login" class="actor-input-narrow noformat" name="login" value="{{ $actorInfo->login }}">
                 </tr><tr><td><label for="default_role" title="{{ $actorComments['default_role'] }}">Default role</label>
                 </td><td class="ui-front">
-                		<input type="text" class="actor-input-wide" name="default_role" value="{{ $actorInfo->drole_name }}">
+                		<input type="text" class="actor-input-wide" name="default_role" value="{{ empty($actorInfo->droleInfo) ? '' : $actorInfo->droleInfo->name }}">
                 </td><td><label for="function" title="{{ $actorComments['function'] }}">Function</label>
                 </td><td><input id="function" class="actor-input-narrow noformat" name="function" value="{{ $actorInfo->function }}">
                 </tr><tr><td><label for="company_id" title="{{ $actorComments['company_id'] }}">Employer</label>
                 </td><td class="ui-front">
-                		<input type="text" class="actor-input-wide" id="company_id" name="company_id" value="{{ $actorInfo->company_name }}">
+                		<input type="text" class="actor-input-wide" id="company_id" name="company_id" value="{{ empty($actorInfo->company) ? '' : $actorInfo->company->name }}">
                 <td><label for="parent_id" title="{{ $actorComments['parent_id'] }}">Parent company</label>
                 </td><td class="ui-front">
-                		<input type="text" class="actor-input-narrow" id="parent_id" name="parent_id" value="{{ $actorInfo->parent_name }}">
+                		<input type="text" class="actor-input-narrow" id="parent_id" name="parent_id" value="{{ empty($actorInfo->parent) ? '' : $actorInfo->parent->name }}">
                 </tr><tr><td><label for="site_id" title="{{ $actorComments['site_id'] }}">Work site</label>
                 </td><td class="ui-front">
-                		<input type="text" class="actor-input-wide" id="site_id" name="site_id" value="{{ $actorInfo->site_name }}">
+                		<input type="text" class="actor-input-wide" id="site_id" name="site_id" value="{{ empty($actorInfo->site) ? '' : $actorInfo->site->name }}">
                 </td><td><label for="phy_person" title="{{ $actorComments['phy_person'] }}">Person</label>
                 </td><td><span class="actor-input-narrow" name="phy_person">
                         <input type="radio" name="phy_person" id="phy_person" value="1" {{ $actorInfo->phy_person ? 'checked="checked"' : "" }} />Physical&nbsp;&nbsp;
@@ -88,7 +88,7 @@ input {
                 </span>
                 </tr><tr><td><label for="nationality" title="{{ $actorComments['nationality'] }}">Nationality</label>
                 </td><td class="ui-front">
-                		<input type="text" class="actor-input-wide" name="nationality" value="{{ $actorInfo->nationality_name }}">
+                		<input type="text" class="actor-input-wide" name="nationality" value="{{ empty($actorInfo->nationalityInfo) ? '' : $actorInfo->nationalityInfo->name }}">
                 </td><td><label for="small_entity" title="{{ $actorComments['small_entity'] }}">Small entity</label>
                 </td><td><span class="actor-input-narrow" name="small_entity">
                         <input type="radio" name="small_entity" id="small_entity" value="1" {{ $actorInfo->small_entity ? 'checked="checked"' : "" }} />Yes&nbsp;&nbsp;
@@ -105,19 +105,19 @@ input {
 					<input type='text' class="actor-input-wide noformat" name="address" value="{{ $actorInfo->address }}">
                 </td><td><label for="country" title="{{ $actorComments['country'] }}">Country</label>
                 </td><td class="ui-front">
-						<input type='text' class="actor-input-narrow" name="country" value="{{ $actorInfo->country_name }}">
+						<input type='text' class="actor-input-narrow" name="country" value="{{ empty($actorInfo->countryInfo) ? '' : $actorInfo->countryInfo->name }}">
 				</tr><tr><td><label for="address_mailing" title="{{ $actorComments['address_mailing'] }}">Address mailing</label>
                 </td><td class="ui-front">
 					<input type='text' class="actor-input-wide noformat" name="address_mailing" value="{{ $actorInfo->address_mailing }}">
                 </td><td><label for="country_mailing" title="{{ $actorComments['country_mailing'] }}">Country mailing</label>
                 </td><td class="ui-front">
-						<input type='text' class="actor-input-narrow" name="country_mailing" value="{{ $actorInfo->country_mailing_name }}">
+						<input type='text' class="actor-input-narrow" name="country_mailing" value="{{ empty($actorInfo->country_mailingInfo ) ? '' : $actorInfo->country_mailingInfo->name }}">
 				</tr><tr><td><label for="address_billing" title="{{ $actorComments['address_billing'] }}">Address billing</label>
                 </td><td class="ui-front">
 					<input type='text' class="actor-input-wide noformat" name="address_billing" value="{{ $actorInfo->address_billing }}">
                 </td><td><label for="country_billing" title="{{ $actorComments['country_billing'] }}">Country billing</label>
                 </td><td class="ui-front">
-						<input type='text' class="actor-input-narrow" name="country_billing" value="{{ $actorInfo->country_billing_name }}">
+						<input type='text' class="actor-input-narrow" name="country_billing" value="{{ empty($actorInfo->country_billingInfo ) ? '' : $actorInfo->country_billingInfo->name }}">
 				</tr><tr><td><label for="email" title="{{ $actorComments['email'] }}">Email</label>
                 </td><td class="ui-front">
 					<input type='text' class="actor-input-wide noformat" name="email" value="{{ $actorInfo->email }}">

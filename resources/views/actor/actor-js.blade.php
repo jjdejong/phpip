@@ -86,7 +86,7 @@ $('#infoModal').on("click",'input[type="radio"]', function() {
 
 $('#infoModal').on("click", 'input[name^="country"],input[name="nationality"]', function() {
 	$(this).autocomplete({
-		minLength: 2,
+		minLength: 1,
 		source: "/country/autocomplete",
 		change: function (event, ui) {
 			if (!ui.item) $(this).val("");
@@ -111,7 +111,7 @@ $('#infoModal').on("click", 'input[name="company_id"],input[name="parent_id"],in
 			if (!ui.item) $(this).val("");
 		},
 		select: function(event, ui) {
-			this.value = ui.item.id;
+			this.value = ui.item.value;
 			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
 			$.post(resource + $(this).closest("table").data("id"), data)
 			.done(function () {
@@ -121,6 +121,26 @@ $('#infoModal').on("click", 'input[name="company_id"],input[name="parent_id"],in
 		}
 	});
 });
+
+$('#infoModal').on("click", 'input[name="default_role"]', function() {
+	$(this).autocomplete({
+		minLength: 1,
+		source: "/role/autocomplete",
+		change: function (event, ui) {
+			if (!ui.item) $(this).val("");
+		},
+		select: function(event, ui) {
+			this.value = ui.item.value;
+			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
+			$.post(resource + $(this).closest("table").data("id"), data)
+			.done(function () {
+				$("#infoModal").find(".modal-body").load(relatedUrl);
+				$("#infoModal").find(".alert").removeClass("alert-danger").html("");
+			});
+		}
+	});
+});
+
 $('#actor-list').on("click",'.delete-from-list',function() {
     var del_conf = confirm("Deleting actor from table?");
     if(del_conf == 1) {

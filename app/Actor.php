@@ -26,70 +26,33 @@ class Actor extends Model
   	return $this->belongsTo('App\Actor', 'parent_id');
   }
 
+  public function site() {
+  	return $this->belongsTo('App\Actor', 'site_id');
+  }
+
   public function matters() {
 		return $this->hasMany('App\ActorPivot');
 	}
 
-  public function actorsList($Name=null, $Phy_person=null)
-    {
-                $select = $this->selectActor();
-                 if ($Phy_person != '')
-                        $select = $select->where ( 'a.phy_person','like', $Phy_person. '%');               
-                if ($Name != '')
-                        $select = $select->where ( 'a.name','like', $Name. '%');
-                $select = $select->orderBy ( 'a.name' );
-                //dd($select->get());
-                return $select->get();
-    }
+  public function droleInfo() {
+  	return $this->belongsTo('App\Role', 'default_role');
+  }
 
-    protected function selectActor() {
-          $select = DB::table('actor as a')
-            ->leftJoin('country as c', 'a.country', '=', 'c.iso')
-            ->leftJoin('country as cm', 'a.country_mailing', '=', 'cm.iso')
-            ->leftJoin('country as cb', 'a.country_billing', '=', 'cb.iso')
-            ->leftJoin('actor as co', 'a.company_id', '=', 'co.id')
-            ->leftJoin('actor as p', 'a.parent_id', '=', 'p.id')
-            ->leftJoin('actor as as', 'a.site_id', '=', 'as.id')
-            ->leftJoin('actor_role as ar', 'a.default_role', '=', 'ar.code')
-            ->leftJoin('country as na', 'a.nationality', '=', 'na.iso')
-            ->select(           'a.id as id',
-								'a.name as name',	
-								'a.first_name',
-								'a.display_name',
-								'a.login',
-								'a.function',
-								'a.phy_person',
-								'a.small_entity',
-								'a.address',
-								'a.address_mailing',
-								'a.email',
-								'a.phone',
-								'a.legal_form',
-								'a.registration_no',
-								'a.warn',
-								'a.VAT_number',
-								'a.notes',
-								'a.address_billing',
-								'c.name as country_name',
-                                'cm.name as country_mailing_name',
-                                'cb.name as country_billing_name',
-                                'co.name as company_name',
-                                'p.name as parent_name',
-                                'as.name as site_name',
-                                'ar.name as drole_name',
-                                'na.name as nationality_name'
-                                );
-            
-          return $select;
-        }
+  public function countryInfo() {
+  	return $this->belongsTo('App\Country', 'country');
+  }
 
-        public function getActorInfo($actor_id = 0) {
-                if (! $actor_id)
-                        return null;
-				$select =  $this->selectActor()->where ( 'a.id','=', $actor_id );
-                $result = $select->first();
-                return $result;
-        }
+  public function country_mailingInfo() {
+  	return $this->belongsTo('App\Country', 'country_mailing');
+  }
+
+  public function country_billingInfo() {
+  	return $this->belongsTo('App\Country', 'country_billing');
+  }
+
+  public function nationalityInfo() {
+  	return $this->belongsTo('App\Country', 'nationality');
+  }
 
    public function getTableComments($table_name = null) {
                 if (! isset ( $table_name )) {

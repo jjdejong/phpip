@@ -50,7 +50,7 @@
 
 @foreach ($actorslist as $actor)
     <tr class="actor-list-row" data-id="{{ $actor->id }}">
-    	<td class="col-name"><a href="/actor/{{ $actor->id }}" class="hidden-action" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Actor data" data-resource="/actorinfo/" data-source="/actor?">
+    	<td class="col-name"><a href="/actor/{{ $actor->id }}" class="hidden-action" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Actor data" data-resource="/actor/" data-source="/actor?">
 								{{ $actor->name }}</a></td>
     	<td class="col-trigger">{{ $actor->first_name }}</td>
     	<td class="col-category">{{ $actor->display_name }}</td>

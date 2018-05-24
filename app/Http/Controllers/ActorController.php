@@ -45,7 +45,19 @@ class ActorController extends Controller
     public function store(Request $request)
     {
     	$validator = Validator::make($request->all(), [
-			'name' => 'required'
+			'name' => 'required|max:100',
+			'first_name' => 'max:60',
+			'display_name' => 'max:30',
+			'login' => 'unique:actor|max:16',
+			'function' => 'max:45',
+			'address' => 'max:256',
+			'address_mailing' => 'max:256',
+			'address_billing' => 'max:256',
+			'phone' => 'max:20',
+			'email' => 'email|max:45',
+			'legal_form' => 'max:60',
+			'registration_no' => 'max:20',
+			'VAT_number' => 'max:45'	,		
     	]);
     	$input = $request->all();
     	$to_retain = ['_token', '_method'];
@@ -71,7 +83,14 @@ class ActorController extends Controller
     public function show($n)
     {
 		$actor = new Actor ;
-        $actorInfo = $actor->getActorInfo($n);
+        $actorInfo = $actor->with('parent')
+			->with('site')
+			->with('droleInfo')
+			->with('countryInfo')
+			->with('country_mailingInfo')
+			->with('country_billingInfo')
+			->with('nationalityInfo')
+			->find($n);
         $actorComments = $actor->getTableComments('actor');
         return view('actor.show', compact('actorInfo', 'actorComments') );
     }
