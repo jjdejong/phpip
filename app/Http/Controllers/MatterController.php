@@ -59,10 +59,12 @@ class MatterController extends Controller {
 	{
 		$operation = $request->input ( 'operation', 'new' ); // new, clone, child
 		if ( $operation != 'new' ) {
-			$matter = Matter::find($request->matter_id);
+			$matter = Matter::with('container', 'countryInfo', 'originInfo', 'category', 'type')->find($request->matter_id);
 			if ( $operation == 'clone') {
 				// Generate the next available caseref based on the prefix
 				$matter->caseref = Matter::where('caseref', 'like', $matter->category->ref_prefix . '%')->max('caseref') + 1;
+			} else {
+				$matter = collect(new Matter);
 			}
 		}
 

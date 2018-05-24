@@ -46,19 +46,14 @@ class ActorPivotController extends Controller
         $max = $i;
       }
 
-      $request->request->add(['display_order' => $max + 1]);
-      ActorPivot::create($request->except(['_token', '_method']));
-    }
+      $request->merge(['display_order' => $max + 1]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\ActorPivot  $actorPivot
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ActorPivot $actorPivot)
-    {
-        //
+      try {
+				ActorPivot::create($request->except(['_token', '_method']));
+			} catch (Exception $e) {
+				report($e);
+				return false;
+			}
     }
 
     /**

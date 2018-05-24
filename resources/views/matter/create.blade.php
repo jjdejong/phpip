@@ -1,6 +1,6 @@
 <form id="createMatterForm" class="ui-front">
   <input type="hidden" name="operation" value="{{ $operation }}" />
-  <input type="hidden" name="origin_id" value="{{ $matter->id }}" />
+  <input type="hidden" name="origin_id" value="{{ $matter->id or '' }}" />
   <input type="hidden" name="origin_container_id" value="{{ $matter->container_id or '' }}" />
   <div class="form-group row">
     <label for="category" class="col-3 col-form-label font-weight-bold">Category</label>
@@ -20,14 +20,14 @@
     <label for="origin" class="col-3 col-form-label">Origin</label>
     <div class="col-9">
       <input type="hidden" name="origin" value="{{ $matter->origin or '' }}" />
-      <input type="text" class="form-control" id="origin" value="{{ @$matter->originInfo->name or '' }}" onFocus="this.select()" />
+      <input type="text" class="form-control" id="origin" value="{{ $matter->originInfo->name or '' }}" onFocus="this.select()" />
     </div>
   </div>
   <div class="form-group row">
     <label for="type_code" class="col-3 col-form-label">Type</label>
     <div class="col-9">
       <input type="hidden" name="type_code" value="{{ $matter->type_code or '' }}" />
-      <input type="text" class="form-control" id="type_code" value="{{ @$matter->type->type or '' }}" onFocus="this.select()" />
+      <input type="text" class="form-control" id="type_code" value="{{ $matter->type->type or '' }}" onFocus="this.select()" />
     </div>
   </div>
   <div class="form-group row">
