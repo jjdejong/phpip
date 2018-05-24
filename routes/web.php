@@ -39,10 +39,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('matter/{matter}/tasks', 'MatterController@tasks');
 	Route::get('matter/{matter}/renewals', 'MatterController@renewals');
   Route::get('matter/{matter}/roleActors/{role}', 'MatterController@actors');
-  Route::get('matter/{matter}/createN', function (Matter $matter) {
-    return view('matter.createN', compact('matter'));
-  });
-  Route::post('matter/storeN', 'MatterController@storeN');
 
 	Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
 		$term = $request->input('term');
@@ -121,13 +117,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('ruleinfo/{rule}','RuleController@update');
 	Route::get('ruleadd','RuleController@addShow');
 	Route::put('ruleadd','RuleController@store');
-
-	Route::get('actors','ActorController@index');
+	
+/*	Route::get('actors','ActorController@index');
 	Route::delete('actors/{actor}','ActorController@delete');
 	Route::get('actorinfo/{actor}','ActorController@show');
 	Route::put('actorinfo/{actor}','ActorController@update');
 	Route::get('actoradd','ActorController@addShow');
-	Route::put('actoradd','ActorController@store');
+	Route::put('actoradd','ActorController@store');*/
 	
     Route::resource('matter', 'MatterController');
     Route::apiResource('task', 'TaskController');

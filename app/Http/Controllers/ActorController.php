@@ -20,7 +20,7 @@ class ActorController extends Controller
         $Phy_person = $request->input ( 'phy_person' );
         $actor = new Actor ;
         $actorslist = $actor->actorsList($Name, $Phy_person);
-        return view('tables.actorlist', compact('actorslist') );
+        return view('actor.index', compact('actorslist') );
     }
 
     /**
@@ -30,7 +30,10 @@ class ActorController extends Controller
      */
     public function create()
     {
-        //
+        $table = new Actor ;
+        //TODO getTableComments is the same as in Rule.php. To render common
+        $tableComments = $table->getTableComments('actor');
+        return view('actor.create',compact('tableComments'));
     }
 
     /**
@@ -69,21 +72,8 @@ class ActorController extends Controller
     {
 		$actor = new Actor ;
         $actorInfo = $actor->getActorInfo($n);
-        //dd($actorInfo);
         $actorComments = $actor->getTableComments('actor');
-        return view('tables.actorinfo', compact('actorInfo', 'actorComments') );
-    }
-
-    /**
-     * Display the content of modal view to add an actor.
-     */
-    public function addShow()
-
-    {
-        $actor = new Actor ;
-        //TODO getTableComments is the same as in Rule.php. To render common
-        $tableComments = $actor->getTableComments('actor');
-        return view('tables.actoradd',compact('tableComments'));
+        return view('actor.show', compact('actorInfo', 'actorComments') );
     }
 
     /**
@@ -115,9 +105,10 @@ class ActorController extends Controller
      * @param  \App\Actor  $actor
      * @return \Illuminate\Http\Response
      */
-    public function delete(Actor $actor)
+    public function destroy($id)
     {
-    	$actor->delete();
+    	$actor = new Actor ;
+    	$actor->destroy($id);
     }
 
 }

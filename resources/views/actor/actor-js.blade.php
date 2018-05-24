@@ -3,7 +3,7 @@ var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Upd
 var csrf_token = $('input[name="_token"]').val();
 
 function refreshActorList() {
-    var url = '/actors?' + $("#filter").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
+    var url = '/actor?' + $("#filter").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
     $('#actor-list').load(url + ' #actor-list > tr', function() { // Refresh all the tr's in tbody#actor-list
 	window.history.pushState('', 'phpIP' , url);
     })
@@ -125,7 +125,7 @@ $('#actor-list').on("click",'.delete-from-list',function() {
     var del_conf = confirm("Deleting actor from table?");
     if(del_conf == 1) {
 	var data = $.param({ _method: "DELETE" }) ;
-	$.post('/actors/' + $(this).closest("tr").data("id"), data).done(function(){
+	$.post('/actor/' + $(this).closest("tr").data("id"), data).done(function(){
 		$('#listModal').find(".modal-body").load(relatedUrl);
 		});
 	refreshActorList();
@@ -137,7 +137,7 @@ $('#infoModal').on("click",'.delete-actor',function() {
     var del_conf = confirm("Deleting actor from table?");
     if(del_conf == 1) {
 	var data = $.param({ _method: "DELETE" }) ;
-	$.post('/actors/' + $(this).data("id"), data).done(function(){
+	$.post('/actor/' + $(this).data("id"), data).done(function(){
 		$('#listModal').find(".modal-body").load(relatedUrl);
 		});
     }
@@ -269,9 +269,9 @@ $(document).on("submit", "#createActorForm", function(e) {
 	e.preventDefault();
 	var $form = $(this);
 	var request = $("#createActorForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
-	var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + request;
+	var data = $.param({ _token: csrf_token }) + "&" + request;
 	console.log(request);
-	$.post('/actoradd', data,function(response) {
+	$.post('/actor', data,function(response) {
 		if(response.success) {
 			window.alert("Actor created.");
 			$('#addModal').modal("hide");

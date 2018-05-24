@@ -27,7 +27,7 @@
 
 @section('content')
 <div id="rules-tab">Actors</div>
-<a href="actoradd"  data-toggle="modal" data-target="#addModal" data-remote="false" title="Actor data" data-resource="/actoradd/">Add a new actor</a>
+<a href="actor/create"  data-toggle="modal" data-target="#addModal" data-remote="false" title="Actor data" data-source="/actor?" data-resource="/actor/">Add a new actor</a>
 <div id="rules-box">
 <table class="table table-striped table-hover table-sm">
   <thead>
@@ -50,7 +50,7 @@
 
 @foreach ($actorslist as $actor)
     <tr class="actor-list-row" data-id="{{ $actor->id }}">
-    	<td class="col-name"><a href="/actorinfo/{{ $actor->id }}" class="hidden-action" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Actor data" data-resource="/actorinfo/">
+    	<td class="col-name"><a href="/actor/{{ $actor->id }}" class="hidden-action" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Actor data" data-resource="/actorinfo/" data-source="/actor?">
 								{{ $actor->name }}</a></td>
     	<td class="col-trigger">{{ $actor->first_name }}</td>
     	<td class="col-category">{{ $actor->display_name }}</td>
@@ -81,6 +81,6 @@
 
 @section('script')
 
-@include('tables.actor-js')
+@include('actor.actor-js')
 
 @stop
