@@ -20,7 +20,7 @@ class ActorController extends Controller
         $Phy_person = $request->input ( 'phy_person' );
         $actor = new Actor ;
         $actorslist = $actor->actorsList($Name, $Phy_person);
-        return view('tables.actorlist', compact('actorslist') );
+        return view('actor.index', compact('actorslist') );
     }
 
     /**
@@ -30,7 +30,10 @@ class ActorController extends Controller
      */
     public function create()
     {
-        //
+        $table = new Actor ;
+        //TODO getTableComments is the same as in Rule.php. To render common
+        $tableComments = $table->getTableComments('actor');
+        return view('actor.create',compact('tableComments'));
     }
 
     /**
@@ -42,7 +45,19 @@ class ActorController extends Controller
     public function store(Request $request)
     {
     	$validator = Validator::make($request->all(), [
-			'name' => 'required'
+			'name' => 'required|max:100',
+			'first_name' => 'max:60',
+			'display_name' => 'max:30',
+			'login' => 'unique:actor|max:16',
+			'function' => 'max:45',
+			'address' => 'max:256',
+			'address_mailing' => 'max:256',
+			'address_billing' => 'max:256',
+			'phone' => 'max:20',
+			'email' => 'email|max:45',
+			'legal_form' => 'max:60',
+			'registration_no' => 'max:20',
+			'VAT_number' => 'max:45'	,		
     	]);
     	$input = $request->all();
     	$to_retain = ['_token', '_method'];
@@ -68,22 +83,16 @@ class ActorController extends Controller
     public function show($n)
     {
 		$actor = new Actor ;
-        $actorInfo = $actor->getActorInfo($n);
-        //dd($actorInfo);
+        $actorInfo = $actor->with('parent')
+			->with('site')
+			->with('droleInfo')
+			->with('countryInfo')
+			->with('country_mailingInfo')
+			->with('country_billingInfo')
+			->with('nationalityInfo')
+			->find($n);
         $actorComments = $actor->getTableComments('actor');
-        return view('tables.actorinfo', compact('actorInfo', 'actorComments') );
-    }
-
-    /**
-     * Display the content of modal view to add an actor.
-     */
-    public function addShow()
-
-    {
-        $actor = new Actor ;
-        //TODO getTableComments is the same as in Rule.php. To render common
-        $tableComments = $actor->getTableComments('actor');
-        return view('tables.actoradd',compact('tableComments'));
+        return view('actor.show', compact('actorInfo', 'actorComments') );
     }
 
     /**
@@ -115,9 +124,10 @@ class ActorController extends Controller
      * @param  \App\Actor  $actor
      * @return \Illuminate\Http\Response
      */
-    public function delete(Actor $actor)
+    public function destroy($id)
     {
-    	$actor->delete();
+    	$actor = new Actor ;
+    	$actor->destroy($id);
     }
 
 }

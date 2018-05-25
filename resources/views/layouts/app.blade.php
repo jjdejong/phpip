@@ -65,7 +65,7 @@
                                 <ul class="dropdown-menu" role="menu">
                                     <a class="dropdown-item" href="{{ url('/rule/') }}">Edit rules</a>
                                     <a class="dropdown-item" href="{{ url('/eventname/') }}">Edit event names</a>
-                                    <a class="dropdown-item" href="{{ url('/actors/') }}">Actors</a>
+                                    <a class="dropdown-item" href="{{ url('/actor/') }}">Actors</a>
                                 </ul>
                             </li>
 
