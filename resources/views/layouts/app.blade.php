@@ -54,6 +54,7 @@
                                     <a class="dropdown-item" href="{{ url('/matter/') }}">All</a>
                                     <a class="dropdown-item" href="{{ url('/matter?display=PAT') }}">Patents</a>
                                     <a class="dropdown-item" href="{{ url('/matter?display=TM') }}">Trademarks</a>
+                                    <a class="dropdown-item" href="#newMatterModal" data-toggle="modal">New</a>
                                 </ul>
                             </li>
 
@@ -93,6 +94,25 @@
         <main class="container-fluid">
             @yield('content')
         </main>
+    </div>
+
+    <div id="newMatterModal" class="modal fade" role="dialog">
+    	<div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+    	    <div class="modal-header">
+    				<h4 class="modal-title">Create Matter</h4>
+    				<button type="button" class="close" data-dismiss="modal">&times;</button>
+    			</div>
+    			<div class="modal-body">
+    				@include('matter.create', ['operation' => 'new'])
+    			</div>
+    			<div class="modal-footer">
+    				<span class="alert float-left"></span>
+    				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    			</div>
+        </div>
+    	</div>
     </div>
     @yield('script')
 </body>
