@@ -325,7 +325,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							Due
 							<a class="hidden-action float-right"
 								href="/matter/{{ $matter->id }}/renewals"
-								data-toggle="modal" data-target="#listModal"
+								data-toggle="modal"
+								data-target="#listModal"
 								data-remote="false"
 								title="All renewals"
 								data-resource="/task/">

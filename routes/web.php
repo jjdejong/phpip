@@ -44,7 +44,17 @@ Route::group(['middleware' => 'auth'], function () {
   });
   Route::post('matter/storeN', 'MatterController@storeN');
 
-	Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
+  Route::get('matter/autocomplete', function (Request $request) {
+		$term = $request->input('term');
+		$newref = App\Matter::where('caseref', 'like', "$term%")->max('caseref');
+    $suffix = preg_replace ( '#\D#', '', $newref );
+		$suffix = str_pad ( $suffix + 1, strlen ( $suffix ), '0', STR_PAD_LEFT );
+		$prefix = preg_replace ( '#\d#', '', $newref );
+		$newref = $prefix . $suffix;
+    return ['value' => $newref];
+	});
+
+  Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
 		$term = $request->input('term');
 		$results = App\EventName::select('name as value', 'code')
 			->where('name', 'like', "%$term%")
@@ -128,7 +138,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('actorinfo/{actor}','ActorController@update');
 	Route::get('actoradd','ActorController@addShow');
 	Route::put('actoradd','ActorController@store');
-	
+
     Route::resource('matter', 'MatterController');
     Route::apiResource('task', 'TaskController');
 	Route::apiResource('event', 'EventController');
