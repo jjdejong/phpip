@@ -26,7 +26,7 @@
 
 
 @section('content')
-<div id="rules-tab">Actors</div>
+<div id="rules-tab"><h1>Actors</h1></div>
 <a href="actor/create"  data-toggle="modal" data-target="#addModal" data-remote="false" title="Actor data" data-source="/actor?" data-resource="/actor/">Add a new actor</a>
 <div id="rules-box">
 <table class="table table-striped table-hover table-sm">

@@ -302,11 +302,9 @@ $(document).on("submit", "#createActorForm", function(e) {
 });
 
 function associate_errors(errors,$form) {
-	console.log(errors);
-	$form.find('.form-group').removeClass('has-errors').find('.help-text').text();
+	$('#error-box').addClass('alert alert-danger');
 	for(index in errors) {
 		value = errors[index][0];
-		console.log(index, value);
 		document.getElementById('error-box').innerHTML+=value + '<BR />';
 	};
 }
