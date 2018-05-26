@@ -146,9 +146,8 @@ $('#actor-list').on("click",'.delete-from-list',function() {
     if(del_conf == 1) {
 	var data = $.param({ _method: "DELETE" }) ;
 	$.post('/actor/' + $(this).closest("tr").data("id"), data).done(function(){
-		$('#listModal').find(".modal-body").load(relatedUrl);
+		refreshActorList();
 		});
-	refreshActorList();
     }
     return false;
 });

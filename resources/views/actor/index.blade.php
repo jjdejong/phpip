@@ -54,7 +54,7 @@
 								{{ $actor->name }}</a></td>
     	<td class="col-trigger">{{ $actor->first_name }}</td>
     	<td class="col-category">{{ $actor->display_name }}</td>
-    	<td class="col-country">{{ $actor->company_name }}</td>
+    	<td class="col-country">{{ empty($actor->company) ? '' : $actor->company->name }}</td>
     	<td class="col-country">
 			@if ($actor->phy_person) 
 			  Physical

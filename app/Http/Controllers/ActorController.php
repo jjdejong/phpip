@@ -19,7 +19,9 @@ class ActorController extends Controller
         $Name = $request->input ( 'Name' );
         $Phy_person = $request->input ( 'phy_person' );
         $actor = new Actor ;
-        $actorslist = $actor->actorsList($Name, $Phy_person);
+        if (! is_null($Name)) {$actor = $actor->where('name','like',$Name);}
+        if (! is_null($Phy_person)) {$actor = $actor->where('phy_person',$Phy_person);}
+        $actorslist = $actor->with('company')->orderby('name')->get();
         return view('actor.index', compact('actorslist') );
     }
 
@@ -83,13 +85,14 @@ class ActorController extends Controller
     public function show($n)
     {
 		$actor = new Actor ;
-        $actorInfo = $actor->with('parent')
-			->with('site')
-			->with('droleInfo')
-			->with('countryInfo')
-			->with('country_mailingInfo')
-			->with('country_billingInfo')
-			->with('nationalityInfo')
+        $actorInfo = $actor->with('company',
+			'parent',
+			'site',
+			'droleInfo',
+			'countryInfo',
+			'country_mailingInfo',
+			'country_billingInfo',
+			'nationalityInfo')
 			->find($n);
         $actorComments = $actor->getTableComments('actor');
         return view('actor.show', compact('actorInfo', 'actorComments') );
