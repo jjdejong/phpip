@@ -31,21 +31,27 @@
 <div id="rules-box">
 <table class="table table-striped table-hover table-sm">
   <thead>
-    <tr id="filter">
-    	<th><input class="filter-input form-control form-control-sm" name="Name" placeholder="Name" value="{{ old('Name') }}"></th>
+    <tr>
+    	<th>Name</th>
     	<th>First name</th>
     	<th>Display name</th>
     	<th>Company</th>
-    	<th><label for="phy_person" name="phy_person">Person</label>
-                <br />
-                        <input class="filter-input" type="radio" name="phy_person" value="1" />Physical&nbsp;
+    	<th>Person</th>
+       	<th>Delete</th>
+    </tr>
+    <tr id="filter" class="sticky-top">
+    	<th><input class="filter-input form-control form-control-sm" name="Name" value="{{ old('Name') }}"></th>
+    	<th></th>
+    	<th></th>
+    	<th></th>
+    	<th><input class="filter-input" type="radio" name="phy_person" value="1" />Physical&nbsp;
                         <input class="filter-input" type="radio" name="phy_person" value="0" />Legal&nbsp;
-                        <input class="filter-input" type="radio" name="phy_person" value="" checked=checked />Both
-    	<th>Delete</th>
+                        <input class="filter-input" type="radio" name="phy_person" value="" checked=checked />Both</th>
+    	<th></th>
     </tr>
   </thead>
 <div id="actor-table-list">
-<div class="phpip-list" id="actors-list">
+<div id="actors-list">
   <tbody id="actor-list">
 
 @foreach ($actorslist as $actor)
