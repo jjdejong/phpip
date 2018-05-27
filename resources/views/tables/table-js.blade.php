@@ -2,6 +2,7 @@
 var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
 var csrf_token = $('input[name="_token"]').val();
 var sourceUrl = "";  // Identifies what to reload when refreshing the list
+
 function refreshRuleList() {
     var url = sourceUrl + $("#filter").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
     $('#rule-list').load(url + ' #rule-list > tr', function() { // Refresh all the tr's in tbody#matter-list
@@ -227,14 +228,13 @@ $('#infoModal').on("focus", 'input[name$="date"].noformat', function() {
 });
 
 $('#rule-list').on("click",'.delete-from-list',function() {
-    var del_conf = confirm("Deleting rule from table?");
+    var del_conf = confirm("Deleting rule "+$(this).closest("tr").data("id")+" from table?");
     if(del_conf == 1) {
 	var data = $.param({ _method: "DELETE" }) ;
 	$.post('/rule/' + $(this).closest("tr").data("id"), data).done(function(){
-		$('#listModal').find(".modal-body").load(relatedUrl);
+		sourceUrl = "/rule?";  // Used to refresh the list
+		refreshRuleList();
 		});
-	sourceUrl = $(this).data("source");  // Used to refresh the list
-	refreshRuleList();
     }
     return false;
 });
@@ -424,9 +424,9 @@ $(document).on("submit", "#createRuleForm", function(e) {
 	e.preventDefault();
 	var $form = $(this);
 	var request = $("#createRuleForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
-	var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + request;
+	var data = $.param({ _token: csrf_token }) + "&" + request;
 	console.log(request);
-	$.post('/ruleadd', data,function(response) {
+	$.post('/rule', data,function(response) {
 		if(response.success) {
 			window.alert("Rule created.");
 			$('#addModal').modal("hide");}

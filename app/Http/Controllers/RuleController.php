@@ -17,25 +17,42 @@ class RuleController extends Controller
         $Trigger = $request->input ( 'Trigger' );
         $Country = $request->input ( 'Country' );
         $rule = new Rule ;
-        $ruleslist = $rule->rulesList($Task, $Trigger, $Country);
-        return view('tables.rulelist', compact('ruleslist') );
+        //$ruleslist = $rule->rulesList($Task, $Trigger, $Country);
+        if (! is_null($Task)) {$rule = $rule->where('task.name','like',$Task);}
+        if (! is_null($Trigger)) {$rule = $rule->where('trigger.name','like',$Trigger);}
+        if (! is_null($Country)) {$rule = $rule->where('country.name','like',$Country);}
+        $ruleslist = $rule->with('country', 'trigger','country','category', 'origin', 'type', 'taskInfo')
+			->orderby('task')->get();
+        return view('rule.index', compact('ruleslist') );
     }
 
     public function show($n)
 
     {
         $rule = new Rule ;
-        $ruleInfo = $rule->getRuleInfo($n);
+        $ruleInfo = $rule->with('country', 
+			'trigger',
+			'country',
+			'category',
+			'origin', 
+			'type', 
+			'taskInfo',
+			'condition_eventInfo',
+			'abort_onInfo',
+			'responsibleInfo'
+			)->find($n);
+		//	$rule->getRuleInfo($n);
+        
         $ruleComments = $rule->getTableComments('task_rules');
-        return view('tables.ruleinfo', compact('ruleInfo', 'ruleComments') );
+        return view('rule.show', compact('ruleInfo', 'ruleComments') );
     }
 
-    public function addShow()
+    public function create()
 
     {
         $rule = new Rule ;
         $ruleComments = $rule->getTableComments('task_rules');
-        return view('tables.ruleadd',compact('ruleComments'));
+        return view('rule.create',compact('ruleComments'));
     }
 
      /**
@@ -80,15 +97,16 @@ class RuleController extends Controller
 		return Response::json(['errors' => $validator->errors()]);
     }
     
-    public function create(Request $request)
+/*    public function create(Request $request)
     {
     	$rule = new Rule ;
         $rule->add();
     }
-
-    public function delete(Rule $rule)
+*/
+    public function destroy($n)
     {
-    	$rule->delete();
+    	$rule = new Rule ;
+    	$rule->destroy($n);
     }
 
 }

@@ -103,7 +103,7 @@
                 </td><td><label for="legal_form" title="{{ $tableComments['legal_form'] }}">Legal form</label> 
                 </td><td><input type='text' class="rule-input-narrow noformat" name="legal_form">
                 </td></tr><tr><td><label  for="notes" title="{{ $tableComments['notes'] }}">Notes</label>
-                </td><td><input type='text' class="rule-input-narrow noformat" name="notes">
+                </td><td><input type='text' class="rule-input-wide noformat" name="notes">
                 </td></tr>
 			</table>
 		</fieldset>

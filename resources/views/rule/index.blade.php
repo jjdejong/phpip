@@ -27,7 +27,7 @@
 
 @section('content')
 <div id="rules-tab">Rules</div>
-<a href="ruleadd"  data-toggle="modal" data-target="#addModal" data-remote="false" title="Rule data" data-resource="/ruleadd/">Add a new rule</a>
+<a href="rule/create"  data-toggle="modal" data-target="#addModal" data-remote="false" title="Rule data" data-source="/rule?" data-resource="/rule/create/">Add a new rule</a>
 <div id="rules-box">
 <table class="table table-striped table-hover table-sm">
 	<thead>
@@ -47,17 +47,17 @@
   <tbody id="rule-list">
 
 @foreach ($ruleslist as $rule)
-    <tr class="rule-list-row" data-id="{{ $rule->rule_id }}">
-    	<td class="col-task"><a href="/ruleinfo/{{ $rule->rule_id }}" class="hidden-action" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Rule data" data-resource="/ruleinfo/">
-								{{ $rule->task_name }}</a></td>
+    <tr class="rule-list-row" data-id="{{ $rule->id }}">
+    	<td class="col-task"><a href="/rule/{{ $rule->id }}" class="hidden-action" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Rule data" data-source="/rule?" data-resource="/rule/">
+								{{ $rule->taskInfo->name }}</a></td>
       <td class="col-notes">{{ $rule->detail }}</td>
-      <td class="col-trigger">{{ $rule->trigger_event_name }}</td>
-      <td class="col-category">{{ $rule->category_name }}</td>
-    	<td class="col-country">{{ $rule->country_name }}</td>
-      <td class="col-origin">{{ $rule->origin_name }}</td>
-      <td class="col-type">{{ $rule->for_type_name }}</td>
+      <td class="col-trigger">{{ empty($rule->trigger) ? '' : $rule->trigger->name }}</td>
+      <td class="col-category">{{ empty($rule->category) ? '' : $rule->category->name }}</td>
+    	<td class="col-country">{{ empty($rule->country) ? '' : $rule->country->name }}</td>
+      <td class="col-origin">{{ empty($rule->origin) ? '' : $rule->origin->name }}</td>
+      <td class="col-type">{{ empty($rule->type) ? '' : $rule->type->name }}</td>
     	<td class="col-delete" >
-    		<span class="delete-from-list float-right text-danger" id="{{ $rule->rule_id }}" title="Delete rule">&ominus;</span>
+    		<span class="delete-from-list float-right text-danger" data-id="{{ $rule->id }}" title="Delete rule">&ominus;</span>
     	</td>
     </tr>
 @endforeach
