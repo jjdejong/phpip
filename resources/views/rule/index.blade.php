@@ -31,15 +31,25 @@
 <div id="rules-box">
 <table class="table table-striped table-hover table-sm">
 	<thead>
-    <tr id="filter">
-    	<th><input class="filter-input form-control form-control-sm" data-source="/rule?" name="Task" placeholder="Task" value="{{ old('Task') }}"></th>
+    <tr>
+    	<th>Task</th>
       <th>Detail</th>
-      <th><input class="filter-input form-control form-control-sm" data-source="/rule?" value="{{ old('Trigger') }}" name="Trigger"  placeholder="Trigger event"/></th>
+      <th>Trigger event</th>
       <th>Category</th>
-    	<th><input name="Country" class="filter-input form-control form-control-sm" data-source="/rule?" name="Country" placeholder="Country" value="{{ old('Country') }}"/></th>
+    	<th>Country</th>
       <th>Origin</th>
       <th>Type</th>
     	<th>Delete</th>
+    </tr>
+    <tr id="filter">
+    	<th><input class="filter-input form-control form-control-sm" data-source="/rule?" name="Task" placeholder="Task" value="{{ old('Task') }}"></th>
+      <th></th>
+      <th><input class="filter-input form-control form-control-sm" data-source="/rule?" value="{{ old('Trigger') }}" name="Trigger"  placeholder="Trigger event"/></th>
+      <th></th>
+    	<th><input name="Country" class="filter-input form-control form-control-sm" data-source="/rule?" name="Country" placeholder="Country" value="{{ old('Country') }}"/></th>
+      <th></th>
+      <th></th>
+    	<th></th>
     </tr>
   </thead>
 <div id="rule-table-list">
