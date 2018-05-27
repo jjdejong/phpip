@@ -18,9 +18,15 @@ class RuleController extends Controller
         $Country = $request->input ( 'Country' );
         $rule = new Rule ;
         //$ruleslist = $rule->rulesList($Task, $Trigger, $Country);
-        if (! is_null($Task)) {$rule = $rule->where('task.name','like',$Task);}
-        if (! is_null($Trigger)) {$rule = $rule->where('trigger.name','like',$Trigger);}
-        if (! is_null($Country)) {$rule = $rule->where('country.name','like',$Country);}
+        if (! is_null($Task)) {
+			$rule = $rule->whereHas('taskInfo', function($q) use ($Task) {$q->where('name','like',$Task.'%');});
+			}
+        if (! is_null($Trigger)) {
+			$rule = $rule->whereHas('trigger', function($q) use ($Trigger) {$q->where('name','like',$Trigger.'%');});
+			}
+        if (! is_null($Country)) {
+			$rule = $rule->whereHas('country', function($q) use ($Country) {$q->where('name','like',$Country.'%');});
+			}
         $ruleslist = $rule->with('country', 'trigger','country','category', 'origin', 'type', 'taskInfo')
 			->orderby('task')->get();
         return view('rule.index', compact('ruleslist') );

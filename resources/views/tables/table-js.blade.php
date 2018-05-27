@@ -80,7 +80,8 @@ $('.filter-input').keyup(_.debounce(function(){
 	    $(this).css("background-color", "bisque");
 	else
 	    $(this).css("background-color", "white");
-	refreshRuleList();
+	sourceUrl = $(this).data("source");   // Used to refresh the list
+    refreshRuleList();
     }, 500));
     
 // Specific in place edition of rule

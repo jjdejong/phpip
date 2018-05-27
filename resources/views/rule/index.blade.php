@@ -32,11 +32,11 @@
 <table class="table table-striped table-hover table-sm">
 	<thead>
     <tr id="filter">
-    	<th><input class="filter-input form-control form-control-sm" name="Task" placeholder="Task" value="{{ old('Task') }}"></th>
+    	<th><input class="filter-input form-control form-control-sm" data-source="/rule?" name="Task" placeholder="Task" value="{{ old('Task') }}"></th>
       <th>Detail</th>
-      <th><input class="filter-input form-control form-control-sm" value="{{ old('Trigger') }}" name="Trigger"  placeholder="Trigger event"/></th>
+      <th><input class="filter-input form-control form-control-sm" data-source="/rule?" value="{{ old('Trigger') }}" name="Trigger"  placeholder="Trigger event"/></th>
       <th>Category</th>
-    	<th><input name="Country" class="filter-input form-control form-control-sm" name="Country" placeholder="Country" value="{{ old('Country') }}"/></th>
+    	<th><input name="Country" class="filter-input form-control form-control-sm" data-source="/rule?" name="Country" placeholder="Country" value="{{ old('Country') }}"/></th>
       <th>Origin</th>
       <th>Type</th>
     	<th>Delete</th>
