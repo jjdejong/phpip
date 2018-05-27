@@ -43,22 +43,21 @@
     </tr>
   </thead>
 <div id="rule-table-list">
-<div class="phpip-list" id="rules-list">
+<div id="rules-list">
   <tbody id="rule-list">
 
 @foreach ($ruleslist as $rule)
-    <tr class="rule-list-row" data-id="{{ $rule->id }}">
-    	<td class="col-task"><a href="/rule/{{ $rule->id }}" class="hidden-action" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Rule data" data-source="/rule?" data-resource="/rule/">
+    <tr data-id="{{ $rule->id }}">
+    	<td><a href="/rule/{{ $rule->id }}" class="hidden-action" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Rule data" data-source="/rule?" data-resource="/rule/">
 								{{ $rule->taskInfo->name }}</a></td>
-      <td class="col-notes">{{ $rule->detail }}</td>
-      <td class="col-trigger">{{ empty($rule->trigger) ? '' : $rule->trigger->name }}</td>
-      <td class="col-category">{{ empty($rule->category) ? '' : $rule->category->name }}</td>
-    	<td class="col-country">{{ empty($rule->country) ? '' : $rule->country->name }}</td>
-      <td class="col-origin">{{ empty($rule->origin) ? '' : $rule->origin->name }}</td>
-      <td class="col-type">{{ empty($rule->type) ? '' : $rule->type->name }}</td>
-    	<td class="col-delete" >
-    		<span class="delete-from-list float-right text-danger" data-id="{{ $rule->id }}" title="Delete rule">&ominus;</span>
-    	</td>
+      <td>{{ $rule->detail }}</td>
+      <td>{{ empty($rule->trigger) ? '' : $rule->trigger->name }}</td>
+      <td>{{ empty($rule->category) ? '' : $rule->category->name }}</td>
+	  <td>{{ empty($rule->country) ? '' : $rule->country->name }}</td>
+      <td>{{ empty($rule->origin) ? '' : $rule->origin->name }}</td>
+      <td>{{ empty($rule->type) ? '' : $rule->type->name }}</td>
+      <td><span class="delete-from-list float-right text-danger" data-id="{{ $rule->id }}" title="Delete rule">&ominus;</span>
+      </td>
     </tr>
 @endforeach
   </tbody>
