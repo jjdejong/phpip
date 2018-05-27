@@ -19,7 +19,7 @@ class ActorController extends Controller
         $Name = $request->input ( 'Name' );
         $Phy_person = $request->input ( 'phy_person' );
         $actor = new Actor ;
-        if (! is_null($Name)) {$actor = $actor->where('name','like',$Name);}
+        if (! is_null($Name)) {$actor = $actor->where('name','like',$Name.'%');}
         if (! is_null($Phy_person)) {$actor = $actor->where('phy_person',$Phy_person);}
         $actorslist = $actor->with('company')->orderby('name')->get();
         return view('actor.index', compact('actorslist') );
