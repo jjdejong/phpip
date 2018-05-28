@@ -54,19 +54,20 @@ class Actor extends Model
   	return $this->belongsTo('App\Country', 'nationality');
   }
 
-   public function getTableComments($table_name = null) {
-                if (! isset ( $table_name )) {
-                        return false;
-                }
-                // To fix: table_schema is hardcoded, it is to retreive
-                $select =  DB::select("select column_name, column_comment from information_schema.columns WHERE `TABLE_SCHEMA` = 'phpipv2'  AND `TABLE_NAME` = ?",[$table_name])	;
-                //$result = $select->get();
-                $comments = array ();
-                foreach ( $select as $column ) {
-                        $col_name = $column->column_name;
-                        $comments["$col_name"] = $column->column_comment;
-                }
-                return $comments;
-        }
+  public function getTableComments($table_name = null) {
+    if (! isset ( $table_name )) {
+      return false;
+    }
+    // To fix: table_schema is hardcoded, it is to retreive
+    $tableInfo = DB::connection()->getDoctrineSchemaManager()->listTableDetails($table_name);
+    //$select =  DB::select("select column_name, column_comment from information_schema.columns WHERE `TABLE_SCHEMA` = 'phpipv2'  AND `TABLE_NAME` = ?",[$table_name])	;
+    //$result = $select->get();
+    $comments = [];
+    foreach ( $tableInfo->getColumns() as $column ) {
+      $col_name = $column->getName();
+      $comments[$col_name] = $column->getComment();
+    }
+    return $comments;
+  }
 
 }
