@@ -61,8 +61,8 @@ class Matter extends Model {
 		return $this->hasMany('App\MatterActors');
 	}
 
-	public function actorsCtnr() {
-		return $this->belongsToMany('App\Actor', 'matter_actor_lnk')->withPivot('role', 'display_order', 'actor_ref', 'company_id', 'shared', 'date', 'rate');
+	public function actorsNative() {
+		return $this->hasMany('App\ActorPivot');
 	}
 
 	public function events()
@@ -123,7 +123,7 @@ class Matter extends Model {
 			->where('main_display', 0);
 	}
 
-	public function classifiersCtnr()
+	public function classifiersNative()
 	{
 			return $this->hasMany('App\Classifier');
 	}
