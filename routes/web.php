@@ -39,17 +39,21 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('matter/{matter}/tasks', 'MatterController@tasks');
 	Route::get('matter/{matter}/renewals', 'MatterController@renewals');
   Route::get('matter/{matter}/roleActors/{role}', 'MatterController@actors');
-  Route::get('matter/{matter}/createN', function (Matter $matter) {
-    return view('matter.createN', compact('matter'));
+  Route::get('matter/{from_matter}/createN', function (Matter $from_matter) {
+    return view('matter.createN', compact('from_matter'));
   });
   Route::post('matter/storeN', 'MatterController@storeN');
 
   Route::get('matter/new-caseref', function (Request $request) {
 		$term = $request->input('term');
 		$newref = App\Matter::where('caseref', 'like', "$term%")->max('caseref');
+    // Retrieve the (normally) numeric suffix of the largest caseref matching "term", e.g. "005" from "PAT005"
     $suffix = preg_replace ( '#\D#', '', $newref );
+    // Increment the suffix and pad zeroes to its left up to the initial suffix's length (e.g. string 005 incremented becomes integer 6, then string 006 after padding)
 		$suffix = str_pad ( $suffix + 1, strlen ( $suffix ), '0', STR_PAD_LEFT );
+    // Retrieve non-numeric prefix, e.g. "PAT" from "PAT005"
 		$prefix = preg_replace ( '#\d#', '', $newref );
+    // Stick "PAT" and "006" together
 		$newref = $prefix . $suffix;
     return ['value' => $newref];
 	});
