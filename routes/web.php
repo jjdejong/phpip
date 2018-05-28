@@ -39,6 +39,20 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('matter/{matter}/tasks', 'MatterController@tasks');
 	Route::get('matter/{matter}/renewals', 'MatterController@renewals');
   Route::get('matter/{matter}/roleActors/{role}', 'MatterController@actors');
+  Route::get('matter/{matter}/createN', function (Matter $matter) {
+    return view('matter.createN', compact('matter'));
+  });
+  Route::post('matter/storeN', 'MatterController@storeN');
+
+  Route::get('matter/new-caseref', function (Request $request) {
+		$term = $request->input('term');
+		$newref = App\Matter::where('caseref', 'like', "$term%")->max('caseref');
+    $suffix = preg_replace ( '#\D#', '', $newref );
+		$suffix = str_pad ( $suffix + 1, strlen ( $suffix ), '0', STR_PAD_LEFT );
+		$prefix = preg_replace ( '#\d#', '', $newref );
+		$newref = $prefix . $suffix;
+    return ['value' => $newref];
+	});
 
 	Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
 		$term = $request->input('term');
@@ -117,14 +131,14 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('ruleinfo/{rule}','RuleController@update');
 	Route::get('ruleadd','RuleController@addShow');
 	Route::put('ruleadd','RuleController@store');
-	
+
 	Route::get('actors','ActorController@index');
 	Route::delete('actors/{actor}','ActorController@delete');
 	Route::get('actorinfo/{actor}','ActorController@show');
 	Route::put('actorinfo/{actor}','ActorController@update');
 	Route::get('actoradd','ActorController@addShow');
 	Route::put('actoradd','ActorController@store');*/
-	
+
     Route::resource('matter', 'MatterController');
     Route::apiResource('task', 'TaskController');
 	Route::apiResource('event', 'EventController');

@@ -121,7 +121,7 @@
 
   $('input#caseref').autocomplete({
 		minLength: 2,
-		source: "/matter/autocomplete"
+		source: "/matter/new-caseref"
 	});
 
   $('input#responsible').autocomplete({
