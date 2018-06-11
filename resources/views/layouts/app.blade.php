@@ -91,7 +91,7 @@
                 </div>
             </div>
         </nav>
-        <main class="container-fluid">
+        <main class="container">
             @yield('content')
         </main>
     </div>

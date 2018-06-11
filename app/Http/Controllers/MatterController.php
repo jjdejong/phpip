@@ -170,7 +170,7 @@ class MatterController extends Controller {
 		]);
 
 		$origin_id = $request->origin_id;
-		$from_matter = Matter::with('priority', 'classifiersNative')->find($origin_id);
+		$from_matter = Matter::with('priority', 'filing', 'classifiersNative')->find($origin_id);
 
 		foreach ($request->ncountry as $country) {
 
@@ -205,11 +205,7 @@ class MatterController extends Controller {
 			$new_matter->filing()->create($from_matter->filing->toArray());
 
 			// Insert "entered" event
-			$entered = new Event;
-			$entered->matter_id = $new_matter->id;
-			$entered->code = 'ENT';
-			$entered->event_date = date('Y-m-d');
-			$entered->save();
+			$new_matter->events()->create(["code" => 'ENT', "event_date" => date('Y-m-d')]);
 
 			$new_matter->parent_id = $origin_id;
 			$new_matter->save();
