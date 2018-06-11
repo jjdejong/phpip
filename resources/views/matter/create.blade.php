@@ -1,7 +1,6 @@
 <form id="createMatterForm" autocomplete="off" class="ui-front">
   <input type="hidden" name="operation" value="{{ $operation or "new" }}" />
   <input type="hidden" name="origin_id" value="{{ $from_matter->id or '' }}" />
-  <input type="hidden" name="origin_container_id" value="{{ $from_matter->container_id or '' }}" />
   <div class="form-group row">
     <label for="category" class="col-3 col-form-label font-weight-bold">Category</label>
     <div class="col-9">
@@ -147,6 +146,7 @@
       $("#createMatterForm").after('<div class="alert alert-danger" role="alert">' + errors.responseJSON.message + '</div>');
     })
     .done(function(data) {
+      // "data" contains the return value of the store() function, which is the URL of the newly created matter
       $(location).attr("href", data);
     });
   });

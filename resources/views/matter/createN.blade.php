@@ -5,7 +5,6 @@
   <input type="hidden" name="type_code" value="{{ $from_matter->type_code }}" />
   <input type="hidden" name="idx" value="{{ $from_matter->idx }}" />
 	<input type="hidden" name="origin_id" value="{{ $from_matter->id }}" />
-  <input type="hidden" name="origin_container_id" value="{{ $from_matter->container_id or '' }}" />
   <input type="hidden" name="responsible" value="{{ $from_matter->responsible }}" />
 	<div id="ncountries">
     @foreach( $from_matter->countryInfo->natcountries as $iso => $name )

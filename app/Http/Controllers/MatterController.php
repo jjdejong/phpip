@@ -30,8 +30,7 @@ class MatterController extends Controller {
 				'dir'
 		] );
 
-		$matter = new Matter ();
-		$matters = $matter->filter ( $sort_field, $sort_dir, $filters, $category_display, true );
+		$matters = Matter::filter ( $sort_field, $sort_dir, $filters, $category_display, true );
 		$matters->appends ( $request->input () )->links (); // Keep URL parameters in the paginator links
 
 		$matters->sort_id = $sort_field;
@@ -102,7 +101,7 @@ class MatterController extends Controller {
 		}
 
 		try {
-			$new_matter = Matter::create( $request->except(['_token', '_method', 'operation', 'origin_id', 'origin_container_id', 'priority']) );
+			$new_matter = Matter::create( $request->except(['_token', '_method', 'operation', 'origin_id', 'priority']) );
 		} catch (Exception $e) {
 			report($e);
 			return false;
@@ -170,19 +169,20 @@ class MatterController extends Controller {
 			'ncountry' => 'required:array'
 		]);
 
+		$origin_id = $request->origin_id;
+		$from_matter = Matter::with('priority', 'classifiersNative')->find($origin_id);
 
 		foreach ($request->ncountry as $country) {
 
 			$request->merge(['country' => $country]);
 
 			try {
-				$new_matter = Matter::create( $request->except(['_token', '_method', 'ncountry', 'origin_id', 'origin_container_id']) );
+				$new_matter = Matter::create( $request->except(['_token', '_method', 'ncountry', 'origin_id']) );
 			} catch (Exception $e) {
 				report($e);
 				return false;
 			}
 
-			$origin_id = $request->origin_id;
 			// Copy actors from original matter
 			DB::statement("INSERT IGNORE INTO matter_actor_lnk (matter_id, actor_id, display_order, role, shared, actor_ref, company_id, rate, date)
 				SELECT ?, actor_id, display_order, role, shared, actor_ref, company_id, rate, date
@@ -190,19 +190,19 @@ class MatterController extends Controller {
 				WHERE matter_id=?", [ $new_matter->id, $origin_id ]);
 
 			// Copy classifiers (from original matter's container, or from original matter if there is no container)
-			DB::statement("INSERT INTO classifier (matter_id, type_code, value, url, value_id, display_order, lnk_matter_id)
-				SELECT ?, type_code, value, url, value_id, display_order, lnk_matter_id
-				FROM classifier WHERE matter_id=?", [ $new_matter->id, $request->input('origin_container_id', $origin_id) ]);
+			if ( $from_matter->has('container') ) {
+				$new_matter->classifiersNative()->createMany($from_matter->container->classifiersNative->toArray());
+				$new_matter->container_id = $from_matter->container_id;
+			} else {
+				$new_matter->classifiersNative()->createMany($from_matter->classifiersNative->toArray());
+				$new_matter->container_id = $origin_id;
+			}
 
 			// Copy priority claims from original matter
-			DB::statement("INSERT INTO event (code, matter_id, event_date, alt_matter_id, detail, notes)
-				SELECT 'PRI', ?, event_date, alt_matter_id, detail, notes
-				FROM event WHERE matter_id=? AND code='PRI'", [ $new_matter->id, $origin_id ]);
+			$new_matter->priority()->createMany($from_matter->priority->toArray());
 
 			// Copy filing from original matter
-			DB::statement("INSERT INTO event (code, matter_id, event_date, detail, notes)
-				SELECT 'FIL', ?, event_date, detail, notes
-				FROM event WHERE matter_id=? AND code='FIL'", [ $new_matter->id, $origin_id ]);
+			$new_matter->filing()->create($from_matter->filing->toArray());
 
 			// Insert "entered" event
 			$entered = new Event;
@@ -212,7 +212,6 @@ class MatterController extends Controller {
 			$entered->save();
 
 			$new_matter->parent_id = $origin_id;
-			$new_matter->container_id = $request->input('origin_container_id', $origin_id);
 			$new_matter->save();
 		}
 
