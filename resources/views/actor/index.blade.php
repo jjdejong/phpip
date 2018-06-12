@@ -27,7 +27,9 @@
 
 @section('content')
 <div id="rules-tab"><h1>Actors</h1></div>
+<div class="btn btn-info">
 <a href="actor/create"  data-toggle="modal" data-target="#addModal" data-remote="false" title="Actor data" data-source="/actor?" data-resource="/actor/">Add a new actor</a>
+</div>
 <div id="rules-box">
 <table class="table table-striped table-hover table-sm">
   <thead>
@@ -40,13 +42,22 @@
        	<th>Delete</th>
     </tr>
     <tr id="filter" class="sticky-top">
+		
     	<th><input class="filter-input form-control form-control-sm" name="Name" value="{{ old('Name') }}"></th>
     	<th></th>
     	<th></th>
     	<th></th>
-    	<th><input class="filter-input" type="radio" name="phy_person" value="1" />Physical&nbsp;
-                        <input class="filter-input" type="radio" name="phy_person" value="0" />Legal&nbsp;
-                        <input class="filter-input" type="radio" name="phy_person" value="" checked=checked />Both</th>
+    	<th><div class="btn-group btn-group-toggle" data-toggle="buttons">
+			<label class="btn btn-info">
+				<input type="radio" name="phy_person" id="physical" value="1" />Physical
+			</label>
+			<label class="btn btn-info">
+				<input type="radio" name="phy_person" id="legal" value="0" />Legal
+			</label>
+			<label class="btn btn-info active">
+				<input type="radio" name="phy_person" id="both" value="" />Both
+			</label>
+			</div>
     	<th></th>
     </tr>
   </thead>
@@ -56,20 +67,20 @@
 
 @foreach ($actorslist as $actor)
     <tr class="actor-list-row" data-id="{{ $actor->id }}">
-    	<td class="col-name"><a href="/actor/{{ $actor->id }}" class="hidden-action" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Actor data" data-resource="/actor/" data-source="/actor?">
+    	<td><a href="/actor/{{ $actor->id }}" class="hidden-action" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Actor data" data-resource="/actor/" data-source="/actor?">
 								{{ $actor->name }}</a></td>
-    	<td class="col-trigger">{{ $actor->first_name }}</td>
-    	<td class="col-category">{{ $actor->display_name }}</td>
-    	<td class="col-country">{{ empty($actor->company) ? '' : $actor->company->name }}</td>
-    	<td class="col-country">
+    	<td>{{ $actor->first_name }}</td>
+    	<td>{{ $actor->display_name }}</td>
+    	<td>{{ empty($actor->company) ? '' : $actor->company->name }}</td>
+    	<td>
 			@if ($actor->phy_person) 
 			  Physical
 			@else
 			  Legal
 			@endif
 		</td>
-    	<td class="col-delete" >
-    		<span class="delete-from-list float-right text-danger" data-id="{{ $actor->id }}" title="Delete actor">&ominus;</span>
+    	<td>
+    		<span class="delete-from-list float-right" data-id="{{ $actor->id }}" title="Delete actor"> &#10060;</span>
     	</td>
     </tr>
 @endforeach

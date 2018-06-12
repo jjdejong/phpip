@@ -59,11 +59,21 @@ $("#infoModal").on("keypress", "input.noformat", function (e) {
 });
 
 //$('.filter-input:input').onclick( function() {
-$('.filter-input').on('click','input[type="radio"]', function() {
+$('#physical').on('change', function() {
 	refreshActorList();
 	}
 );
 	
+$('#legal').on('change', function() {
+	refreshActorList();
+	}
+);
+
+$('#both').on('change', function() {
+	refreshActorList();
+	}
+);
+
 $('.filter-input').keyup(_.debounce(function(){
 	if($(this).val().length != 0)
 	    $(this).css("background-color", "bisque");
