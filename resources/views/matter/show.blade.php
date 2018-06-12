@@ -179,7 +179,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							data-target="#listModal"
 							data-remote="false"
 							title="Edit actors in {{ $role_group[0]->role_name }} group"
-							href="/matter/{{ $matter->id }}/roleActors/{{ $role_group[0]->role_code }}"
+							href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}"
 							data-resource="/actor-pivot/">
 							&#9998;
 						</a>
@@ -189,8 +189,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 							data-html="true"
 							title='Add {{ $role_name }}'
 							data-content='<form id="addActorForm">
-									<input type="hidden" name="role" value="{{ $role_group[0]->role_code }}" />
-									<input type="hidden" name="shared" value="{{ $role_group[0]->shareable }}" />
+									<input type="hidden" name="role" value="{{ $role_group->first()->role_code }}" />
+									<input type="hidden" name="shared" value="{{ $role_group->first()->shareable }}" />
 									<input type="hidden" name="company_id" value="" />
 									<div class="ui-front">
 										<input type="text" class="form-control form-control-sm" name="actor_id" placeholder="Name" />
@@ -198,11 +198,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 									</div>
 									<div class="form-group">
 										<div class="form-check">
-											<input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id or $matter->id }}" {{ $role_group[0]->shareable ? "checked" : "" }}>
+											<input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id or $matter->id }}" {{ $role_group->first()->shareable ? "checked" : "" }}>
 											<label class="form-check-label" for="actorShared">Add to container and share</label>
 										</div>
 										<div class="form-check">
-											<input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}" {{ $role_group[0]->shareable ? "" : "checked" }}>
+											<input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}" {{ $role_group->first()->shareable ? "" : "checked" }}>
 											<label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
 										</div>
 									</div>

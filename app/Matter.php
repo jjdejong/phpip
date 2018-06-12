@@ -159,7 +159,7 @@ class Matter extends Model {
 		return $this->belongsTo('App\Type');
 	}
 
-	public static function filter ($sortField = 'caseref', $sortDir = 'asc', $multi_filter = [], $display_with = false, $paginated = false)
+	public static function filter ($sortkey = 'caseref', $sortdir = 'asc', $multi_filter = [], $display_with = false, $paginated = false)
 	{
 		$query = Matter::select ( DB::raw ( "CONCAT_WS('', caseref, suffix) AS Ref" ),
 			'matter.country AS country',
@@ -277,14 +277,14 @@ class Matter extends Model {
 			}
 		}
 
-		if ($sortField == 'caseref') {
-			if ($sortDir == 'desc') {
+		if ($sortkey == 'caseref') {
+			if ($sortdir == 'desc') {
 				$query->orderByRaw ( 'matter.caseref DESC, matter.container_id, matter.origin, matter.country, matter.type_code, matter.idx' );
 			} else {
 				$query->orderByRaw ( 'matter.caseref, matter.container_id, matter.origin, matter.country, matter.type_code, matter.idx' );
 			}
 		} else {
-			$query->orderByRaw ( "$sortField $sortDir, matter.caseref, matter.origin, matter.country" );
+			$query->orderByRaw ( "$sortkey $sortdir, matter.caseref, matter.origin, matter.country" );
 		}
 
 		if ($paginated) {

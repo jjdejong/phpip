@@ -52,8 +52,8 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <a class="dropdown-item" href="{{ url('/matter/') }}">All</a>
-                                    <a class="dropdown-item" href="{{ url('/matter?display=PAT') }}">Patents</a>
-                                    <a class="dropdown-item" href="{{ url('/matter?display=TM') }}">Trademarks</a>
+                                    <a class="dropdown-item" href="{{ url('/matter?display_with=PAT') }}">Patents</a>
+                                    <a class="dropdown-item" href="{{ url('/matter?display_with=TM') }}">Trademarks</a>
                                     <a class="dropdown-item" href="#newMatterModal" data-toggle="modal">New</a>
                                 </ul>
                             </li>

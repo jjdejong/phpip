@@ -14,30 +14,17 @@ class MatterController extends Controller {
 
 	public function index (Request $request)
 	{
-		$category_display = $request->input ( 'display' );
-		$get_sort = $request->input ( 'sort' );
-		$get_dir = $request->input ( 'dir' );
-		$sort_field = isset ( $get_sort ) ? $get_sort : 'caseref';
-		$sort_dir = isset ( $get_dir ) ? $get_dir : 'asc';
-		$page = $request->input ( 'page', 1 );
-
 		$filters = $request->except ( [
-				'display',
+				'display_with',
 				'page',
 				'filter',
 				'value',
-				'sort',
-				'dir'
+				'sortkey',
+				'sortdir'
 		] );
 
-		$matters = Matter::filter ( $sort_field, $sort_dir, $filters, $category_display, true );
+		$matters = Matter::filter ( $request->input ( 'sortkey', 'caseref' ), $request->input ( 'sortdir', 'asc' ), $filters, $request->display_with, true );
 		$matters->appends ( $request->input () )->links (); // Keep URL parameters in the paginator links
-
-		$matters->sort_id = $sort_field;
-		$matters->sort_dir = $sort_dir;
-		$matters->responsible = @$filters ['responsible'];
-		$matters->category_display = $request->input ( 'display' );
-		$request->flash (); // Flashes the previous values for storing data typed in forms
 
 		return view ( 'matter.index', compact ( 'matters' ) );
 	}
@@ -243,23 +230,17 @@ class MatterController extends Controller {
 	 */
 	public function export (Request $request)
 	{
-		$category_display = $request->input ( 'display' );
-		$get_sort = $request->input ( 'sort' );
-		$get_dir = $request->input ( 'dir' );
-		$sort_field = isset ( $get_sort ) ? $get_sort : 'caseref';
-		$sort_dir = isset ( $get_dir ) ? $get_dir : 'asc';
-
 		$filters = $request->except ( [
-				'display',
+				'display_with',
 				'page',
 				'filter',
 				'value',
-				'sort',
-				'dir'
+				'sortkey',
+				'sortdir'
 		] );
 
 		$matter = new Matter ();
-		$export = $matter->filter ( $sort_field, $sort_dir, $filters, $category_display, false )->toArray ();
+		$export = $matter->filter ( $request->input ( 'sortkey', 'caseref' ), $request->input ( 'sortdir', 'asc' ), $filters, $request->display_with, false )->toArray ();
 
 		$captions = [
 				'Omnipat',

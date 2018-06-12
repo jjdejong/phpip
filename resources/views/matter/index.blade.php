@@ -28,13 +28,12 @@ $(document).ready(function() {
 	contentUpdated();
 
 	$('.sortable').click(function() {
-		$('#sort_id').val( $(this).data('sortkey') );
-		$('#sort_dir').val( $(this).data('sortdir') );
+		$('#sortkey').val( $(this).data('sortkey') );
+		$('#sortdir').val( $(this).data('sortdir') );
 		if ( $(this).data('sortdir') == 'asc' ) {
 			$(this).data('sortdir', 'desc');
 		} else {
 			$(this).data('sortdir', 'asc');
-
 		}
 		refreshMatterList();
 	});
@@ -72,14 +71,14 @@ $(document).ready(function() {
 @stop
 
 @section('content')
-<div class="card" style="margin-bottom: 0px;">
+<div class="card mb-0">
 	<div class="card-header">
     <form class="btn-toolbar" role="toolbar">
       <div class="btn-group btn-group-toggle mr-3" data-toggle="buttons" id="container-all">
-        <label class="btn btn-info active">
+        <label class="btn btn-info {{ Request::get('Ctnr') ? '' : 'active' }}">
           <input type="radio" id="show-all" name="Ctnr" value=""> Show All
 				</label>
-        <label class="btn btn-info">
+        <label class="btn btn-info {{ Request::get('Ctnr') ? 'active' : '' }}">
           <input type="radio" id="show-containers" name="Ctnr" value="1"> Show Containers
 				</label>
       </div>
@@ -92,13 +91,13 @@ $(document).ready(function() {
 				</label>
       </div>
       <div class="btn-group-toggle mr-3" id="mine-all" data-toggle="buttons">
-        <label class="btn btn-info {{ @$_GET['responsible'] ? 'active' : '' }}">
+        <label class="btn btn-info {{ Request::get('responsible') ? 'active' : '' }}">
           <input class="responsible-filter" type="checkbox" id="show-responsible" name="responsible" value="{{ Auth::user ()->login }}"> Show Mine
 				</label>
       </div>
-      <input type="hidden" id="sort_id" name="sort" value="{{ $matters->sort_id }}">
-      <input type="hidden" id="sort_dir" name="dir" value="{{ $matters->sort_dir }}">
-      <input type="hidden" id="display" name="display" value="{{ $matters->category_display }}">
+      <input type="hidden" id="sortkey" name="sortkey" value="{{ Request::get('sortkey') }}">
+      <input type="hidden" id="sortdir" name="sortdir" value="{{ Request::get('sortdir') }}">
+      <input type="hidden" name="display_with" value="{{ Request::get('display_with') }}">
       <div class="btn-group mr-3">
         <button id="export" type="button" class="btn btn-primary"> &DownArrowBar; Export</button>
 			</div>
@@ -135,22 +134,22 @@ $(document).ready(function() {
       <th class="display_status">Number</th>
     </tr>
     <tr class="sticky-top" id="filter">
-      <td><input class="filter-input form-control form-control-sm" name="Ref" placeholder="Ref" value="{{ old('Ref') }}"></td>
-      <td><input class="filter-input form-control form-control-sm" size="3" name="Cat" placeholder="Cat" value="{{ old('Cat') }}"></td>
-      <td><input class="filter-input form-control form-control-sm" name="Status" placeholder="Status" value="{{ old('Status') }}"></td>
-      <td class="display_actor"><input class="filter-input form-control form-control-sm" name="Client" placeholder="Client" value="{{ old('Client') }}"></td>
-      <td class="display_actor"><input class="filter-input form-control form-control-sm" size="8" name="ClRef" placeholder="Cl. Ref" value="{{ old('ClRef') }}"></td>
-      <td class="display_actor"><input class="filter-input form-control form-control-sm" name="Agent" placeholder="Agent" value="{{ old('Agent') }}"></td>
-      <td class="display_actor"><input class="filter-input form-control form-control-sm" size="16" name="AgtRef" placeholder="Agt. Ref" value="{{ old('AgtRef') }}"></td>
-      <td class="display_actor"><input class="filter-input form-control form-control-sm" name="Title" placeholder="Title" value="{{ old('Title') }}"></td>
-      <td class="display_actor"><input class="filter-input form-control form-control-sm" name="Inventor1" placeholder="Inventor" value="{{ old('Inventor1') }}"></td>
-      <td class="display_status"><input class="filter-input form-control form-control-sm" name="Status_date" placeholder="Date" value="{{ old('Status_date') }}"></td>
-      <td class="display_status"><input class="filter-input form-control form-control-sm" name="Filed" placeholder="Filed" value="{{ old('Filed') }}"></td>
-      <td class="display_status"><input class="filter-input form-control form-control-sm" name="FilNo" placeholder="Number" value="{{ old('FilNo') }}"></td>
-      <td class="display_status"><input class="filter-input form-control form-control-sm" name="Published" placeholder="Published" value="{{ old('Published') }}"></td>
-      <td class="display_status"><input class="filter-input form-control form-control-sm" name="PubNo" placeholder="Number" value="{{ old('PubNo') }}"></td>
-      <td class="display_status"><input class="filter-input form-control form-control-sm" name="Granted" placeholder="Granted" value="{{ old('Granted') }}"></td>
-      <td class="display_status"><input class="filter-input form-control form-control-sm" name="GrtNo" placeholder="Number" value="{{ old('GrtNo') }}"></td>
+      <td><input class="filter-input form-control form-control-sm" name="Ref" placeholder="Ref" value="{{ Request::get('Ref') }}"></td>
+      <td><input class="filter-input form-control form-control-sm" size="3" name="Cat" placeholder="Cat" value="{{ Request::get('Cat') }}"></td>
+      <td><input class="filter-input form-control form-control-sm" name="Status" placeholder="Status" value="{{ Request::get('Status') }}"></td>
+      <td class="display_actor"><input class="filter-input form-control form-control-sm" name="Client" placeholder="Client" value="{{ Request::get('Client') }}"></td>
+      <td class="display_actor"><input class="filter-input form-control form-control-sm" size="8" name="ClRef" placeholder="Cl. Ref" value="{{ Request::get('ClRef') }}"></td>
+      <td class="display_actor"><input class="filter-input form-control form-control-sm" name="Agent" placeholder="Agent" value="{{ Request::get('Agent') }}"></td>
+      <td class="display_actor"><input class="filter-input form-control form-control-sm" size="16" name="AgtRef" placeholder="Agt. Ref" value="{{ Request::get('AgtRef') }}"></td>
+      <td class="display_actor"><input class="filter-input form-control form-control-sm" name="Title" placeholder="Title" value="{{ Request::get('Title') }}"></td>
+      <td class="display_actor"><input class="filter-input form-control form-control-sm" name="Inventor1" placeholder="Inventor" value="{{ Request::get('Inventor1') }}"></td>
+      <td class="display_status"><input class="filter-input form-control form-control-sm" name="Status_date" placeholder="Date" value="{{ Request::get('Status_date') }}"></td>
+      <td class="display_status"><input class="filter-input form-control form-control-sm" name="Filed" placeholder="Filed" value="{{ Request::get('Filed') }}"></td>
+      <td class="display_status"><input class="filter-input form-control form-control-sm" name="FilNo" placeholder="Number" value="{{ Request::get('FilNo') }}"></td>
+      <td class="display_status"><input class="filter-input form-control form-control-sm" name="Published" placeholder="Published" value="{{ Request::get('Published') }}"></td>
+      <td class="display_status"><input class="filter-input form-control form-control-sm" name="PubNo" placeholder="Number" value="{{ Request::get('PubNo') }}"></td>
+      <td class="display_status"><input class="filter-input form-control form-control-sm" name="Granted" placeholder="Granted" value="{{ Request::get('Granted') }}"></td>
+      <td class="display_status"><input class="filter-input form-control form-control-sm" name="GrtNo" placeholder="Number" value="{{ Request::get('GrtNo') }}"></td>
     </tr>
 	</thead>
   <tbody id="matter-list">
