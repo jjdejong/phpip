@@ -10,7 +10,6 @@
 	width: 125px;
 }
 
-}
 </style>
 
 <div id="edit-rule-content">
