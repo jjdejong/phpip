@@ -66,6 +66,18 @@ $(document).ready(function() {
 			$(this).css("background-color", "white");
 		refreshMatterList();
 	}, 500));
+
+	$('#clear-filters').click(function() {
+		$('#matter-list').load('/matter #matter-list > tr', function() {
+                    $('#filter').find('input').val('').css('background-color', '#fff');
+                    contentUpdated();
+                    $('#mine-all > label.active').removeClass('active');
+                    $('#container-all > label.active').removeClass('active');
+                    $('#container-all > label:first').addClass('active');
+                    window.history.pushState('', 'phpIP' , '/matter');
+		});
+	});
+
 });
 </script>
 @stop
@@ -75,10 +87,10 @@ $(document).ready(function() {
 	<div class="card-header">
     <form class="btn-toolbar" role="toolbar">
       <div class="btn-group btn-group-toggle mr-3" data-toggle="buttons" id="container-all">
-        <label class="btn btn-info {{ Request::get('Ctnr') ? '' : 'active' }}">
+        <label class="btn btn-info {{ Request::filled('Ctnr') ? '' : 'active' }}">
           <input type="radio" id="show-all" name="Ctnr" value=""> Show All
 				</label>
-        <label class="btn btn-info {{ Request::get('Ctnr') ? 'active' : '' }}">
+        <label class="btn btn-info {{ Request::filled('Ctnr') ? 'active' : '' }}">
           <input type="radio" id="show-containers" name="Ctnr" value="1"> Show Containers
 				</label>
       </div>
@@ -102,13 +114,7 @@ $(document).ready(function() {
         <button id="export" type="button" class="btn btn-primary"> &DownArrowBar; Export</button>
 			</div>
 			<div class="button-group">
-        <button id="clear-filters" type="button" class="btn btn-primary" onclick="$('#matter-list').load('/matter #matter-list > tr', function() {
-					$('#filter').find('input').val('').css('background-color', '#fff');
-					contentUpdated();
-					$('#mine-all > label').removeClass('active');
-					window.history.pushState('', 'phpIP' , '/matter');
-				});">
-				&circlearrowright; Clear filters</button>
+        <button id="clear-filters" type="button" class="btn btn-primary">&circlearrowright; Clear filters</button>
       </div>
     </form>
 	</div>
