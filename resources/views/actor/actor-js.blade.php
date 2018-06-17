@@ -41,7 +41,7 @@ $(document).ready(function() {
 
 // Generic in-place edition of fields in a infoModal
 
-$("#infoModal").on("keypress", "input.noformat", function (e) {
+$("#infoModal").on("keypress", "input.editable", function (e) {
 	if (e.which == 13) {
 		e.preventDefault();
 		var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();

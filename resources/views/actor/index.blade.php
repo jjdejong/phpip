@@ -11,15 +11,7 @@
 .reveal-hidden:hover .hidden-action {
 	display: inline-block;
 }
-.noformat {
-    border: none;
-    background: white;
-    color: inherit;
-    padding: 0px;
-    height: inherit;
-    display: inline;
-    box-shadow: none;
-}
+
 </style>
 
 @stop

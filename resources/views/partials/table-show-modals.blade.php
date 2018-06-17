@@ -1,5 +1,5 @@
 <div id="infoModal" class="modal fade" role="dialog">
-	<div class="modal-dialog modal-lg" style="max-width:550px">
+	<div class="modal-dialog modal-lg">
 	    <!-- Modal content-->
 	    <div class="modal-content">
 		    <div class="modal-header">
