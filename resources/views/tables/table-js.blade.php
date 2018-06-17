@@ -58,7 +58,7 @@ $('#infoModal').on("focus", 'input[name^="use"].noformat', function() {
     });
 });
 
-$("#infoModal").on("keypress", "input.noformat", function (e) {
+$("#infoModal").on("keypress", "input.editable", function (e) {
 	if (e.which == 13) {
 		e.preventDefault();
 		var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
