@@ -10,20 +10,13 @@
 <script>
 
 $('#tasklistdate').on("focus", 'input[name$="date"]', function() {
-	$(this).datepicker({
-		dateFormat: 'yy-mm-dd',
-		showButtonPanel: true,
-		onSelect: function(date, instance) {
-      $.ajax({
-        url: resource + $(this).closest("tr").data("id"),
-        type: 'PUT',
-        data: $(this).serialize(),
-      }).done(function () {
-				$("#listModal").find(".modal-body").load(relatedUrl);
-				$("#listModal").find(".alert").removeClass("alert-danger").html("");
-			});
-		}
-	});
+    $(this).datepicker({
+	dateFormat: 'yy-mm-dd',
+	showButtonPanel: true,
+	onSelect: function(date) {
+                        $(this).val(date);
+	}
+    });
 });
 
 $('#mytasks').on('change', function() {
@@ -54,5 +47,14 @@ $('#myrenewals').on('change', function() {
 	window.history.pushState('', 'phpIP' , url);
 	});
 });
+
+	// Ajax fill the opened modal and set global parameters
+    $("#homeModal").on("show.bs.modal", function(event) {
+    	relatedUrl = $(event.relatedTarget).attr("href");
+    	resource = $(event.relatedTarget).data("resource");
+
+    	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
+        $(this).find(".modal-body").load(relatedUrl);
+    });
 
 </script>
