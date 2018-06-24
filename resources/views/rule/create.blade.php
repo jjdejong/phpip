@@ -46,14 +46,14 @@
                         <input type="radio" name="use_parent" value="0"/>NO
                 </span>
                 </tr><tr><td><label for="use_before" title="{{ $ruleComments['use_before'] }}">Use before</label>
-                </td><td><input type='text' class="form-control form-control-sm  form-control" size="10" name="use_before" value="...">
+                </td><td><input type='text' class="form-control form-control-sm" size="10" name="use_before" value="...">
                 </td><td><label for="clear_task" title="{{ $ruleComments['clear_task'] }}">Clear task</label> 
                 </td><td><span class="form-control form-control-sm" name="clear_task">
                         <input type="radio" name="clear_task" value="1"/>YES&nbsp;&nbsp;
                         <input type="radio" name="clear_task" value="0"/>NO
                 </span>
                 </tr><tr><td><label  for="use_after" title="{{ $ruleComments['use_after'] }}">Use after</label>
-                </td><td><input type='text' class="form-control form-control-sm  form-control" size="10" name="use_after" value="...">
+                </td><td><input type='text' class="form-control form-control-sm " size="10" name="use_after" value="...">
                 </td><td><label for="delete_task" title="{{ $ruleComments['delete_task'] }}">Delete task</label> 
                 </td><td><span class="form-control form-control-sm" name="delete_task">
                         <input type="radio" name="delete_task" value="1"/>YES&nbsp;&nbsp;
