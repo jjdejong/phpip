@@ -10,10 +10,11 @@ class MatterActors extends Model
     public $timestamps = false;
 
     public function matter() {
-  		return $this->belongsTo('App\Matter');
-  	}
+        return $this->belongsTo('App\Matter');
+    }
 
     public function company() {
-      return $this->belongsTo('App\Actor', 'company_id');
+        return $this->belongsTo('App\Actor', 'company_id');
     }
+
 }
