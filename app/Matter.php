@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-class Matter extends Model 
+class Matter extends Model
 {
     protected $table = 'matter';
     public $timestamps = false; // removes timestamp updating in this table (done via MySQL triggers)
@@ -20,6 +20,8 @@ class Matter extends Model
     protected $revisionCleanup = true; //Remove old revisions (works only when used with $historyLimit)
     protected $historyLimit = 500; //Maintain a maximum of 500 changes at any point of time, while cleaning up old revisions.
 
+    protected $appends = ['uid']; // Allows eager loading of uid
+    
     public function getUidAttribute() {
         return $this->caseref . $this->suffix;
     }
@@ -140,10 +142,10 @@ class Matter extends Model
     }
 
     public static function filter($sortkey = 'caseref', $sortdir = 'asc', $multi_filter = [], $display_with = false, $paginated = false) {
-        $query = Matter::select(DB::raw("CONCAT_WS('', caseref, suffix) AS Ref"), 
-                'matter.country AS country', 
-                'matter.category_code AS Cat', 
-                'matter.origin', 
+        $query = Matter::select(DB::raw("CONCAT_WS('', caseref, suffix) AS Ref"),
+                'matter.country AS country',
+                'matter.category_code AS Cat',
+                'matter.origin',
                 'event_name.name AS Status',
                 'status.event_date AS Status_date',
                 DB::raw ( "COALESCE(cli.display_name, clic.display_name, cli.name, clic.name) AS Client" ),
@@ -258,7 +260,7 @@ class Matter extends Model
                     if ($key == 'responsible') {
                         $query->whereRaw("'$value' IN (matter.responsible, del.login)");
                     } else {
-                        $query->havingRaw("$key LIKE '$value%'");
+                        $query->having("$key", 'LIKE', "$value%");
                     }
                 }
             }

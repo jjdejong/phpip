@@ -1,5 +1,22 @@
 @extends('layouts.app')
 
+@section('style')
+
+<style>
+    .noformat {
+        border: none;
+        border-radius: 0;
+        background: white;
+        color: inherit;
+        padding: 0px;
+        height: inherit;
+        display: inline;
+        box-shadow: none;
+    }
+</style>
+
+@stop
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -36,7 +53,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <button>Clear selected on : </button>
+                            <button class="btn btn-primary">Clear selected on</button>
                         </div>
                         <div class="col-md-3" id="tasklistdate">
                             <input class="form-control form-control-sm noformat" size="10" name="datetaskcleardate" id="taskcleardate" type="text">
@@ -62,7 +79,7 @@
                 @foreach ($tasks as $task)
                     <div class="row">
                         <div class="col-md-6"><a href="/matter/{{ $task->trigger->matter_id }}/tasks" class="hidden-action" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
-								                {{ $task->info->name or '' }} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
+								                {{ $task->info->name or ''}} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
                       <div  class="col-md-3"><a href="/matter/{{ $task->trigger->matter_id }}" >{{ empty($task->trigger) ? '' : $task->trigger->matter->uid }}</a></div>
                       
                         @if ($task->due_date < date('Y-m-d'))
@@ -95,7 +112,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <button>Clear selected on : </button>
+                            <button class="btn btn-primary">Clear selected on</button>
                         </div>
                         <div class="col-md-3">
                             <input class="form-control form-control-sm hasDatepicker" size="10" name="renewalcleardate" id="taskcleardate" type="text">

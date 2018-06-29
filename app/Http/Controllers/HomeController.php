@@ -30,17 +30,19 @@ class HomeController extends Controller
         $MyRenewals = $request->input ( 'my_renewals' );
         
         // Get list of active tasks
-        $tasks = Task::with('info','trigger', 'trigger.matter')
-        ->where('done','0')->where('code', '!=', 'REN');
-        if (! is_null($MyTasks)) {
-            if ($MyTasks =='1') $tasks = $tasks->where('assigned_to','=',Auth::user()->login);}
-        $tasks = $tasks->orderby('due_date')->simplePaginate(25);
+        $tasks = Task::with('info:code,name', 'trigger:id,matter_id', 'trigger.matter:id,caseref,suffix')
+        ->where('done','0')->where('code', '!=', 'REN')->orderby('due_date');
+        if ($MyTasks) {
+            $tasks->where('assigned_to', Auth::user()->login);
+        }
+        $tasks = $tasks->simplePaginate(25);
         // Get list of active renewals
-        $renewals = Task::with('info','trigger', 'trigger.matter')
-        ->where('done','0')->where('code', '=', 'REN');
-        if (! is_null($MyRenewals)) {
-            if ($MyRenewals =='1') $renewals = $renewals->where('assigned_to','=',Auth::user()->login);}
-        $renewals = $renewals->orderby('due_date')->simplePaginate(25);
+        $renewals = Task::with('info:code,name', 'trigger:id,matter_id', 'trigger.matter:id,caseref,suffix')
+        ->where('done','0')->where('code', 'REN')->orderby('due_date');
+        if ($MyRenewals) {
+            $renewals->where('assigned_to', Auth::user()->login);
+        }
+        $renewals = $renewals->simplePaginate(25);
         
         return view('home',compact('tasks','renewals'));
     }
