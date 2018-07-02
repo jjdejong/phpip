@@ -73,7 +73,7 @@
 			</table>
         </fieldset>
         <fieldset>
-              <legend>Contact details</legend>
+              <legend>Administrative details</legend>
               <table class="table table-hover table-sm" data-id="{{ $actorInfo->id }}">
 				<tr><td><label for="VAT_number" title="{{ $actorComments['VAT_number'] }}" >VAT no.</label>
                 </td><td><input type='text' class="editable form-control form-control-sm" name="VAT_number" value="{{ $actorInfo->VAT_number }}">

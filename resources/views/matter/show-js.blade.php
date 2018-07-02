@@ -25,10 +25,19 @@
                 minLength: 2,
                 source: "/actor/autocomplete",
                 select: function (event, ui) {
+                    if (ui.item.value === 'create') {
+                        $.post('/actor', { name: this.value.toUpperCase(), default_role: $(".popover:last").find('input[name="role"]').val() })
+                        .done( function(response) {
+                            $(".popover:last").find('input[name="actor_id"]').val(response.id);
+                        });
+                    } else {
+                        // Fills in actor's company information, if available
                         $(this).parents('form').find('input[name="company_id"]').val(ui.item.company_id);
+                    }
                 },
                 change: function (event, ui) {
-    			if (!ui.item) $(this).val("");
+                    if (!ui.item)
+                        $(this).val("");
                 }
             });
 
