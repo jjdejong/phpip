@@ -35,7 +35,7 @@
                             <th class="border-top-0">Link to matter</th>
                             <th class="border-top-0">
                                 <a href="#addClassifierForm" data-toggle="collapse">
-                                    <span class="pull-right" title="Add classifier">&oplus;</span>
+                                    <span class="float-right" title="Add classifier">&oplus;</span>
                                 </a>
                             </th>
                         </tr>

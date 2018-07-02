@@ -5,23 +5,22 @@ namespace App\Http\Controllers;
 use App\Event;
 use Illuminate\Http\Request;
 
-class EventController extends Controller
-{
+class EventController extends Controller {
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-    	$this->validate($request, [
-			'name' => 'required',
-			'matter_id' => 'required|numeric',
-			'event_date' => 'required_without:alt_matter_id|date'
-    	]);
+    public function store(Request $request) {
+        $this->validate($request, [
+            'name' => 'required',
+            'matter_id' => 'required|numeric',
+            'event_date' => 'required_without:alt_matter_id|date'
+        ]);
 
-    	Event::create($request->except(['_token', '_method', 'name']));
+        Event::create($request->except(['_token', '_method', 'name']));
     }
 
     /**
@@ -30,8 +29,7 @@ class EventController extends Controller
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event)
-    {
+    public function show(Event $event) {
         //
     }
 
@@ -42,14 +40,13 @@ class EventController extends Controller
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event)
-    {
-    	$this->validate($request, [
-    		'event_date' => 'date',
-    		'alt_matter_id' => 'nullable|numeric'
-    	]);
+    public function update(Request $request, Event $event) {
+        $this->validate($request, [
+            'event_date' => 'date',
+            'alt_matter_id' => 'nullable|numeric'
+        ]);
 
-    	$event->update($request->except(['_token', '_method']));
+        $event->update($request->except(['_token', '_method']));
     }
 
     /**
@@ -58,8 +55,8 @@ class EventController extends Controller
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Event $event)
-    {
-    	$event->delete();
+    public function destroy(Event $event) {
+        $event->delete();
     }
+
 }

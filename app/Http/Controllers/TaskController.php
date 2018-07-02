@@ -6,8 +6,7 @@ use App\Task;
 //use App\Event;
 use Illuminate\Http\Request;
 
-class TaskController extends Controller
-{
+class TaskController extends Controller {
 
     /**
      * Store a newly created resource in storage.
@@ -15,18 +14,17 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-    	$request->validate([
-  			'trigger_id' => 'required|numeric',
-  			'name' => 'required',
-  			'due_date' => 'required|date',
-  			'done_date' => 'nullable|date',
-  			'cost' => 'nullable|numeric',
-  			'fee' => 'nullable|numeric'
-    	]);
+    public function store(Request $request) {
+        $request->validate([
+            'trigger_id' => 'required|numeric',
+            'name' => 'required',
+            'due_date' => 'required|date',
+            'done_date' => 'nullable|date',
+            'cost' => 'nullable|numeric',
+            'fee' => 'nullable|numeric'
+        ]);
 
-    	Task::create($request->except(['_token', '_method', 'name']));
+        Task::create($request->except(['_token', '_method', 'name']));
     }
 
     /**
@@ -35,8 +33,7 @@ class TaskController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function show(Task $task)
-    {
+    public function show(Task $task) {
         //
     }
 
@@ -47,21 +44,20 @@ class TaskController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task)
-    {
-    	$this->validate($request, [
-  			'due_date' => 'date',
-  			'done_date' => 'nullable|date',
-  			'cost' => 'nullable|numeric',
-  			'fee' => 'nullable|numeric'
-    	]);
+    public function update(Request $request, Task $task) {
+        $this->validate($request, [
+            'due_date' => 'date',
+            'done_date' => 'nullable|date',
+            'cost' => 'nullable|numeric',
+            'fee' => 'nullable|numeric'
+        ]);
 
-    	// Remove task rule when due date is manually changed
-    	if ($request->has('due_date')) {
-    		$request->merge(['rule_used' => null]);
-      }
+        // Remove task rule when due date is manually changed
+        if ($request->has('due_date')) {
+            $request->merge(['rule_used' => null]);
+        }
 
-    	$task->update($request->except(['_token', '_method']));
+        $task->update($request->except(['_token', '_method']));
     }
 
     /**
@@ -70,8 +66,8 @@ class TaskController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Task $task)
-    {
+    public function destroy(Task $task) {
         $task->delete();
     }
+
 }
