@@ -21,7 +21,7 @@
         });
 
         $('body').on("shown.bs.popover", '[rel="popover"]', function () {
-            $(".popover:last").find('input[name="actor_id"]').autocomplete({
+            $(".popover:last").find('#actor_name').autocomplete({
                 minLength: 2,
                 source: "/actor/autocomplete",
                 select: function (event, ui) {
@@ -29,8 +29,10 @@
                         $.post('/actor', { name: this.value.toUpperCase(), default_role: $(".popover:last").find('input[name="role"]').val() })
                         .done( function(response) {
                             $(".popover:last").find('input[name="actor_id"]').val(response.id);
+                            $(".popover:last").find('#actor_name').val(response.name);
                         });
                     } else {
+                        $(this).parents('form').find('input[name="actor_id"]').val(ui.item.id);
                         // Fills in actor's company information, if available
                         $(this).parents('form').find('input[name="company_id"]').val(ui.item.company_id);
                     }

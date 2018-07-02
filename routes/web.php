@@ -93,7 +93,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('actor/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\Actor::select('name as label', 'id as value', 'company_id')
+        return App\Actor::select('name as value', 'id', 'company_id')
                         ->where('name', 'like', "%$term%")
                         ->take(10)->get()
                         ->push(['label' => '++Create actor from input', 'value' => 'create', 'company_id' => null]);
