@@ -96,7 +96,7 @@ Route::group(['middleware' => 'auth'], function () {
         return App\Actor::select('name as value', 'id', 'company_id')
                         ->where('name', 'like', "%$term%")
                         ->take(10)->get()
-                        ->push(['label' => '++Create actor from input', 'value' => 'create', 'company_id' => null]);
+                        ->push(['label' => 'Unknown. Create?', 'value' => 'create', 'company_id' => null]);
     });
 
     Route::get('role/autocomplete', function (Request $request) {

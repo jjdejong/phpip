@@ -25,7 +25,7 @@
                 minLength: 2,
                 source: "/actor/autocomplete",
                 select: function (event, ui) {
-                    if (ui.item.value === 'create') {
+                    if (ui.item.value === 'create') { // Creates actor on the fly
                         $.post('/actor', { name: this.value.toUpperCase(), default_role: $(".popover:last").find('input[name="role"]').val() })
                         .done( function(response) {
                             $(".popover:last").find('input[name="actor_id"]').val(response.id);
@@ -36,6 +36,9 @@
                         // Fills in actor's company information, if available
                         $(this).parents('form').find('input[name="company_id"]').val(ui.item.company_id);
                     }
+                },
+                open: function(event, ui) { // Change color of last suggestion (which is the "create actor" option)
+                    $("ul").find( ".ui-menu-item:last" ).addClass("text-success");
                 },
                 change: function (event, ui) {
                     if (!ui.item)
