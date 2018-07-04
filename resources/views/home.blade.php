@@ -52,10 +52,10 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <button class="btn btn-primary" id="clear-open-tasks">Clear selected on</button>
                         </div>
-                        <div class="col-md-3" id="tasklistdate">
+                        <div class="col-md-2" id="tasklistdate">
                             <input class="form-control form-control-sm noformat" size="10" name="datetaskcleardate" id="taskcleardate" type="text">
                         </div>
                     </div>
@@ -111,10 +111,10 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <button class="btn btn-primary" id="clear-ren-tasks">Clear selected on : </button>
                         </div>
-                        <div class="col-md-3" id="renewallistdate">
+                        <div class="col-md-2" id="renewallistdate">
                             <input class="form-control form-control-sm noformat" size="10" name="renewalcleardate" id="renewalcleardate" type="text">
                         </div>
                     </div>
