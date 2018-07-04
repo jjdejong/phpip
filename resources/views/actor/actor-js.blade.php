@@ -301,7 +301,7 @@ $(document).on("submit", "#createActorForm", function(e) {
 	var data = $.param({ _token: csrf_token }) + "&" + request;
 	console.log(request);
 	$.post('/actor', data,function(response) {
-		if(response.success) {
+		if(response.id) {
 			window.alert("Actor created.");
 			$('#addModal').modal("hide");
 			refreshActorList();}
