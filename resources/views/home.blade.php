@@ -53,10 +53,10 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <button class="btn btn-primary" id="clear-open-tasks">Clear selected on</button>
+                            <button class="btn btn-primary" id="clear-open-tasks">Clear selected on: </button>
                         </div>
                         <div class="col-md-2" id="tasklistdate">
-                            <input class="form-control form-control-sm noformat" size="10" name="datetaskcleardate" id="taskcleardate" type="text">
+                            <input class="form-control noformat" size="10" name="datetaskcleardate" id="taskcleardate" type="text">
                         </div>
                     </div>
                 </div>
@@ -75,23 +75,26 @@
                             Close
                         </div>
                     </div>
-
-                @foreach ($tasks as $task)
-                    <div class="row">
-                        <div class="col-md-6"><a href="/matter/{{ $task->trigger->matter_id }}/tasks" class="hidden-action" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
-								                {{ $task->info->name or ''}} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
-                      <div  class="col-md-3"><a href="/matter/{{ $task->trigger->matter_id }}" >{{ empty($task->trigger) ? '' : $task->trigger->matter->uid }}</a></div>
-                      
-                        @if ($task->due_date < date('Y-m-d'))
-                            <div class="col-md-2 text-danger">{{ $task->due_date}}</div>
-                        @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
-                            <div  class="col-md-2 text-warning">{{ $task->due_date}}</div>
-                        @else
-                            <div  class="col-md-2">{{ $task->due_date}}</div>
-                        @endif
-                      <div  class="col-md-1"><input id="{{ $task->id }}" class="clear-open-task" type="checkbox" /></div>
-                    </div>
-                @endforeach
+                @if (count($tasks) == 0)
+                    <div class="row text-danger">The list is empty</div>
+                @else
+                    @foreach ($tasks as $task)
+                        <div class="row">
+                            <div class="col-md-6"><a href="/matter/{{ $task->trigger->matter_id }}/tasks" class="hidden-action" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
+                                                    {{ $task->info->name or ''}} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
+                          <div  class="col-md-3"><a href="/matter/{{ $task->trigger->matter_id }}" >{{ empty($task->trigger) ? '' : $task->trigger->matter->uid }}</a></div>
+                          
+                            @if ($task->due_date < date('Y-m-d'))
+                                <div class="col-md-2 text-danger">{{ $task->due_date}}</div>
+                            @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
+                                <div  class="col-md-2 text-warning">{{ $task->due_date}}</div>
+                            @else
+                                <div  class="col-md-2">{{ $task->due_date}}</div>
+                            @endif
+                          <div  class="col-md-1"><input id="{{ $task->id }}" class="clear-open-task" type="checkbox" /></div>
+                        </div>
+                    @endforeach
+                @endif
                 </div>
 
             </div>
@@ -112,10 +115,10 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <button class="btn btn-primary" id="clear-ren-tasks">Clear selected on : </button>
+                            <button class="btn btn-primary" id="clear-ren-tasks">Clear selected on: </button>
                         </div>
                         <div class="col-md-2" id="renewallistdate">
-                            <input class="form-control form-control-sm noformat" size="10" name="renewalcleardate" id="renewalcleardate" type="text">
+                            <input class="form-control noformat" size="10" name="renewalcleardate" id="renewalcleardate" type="text">
                         </div>
                     </div>
                 </div>
