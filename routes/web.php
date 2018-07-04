@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
         return view('matter.createN', compact('from_matter'));
     });
     Route::post('matter/storeN', 'MatterController@storeN');
+    Route::post('matter/clear-tasks', 'HomeController@clearTasks');
 
     Route::get('matter/new-caseref', function (Request $request) {
         $term = $request->input('term');

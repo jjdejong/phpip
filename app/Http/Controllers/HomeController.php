@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Task;
+use Response;
 
 class HomeController extends Controller
 {
@@ -46,4 +48,32 @@ class HomeController extends Controller
         
         return view('home',compact('tasks','renewals'));
     }
+
+    /**
+     * Clear selected tasks.
+     *
+     */
+    public function clearTasks(Request $request)
+    {
+    	$validator = Validator::make($request->all(), [
+        'done_date' => 'bail|required|date',
+        ]);
+    	if($validator->passes()){
+            $tids = $request->input('task_ids');
+            $done_date = $request->input('done_date');
+            $updated = 0;
+            foreach($tids as $id) {
+                $task = Task::find($id);
+                $task->done_date = $done_date;
+                $task->done = 1;
+                $returncode = $task->save();
+                if ($returncode) $updated = $updated + 1;
+            }
+            return Response::json(['not_updated' => (count($tids) - $updated),
+            'errors' =>'']);
+		}
+		return Response::json(['errors' => $validator->errors()]);
+
+    }
+
 }

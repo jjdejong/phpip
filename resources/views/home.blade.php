@@ -53,7 +53,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <button class="btn btn-primary">Clear selected on</button>
+                            <button class="btn btn-primary" id="clear-open-tasks">Clear selected on</button>
                         </div>
                         <div class="col-md-3" id="tasklistdate">
                             <input class="form-control form-control-sm noformat" size="10" name="datetaskcleardate" id="taskcleardate" type="text">
@@ -89,7 +89,7 @@
                         @else
                             <div  class="col-md-2">{{ $task->due_date}}</div>
                         @endif
-                      <div  class="col-md-1"><input id="{{ $task->id }}" type="checkbox" /></div>
+                      <div  class="col-md-1"><input id="{{ $task->id }}" class="clear-open-task" type="checkbox" /></div>
                     </div>
                 @endforeach
                 </div>
@@ -112,10 +112,10 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <button class="btn btn-primary">Clear selected on</button>
+                            <button class="btn btn-primary" id="clear-ren-tasks">Clear selected on : </button>
                         </div>
-                        <div class="col-md-3">
-                            <input class="form-control form-control-sm hasDatepicker" size="10" name="renewalcleardate" id="taskcleardate" type="text">
+                        <div class="col-md-3" id="renewallistdate">
+                            <input class="form-control form-control-sm" size="10" name="renewalcleardate" id="renewalcleardate" type="text">
                         </div>
                     </div>
                 </div>
@@ -151,7 +151,7 @@
                                 @else
                                     <div  class="col-md-2">{{ $task->due_date}}</div>
                                 @endif
-                              <div  class="col-md-1"><input id="{{ $task->id }}" type="checkbox" /></div>
+                              <div  class="col-md-1"><input id="{{ $task->id }}" class="clear-ren-task" type="checkbox" /></div>
                             </div>
                         @endforeach
                     @endif
