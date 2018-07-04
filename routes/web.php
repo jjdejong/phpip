@@ -131,20 +131,6 @@ Route::group(['middleware' => 'auth'], function () {
                         ->where('name', 'like', "$term%")->get();
     });
 
-    /* 	Route::get('rule','RuleController@index');
-      Route::delete('rule/{rule}','RuleController@delete');
-      Route::get('ruleinfo/{rule}','RuleController@show');
-      Route::put('ruleinfo/{rule}','RuleController@update');
-      Route::get('ruleadd','RuleController@addShow');
-      Route::put('ruleadd','RuleController@store');
-
-      Route::get('actors','ActorController@index');
-      Route::delete('actors/{actor}','ActorController@delete');
-      Route::get('actorinfo/{actor}','ActorController@show');
-      Route::put('actorinfo/{actor}','ActorController@update');
-      Route::get('actoradd','ActorController@addShow');
-      Route::put('actoradd','ActorController@store'); */
-
     Route::resource('matter', 'MatterController');
     Route::apiResource('task', 'TaskController');
     Route::apiResource('event', 'EventController');
