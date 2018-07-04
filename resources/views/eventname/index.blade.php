@@ -56,7 +56,9 @@
 
 <!-- Modals -->
 @include('partials.table-show-modals')
-@include('partials.table-add-modals')
+<div id="addModal" class="modal fade" role="dialog">
+@include('partials.generic-modals')
+</div>
 
 @endsection
 

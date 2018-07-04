@@ -166,8 +166,9 @@
 </div>
 @endsection
 
-
-@include('partials.home-modals')
+<div id="homeModal" class="modal fade" role="dialog">
+@include('partials.generic-modals')
+</div>
 @section('script')
 
 @include('home-js')
