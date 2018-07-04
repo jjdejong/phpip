@@ -115,7 +115,7 @@
                             <button class="btn btn-primary" id="clear-ren-tasks">Clear selected on : </button>
                         </div>
                         <div class="col-md-3" id="renewallistdate">
-                            <input class="form-control form-control-sm" size="10" name="renewalcleardate" id="renewalcleardate" type="text">
+                            <input class="form-control form-control-sm noformat" size="10" name="renewalcleardate" id="renewalcleardate" type="text">
                         </div>
                     </div>
                 </div>
