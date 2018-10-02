@@ -47,7 +47,7 @@
               <table class="table table-hover table-sm" data-id="{{ $actorInfo->id }}">
                 <tr><td><label for="address" title="{{ $actorComments['address'] }}">Address</label>
                 </td><td class="ui-front">
-					<input type='text' class="editable form-control form-control-sm" name="address" value="{{ $actorInfo->address }}">
+                    <textarea class="editable form-control form-control-sm" name="address">{{ $actorInfo->address }}</textarea>
                 </td><td><label for="country" title="{{ $actorComments['country'] }}">Country</label>
                 </td><td class="ui-front">
 						<input type='text' class=" form-control form-control-sm" name="country" value="{{ empty($actorInfo->countryInfo) ? '' : $actorInfo->countryInfo->name }}">

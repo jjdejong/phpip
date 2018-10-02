@@ -1,54 +1,54 @@
 <form id="createMatterForm" autocomplete="off" class="ui-front">
-  <input type="hidden" name="operation" value="{{ $operation or "new" }}" />
-  <input type="hidden" name="origin_id" value="{{ $from_matter->id or '' }}" />
+  <input type="hidden" name="operation" value="{{ $operation ?? "new" }}" />
+  <input type="hidden" name="origin_id" value="{{ $from_matter->id ?? '' }}" />
   <div class="form-group row">
     <label for="category" class="col-3 col-form-label font-weight-bold">Category</label>
     <div class="col-9">
-      <input type="hidden" name="category_code" value="{{ $from_matter->category_code or '' }}" />
-      <input type="text" class="form-control" id="category" value="{{ $from_matter->category->category or '' }}" onFocus="this.select()" />
+      <input type="hidden" name="category_code" value="{{ $from_matter->category_code ?? '' }}" />
+      <input type="text" class="form-control" id="category" value="{{ $from_matter->category->category ?? '' }}" onFocus="this.select()" />
     </div>
   </div>
   <div class="form-group row">
     <label for="country" class="col-3 col-form-label font-weight-bold">Country</label>
     <div class="col-9">
-      <input type="hidden" name="country" value="{{ $from_matter->country or '' }}" />
-      <input type="text" class="form-control" id="country" value="{{ $from_matter->countryInfo->name or '' }}" onFocus="this.select()" />
+      <input type="hidden" name="country" value="{{ $from_matter->country ?? '' }}" />
+      <input type="text" class="form-control" id="country" value="{{ $from_matter->countryInfo->name ?? '' }}" onFocus="this.select()" />
     </div>
   </div>
   <div class="form-group row">
     <label for="origin" class="col-3 col-form-label">Origin</label>
     <div class="col-9">
-      <input type="hidden" name="origin" value="{{ $from_matter->origin or '' }}" />
-      <input type="text" class="form-control" id="origin" value="{{ $from_matter->originInfo->name or '' }}" onFocus="this.select()" />
+      <input type="hidden" name="origin" value="{{ $from_matter->origin ?? '' }}" />
+      <input type="text" class="form-control" id="origin" value="{{ $from_matter->originInfo->name ?? '' }}" onFocus="this.select()" />
     </div>
   </div>
   <div class="form-group row">
     <label for="type_code" class="col-3 col-form-label">Type</label>
     <div class="col-9">
-      <input type="hidden" name="type_code" value="{{ $from_matter->type_code or '' }}" />
-      <input type="text" class="form-control" id="type_code" value="{{ $from_matter->type->type or '' }}" onFocus="this.select()" />
+      <input type="hidden" name="type_code" value="{{ $from_matter->type_code ?? '' }}" />
+      <input type="text" class="form-control" id="type_code" value="{{ $from_matter->type->type ?? '' }}" onFocus="this.select()" />
     </div>
   </div>
   <div class="form-group row">
     <label for="caseref" class="col-3 col-form-label font-weight-bold">Caseref</label>
     <div class="col-9">
       @if ( $operation == 'child' )
-        <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $from_matter->caseref or '' }}" readonly />
+        <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $from_matter->caseref ?? '' }}" readonly />
       @else
-        <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $from_matter->caseref or '' }}" onFocus="this.select()" />
+        <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $from_matter->caseref ?? '' }}" onFocus="this.select()" />
       @endif
     </div>
   </div>
   <div class="form-group row">
     <label for="responsible" class="col-3 col-form-label font-weight-bold">Responsible</label>
     <div class="col-9">
-      <input type="text" class="form-control" id="responsible" name="responsible" value="{{ $from_matter->responsible or '' }}" onFocus="this.select()" />
+      <input type="text" class="form-control" id="responsible" name="responsible" value="{{ $from_matter->responsible ?? '' }}" onFocus="this.select()" />
     </div>
   </div>
 
   @if ( $operation == 'child' )
   <fieldset class="form-group">
-    <legend>Use current {{ $from_matter->category->category or 'matter' }} as:</legend>
+    <legend>Use current {{ $from_matter->category->category ?? 'matter' }} as:</legend>
     <div class="form-check">
       <input class="form-check-input" type="radio" name="priority" value="1" checked="checked" id="priority" />
       <label class="form-check-label" for="priority">Priority application</label>
@@ -59,7 +59,7 @@
     </div>
   </fieldset>
   {{-- <fieldset class="form-group">
-    <legend>Child {{ $from_matter->category->category or 'matter' }}:</legend>
+    <legend>Child {{ $from_matter->category->category ?? 'matter' }}:</legend>
     <div class="form-check">
       <input class="form-check-input" type="radio" name="container" value="1" id="container" />
       <label class="form-check-label" for="container">Is independent container</label>

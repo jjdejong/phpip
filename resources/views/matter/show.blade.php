@@ -81,7 +81,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <div id="addTitleForm" class="collapse">
                 <form>
                     <div class="form-row">
-                        <input type="hidden" name="matter_id" value="{{ $matter->container_id or $matter->id }}" />
+                        <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}" />
                         <input type="hidden" name="type_code" />
                         <div class="col-2">
                             <input type="text" class="form-control form-control-sm" name="type" placeholder="Type" />
@@ -153,7 +153,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                </div>
                <div class="form-group">
                <div class="form-check">
-               <input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id or $matter->id }}">
+               <input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
                <label class="form-check-label" for="actorShared">Add to container and share</label>
                </div>
                <div class="form-check">
@@ -200,7 +200,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                        </div>
                        <div class="form-group">
                        <div class="form-check">
-                       <input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id or $matter->id }}" {{ $role_group->first()->shareable ? "checked" : "" }}>
+                       <input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}" {{ $role_group->first()->shareable ? "checked" : "" }}>
                        <label class="form-check-label" for="actorShared">Add to container and share</label>
                        </div>
                        <div class="form-check">

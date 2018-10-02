@@ -68,7 +68,7 @@
                         <tr id="addClassifierForm" class="collapse">
                             <td colspan="5">
                                 <form class="form-inline">
-                                    <input type="hidden" name="matter_id" value="{{ $matter->container_id or $matter->id }}"/>
+                                    <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}"/>
                                     <input type="hidden" name="type_code" value=""/>
                                     <div class="input-group">
                                         <div class="ui-front">

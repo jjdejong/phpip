@@ -18,8 +18,8 @@
                                 <input id="login" type="text" class="form-control" name="login" value="{{ old('login') }}" required autofocus>
 
                                 @if ($errors->has('login'))
-                                    <span class="help-block">
                                         <strong>{{ $errors->first('login') }}</strong>
+                                    <span class="invalid-feedback" role="alert">
                                     </span>
                                 @endif
                             </div>
@@ -32,7 +32,7 @@
                                 <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
 
                                 @if ($errors->has('password'))
-                                    <span class="invalid-feedback">
+                                    <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
                                 @endif
@@ -41,9 +41,11 @@
 
                         <div class="form-group row">
                             <div class="col-md-6 offset-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('Remember Me') }}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+
+                                    <label class="form-check-label" for="remember">
+                                        {{ __('Remember Me') }}
                                     </label>
                                 </div>
                             </div>

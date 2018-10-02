@@ -81,7 +81,7 @@
                     @foreach ($tasks as $task)
                         <div class="row">
                             <div class="col-md-6"><a href="/matter/{{ $task->trigger->matter_id }}/tasks" class="hidden-action" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
-                                                    {{ $task->info->name or ''}} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
+                                                    {{ $task->info->name ?? ''}} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
                           <div  class="col-md-3"><a href="/matter/{{ $task->trigger->matter_id }}" >{{ empty($task->trigger) ? '' : $task->trigger->matter->uid }}</a></div>
                           
                             @if ($task->due_date < date('Y-m-d'))
@@ -144,7 +144,7 @@
                         @foreach ($renewals as $task)
                             <div class="row">
                                 <div class="col-md-6"><a href="/matter/{{ $task->trigger->matter_id }}/renewals" class="hidden-action" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
-								                {{ $task->info->name or '' }} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
+								                {{ $task->info->name ?? '' }} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
                               <div  class="col-md-3"><a href="/matter/{{ $task->trigger->matter_id }}" >{{ empty($task->trigger) ? '' : $task->trigger->matter->uid }}</a></div>
                               
                                 @if ($task->due_date < date('Y-m-d'))
