@@ -18,7 +18,7 @@
 @stop
 
 @section('content')
-<div class="container">
+
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card">
@@ -83,7 +83,7 @@
                             <div class="col-md-6"><a href="/matter/{{ $task->trigger->matter_id }}/tasks" class="hidden-action" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
                                                     {{ $task->info->name ?? ''}} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
                           <div  class="col-md-3"><a href="/matter/{{ $task->trigger->matter_id }}" >{{ empty($task->trigger) ? '' : $task->trigger->matter->uid }}</a></div>
-                          
+
                             @if ($task->due_date < date('Y-m-d'))
                                 <div class="col-md-2 text-danger">{{ $task->due_date}}</div>
                             @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
@@ -146,7 +146,7 @@
                                 <div class="col-md-6"><a href="/matter/{{ $task->trigger->matter_id }}/renewals" class="hidden-action" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
 								                {{ $task->info->name ?? '' }} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
                               <div  class="col-md-3"><a href="/matter/{{ $task->trigger->matter_id }}" >{{ empty($task->trigger) ? '' : $task->trigger->matter->uid }}</a></div>
-                              
+
                                 @if ($task->due_date < date('Y-m-d'))
                                     <div class="col-md-2 text-danger">{{ $task->due_date}}</div>
                                 @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
@@ -162,16 +162,17 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-@endsection
+    
+
 
 <div id="homeModal" class="modal fade" role="dialog">
 @include('partials.generic-modals')
 </div>
+
+@stop
+
 @section('script')
 
 @include('home-js')
 
 @stop
-

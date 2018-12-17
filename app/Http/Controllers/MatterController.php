@@ -291,7 +291,7 @@ class MatterController extends Controller
     public function tasks(Matter $matter) { // All events and their tasks, excepting renewals
         $events = Event::with(['tasks' => function($query) {
             $query->where('code', '!=', 'REN');
-        }])->where('matter_id', $matter->id)
+        }, 'info:code,name', 'tasks.info:code,name'])->where('matter_id', $matter->id)
         ->orderBy('event_date')->get();
         return view('matter.tasks', compact('events', 'matter'));
     }
