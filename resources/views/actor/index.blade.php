@@ -4,19 +4,6 @@
     Actors edition
 @endsection
 
-@section('style')
-
-<style>
-
-.reveal-hidden:hover .hidden-action {
-	display: inline-block;
-}
-
-</style>
-
-@stop
-
-
 @section('content')
 <div id="rules-tab"><h1>Actors</h1></div>
 <div class="btn btn-info">
@@ -34,7 +21,7 @@
        	<th>Delete</th>
     </tr>
     <tr id="filter" class="sticky-top">
-		
+
     	<th><input class="filter-input form-control form-control-sm" name="Name" value="{{ old('Name') }}"></th>
     	<th></th>
     	<th></th>
@@ -65,7 +52,7 @@
     	<td>{{ $actor->display_name }}</td>
     	<td>{{ empty($actor->company) ? '' : $actor->company->name }}</td>
     	<td>
-			@if ($actor->phy_person) 
+			@if ($actor->phy_person)
 			  Physical
 			@else
 			  Legal

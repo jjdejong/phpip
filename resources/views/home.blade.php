@@ -1,22 +1,5 @@
 @extends('layouts.app')
 
-@section('style')
-
-<style>
-    .noformat {
-        border: none;
-        border-radius: 0;
-        background: white;
-        color: inherit;
-        padding: 0px;
-        height: inherit;
-        display: inline;
-        box-shadow: none;
-    }
-</style>
-
-@stop
-
 @section('content')
 
     <div class="row justify-content-center">
@@ -162,7 +145,7 @@
                 </div>
             </div>
         </div>
-    
+
 
 
 <div id="homeModal" class="modal fade" role="dialog">

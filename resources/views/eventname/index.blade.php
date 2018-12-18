@@ -4,16 +4,6 @@
     Actors edition
 @endsection
 
-@section('style')
-
-<style>
-
-.reveal-hidden:hover .hidden-action {
-    display: inline-block;
-</style>
-
-@stop
-
 @section('content')
 <div id="events-tab">Event names</div>
 <a href="eventname/create"  data-toggle="modal" data-target="#addModal" data-remote="false" title="Event name" data-resource="/eventname/create/" data-source="/eventname?">Add a new event name</a>

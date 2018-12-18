@@ -11789,3 +11789,23 @@ a.text-dark:focus {
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
+.hidden-action {
+  display: none;
+}
+
+.reveal-hidden:hover .hidden-action {
+  display: inline-block;
+}
+
+.noformat {
+  border: none;
+  border-radius: 0;
+  background: white;
+  color: inherit;
+  padding: 0px;
+  height: inherit;
+  display: inline;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+

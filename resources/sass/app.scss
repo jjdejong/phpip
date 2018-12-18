@@ -14,3 +14,23 @@
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
+
+// Show/hide elements upon hovering
+.hidden-action {
+    display: none;
+}
+.reveal-hidden:hover .hidden-action {
+    display: inline-block;
+}
+
+// Clear all input field formatting for in-place edition fields
+.noformat {
+    border: none;
+    border-radius: 0;
+    background: white;
+    color: inherit;
+    padding: 0px;
+    height: inherit;
+    display: inline;
+    box-shadow: none;
+}

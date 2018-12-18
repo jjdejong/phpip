@@ -4,27 +4,6 @@
     Rules edition
 @endsection
 
-@section('style')
-
-<style>
-
-.reveal-hidden:hover .hidden-action {
-    display: inline-block;
-}
-.noformat {
-    border: none;
-    background: white;
-    color: inherit;
-    padding: 0px;
-    height: inherit;
-    display: inline;
-    box-shadow: none;
-}
-</style>
-
-@stop
-
-
 @section('content')
 <div id="rules-tab">Rules</div>
 <a href="rule/create"  data-toggle="modal" data-target="#addModal" data-remote="false" title="Rule data" data-source="/rule?" data-resource="/rule/create/">Add a new rule</a>

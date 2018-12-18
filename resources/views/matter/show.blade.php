@@ -7,29 +7,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 @extends('layouts.app')
 
-@section('style')
-
-<style>
-    .hidden-action {
-        display: none;
-    }
-    .reveal-hidden:hover .hidden-action {
-        display: inline-block;
-    }
-    .noformat {
-        border: none;
-        border-radius: 0;
-        background: white;
-        color: inherit;
-        padding: 0px;
-        height: inherit;
-        display: inline;
-        box-shadow: none;
-    }
-</style>
-
-@stop
-
 @section('content')
 
 <div id="matter_id" class="d-none">{{ $matter->id }}</div>
