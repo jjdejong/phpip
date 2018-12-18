@@ -13066,18 +13066,21 @@ __webpack_require__(5);
 //window.Vue = require('vue');
 
 /**
+ * The following block of code may be used to automatically register your
+ * Vue components. It will recursively scan this directory for the Vue
+ * components and automatically register them with their "basename".
+ *
+ * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
+ */
+
+//const files = require.context('./components/', false, /\.vue$/i);
+//files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)));
+
+/**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-/*
-
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-
-const app = new Vue({
-    el: '#app'
-});
-*/
 
 /***/ }),
 /* 5 */
@@ -13085,7 +13088,6 @@ const app = new Vue({
 
 
 window._ = __webpack_require__(6);
-window.Popper = __webpack_require__(2).default;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -13094,6 +13096,7 @@ window.Popper = __webpack_require__(2).default;
  */
 
 try {
+  window.Popper = __webpack_require__(2).default;
   window.$ = window.jQuery = __webpack_require__(0);
   __webpack_require__(8);
   __webpack_require__(9);
