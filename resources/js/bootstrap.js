@@ -10,7 +10,6 @@ window._ = require('lodash');
 try {
   window.Popper = require('popper.js').default;
   window.$ = window.jQuery = require('jquery');
-  require('jquery-ui-bundle');
   require('bootstrap');
   // Registering the CSRF Token as a common header with Ajax so that all
   // outgoing HTTP requests automatically have it attached.

@@ -6,6 +6,9 @@
  */
 
 require('./bootstrap');
+import 'jquery-ui/ui/widgets/autocomplete.js';
+import 'jquery-ui/ui/widgets/datepicker.js';
+import 'jquery-ui/ui/widgets/sortable.js';
 
 //window.Vue = require('vue');
 

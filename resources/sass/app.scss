@@ -9,7 +9,11 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-@import "~jquery-ui-bundle/jquery-ui.css";
+@import "~jquery-ui/themes/base/theme.css";
+@import "~jquery-ui/themes/base/autocomplete.css";
+@import "~jquery-ui/themes/base/datepicker.css";
+@import "~jquery-ui/themes/base/sortable.css";
+
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
