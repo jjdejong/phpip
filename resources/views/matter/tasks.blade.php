@@ -74,7 +74,6 @@
     <tr>
         <td colspan="11">
             <form id="addTaskForm" class="form-inline">
-                @csrf
                 <input type="hidden" name="trigger_id" value="" id="trigger_id" />
                 <input type="hidden" name="code" value="" id="task_code" />
                 <div class="input-group">
