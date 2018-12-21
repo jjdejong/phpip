@@ -63,7 +63,7 @@
             window.location.href = url;
         });
 
-        $('.filter-input').keyup(_.debounce(function () {
+        $('.filter-input').keyup(debounce(function () {
             if ($(this).val().length !== 0) {
                 $(this).css("background-color", "bisque");
             } else {
@@ -188,7 +188,7 @@
         @else
         <tr class="table-info">
         @endif
-            <td {{{ $matter->dead ? 'style="text-decoration: line-through"' : '' }}}><a href="/matter/{{ $matter->id }}" target="_blank">{{ $matter->Ref }}</a></td>
+            <td {!! $matter->dead ? 'style="text-decoration: line-through;"' : '' !!}><a href="/matter/{{ $matter->id }}" target="_blank">{{ $matter->Ref }}</a></td>
             <td>{{ $matter->Cat }}</td>
             <td>
                 @if ( $published )
