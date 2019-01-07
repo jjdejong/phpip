@@ -79,15 +79,15 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    PhpIP
+                </div>
+                <div class="subtitle m-b-md">
+                    IP rights portfolio manager and docketing system 
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                    <a href="https://github.com/jjdejong/phpip-v2/wiki">Documentation</a>
+                    <a href="https://github.com/jjdejong/phpip-v2">Retreive sources on GitHub</a>
                 </div>
             </div>
         </div>
