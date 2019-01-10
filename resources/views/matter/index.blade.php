@@ -64,11 +64,6 @@
         });
 
         $('.filter-input').keyup(debounce(function () {
-            if ($(this).val().length !== 0) {
-                $(this).css("background-color", "bisque");
-            } else {
-                $(this).css("background-color", "white");
-            }
             refreshMatterList();
         }, 500));
 
@@ -85,6 +80,14 @@
 
     });
 </script>
+@stop
+
+@section('style')
+<style>
+  input:not(:placeholder-shown) {
+    border-color: green;
+  }
+</style>
 @stop
 
 @section('content')
