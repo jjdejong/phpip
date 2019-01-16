@@ -75,7 +75,7 @@ $("#infoModal").on("keypress", "input.editable", function (e) {
 		$(this).parent("td").addClass("bg-warning");
 });
 
-$('.filter-input').keyup(_.debounce(function(){
+$('.filter-input').keyup(debounce(function(){
 	if($(this).val().length != 0)
 	    $(this).css("background-color", "bisque");
 	else
