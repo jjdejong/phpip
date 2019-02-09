@@ -5,16 +5,47 @@
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header">New matter</div>
+                <div class="card-header">
+                    
+                    <div class="row">
+                        <div class="col-md-8">
+                            Categories
+                        </div>
+                        <div class="col-md-4">
+                            <a href="#newMatterModal" data-toggle="modal">New matter</a>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <b>Category</b>
+                        </div>
+                        <div class="col-md-3">
+                            <b>Count</b>
+                        </div>
+                        <div class="col-md-1">
+                        </div>
+                    </div>
                     @if (session('status'))
                         <div class="alert alert-success">
                             {{ session('status') }}
                         </div>
                     @endif
-
-                    You are logged in!
+                    @foreach ($categories as $group)
+                        <div class="row">
+                            <div class="col-md-8">
+                                {{$group->category }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ $group->total }}
+                            </div>
+                            <div class="col-md-1">
+                                <a href="#newMatterModal" data-toggle="modal"><b>+</b></a>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>

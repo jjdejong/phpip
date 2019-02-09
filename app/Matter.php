@@ -289,5 +289,21 @@ class Matter extends Model
 
         return $matters;
     }
-
+    public static function getCategoryMatterCount($user = null) {
+        $authUserRole = Auth::user()->default_role;
+        $authUserId = Auth::user()->id;
+        $query = Matter::leftJoin('matter_category as mc', 'mc.code','=','matter.category_code')
+                ->groupBy('category_code', 'category')
+                ->select('mc.category','category_code',DB::raw('count(*) as total'));
+        if ($authUserRole == 'CLI') {
+            $query->join( 'matter_actor_lnk as cli',DB::raw("ifnull(matter.container_ID,matter.ID)"),'=', 'cli.matter_ID' )
+            ->where([[ 'cli.role','CLI'],['cli.actor_id', $authUserId]]);
+        }
+        else {
+            if ($user ) 
+                $query = $query->where('responsible','=',$user);
+        }
+        return $query->get();
+  
+    }
 }

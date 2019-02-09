@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Task;
+use App\Matter;
 use Response;
 
 class HomeController extends Controller
@@ -45,8 +46,9 @@ class HomeController extends Controller
             $renewals->where('assigned_to', Auth::user()->login);
         }
         $renewals = $renewals->simplePaginate(25);
-        
-        return view('home',compact('tasks','renewals'));
+        // Count matters per categories
+        $categories = Matter::getCategoryMatterCount();
+        return view('home',compact('tasks','renewals','categories'));
     }
 
     /**
