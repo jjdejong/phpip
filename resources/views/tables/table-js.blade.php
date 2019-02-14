@@ -75,6 +75,29 @@ $("#infoModal").on("keypress", "input.editable", function (e) {
 		$(this).parent("td").addClass("bg-warning");
 });
 
+// Address and notes edition
+$("#infoModal").on("keyup", "textarea.editable", function () {
+    var field = $(this).data('field');
+	$(field).removeClass('hidden-action');
+	$(this).addClass('changed');
+});
+
+$("#infoModal").on("click", "button.area", function () {
+    var field = $(this).data('field');
+    var areaId = '#'+field
+    var dataString = field + "=" + $(areaId).val();
+	if ($(areaId).hasClass('changed')) {
+		$.ajax({
+			type: 'PUT',
+			url: $(this).closest("table").data("source") +  $(this).closest("table").data("id"),
+			data: dataString,
+		});
+		$(this).addClass('hidden-action');
+		$(areaId).removeClass('changed');
+	}
+	return false;
+});
+
 $('.filter-input').keyup(debounce(function(){
 	if($(this).val().length != 0)
 	    $(this).css("background-color", "bisque");
@@ -88,7 +111,6 @@ $('.filter-input').keyup(debounce(function(){
 $('#infoModal').on("click",'input[type="radio"]', function() {
 	var mydata = {};
 	mydata[this.name] = this.value;
-	mydata['_token'] = csrf_token;
 	mydata['_method'] ="PUT";
 	$.post(resource + $(this).closest("table").data("id"),  mydata )
 	.done(function () {

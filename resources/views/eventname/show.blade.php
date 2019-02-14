@@ -57,7 +57,7 @@ input {
 <div id="edit-ename-content">
 	<fieldset class="ename-info-set">
 		<legend>Event name details - ID: {{ $enameInfo->code }}</legend>
-		<table data-id="{{ $enameInfo->code }}">
+		<table data-id="{{ $enameInfo->code }}" data-source="/eventname/">
                 <tr><td><label for="code" class="required-field" title="{{ $tableComments['code'] }}">Code</label> 
                 </td><td>{{ $enameInfo->code }}
                 </td><td><label for="is_task" title="{{ $tableComments['is_task'] }}">Is task</label>
@@ -96,8 +96,10 @@ input {
                         <input type="radio" name="uqtrigger" id="uqtrigger" value="1" {{ $enameInfo->uqtrigger ? 'checked="checked"' : "" }} />Yes&nbsp;&nbsp;
                         <input type="radio" name="uqtrigger" id="uqtrigger" value="0" {{ $enameInfo->uqtrigger ? "" : 'checked="checked"'}} />No
                 </span>
-                </tr><tr><td><label for="notes" title="{{ $tableComments['notes'] }}">Notes</label>
-                </td><td><input type="text" class="ename-input-wide noformat" name="notes" value="{{ $enameInfo->notes }}">
+                </tr><tr><td><label for="notes" title="{{ $tableComments['notes'] }}">Notes</label><br />
+                <button type="button" data-field="notes" id="updateNotes" class="area hidden-action btn btn-primary btn-sm">&#9432; Save</button>
+                </td><td class="ui-front">
+					<textarea data-field="#updateNotes" id="notes" class="ename-input-wide editable form-control form-control-sm" name="address_billing">{{ $enameInfo->notes }}</textarea>
 				</td></td><td><label for="killer" title="{{ $tableComments['killer'] }}">Is killer</label>
                 </td><td><span class="ename-input-narrow" name="killer">
                         <input type="radio" name="killer" id="killer" value="1" {{ $enameInfo->killer ? 'checked="checked"' : "" }} />Yes&nbsp;&nbsp;
