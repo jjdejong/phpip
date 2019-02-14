@@ -3,7 +3,7 @@
 		value="{{ $ruleInfo->id }}" />   
 	<fieldset>
 		<legend>Task rule details - ID: {{ $ruleInfo->id }}</legend>
-		<table class="table table-sm table-hover" data-id="{{ $ruleInfo->id }}">
+		<table class="table table-sm table-hover" data-id="{{ $ruleInfo->id }}" data-source="/rule/">
                 <tr><td><label for="task" class="required-field" title="{{ $ruleComments['task'] }}">Task</label> 
                 </td><td class="ui-front"><input class="form-control form-control-sm" name="task" value="{{ empty($ruleInfo->taskInfo) ? '' : $ruleInfo->taskInfo->name }}">
                 </td><td><label for="detail" title="{{ $ruleComments['detail'] }}">Detail</label>
@@ -22,8 +22,10 @@
                 </td><td><label for="for_category" title="{{ $ruleComments['for_category'] }}">Category</label>
                 </td><td class="ui-front">
 						<input class="form-control form-control-sm" name="for_category" value="{{ empty($ruleInfo->category) ? '' : $ruleInfo->category->category }}">
-				</tr><tr><td><label for="notes" title="{{ $ruleComments['notes'] }}">Notes</label>
-                </td><td><input id="notes" class="form-control form-control-sm editable" name="notes" value="{{ $ruleInfo->notes }}">
+				</tr><tr><td><label for="notes" title="{{ $ruleComments['notes'] }}">Notes</label><br />
+                    <button type="button" data-field="notes" id="updateNotes" class="area hidden-action btn btn-primary btn-sm">&#9432; Save</button>
+                </td><td>
+					<textarea data-field="#updateNotes" id="notes" class="editable form-control form-control-sm" name="notes">{{ $ruleInfo->notes }}</textarea>
                 </td><td><label for="for_type" title="{{ $ruleComments['for_type'] }}">Type</label>
                 </td><td class="ui-front">
 					<input class="form-control form-control-sm" name="for_type" value="{{ empty($ruleInfo->type) ? '' : $ruleInfo->type->type }}">

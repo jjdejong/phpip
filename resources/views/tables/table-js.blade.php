@@ -75,7 +75,7 @@ $("#infoModal").on("keypress", "input.editable", function (e) {
 		$(this).parent("td").addClass("bg-warning");
 });
 
-// Address and notes edition
+// Notes edition
 $("#infoModal").on("keyup", "textarea.editable", function () {
     var field = $(this).data('field');
 	$(field).removeClass('hidden-action');
@@ -85,12 +85,11 @@ $("#infoModal").on("keyup", "textarea.editable", function () {
 $("#infoModal").on("click", "button.area", function () {
     var field = $(this).data('field');
     var areaId = '#'+field
-    var dataString = field + "=" + $(areaId).val();
 	if ($(areaId).hasClass('changed')) {
 		$.ajax({
 			type: 'PUT',
 			url: $(this).closest("table").data("source") +  $(this).closest("table").data("id"),
-			data: dataString,
+			data: field + "=" + $(areaId).val(),
 		});
 		$(this).addClass('hidden-action');
 		$(areaId).removeClass('changed');
