@@ -11,7 +11,7 @@
 			</div>
 			<div class="modal-footer">
 				<span class="alert pull-left"></span>
-				<mark>Values are editable. Click on a value to change it and press <kbd>&crarr;</kbd> to save changes</mark>
+				<mark>Values are editable. Click on a value to change it and press <kbd>&crarr;</kbd> or the Save button to save changes</mark>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 	    </div>
