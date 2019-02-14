@@ -45,24 +45,28 @@
         <fieldset>
               <legend>Contact details</legend>
               <table class="table table-hover table-sm" data-id="{{ $actorInfo->id }}">
-                <tr><td><label for="address" title="{{ $actorComments['address'] }}">Address</label>
-                </td><td class="ui-front">
-                    <textarea class="editable form-control form-control-sm" name="address">{{ $actorInfo->address }}</textarea>
+                <tr><td><label for="address" title="{{ $actorComments['address'] }}">Address</label><br />
+                    <button type="button" data-field="address" class="area hidden-action btn btn-primary btn-sm" id="updateAddress">&#9432; Save</button>
+               </td><td class="ui-front">
+                    <textarea id="address" data-field="#updateAddress" class="editable form-control form-control-sm" name="address">{{ $actorInfo->address }}</textarea>
                 </td><td><label for="country" title="{{ $actorComments['country'] }}">Country</label>
                 </td><td class="ui-front">
 						<input type='text' class=" form-control form-control-sm" name="country" value="{{ empty($actorInfo->countryInfo) ? '' : $actorInfo->countryInfo->name }}">
-				</tr><tr><td><label for="address_mailing" title="{{ $actorComments['address_mailing'] }}">Address mailing</label>
+				</tr><tr><td><label for="address_mailing" title="{{ $actorComments['address_mailing'] }}">Address mailing</label><br />
+                    <button type="button" data-field="address_mailing" class="area hidden-action btn btn-primary btn-sm" id="updateAddressM">&#9432; Save</button>
                 </td><td class="ui-front">
-					<input type='text' class="editable form-control form-control-sm" name="address_mailing" value="{{ $actorInfo->address_mailing }}">
+					<textarea data-field="#updateAddressM" id="address_mailing" class="editable form-control form-control-sm" name="address_mailing">{{ $actorInfo->address_mailing }}</textarea> 
                 </td><td><label for="country_mailing" title="{{ $actorComments['country_mailing'] }}">Country mailing</label>
                 </td><td class="ui-front">
 						<input type='text' class=" form-control form-control-sm" name="country_mailing" value="{{ empty($actorInfo->country_mailingInfo ) ? '' : $actorInfo->country_mailingInfo->name }}">
-				</tr><tr><td><label for="address_billing" title="{{ $actorComments['address_billing'] }}">Address billing</label>
+				</tr><tr><td><label for="address_billing" title="{{ $actorComments['address_billing'] }}">Address billing</label><br />
+                    <button type="button" data-field="address_billing" class="area hidden-action btn btn-primary btn-sm" id="updateAddressB">&#9432; Save</button>
                 </td><td class="ui-front">
-					<input type='text' class="editable form-control form-control-sm" name="address_billing" value="{{ $actorInfo->address_billing }}">
-                </td><td><label for="country_billing" title="{{ $actorComments['country_billing'] }}">Country billing</label>
+					<textarea data-field="#updateAddressB" id="address_billing" class="editable form-control form-control-sm" name="address_billing">{{ $actorInfo->address_billing }}</textarea>
+                </td><td><label for="country_billing" title="{{ $actorComments['country_billing'] }}">Country billing</label><br />
+                    <button type="button" class="hidden-action btn btn-warning btn-sm" id="updateAddressB">&#9432; Save</button>
                 </td><td class="ui-front">
-						<input type='text' class=" form-control form-control-sm" name="country_billing" value="{{ empty($actorInfo->country_billingInfo ) ? '' : $actorInfo->country_billingInfo->name }}">
+						<input class=" form-control form-control-sm" name="country_billing" value="{{ empty($actorInfo->country_billingInfo ) ? '' : $actorInfo->country_billingInfo->name }}">
 				</tr><tr><td><label for="email" title="{{ $actorComments['email'] }}">Email</label>
                 </td><td class="ui-front">
 					<input type='text' class="editable form-control form-control-sm" name="email" value="{{ $actorInfo->email }}">
@@ -86,8 +90,10 @@
                 </td><td><input type='text' class="editable form-control form-control-sm" name="registration_no" value="{{ $actorInfo->registration_no }}">
                 </td><td><label for="registration_no" title="{{ $actorComments['legal_form'] }}" >Legal form</label>
                 </td><td><input type='text' class="editable form-control form-control-sm" name="legal_form" value="{{ $actorInfo->legal_form }}">
-                </td></tr><tr><td><label for="notes" title="{{ $actorComments['notes'] }}">Notes</label>
-                </td><td colspan="3"><input type='text' class="editable form-control form-control-sm" name="notes" value="{{ $actorInfo->notes }}">
+                </td></tr><tr><td><label for="notes" title="{{ $actorComments['notes'] }}">Notes</label><br />
+                    <button type="button" data-field="notes" id="updateNotes" class="area hidden-action btn btn-primary btn-sm">&#9432; Save</button>
+                </td><td class="ui-front">
+					<textarea data-field="#updateNotes" id="notes" class="editable form-control form-control-sm" name="address_billing">{{ $actorInfo->notes }}</textarea>
                 </td></tr>
         </table>
 		<button title="Delete actor" class="delete-actor" data-dismiss="modal" data-id="{{ $actorInfo->id }}" style="float: right; margin-top: 10px; margin-right: 16px;">

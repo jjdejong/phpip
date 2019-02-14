@@ -58,6 +58,29 @@ $("#infoModal").on("keypress", "input.editable", function (e) {
 		$(this).parent("td").addClass("bg-warning");
 });
 
+// Address and notes edition
+$("#infoModal").on("keyup", "textarea.editable", function () {
+    var field = $(this).data('field');
+	$(field).removeClass('hidden-action');
+	$(this).addClass('changed');
+});
+
+$("#infoModal").on("click", "button.area", function () {
+    var field = $(this).data('field');
+    var areaId = '#'+field
+    var dataString = field + "=" + $(areaId).val();
+	if ($(areaId).hasClass('changed')) {
+		$.ajax({
+			type: 'PUT',
+			url: "/actor/" +  $(this).closest("table").data("id"),
+			data: dataString,
+		});
+		$(this).addClass('hidden-action');
+		$(areaId).removeClass('changed');
+	}
+	return false;
+});
+
 //$('.filter-input:input').onclick( function() {
 $('#physical').on('change', function() {
 	refreshActorList();
