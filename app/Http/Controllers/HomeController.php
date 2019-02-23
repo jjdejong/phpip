@@ -33,19 +33,18 @@ class HomeController extends Controller
         $MyRenewals = $request->input ( 'my_renewals' );
         
         // Get list of active tasks
-        $tasks = Task::with('info:code,name', 'trigger:id,matter_id', 'trigger.matter:id,caseref,suffix')
-        ->where('done','0')->where('code', '!=', 'REN')->orderby('due_date');
+        $task = new Task();
+        $tasks = $task->activeTasks()->where('task.code', '!=', 'REN');
         if ($MyTasks) {
             $tasks->where('assigned_to', Auth::user()->login);
         }
-        $tasks = $tasks->simplePaginate(25);
+        $tasks = $tasks->simplePaginate(25)->all();
         // Get list of active renewals
-        $renewals = Task::with('info:code,name', 'trigger:id,matter_id', 'trigger.matter:id,caseref,suffix')
-        ->where('done','0')->where('code', 'REN')->orderby('due_date');
+        $renewals = $task->activeTasks()->where('task.code', 'REN');
         if ($MyRenewals) {
             $renewals->where('assigned_to', Auth::user()->login);
         }
-        $renewals = $renewals->simplePaginate(25);
+        $renewals = $renewals->simplePaginate(25)->all();
         // Count matters per categories
         $categories = Matter::getCategoryMatterCount();
         return view('home',compact('tasks','renewals','categories'));

@@ -89,14 +89,12 @@
                             Close
                         </div>
                     </div>
-                @if (count($tasks) == 0)
-                    <div class="row text-danger">The list is empty</div>
-                @else
+                @if (is_array($tasks) )
                     @foreach ($tasks as $task)
                         <div class="row">
-                            <div class="col-md-6"><a href="/matter/{{ $task->trigger->matter_id }}/tasks" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
-                                                    {{ $task->info->name ?? ''}} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
-                          <div  class="col-md-3"><a href="/matter/{{ $task->trigger->matter_id }}" >{{ empty($task->trigger) ? '' : $task->trigger->matter->uid }}</a></div>
+                            <div class="col-md-6"><a href="/matter/{{ $task->matter_id }}/tasks" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
+                                                    {{ $task->name ?? ''}} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
+                          <div  class="col-md-3"><a href="/matter/{{ $task->matter_id }}" >{{ $task->trigger->matter->uid }}</a></div>
 
                             @if ($task->due_date < date('Y-m-d'))
                                 <div class="col-md-2 text-danger">{{ $task->due_date}}</div>
@@ -108,6 +106,8 @@
                           <div  class="col-md-1"><input id="{{ $task->id }}" class="clear-open-task" type="checkbox" /></div>
                         </div>
                     @endforeach
+                @else
+                    <div class="row text-danger">The list is empty</div>
                 @endif
                 </div>
 
@@ -152,14 +152,12 @@
                             Close
                         </div>
                     </div>
-                    @if (count($renewals) == 0)
-                        <div class="row text-danger">The list is empty</div>
-                    @else
+                    @if (is_array($renewals) )
                         @foreach ($renewals as $task)
                             <div class="row">
-                                <div class="col-md-6"><a href="/matter/{{ $task->trigger->matter_id }}/renewals" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
-								                {{ $task->info->name ?? '' }} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
-                              <div  class="col-md-3"><a href="/matter/{{ $task->trigger->matter_id }}" >{{ empty($task->trigger) ? '' : $task->trigger->matter->uid }}</a></div>
+                                <div class="col-md-6"><a href="/matter/{{ $task->matter_id }}/renewals" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
+								                {{ $task->name ?? '' }} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
+                              <div  class="col-md-3"><a href="/matter/{{ $task->matter_id }}" >{{ $task->trigger->matter->uid }}</a></div>
 
                                 @if ($task->due_date < date('Y-m-d'))
                                     <div class="col-md-2 text-danger">{{ $task->due_date}}</div>
@@ -171,6 +169,8 @@
                               <div  class="col-md-1"><input id="{{ $task->id }}" class="clear-ren-task" type="checkbox" /></div>
                             </div>
                         @endforeach
+                    @else
+                        <div class="row text-danger">The list is empty</div>
                     @endif
                     </div>
                 </div>
