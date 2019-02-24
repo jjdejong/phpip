@@ -33,14 +33,17 @@ class HomeController extends Controller
         $MyRenewals = $request->input ( 'my_renewals' );
         
         // Get list of active tasks
-        $task = new Task();
-        $tasks = $task->activeTasks()->where('task.code', '!=', 'REN');
+        $tasks = Task::with(['info:code,name', 'trigger.matter:id,caseref,suffix'])->whereHas('trigger.matter', function ($query) {
+          $query->where('dead', 0);
+        })->where('done', 0)->where('task.code', '!=', 'REN');
         if ($MyTasks) {
             $tasks->where('assigned_to', Auth::user()->login);
         }
         $tasks = $tasks->simplePaginate(25)->all();
         // Get list of active renewals
-        $renewals = $task->activeTasks()->where('task.code', 'REN');
+        $renewals = Task::with(['info:code,name', 'trigger.matter:id,caseref,suffix'])->whereHas('trigger.matter', function ($query) {
+          $query->where('dead', 0);
+        })->where('done', 0)->where('task.code', 'REN');
         if ($MyRenewals) {
             $renewals->where('assigned_to', Auth::user()->login);
         }

@@ -90,22 +90,28 @@
                         </div>
                     </div>
                 @if (is_array($tasks) )
-                    @foreach ($tasks as $task)
-                        <div class="row">
-                            <div class="col-md-6"><a href="/matter/{{ $task->matter_id }}/tasks" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
-                                                    {{ $task->name ?? ''}} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
-                          <div  class="col-md-3"><a href="/matter/{{ $task->matter_id }}" >{{ $task->trigger->matter->uid }}</a></div>
-
-                            @if ($task->due_date < date('Y-m-d'))
-                                <div class="col-md-2 text-danger">{{ $task->due_date}}</div>
-                            @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
-                                <div  class="col-md-2 text-warning">{{ $task->due_date}}</div>
-                            @else
-                                <div  class="col-md-2">{{ $task->due_date}}</div>
-                            @endif
-                          <div  class="col-md-1"><input id="{{ $task->id }}" class="clear-open-task" type="checkbox" /></div>
+                  @foreach ($tasks as $task)
+                    <div class="row">
+                        <div class="col-md-6">
+                          <a href="/matter/{{ $task->trigger->matter->id }}/tasks" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
+                            {{ $task->info->name }}{{ $task->detail ? " - ".$task->detail : "" }}
+                          </a>
                         </div>
-                    @endforeach
+                        <div  class="col-md-3">
+                          <a href="/matter/{{ $task->trigger->matter->id }}" >
+                            {{ $task->trigger->matter->uid }}
+                          </a>
+                        </div>
+                        @if ($task->due_date < date('Y-m-d'))
+                            <div class="col-md-2 text-danger">{{ $task->due_date}}</div>
+                        @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
+                            <div  class="col-md-2 text-warning">{{ $task->due_date}}</div>
+                        @else
+                            <div  class="col-md-2">{{ $task->due_date}}</div>
+                        @endif
+                        <div  class="col-md-1"><input id="{{ $task->id }}" class="clear-open-task" type="checkbox" /></div>
+                    </div>
+                  @endforeach
                 @else
                     <div class="row text-danger">The list is empty</div>
                 @endif
@@ -153,22 +159,28 @@
                         </div>
                     </div>
                     @if (is_array($renewals) )
-                        @foreach ($renewals as $task)
-                            <div class="row">
-                                <div class="col-md-6"><a href="/matter/{{ $task->matter_id }}/renewals" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
-								                {{ $task->name ?? '' }} {{ $task->detail ? "- ".$task->detail : "" }}</a></div>
-                              <div  class="col-md-3"><a href="/matter/{{ $task->matter_id }}" >{{ $task->trigger->matter->uid }}</a></div>
-
-                                @if ($task->due_date < date('Y-m-d'))
-                                    <div class="col-md-2 text-danger">{{ $task->due_date}}</div>
-                                @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
-                                    <div  class="col-md-2 text-warning">{{ $task->due_date}}</div>
-                                @else
-                                    <div  class="col-md-2">{{ $task->due_date}}</div>
-                                @endif
-                              <div  class="col-md-1"><input id="{{ $task->id }}" class="clear-ren-task" type="checkbox" /></div>
-                            </div>
-                        @endforeach
+                      @foreach ($renewals as $task)
+                        <div class="row">
+                          <div class="col-md-6">
+                            <a href="/matter/{{ $task->trigger->matter->id }}/renewals" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
+                              {{ $task->detail }}
+                            </a>
+                          </div>
+                          <div  class="col-md-3">
+                            <a href="/matter/{{ $task->trigger->matter->id }}" >
+                              {{ $task->trigger->matter->uid }}
+                            </a>
+                          </div>
+                          @if ($task->due_date < date('Y-m-d'))
+                              <div class="col-md-2 text-danger">{{ $task->due_date}}</div>
+                          @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
+                              <div  class="col-md-2 text-warning">{{ $task->due_date}}</div>
+                          @else
+                              <div  class="col-md-2">{{ $task->due_date}}</div>
+                          @endif
+                          <div  class="col-md-1"><input id="{{ $task->id }}" class="clear-ren-task" type="checkbox" /></div>
+                        </div>
+                      @endforeach
                     @else
                         <div class="row text-danger">The list is empty</div>
                     @endif
