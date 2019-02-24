@@ -25,7 +25,7 @@
 						<input class="form-control form-control-sm" name="for_category_new">
 						<input type='hidden' name='for_category' id='for_category' >
 				</tr><tr><td><label for="notes" title="{{ $ruleComments['notes'] }}">Notes</label>
-                </td><td><input id="notes" class="form-control form-control-sm" name="notes">
+                </td><td><textarea id="notes" class="form-control form-control-sm" name="notes"></textarea>
                 </td><td><label for="for_type_new" title="{{ $ruleComments['for_type'] }}">Type</label>
                 </td><td class="ui-front">
 					<input class="form-control form-control-sm" name="for_type_new" >
