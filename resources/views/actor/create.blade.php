@@ -50,20 +50,20 @@
                 <legend>Contact details</legend>
                 <table class="table table-sm table-hover">
                 <tr><td><label for="address" title="{{ $tableComments['address'] }}">Address</label>
-                </td><td><input id="address" class=" form-control form-control-sm" name="address" >
+                </td><td><textarea id="address" class=" form-control form-control-sm" name="address" ></textarea>
                 </td><td><label for="country_new" title="{{ $tableComments['country'] }}">Country</label>
                 </td><td class="ui-front">
 						<input type="text" class="form-control form-control-sm" name="country_new">
 						<input type='hidden' name='country' id='country' >
                 </td><td>
                 </td></tr><tr><td><label for="address_mailing" title="{{ $tableComments['address_mailing'] }}">Address mailing</label>
-                </td><td><input type='text' class=" form-control form-control-sm" id="address_mailing" name="address_mailing">
+                </td><td><textarea class=" form-control form-control-sm" id="address_mailing" name="address_mailing"></textarea>
                 </td><td><label for="country_mailing_new" title="{{ $tableComments['country_mailing'] }}">Counntry mailing</label> 
                 </td><td class="ui-front">
 						<input type="text" class="form-control form-control-sm" name="country_mailing_new">
 						<input type='hidden' name='country_mailing' id='country_mailing' >
                 </td></tr><tr><td><label for="address_billing" title="{{ $tableComments['address_billing'] }}">Address billing</label>
-                </td><td><input type='text' class=" form-control form-control-sm" name="address_billing" id="address_billing">
+                </td><td><textarea class=" form-control form-control-sm" name="address_billing" id="address_billing"></textarea>
                 </td><td><label type='text' for="country_billing_new" title="{{ $tableComments['country_billing'] }}">Country billing</label> 
                 </td><td class="ui-front">
 						<input class="form-control form-control-sm" name="country_billing_new">
@@ -90,7 +90,7 @@
                 </td><td><label for="legal_form" title="{{ $tableComments['legal_form'] }}">Legal form</label> 
                 </td><td><input type='text' class="  form-control form-control-sm" name="legal_form">
                 </td></tr><tr><td><label  for="notes" title="{{ $tableComments['notes'] }}">Notes</label>
-                </td><td colspan="3"><input type='text' class=" form-control form-control-sm" name="notes"></td>
+                </td><td colspan="3"><textarea class=" form-control form-control-sm" name="notes"></textarea></td>
                 </tr>
 			</table>
 		</fieldset>
