@@ -101,7 +101,7 @@ input {
                         <input type="radio" name="uqtrigger" value="0"/> No
                      </span>
 				</td></tr><tr><td><label for="notes" title="{{ $tableComments['notes'] }}">Notes</label>
-                </td><td><input id="notes" class="rule-input-wide noformat" name="notes">
+                </td><td><textarea id="notes" class="rule-input-wide noformat" name="notes"></textarea>
 				</td><td><label for="killer" title="{{ $tableComments['killer'] }}">Is killer</label>
                 </td><td><span class="rule-input-narrow " name="killer">
                         <input type="radio" name="killer" value="1"/> Yes&nbsp;&nbsp;
