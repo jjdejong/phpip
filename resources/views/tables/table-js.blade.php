@@ -446,8 +446,7 @@ $(document).on("submit", "#createRuleForm", function(e) {
 	e.preventDefault();
 	var $form = $(this);
 	var request = $("#createRuleForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
-	var data = $.param({ _token: csrf_token }) + "&" + request;
-	console.log(request);
+	var data = request + "&" + $("#createRuleForm").find("textarea").filter(function(){return $(this).val().length > 0}).serialize();
 	$.post('/rule', data,function(response) {
 		if(response.success) {
 			window.alert("Rule created.");
@@ -463,7 +462,7 @@ $(document).on("submit", "#createEventForm", function(e) {
 	e.preventDefault();
 	var $form = $(this);
 	var request = $("#createEventForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
-	var data = $.param({ _token: csrf_token }) + "&" + request;
+	var data = request +"&" + $("#createEventForm").find("textarea").filter(function(){return $(this).val().length > 0}).serialize();
 	$.post('/eventname', data,function(response) {
 		if(response.success) {
 			window.alert("Event name created.");
@@ -475,11 +474,9 @@ $(document).on("submit", "#createEventForm", function(e) {
 });
 
 function associate_errors(errors,$form) {
-	console.log(errors);
 	$form.find('.form-group').removeClass('has-errors').find('.help-text').text();
 	for(index in errors) {
 		value = errors[index][0];
-		console.log(index, value);
 		document.getElementById('error-box').innerHTML+=value + '<BR />';
 	};
 }
