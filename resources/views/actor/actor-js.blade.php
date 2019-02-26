@@ -282,7 +282,7 @@ $('#addModal').on("click", 'input[name="parent_new"]', function() {
                 select: function (event, ui) {
                         event.preventDefault();
                         $(this).val(ui.item.label);
-                        $('input[name="parent_id"]').val(ui.item.value);
+                        $('input[name="parent_id"]').val(ui.item.id);
                 }
         });
 });
@@ -297,7 +297,7 @@ $('#addModal').on("click", 'input[name="company_new"]', function() {
                 select: function (event, ui) {
                         event.preventDefault();
                         $(this).val(ui.item.label);
-                        $('input[name="company_id"]').val(ui.item.value);
+                        $('input[name="company_id"]').val(ui.item.id);
                 }
         });
 });
@@ -312,7 +312,7 @@ $('#addModal').on("click", 'input[name="site_new"]', function() {
                 select: function (event, ui) {
                         event.preventDefault();
                         $(this).val(ui.item.label);
-                        $('input[name="site_id"]').val(ui.item.value);
+                        $('input[name="site_id"]').val(ui.item.id);
                 }
         });
 });
@@ -321,10 +321,11 @@ $(document).on("submit", "#createActorForm", function(e) {
 	e.preventDefault();
 	var $form = $(this);
 	var request = $("#createActorForm").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
-	var data = $.param({ _token: csrf_token }) + "&" + request;
+	request = request +"&" + $("#createActorForm").find("textarea").filter(function(){return $(this).val().length > 0}).serialize();
+	var data = request;
 	console.log(request);
 	$.post('/actor', data,function(response) {
-		if(response.id) {
+		if(response.success) {
 			window.alert("Actor created.");
 			$('#addModal').modal("hide");
 			refreshActorList();}
