@@ -33,6 +33,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                     </a></li>
                 @endif
             </ul>
+            <span><strong>Responsible:</strong> {{$matter->responsible}}</span>
             @if ($matter->expire_date)
             <span class="float-right"><strong>Expiry:</strong> {{ $matter->expire_date }}</span>
             @endif
@@ -49,12 +50,10 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                     @if ($title != $title_group->first()) <br> @endif
                     <span id="{{ $title->id }}" class="titleItem" contenteditable="true">{{ $title->value }}</span>&nbsp;
                     @endforeach
-                    @if ($title == $title_group->last() && $type == $titles->keys()->last())
-                    <a class="badge badge-pill badge-primary float-right" data-toggle="collapse" href="#addTitleForm">+</a>
-                    @endif
                 </div>
             </div>
             @endforeach
+            <a class="badge badge-pill badge-primary float-right" data-toggle="collapse" href="#addTitleForm">+</a>
             <div id="addTitleForm" class="collapse">
                 <form>
                     <div class="form-row">
@@ -232,14 +231,14 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                         <span class="col-3">Date</span>
                         <span class="col-4">
                             Number
-                            <a class="hidden-action float-right"
+                            <a class="hidden-action float-right font-weight-bold"
                                href="/matter/{{ $matter->id }}/events"
                                data-toggle="modal"
                                data-target="#listModal"
                                data-remote="false"
                                title="All events"
                                data-resource="/event/">
-                                <span class="badge badge-primary">&vellip;</span>
+                                &vellip;
                             </a>
                         </span>
                     </div>
@@ -273,14 +272,14 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                         <span class="font-weight-bold col-9">Open Tasks</span>
                         <span class="col-3">
                             Due
-                            <a class="hidden-action float-right"
+                            <a class="hidden-action float-right font-weight-bold"
                                href="/matter/{{ $matter->id }}/tasks"
                                data-toggle="modal"
                                data-target="#listModal"
                                data-remote="false"
                                title="All tasks"
                                data-resource="/task/">
-                                <span class="badge badge-primary">&vellip;</span>
+                                &vellip;
                             </a>
                         </span>
                     </div>
@@ -302,14 +301,14 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                         <span class="font-weight-bold col-6">Renewals</span>
                         <span class="col-6">
                             Due
-                            <a class="hidden-action float-right"
+                            <a class="hidden-action float-right font-weight-bold"
                                href="/matter/{{ $matter->id }}/renewals"
                                data-toggle="modal"
                                data-target="#listModal"
                                data-remote="false"
                                title="All renewals"
                                data-resource="/task/">
-                                <span class="badge badge-primary">&vellip;</span>
+                                &vellip;
                             </a>
                         </span>
                     </div>
@@ -326,11 +325,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <div class="card col-6 p-0 reveal-hidden">
                 <div class="card-header font-weight-bold p-1">
                     Classifiers
-                    <a class="hidden-action float-right"
+                    <a class="hidden-action float-right font-weight-bold"
                        href="#classifiersModal"
                        data-toggle="modal"
                        title="Classifier detail">
-                        <span class="badge badge-primary">&vellip;</span>
+                        &vellip;
                     </a>
                 </div>
                 <div class="card-body p-1" id="classifier-panel" style="overflow: auto;">
