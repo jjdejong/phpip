@@ -53,7 +53,9 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                 </div>
             </div>
             @endforeach
-            <a class="badge badge-pill badge-primary float-right" data-toggle="collapse" href="#addTitleForm">+</a>
+            <div>
+              <a class="badge badge-pill badge-primary float-right" role="button" data-toggle="collapse" href="#addTitleForm">+</a>
+            </div>
             <div id="addTitleForm" class="collapse">
                 <form>
                     <div class="form-row">
