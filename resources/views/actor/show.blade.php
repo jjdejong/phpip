@@ -97,7 +97,7 @@
                 </td></tr>
         </table>
 		<button title="Delete actor" class="delete-actor" data-dismiss="modal" data-id="{{ $actorInfo->id }}" style="float: right; margin-top: 10px; margin-right: 16px;">
-			<span class="ui-icon ui-icon-trash" style="float: left;"></span>
+			&times;
 			Delete
 		</button>
 	</fieldset>

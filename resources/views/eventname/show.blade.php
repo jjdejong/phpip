@@ -108,8 +108,7 @@ input {
                 </tr>
 			</table>
 		<button title="Delete event name" id="delete-ename" data-dismiss="modal" data-id="{{ $enameInfo->code }}" style="float: right; margin-top: 10px; margin-right: 16px;">
-			<span class="ui-icon ui-icon-trash" style="float: left;"></span>
-			Delete
+			&times; Delete
 		</button>
 	</fieldset>
 	

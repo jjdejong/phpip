@@ -91,8 +91,7 @@
                 </td></tr>
         </table>
 		<button title="Delete rule" id="delete-rule" data-dismiss="modal" data-id="{{ $ruleInfo->id }}">
-			<span class="ui-icon ui-icon-trash" style="float: left;"></span>
-			Delete
+			&times;	Delete
 		</button>
 	</fieldset>
 	
