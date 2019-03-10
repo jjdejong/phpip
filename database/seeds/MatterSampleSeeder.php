@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class MatterSampleSeeder extends Seeder
 {
@@ -13,5 +14,7 @@ class MatterSampleSeeder extends Seeder
     {
         require 'matter-sample.php';
         App\Matter::insert($matter);
+        require 'matter_actor_lnk.php';
+        DB::table('matter_actor_lnk')->insert($matter_actor_lnk);
     }
 }

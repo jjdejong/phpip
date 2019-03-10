@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(CountryTableSeeder::class);
-        $this->call(matterCategoryTableSeeder::class);
+        $this->call(MatterCategoryTableSeeder::class);
         $this->call(ClassifierTypeTableSeeder::class);
         $this->call(ActorRoleTableSeeder::class);
         $this->call(ActorTableSeeder::class);

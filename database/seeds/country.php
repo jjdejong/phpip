@@ -5,10 +5,10 @@
  */
 
 /**
- * Database `phpip`
+ * Database `phpipv2`
  */
 
-/* `phpip`.`country` */
+/* `phpipv2`.`country` */
 $country = array(
   array('numcode' => '20','iso' => 'AD','iso3' => 'AND','name_DE' => 'Andorra','name' => 'Andorra','name_FR' => 'Andorre','ep' => '0','wo' => '0','em' => '0','oa' => '0'),
   array('numcode' => '784','iso' => 'AE','iso3' => 'ARE','name_DE' => 'Vereinigte Arabische Emirate','name' => 'United Arab Emirates','name_FR' => 'Émirats Arabes Unis','ep' => '0','wo' => '0','em' => '0','oa' => '0'),

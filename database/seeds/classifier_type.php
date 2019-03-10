@@ -5,10 +5,10 @@
  */
 
 /**
- * Database `phpip`
+ * Database `phpipv2`
  */
 
-/* `phpip`.`classifier_type` */
+/* `phpipv2`.`classifier_type` */
 $classifier_type = array(
   array('code' => 'ABS','type' => 'Abstract','main_display' => '0','for_category' => NULL,'display_order' => '127','notes' => NULL,'creator' => 'root','updated' => '2011-06-18 17:30:36','updater' => NULL),
   array('code' => 'AGR','type' => 'Agreement','main_display' => '0','for_category' => NULL,'display_order' => '127','notes' => NULL,'creator' => 'root','updated' => '2011-06-18 17:30:39','updater' => NULL),

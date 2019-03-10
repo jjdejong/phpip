@@ -5,12 +5,12 @@
  */
 
 /**
- * Database `phpip`
+ * Database `phpipv2`
  */
 
-/* `phpip`.`event_name` */
+/* `phpipv2`.`event_name` */
 $event_name = array(
-  array('code' => 'ABA','name' => 'Abandoned','category' => NULL,'country' => NULL,'is_task' => '0','status_event' => '1','default_responsible' => NULL,'use_matter_resp' => '0','unique' => '1','uqtrigger' => '0','killer' => '1','notes' => NULL,'creator' => 'root','updated' => NULL,'updater' => NULL),
+  array('code' => 'ABA','name' => 'Abandoned','category' => NULL,'country' => NULL,'is_task' => '0','status_event' => '1','default_responsible' => NULL,'use_matter_resp' => '0','unique' => '1','uqtrigger' => '0','killer' => '1','notes' => NULL,'creator' => 'root','updated' => '2019-02-14 15:04:27','updater' => 'root'),
   array('code' => 'ABO','name' => 'Abandon Original','category' => 'PAT','country' => 'EP','is_task' => '1','status_event' => '0','default_responsible' => NULL,'use_matter_resp' => '0','unique' => '1','uqtrigger' => '0','killer' => '0','notes' => 'Abandon the originating patent that was re-designated in EP','creator' => 'root','updated' => '2011-04-23 22:43:27','updater' => NULL),
   array('code' => 'ADV','name' => 'Advisory Action','category' => 'PAT','country' => 'US','is_task' => '0','status_event' => '0','default_responsible' => NULL,'use_matter_resp' => '0','unique' => '0','uqtrigger' => '0','killer' => '0','notes' => NULL,'creator' => 'root','updated' => NULL,'updater' => NULL),
   array('code' => 'ALL','name' => 'Allowance','category' => 'PAT','country' => NULL,'is_task' => '0','status_event' => '1','default_responsible' => NULL,'use_matter_resp' => '0','unique' => '0','uqtrigger' => '0','killer' => '0','notes' => 'Use also for R71.3 in EP','creator' => 'root','updated' => '2011-03-20 17:15:45','updater' => NULL),

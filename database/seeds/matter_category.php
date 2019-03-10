@@ -5,10 +5,10 @@
  */
 
 /**
- * Database `phpip`
+ * Database `phpipv2`
  */
 
-/* `phpip`.`matter_category` */
+/* `phpipv2`.`matter_category` */
 $matter_category = array(
   array('code' => 'AGR','ref_prefix' => 'AGR','category' => 'Agreement','display_with' => 'OTH','creator' => 'root','updated' => '2011-09-27 17:52:36','updater' => NULL),
   array('code' => 'DSG','ref_prefix' => 'DSG','category' => 'Design','display_with' => 'TM','creator' => 'root','updated' => '2012-06-18 15:11:56','updater' => NULL),

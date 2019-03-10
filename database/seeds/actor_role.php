@@ -5,10 +5,10 @@
  */
 
 /**
- * Database `phpip`
+ * Database `phpipv2`
  */
 
-/* `phpip`.`actor_role` */
+/* `phpipv2`.`actor_role` */
 $actor_role = array(
   array('code' => 'AGT','name' => 'Primary Agent','display_order' => '20','shareable' => '0','show_ref' => '1','show_company' => '0','show_rate' => '0','show_date' => '0','box' => '3','box_color' => NULL,'notes' => NULL,'creator' => 'root','updated' => '2016-03-16 16:49:49','updater' => NULL),
   array('code' => 'AGT2','name' => 'Secondary Agent','display_order' => '22','shareable' => '0','show_ref' => '1','show_company' => '0','show_rate' => '0','show_date' => '0','box' => '3','box_color' => NULL,'notes' => 'Usually the primary agent\'s agent','creator' => 'root','updated' => '2011-05-05 11:17:57','updater' => NULL),
