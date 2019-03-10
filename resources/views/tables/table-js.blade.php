@@ -474,10 +474,11 @@ $(document).on("submit", "#createEventForm", function(e) {
 });
 
 function associate_errors(errors,$form) {
-	$form.find('.form-group').removeClass('has-errors').find('.help-text').text();
+	$form.find('.form-control').removeClass('is-invalid').attr("placeholder", "").find('.help-text').text();
 	for(index in errors) {
 		value = errors[index][0];
-		document.getElementById('error-box').innerHTML+=value + '<BR />';
+        $form.find('input[name=' + index + '_new]').attr("placeholder", value).attr("title", value).addClass('is-invalid');
+        $form.find('input[name=' + index + ']').attr("placeholder", value).attr("title", value).addClass('is-invalid');
 	};
 }
 </script>
