@@ -336,10 +336,10 @@ $(document).on("submit", "#createActorForm", function(e) {
 });
 
 function associate_errors(errors,$form) {
-	$('#error-box').addClass('alert alert-danger');
+	$form.find('.form-control').removeClass('is-invalid').attr("placeholder", "");
 	for(index in errors) {
 		value = errors[index][0];
-		document.getElementById('error-box').innerHTML+=value + '<BR />';
+        $form.find('input[name=' + index + ']').attr("placeholder", value).attr("title", value).addClass('is-invalid');
 	};
 }
 </script>
