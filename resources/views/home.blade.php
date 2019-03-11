@@ -48,6 +48,49 @@
                     @endforeach
                 </div>
             </div>
+            <div class="card">
+                <div class="card-header">
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            Users tasks
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <b>User</b>
+                        </div>
+                        <div class="col-md-3">
+                            <b>Open tasks</b>
+                        </div>
+                        <div class="col-md-3">
+                            <b>Most urgent</b>                        
+                        </div>
+                    </div>
+                    @foreach ($taskscount as $group)
+                        @if ($group->no_of_tasks > 0)
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{$group->login }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ $group->no_of_tasks }}
+                            </div>
+                                @if ($group->posix_urgent_date < date('Y-m-d'))
+                                    <div class="col-md-3 text-danger">{{ $group->urgent_date }}</div>
+                                @elseif ($group->posix_urgent_date < date('Y-m-d', strtotime("+1 week")))
+                                    <div  class="col-md-3 text-warning">{{ $group->urgent_date }}</div>
+                                @else
+                                    <div  class="col-md-3">{{ $group->urgent_date }}</div>
+                                @endif
+                        </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
         </div>
         <div class="col-md-8" id="filter">
             <div class="card">

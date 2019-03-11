@@ -50,7 +50,8 @@ class HomeController extends Controller
         $renewals = $renewals->simplePaginate(25)->all();
         // Count matters per categories
         $categories = Matter::getCategoryMatterCount();
-        return view('home',compact('tasks','renewals','categories'));
+        $taskscount = Task::getUsersOpenTaskCount();
+        return view('home',compact('tasks','renewals','categories','taskscount'));
     }
 
     /**
