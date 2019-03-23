@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class ActorSampleSeeder extends Seeder
 {
@@ -12,6 +13,8 @@ class ActorSampleSeeder extends Seeder
     public function run()
     {
         require 'actor-sample.php';
+        Schema::disableForeignKeyConstraints();
         App\Actor::insert($actor);
+        Schema::enableForeignKeyConstraints();
     }
 }
