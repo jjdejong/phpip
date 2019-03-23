@@ -18,6 +18,8 @@ $(document).ready(function() {
     	sourceUrl = $(event.relatedTarget).data("source");  // Used to refresh the list
     	resource = $(event.relatedTarget).data("resource");
 
+    	$(this).find(".modal-dialog").removeClass("modal-lg");
+    	$(this).find(".modal-dialog").addClass("modal-sm");
     	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
         $(this).find(".modal-body").load(relatedUrl);
     });
@@ -32,6 +34,8 @@ $(document).ready(function() {
     	sourceUrl = $(event.relatedTarget).data("source");   // Used to refresh the list
     	resource = $(event.relatedTarget).data("resource");
 
+    	$(this).find(".modal-dialog").removeClass("modal-lg");
+    	$(this).find(".modal-dialog").addClass("modal-sm");
     	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
         $(this).find(".modal-body").load(relatedUrl);
     });
