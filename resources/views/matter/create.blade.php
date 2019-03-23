@@ -4,8 +4,8 @@
   <div class="form-group row">
     <label for="category" class="col-3 col-form-label font-weight-bold">Category</label>
     <div class="col-9">
-      <input type="hidden" name="category_code" value="{{ $from_matter->category_code ?? '' }}" />
-      <input type="text" class="form-control" id="category" value="{{ $from_matter->category->category ?? '' }}" onFocus="this.select()" />
+      <input type="hidden" name="category_code" value="{{ $from_matter->category_code ?? ( $category['code'] ?? '') }}" />
+      <input type="text" class="form-control" id="category" value="{{  $from_matter->category ??  ($from_matter->category->category ?? ( $category['name'] ?? '')) }}" onFocus="this.select()" />
     </div>
   </div>
   <div class="form-group row">
@@ -35,7 +35,7 @@
       @if ( $operation == 'child' )
         <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $from_matter->caseref ?? '' }}" readonly />
       @else
-        <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $from_matter->caseref ?? '' }}" onFocus="this.select()" />
+        <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $from_matter->caseref ?? ( $category['next_caseref'] ?? '') }}" onFocus="this.select()" />
       @endif
     </div>
   </div>

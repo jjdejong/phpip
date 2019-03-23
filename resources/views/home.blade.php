@@ -42,7 +42,15 @@
                                 {{ $group->total }}
                             </div>
                             <div class="col-md-1">
-                                <a href="#newMatterModal" data-toggle="modal"><b>+</b></a>
+                                <a class="btn btn-outline-info btn-block btn-sm"
+                                    href="/matter/create?operation=new&category={{$group->category_code}}"
+                                    data-target="#homeModal"
+                                    data-remote="false"
+                                    title="Create new {{ $group->category }}"
+                                    data-toggle="modal"
+                                    data-size="modal-sm" >
+                                    <b>+</b>
+                                </a>
                             </div>
                         </div>
                     @endforeach
@@ -136,7 +144,12 @@
                   @foreach ($tasks as $task)
                     <div class="row">
                         <div class="col-md-6">
-                          <a href="/matter/{{ $task->trigger->matter->id }}/tasks" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
+                          <a href="/matter/{{ $task->trigger->matter->id }}/tasks" 
+                                data-toggle="modal" 
+                                data-target="#homeModal" 
+                                data-size="modal-lg"
+                                data-remote="false"
+                                title="All tasks">
                             {{ $task->info->name }}{{ $task->detail ? " - ".$task->detail : "" }}
                           </a>
                         </div>
@@ -205,7 +218,12 @@
                       @foreach ($renewals as $task)
                         <div class="row">
                           <div class="col-md-6">
-                            <a href="/matter/{{ $task->trigger->matter->id }}/renewals" data-toggle="modal" data-target="#homeModal" data-remote="false" title="All tasks" data-resource="/home/" data-source="/home?">
+                            <a href="/matter/{{ $task->trigger->matter->id }}/renewals"
+                                    data-toggle="modal"
+                                    data-target="#homeModal"
+                                    data-remote="false"
+                                    title="All tasks" 
+                                    data-size="modal-lg">
                               {{ $task->detail }}
                             </a>
                           </div>
