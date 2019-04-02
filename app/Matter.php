@@ -13,7 +13,7 @@ class Matter extends Model
     protected $hidden = ['creator', 'updated', 'updater'];
     protected $guarded = ['id', 'creator', 'updated', 'updater'];
 
-    use \Venturecraft\Revisionable\RevisionableTrait;
+    //use \Venturecraft\Revisionable\RevisionableTrait;
 
     protected $revisionEnabled = true;
     protected $revisionCreationsEnabled = true;
@@ -21,7 +21,7 @@ class Matter extends Model
     protected $historyLimit = 500; //Maintain a maximum of 500 changes at any point of time, while cleaning up old revisions.
 
     protected $appends = ['uid']; // Allows eager loading of uid
-    
+
     public function getUidAttribute() {
         return $this->caseref . $this->suffix;
     }
@@ -300,10 +300,10 @@ class Matter extends Model
             ->where([[ 'cli.role','CLI'],['cli.actor_id', $authUserId]]);
         }
         else {
-            if ($user ) 
+            if ($user )
                 $query = $query->where('responsible','=',$user);
         }
         return $query->get();
-  
+
     }
 }

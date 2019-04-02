@@ -13,7 +13,7 @@ class Task extends Model
     protected $hidden = ['creator', 'updated', 'updater'];
     protected $guarded = ['id', 'creator', 'updated', 'updater'];
 
-    use \Venturecraft\Revisionable\RevisionableTrait;
+    //use \Venturecraft\Revisionable\RevisionableTrait;
 
     protected $revisionEnabled = true;
     protected $revisionCreationsEnabled = true;
@@ -27,7 +27,7 @@ class Task extends Model
     public function trigger() {
         return $this->belongsTo('App\Event', 'trigger_id');
     }
-    
+
     public static function getUsersOpenTaskCount() {
         $userid = Auth::user()->id;
         $role = Auth::user()->default_role;
@@ -40,7 +40,7 @@ class Task extends Model
             ->where('m.dead','=', 0)
             ->where('task.done', 0)
             ->groupby( 'login' );
-        
+
         if ($role == 'CLI')
             $selectQuery->join ( 'matter_actor_lnk as cli', DB::raw("ifnull(m.container_ID,m.ID)", '=', "cli.matter_ID"))
             ->where([[ 'cli.role','CLI'],['cli.actor_id', $userid]]);

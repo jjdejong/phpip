@@ -11,7 +11,7 @@ class Event extends Model
     protected $hidden = ['creator', 'updated', 'updater'];
     protected $guarded = ['id', 'creator', 'updated', 'updater'];
 
-    use \Venturecraft\Revisionable\RevisionableTrait;
+    //use \Venturecraft\Revisionable\RevisionableTrait;
 
     protected $revisionEnabled = true;
     protected $revisionCreationsEnabled = true;

@@ -12,7 +12,7 @@ class Actor extends Model
   protected $hidden = ['login', 'last_login', 'password', 'remember_token', 'creator', 'updated', 'updater'];
   protected $guarded = ['id', 'password', 'creator', 'updated', 'updater'];
 
-  use \Venturecraft\Revisionable\RevisionableTrait;
+  //use \Venturecraft\Revisionable\RevisionableTrait;
   protected $revisionEnabled = true;
   protected $revisionCreationsEnabled = true;
   protected $revisionCleanup = true; //Remove old revisions (works only when used with $historyLimit)
