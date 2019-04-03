@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 // use App\Http\Controllers\Controller;
 // use Illuminate\Database\Query\Builder;
 
-class MatterController extends Controller 
+class MatterController extends Controller
 {
 
     public function index(Request $request) {
@@ -55,12 +55,12 @@ class MatterController extends Controller
                 $from_matter = collect(new Matter); // Create empty matter object
             }
             else {
-                $ref_prefix =  \App\Category::select('ref_prefix')->where('code','=',$category_code)->first()['ref_prefix'];
+                $ref_prefix = \App\Category::select('ref_prefix')->where('code', '=', $category_code)->first()['ref_prefix'];
                 $category=[
                     'code' => $category_code,
                     'next_caseref' => Matter::where('caseref', 'like', $ref_prefix . '%')->max('caseref') + 1,
-                    'name' => \App\Category::select('category')->where('code','=', $category_code)->first()['category']
-                    ];
+                    'name' => \App\Category::select('category')->where('code', '=', $category_code)->first()['category']
+                ];
             }
         }
 
@@ -108,13 +108,15 @@ class MatterController extends Controller
 
             $from_matter = Matter::with('priority', 'classifiersNative')->find($origin_id);
             //$container = $from_matter->container;
-            // Copy actors from original matter (cannot use Eloquent relationships because they do not handle unique key constraints)
+            // Copy actors from original matter when not a container (cannot use Eloquent relationships because they do not handle unique key constraints)
             // $new_matter->actorsNative()->createMany($from_matter->actorsNative->toArray());
 
-            DB::statement("INSERT IGNORE INTO matter_actor_lnk (matter_id, actor_id, display_order, role, shared, actor_ref, company_id, rate, date)
-                            SELECT ?, actor_id, display_order, role, shared, actor_ref, company_id, rate, date
-                            FROM matter_actor_lnk
-                            WHERE matter_id=?", [$new_matter->id, $origin_id]);
+            if ($from_matter->container_id) {
+              DB::statement("INSERT IGNORE INTO matter_actor_lnk (matter_id, actor_id, display_order, role, shared, actor_ref, company_id, rate, date)
+                              SELECT ?, actor_id, display_order, role, shared, actor_ref, company_id, rate, date
+                              FROM matter_actor_lnk
+                              WHERE matter_id=?", [$new_matter->id, $origin_id]);
+            }
 
             // Copy priority claims from original matter
             $new_matter->priority()->createMany($from_matter->priority->toArray());
