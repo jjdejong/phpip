@@ -103,54 +103,51 @@ class MatterController extends Controller
             return false;
         }
 
-        if ($request->operation != 'new') {
-            $origin_id = $request->origin_id;
-
-            $from_matter = Matter::with('priority', 'classifiersNative')->find($origin_id);
-            //$container = $from_matter->container;
-            // Copy actors from original matter when not a container (cannot use Eloquent relationships because they do not handle unique key constraints)
-            // $new_matter->actorsNative()->createMany($from_matter->actorsNative->toArray());
-
-            if ($from_matter->container_id) {
-              DB::statement("INSERT IGNORE INTO matter_actor_lnk (matter_id, actor_id, display_order, role, shared, actor_ref, company_id, rate, date)
-                              SELECT ?, actor_id, display_order, role, shared, actor_ref, company_id, rate, date
-                              FROM matter_actor_lnk
-                              WHERE matter_id=?", [$new_matter->id, $origin_id]);
-            }
-
+        switch ($request->operation) {
+          case 'child':
+            $from_matter = Matter::with('priority')->find($request->origin_id);
             // Copy priority claims from original matter
             $new_matter->priority()->createMany($from_matter->priority->toArray());
-
-            if ($request->operation == 'child') {
-                $new_matter->container_id = $request->input('origin_container_id', $origin_id);
-                if ($request->priority) {
-                    $event = new Event(
-                        ['code' => 'PRI', 'alt_matter_id' => $origin_id]
-                    );
-                } else {
-                    $new_matter->parent_id = $origin_id;
-                    $event = new Event(
-                        ['code' => 'PFIL', 'alt_matter_id' => $origin_id]
-                    );
-                }
-                $new_matter->events()->save($event);
-                $new_matter->save();
+            $new_matter->container_id = $from_matter->container_id ?? $request->origin_id;
+            if ($request->priority) {
+                $event = new Event(
+                    ['code' => 'PRI', 'alt_matter_id' => $request->origin_id]
+                );
+            } else {
+                $new_matter->parent_id = $request->origin_id;
+                $event = new Event(
+                    ['code' => 'PFIL', 'alt_matter_id' => $request->origin_id]
+                );
             }
-
-            if ($request->operation == 'clone') {
-                if ($from_matter->has('container')) {
-                    // Copy shared actors and classifiers from original matter's container
-                    DB::statement("INSERT IGNORE INTO matter_actor_lnk (matter_id, actor_id, display_order, role, shared, actor_ref, company_id, rate, date)
-                                    SELECT ?, actor_id, display_order, role, shared, actor_ref, company_id, rate, date
-                                    FROM matter_actor_lnk
-                                    WHERE matter_id=? AND shared=1", [$new_matter->id, $from_matter->container_id]);
-                    $new_matter->classifiersNative()->createMany($from_matter->container->classifiersNative->toArray());
-                } else {
-                    $new_matter->classifiersNative()->createMany($from_matter->classifiersNative->toArray());
-                }
+            $new_matter->events()->save($event);
+            $new_matter->save();
+            break;
+          case 'clone':
+            $from_matter = Matter::with('priority', 'classifiersNative')->find($request->origin_id);
+            // Copy priority claims from original matter
+            $new_matter->priority()->createMany($from_matter->priority->toArray());
+            //$container = $from_matter->container;
+            // Copy actors from original matter (cannot use Eloquent relationships because they do not handle unique key constraints)
+            // $new_matter->actorsNative()->createMany($from_matter->actorsNative->toArray());
+            DB::statement("INSERT IGNORE INTO matter_actor_lnk (matter_id, actor_id, display_order, role, shared, actor_ref, company_id, rate, date)
+                            SELECT ?, actor_id, display_order, role, shared, actor_ref, company_id, rate, date
+                            FROM matter_actor_lnk
+                            WHERE matter_id=?", [$new_matter->id, $request->origin_id]);
+            if ($from_matter->container_id) {
+                // Copy shared actors and classifiers from original matter's container
+                DB::statement("INSERT IGNORE INTO matter_actor_lnk (matter_id, actor_id, display_order, role, shared, actor_ref, company_id, rate, date)
+                                SELECT ?, actor_id, display_order, role, shared, actor_ref, company_id, rate, date
+                                FROM matter_actor_lnk
+                                WHERE matter_id=? AND shared=1", [$new_matter->id, $from_matter->container_id]);
+                $new_matter->classifiersNative()->createMany($from_matter->container->classifiersNative->toArray());
+            } else {
+                // Copy classifiers from original matter
+                $new_matter->classifiersNative()->createMany($from_matter->classifiersNative->toArray());
             }
+            break;
+          case 'new':
+            break;
         }
-
         return route('matter.show', [$new_matter]);
     }
 

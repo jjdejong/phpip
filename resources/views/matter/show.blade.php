@@ -250,9 +250,9 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                     <div class="row">
                         <span class="col-5">{{ $event->info->name }}</span>
                         @if ( $event->alt_matter_id )
-                        <span class="col-3">{{ $event->link->event_date }}</span>
+                        <span class="col-3">{{ $event->link->event_date ?? $event->event_date }}</span>
                         <span class="col">
-                            <a href="/matter/{{ $event->alt_matter_id }}" target="_blank">{{ $event->altMatter->country . $event->link->detail }}</a>
+                            <a href="/matter/{{ $event->alt_matter_id }}" target="_blank">{{ $event->altMatter->country }} {{ $event->link->detail ?? $event->detail }}</a>
                         </span>
                         @else
                         <span class="col-3">{{ $event->event_date }}</span>
