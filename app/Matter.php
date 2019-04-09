@@ -54,11 +54,14 @@ class Matter extends Model
                         ->orderBy('country');
     }
 
-    public function actors() {
+    public function actors()
+    {
+        // MatterActors refers to a view that also includes the actors inherited from the container. Can only be used to display data
         return $this->hasMany('App\MatterActors');
     }
 
-    public function actorsNative() {
+    public function actorPivot()
+    {
         return $this->hasMany('App\ActorPivot');
     }
 

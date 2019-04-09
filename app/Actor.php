@@ -31,7 +31,7 @@ class Actor extends Model
   }
 
   public function matters() {
-		return $this->hasMany('App\ActorPivot');
+		return $this->belongsToMany('App\Matter', 'matter_actor_lnk');
 	}
 
   public function droleInfo() {

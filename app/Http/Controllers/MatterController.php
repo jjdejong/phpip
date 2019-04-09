@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Matter;
 use App\Event;
+use App\ActorPivot;
 // use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -13,8 +14,8 @@ use Illuminate\Http\Request;
 
 class MatterController extends Controller
 {
-
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $filters = $request->except([
             'display_with',
             'page',
@@ -30,7 +31,8 @@ class MatterController extends Controller
         return view('matter.index', compact('matters'));
     }
 
-    public function show(Matter $matter) {
+    public function show(Matter $matter)
+    {
         $matter->with(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers']);
         return view('matter.show', compact('matter'));
     }
@@ -41,7 +43,8 @@ class MatterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $operation = $request->input('operation', 'new'); // new, clone, child
         $category_code = $request->input('category');
         if ($operation != 'new') {
@@ -53,8 +56,7 @@ class MatterController extends Controller
         } else {
             if ($category_code == '') {
                 $from_matter = collect(new Matter); // Create empty matter object
-            }
-            else {
+            } else {
                 $ref_prefix = \App\Category::select('ref_prefix')->where('code', '=', $category_code)->first()['ref_prefix'];
                 $category=[
                     'code' => $category_code,
@@ -73,7 +75,8 @@ class MatterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $this->validate($request, [
             'category_code' => 'required',
             'caseref' => 'required',
@@ -123,22 +126,25 @@ class MatterController extends Controller
             $new_matter->save();
             break;
           case 'clone':
-            $from_matter = Matter::with('priority', 'classifiersNative')->find($request->origin_id);
+            $from_matter = Matter::with('priority', 'classifiersNative', 'actorPivot')->find($request->origin_id);
             // Copy priority claims from original matter
             $new_matter->priority()->createMany($from_matter->priority->toArray());
-            //$container = $from_matter->container;
             // Copy actors from original matter (cannot use Eloquent relationships because they do not handle unique key constraints)
-            // $new_matter->actorsNative()->createMany($from_matter->actorsNative->toArray());
-            DB::statement("INSERT IGNORE INTO matter_actor_lnk (matter_id, actor_id, display_order, role, shared, actor_ref, company_id, rate, date)
-                            SELECT ?, actor_id, display_order, role, shared, actor_ref, company_id, rate, date
-                            FROM matter_actor_lnk
-                            WHERE matter_id=?", [$new_matter->id, $request->origin_id]);
+            $actors = $from_matter->actorPivot;
+            $new_matter_id = $new_matter->id;
+            $actors->each(function ($item) use ($new_matter_id) {
+                $item->matter_id = $new_matter_id;
+                $item->id = null;
+            });
+            ActorPivot::insertIgnore($actors->toArray());
             if ($from_matter->container_id) {
                 // Copy shared actors and classifiers from original matter's container
-                DB::statement("INSERT IGNORE INTO matter_actor_lnk (matter_id, actor_id, display_order, role, shared, actor_ref, company_id, rate, date)
-                                SELECT ?, actor_id, display_order, role, shared, actor_ref, company_id, rate, date
-                                FROM matter_actor_lnk
-                                WHERE matter_id=? AND shared=1", [$new_matter->id, $from_matter->container_id]);
+                $actors = $from_matter->container->actorPivot->where('shared', 1);
+                $actors->each(function ($item) use ($new_matter_id) {
+                    $item->matter_id = $new_matter_id;
+                    $item->id = null;
+                });
+                ActorPivot::insertIgnore($actors->toArray());
                 $new_matter->classifiersNative()->createMany($from_matter->container->classifiersNative->toArray());
             } else {
                 // Copy classifiers from original matter
@@ -157,7 +163,8 @@ class MatterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storeN(Request $request) {
+    public function storeN(Request $request)
+    {
         $this->validate($request, [
             'ncountry' => 'required:array'
         ]);
@@ -166,7 +173,6 @@ class MatterController extends Controller
         $from_matter = Matter::with('priority', 'filing', 'classifiersNative')->find($origin_id);
 
         foreach ($request->ncountry as $country) {
-
             $request->merge(['country' => $country]);
 
             try {
@@ -176,14 +182,8 @@ class MatterController extends Controller
                 return false;
             }
 
-            // Copy actors from original matter
-            DB::statement("INSERT IGNORE INTO matter_actor_lnk (matter_id, actor_id, display_order, role, shared, actor_ref, company_id, rate, date)
-                            SELECT ?, actor_id, display_order, role, shared, actor_ref, company_id, rate, date
-                            FROM matter_actor_lnk
-                            WHERE matter_id=?", [$new_matter->id, $origin_id]);
-
             // Copy classifiers (from original matter's container, or from original matter if there is no container)
-            if ($from_matter->has('container')) {
+            if ($from_matter->container_id) {
                 $new_matter->classifiersNative()->createMany($from_matter->container->classifiersNative->toArray());
                 $new_matter->container_id = $from_matter->container_id;
             } else {
@@ -213,7 +213,8 @@ class MatterController extends Controller
      * @param  \App\Matter  $matter
      * @return \Illuminate\Http\Response
      */
-    public function edit(Matter $matter) {
+    public function edit(Matter $matter)
+    {
         //
     }
 
@@ -224,7 +225,8 @@ class MatterController extends Controller
      * @param  \App\Matter  $matter
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Matter $matter) {
+    public function update(Request $request, Matter $matter)
+    {
         $matter->update($request->except(['_token', '_method']));
     }
 
@@ -232,7 +234,8 @@ class MatterController extends Controller
      * Exports Matters list
      * *
      */
-    public function export(Request $request) {
+    public function export(Request $request)
+    {
         $filters = $request->except([
             'display_with',
             'page',
@@ -242,7 +245,7 @@ class MatterController extends Controller
             'sortdir'
         ]);
 
-        $matter = new Matter ();
+        $matter = new Matter();
         $export = $matter->filter($request->input('sortkey', 'caseref'), $request->input('sortdir', 'asc'), $filters, $request->display_with, false)->toArray();
 
         $captions = [
@@ -283,14 +286,17 @@ class MatterController extends Controller
         rewind($export_csv);
         $filename = 'phpIP-export.csv';
 
-        return response ()->stream (
-            function () use ( $export_csv ) { fpassthru ( $export_csv ); },
+        return response()->stream(
+            function () use ($export_csv) {
+                fpassthru($export_csv);
+            },
             200,
             [ 'Content-Type' => 'application/csv', 'Content-disposition' => 'attachment; filename=' . $filename ]
         );
     }
 
-    public function events(Matter $matter) {
+    public function events(Matter $matter)
+    {
         $events = $matter->events->load('info');
         /* = Event::with('info')
           ->where('matter_id', $matter->id)
@@ -298,26 +304,28 @@ class MatterController extends Controller
         return view('matter.events', compact('events', 'matter'));
     }
 
-    public function tasks(Matter $matter) { // All events and their tasks, excepting renewals
-        $events = Event::with(['tasks' => function($query) {
+    public function tasks(Matter $matter)
+    { // All events and their tasks, excepting renewals
+        $events = Event::with(['tasks' => function ($query) {
             $query->where('code', '!=', 'REN');
         }, 'info:code,name', 'tasks.info:code,name'])->where('matter_id', $matter->id)
         ->orderBy('event_date')->get();
         return view('matter.tasks', compact('events', 'matter'));
     }
 
-    public function renewals(Matter $matter) { // The renewal trigger event and its renewals
-        $events = Event::with(['tasks' => function($query) {
+    public function renewals(Matter $matter)
+    { // The renewal trigger event and its renewals
+        $events = Event::with(['tasks' => function ($query) {
             $query->where('code', 'REN');
-        }])->whereHas('tasks', function($query) {
+        }])->whereHas('tasks', function ($query) {
             $query->where('code', 'REN');
         })->where('matter_id', $matter->id)->get();
         return view('matter.tasks', compact('events', 'matter'));
     }
 
-    public function actors(Matter $matter, $role) {
+    public function actors(Matter $matter, $role)
+    {
         $role_group = $matter->actors->where('role_code', $role);
         return view('matter.roleActors', compact('role_group', 'matter'));
     }
-
 }

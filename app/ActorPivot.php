@@ -3,8 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ActorPivot extends Model
+class ActorPivot extends Pivot
 {
     protected $table = 'matter_actor_lnk';
     public $timestamps = false;
@@ -17,16 +18,23 @@ class ActorPivot extends Model
     // protected $revisionCleanup = true; //Remove old revisions (works only when used with $historyLimit)
     // protected $historyLimit = 500; //Maintain a maximum of 500 changes at any point of time, while cleaning up old revisions.
 
-    public function matter() {
+    public function matter()
+    {
         return $this->belongsTo('App\Matter');
     }
 
-    public function actor() {
+    public function actor()
+    {
         return $this->belongsTo('App\Actor');
     }
 
-    public function role() {
+    public function role()
+    {
         return $this->belongsTo('App\Role', 'role');
     }
 
+    public function company()
+    {
+        return $this->belongsTo('App\Actor', 'company_id');
+    }
 }
