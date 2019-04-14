@@ -99,7 +99,7 @@
     });
 
     // Ajax fill the opened modal and set global parameters
-    $("#listModal, #createMatterModal").on("show.bs.modal", function(event) {
+        $("#listModal, #createMatterModal, #summaryModal").on("show.bs.modal", function (event) {
       relatedUrl = $(event.relatedTarget).attr("href");
       resource = $(event.relatedTarget).data("resource");
       $(this).find(".modal-title").text($(event.relatedTarget).attr("title"));
@@ -533,4 +533,24 @@
     });
     return false;
   });
+
+//  Generate summary and copy
+
+    $("#summaryModal").on("click", "#sumButton", function(event) {
+            /* write to the clipboard now */
+            //var text = document.getElementById("tocopy").textContent;
+            var node = document.getElementById("tocopy")
+            
+            var selection = getSelection();
+            selection.removeAllRanges();
+
+            var range = document.createRange();
+            range.selectNodeContents(node);
+            selection.addRange(range);
+
+            var success = document.execCommand('copy');
+            selection.removeAllRanges();
+            return success;
+    });
+ 
 </script>

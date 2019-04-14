@@ -328,4 +328,10 @@ class MatterController extends Controller
         $role_group = $matter->actors->where('role_code', $role);
         return view('matter.roleActors', compact('role_group', 'matter'));
     }
+    
+    public function description(Matter $matter, $lang)
+    {
+        $description = $matter->getDescription($matter->id, $lang);
+        return view('matter.summary', compact('description'));
+    }
 }

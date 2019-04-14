@@ -343,7 +343,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       </div>
     </div>
     <div class="row card-deck">
-      <div class="card col-12 p-0">
+            <div class="card col-9 p-0">
         <div class="card-header font-weight-bold p-1">
           Notes
           <button type="button" class="hidden-action btn btn-warning btn-sm" id="updateNotes">&#9432; Save</button>
@@ -352,6 +352,32 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           <textarea id="notes" class="form-control noformat" style="width:100%; height:100%; box-sizing: border-box;" name="notes">{{ $matter->notes }}</textarea>
         </div>
       </div>
+            <div class="card border-info col-3 p-0">
+                <div class="card-header font-weight-bold bg-info text-white p-1">
+                    Copy summary
+                    <span class="float-right">&#9432;</span>
+                </div>
+                <div class="card-body p-1" id="related-panel" style="overflow: auto;">                
+                    <a class="font-weight-bold badge badge-primary"
+                        href="/matter/{{ $matter->id }}/description/en"
+                        data-toggle="modal"
+                        data-target="#summaryModal"
+                        data-remote="false"
+                        data-resource="/event"
+                        title="Copy a summary in English">
+                        &boxbox; EN
+                    </a>
+                    <a class="font-weight-bold badge badge-primary"
+                        href="/matter/{{ $matter->id }}/description/fr"
+                        data-toggle="modal"
+                        data-target="#summaryModal"
+                        data-remote="false"
+                        data-resource="/event"
+                        title="Copy a summary in French">
+                        &boxbox; FR
+                    </a>
+                </div>
+            </div>
     </div>
   </div>
 </div>

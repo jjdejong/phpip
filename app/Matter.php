@@ -349,4 +349,160 @@ class Matter extends Model
         }
         return $query->get();
     }
+    public static function getDescription($id, $lang='en') {
+        $query = Matter::select(DB::raw("CONCAT_WS('', caseref, suffix) AS Ref"),
+                'matter.country AS country',
+                'matter.category_code AS Cat',
+                'matter.origin',
+                'event_name.name AS Status',
+                'status.event_date AS Status_date',
+                DB::raw ( "COALESCE(cli.display_name, clic.display_name, cli.name, clic.name) AS Client" ),
+                DB::raw ( "COALESCE(clilnk.actor_ref, lclic.actor_ref) AS ClRef" ),
+                DB::raw ( "COALESCE(app.display_name, app.name) AS Applicant" ),
+                //DB::raw ( "COALESCE(agt.display_name, agt.name) AS Agent" ),
+                'agtlnk.actor_ref AS AgtRef',
+                'classifier.value AS Title',
+                'classifier2.value AS Title2',
+                DB::raw ( "CONCAT_WS(' ', inv.name, inv.first_name) as Inventor1" ),
+                'fil.event_date AS Filed',
+                'fil.detail AS FilNo',
+                'pub.event_date AS Published',
+                'pub.detail AS PubNo',
+                'grt.event_date AS Granted',
+                'grt.detail AS GrtNo',
+                //'matter.id',
+                //'matter.container_id',
+                //'matter.parent_id',
+                //'matter.responsible',
+                //'del.login AS delegate',
+                //'matter.dead',
+                'country.name AS country_name',
+                'country.name_FR AS country_name_FR',
+                'country.name_DE AS country_name_DE',
+                DB::raw ( "IF(isnull(matter.container_id),1,0) AS Ctnr" ))
+        ->join('matter_category', 'matter.category_code', 'matter_category.code')
+        ->join('country', 'matter.country', 'country.iso')
+        ->leftJoin(DB::raw('matter_actor_lnk clilnk
+            JOIN actor cli ON cli.id = clilnk.actor_id'), function ($join) {
+                $join->on('matter.id', 'clilnk.matter_id')->where('clilnk.role', 'CLI');
+            }
+        )
+        ->leftJoin(DB::raw('matter_actor_lnk lclic
+            JOIN actor clic ON clic.id = lclic.actor_id'), function ($join) {
+                $join->on('matter.container_id', 'lclic.matter_id')->where([
+                    ['lclic.role', 'CLI'],
+                    ['lclic.shared', 1]
+                ]);
+            }
+        );
+
+        $query->leftJoin(DB::raw('matter_actor_lnk invlnk
+                JOIN actor inv ON inv.id = invlnk.actor_id'), function ($join) {
+                    $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'invlnk.matter_id')->where([
+                        ['invlnk.role', 'INV'],
+                        ['invlnk.display_order', 1]
+                    ]);
+                }
+            );
+
+        $query->leftJoin(DB::raw('matter_actor_lnk agtlnk
+            JOIN actor agt ON agt.id = agtlnk.actor_id'), function ($join) {
+                $join->on('matter.id', 'agtlnk.matter_id')->where([
+                    ['agtlnk.role', 'AGT'],
+                    ['agtlnk.display_order', 1]
+                ]);
+            }
+        )
+        ->leftJoin(DB::raw('matter_actor_lnk applnk
+            JOIN actor app ON app.id = applnk.actor_id'), function ($join) {
+                $join->on('matter.id', 'applnk.matter_id')->where([
+                    ['applnk.role', 'APP'],
+                    ['applnk.display_order', 1]
+                ]);
+            }
+        )
+        ->leftJoin(DB::raw('matter_actor_lnk dellnk
+            JOIN actor del ON del.id = dellnk.actor_id'), function ($join) {
+                $join->on(DB::raw('ifnull(matter.container_id,matter.id)'), 'dellnk.matter_id')->where('dellnk.role', 'DEL');
+            }
+        )
+        ->leftJoin('event AS fil', function ($join) {
+            $join->on('matter.id', 'fil.matter_id')->where('fil.code', 'FIL');
+        })
+        ->leftJoin('event AS pub', function ($join) {
+            $join->on('matter.id', 'pub.matter_id')->where('pub.code', 'PUB');
+        })
+        ->leftJoin('event AS grt', function ($join) {
+            $join->on('matter.id', 'grt.matter_id')->where('grt.code', 'GRT');
+        })
+        ->leftJoin(DB::raw('event status
+            JOIN event_name ON event_name.code = status.code AND event_name.status_event = 1'), 'matter.id', 'status.matter_id')
+        ->leftJoin(DB::raw('event e2
+            JOIN event_name en2 ON e2.code=en2.code AND en2.status_event = 1'), function ($join) {
+                $join->on('status.matter_id', 'e2.matter_id')->whereColumn('status.event_date', '<', 'e2.event_date');
+            }
+        )
+        ->leftJoin(DB::raw('classifier
+            JOIN classifier_type ON classifier.type_code = classifier_type.code AND classifier_type.main_display = 1 AND classifier_type.display_order = 1'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'classifier.matter_id')
+        ->leftJoin(DB::raw('classifier classifier2
+            JOIN classifier_type ct2 ON classifier2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'classifier2.matter_id')
+        ->where('matter.id','=',$id);
+        $info = $query->first();
+        $description = array();
+        $filed_date = date_create($info['Filed']);
+        $granted_date = date_create($info['Granted']);
+        $published_date = date_create($info['Published']);
+        if($lang == "fr") {
+            $description[] = "N/réf : " . $info['Ref'] ;
+            if($info['ClRef']) {$description[] = "V/réf : " . $info['ClRef'] ;}
+            if ($info['Cat'] == 'PAT') {
+                if ($info['Granted']) {
+                    $description[] = "Brevet " . $info['GrtNo'] . " déposé en " . $info['country_name_FR'] . " le " . $filed_date->format("d/m/Y") . " et délivré le " . $granted_date->format("d/m/Y");
+                }
+                else {
+                    $line = "Demande de brevet n°" . $info['FilNo'] . " déposée en " . $info['country_name_FR'] . " le ". $filed_date->format("d/m/Y");
+                    if($info['Published']) {$line .= " et publiée le " . $published_date->format("d/m/Y") ." sous le n° ". $info['PubNo'];}
+                    $description[] = $line;
+                }
+                $description[] = "Pour : " . $info['Title1'] ;
+                $description[] = "Au nom de : ". $info['Applicant'] ;
+            }
+            if ($info['Cat'] == 'TM') {
+                $line = "Marque n° " . $info['FilNo'] . " déposée en " . $info['country_name_FR'] . " le " . $filed_date->format("d/m/Y") ;
+                if($info['Published']) {$line .= ", publiée le " . $published_date->format("d/m/Y") ." sous le n° ". $info['PubNo'];}
+                if ($info['Granted']) {
+                    $line .=  " et enregistrée le " . $granted_date->format("d/m/Y");
+                }
+                $description[] = $line;
+                $description[] = "Pour : " . $info['Title1'] ;
+                $description[] = "Au nom de : ". $info['Applicant'] ;
+            }
+        }
+        if($lang == "en") {
+            $description[] = "Our ref: " . $info['Ref'] ;
+            if($info['ClRef']) {$description[] = "Your ref: " . $info['ClRef'] ;}
+            if ($info['Cat'] == 'PAT') {
+                if ($info['Granted']) {
+                    $description[] = "Patent " . $info['FilNo'] . " filed in " . $info['country_name'] . " at " . $info['Filed'] . $info['GrtNo'] . " and granted at " . $info['Granted'];
+                }
+                else {
+                    $description[] = "Patent application n°" . $info['FilNo'] . " filed in " . $info['country_name'] . " at ". $info['Filed'];
+                    if($info['Published']) {$description[]= " and published at " . $info['Published'] ." with no ". $info['PubNo'];}
+                }
+                $description[] = "For: " . $info['Title1'] ;
+                $description[] = "In name of: ". $info['Applicant'] ;
+            }
+            if ($info['Cat'] == 'TM') {
+                $line = "Marque no " . $info['FilNo'] . " filed in " . $info['country_name_FR'] . " at " . $info['Filed'] ;
+                if($info['Published']) {$line .= ", published at " .  $info['Published'] ." with no ". $info['PubNo'];}
+                if ($info['Granted']) {
+                    $line .=  " and registered at " . $info['Granted'];
+                }
+                $description[] = $line;
+                $description[] = "For: " . $info['Title1'] ;
+                $description[] = "In name of: ". $info['Applicant'] ;
+            }
+        }
+    return $description;
+    }
 }

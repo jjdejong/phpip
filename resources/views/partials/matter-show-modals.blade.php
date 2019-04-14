@@ -117,3 +117,24 @@
     </div>
   </div>
 </div>
+
+
+<div id="summaryModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Copy summary to clipboard</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                Ajax placeholder
+            </div>
+            <div class="modal-footer">
+                <span class="alert float-left"></span>
+                <button id="sumButton" type="button" class="btn btn-default" data-dismiss="modal">Copy</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
