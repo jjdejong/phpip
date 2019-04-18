@@ -45,7 +45,7 @@ class CreateActorTable extends Migration {
 			$table->text('notes', 65535)->nullable();
 			$table->string('VAT_number', 45)->nullable();
 			$table->char('creator', 16)->nullable();
-			$table->timestamp('updated')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));
+			$table->timestamp('updated')->nullable()->useCurrent();
 			$table->char('updater', 16)->nullable();
 			$table->string('remember_token', 100)->nullable();
 		});

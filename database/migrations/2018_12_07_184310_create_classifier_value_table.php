@@ -20,7 +20,7 @@ class CreateClassifierValueTable extends Migration {
 			$table->char('type_code', 5)->nullable()->index('value_type')->comment('Restrict this classifier name to the classifier type identified here');
 			$table->string('notes')->nullable();
 			$table->string('creator', 20)->nullable();
-			$table->timestamp('updated')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));
+			$table->timestamp('updated')->nullable()->useCurrent();
 			$table->string('updater', 20)->nullable();
 			$table->unique(['value','type_code'], 'uqclvalue');
 		});

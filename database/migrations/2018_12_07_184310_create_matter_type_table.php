@@ -18,7 +18,7 @@ class CreateMatterTypeTable extends Migration {
 			$table->char('code', 5)->primary();
 			$table->string('type', 45);
 			$table->string('creator', 20)->nullable();
-			$table->timestamp('updated')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));
+			$table->timestamp('updated')->useCurrent();
 			$table->string('updater', 20)->nullable();
 		});
 	}

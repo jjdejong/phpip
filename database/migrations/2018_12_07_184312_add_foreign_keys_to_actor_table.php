@@ -14,14 +14,14 @@ class AddForeignKeysToActorTable extends Migration {
 	{
 		Schema::table('actor', function(Blueprint $table)
 		{
-			$table->foreign('company_id')->references('id')->on('actor')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('company_id')->references('id')->on('actor')->onUpdate('CASCADE')->onDelete('SET NULL');
 			$table->foreign('country')->references('iso')->on('country')->onUpdate('CASCADE')->onDelete('SET NULL');
 			$table->foreign('country_billing')->references('iso')->on('country')->onUpdate('CASCADE')->onDelete('SET NULL');
 			$table->foreign('country_mailing')->references('iso')->on('country')->onUpdate('CASCADE')->onDelete('SET NULL');
 			$table->foreign('nationality')->references('iso')->on('country')->onUpdate('CASCADE')->onDelete('SET NULL');
-			$table->foreign('parent_id')->references('id')->on('actor')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('parent_id')->references('id')->on('actor')->onUpdate('CASCADE')->onDelete('SET NULL');
 			$table->foreign('default_role')->references('code')->on('actor_role')->onUpdate('CASCADE')->onDelete('SET NULL');
-			$table->foreign('site_id')->references('id')->on('actor')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('site_id')->references('id')->on('actor')->onUpdate('CASCADE')->onDelete('SET NULL');
 		});
 	}
 

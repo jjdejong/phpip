@@ -27,7 +27,7 @@ class CreateActorRoleTable extends Migration {
 			$table->string('box_color', 7)->nullable()->default('#000000')->comment('Color of background');
 			$table->string('notes', 160)->nullable();
 			$table->string('creator', 20)->nullable();
-			$table->timestamp('updated')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));
+			$table->timestamp('updated')->nullable()->useCurrent();
 			$table->string('updater', 20)->nullable();
 		});
 	}

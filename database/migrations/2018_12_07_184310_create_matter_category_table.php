@@ -20,7 +20,7 @@ class CreateMatterCategoryTable extends Migration {
 			$table->string('category', 45);
 			$table->char('display_with', 5)->default('PAT')->index('display_with')->comment('Display with the indicated category in the interface');
 			$table->char('creator', 16)->nullable();
-			$table->timestamp('updated')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));
+			$table->timestamp('updated')->nullable()->useCurrent();
 			$table->char('updater', 16)->nullable();
 		});
 	}
