@@ -171,7 +171,14 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               @if ( $actor->warn && $role_name == 'Client' )
               <span title="Payment Difficulties">&#9888;</span>
               @endif
+              <a href="/actor/{{ $actor->actor_id }}" 
+                data-toggle="modal" 
+                data-target="#listModal" 
+                data-remote="false" 
+                title="Actor data" 
+                data-resource="/actor/">
               {{ $actor->display_name }}
+              </a>
               @if ( $actor->show_ref && $actor->actor_ref )
               ({{ $actor->actor_ref }})
               @endif
