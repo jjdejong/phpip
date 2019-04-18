@@ -14,7 +14,7 @@ class AddForeignKeysToClassifierTypeTable extends Migration {
 	{
 		Schema::table('classifier_type', function(Blueprint $table)
 		{
-			$table->foreign('for_category', 'fk_forcategory')->references('code')->on('matter_category')->onUpdate('CASCADE')->onDelete('SET NULL');
+			$table->foreign('for_category')->references('code')->on('matter_category')->onUpdate('CASCADE')->onDelete('SET NULL');
 		});
 	}
 
@@ -28,7 +28,7 @@ class AddForeignKeysToClassifierTypeTable extends Migration {
 	{
 		Schema::table('classifier_type', function(Blueprint $table)
 		{
-			$table->dropForeign('fk_forcategory');
+			$table->dropForeign(['for_category']);
 		});
 	}
 

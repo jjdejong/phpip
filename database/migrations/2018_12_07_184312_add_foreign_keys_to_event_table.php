@@ -14,9 +14,9 @@ class AddForeignKeysToEventTable extends Migration {
 	{
 		Schema::table('event', function(Blueprint $table)
 		{
-			$table->foreign('alt_matter_id', 'fk_event_altmatter')->references('id')->on('matter')->onUpdate('CASCADE')->onDelete('SET NULL');
-			$table->foreign('matter_id', 'fk_event_matter')->references('id')->on('matter')->onUpdate('CASCADE')->onDelete('CASCADE');
-			$table->foreign('code', 'fk_event_name')->references('code')->on('event_name')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('alt_matter_id')->references('id')->on('matter')->onUpdate('CASCADE')->onDelete('SET NULL');
+			$table->foreign('matter_id')->references('id')->on('matter')->onUpdate('CASCADE')->onDelete('CASCADE');
+			$table->foreign('code')->references('code')->on('event_name')->onUpdate('CASCADE')->onDelete('RESTRICT');
 		});
 	}
 
@@ -30,9 +30,9 @@ class AddForeignKeysToEventTable extends Migration {
 	{
 		Schema::table('event', function(Blueprint $table)
 		{
-			$table->dropForeign('fk_event_altmatter');
-			$table->dropForeign('fk_event_matter');
-			$table->dropForeign('fk_event_name');
+			$table->dropForeign(['alt_matter_id']);
+			$table->dropForeign(['matter_id']);
+			$table->dropForeign(['code']);
 		});
 	}
 

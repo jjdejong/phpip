@@ -14,13 +14,13 @@ class AddForeignKeysToTaskRulesTable extends Migration {
 	{
 		Schema::table('task_rules', function(Blueprint $table)
 		{
-			$table->foreign('abort_on', 'fk_abort_on')->references('code')->on('event_name')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('for_category', 'fk_category')->references('code')->on('matter_category')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('condition_event', 'fk_condition')->references('code')->on('event_name')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('for_country', 'fk_country')->references('iso')->on('country')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('task', 'fk_name')->references('code')->on('event_name')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('for_origin', 'fk_origin')->references('iso')->on('country')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('trigger_event', 'fk_trigger')->references('code')->on('event_name')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('abort_on')->references('code')->on('event_name')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('for_category')->references('code')->on('matter_category')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('condition_event')->references('code')->on('event_name')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('for_country')->references('iso')->on('country')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('task')->references('code')->on('event_name')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('for_origin')->references('iso')->on('country')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('trigger_event')->references('code')->on('event_name')->onUpdate('CASCADE')->onDelete('RESTRICT');
 		});
 	}
 
@@ -34,13 +34,13 @@ class AddForeignKeysToTaskRulesTable extends Migration {
 	{
 		Schema::table('task_rules', function(Blueprint $table)
 		{
-			$table->dropForeign('fk_abort_on');
-			$table->dropForeign('fk_category');
-			$table->dropForeign('fk_condition');
-			$table->dropForeign('fk_country');
-			$table->dropForeign('fk_name');
-			$table->dropForeign('fk_origin');
-			$table->dropForeign('fk_trigger');
+			$table->dropForeign(['abort_on']);
+			$table->dropForeign(['for_category']);
+			$table->dropForeign(['condition_event']);
+			$table->dropForeign(['for_country']);
+			$table->dropForeign(['task']);
+			$table->dropForeign(['for_origin']);
+			$table->dropForeign(['trigger_event']);
 		});
 	}
 

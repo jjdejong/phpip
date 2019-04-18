@@ -14,10 +14,10 @@ class AddForeignKeysToDefaultActorTable extends Migration {
 	{
 		Schema::table('default_actor', function(Blueprint $table)
 		{
-			$table->foreign('actor_id', 'fk_dfltactor')->references('id')->on('actor')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('for_client', 'fk_dfltactor_client')->references('id')->on('actor')->onUpdate('CASCADE')->onDelete('CASCADE');
-			$table->foreign('for_country', 'fk_dfltactor_country')->references('iso')->on('country')->onUpdate('CASCADE')->onDelete('CASCADE');
-			$table->foreign('role', 'fk_dfltactor_role')->references('code')->on('actor_role')->onUpdate('CASCADE')->onDelete('CASCADE');
+			$table->foreign('actor_id')->references('id')->on('actor')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('for_client')->references('id')->on('actor')->onUpdate('CASCADE')->onDelete('CASCADE');
+			$table->foreign('for_country')->references('iso')->on('country')->onUpdate('CASCADE')->onDelete('CASCADE');
+			$table->foreign('role')->references('code')->on('actor_role')->onUpdate('CASCADE')->onDelete('CASCADE');
 		});
 	}
 
@@ -31,10 +31,10 @@ class AddForeignKeysToDefaultActorTable extends Migration {
 	{
 		Schema::table('default_actor', function(Blueprint $table)
 		{
-			$table->dropForeign('fk_dfltactor');
-			$table->dropForeign('fk_dfltactor_client');
-			$table->dropForeign('fk_dfltactor_country');
-			$table->dropForeign('fk_dfltactor_role');
+			$table->dropForeign(['actor_id']);
+			$table->dropForeign(['for_client']);
+			$table->dropForeign(['for_country']);
+			$table->dropForeign(['role']);
 		});
 	}
 

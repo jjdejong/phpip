@@ -14,7 +14,7 @@ class AddForeignKeysToMatterCategoryTable extends Migration {
 	{
 		Schema::table('matter_category', function(Blueprint $table)
 		{
-			$table->foreign('display_with', 'fk_displaywith')->references('code')->on('matter_category')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('display_with')->references('code')->on('matter_category')->onUpdate('CASCADE')->onDelete('RESTRICT');
 		});
 	}
 
@@ -28,7 +28,7 @@ class AddForeignKeysToMatterCategoryTable extends Migration {
 	{
 		Schema::table('matter_category', function(Blueprint $table)
 		{
-			$table->dropForeign('fk_displaywith');
+			$table->dropForeign(['display_with']);
 		});
 	}
 

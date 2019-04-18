@@ -14,7 +14,7 @@ class AddForeignKeysToEventNameTable extends Migration {
 	{
 		Schema::table('event_name', function(Blueprint $table)
 		{
-			$table->foreign('default_responsible', 'fk_dflt_responsible')->references('login')->on('actor')->onUpdate('CASCADE')->onDelete('SET NULL');
+			$table->foreign('default_responsible')->references('login')->on('actor')->onUpdate('CASCADE')->onDelete('SET NULL');
 		});
 	}
 
@@ -28,7 +28,7 @@ class AddForeignKeysToEventNameTable extends Migration {
 	{
 		Schema::table('event_name', function(Blueprint $table)
 		{
-			$table->dropForeign('fk_dflt_responsible');
+			$table->dropForeign(['default_responsible']);
 		});
 	}
 

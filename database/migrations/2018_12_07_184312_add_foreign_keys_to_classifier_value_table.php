@@ -14,7 +14,7 @@ class AddForeignKeysToClassifierValueTable extends Migration {
 	{
 		Schema::table('classifier_value', function(Blueprint $table)
 		{
-			$table->foreign('type_code', 'fk_value_type')->references('code')->on('classifier_type')->onUpdate('CASCADE')->onDelete('SET NULL');
+			$table->foreign('type_code')->references('code')->on('classifier_type')->onUpdate('CASCADE')->onDelete('SET NULL');
 		});
 	}
 
@@ -28,7 +28,7 @@ class AddForeignKeysToClassifierValueTable extends Migration {
 	{
 		Schema::table('classifier_value', function(Blueprint $table)
 		{
-			$table->dropForeign('fk_value_type');
+			$table->dropForeign(['type_code']);
 		});
 	}
 

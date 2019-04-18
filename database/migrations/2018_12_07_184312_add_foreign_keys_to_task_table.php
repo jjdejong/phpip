@@ -14,10 +14,10 @@ class AddForeignKeysToTaskTable extends Migration {
 	{
 		Schema::table('task', function(Blueprint $table)
 		{
-			$table->foreign('assigned_to', 'fk_assigned_to')->references('login')->on('actor')->onUpdate('CASCADE')->onDelete('SET NULL');
-			$table->foreign('code', 'fk_task_code')->references('code')->on('event_name')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('rule_used', 'fk_task_rule')->references('id')->on('task_rules')->onUpdate('CASCADE')->onDelete('SET NULL');
-			$table->foreign('trigger_id', 'fk_trigger_id')->references('id')->on('event')->onUpdate('CASCADE')->onDelete('CASCADE');
+			$table->foreign('assigned_to')->references('login')->on('actor')->onUpdate('CASCADE')->onDelete('SET NULL');
+			$table->foreign('code')->references('code')->on('event_name')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('rule_used')->references('id')->on('task_rules')->onUpdate('CASCADE')->onDelete('SET NULL');
+			$table->foreign('trigger_id')->references('id')->on('event')->onUpdate('CASCADE')->onDelete('CASCADE');
 		});
 	}
 
@@ -31,10 +31,10 @@ class AddForeignKeysToTaskTable extends Migration {
 	{
 		Schema::table('task', function(Blueprint $table)
 		{
-			$table->dropForeign('fk_assigned_to');
-			$table->dropForeign('fk_task_code');
-			$table->dropForeign('fk_task_rule');
-			$table->dropForeign('fk_trigger_id');
+			$table->dropForeign(['assigned_to']);
+			$table->dropForeign(['code']);
+			$table->dropForeign(['rule_used']);
+			$table->dropForeign(['trigger_id']);
 		});
 	}
 

@@ -14,13 +14,13 @@ class AddForeignKeysToMatterTable extends Migration {
 	{
 		Schema::table('matter', function(Blueprint $table)
 		{
-			$table->foreign('category_code', 'fk_matter_category')->references('code')->on('matter_category')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('container_id', 'fk_matter_container')->references('id')->on('matter')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('country', 'fk_matter_country')->references('iso')->on('country')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('origin', 'fk_matter_origin')->references('iso')->on('country')->onUpdate('CASCADE')->onDelete('SET NULL');
-			$table->foreign('parent_id', 'fk_matter_parent')->references('id')->on('matter')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('responsible', 'fk_matter_responsible')->references('login')->on('actor')->onUpdate('CASCADE')->onDelete('RESTRICT');
-			$table->foreign('type_code', 'fk_matter_type')->references('code')->on('matter_type')->onUpdate('CASCADE')->onDelete('SET NULL');
+			$table->foreign('category_code')->references('code')->on('matter_category')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('container_id')->references('id')->on('matter')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('country')->references('iso')->on('country')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('origin')->references('iso')->on('country')->onUpdate('CASCADE')->onDelete('SET NULL');
+			$table->foreign('parent_id')->references('id')->on('matter')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('responsible')->references('login')->on('actor')->onUpdate('CASCADE')->onDelete('RESTRICT');
+			$table->foreign('type_code')->references('code')->on('matter_type')->onUpdate('CASCADE')->onDelete('SET NULL');
 		});
 	}
 
@@ -34,13 +34,13 @@ class AddForeignKeysToMatterTable extends Migration {
 	{
 		Schema::table('matter', function(Blueprint $table)
 		{
-			$table->dropForeign('fk_matter_category');
-			$table->dropForeign('fk_matter_container');
-			$table->dropForeign('fk_matter_country');
-			$table->dropForeign('fk_matter_origin');
-			$table->dropForeign('fk_matter_parent');
-			$table->dropForeign('fk_matter_responsible');
-			$table->dropForeign('fk_matter_type');
+			$table->dropForeign(['category_code']);
+			$table->dropForeign(['container_id']);
+			$table->dropForeign(['country']);
+			$table->dropForeign(['origin']);
+			$table->dropForeign(['parent_id']);
+			$table->dropForeign(['responsible']);
+			$table->dropForeign(['type_code']);
 		});
 	}
 
