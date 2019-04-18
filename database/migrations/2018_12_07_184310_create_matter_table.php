@@ -22,7 +22,7 @@ class CreateMatterTable extends Migration {
 			$table->char('origin', 2)->nullable()->index('origin')->comment('Code of the regional system the patent originates from (mainly EP or WO)');
 			$table->char('type_code', 5)->nullable()->index('type');
 			$table->boolean('idx')->nullable()->comment('Increment this to differentiate multiple patents filed in the same country in the same family');
-			$table->string('suffix', 16)->nullable();
+			$table->string('suffix', 16)->virtualAs('concat_ws("",concat_ws("-",concat_ws("/",`country`,`origin`),`type_code`),`idx`)');
 			$table->integer('parent_id')->unsigned()->nullable()->index('parent')->comment('Link to parent patent. Used to create a hierarchy');
 			$table->integer('container_id')->unsigned()->nullable()->index('container')->comment('Identifies the container matter from which this matter gathers its shared data. If null, this matter is a container');
 			$table->char('responsible', 16)->index('responsible')->comment('Database user responsible for the patent');
@@ -31,7 +31,7 @@ class CreateMatterTable extends Migration {
 			$table->date('expire_date')->nullable();
 			$table->smallInteger('term_adjust')->default(0)->comment('Patent term adjustment in days. Essentially for US patents.');
 			$table->char('creator', 16)->nullable()->comment('ID of the user who created the record');
-			$table->timestamp('updated')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'))->comment('Record modification date');
+			$table->timestamp('updated')->nullable()->useCurrent()->comment('Record modification date');
 			$table->char('updater', 16)->nullable()->comment('ID of the user who last modified the record');
 			$table->index(['caseref','container_id','origin','country','type_code','idx'], 'sort');
 			$table->unique(['category_code','caseref','suffix'], 'UID');
