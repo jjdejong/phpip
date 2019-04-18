@@ -13,7 +13,7 @@ class UpdateExpired extends Migration
     public function up()
     {
         DB::unprepared(
-"CREATE OR REPLACE DEFINER=`root`@`localhost` PROCEDURE `update_expired`()
+"CREATE DEFINER=`root`@`localhost` PROCEDURE `update_expired`()
 BEGIN
 	DECLARE vmatter_id INTEGER;
     DECLARE vexpire_date DATE;

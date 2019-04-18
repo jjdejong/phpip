@@ -13,7 +13,7 @@ class RecreateTasks extends Migration
     public function up()
     {
         DB::unprepared(
-"CREATE OR REPLACE PROCEDURE `recreate_tasks`(IN Ptrigger_id INT)
+"CREATE DEFINER=`root`@`localhost` PROCEDURE `recreate_tasks`(IN Ptrigger_id INT)
 proc: BEGIN
   DECLARE vevent_date, vdue_date, vbase_date, vexpiry, tmp_date DATE DEFAULT NULL;
   DECLARE vmatter_id, vid_uqtask, vrule_id, vdays, vmonths, vyears, vpta, vid, vcli_ann_agt INT DEFAULT NULL;

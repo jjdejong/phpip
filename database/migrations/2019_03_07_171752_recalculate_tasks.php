@@ -11,8 +11,9 @@ class RecalculateTasks extends Migration
      * @return void
      */
     public function up()
-    { DB::unprepared(        
-"CREATE OR REPLACE PROCEDURE `recalculate_tasks`(IN Pmatter_id int, IN Ptrig_code char(5))
+    {
+        DB::unprepared(
+        "CREATE DEFINER=`root`@`localhost` PROCEDURE `recalculate_tasks`(IN Pmatter_id int, IN Ptrig_code char(5))
 proc: BEGIN
 	DECLARE vtrigevent_date, vdue_date, vbase_date DATE DEFAULT NULL;
 	DECLARE vtask_id, vtrigevent_id, vdays, vmonths, vyears, vrecurring, vpta INT DEFAULT NULL;
@@ -30,7 +31,6 @@ proc: BEGIN
 	IF EXISTS (SELECT 1 FROM event_lnk_list WHERE matter_id=Pmatter_id AND code=Ptrig_code) THEN
 		SELECT id, event_date INTO vtrigevent_id, vtrigevent_date FROM event_lnk_list WHERE matter_id=Pmatter_id AND code=Ptrig_code ORDER BY event_date LIMIT 1;
 	ELSE
-
 		LEAVE proc;
 	END IF;
 
