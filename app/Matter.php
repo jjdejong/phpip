@@ -464,7 +464,7 @@ class Matter extends Model
                     if($info['Published']) {$line .= " et publiée le " . $published_date->format("d/m/Y") ." sous le n° ". $info['PubNo'];}
                     $description[] = $line;
                 }
-                $description[] = "Pour : " . $info['Title1'] ;
+                $description[] = "Pour : " . $info['Title'] ;
                 $description[] = "Au nom de : ". $info['Applicant'] ;
             }
             if ($info['Cat'] == 'TM') {
@@ -474,7 +474,7 @@ class Matter extends Model
                     $line .=  " et enregistrée le " . $granted_date->format("d/m/Y");
                 }
                 $description[] = $line;
-                $description[] = "Pour : " . $info['Title1'] ;
+                $description[] = "Pour : " . $info['Title'] ;
                 $description[] = "Au nom de : ". $info['Applicant'] ;
             }
         }
@@ -489,7 +489,7 @@ class Matter extends Model
                     $description[] = "Patent application n°" . $info['FilNo'] . " filed in " . $info['country_name'] . " at ". $info['Filed'];
                     if($info['Published']) {$description[]= " and published at " . $info['Published'] ." with no ". $info['PubNo'];}
                 }
-                $description[] = "For: " . $info['Title1'] ;
+                $description[] = "For: " . $info['Title'] ;
                 $description[] = "In name of: ". $info['Applicant'] ;
             }
             if ($info['Cat'] == 'TM') {
@@ -499,7 +499,7 @@ class Matter extends Model
                     $line .=  " and registered at " . $info['Granted'];
                 }
                 $description[] = $line;
-                $description[] = "For: " . $info['Title1'] ;
+                $description[] = "For: " . $info['Title'] ;
                 $description[] = "In name of: ". $info['Applicant'] ;
             }
         }
