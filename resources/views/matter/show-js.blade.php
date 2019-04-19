@@ -145,7 +145,7 @@
     $("#addTitleForm").collapse("show");
   }
 
-  $("#titlePanel").on("keypress", ".titleItem", function(e) {
+  $("#titlePanel").on("keydown", ".titleItem", function(e) {
     if (e.which === 13) {
       e.preventDefault();
       var method = "PUT";
@@ -162,7 +162,7 @@
         $('#titlePanel').load("/matter/" + matter_id + " #titlePanel > div");
       });
     } else
-      $(this).addClass("bg-warning");
+      $(this).addClass("border border-info");
   });
 
   $("#titlePanel").on("shown.bs.collapse", "#addTitleForm", function() {
@@ -540,7 +540,7 @@
             /* write to the clipboard now */
             //var text = document.getElementById("tocopy").textContent;
             var node = document.getElementById("tocopy")
-            
+
             var selection = getSelection();
             selection.removeAllRanges();
 
@@ -552,5 +552,5 @@
             selection.removeAllRanges();
             return success;
     });
- 
+
 </script>
