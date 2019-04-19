@@ -49,7 +49,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           @foreach ( $title_group as $title )
           @if ($title != $title_group->first()) <br>
           @endif
-          <span id="{{ $title->id }}" class="titleItem" contenteditable="true">{{ $title->value }}</span>&nbsp;
+          <div id="{{ $title->id }}" class="titleItem w-100" contenteditable="true">{{ $title->value }}</div>
           @endforeach
         </div>
       </div>
@@ -87,11 +87,9 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <a class="btn btn-outline-info btn-block btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=child" data-toggle="modal" data-target="#createMatterModal" data-remote="false" title="Create child {{ $matter->category->category }}">
         &oplus; New Child
       </a>
-      @if ( $matter->countryInfo->goesnational )
-      <a class="btn btn-outline-info btn-block btn-sm" href="/matter/{{ $matter->id }}/createN" data-toggle="modal" data-target="#createMatterModal" data-remote="false" title="Enter {{ $matter->category->category }} in national phase">
+      <a class="btn btn-outline-info btn-block btn-sm {{ $matter->countryInfo->goesnational ? '' : 'disabled' }}" href="/matter/{{ $matter->id }}/createN" data-toggle="modal" data-target="#createMatterModal" data-remote="false" title="Enter {{ $matter->category->category }} in national phase">
         &#9872; Enter Nat. Phase
       </a>
-      @endif
     </div>
   </div>
 </div>
@@ -349,7 +347,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           <button type="button" class="hidden-action btn btn-warning btn-sm" id="updateNotes">&#9432; Save</button>
         </div>
         <div class="card-body p-1" id="notes-panel" style="overflow: auto;">
-          <textarea id="notes" class="form-control noformat" style="width:100%; height:100%; box-sizing: border-box;" name="notes">{{ $matter->notes }}</textarea>
+          <textarea id="notes" class="form-control noformat" name="notes">{{ $matter->notes }}</textarea>
         </div>
       </div>
             <div class="card border-info col-3 p-0">
@@ -357,7 +355,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                     Copy summary
                     <span class="float-right">&#9432;</span>
                 </div>
-                <div class="card-body p-1" id="related-panel" style="overflow: auto;">                
+                <div class="card-body p-1" id="related-panel" style="overflow: auto;">
                     <a class="font-weight-bold badge badge-primary"
                         href="/matter/{{ $matter->id }}/description/en"
                         data-toggle="modal"
