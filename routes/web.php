@@ -45,6 +45,21 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::post('matter/storeN', 'MatterController@storeN');
     Route::post('matter/clear-tasks', 'HomeController@clearTasks');
+    Route::post('matter/search', function (Request $request) {    
+        $matter_search = $request->input('matter_search'); 
+        $option = $request->input('search_field');
+        if ($option == "Ref") {
+            $filter = array('Ref'  => $matter_search);
+            $matters = Matter::filter('caseref',  'asc', $filter, false, true);
+            if (count($matters) == 1) {
+                return redirect('matter/' . $matters[0]->id);
+            }
+            return redirect('/matter?Ref='.$matter_search);
+        }
+        elseif ($option == "Responsible") {
+            return redirect('/matter?responsible='.$matter_search);
+        }
+    });
 
     Route::get('matter/new-caseref', function (Request $request) {
         $term = $request->input('term');
