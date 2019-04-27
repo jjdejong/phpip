@@ -43,7 +43,6 @@ $(document).ready(function() {
     $("#addModal").on("hidden.bs.modal", function(event) {
     	refreshRuleList();
     });
-
 });
 
 // Generic in-place edition of fields in a listModal

@@ -154,6 +154,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('task', 'TaskController');
     Route::apiResource('event', 'EventController');
     Route::resource('actor', 'ActorController');
+    Route::get('actor/{actor}/usedin','ActorPivotController@usedIn');
     Route::resource('eventname', 'EventNameController');
     Route::resource('rule', 'RuleController');
     Route::apiResource('actor-pivot', 'ActorPivotController');

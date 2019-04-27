@@ -41,6 +41,19 @@ $(document).ready(function() {
     	refreshActorList();
     });
 
+    $("#usedModal").on("hidden.bs.modal", function(event) {
+        $('#infoModal').modal('hide');
+    	refreshActorList();
+    });
+    
+	// Display the modal view for used in 
+    $("#usedModal").on("show.bs.modal", function(event) {
+    	relatedUrl = $(event.relatedTarget).attr("href");
+
+    	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
+        $(this).find(".modal-body").load(relatedUrl);
+    });
+
 });
 
 // Generic in-place edition of fields in a infoModal

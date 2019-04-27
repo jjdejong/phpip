@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\ActorPivot;
+use App\Actor;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class ActorPivotController extends Controller
@@ -90,4 +92,21 @@ class ActorPivotController extends Controller
         $actor->save();
       }
     }
+    
+    /**
+        * show Matters where actor is used
+        * *
+        */
+    public function usedIn(int $actor) {
+        $actorpivot = new ActorPivot();
+        $matter_dependencies = $actorpivot->with('matter','role')->where('actor_id',$actor)->get();
+        $actor_model = new Actor();
+        $other_dependencies = $actor_model->select(array('id', DB::Raw("concat_ws(' ', name, first_name) as Actor"), DB::Raw("(case ".$actor."
+           when parent_id then 'Parent'
+           when company_id then 'Company'
+           when site_id then 'Site'
+         end) as Dependency")))->where('parent_id', $actor)->orWhere('company_id', $actor)->orWhere('site_id',$actor)->get();
+        return view('actor.usedin', compact(['matter_dependencies','other_dependencies']));
+	}
+
 }

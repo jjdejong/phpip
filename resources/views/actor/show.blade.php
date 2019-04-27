@@ -93,14 +93,18 @@
                 </td></tr><tr><td><label for="notes" title="{{ $actorComments['notes'] }}">Notes</label><br />
                     <button type="button" data-field="notes" id="updateNotes" class="area hidden-action btn btn-primary btn-sm">&#9432; Save</button>
                 </td><td class="ui-front">
-					<textarea data-field="#updateNotes" id="notes" class="editable form-control form-control-sm" name="address_billing">{{ $actorInfo->notes }}</textarea>
+                    <textarea data-field="#updateNotes" id="notes" class="editable form-control form-control-sm" name="address_billing">{{ $actorInfo->notes }}</textarea>
                 </td></tr>
         </table>
-		<button title="Delete actor" class="delete-actor" data-dismiss="modal" data-id="{{ $actorInfo->id }}" style="float: right; margin-top: 10px; margin-right: 16px;">
-			&times;
-			Delete
-		</button>
-	</fieldset>
+        
+        <a href="/actor/{{ $actorInfo->id }}/usedin" data-toggle="modal" data-target="#usedModal" data-remote="false" title="Actor used in matters or other actors" data-resource="/actor/">
+            &boxbox;
+            Used in
+        </a>
+        <button title="Delete actor" class="delete-actor" data-dismiss="modal" data-id="{{ $actorInfo->id }}" style="float: right; margin-top: 10px; margin-right: 16px;">
+            &times;
+            Delete
+        </button>
+    </fieldset>
 	
 </div>
-
