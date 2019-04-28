@@ -161,7 +161,7 @@ $('#infoModal').on("click", 'input[name="company_id"],input[name="parent_id"],in
 			if (!ui.item) $(this).val("");
 		},
 		select: function(event, ui) {
-			this.value = ui.item.value;
+			this.value = ui.item.id;
 			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
 			$.post(resource + $(this).closest("table").data("id"), data)
 			.done(function () {
