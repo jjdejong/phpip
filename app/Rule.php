@@ -65,13 +65,10 @@ class Rule extends Model
                 if (! isset ( $table_name )) {
                         return false;
                 }
-                // To fix: table_schema is hardcoded, it is to retreive
-                $select =  DB::select("select column_name, column_comment from information_schema.columns WHERE `TABLE_SCHEMA` = 'phpipv2'  AND `TABLE_NAME` = ?",[$table_name])	;
-                //$result = $select->get();
+                $tableInfo = DB::connection()->getDoctrineSchemaManager()->listTableDetails($table_name);
                 $comments = array ();
-                foreach ( $select as $column ) {
-                        $col_name = $column->column_name;
-                        $comments["$col_name"] = $column->column_comment;
+                foreach ($tableInfo->getColumns() as $column) {
+                    $comments[$column->getName()] = $column->getComment();
                 }
                 return $comments;
         }
