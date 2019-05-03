@@ -41,7 +41,7 @@
                                 {{ $rule->taskInfo->name }}</a></td>
       <td>{{ $rule->detail }}</td>
       <td>{{ empty($rule->trigger) ? '' : $rule->trigger->name }}</td>
-      <td>{{ empty($rule->category) ? '' : $rule->category->name }}</td>
+      <td>{{ empty($rule->category) ? '' : $rule->category->category }}</td>
       <td>{{ empty($rule->country) ? '' : $rule->country->name }}</td>
       <td>{{ empty($rule->origin) ? '' : $rule->origin->name }}</td>
       <td>{{ empty($rule->type) ? '' : $rule->type->name }}</td>
