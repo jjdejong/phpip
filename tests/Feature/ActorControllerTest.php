@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 use App\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\Concerns\ImpersonatesUsers;
 
 class ActorControllerTest extends TestCase
 {
@@ -16,7 +14,7 @@ class ActorControllerTest extends TestCase
 
     public function testIndex()
     {
-        $this->resetDatabase();
+        $this->resetDatabaseAndSeed();
         $user = new User();
 
         $user->id = 1;
@@ -34,5 +32,18 @@ class ActorControllerTest extends TestCase
         $response->assertStatus(200)
           ->assertViewHas('actorInfo')
           ->assertSeeText("Actor details");
+        
+        // A page used-in
+        $response = $this->call('GET','/actor/124/usedin');
+        $response->assertStatus(200)
+          ->assertViewHas('matter_dependencies')
+          ->assertViewHas('other_dependencies')
+          ->assertSeeText("Matter Dependencies");
+          
+        // Autocompletion
+        $response = $this->call('GET','/actor/autocomplete?term=Tes');
+        $response->assertStatus(200)
+          ->assertJson( [0 => array(
+            'value' => 'Tesla Motors Inc.')]);
     }
 }

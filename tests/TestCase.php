@@ -14,6 +14,11 @@ abstract class TestCase extends BaseTestCase
         $this->artisan('migrate:rollback');
         $this->artisan('migrate');
         $this->artisan('db:seed');
+    }
+    
+    public function resetDatabaseAndSeed() 
+    {
+        $this->resetDatabase();
         $this->artisan('db:seed --class=SampleSeeder');
     }
 }
