@@ -16,8 +16,11 @@ class RuleController extends Controller
         $Task  = $request->input ( 'Task' );
         $Trigger = $request->input ( 'Trigger' );
         $Country = $request->input ( 'Country' );
+        $Origin = $request->input ( 'Origin' );
+        $Detail = $request->input ( 'Detail' );
+        $Type = $request->input ( 'Type' );
+        $Category = $request->input ( 'Category' );
         $rule = new Rule ;
-        //$ruleslist = $rule->rulesList($Task, $Trigger, $Country);
         if (! is_null($Task)) {
 			$rule = $rule->whereHas('taskInfo', function($q) use ($Task) {$q->where('name','like',$Task.'%');});
 			}
@@ -27,7 +30,19 @@ class RuleController extends Controller
         if (! is_null($Country)) {
 			$rule = $rule->whereHas('country', function($q) use ($Country) {$q->where('name','like',$Country.'%');});
 			}
-        $ruleslist = $rule->with('country', 'trigger','country','category', 'origin', 'type', 'taskInfo')
+        if (! is_null($Category)) {
+			$rule = $rule->whereHas('category', function($q) use ($Category) {$q->where('category','like',$Category.'%');});
+			}
+        if (! is_null($Detail)) {
+			$rule = $rule->where('detail','like',$Detail.'%');
+			}
+        if (! is_null($Type)) {
+			$rule = $rule->whereHas('type', function($q) use ($Type) {$q->where('type','like',$Type.'%');});
+			}
+        if (! is_null($Origin)) {
+			$rule = $rule->whereHas('origin', function($q) use ($Origin) {$q->where('name','like',$Origin.'%');});
+			}
+        $ruleslist = $rule->with('country:iso,name', 'trigger:code,name','category:code,category', 'origin:iso,name', 'type', 'taskInfo:code,name')
 			->orderby('task')->get();
         return view('rule.index', compact('ruleslist') );
     }

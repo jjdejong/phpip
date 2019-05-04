@@ -22,12 +22,14 @@
       <th>&nbsp;&nbsp;</th>
     </tr>
     <tr id="filter">
-      <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Task" placeholder="Task" value="{{ old('Task') }}"></th>
-      <th></th>
-      <th><input class="filter-input form-control form-control-sm" data-source="/rule" value="{{ old('Trigger') }}" name="Trigger"  placeholder="Trigger event"/></th>
-      <th></th>
-      <th><input name="Country" class="filter-input form-control form-control-sm" data-source="/rule" name="Country" placeholder="Country" value="{{ old('Country') }}"/></th>
-      <th colspan="3"></th>
+        <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Task" placeholder="Task" value="{{ old('Task') }}"></th>
+        <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Detail" placeholder="Detail" value="{{ old('Detail') }}"></th>
+        <th><input class="filter-input form-control form-control-sm" data-source="/rule" value="{{ old('Trigger') }}" name="Trigger"  placeholder="Trigger event"/></th>
+        <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Category" placeholder="Category" value="{{ old('Category') }}"></th>
+        <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Country" placeholder="Country" value="{{ old('Country') }}"/></th>
+        <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Origin" placeholder="Origin" value="{{ old('Origin') }}"></th>
+        <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Type" placeholder="Type" value="{{ old('Type') }}"></th>
+        <th></th>
     </tr>
   </thead>
   <tbody id="rule-list">
