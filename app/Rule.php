@@ -11,19 +11,6 @@ class Rule extends Model
 	public $timestamps = false; // removes timestamp updating in this table (done via MySQL triggers)
 	protected $hidden = ['creator', 'updated', 'updater'];
 	protected $guarded = ['id', 'creator', 'updated', 'updater'];
-    //
-    public function rulesList($Task=null, $Trigger=null, $Country=null)
-    {
-                $select = $this->selectRule();
-                if ($Task != '')
-                        $select = $select->where ( 'tn.name','like', $Task . '%');
-                if ($Trigger != '')
-                        $select = $select->where ( 'en.name','like', $Trigger . '%');
-                if ($Country != '')
-                        $select = $select->where ( 'c.name','like', $Country . '%');
-                $select = $select->orderBy ( 'tn.name' );
-                return $select->get();
-    }
     
     public function country() {
 		return $this->belongsTo('App\Country', 'for_country','iso');
