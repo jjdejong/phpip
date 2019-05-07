@@ -99,7 +99,7 @@
     });
 
     // Ajax fill the opened modal and set global parameters
-        $("#listModal, #createMatterModal, #summaryModal").on("show.bs.modal", function (event) {
+    $("#listModal, #createMatterModal, #summaryModal").on("show.bs.modal", function (event) {
       relatedUrl = $(event.relatedTarget).attr("href");
       resource = $(event.relatedTarget).data("resource");
       $(this).find(".modal-title").text($(event.relatedTarget).attr("title"));
