@@ -214,8 +214,18 @@ class MatterController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Matter $matter)
-    {
-        //
+    {		
+		$matterInfo = $matter->with('container','parent', 'countryInfo:iso,name', 'originInfo:iso,name', 'category', 'type','events')->first();
+		if ($matter->events) {	
+			$cat_edit = 0;
+			$country_edit = 0;
+		} else {
+			$cat_edit = 1;
+			$country_edit = 1;
+		}
+		$cats = \App\Category::all();
+		$types = \App\Type::all();
+		return view("matter.edit",compact(['matter','cats','types','cat_edit', 'country_edit']));
     }
 
     /**
@@ -334,4 +344,5 @@ class MatterController extends Controller
         $description = $matter->getDescription($matter->id, $lang);
         return view('matter.summary', compact('description'));
     }
+    
 }

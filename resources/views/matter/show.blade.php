@@ -16,7 +16,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     <div class="card-header bg-primary text-white reveal-hidden lead p-1">
       <a class="bg-primary text-white" href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
       ({{ $matter->category->category }})
-      <a class="bg-primary text-white float-right hidden-action" href="/matter/{{ $matter->id }}/edit" title="Advanced edit">
+      <a class="bg-primary text-white float-right hidden-action" 
+         data-toggle="modal" data-target="#listModal" data-remote="false" data-resource="/matter/" href="/matter/{{ $matter->id }}/edit" title="Advanced matter edition">
         &#9998;
       </a>
     </div>

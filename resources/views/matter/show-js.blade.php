@@ -320,6 +320,113 @@
     });
   });
 
+  // Specific to Advanced matter edition
+  
+  $('#listModal').on("click", 'input[name="origin"],input[name="country"]', function() {
+    $(this).autocomplete({
+      minLength: 1,
+      source: "/country/autocomplete",
+      change: function(event, ui) {
+        if (!ui.item) {
+          $(this).val("");
+          $(this).parent().removeClass("bg-warning");
+        }
+      },
+      select: function(event, ui) {
+        this.value = ui.item.id;
+        $.ajax({
+          url: resource + $(this).closest("card").data("id"),
+          type: 'PUT',
+          data: $(this).serialize()
+        }).done(function() {
+          $("#listModal").find(".modal-body").load(relatedUrl);
+          $("#listModal").find(".alert").removeClass("alert-danger").html("");
+        });
+      }
+    });
+  });
+ 
+  $('#listModal').on("click", 'input[name="parent_id"],input[name="container_id"]', function() {
+    $(this).autocomplete({
+      minLength: 1,
+      source: "/matter/autocomplete",
+      change: function(event, ui) {
+        if (!ui.item) {
+          $(this).val("");
+          $(this).parent().removeClass("bg-warning");
+        }
+      },
+      select: function(event, ui) {
+        this.value = ui.item.value;
+        $.ajax({
+          url: resource + $(this).closest("card").data("id"),
+          type: 'PUT',
+          data: $(this).serialize()
+        }).done(function() {
+          $("#listModal").find(".modal-body").load(relatedUrl);
+          $("#listModal").find(".alert").removeClass("alert-danger").html("");
+        });
+      }
+    });
+  });
+ 
+  $('#listModal').on("click", 'input[name="responsible"]', function() {
+    $(this).autocomplete({
+      minLength: 1,
+      source: "/user/autocomplete",
+      change: function(event, ui) {
+        if (!ui.item) {
+          $(this).val("");
+          $(this).parent().removeClass("bg-warning");
+        }
+      },
+      select: function(event, ui) {
+        this.value = ui.item.value;
+        $.ajax({
+          url: resource + $(this).closest("card").data("id"),
+          type: 'PUT',
+          data: $(this).serialize()
+        }).done(function() {
+          $("#listModal").find(".modal-body").load(relatedUrl);
+          $("#listModal").find(".alert").removeClass("alert-danger").html("");
+        });
+      }
+    });
+  });
+
+  $("#listModal").on("keypress", "input.edit", function(e) {
+    if (e.which === 13) {
+      e.preventDefault();
+      $.ajax({
+        url: resource + $(this).closest("card").data("id"),
+        type: 'PUT',
+        data: $(this).serialize()
+      }).done(function() {
+        $("#listModal").find(".modal-body").load(relatedUrl);
+        $("#listModal").find(".alert").removeClass("alert-danger").html("");
+      }).fail(function(errors) {
+        $.each(errors.responseJSON.errors, function(key, item) {
+          $("#listModal").find(".modal-footer .alert").html(item).addClass("alert-danger");
+        });
+      });
+    } else
+      $(this).parent().addClass("bg-warning");
+  });
+
+
+  $("#listModal").on("change", "select.edit", function() {
+      $.ajax({
+        url: resource + $(this).closest("card").data("id"),
+        type: 'PUT',
+        data: $(this).serialize()
+      }).done(function() {
+        $("#listModal").find(".modal-body").load(relatedUrl);
+      }).fail(function(errors) {
+        $.each(errors.responseJSON.errors, function(key, item) {
+          $("#listModal").find(".modal-footer .alert").html(item).addClass("alert-danger");
+        });
+      });
+  });
 
   // Specific processing in the actor/role list modal
 
