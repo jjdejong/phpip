@@ -15,9 +15,6 @@ $(document).ready(function() {
     $("#infoModal").on("show.bs.modal", function(event) {
     	relatedUrl = $(event.relatedTarget).attr("href");
     	resource = $(event.relatedTarget).data("resource");
-
-    	$(this).find(".modal-dialog").removeClass("modal-lg");
-    	$(this).find(".modal-dialog").addClass("modal-md");
     	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
         $(this).find(".modal-body").load(relatedUrl);
     });
@@ -25,14 +22,11 @@ $(document).ready(function() {
     $("#infoModal").on("hide.bs.modal", function(event) {
     	refreshActorList();
     });
-    
+
 	// Display the modal view for creation of rule
     $("#addModal").on("show.bs.modal", function(event) {
     	relatedUrl = $(event.relatedTarget).attr("href");
     	resource = $(event.relatedTarget).data("resource");
-
-    	$(this).find(".modal-dialog").removeClass("modal-lg");
-    	$(this).find(".modal-dialog").addClass("modal-md");
     	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
         $(this).find(".modal-body").load(relatedUrl);
     });
@@ -45,8 +39,8 @@ $(document).ready(function() {
         $('#infoModal').modal('hide');
     	refreshActorList();
     });
-    
-	// Display the modal view for used in 
+
+	// Display the modal view for used in
     $("#usedModal").on("show.bs.modal", function(event) {
     	relatedUrl = $(event.relatedTarget).attr("href");
 
@@ -103,7 +97,7 @@ $('#physical').on('change', function() {
 	refreshActorList();
 	}
 );
-	
+
 $('#legal').on('change', function() {
 	refreshActorList();
 	}
@@ -121,7 +115,7 @@ $('.filter-input').keyup(debounce(function(){
 	    $(this).css("background-color", "white");
 	refreshActorList();
     }, 500));
-    
+
 // Specific in place edition of actor
 $('#infoModal').on("click",'input[type="radio"]', function() {
 	var mydata = {};

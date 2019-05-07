@@ -17,27 +17,21 @@ $(document).ready(function() {
     	relatedUrl = $(event.relatedTarget).attr("href");
     	sourceUrl = $(event.relatedTarget).data("source");  // Used to refresh the list
     	resource = $(event.relatedTarget).data("resource");
-
-    	$(this).find(".modal-dialog").removeClass("modal-lg");
-    	$(this).find(".modal-dialog").addClass("modal-sm");
     	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
-        $(this).find(".modal-body").load(relatedUrl);
+      $(this).find(".modal-body").load(relatedUrl);
     });
     // Reload the rules list when closing the modal window
     $("#infoModal").on("hidden.bs.modal", function(event) {
     	refreshRuleList();
     });
-    
+
 	// Display the modal view for creation of record
     $("#addModal").on("show.bs.modal", function(event) {
     	relatedUrl = $(event.relatedTarget).attr("href");
     	sourceUrl = $(event.relatedTarget).data("source");   // Used to refresh the list
     	resource = $(event.relatedTarget).data("resource");
-
-    	$(this).find(".modal-dialog").removeClass("modal-lg");
-    	$(this).find(".modal-dialog").addClass("modal-sm");
     	$(this).find(".modal-title").text( $(event.relatedTarget).attr("title") );
-        $(this).find(".modal-body").load(relatedUrl);
+      $(this).find(".modal-body").load(relatedUrl);
     });
     // Reload the rules list when closing the modal window
     $("#addModal").on("hidden.bs.modal", function(event) {
@@ -108,7 +102,7 @@ $('.filter-input').keyup(debounce(function(){
 	sourceUrl = $(this).data("source");   // Used to refresh the list
     refreshRuleList();
     }, 500));
-    
+
 // Specific in place edition of rule
 $('#infoModal').on("click",'input[type="radio"]', function() {
 	var mydata = {};
@@ -193,7 +187,7 @@ $('#infoModal').on("click", 'input[name="for_type"]', function() {
                                 $("#infoModal").find(".modal-body").load(relatedUrl);
                                 $("#infoModal").find(".alert").removeClass("alert-danger").html("");
                         });
-                } 
+                }
         });
 });
 
@@ -212,7 +206,7 @@ $('#infoModal').on("click", "input[name$='event'],input[name='abort_on']", funct
                                 $("#infoModal").find(".modal-body").load(relatedUrl);
                                 $("#infoModal").find(".alert").removeClass("alert-danger").html("");
                         });
-                } 
+                }
         });
 });
 
@@ -231,7 +225,7 @@ $('#infoModal').on("click", 'input[name$="responsible"].noformat', function() {
                                 $("#infoModal").find(".modal-body").load(relatedUrl);
                                 $("#infoModal").find(".alert").removeClass("alert-danger").html("");
                         });
-                } 
+                }
         });
 });
 
