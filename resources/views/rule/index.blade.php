@@ -45,7 +45,7 @@
       <td>{{ empty($rule->category) ? '' : $rule->category->category }}</td>
       <td>{{ empty($rule->country) ? '' : $rule->country->name }}</td>
       <td>{{ empty($rule->origin) ? '' : $rule->origin->name }}</td>
-      <td>{{ empty($rule->type) ? '' : $rule->type->name }}</td>
+      <td>{{ empty($rule->type) ? '' : $rule->type->type }}</td>
       <td>
         <a class="delete-from-list text-danger hidden-action float-right" data-id="{{ $rule->id }}" title="Delete rule" href="javascript:void(0);">&times;</a>
       </td>
