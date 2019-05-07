@@ -1,7 +1,6 @@
 
 <div id="edit-actor-content">
     <fieldset>
-        <legend>Actor details <span class="badge badge-light">{{ $actorInfo->id }}</span></legend>
         <table class="table table-hover table-sm" data-id="{{ $actorInfo->id }}">
             <tr>
                 <td><label for="name" class="required-field" title="{{ $actorComments['name'] }}">Name</label> </td>
@@ -57,6 +56,7 @@
                     </div>
                 </td>
             </tr>
+
         </table>
     </fieldset>
     <fieldset>
