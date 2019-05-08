@@ -167,7 +167,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         <div class="card-body p-1" style="max-height: 80px; overflow: auto;">
           <ul class="list-unstyled">
             @foreach ( $role_group as $actor)
-            <li {{ $actor->inherited ? 'class=font-italic' : '' }}>
+            <li class="text-truncate {{ $actor->inherited ? 'font-italic' : '' }}">
               @if ( $actor->warn && $role_name == 'Client' )
               <span title="Payment Difficulties">&#9888;</span>
               @endif

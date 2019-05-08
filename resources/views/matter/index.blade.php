@@ -128,7 +128,7 @@
 </div>
 <table class="table table-striped table-hover table-sm">
   <thead>
-    <tr>
+    <tr class="sticky-top bg-light">
       <th><a href="#" class="sortable" data-sortkey="caseref" data-sortdir="desc">Reference</a></th>
       <th>Cat.</th>
       <th><a href="#" class="sortable" data-sortkey="Status" data-sortdir="asc">Status</a></th>
@@ -146,7 +146,7 @@
       <th class="display_status"><a href="#" class="sortable" data-sortkey="Granted" data-sortdir="asc">Granted</a></th>
       <th class="display_status">Number</th>
     </tr>
-    <tr class="sticky-top" id="filter">
+    <tr id="filter">
       <td><input class="filter-input form-control form-control-sm" name="Ref" placeholder="Ref" value="{{ Request::get('Ref') }}"></td>
       <td><input class="filter-input form-control form-control-sm" size="3" name="Cat" placeholder="Cat" value="{{ Request::get('Cat') }}"></td>
       <td><input class="filter-input form-control form-control-sm" name="Status" placeholder="Status" value="{{ Request::get('Status') }}"></td>
@@ -170,19 +170,19 @@
     @php // Format the publication number for searching on Espacenet
     $published = 0;
     if ( $matter->PubNo || $matter->GrtNo) {
-    $published = 1;
-    if ( $matter->origin == 'EP' )
-    $CC = 'EP';
-    else
-    $CC = $matter->country;
-    $removethese = [ "/^$matter->country/", '/ /', '/,/', '/-/', '/\//' ];
-    $pubno = preg_replace ( $removethese, '', $matter->PubNo );
-    if ( $CC == 'US' ) {
-    if ( $matter->GrtNo )
-    $pubno = preg_replace ( $removethese, '', $matter->GrtNo );
-    else
-    $pubno = substr ( $pubno, 0, 4 ) . substr ( $pubno, - 6 );
-    }
+      $published = 1;
+      if ( $matter->origin == 'EP' )
+        $CC = 'EP';
+      else
+        $CC = $matter->country;
+      $removethese = [ "/^$matter->country/", '/ /', '/,/', '/-/', '/\//' ];
+      $pubno = preg_replace ( $removethese, '', $matter->PubNo );
+      if ( $CC == 'US' ) {
+        if ( $matter->GrtNo )
+          $pubno = preg_replace ( $removethese, '', $matter->GrtNo );
+        else
+          $pubno = substr ( $pubno, 0, 4 ) . substr ( $pubno, - 6 );
+      }
     }
     @endphp
     @if ( $matter->container_id )
