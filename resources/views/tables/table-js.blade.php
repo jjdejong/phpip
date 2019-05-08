@@ -1,6 +1,5 @@
 <script>
 var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
-var csrf_token = $('input[name="_token"]').val();
 var sourceUrl = "";  // Identifies what to reload when refreshing the list
 
 function refreshRuleList() {
@@ -45,7 +44,7 @@ $('#infoModal').on("focus", 'input[name^="use"].noformat', function() {
 	dateFormat: 'yy-mm-dd',
 	showButtonPanel: true,
 	onSelect: function(date, instance) {
-	    var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
+	    var data = $.param({ _method: "PUT" }) + "&" + $(this).serialize();
 	    $.post(resource + $(this).closest("table").data("id"), data)
 	    .done(function () {
 		$("#infoModal").find(".modal-body").load(relatedUrl);
@@ -58,7 +57,7 @@ $('#infoModal').on("focus", 'input[name^="use"].noformat', function() {
 $("#infoModal").on("keypress", "input.editable", function (e) {
 	if (e.which == 13) {
 		e.preventDefault();
-		var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
+		var data = $.param({ _method: "PUT" }) + "&" + $(this).serialize();
 		$.post(resource + $(this).closest("table").data("id"), data)
 		.done(function () {
 			$("#infoModal").find(".modal-body").load(relatedUrl);
@@ -142,7 +141,7 @@ $('#infoModal').on("click", 'input[name="task"]', function() {
 		},
 		select: function(event, ui) {
 			this.value = ui.item.value;
-			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
+			var data = $.param({ _method: "PUT" }) + "&" + $(this).serialize();
 			$.post(resource + $(this).closest("table").data("id"), data)
 			.done(function () {
 				$("#infoModal").find(".modal-body").load(relatedUrl);
@@ -161,7 +160,7 @@ $('#infoModal').on("click", 'input[name$="category"]', function() {
                 },
                 select: function(event, ui) {
                         this.value = ui.item.id;
-                        var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
+                        var data = $.param({ _method: "PUT" }) + "&" + $(this).serialize();
                         $.post(resource + $(this).closest("table").data("id"), data)
                         .done(function () {
                                 $("#infoModal").find(".modal-body").load(relatedUrl);
@@ -181,7 +180,7 @@ $('#infoModal').on("click", 'input[name="for_type"]', function() {
                 },
                 select: function(event, ui) {
                         this.value = ui.item.id;
-                        var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
+                        var data = $.param({ _method: "PUT" }) + "&" + $(this).serialize();
                         $.post(resource + $(this).closest("table").data("id"), data)
                         .done(function () {
                                 $("#infoModal").find(".modal-body").load(relatedUrl);
@@ -200,7 +199,7 @@ $('#infoModal').on("click", "input[name$='event'],input[name='abort_on']", funct
                 },
                 select: function(event, ui) {
                         this.value = ui.item.value;
-                        var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
+                        var data = $.param({ _method: "PUT" }) + "&" + $(this).serialize();
                         $.post(resource + $(this).closest("table").data("id"), data)
                         .done(function () {
                                 $("#infoModal").find(".modal-body").load(relatedUrl);
@@ -219,7 +218,7 @@ $('#infoModal').on("click", 'input[name$="responsible"].noformat', function() {
                 },
                 select: function(event, ui) {
                         this.value = ui.item.value;
-                        var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
+                        var data = $.param({ _method: "PUT" }) + "&" + $(this).serialize();
                         $.post(resource + $(this).closest("table").data("id"), data)
                         .done(function () {
                                 $("#infoModal").find(".modal-body").load(relatedUrl);
@@ -274,7 +273,7 @@ $('#rule-list').on("click",'.delete-event-name',function(event) {
 $('#infoModal').on("click",'#delete-rule',function() {
     var del_conf = confirm("Deleting rule from table?");
     if(del_conf == 1) {
-	var data = $.param({ _token: csrf_token, _method: "DELETE" }) ;
+	var data = $.param({ _method: "DELETE" }) ;
 	$.post('/rule/' + $(this).data("id"), data).done(function(){
 		$('#listModal').find(".modal-body").load(relatedUrl);
 		});

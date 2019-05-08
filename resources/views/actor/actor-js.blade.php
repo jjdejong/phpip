@@ -1,6 +1,5 @@
 <script>
 var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
-var csrf_token = $('input[name="_token"]').val();
 
 function refreshActorList() {
     var url = '/actor?' + $("#filter").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
@@ -55,7 +54,7 @@ $(document).ready(function() {
 $("#infoModal").on("keypress", "input.editable", function (e) {
 	if (e.which == 13) {
 		e.preventDefault();
-		var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
+		var data = $.param({ _method: "PUT" }) + "&" + $(this).serialize();
 		$.post(resource + $(this).closest("table").data("id"), data)
 		.done(function () {
 			$("#infoModal").find(".modal-body").load(relatedUrl);
@@ -120,7 +119,6 @@ $('.filter-input').keyup(debounce(function(){
 $('#infoModal').on("click",'input[type="radio"]', function() {
 	var mydata = {};
 	mydata[this.name] = this.value;
-	mydata['_token'] = csrf_token;
 	mydata['_method'] ="PUT";
 	$.post(resource + $(this).closest("table").data("id"),  mydata )
 	.done(function () {
@@ -137,7 +135,7 @@ $('#infoModal').on("click", 'input[name^="country"],input[name="nationality"]', 
 		},
 		select: function(event, ui) {
 			this.value = ui.item.id;
-			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
+			var data = $.param({ _method: "PUT" }) + "&" + $(this).serialize();
 			$.post(resource + $(this).closest("table").data("id"), data)
 			.done(function () {
 				$("#infoModal").find(".modal-body").load(relatedUrl);
@@ -156,7 +154,7 @@ $('#infoModal').on("click", 'input[name="company_id"],input[name="parent_id"],in
 		},
 		select: function(event, ui) {
 			this.value = ui.item.id;
-			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
+			var data = $.param({ _method: "PUT" }) + "&" + $(this).serialize();
 			$.post(resource + $(this).closest("table").data("id"), data)
 			.done(function () {
 				$("#infoModal").find(".modal-body").load(relatedUrl);
@@ -175,7 +173,7 @@ $('#infoModal').on("click", 'input[name="default_role"]', function() {
 		},
 		select: function(event, ui) {
 			this.value = ui.item.value;
-			var data = $.param({ _token: csrf_token, _method: "PUT" }) + "&" + $(this).serialize();
+			var data = $.param({ _method: "PUT" }) + "&" + $(this).serialize();
 			$.post(resource + $(this).closest("table").data("id"), data)
 			.done(function () {
 				$("#infoModal").find(".modal-body").load(relatedUrl);
