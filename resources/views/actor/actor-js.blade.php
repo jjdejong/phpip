@@ -53,8 +53,8 @@
 
 // Generic in-place edition of fields in a infoModal
 
-    $("#infoModal").on("keypress", "input.noformat", function (e) {
-        if (e.which == 13) {
+    $("#infoModal").on("keydown", "input.noformat", function (e) {
+        if (e.which === 13) {
             e.preventDefault();
             var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
             $.post(resource + $(this).closest("table").data("id"), data)
