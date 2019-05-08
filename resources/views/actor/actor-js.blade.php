@@ -44,7 +44,6 @@
         // Display the modal view for used in
         $("#usedModal").on("show.bs.modal", function (event) {
             relatedUrl = $(event.relatedTarget).attr("href");
-
             $(this).find(".modal-title").text($(event.relatedTarget).attr("title"));
             $(this).find(".modal-body").load(relatedUrl);
         });
@@ -97,18 +96,15 @@
 //$('.filter-input:input').onclick( function() {
     $('#physical').on('change', function () {
         refreshActorList();
-    }
-    );
+    });
 
     $('#legal').on('change', function () {
         refreshActorList();
-    }
-    );
+    });
 
     $('#both').on('change', function () {
         refreshActorList();
-    }
-    );
+    });
 
     $('.filter-input').keyup(debounce(function () {
         if ($(this).val().length != 0)
@@ -368,7 +364,6 @@
             value = errors[index][0];
             $form.find('input[name=' + index + '_new]').attr("placeholder", value).attr("title", value).addClass('is-invalid');
             $form.find('input[name=' + index + ']').attr("placeholder", value).attr("title", value).addClass('is-invalid');
-        }
-        ;
+        };
     }
 </script>
