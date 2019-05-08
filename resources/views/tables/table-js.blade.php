@@ -3,7 +3,7 @@
     var sourceUrl = "";  // Identifies what to reload when refreshing the list
 
     function refreshRuleList() {
-        var url = sourceUrl + $("#filter").find("input").filter(function () {
+        var url = sourceUrl + '?' + $("#filter").find("input").filter(function () {
             return $(this).val().length > 0
         }).serialize(); // Filter out empty values
         $('#rule-list').load(url + ' #rule-list > tr', function () { // Refresh all the tr's in tbody#matter-list
