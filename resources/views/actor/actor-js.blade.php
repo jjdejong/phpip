@@ -53,7 +53,7 @@
 
 // Generic in-place edition of fields in a infoModal
 
-    $("#infoModal").on("keypress", "input.editable", function (e) {
+    $("#infoModal").on("keypress", "input.noformat", function (e) {
         if (e.which == 13) {
             e.preventDefault();
             var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
@@ -72,7 +72,7 @@
     });
 
 // Address and notes edition
-    $("#infoModal").on("keyup", "textarea.editable", function () {
+    $("#infoModal").on("keyup", "textarea.noformat", function () {
         var field = $(this).data('field');
         $(field).removeClass('hidden-action');
         $(this).addClass('changed');
