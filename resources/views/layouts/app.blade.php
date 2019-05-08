@@ -29,14 +29,18 @@
                     {{ config('app.name', 'phpIP') }}
                 </a>
             
-                <Form Name ="search" Method ="POST" type="button" class="btn btn-info"  ACTION = "/matter/search" value="Quick Search">
-                <input  id="matter-search" type="text" name="matter_search" /> 
-                <select class="btn btn-secondary btn-sm" style="width: 100px;" id="matter-option" name="search_field">
-                    <option value="Ref" selected>Case reference</option>
-                    <option value="Responsible">Responsible</option>
-                </select> 
-                <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-                <button class="btn btn-primary" type="submit">Quick search</button>
+                <form method="POST" action="/matter/search">
+                    @csrf
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="matter-search" name="matter_search" placeholder="Search">
+                        <div class="input-group-append">
+                            <select class="custom-select btn btn-info" id="matter-option" name="search_field">
+                                <option value="Ref" selected>Case reference</option>
+                                <option value="Responsible">Responsible</option>
+                            </select>
+                            <button class="btn btn-info" type="submit">Go</button>
+                        </div>
+                    </div>
                 </form>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
