@@ -9,22 +9,12 @@
 </style>
 <script>
 
-$('#tasklistdate').on("focus", 'input[name$="date"]', function() {
+$('.card-header').on("focus", 'input[name$="date"]', function() {
     $(this).datepicker({
 	dateFormat: 'yy-mm-dd',
 	showButtonPanel: true,
 	onSelect: function(date) {
-                        $(this).val(date);
-	}
-    });
-});
-
-$('#renewallistdate').on("focus", 'input[name$="date"]', function() {
-    $(this).datepicker({
-	dateFormat: 'yy-mm-dd',
-	showButtonPanel: true,
-	onSelect: function(date) {
-                        $(this).val(date);
+            $(this).val(date);
 	}
     });
 });
