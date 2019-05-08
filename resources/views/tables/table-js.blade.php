@@ -54,7 +54,7 @@ $('#infoModal').on("focus", 'input[name^="use"].noformat', function() {
     });
 });
 
-$("#infoModal").on("keypress", "input.editable", function (e) {
+$("#infoModal").on("keydown", "input.noformat", function (e) {
 	if (e.which == 13) {
 		e.preventDefault();
 		var data = $.param({ _method: "PUT" }) + "&" + $(this).serialize();
@@ -72,7 +72,7 @@ $("#infoModal").on("keypress", "input.editable", function (e) {
 });
 
 // Notes edition
-$("#infoModal").on("keyup", "textarea.editable", function () {
+$("#infoModal").on("keyup", "textarea.noformat", function () {
     var field = $(this).data('field');
 	$(field).removeClass('hidden-action');
 	$(this).addClass('changed');

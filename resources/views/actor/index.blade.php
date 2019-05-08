@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Actors</h1>
-<div class="btn btn-info">
-  <a href="actor/create" data-toggle="modal" data-target="#addModal" data-remote="false" title="Actor data" data-resource="/actor/">Add a new actor</a>
-</div>
+<legend>
+    Actors
+    <a href="actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#addModal" data-remote="false" title="Actor data" data-resource="/actor/">Create actor</a>
+</legend>
 <table class="table table-striped table-hover table-sm">
   <thead>
     <tr>
