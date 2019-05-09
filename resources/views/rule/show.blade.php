@@ -61,7 +61,7 @@
             </tr>
             <tr>
                 <td><label for="use_before" title="{{ $ruleComments['use_before'] }}">Use before</label></td>
-                <td><input type='text' class="form-control noformat form-control" size="10" name="use_before" value="{{ $ruleInfo->use_before != '' ?  $ruleInfo->use_before: '...' }}"></td>
+                <td><input type="date" class="form-control noformat" name="use_before" value="{{ $ruleInfo->use_before != '' ?  $ruleInfo->use_before: '...' }}"></td>
                 <td><label for="clear_task" title="{{ $ruleComments['clear_task'] }}">Clear task</label></td>
                 <td>
                     <div class="form-check form-check-inline">
@@ -76,7 +76,7 @@
             </tr>
             <tr>
                 <td><label for="use_after" title="{{ $ruleComments['use_after'] }}">Use after</label></td>
-                <td><input type="text" class="form-control noformat form-control" size="10" name="use_after" value="{{ $ruleInfo->use_after != "" ?  $ruleInfo->use_after: "..." }}"></td>
+                <td><input type="date" class="form-control noformat" name="use_after" value="{{ $ruleInfo->use_after != "" ?  $ruleInfo->use_after: "..." }}"></td>
                 <td><label for="delete_task" title="{{ $ruleComments['delete_task'] }}">Delete task</label></td>
                 <td>
                     <div class="form-check form-check-inline">

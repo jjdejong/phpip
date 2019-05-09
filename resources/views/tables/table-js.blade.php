@@ -4,11 +4,11 @@
 
     function refreshRuleList() {
         var url = sourceUrl + '?' + $("#filter").find("input").filter(function () {
-            return $(this).val().length > 0
+            return $(this).val().length > 0;
         }).serialize(); // Filter out empty values
         $('#rule-list').load(url + ' #rule-list > tr', function () { // Refresh all the tr's in tbody#matter-list
             window.history.pushState('', 'phpIP', url);
-        })
+        });
     }
 
     $(document).ready(function () {
@@ -41,23 +41,8 @@
     });
 
 // Generic in-place edition of fields in a listModal
-    $('#infoModal').on("focus", 'input[name^="use"].noformat', function () {
-        $(this).datepicker({
-            dateFormat: 'yy-mm-dd',
-            showButtonPanel: true,
-            onSelect: function (date, instance) {
-                var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
-                $.post(resource + $(this).closest("table").data("id"), data)
-                    .done(function () {
-                        $("#infoModal").find(".modal-body").load(relatedUrl);
-                        $("#infoModal").find(".alert").removeClass("alert-danger").html("");
-                    });
-            }
-        });
-    });
-
     $("#infoModal").on("keydown", "input.noformat", function (e) {
-        if (e.which == 13) {
+        if (e.which === 13) {
             e.preventDefault();
             var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
             $.post(resource + $(this).closest("table").data("id"), data)
@@ -82,12 +67,12 @@
 
     $("#infoModal").on("click", "button.area", function () {
         var field = $(this).data('field');
-        var areaId = '#' + field
+        var areaId = '#' + field;
         if ($(areaId).hasClass('changed')) {
             $.ajax({
                 type: 'PUT',
                 url: $(this).closest("table").data("source") + $(this).closest("table").data("id"),
-                data: field + "=" + $(areaId).val(),
+                data: field + "=" + $(areaId).val()
             });
             $(this).addClass('hidden-action');
             $(areaId).removeClass('changed');
@@ -96,7 +81,7 @@
     });
 
     $('.filter-input').keyup(debounce(function () {
-        if ($(this).val().length != 0)
+        if ($(this).val().length !== 0)
             $(this).css("background-color", "bisque");
         else
             $(this).css("background-color", "white");
@@ -112,7 +97,7 @@
         $.post(resource + $(this).closest("table").data("id"), mydata)
             .done(function () {
                 $("#infoModal").find(".modal-body").load(relatedUrl);
-            })
+            });
     });
 
     $('#infoModal').on("click", 'input[name="for_country"],input[name="country"],input[name="for_origin"]', function () {
@@ -236,26 +221,9 @@
         });
     });
 
-    $('#infoModal').on("focus", 'input[name$="date"].noformat', function () {
-        $(this).datepicker({
-            dateFormat: 'yy-mm-dd',
-            showButtonPanel: true,
-            onSelect: function (date, instance) {
-                $.ajax({
-                    url: resource + $(this).closest("table").data("id"),
-                    type: 'PUT',
-                    data: $(this).serialize(),
-                }).done(function () {
-                    $("#infoModal").find(".modal-body").load(relatedUrl);
-                    $("#infoModal").find(".alert").removeClass("alert-danger").html("");
-                });
-            }
-        });
-    });
-
     $('#rule-list').on("click", '.delete-from-list', function () {
         var del_conf = confirm("Deleting rule " + $(this).closest("tr").data("id") + " from table?");
-        if (del_conf == 1) {
+        if (del_conf === 1) {
             var data = $.param({_method: "DELETE"});
             $.post('/rule/' + $(this).closest("tr").data("id"), data).done(function () {
                 sourceUrl = "/rule?";  // Used to refresh the list
@@ -267,7 +235,7 @@
 
     $('#rule-list').on("click", '.delete-event-name', function (event) {
         var del_conf = confirm("Deleting event name from table?");
-        if (del_conf == 1) {
+        if (del_conf === 1) {
             var data = $.param({_method: "DELETE"});
             $.post('/eventname/' + $(this).closest("tr").data("id"), data).done(function () {
                 $('#listModal').find(".modal-body").load(relatedUrl);
@@ -280,7 +248,7 @@
 
     $('#infoModal').on("click", '#delete-rule', function () {
         var del_conf = confirm("Deleting rule from table?");
-        if (del_conf == 1) {
+        if (del_conf === 1) {
             var data = $.param({_method: "DELETE"});
             $.post('/rule/' + $(this).data("id"), data).done(function () {
                 $('#listModal').find(".modal-body").load(relatedUrl);
@@ -292,7 +260,7 @@
 
     $('#infoModal').on("click", '#delete-ename', function () {
         var del_conf = confirm("Deleting event name from table?");
-        if (del_conf == 1) {
+        if (del_conf === 1) {
             var data = $.param({_method: "DELETE"});
             $.post('/eventname/' + $(this).data("id"), data).done(function () {
                 $('#listModal').find(".modal-body").load(relatedUrl);
@@ -319,15 +287,6 @@
         });
     });
 
-    $('#addModal').on("focus", 'input[name^="use"].noformat', function () {
-        $(this).datepicker({
-            dateFormat: 'yy-mm-dd',
-            showButtonPanel: true,
-            onSelect: function (date) {
-                $(this).val(date);
-            }
-        });
-    });
     $('#addModal').on("click", 'input[name$="country_new"]', function () {
         $(this).autocomplete({
             minLength: 1,
@@ -459,10 +418,10 @@
         e.preventDefault();
         var $form = $(this);
         var request = $("#createRuleForm").find("input").filter(function () {
-            return $(this).val().length > 0
+            return $(this).val().length > 0;
         }).serialize(); // Filter out empty values
         var data = request + "&" + $("#createRuleForm").find("textarea").filter(function () {
-            return $(this).val().length > 0
+            return $(this).val().length > 0;
         }).serialize();
         $.post('/rule', data, function (response) {
             if (response.success) {
@@ -479,10 +438,10 @@
         e.preventDefault();
         var $form = $(this);
         var request = $("#createEventForm").find("input").filter(function () {
-            return $(this).val().length > 0
+            return $(this).val().length > 0;
         }).serialize(); // Filter out empty values
         var data = request + "&" + $("#createEventForm").find("textarea").filter(function () {
-            return $(this).val().length > 0
+            return $(this).val().length > 0;
         }).serialize();
         $.post('/eventname', data, function (response) {
             if (response.success) {
