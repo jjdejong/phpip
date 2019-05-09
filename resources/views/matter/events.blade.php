@@ -20,7 +20,7 @@
 				{{ $event->info->name }}
 			</td>
 			<td>
-				<input type="text" class="form-control noformat" size="10" name="event_date" value="{{ $event->event_date }}"/>
+				<input type="date" class="form-control noformat" size="10" name="event_date" value="{{ $event->event_date }}">
 			</td>
 			<td>
 				<input type="text" class="form-control noformat" size="16" name="detail" value="{{ $event->detail }}"/>
@@ -46,7 +46,7 @@
 				<div class="input-group">
 					<div class="ui-front">
 						<input type="text" class="form-control form-control-sm" name="name" placeholder="Name"/>
-						<input type="text" class="form-control form-control-sm" name="event_date" placeholder="Date"/>
+						<input type="date" class="form-control form-control-sm" name="event_date">
 					</div>
 					<input type="text" class="form-control form-control-sm" name="detail" placeholder="Detail"/>
 					<input type="text" class="form-control form-control-sm" name="notes" placeholder="Notes"/>

@@ -216,23 +216,6 @@
       $(this).parent("td").addClass("bg-warning");
   });
 
-  $('#listModal').on("focus", 'input[name$="date"].noformat', function() {
-    $(this).datepicker({
-      dateFormat: 'yy-mm-dd',
-      showButtonPanel: true,
-      onSelect: function(date, instance) {
-        $.ajax({
-          url: resource + $(this).closest("tr").data("id"),
-          type: 'PUT',
-          data: $(this).serialize()
-        }).done(function() {
-          $("#listModal").find(".modal-body").load(relatedUrl);
-          $("#listModal").find(".alert").removeClass("alert-danger").html("");
-        });
-      }
-    });
-  });
-
   $('#listModal').on("click", 'input[name="assigned_to"].noformat', function() {
     $(this).autocomplete({
       minLength: 2,
@@ -464,10 +447,6 @@
           $(this).val("");
       }
     });
-    $("#addTaskForm").find('input[name$="date"]').datepicker({
-      dateFormat: 'yy-mm-dd',
-      showButtonPanel: true
-    });
   });
 
   $("#listModal").on("click", "#addTaskSubmit", function() {
@@ -526,10 +505,6 @@
         if (!ui.item)
           $(this).val("");
       }
-    });
-    $("#addEventForm").find('input[name$="date"]').datepicker({
-      dateFormat: 'yy-mm-dd',
-      showButtonPanel: true
     });
   });
 
