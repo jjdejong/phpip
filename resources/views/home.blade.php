@@ -121,7 +121,7 @@
                                 <div class="input-group-prepend">
                                   <button class="btn btn-outline-primary" type="button" id="clear-open-tasks">Clear selected on</button>
                                 </div>
-                                <input type="text" class="form-control" name="datetaskcleardate" id="taskcleardate">
+                                <input type="date" class="form-control" name="datetaskcleardate" id="taskcleardate">
                             </div>
                         </div>
                     </div>
@@ -196,7 +196,7 @@
                                 <div class="input-group-prepend">
                                   <button class="btn btn-outline-primary" type="button" id="clear-ren-tasks">Clear selected on</button>
                                 </div>
-                                <input type="text" class="form-control" name="renewalcleardate" id="renewalcleardate">
+                                <input type="date" class="form-control" name="renewalcleardate" id="renewalcleardate">
                             </div>
                         </div>
                     </div>

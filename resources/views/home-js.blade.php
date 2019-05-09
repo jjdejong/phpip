@@ -1,23 +1,13 @@
 <style type="text/css">
     .card-body {
-        max-height: 150px;
+        max-height: 250px;
         overflow: auto;
         }
     .card-body .row:hover {
-        background-color: #dddddd;
+        background-color: #eeeeee;
         }
 </style>
 <script>
-
-$('.card-header').on("focus", 'input[name$="date"]', function() {
-    $(this).datepicker({
-	dateFormat: 'yy-mm-dd',
-	showButtonPanel: true,
-	onSelect: function(date) {
-            $(this).val(date);
-	}
-    });
-});
 
 function refreshTasks() {
     var url = '/home?' + $("#filter").find("input").filter(function(){return $(this).val().length > 0}).serialize(); // Filter out empty values
@@ -42,11 +32,11 @@ $('#alltasks').on('change', function() {
 });
 
 $('#allrenewals').on('change', function() {
-  refreshRenwals();
+  refreshRenewals();
 });
 
 $('#myrenewals').on('change', function() {
-  refreshRenwals();
+  refreshRenewals();
 });
 
 	// Ajax fill the opened modal and set global parameters
@@ -66,14 +56,14 @@ $('#myrenewals').on('change', function() {
           if($(this).is(':checked'))
              tids.push($(this).attr('id'));
         });
-        if(tids.length == 0) {
+        if(tids.length === 0) {
              alert("No tasks selected for clearing!");
              return;
         }
 		$.post('/matter/clear-tasks', 
 			{ task_ids: tids, done_date: $('#renewalcleardate').val() },
 			function(response){
-                if(response.errors == '') {
+                if(response.errors === '') {
                 refreshRenewals();}
                 else {
                     alert(response.errors.done_date);
@@ -88,14 +78,14 @@ $('#myrenewals').on('change', function() {
           if($(this).is(':checked'))
              tids.push($(this).attr('id'));
         });
-        if(tids.length == 0) {
+        if(tids.length === 0) {
              alert("No tasks selected for clearing!");
              return;
         }
         $.post('/matter/clear-tasks',
 			{ task_ids: tids, done_date: $('#taskcleardate').val() },
 			function(response){
-                if(response.errors == '') {
+                if(response.errors === '') {
                 refreshTasks();}
                 else {
                     alert(response.errors.done_date);

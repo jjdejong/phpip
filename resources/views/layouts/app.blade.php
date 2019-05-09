@@ -32,7 +32,7 @@
                 <form method="POST" action="/matter/search">
                     @csrf
                     <div class="input-group">
-                        <input type="text" class="form-control" id="matter-search" name="matter_search" placeholder="Search">
+                        <input type="text" class="form-control" id="matter-search" name="matter_search" placeholder="Search" autocomplete="off">
                         <div class="input-group-append">
                             <select class="custom-select btn btn-info" id="matter-option" name="search_field">
                                 <option value="Ref" selected>Case reference</option>
