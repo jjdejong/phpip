@@ -12,7 +12,8 @@
 
     $('body').popover({
       selector: '[rel="popover"]',
-      template: popoverTemplate
+      template: popoverTemplate,
+      sanitize: false
     });
 
     // Close popovers by clicking the cancel button
