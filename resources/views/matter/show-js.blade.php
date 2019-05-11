@@ -13,6 +13,7 @@
     $('body').popover({
       selector: '[rel="popover"]',
       template: popoverTemplate,
+      html: true,
       sanitize: false
     });
 

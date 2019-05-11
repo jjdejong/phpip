@@ -99,14 +99,15 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
   <div id="actorPanel" class="card col-3 border-secondary p-0">
     <div class="card-header reveal-hidden text-white bg-secondary font-weight-bold p-1">
       Actors
-      <a class="badge badge-pill badge-light hidden-action float-right" rel="popover" data-placement="right" href="#" data-html="true" title="Add Actor" data-content='<form id="addActorForm">
-               <input type="hidden" name="shared" value="1" />
-               <input type="hidden" name="actor_id" value="" />
-               <input type="hidden" name="company_id" value="" />
+      <a class="badge badge-pill badge-light hidden-action float-right" rel="popover" data-placement="right" href="#" title="Add Actor" 
+         data-content='<form id="addActorForm">
+                <input type="hidden" name="shared" value="1">
+                <input type="hidden" name="actor_id" value="">
+                <input type="hidden" name="company_id" value="">
                <div class="ui-front">
-               <input type="text" class="form-control form-control-sm" name="role" placeholder="Role" />
-               <input type="text" class="form-control form-control-sm" id="actor_name" placeholder="Name" />
-               <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference" />
+                    <input type="text" class="form-control form-control-sm" name="role" placeholder="Role">
+                    <input type="text" class="form-control form-control-sm" id="actor_name" placeholder="Name">
+                    <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
                </div>
                <div class="form-group">
                <div class="form-check">
@@ -136,14 +137,15 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             data-resource="/actor-pivot/">
             &#9998;
           </a>
-          <a class="hidden-action float-right" data-placement="right" rel="popover" data-html="true" title='Add {{ $role_name }}' data-content='<form id="addActorForm">
-                       <input type="hidden" name="role" value="{{ $role_group->first()->role_code }}" />
-                       <input type="hidden" name="shared" value="{{ $role_group->first()->shareable }}" />
-                       <input type="hidden" name="actor_id" value="" />
-                       <input type="hidden" name="company_id" value="" />
+          <a class="hidden-action float-right" data-placement="right" rel="popover" title="Add {{ $role_name }}" 
+             data-content='<form id="addActorForm">
+                        <input type="hidden" name="role" value="{{ $role_group->first()->role_code }}">
+                        <input type="hidden" name="shared" value="{{ $role_group->first()->shareable }}">
+                        <input type="hidden" name="actor_id" value="">
+                        <input type="hidden" name="company_id" value="">
                        <div class="ui-front">
-                       <input type="text" class="form-control form-control-sm" id="actor_name" placeholder="Name" />
-                       <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference" />
+                            <input type="text" class="form-control form-control-sm" id="actor_name" placeholder="Name">
+                            <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
                        </div>
                        <div class="form-group">
                        <div class="form-check">
