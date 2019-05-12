@@ -65,7 +65,7 @@
         change: function(event, ui) {
           // Removes the entered value if it does not correspond to a suggestion
           if (!ui.item)
-            $(this).val("");
+            this.value = "";
         }
       }).focus(function() {
         // Triggers autocomplete search with 0 characters upon focus
@@ -176,7 +176,7 @@
       },
       change: function(event, ui) {
         if (!ui.item)
-          $(this).val("");
+          this.value = "";
       }
     }).focus(function() {
       $(this).autocomplete("search", "");
@@ -199,24 +199,6 @@
 
   // Generic in-place edition of fields in a listModal
 
-  $("#listModal").on("keypress", "input.noformat", function(e) {
-    if (e.which === 13) {
-      e.preventDefault();
-      $.ajax({
-        url: resource + $(this).closest("tr").data("id"),
-        type: 'PUT',
-        data: $(this).serialize()
-      }).done(function() {
-        $("#listModal").find(".modal-body").load(relatedUrl);
-        $("#listModal").find(".alert").removeClass("alert-danger").html("");
-      }).fail(function(errors) {
-        $.each(errors.responseJSON.errors, function(key, item) {
-          $("#listModal").find(".modal-footer .alert").html(item).addClass("alert-danger");
-        });
-      });
-    } else
-      $(this).parent("td").addClass("bg-warning");
-  });
 
   $('#listModal').on("click", 'input[name="assigned_to"].noformat', function() {
     $(this).autocomplete({
@@ -224,7 +206,7 @@
       source: "/user/autocomplete",
       change: function(event, ui) {
         if (!ui.item) {
-          $(this).val("");
+          this.value = "";
           $(this).parent().removeClass("bg-warning");
         }
       },
@@ -248,7 +230,7 @@
       source: "/actor/autocomplete",
       change: function(event, ui) {
         if (!ui.item) {
-          $(this).val("");
+          this.value = "";
           $(this).parent().removeClass("bg-warning");
         }
       },
@@ -287,7 +269,7 @@
       source: "/matter/autocomplete",
       change: function(event, ui) {
         if (!ui.item) {
-          $(this).val("");
+          this.value = "";
           $(this).parent().removeClass("bg-warning");
         }
       },
@@ -313,7 +295,7 @@
       source: "/country/autocomplete",
       change: function(event, ui) {
         if (!ui.item) {
-          $(this).val("");
+          this.value = "";
           $(this).parent().removeClass("bg-warning");
         }
       },
@@ -337,7 +319,7 @@
       source: "/matter/autocomplete",
       change: function(event, ui) {
         if (!ui.item) {
-          $(this).val("");
+          this.value = "";
           $(this).parent().removeClass("bg-warning");
         }
       },
@@ -361,7 +343,7 @@
       source: "/user/autocomplete",
       change: function(event, ui) {
         if (!ui.item) {
-          $(this).val("");
+          this.value = "";
           $(this).parent().removeClass("bg-warning");
         }
       },
@@ -487,42 +469,6 @@
 
   // Specific processing in the event list modal
 
-  $("#listModal").on("click", "#addEvent", function() {
-    $("#listModal").find("tbody").append($("#addEventFormTemplate").html());
-    $("#addEventForm").find('input[name="name"]').focus().autocomplete({
-      minLength: 2,
-      source: "/event-name/autocomplete/0",
-      select: function(event, ui) {
-        $("#addEventForm").find('input[name="code"]').val(ui.item.code);
-      },
-      change: function(event, ui) {
-        if (!ui.item)
-          $(this).val("");
-      }
-    });
-    $("#addEventForm").find('input[name="alt_matter_id"]').autocomplete({
-      minLength: 2,
-      source: "/matter/autocomplete",
-      change: function(event, ui) {
-        if (!ui.item)
-          $(this).val("");
-      }
-    });
-  });
-
-  $("#listModal").on("click", "#addEventSubmit", function() {
-    var request = $("#addEventForm").find("input").filter(function() {
-      return $(this).val().length > 0;
-    }).serialize(); // Filter out empty values
-    $.post('/event', request)
-      .done(function() {
-        $('#listModal').find(".modal-body").load("/matter/" + matter_id + "/events");
-      }).fail(function(errors) {
-        $.each(errors.responseJSON.errors, function(key, item) {
-          $("#addEventForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
-        });
-      });
-  });
 
   // Classifiers modal processing
 
@@ -551,7 +497,7 @@
       source: "/matter/autocomplete",
       change: function(event, ui) {
         if (!ui.item) {
-          $(this).val("");
+          this.value = "";
           $(this).parent().removeClass("bg-warning");
         }
       },
@@ -578,7 +524,7 @@
       },
       change: function(event, ui) {
         if (!ui.item)
-          $(this).val("");
+          this.value = "";
       }
     }).focus(function() {
       // Forces search with no characters upon focus
@@ -589,7 +535,7 @@
       source: "/matter/autocomplete",
       change: function(event, ui) {
         if (!ui.item)
-          $(this).val("");
+          this.value = "";
       }
     });
   });
