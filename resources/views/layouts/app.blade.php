@@ -28,7 +28,7 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'phpIP') }}
                 </a>
-            
+                @auth
                 <form method="POST" action="/matter/search">
                     @csrf
                     <div class="input-group">
@@ -42,6 +42,7 @@
                         </div>
                     </div>
                 </form>
+                @endauth
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
