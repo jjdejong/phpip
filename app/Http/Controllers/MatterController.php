@@ -237,6 +237,10 @@ class MatterController extends Controller
      */
     public function update(Request $request, Matter $matter)
     {
+        $request->validate([
+            'term_adjust' => 'numeric',
+            'idx' => 'numeric|nullable'
+        ]);
         $matter->update($request->except(['_token', '_method']));
     }
 
