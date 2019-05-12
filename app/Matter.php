@@ -493,7 +493,7 @@ class Matter extends Model
                 $description[] = "In name of: ". $info['Applicant'] ;
             }
             if ($info['Cat'] == 'TM') {
-                $line = "Marque no " . $info['FilNo'] . " filed in " . $info['country_name_FR'] . " at " . $info['Filed'] ;
+                $line = "Trademark no " . $info['FilNo'] . " filed in " . $info['country_name_FR'] . " at " . $info['Filed'] ;
                 if($info['Published']) {$line .= ", published at " .  $info['Published'] ." with no ". $info['PubNo'];}
                 if ($info['Granted']) {
                     $line .=  " and registered at " . $info['Granted'];
