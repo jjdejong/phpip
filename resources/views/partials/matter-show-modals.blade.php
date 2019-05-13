@@ -11,7 +11,10 @@
       </div>
       <div class="modal-footer">
         <span class="alert float-left"></span>
-        <mark>Values are editable. Click on a value to change it and press <kbd>&crarr;</kbd> to save changes</mark>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            Click on a value to change it. Changes are saved upon clicking elsewhere.
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
