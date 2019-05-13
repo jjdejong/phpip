@@ -9,8 +9,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 @section('content')
 
-<div id="matter_id" class="d-none">{{ $matter->id }}</div>
-
 <div class="row card-deck mb-1">
   <div class="card border-primary col-3 p-0">
     <div class="card-header bg-primary text-white reveal-hidden lead p-1">
