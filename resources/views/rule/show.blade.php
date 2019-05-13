@@ -35,7 +35,7 @@
                     <label for="notes" title="{{ $ruleComments['notes'] }}">Notes</label><br />
                     <button type="button" data-field="notes" id="updateNotes" class="area hidden-action btn btn-primary btn-sm">&#9432; Save</button>
                 </td>
-                <td><textarea data-field="#updateNotes" id="notes" class="editable form-control noformat" name="notes" cols="" rows="">{{ $ruleInfo->notes }}</textarea></td>
+                <td><textarea data-field="#updateNotes" id="notes" class="form-control noformat" name="notes" cols="" rows="">{{ $ruleInfo->notes }}</textarea></td>
                 <td><label for="for_type" title="{{ $ruleComments['for_type'] }}">Type</label></td>
                 <td class="ui-front"><input class="form-control noformat" name="for_type" value="{{ empty($ruleInfo->type) ? '' : $ruleInfo->type->type }}"></td>
             </tr>
@@ -118,9 +118,9 @@
             </tr>
             <tr>
                 <td><label for="months" title="{{ $ruleComments['months'] }}">Months</label></td>
-                <td><input class="editable form-control noformat" name="months" value="{{ $ruleInfo->months }}"></td>
+                <td><input class="form-control noformat" name="months" value="{{ $ruleInfo->months }}"></td>
                 <td><label for="fee" title="{{ $ruleComments['fee'] }}">Fee</label></td>
-                <td><input class="editable form-control noformat" name="fee" value="{{ $ruleInfo->fee }}"></td>
+                <td><input class="form-control noformat" name="fee" value="{{ $ruleInfo->fee }}"></td>
             </tr>
             <tr>
                 <td><label for="years" title="{{ $ruleComments['years'] }}">Years</label></td>
