@@ -43,7 +43,7 @@
             <td><input type="date" class="form-control noformat" name="event_date" value="{{ $event->event_date }}"></td>
             <td><input type="text" class="form-control noformat" size="16" name="detail" value="{{ $event->detail }}"></td>
             <td><input type="text" class="form-control noformat" name="notes" value="{{ $event->notes }}"></td>
-            <td class="ui-front"><input type="text" class="form-control noformat" size="10" name="alt_matter_id" placeholder="{{ $event->altMatter ? $event->altMatter->uid : '' }}"></td>
+            <td class="ui-front"><input type="text" class="form-control noformat" size="10" name="alt_matter_id" value="{{ $event->altMatter ? $event->altMatter->uid : '' }}"></td>
         </tr>
         @endforeach
     </tbody>

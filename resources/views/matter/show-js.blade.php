@@ -197,8 +197,16 @@
       });
   });
 
-  // Generic in-place edition of fields in a listModal
+ // Generic listModal functions
   
+    // Mark a modified input field
+    document.getElementById('listModal').addEventListener("input", e => {
+        if (e.target && e.target.matches("input.noformat")) {
+            e.target.className += " bg bg-warning";
+        }
+    }); 
+    
+    // Generic in-place edition of input fields
     document.getElementById('listModal').addEventListener("change", e => {
         if (e.target && e.target.matches("input.noformat")) {
             $.ajax({
@@ -223,19 +231,11 @@
       change: function(event, ui) {
         if (!ui.item) {
           this.value = "";
-          $(this).parent().removeClass("bg-warning");
         }
       },
       select: function(event, ui) {
         this.value = ui.item.value;
-        $.ajax({
-          url: resource + $(this).closest("tr").data("id"),
-          type: 'PUT',
-          data: $(this).serialize()
-        }).done(function() {
-          $("#listModal").find(".modal-body").load(relatedUrl);
-          $("#listModal").find(".alert").removeClass("alert-danger").html("");
-        });
+        this.blur(); // Removing focus causes the "change" event to trigger and submit the value via the default functionality attached to the "input.noformat" fields
       }
     });
   });
@@ -247,19 +247,11 @@
       change: function(event, ui) {
         if (!ui.item) {
           this.value = "";
-          $(this).parent().removeClass("bg-warning");
         }
       },
       select: function(event, ui) {
         this.value = ui.item.id;
-        $.ajax({
-          url: resource + $(this).closest("tr").data("id"),
-          type: 'PUT',
-          data: $(this).serialize()
-        }).done(function() {
-          $("#listModal").find(".modal-body").load(relatedUrl);
-          $("#listModal").find(".alert").removeClass("alert-danger").html("");
-        });
+        this.blur();
       }
     });
   });
@@ -286,19 +278,11 @@
       change: function(event, ui) {
         if (!ui.item) {
           this.value = "";
-          $(this).parent().removeClass("bg-warning");
         }
       },
       select: function(event, ui) {
         this.value = ui.item.value;
-        $.ajax({
-          url: resource + $(this).closest("tr").data("id"),
-          type: 'PUT',
-          data: $(this).serialize()
-        }).done(function() {
-          $("#listModal").find(".modal-body").load(relatedUrl);
-          $("#listModal").find(".alert").removeClass("alert-danger").html("");
-        });
+        this.blur();
       }
     });
   });
@@ -312,7 +296,6 @@
       change: function(event, ui) {
         if (!ui.item) {
           this.value = "";
-          $(this).parent().removeClass("bg-warning");
         }
       },
       select: function(event, ui) {
@@ -336,7 +319,6 @@
       change: function(event, ui) {
         if (!ui.item) {
           this.value = "";
-          $(this).parent().removeClass("bg-warning");
         }
       },
       select: function(event, ui) {
@@ -360,7 +342,6 @@
       change: function(event, ui) {
         if (!ui.item) {
           this.value = "";
-          $(this).parent().removeClass("bg-warning");
         }
       },
       select: function(event, ui) {
@@ -480,7 +461,6 @@
       change: function(event, ui) {
         if (!ui.item) {
           this.value = "";
-          $(this).parent().removeClass("bg-warning");
         }
       },
       select: function(event, ui) {
