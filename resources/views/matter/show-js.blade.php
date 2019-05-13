@@ -198,7 +198,23 @@
   });
 
   // Generic in-place edition of fields in a listModal
-
+  
+    document.getElementById('listModal').addEventListener("change", e => {
+        if (e.target && e.target.matches("input.noformat")) {
+            $.ajax({
+                url: resource + e.target.parentNode.parentNode.getAttribute('data-id'),
+                type: 'PUT',
+                data: $(e.target).serialize()
+            }).done( () => {
+                $("#listModal").find(".modal-body").load(relatedUrl);
+                $("#listModal").find(".alert").removeClass("alert-danger").html("");
+            }).fail( (errors) => {
+                $.each(errors.responseJSON.errors, (key, item) => {
+                    $("#listModal").find(".modal-footer .alert").html(item).addClass("alert-danger");
+                });
+            });
+        }
+    });
 
   $('#listModal').on("click", 'input[name="assigned_to"].noformat', function() {
     $(this).autocomplete({
@@ -288,7 +304,7 @@
   });
 
   // Specific to Advanced matter edition
-  
+
   $('#listModal').on("click", 'input[name="origin"],input[name="country"]', function() {
     $(this).autocomplete({
       minLength: 1,
@@ -312,7 +328,7 @@
       }
     });
   });
- 
+
   $('#listModal').on("click", 'input[name="parent_id"],input[name="container_id"]', function() {
     $(this).autocomplete({
       minLength: 1,
@@ -336,7 +352,7 @@
       }
     });
   });
- 
+
   $('#listModal').on("click", 'input[name="responsible"]', function() {
     $(this).autocomplete({
       minLength: 1,
