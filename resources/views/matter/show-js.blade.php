@@ -56,9 +56,9 @@
                 select: function (event, ui) {
                     addActorForm.shared.value = ui.item.shareable;
                     if (ui.item.shareable) {
-                        $("#actorShared").prop('checked', true);
+                        addActorForm.elements.actorShared.checked = true;
                     } else {
-                        $("#actorNotShared").prop('checked', true);
+                        addActorForm.elements.actorNotShared.checked = true;
                     }
                 },
                 change: function (event, ui) {
@@ -91,7 +91,6 @@
                             $.each(errors.responseJSON.errors, function (key, item) {
                                 addActorForm[key].placeholder = item;
                                 addActorForm[key].className += ' is-invalid';
-                                //currentForm.find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
                             });
                             $(".popover-body").find(".alert").html(errors.responseJSON.message).removeClass("d-none");
                         }).done(function () {
@@ -102,7 +101,7 @@
 
             // Close popover by clicking the cancel button
             document.getElementById('popoverCancel').onclick = () => {
-                $('.popover').popover('hide');
+                $('.popover').popover('dispose');
             };
             });
 
@@ -119,11 +118,7 @@
 
         // Ajax refresh various panels when a modal is closed
         $("#listModal, #classifiersModal").on("hide.bs.modal", function (event) {
-            if (resource === '/actor-pivot/') {
-                $("#actorPanel").load("/matter/{{ $matter->id }}" + " #actorPanel > div");
-            } else {
                 $("#multiPanel").load("/matter/{{ $matter->id }}" + " #multiPanel > div");
-            }
         });
 
         // Notes edition
