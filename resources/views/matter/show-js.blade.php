@@ -33,7 +33,7 @@
                         })
                                 .done(function (response) {
                             addActorForm.actor_id.value = response.id;
-                            this.value = response.name;
+                            addActorForm.elements.actor_name.value = response.name;
                                 });
                     } else {
                         addActorForm.actor_id.value = ui.item.id;
