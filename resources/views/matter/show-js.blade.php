@@ -16,29 +16,29 @@
             sanitize: false
         });
 
-        // Close popovers by clicking the cancel button
-        $('body').on('click', "#popoverCancel", function (e) {
-            $(this).parents('.popover').popover('hide');
-        });
-
         $('body').on("shown.bs.popover", '[rel="popover"]', function () {
-            $(".popover:last").find('#actor_name').autocomplete({
+            // First destroy existing popover when a new popover is opened
+            $('.popover').siblings('.popover').first().popover('dispose');
+
+            var addActorForm = document.forms['addActorForm'];
+
+            $('#actor_name').autocomplete({
                 minLength: 2,
                 source: "/actor/autocomplete",
                 select: function (event, ui) {
                     if (ui.item.value === 'create') { // Creates actor on the fly
                         $.post('/actor', {
                             name: this.value.toUpperCase(),
-                            default_role: $(".popover:last").find('input[name="role"]').val()
+                            default_role: addActorForm.role.value
                         })
                                 .done(function (response) {
-                                    $(".popover:last").find('input[name="actor_id"]').val(response.id);
-                                    $(".popover:last").find('#actor_name').val(response.name);
+                            addActorForm.actor_id.value = response.id;
+                            this.value = response.name;
                                 });
                     } else {
-                        $(this).parents('form').find('input[name="actor_id"]').val(ui.item.id);
+                        addActorForm.actor_id.value = ui.item.id;
                         // Fills in actor's company information, if available
-                        $(this).parents('form').find('input[name="company_id"]').val(ui.item.company_id);
+                        addActorForm.company_id.value = ui.item.company_id;
                     }
                 },
                 open: function (event, ui) { // Change color of last suggestion (which is the "create actor" option)
@@ -46,19 +46,19 @@
                 },
                 change: function (event, ui) {
                     if (!ui.item)
-                        $(this).val("");
+                        this.value = "";
                 }
             });
 
-            $(".popover:last").find('input[name="role"]').autocomplete({
+            $('input[name="role"]').autocomplete({
                 minLength: 0,
                 source: "/role/autocomplete",
                 select: function (event, ui) {
-                    $(this).parents('form').find('input[name="shared"]').val(ui.item.shareable);
+                    addActorForm.shared.value = ui.item.shareable;
                     if (ui.item.shareable) {
-                        $(this).parents('form').find("#actorShared").prop('checked', true);
+                        $("#actorShared").prop('checked', true);
                     } else {
-                        $(this).parents('form').find("#actorNotShared").prop('checked', true);
+                        $("#actorNotShared").prop('checked', true);
                     }
                 },
                 change: function (event, ui) {
@@ -72,7 +72,7 @@
             });
 
             $("body").on("change", '.popover input[name="matter_id"]', function () {
-                $(this).parents('form').find('input[name="shared"]').val(function (index, value) {
+                $('input[name="shared"]').val(function (index, value) {
                     if (value === 1) {
                         return 0;
                     } else {
@@ -81,29 +81,39 @@
                 });
             });
 
-            $(".popover:last").find("#addActorSubmit").click(function () {
-                var currentForm = $(this).parents('form');
-                var request = currentForm.find("input").filter(function () {
+            document.getElementById('addActorSubmit').onclick = () => {
+                //var currentForm = this.parentNode;
+                var request = $('#addActorForm').find("input").filter(function () {
                     return $(this).val().length > 0;
                 }).serialize(); // Filter out empty values
                 $.post('/actor-pivot', request)
                         .fail(function (errors) {
                             $.each(errors.responseJSON.errors, function (key, item) {
-                                currentForm.find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
+                                addActorForm[key].placeholder = item;
+                                addActorForm[key].className += ' is-invalid';
+                                //currentForm.find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
                             });
-                            currentForm.parents(".popover-body").find(".alert").html(errors.responseJSON.message).removeClass("d-none");
+                            $(".popover-body").find(".alert").html(errors.responseJSON.message).removeClass("d-none");
                         }).done(function () {
-                    currentForm.parents('.popover').popover('hide');
+                    $('.popover').popover('hide');
                     $("#actorPanel").load("/matter/{{ $matter->id }}" + " #actorPanel > div");
                 });
+            };
+
+            // Close popover by clicking the cancel button
+            document.getElementById('popoverCancel').onclick = () => {
+                $('.popover').popover('hide');
+            };
             });
-        });
+
+
+        // Modals
 
         // Ajax fill the opened modal and set global parameters
         $("#listModal, #createMatterModal, #summaryModal").on("show.bs.modal", function (event) {
-            relatedUrl = $(event.relatedTarget).attr("href");
-            resource = $(event.relatedTarget).data("resource");
-            $(this).find(".modal-title").text($(event.relatedTarget).attr("title"));
+            relatedUrl = event.relatedTarget.href;
+            resource = event.relatedTarget.dataset.resource;
+            $(this).find(".modal-title").text(event.relatedTarget.title);
             $(this).find(".modal-body").load(relatedUrl);
         });
 

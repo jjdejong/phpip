@@ -10,7 +10,6 @@
         Ajax placeholder
       </div>
       <div class="modal-footer">
-        <span class="alert float-left"></span>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             Click on a value to change it. Changes are saved upon clicking elsewhere.
             <button type="button" class="close" data-dismiss="alert">&times;</button>

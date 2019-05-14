@@ -68,7 +68,7 @@
     @endforeach
 </table>
 
-<template id="addTaskFormTemplate">
+<div id="addTaskFormTemplate" class="d-none">
     <tr>
         <td colspan="11">
             <form id="addTaskForm" class="form-inline">
@@ -98,4 +98,4 @@
             </form>
         </td>
     </tr>
-</template>
+</div>
