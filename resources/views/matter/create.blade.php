@@ -5,28 +5,28 @@
     <label for="category" class="col-3 col-form-label font-weight-bold">Category</label>
     <div class="col-9">
       <input type="hidden" name="category_code" value="{{ $from_matter->category_code ?? ( $category['code'] ?? '') }}" />
-      <input type="text" class="form-control" id="category" value="{{ $category['name'] ?? ( $from_matter->category->category ??  '' ) }}" onFocus="this.select()" />
+      <input id="category" type="text" class="form-control" data-ac="/category/autocomplete" data-actarget="category_code" value="{{ $category['name'] ?? ( $from_matter->category->category ??  '' ) }}" onFocus="this.select()">
     </div>
   </div>
   <div class="form-group row">
     <label for="country" class="col-3 col-form-label font-weight-bold">Country</label>
     <div class="col-9">
       <input type="hidden" name="country" value="{{ $from_matter->country ?? '' }}" />
-      <input type="text" class="form-control" id="country" value="{{ $from_matter->countryInfo->name ?? '' }}" onFocus="this.select()" />
+      <input id="country" type="text" class="form-control" data-ac="/country/autocomplete" data-actarget="country" value="{{ $from_matter->countryInfo->name ?? '' }}" onFocus="this.select()">
     </div>
   </div>
   <div class="form-group row">
     <label for="origin" class="col-3 col-form-label">Origin</label>
     <div class="col-9">
       <input type="hidden" name="origin" value="{{ $from_matter->origin ?? '' }}" />
-      <input type="text" class="form-control" id="origin" value="{{ $from_matter->originInfo->name ?? '' }}" onFocus="this.select()" />
+      <input id="origin" type="text" class="form-control" data-ac="/country/autocomplete" data-actarget="origin" value="{{ $from_matter->originInfo->name ?? '' }}" onFocus="this.select()">
     </div>
   </div>
   <div class="form-group row">
     <label for="type_code" class="col-3 col-form-label">Type</label>
     <div class="col-9">
       <input type="hidden" name="type_code" value="{{ $from_matter->type_code ?? '' }}" />
-      <input type="text" class="form-control" id="type_code" value="{{ $from_matter->type->type ?? '' }}" onFocus="this.select()" />
+      <input id="type_code" type="text" class="form-control" data-ac="/type/autocomplete" data-actarget="type_code" value="{{ $from_matter->type->type ?? '' }}" onFocus="this.select()">
     </div>
   </div>
   <div class="form-group row">
@@ -35,14 +35,14 @@
       @if ( $operation == 'child' )
       <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $from_matter->caseref ?? '' }}" readonly />
       @else
-      <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $from_matter->caseref ?? ( $category['next_caseref'] ?? '') }}" onFocus="this.select()" />
+      <input type="text" class="form-control" id="caseref" data-ac="/matter/new-caseref" name="caseref" value="{{ $from_matter->caseref ?? ( $category['next_caseref'] ?? '') }}" autocomplete="off" onFocus="this.select()">
       @endif
     </div>
   </div>
   <div class="form-group row">
     <label for="responsible" class="col-3 col-form-label font-weight-bold">Responsible</label>
     <div class="col-9">
-      <input type="text" class="form-control" id="responsible" name="responsible" value="{{ $from_matter->responsible ?? '' }}" onFocus="this.select()" />
+      <input type="text" class="form-control" id="responsible" data-ac="/user/autocomplete" name="responsible" value="{{ $from_matter->responsible ?? '' }}" onFocus="this.select()">
     </div>
   </div>
 
@@ -77,64 +77,62 @@
 </form>
 
 <script>
-  $('input#category').autocomplete({
-    minLength: 2,
-    source: "/category/autocomplete",
-    change: function(event, ui) {
-      if (!ui.item) {
-        $(this).val("");
-      }
-    },
-    select: function(event, ui) {
-      $(this).parent().find('[name="category_code"]').val(ui.item.id);
-    }
-  });
+    document.forms['createMatterForm'].addEventListener('click', (e) => {
+        if (e.target.hasAttribute('data-ac')) {
+            autocompleteJJ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
+        }
+    });
+    
+    function autocompleteJJ (searchField, dataSource, targetField) {
+        /* "searchField" is the element receiving the user input, 
+         * "dataSource" is the Ajax resource URL, and 
+         * "targetField" is an (optional) input field name receiving the "id" value
+         * The Ajax resource returns a list of JSON id/value pairs, sometimes a label
+         * */
+        // Start by removing stray result lists that can remain when clicking erratically
+        if (tmp = document.getElementById('match-list')) tmp.remove();
+        // Create a fresh result list attached to the current element
+        searchField.insertAdjacentHTML('afterend', '<div id="match-list" class="dropdown-menu bg-light"></div>');
+        var matchList = document.getElementById('match-list'); 
+        var targetElement = "";
+        if (targetField) {
+            targetElement = document.querySelector(`[name="${targetField}"]`);
+        }
+        // Get items 
+        var getItems = async (term) => {
+            if (term.length > 0) {
+                var res = await fetch(dataSource + '?term=' + term); 
+                var items = await res.json();
+                if (items.length === 0) { 
+                    matchList.innerHTML = ''; 
+                } else {
+                    $('#match-list').dropdown('show');
+                    outputHtml(items);
+                }
+            } else {
+                matchList.innerHTML = ''; 
+                $('#match-list').dropdown('hide');
+            }
+        };  
+        // Show results in HTML 
+        var outputHtml = (matches) => { 
+            if (matches.length > 0) { 
+                let html = matches.map( 
+                    match => `<button class="dropdown-item" type="button" id="${match.id ? match.id : match.value}" data-value="${match.value}">${match.label ? match.label : match.value}</button>`
+                ).join(''); console.log(html);
+                matchList.innerHTML = html; 
+            } 
+        }; 
 
-  $('input#country, input#origin').autocomplete({
-    minLength: 2,
-    source: "/country/autocomplete",
-    change: function(event, ui) {
-      if (!ui.item) {
-        $(this).val("");
-      }
-    },
-    select: function(event, ui) {
-      $(this).parent().find('[type="hidden"]').val(ui.item.id);
+        searchField.addEventListener('input', () => getItems(searchField.value));
+        matchList.onclick = (e) => {
+            searchField.value = e.target.dataset.value;
+            if (targetField) {
+                targetElement.value = e.target.id;
+            }
+            matchList.remove();
+        };
     }
-  });
-
-  $('input#type_code').autocomplete({
-    minLength: 0,
-    source: "/type/autocomplete",
-    change: function(event, ui) {
-      if (!ui.item) {
-        $(this).val("");
-      }
-    },
-    select: function(event, ui) {
-      $(this).parent().find('[name="type_code"]').val(ui.item.id);
-    }
-  }).focus(function() {
-    $(this).autocomplete("search", "");
-  });
-
-  $('input#caseref').autocomplete({
-    minLength: 2,
-    source: "/matter/new-caseref"
-  });
-
-  $('input#responsible').autocomplete({
-    minLength: 2,
-    source: "/user/autocomplete",
-    change: function(event, ui) {
-      if (!ui.item) {
-        $(this).val("");
-      }
-    },
-    select: function(event, ui) {
-      this.value = ui.item.value;
-    }
-  });
 
   $("#createMatterSubmit").click(function() {
     var request = $("#createMatterForm").find("input").filter(function() {
