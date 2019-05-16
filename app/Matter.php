@@ -360,7 +360,7 @@ class Matter extends Model
                 DB::raw ( "COALESCE(clilnk.actor_ref, lclic.actor_ref) AS ClRef" ),
                 DB::raw ( "COALESCE(app.display_name, app.name) AS Applicant" ),
                 //DB::raw ( "COALESCE(agt.display_name, agt.name) AS Agent" ),
-                'agtlnk.actor_ref AS AgtRef',
+                //'agtlnk.actor_ref AS AgtRef',
                 'classifier.value AS Title',
                 'classifier2.value AS Title2',
                 DB::raw ( "CONCAT_WS(' ', inv.name, inv.first_name) as Inventor1" ),
@@ -405,20 +405,12 @@ class Matter extends Model
                 }
             );
 
-        $query->leftJoin(DB::raw('matter_actor_lnk agtlnk
-            JOIN actor agt ON agt.id = agtlnk.actor_id'), function ($join) {
-                $join->on('matter.id', 'agtlnk.matter_id')->where([
-                    ['agtlnk.role', 'AGT'],
-                    ['agtlnk.display_order', 1]
-                ]);
-            }
-        )
-        ->leftJoin(DB::raw('matter_actor_lnk applnk
+        $query->leftJoin(DB::raw('matter_actor_lnk applnk
             JOIN actor app ON app.id = applnk.actor_id'), function ($join) {
-                $join->on('matter.id', 'applnk.matter_id')->where([
+                $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'applnk.matter_id')->where([
                     ['applnk.role', 'APP'],
                     ['applnk.display_order', 1]
-                ]);
+                ])
             }
         )
         ->leftJoin(DB::raw('matter_actor_lnk dellnk
@@ -452,6 +444,7 @@ class Matter extends Model
         $filed_date = date_create($info['Filed']);
         $granted_date = date_create($info['Granted']);
         $published_date = date_create($info['Published']);
+        $title = $info['Title'] ?? $info['Title2'];
         if($lang == "fr") {
             $description[] = "N/réf : " . $info['Ref'] ;
             if($info['ClRef']) {$description[] = "V/réf : " . $info['ClRef'] ;}
@@ -464,7 +457,7 @@ class Matter extends Model
                     if($info['Published']) {$line .= " et publiée le " . $published_date->format("d/m/Y") ." sous le n° ". $info['PubNo'];}
                     $description[] = $line;
                 }
-                $description[] = "Pour : " . $info['Title'] ;
+                $description[] = "Pour : " . $title ;
                 $description[] = "Au nom de : ". $info['Applicant'] ;
             }
             if ($info['Cat'] == 'TM') {
@@ -474,7 +467,7 @@ class Matter extends Model
                     $line .=  " et enregistrée le " . $granted_date->format("d/m/Y");
                 }
                 $description[] = $line;
-                $description[] = "Pour : " . $info['Title'] ;
+                $description[] = "Pour : " . $title ;
                 $description[] = "Au nom de : ". $info['Applicant'] ;
             }
         }
@@ -489,7 +482,7 @@ class Matter extends Model
                     $description[] = "Patent application n°" . $info['FilNo'] . " filed in " . $info['country_name'] . " at ". $info['Filed'];
                     if($info['Published']) {$description[]= " and published at " . $info['Published'] ." with no ". $info['PubNo'];}
                 }
-                $description[] = "For: " . $info['Title'] ;
+                $description[] = "For: " . $title ;
                 $description[] = "In name of: ". $info['Applicant'] ;
             }
             if ($info['Cat'] == 'TM') {
@@ -499,7 +492,7 @@ class Matter extends Model
                     $line .=  " and registered at " . $info['Granted'];
                 }
                 $description[] = $line;
-                $description[] = "For: " . $info['Title'] ;
+                $description[] = "For: " . $title ;
                 $description[] = "In name of: ". $info['Applicant'] ;
             }
         }
