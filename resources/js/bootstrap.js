@@ -13,9 +13,10 @@ try {
   require('bootstrap');
   // Registering the CSRF Token as a common header with Ajax so that all
   // outgoing HTTP requests automatically have it attached.
+  let token = document.head.querySelector('meta[name="csrf-token"]');
   $.ajaxSetup({
     headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-TOKEN': token.content
     }
   });
 } catch (e) {}

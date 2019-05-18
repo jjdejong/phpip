@@ -14,7 +14,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     <div class="card-header bg-primary text-white reveal-hidden lead p-1">
       <a class="bg-primary text-white" href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
       ({{ $matter->category->category }})
-      <a class="bg-primary text-white float-right hidden-action" 
+      <a class="bg-primary text-white float-right hidden-action"
          data-toggle="modal" data-target="#listModal" data-remote="false" data-resource="/matter/" href="/matter/{{ $matter->id }}/edit" title="Advanced matter edition">
         &#9998;
       </a>
@@ -97,32 +97,32 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
   <div id="actorPanel" class="card col-3 border-secondary p-0">
     <div class="card-header reveal-hidden text-white bg-secondary font-weight-bold p-1">
       Actors
-      <a class="badge badge-pill badge-light hidden-action float-right" rel="popover" data-placement="right" href="#" title="Add Actor" 
+      <a class="badge badge-pill badge-light hidden-action float-right" rel="popover" data-placement="right" href="#" title="Add Actor"
          data-content='<form id="addActorForm">
                 <input type="hidden" name="shared" value="1">
                 <input type="hidden" name="actor_id" value="">
                 <input type="hidden" name="company_id" value="">
-               <div class="ui-front">
+                <div class="ui-front">
                     <input type="text" class="form-control form-control-sm" name="role" placeholder="Role">
                     <input type="text" class="form-control form-control-sm" id="actor_name" placeholder="Name">
                     <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
-               </div>
-               <div class="form-group">
-               <div class="form-check">
-               <input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
-               <label class="form-check-label" for="actorShared">Add to container and share</label>
-               </div>
-               <div class="form-check">
-               <input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
-               <label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
-               </div>
-               </div>
-               <div class="btn-group" role="group">
-               <button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
-               <button type="button" class="btn btn-outline-info btn-sm" id="popoverCancel">&times;</button>
-               </div>
-               </form>
-               <div class="alert alert-danger d-none" role="alert"></div>'>
+                </div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
+                        <label class="form-check-label" for="actorShared">Add to container and share</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
+                        <label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
+                    </div>
+                </div>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
+                    <button type="button" class="btn btn-outline-info btn-sm" id="popoverCancel">&times;</button>
+                </div>
+            </form>
+            <div class="alert alert-danger d-none" role="alert"></div>'>
         &plus;
       </a>
     </div>
@@ -135,32 +135,32 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             data-resource="/actor-pivot/">
             &#9998;
           </a>
-          <a class="hidden-action float-right" data-placement="right" rel="popover" title="Add {{ $role_name }}" 
+          <a class="hidden-action float-right" data-placement="right" rel="popover" title="Add {{ $role_name }}"
              data-content='<form id="addActorForm">
                         <input type="hidden" name="role" value="{{ $role_group->first()->role_code }}">
                         <input type="hidden" name="shared" value="{{ $role_group->first()->shareable }}">
                         <input type="hidden" name="actor_id" value="">
                         <input type="hidden" name="company_id" value="">
-                       <div class="ui-front">
+                        <div class="ui-front">
                             <input type="text" class="form-control form-control-sm" id="actor_name" placeholder="Name">
                             <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
-                       </div>
-                       <div class="form-group">
-                       <div class="form-check">
-                       <input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}" {{ $role_group->first()->shareable ? "checked" : "" }}>
-                       <label class="form-check-label" for="actorShared">Add to container and share</label>
-                       </div>
-                       <div class="form-check">
-                       <input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}" {{ $role_group->first()->shareable ? "" : "checked" }}>
-                       <label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
-                       </div>
-                       </div>
-                       <div class="btn-group" role="group">
-                       <button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
-                       <button type="button" class="btn btn-outline-info btn-sm" id="popoverCancel">&times;</button>
-                       </div>
-                       </form>
-                       <div class="alert alert-danger d-none" role="alert"></div>'
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}" {{ $role_group->first()->shareable ? "checked" : "" }}>
+                                <label class="form-check-label" for="actorShared">Add to container and share</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}" {{ $role_group->first()->shareable ? "" : "checked" }}>
+                                <label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
+                            </div>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
+                            <button type="button" class="btn btn-outline-info btn-sm" id="popoverCancel">&times;</button>
+                        </div>
+                    </form>
+                    <div class="alert alert-danger d-none" role="alert"></div>'
             href="#">
             &oplus;
           </a>
@@ -172,11 +172,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               @if ( $actor->warn && $role_name == 'Client' )
               <span title="Payment Difficulties">&#9888;</span>
               @endif
-              <a href="/actor/{{ $actor->actor_id }}" 
-                data-toggle="modal" 
-                data-target="#listModal" 
-                data-remote="false" 
-                title="Actor data" 
+              <a href="/actor/{{ $actor->actor_id }}"
+                data-toggle="modal"
+                data-target="#listModal"
+                data-remote="false"
+                title="Actor data"
                 data-resource="/actor/">
               {{ $actor->display_name }}
               </a>

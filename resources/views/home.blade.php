@@ -5,13 +5,13 @@
     <div class="row card-deck">
         <div class="col-4">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header py-1">
                     <div class="row">
                         <div class="col-8">
                             Categories
                         </div>
                         <div class="col-4">
-                            <a href="#newMatterModal" data-toggle="modal">New matter</a>
+                            <a href="#newMatterModal" data-toggle="modal" class="btn btn-primary">Create matter</a>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
             </div>
             <div class="card mt-1">
                 <div class="card-header">
-                    
+
                     <div class="row">
                         <div class="col-12">
                             Users tasks
@@ -74,7 +74,7 @@
                             Open tasks
                         </div>
                         <div class="col-3">
-                            Most urgent                        
+                            Most urgent
                         </div>
                     </div>
                     @foreach ($taskscount as $group)
@@ -112,7 +112,7 @@
                                     <input type="radio" name="my_tasks" id="alltasks" value="0">Everyone
                                 </label>
                                 <label class="btn btn-info">
-                                    <input type="radio" name="my_tasks" id="mytasks" value="1">{{ Auth::user()->login }} 
+                                    <input type="radio" name="my_tasks" id="mytasks" value="1">{{ Auth::user()->login }}
                                 </label>
                             </div>
                         </div>
@@ -145,9 +145,9 @@
                   @foreach ($tasks as $task)
                     <div class="row">
                         <div class="col-6">
-                          <a href="/matter/{{ $task->trigger->matter->id }}/tasks" 
-                                data-toggle="modal" 
-                                data-target="#homeModal" 
+                          <a href="/matter/{{ $task->trigger->matter->id }}/tasks"
+                                data-toggle="modal"
+                                data-target="#homeModal"
                                 data-size="modal-lg"
                                 data-remote="false"
                                 title="All tasks">
@@ -225,7 +225,7 @@
                                     data-toggle="modal"
                                     data-target="#homeModal"
                                     data-remote="false"
-                                    title="All tasks" 
+                                    title="All tasks"
                                     data-size="modal-lg">
                               {{ $task->detail }}
                             </a>
