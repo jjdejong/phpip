@@ -352,10 +352,9 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <div class="card col-9 p-0">
         <div class="card-header font-weight-bold p-1">
           Notes
-          <button type="button" class="hidden-action btn btn-warning btn-sm" id="updateNotes">&#9432; Save</button>
         </div>
         <div class="card-body p-1" id="notes-panel" style="overflow: auto;">
-          <textarea id="notes" class="form-control noformat" name="notes">{{ $matter->notes }}</textarea>
+          <textarea id="notes" class="form-control noformat" name="notes" autocomplete="off">{{ $matter->notes }}</textarea>
         </div>
       </div>
             <div class="card border-info col-3 p-0">

@@ -122,25 +122,17 @@
         });
 
         // Notes edition
-        $("#notes").keyup(function () {
-            $("#updateNotes").removeClass('hidden-action');
-            $(this).addClass('changed');
-        });
 
-        $("#updateNotes").click(function () {
-            if ($("#notes").hasClass('changed')) {
+    document.getElementById('multiPanel').addEventListener('change', e => {
+        if (e.target && e.target.matches("#notes")) {
                 $.ajax({
                     type: 'PUT',
                     url: "/matter/{{ $matter->id }}",
                     data: {
                         notes: $("#notes").val()
                     }
-                });
-                $("#updateNotes").addClass('hidden-action');
-                $(this).removeClass('changed');
+            }).done(e.target.classList.remove("bg-warning"));
             }
-            return false;
-        });
     });
 
 
@@ -204,9 +196,9 @@
     // Generic listModal functions
 
     // Mark a modified input field
-    document.getElementById('listModal').addEventListener("input", e => {
-        if (e.target && e.target.matches("input.noformat")) {
-            e.target.className += " bg bg-warning";
+    document.body.addEventListener("input", e => {
+        if (e.target && e.target.matches("input.noformat, textarea")) {
+            e.target.classList.add("bg-warning");
         }
     });
 
@@ -214,7 +206,7 @@
     document.getElementById('listModal').addEventListener("change", e => {
         if (e.target && e.target.matches("input.noformat")) {
             $.ajax({
-                url: resource + e.target.parentNode.parentNode.getAttribute('data-id'),
+                url: resource + e.target.parentNode.parentNode.dataset.id,
                 type: 'PUT',
                 data: $(e.target).serialize()
             }).done(() => {

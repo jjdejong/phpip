@@ -105,14 +105,12 @@
                 var res = await fetch(dataSource + '?term=' + term);
                 var items = await res.json();
                 if (items.length === 0) {
-                    matchList.innerHTML = '';
                     $('#match-list').dropdown('hide');
                 } else {
                     $('#match-list').dropdown('show');
                     outputHtml(items);
                 }
             } else {
-                matchList.innerHTML = '';
                 $('#match-list').dropdown('hide');
             }
         };
@@ -120,7 +118,7 @@
         var outputHtml = (matches) => {
             if (matches.length > 0) {
                 let html = matches.map(
-                    match => `<button class="dropdown-item" type="button" id="${match.id ? match.id : match.value}" data-value="${match.value}">${match.label ? match.label : match.value}</button>`
+                    match => `<button class="dropdown-item py-1" type="button" id="${match.id ? match.id : match.value}" data-value="${match.value}">${match.label ? match.label : match.value}</button>`
                 ).join('');
                 matchList.innerHTML = html;
             }
