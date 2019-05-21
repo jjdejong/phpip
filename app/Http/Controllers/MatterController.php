@@ -214,9 +214,9 @@ class MatterController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Matter $matter)
-    {		
+    {
 		$matterInfo = $matter->with('container','parent', 'countryInfo:iso,name', 'originInfo:iso,name', 'category', 'type','events')->first();
-		if ($matter->events) {	
+		if ($matter->events) {
 			$cat_edit = 0;
 			$country_edit = 0;
 		} else {
@@ -242,6 +242,16 @@ class MatterController extends Controller
             'idx' => 'numeric|nullable'
         ]);
         $matter->update($request->except(['_token', '_method']));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Matter  $matter
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Matter $matter) {
+        $matter->delete();
     }
 
     /**
@@ -342,11 +352,11 @@ class MatterController extends Controller
         $role_group = $matter->actors->where('role_code', $role);
         return view('matter.roleActors', compact('role_group', 'matter'));
     }
-    
+
     public function description(Matter $matter, $lang)
     {
         $description = $matter->getDescription($matter->id, $lang);
         return view('matter.summary', compact('description'));
     }
-    
+
 }

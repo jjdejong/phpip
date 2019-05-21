@@ -91,6 +91,9 @@
                     <input type="text" class="form-control form-control-sm edit" id="term_adjust" name="term_adjust"
                         value="{{ $matter->term_adjust }}">
                 </div>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-danger float-right" id="deleteMatter">Delete Matter</button>
+                </div>
             </div>
         </form>
     </div>
