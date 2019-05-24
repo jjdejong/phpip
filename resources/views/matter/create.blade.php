@@ -77,7 +77,6 @@
 </form>
 
 <script>
-  var createMatterForm = document.forms['createMatterForm'];
   createMatterForm.addEventListener('click', (e) => {
     if (e.target.hasAttribute('data-ac')) {
       autocompleteJJ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
@@ -94,8 +93,7 @@
     // Start by removing stray result lists that can remain when clicking erratically
     if (tmp = document.getElementById('match-list')) tmp.remove();
     // Create a fresh result list attached to the current element
-    searchField.insertAdjacentHTML('afterend', '<div id="match-list" class="dropdown-menu bg-light"></div>');
-    var matchList = document.getElementById('match-list');
+    searchField.insertAdjacentHTML('afterend', '<div id="matchList" class="dropdown-menu bg-light"></div>');
     var targetElement = "",
       items = "",
       selectedItem = "";
@@ -108,9 +106,9 @@
         let res = await fetch(dataSource + '?term=' + term);
         items = await res.json();
         if (items.length === 0) {
-          $('#match-list').dropdown('hide');
+          $('#matchList').dropdown('hide');
         } else {
-          $('#match-list').dropdown('show');
+          $('#matchList').dropdown('show');
           if (items.length > 0) {
             let html = items.map(
               match => `<button class="dropdown-item py-1" type="button" id="${match.id ? match.id : match.value}" data-value="${match.value}">${match.label ? match.label : match.value}</button>`
@@ -119,7 +117,7 @@
           };
         }
       } else {
-        $('#match-list').dropdown('hide');
+        $('#matchList').dropdown('hide');
       }
     };
 
@@ -166,7 +164,7 @@
         if (data.errors) {
           // Form validation error notification
           Object.entries(data.errors).forEach(([key, value]) => {
-            inputElt = createMatterForm.elements[key];
+            let inputElt = createMatterForm.elements[key];
             // "key" matches with both the element's name and id, so inputElt can contain two input elements (the hidden one with id=key and the visible one with name=key)
             if (inputElt.length) {
               // If defined, inputElt contains two elements and we need the visible one (the second one)
