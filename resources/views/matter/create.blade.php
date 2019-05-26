@@ -91,7 +91,7 @@
      * */
 
     // Start by removing stray result lists that can remain when clicking erratically
-    if (tmp = document.getElementById('match-list')) tmp.remove();
+    if (tmp = document.getElementById('matchList')) tmp.remove();
     // Create a fresh result list attached to the current element
     searchField.insertAdjacentHTML('afterend', '<div id="matchList" class="dropdown-menu bg-light"></div>');
     var targetElement = "",
