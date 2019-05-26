@@ -36,7 +36,7 @@
               <th class="border-top-0">URL</th>
               <th class="border-top-0">Link to matter</th>
               <th class="border-top-0">
-                <a href="#addClassifierForm" data-toggle="collapse">
+                <a href="#addClassifierRow" data-toggle="collapse">
                   <span class="float-right" title="Add classifier">&oplus;</span>
                 </a>
               </th>
@@ -67,9 +67,9 @@
           </tbody>
           @endforeach
           <tbody>
-            <tr id="addClassifierForm" class="collapse">
+            <tr id="addClassifierRow" class="collapse">
               <td colspan="5">
-                <form class="form-inline">
+                <form id="addClassifierForm" class="form-inline">
                   <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}" />
                   <input type="hidden" name="type_code" value="" />
                   <div class="input-group">
@@ -83,7 +83,7 @@
                     </div>
                     <div class="input-group-append">
                       <button type="button" class="btn btn-primary btn-sm" id="addClassifierSubmit">&check;</button>
-                      <button type="reset" class="btn btn-outline-primary btn-sm" onClick="$('#addClassifierForm').collapse('hide')">&times;</button>
+                      <button type="reset" class="btn btn-outline-primary btn-sm" onClick="$('#addClassifierRow').collapse('hide')">&times;</button>
                     </div>
                   </div>
                 </form>

@@ -2,7 +2,7 @@
     var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
     var resource = ""; // Identifies the REST resource for CRUD operations
 
-        // Actor processing
+// Actor processing
 
         // Initialize popovers with custom template
         var popoverTemplate = '<div class="popover border-info" role="tooltip"><div class="arrow"></div><h3 class="popover-header bg-info text-white"></h3><div class="popover-body"></div></div>';
@@ -104,7 +104,7 @@
             });
 
 
-        // Modals
+// Modals
 
         // Ajax fill the opened modal and set global parameters
         $("#listModal, #createMatterModal, #summaryModal").on("show.bs.modal", function (event) {
@@ -119,9 +119,9 @@
                 $("#multiPanel").load("/matter/{{ $matter->id }}" + " #multiPanel > div");
         });
 
-        // Notes edition
+// Notes edition
 
-    document.getElementById('multiPanel').addEventListener('change', e => {
+    multiPanel.addEventListener('change', e => {
         if (e.target && e.target.matches("#notes")) {
                 $.ajax({
                     type: 'PUT',
@@ -134,10 +134,10 @@
     });
 
 
-    // Titles processing
+// Titles processing
 
     // Show the title creation form when the title panel is empty
-    if (!$("#titlePanel").text().trim()) {
+    if (!titlePanel.querySelector('.row')) {
         $("#addTitleForm").collapse("show");
     }
 
@@ -155,7 +155,7 @@
                     value: title
                 }
             }).done(function () {
-                $('#titlePanel').load("/matter/{{ $matter->id }}" + " #titlePanel > div");
+                $('#titlePanel').load("/matter/{{ $matter->id }} #titlePanel > div");
             });
         } else
             $(this).addClass("border border-info");
@@ -183,7 +183,7 @@
         }).serialize(); // Filter out empty values
         $.post('/classifier', request)
                 .done(function () {
-                    $('#titlePanel').load("/matter/{{ $matter->id }}" + " #titlePanel > div");
+                $('#titlePanel').load("/matter/{{ $matter->id }} #titlePanel > div");
                 }).fail(function (errors) {
             $.each(errors.responseJSON.errors, function (key, item) {
                 $("#addTitleForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
@@ -191,7 +191,7 @@
         });
     });
 
-    // Generic listModal functions
+// Generic listModal functions
 
     // Mark a modified input field
     document.body.addEventListener("input", e => {
@@ -201,7 +201,7 @@
     });
 
     // Generic in-place edition of input fields
-    document.getElementById('listModal').addEventListener("change", e => {
+    listModal.addEventListener("change", e => {
         if (e.target && e.target.matches("input.noformat")) {
             $.ajax({
                 url: resource + e.target.parentNode.parentNode.dataset.id,
@@ -281,7 +281,7 @@
         });
     });
 
-    // Specific to Advanced matter edition
+// Specific to Advanced matter edition
 
     $('#listModal').on("click", 'input[name="origin"],input[name="country"]', function () {
         $(this).autocomplete({
@@ -376,11 +376,11 @@
         return false;
     });
 
-    // Specific processing in the task list modal
+// Specific processing in the task list modal
 
   $("#listModal").on("click", "#addTaskToEvent", function() {
-    $(this).parents("tbody").append($("#addTaskFormTemplate").html());
-    $("#addTaskForm").find('input[name="trigger_id"]').val($(this).data("event_id"));
+    this.parentNode.parentNode.parentNode.insertAdjacentHTML('beforeend', addTaskFormTemplate.innerHTML);
+    addTaskForm['trigger_id'].value = this.dataset.event_id;
     $("#addTaskForm").find('input[name="name"]').focus().autocomplete({
       minLength: 2,
       source: "/event-name/autocomplete/1",
@@ -389,7 +389,7 @@
       },
       change: function(event, ui) {
         if (!ui.item)
-          $(this).val("");
+          this.value = "";
       }
     });
     $("#addTaskForm").find('input[name="assigned_to"]').autocomplete({
@@ -397,7 +397,7 @@
       source: "/user/autocomplete",
       change: function(event, ui) {
         if (!ui.item)
-          $(this).val("");
+          this.value = "";
       }
     });
   });
@@ -408,7 +408,7 @@
     }).serialize(); // Filter out empty values
     $.post('/task', request)
       .done(function() {
-        $('#listModal').find(".modal-body").load("/matter/" + matter_id + "/tasks");
+        $('#listModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
       }).fail(function(errors) {
         $.each(errors.responseJSON.errors, function(key, item) {
           $("#addTaskForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
@@ -436,28 +436,21 @@
     }
   });
 
-  // Specific processing in the event list modal
+// Classifiers modal processing
 
-
-    // Classifiers modal processing
-
-    $('#classifiersModal').on("keypress", "input.noformat", function (e) {
-        if (e.which === 13) {
-            e.preventDefault();
+    $('#classifiersModal').on("change", "input.noformat", function (e) {
             $.ajax({
                 url: '/classifier/' + $(this).closest("tr").data("classifier_id"),
                 type: 'PUT',
                 data: $(this).serialize()
             }).done(function () {
-                $("td.bg-warning").removeClass("bg-warning");
+                $('.bg-warning').removeClass("bg-warning");
                 $("#classifiersModal").find(".alert").removeClass("alert-danger").html("");
             }).fail(function (errors) {
                 $.each(errors.responseJSON.errors, function (key, item) {
                     $("#classifiersModal").find(".modal-footer .alert").html(item).addClass('alert-danger');
                 });
             });
-        } else
-            $(this).parent("td").addClass("bg-warning");
     });
 
     $('#classifiersModal').on("click", 'input[name="lnk_matter_id"].noformat', function () {
@@ -476,7 +469,7 @@
                     type: 'PUT',
                     data: $(this).serialize()
                 }).done(function () {
-                    $('#classifiersModal').load("/matter/{{ $matter->id }}" + " #classifiersModal > div");
+                    $('#classifiersModal').load("/matter/{{ $matter->id }} #classifiersModal > div");
                     $("#classifiersModal").find(".alert").removeClass("alert-danger").html("");
                 });
             }
@@ -488,7 +481,7 @@
             minLength: 0,
             source: "/classifier-type/autocomplete/0",
             select: function (event, ui) {
-                $("#addClassifierForm").find('input[name="type_code"]').val(ui.item.code);
+                addClassifierForm['type_code'].value = ui.item.code;
             },
             change: function (event, ui) {
                 if (!ui.item)
@@ -509,13 +502,10 @@
     });
 
     $("#classifiersModal").on("click", "#addClassifierSubmit", function () {
-        var request = $("#addClassifierForm").find("input").filter(function () {
-            return $(this).val().length > 0
-        }).serialize(); // Filter out empty values
-        $.post('/classifier', request)
-                .done(function () {
-                    $('#classifiersModal').load("/matter/{{ $matter->id }}" + " #classifiersModal > div");
-                }).fail(function (errors) {
+      $.post('/classifier', $("#addClassifierForm").serialize())
+      .done(function () {
+          $('#classifiersModal').load("/matter/{{ $matter->id }} #classifiersModal > div");
+        }).fail(function (errors) {
             $.each(errors.responseJSON.errors, function (key, item) {
                 $("#addClassifierForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
             });
@@ -527,7 +517,7 @@
             url: '/classifier/' + $(this).closest("tr").data("classifier_id"),
             type: 'DELETE'
         }).done(function () {
-            $('#classifiersModal').load("/matter/{{ $matter->id }}" + " #classifiersModal > div");
+            $('#classifiersModal').load("/matter/{{ $matter->id }} #classifiersModal > div");
         });
         return false;
     });
