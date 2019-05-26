@@ -2,8 +2,6 @@
     var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
     var resource = ""; // Identifies the REST resource for CRUD operations
 
-    $(document).ready(function () {
-
         // Actor processing
 
         // Initialize popovers with custom template
@@ -354,7 +352,19 @@
         });
     });
 
-    // Specific processing in the actor/role list modal
+  $("#listModal").on("click", "#deleteMatter", function() {
+    $.ajax({
+      url: '/matter/' + $(this).closest("card").data("id"),
+      type: 'DELETE'
+    }).done(function() {
+      location.href = "/matter";
+    }).fail( function(errors) {
+      alert(errors.responseJSON.message);
+    });
+    return false;
+  });
+
+// Specific processing in the actor/role list modal
 
     $("#listModal").on("click", "#removeActor", function () {
         $.ajax({
