@@ -72,7 +72,7 @@
                 <a class="dropdown-item" href="{{ url('/matter/') }}">All</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=PAT') }}">Patents</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=TM') }}">Trademarks</a>
-                <a class="dropdown-item" href="#newMatterModal" data-toggle="modal">New</a>
+                <a class="dropdown-item" href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" title="Create Matter">New</a>
               </ul>
             </li>
 
@@ -93,8 +93,7 @@
               </a>
 
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-    document.getElementById('logout-form').submit();">
+                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   {{ __('Logout') }}
                 </a>
 
@@ -110,29 +109,51 @@
     </nav>
     <main class="container">
       @yield('content')
-    </main>
-  </div>
-  @auth
-  <div id="newMatterModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-sm">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Create Matter</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body">
-          @include('matter.create', ['operation' => 'new'])
-        </div>
-        <div class="modal-footer">
-          <span class="alert float-left"></span>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+      <div id="ajaxModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Ajax title placeholder</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              Ajax body placeholder
+            </div>
+            <div class="modal-footer">
+              <span id="footerAlert" class="alert float-left"></span>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
   </div>
-@endauth
   @yield('script')
+  <script>
+    var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
+    var resource = ""; // Identifies the REST resource for CRUD operations
+
+    // Ajax fill the opened modal and set global parameters
+    $("#ajaxModal").on("show.bs.modal", function(event) {
+      var modalTrigger = event.relatedTarget;
+      relatedUrl = modalTrigger.href;
+      resource = modalTrigger.dataset.resource;
+      if (modalTrigger.hasAttribute('data-size')) this.querySelector('.modal-dialog').classList.add(modalTrigger.dataset.size);
+      this.querySelector('.modal-title').innerHTML = modalTrigger.title;
+      /*var doFetch = async (url, selector) => {
+        res = await fetch(url);
+        this.querySelector(selector).innerHTML = await res.text();
+      }
+      doFetch(relatedUrl, '.modal-body');*/
+      fetch(relatedUrl)
+        .then(response => response.text())
+        .then(html => {
+          this.querySelector('.modal-body').innerHTML = html;
+        });
+    });
+  </script>
 </body>
 
 </html>

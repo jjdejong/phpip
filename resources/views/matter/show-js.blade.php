@@ -1,6 +1,4 @@
 <script>
-  var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
-  var resource = ""; // Identifies the REST resource for CRUD operations
 
 // Actor processing
 
@@ -93,7 +91,7 @@
           $(".popover-body").find(".alert").html(errors.responseJSON.message).removeClass("d-none");
         }).done(function() {
           $('.popover').popover('hide');
-          $("#actorPanel").load("/matter/{{ $matter->id }}" + " #actorPanel > div");
+          $("#actorPanel").load("/matter/{{ $matter->id }} #actorPanel > div");
         });
     };
 
@@ -106,25 +104,8 @@
 
 // Modals
 
-  // Ajax fill the opened modal and set global parameters
-  $("#listModal, #createMatterModal, #summaryModal").on("show.bs.modal", function(event) {
-    relatedUrl = event.relatedTarget.href;
-    resource = event.relatedTarget.dataset.resource;
-    this.querySelector('.modal-title').innerHTML = event.relatedTarget.title;
-    /*var doFetch = async (url, selector) => {
-      res = await fetch(url);
-      this.querySelector(selector).innerHTML = await res.text();
-    }
-    doFetch(relatedUrl, '.modal-body');*/
-    fetch(relatedUrl)
-      .then(response => response.text())
-      .then(html => {
-        this.querySelector('.modal-body').innerHTML = html;
-      });
-  });
-
   // Ajax refresh various panels when a modal is closed
-  $(".modal").on("hide.bs.modal", function(event) {
+  $("#ajaxModal").on("hide.bs.modal", function(event) {
     if (resource === '/actor-pivot/') {
       //$("#actorPanel").load("/matter/{{ $matter->id }} #actorPanel > div");
       fetch("/matter/{{ $matter->id }}")
@@ -136,6 +117,12 @@
     } else {
       $("#multiPanel").load("/matter/{{ $matter->id }} #multiPanel > div");
     }
+    // Reset modal to default
+    this.querySelector('.modal-body').innerHTML = "Ajax body placeholder";
+    this.querySelector('.modal-title').innerHTML = "Ajax title placeholder";
+    this.querySelector('.modal-dialog').className = "modal-dialog";
+    footerAlert.innerHTML = "";
+    footerAlert.classList.remove('alert-danger');
   });
 
 // Notes edition
@@ -210,7 +197,7 @@
       });
   });
 
-// Generic listModal functions
+// Generic ajaxModal functions
 
   // Mark a modified input field
   document.body.addEventListener("input", e => {
@@ -220,24 +207,24 @@
   });
 
   // Generic in-place edition of input fields
-  listModal.addEventListener("change", e => {
+  ajaxModal.addEventListener("change", e => {
     if (e.target && e.target.matches("input.noformat")) {
       $.ajax({
         url: resource + e.target.parentNode.parentNode.dataset.id,
         type: 'PUT',
         data: $(e.target).serialize()
       }).done(() => {
-        $("#listModal").find(".modal-body").load(relatedUrl);
-        $("#listModal").find(".alert").removeClass("alert-danger").html("");
+        $("#ajaxModal").find(".modal-body").load(relatedUrl);
+        $("#footerAlert").removeClass("alert-danger").html("");
       }).fail((errors) => {
         $.each(errors.responseJSON.errors, (key, item) => {
-          $("#listModal").find(".modal-footer .alert").html(item).addClass("alert-danger");
+          $("#footerAlert").html(item).addClass("alert-danger");
         });
       });
     }
   });
 
-  $('#listModal').on("click", 'input[name="assigned_to"].noformat', function() {
+  $('#ajaxModal').on("click", 'input[name="assigned_to"].noformat', function() {
     $(this).autocomplete({
       minLength: 2,
       source: "/user/autocomplete",
@@ -253,7 +240,7 @@
     });
   });
 
-  $('#listModal').on("click", 'input[name="actor_id"].noformat, input[name="company_id"].noformat', function() {
+  $('#ajaxModal').on("click", 'input[name="actor_id"].noformat, input[name="company_id"].noformat', function() {
     $(this).autocomplete({
       minLength: 2,
       source: "/actor/autocomplete",
@@ -269,7 +256,7 @@
     });
   });
 
-  $('#listModal').on("click", 'input[type="checkbox"]', function() {
+  $('#ajaxModal').on("click", 'input[type="checkbox"]', function() {
     var flag = 0;
     if ($(this).is(":checked"))
       flag = 1;
@@ -279,12 +266,12 @@
       type: 'PUT',
       data: data
     }).done(function() {
-      $("#listModal").find(".modal-body").load(relatedUrl);
-      $("#listModal").find(".alert").removeClass("alert-danger").html("");
+      $("#ajaxModal").find(".modal-body").load(relatedUrl);
+      $("#footerAlert").removeClass("alert-danger").html("");
     });
   });
 
-  $('#listModal').on("click", 'input[name="alt_matter_id"].noformat', function() {
+  $('#ajaxModal').on("click", 'input[name="alt_matter_id"].noformat', function() {
     $(this).autocomplete({
       minLength: 2,
       source: "/matter/autocomplete",
@@ -302,7 +289,7 @@
 
   // Specific to Advanced matter edition
 
-  $('#listModal').on("click", 'input[name="origin"],input[name="country"]', function() {
+  $('#ajaxModal').on("click", 'input[name="origin"],input[name="country"]', function() {
     $(this).autocomplete({
       minLength: 1,
       source: "/country/autocomplete",
@@ -318,14 +305,14 @@
           type: 'PUT',
           data: $(this).serialize()
         }).done(function() {
-          $("#listModal").find(".modal-body").load(relatedUrl);
-          $("#listModal").find(".alert").removeClass("alert-danger").html("");
+          $("#ajaxModal").find(".modal-body").load(relatedUrl);
+          $("#footerAlert").removeClass("alert-danger").html("");
         });
       }
     });
   });
 
-  $('#listModal').on("click", 'input[name="parent_id"],input[name="container_id"]', function() {
+  $('#ajaxModal').on("click", 'input[name="parent_id"],input[name="container_id"]', function() {
     $(this).autocomplete({
       minLength: 1,
       source: "/matter/autocomplete",
@@ -341,14 +328,14 @@
           type: 'PUT',
           data: $(this).serialize()
         }).done(function() {
-          $("#listModal").find(".modal-body").load(relatedUrl);
-          $("#listModal").find(".alert").removeClass("alert-danger").html("");
+          $("#ajaxModal").find(".modal-body").load(relatedUrl);
+          $("#footerAlert").removeClass("alert-danger").html("");
         });
       }
     });
   });
 
-  $('#listModal').on("click", 'input[name="responsible"]', function() {
+  $('#ajaxModal').on("click", 'input[name="responsible"]', function() {
     $(this).autocomplete({
       minLength: 1,
       source: "/user/autocomplete",
@@ -364,14 +351,14 @@
           type: 'PUT',
           data: $(this).serialize()
         }).done(function() {
-          $("#listModal").find(".modal-body").load(relatedUrl);
-          $("#listModal").find(".alert").removeClass("alert-danger").html("");
+          $("#ajaxModal").find(".modal-body").load(relatedUrl);
+          $("#footerAlert").removeClass("alert-danger").html("");
         });
       }
     });
   });
 
-  $("#listModal").on("click", "#deleteMatter", function() {
+  $("#ajaxModal").on("click", "#deleteMatter", function() {
     $.ajax({
       url: '/matter/' + $(this).closest("card").data("id"),
       type: 'DELETE'
@@ -385,19 +372,19 @@
 
 // Specific processing in the actor/role list modal
 
-  $("#listModal").on("click", "#removeActor", function() {
+  $("#ajaxModal").on("click", "#removeActor", function() {
     $.ajax({
       url: '/actor-pivot/' + $(this).closest("tr").data("id"),
       type: 'DELETE'
     }).done(function() {
-      $('#listModal').find(".modal-body").load(relatedUrl);
+      $('#ajaxModal').find(".modal-body").load(relatedUrl);
     });
     return false;
   });
 
 // Specific processing of the event list modal
 
-  $('#listModal').on("click", 'input[name="eventName"]', function() {
+  $('#ajaxModal').on("click", 'input[name="eventName"]', function() {
     $(this).focus().autocomplete({
       minLength: 2,
       source: "/event-name/autocomplete/0",
@@ -411,7 +398,7 @@
     });
   })
 
-  $('#listModal').on("click", "#alt_matter_id", function() {
+  $('#ajaxModal').on("click", "#alt_matter_id", function() {
     $(this).autocomplete({
       minLength: 2,
       source: "/matter/autocomplete",
@@ -425,13 +412,13 @@
     });
   });
 
-  $("#listModal").on("click", "#addEventSubmit", function() {
+  $("#ajaxModal").on("click", "#addEventSubmit", function() {
     var request = $("#addEventForm").find("input").filter(function() {
       return $(this).val().length > 0;
     }).serialize(); // Filter out empty values
     $.post('/event', request)
       .done(() => {
-        $('#listModal').find(".modal-body").load("/matter/{{ $matter->id }}/events");
+        $('#ajaxModal').find(".modal-body").load("/matter/{{ $matter->id }}/events");
       })
       .fail((errors) => {
         $.each(errors.responseJSON.errors, (key, item) => {
@@ -442,7 +429,7 @@
 
 // Specific processing in the task list modal
 
-  $("#listModal").on("click", "#addTaskToEvent", function() {
+  $("#ajaxModal").on("click", "#addTaskToEvent", function() {
     this.parentNode.parentNode.parentNode.insertAdjacentHTML('beforeend', addTaskFormTemplate.innerHTML);
     addTaskForm['trigger_id'].value = this.dataset.event_id;
     $("#addTaskForm").find('input[name="name"]').focus().autocomplete({
@@ -466,13 +453,13 @@
     });
   });
 
-  $("#listModal").on("click", "#addTaskSubmit", function() {
+  $("#ajaxModal").on("click", "#addTaskSubmit", function() {
     var request = $("#addTaskForm").find("input").filter(function() {
       return $(this).val().length > 0;
     }).serialize(); // Filter out empty values
     $.post('/task', request)
       .done(function() {
-        $('#listModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
+        $('#ajaxModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
       }).fail(function(errors) {
         $.each(errors.responseJSON.errors, function(key, item) {
           $("#addTaskForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
@@ -480,22 +467,22 @@
       });
   });
 
-  $("#listModal").on("click", "#deleteTask", function() {
+  $("#ajaxModal").on("click", "#deleteTask", function() {
     $.ajax({
       url: '/task/' + $(this).closest("tr").data("id"),
       type: 'DELETE'
     }).done(function() {
-      $('#listModal').find(".modal-body").load(relatedUrl);
+      $('#ajaxModal').find(".modal-body").load(relatedUrl);
     });
   });
 
-  $("#listModal").on("click", "#deleteEvent", function() {
+  $("#ajaxModal").on("click", "#deleteEvent", function() {
     if (confirm("Deleting the event will also delete the linked tasks. Continue anyway?")) {
       $.ajax({
         url: '/event/' + $(this).data('event_id'),
         type: 'DELETE'
       }).done(function() {
-        $('#listModal').find(".modal-body").load(relatedUrl);
+        $('#ajaxModal').find(".modal-body").load(relatedUrl);
       });
     }
   });

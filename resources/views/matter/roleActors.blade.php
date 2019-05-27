@@ -42,7 +42,7 @@
                     }
                 });
             });
-            $('#listModal').find(".modal-body").delay(100).load(relatedUrl);
+            $('#ajaxModal').find(".modal-body").delay(100).load(relatedUrl);
         },
     });
 </script>

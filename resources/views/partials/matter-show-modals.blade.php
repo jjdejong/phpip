@@ -1,25 +1,3 @@
-<div id="listModal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Title placeholder</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body">
-        Ajax placeholder
-      </div>
-      <div class="modal-footer">
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            Click on a value to change it. Changes are saved upon clicking elsewhere.
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div id="classifiersModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <!-- Modal content-->
@@ -101,26 +79,6 @@
     </div>
   </div>
 </div>
-
-<div id="createMatterModal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-sm">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Clone Matter</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body">
-        Ajax placeholder
-      </div>
-      <div class="modal-footer">
-        <span class="alert float-left"></span>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 <div id="summaryModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-sm">

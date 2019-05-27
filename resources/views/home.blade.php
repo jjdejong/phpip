@@ -43,7 +43,7 @@
                             <div class="col-1">
                                 <a class="badge badge-primary hidden-action"
                                     href="/matter/create?operation=new&category={{$group->category_code}}"
-                                    data-target="#homeModal"
+                                    data-target="#ajaxModal"
                                     data-remote="false"
                                     title="Create new {{ $group->category }}"
                                     data-toggle="modal"
@@ -147,7 +147,7 @@
                         <div class="col-6">
                           <a href="/matter/{{ $task->trigger->matter->id }}/tasks"
                                 data-toggle="modal"
-                                data-target="#homeModal"
+                                data-target="#ajaxModal"
                                 data-size="modal-lg"
                                 data-remote="false"
                                 title="All tasks">
@@ -223,7 +223,7 @@
                           <div class="col-6">
                             <a href="/matter/{{ $task->trigger->matter->id }}/renewals"
                                     data-toggle="modal"
-                                    data-target="#homeModal"
+                                    data-target="#ajaxModal"
                                     data-remote="false"
                                     title="All tasks"
                                     data-size="modal-lg">
@@ -252,12 +252,6 @@
                 </div>
             </div>
         </div>
-
-
-
-<div id="homeModal" class="modal fade" role="dialog">
-@include('partials.generic-modals')
-</div>
 
 @stop
 

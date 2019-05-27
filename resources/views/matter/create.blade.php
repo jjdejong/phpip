@@ -58,17 +58,6 @@
       <label class="form-check-label" for="parent">Parent application</label>
     </div>
   </fieldset>
-  {{-- <fieldset class="form-group">
-    <legend>Child {{ $from_matter->category->category ?? 'matter' }}:</legend>
-  <div class="form-check">
-    <input class="form-check-input" type="radio" name="container" value="1" id="container" />
-    <label class="form-check-label" for="container">Is independent container</label>
-  </div>
-  <div class="form-check">
-    <input class="form-check-input" type="radio" name="container" value="0" checked="checked" id="inherit" />
-    <label class="form-check-label" for="inherit">Inherits its information</label>
-  </div>
-  </fieldset> --}}
   @endif
 
   <div>
@@ -77,75 +66,23 @@
 </form>
 
 <script>
-  createMatterForm.addEventListener('click', (e) => {
-    if (e.target.hasAttribute('data-ac')) {
-      autocompleteJJ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
-    }
-  });
-
-  var autocompleteJJ = (searchField, dataSource, targetField) => {
-    /* "searchField" is the element receiving the user input,
-     * "dataSource" is the Ajax resource URL, and
-     * "targetField" is an (optional) input field name receiving the "id" value
-     * The Ajax resource returns a list of JSON id/value pairs, sometimes a label
-     * */
-
-    // Start by removing stray result lists that can remain when clicking erratically
-    if (tmp = document.getElementById('matchList')) tmp.remove();
-    // Create a fresh result list attached to the current element
-    searchField.insertAdjacentHTML('afterend', '<div id="matchList" class="dropdown-menu bg-light"></div>');
-    var targetElement = "",
-      items = "",
-      selectedItem = "";
-    if (targetField) {
-      targetElement = document.getElementsByName(targetField)[0];
-    }
-    // Get items
-    var getItems = async (term) => {
-      if (term.length > 0) {
-        let res = await fetch(dataSource + '?term=' + term);
-        items = await res.json();
-        if (items.length === 0) {
-          $('#matchList').dropdown('hide');
-        } else {
-          $('#matchList').dropdown('show');
-          if (items.length > 0) {
-            let html = items.map(
-              match => `<button class="dropdown-item py-1" type="button" id="${match.id ? match.id : match.value}" data-value="${match.value}">${match.label ? match.label : match.value}</button>`
-            ).join('');
-            matchList.innerHTML = html;
-          };
-        }
-      } else {
-        $('#matchList').dropdown('hide');
+  $("#ajaxModal").on('bs.shown.modal', function() {
+    createMatterForm.addEventListener('click', (e) => {
+      if (e.target.hasAttribute('data-ac')) {
+        autocompleteJJ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
       }
-    };
+    });
 
-    searchField.addEventListener('input', () => getItems(searchField.value));
-    matchList.onclick = (e) => {
-      // Retrieve complete selected item, in case it contains more than id, value or label
-      selectedItem = items.filter((item) => {
-        return item.value === e.target.dataset.value;
-      });
-      console.log(selectedItem);
-      searchField.value = e.target.dataset.value;
-      if (targetField) {
-        targetElement.value = e.target.id;
-      }
-      matchList.remove();
-    };
-  }
+    createMatterForm.addEventListener('submit', function(ev) {
+      ev.preventDefault();
 
-  createMatterForm.addEventListener('submit', function(ev) {
-    ev.preventDefault();
+      formData = new FormData(createMatterForm);
+      searchParams = new URLSearchParams(formData);
+      /*searchParams.forEach( (value, key) => {
+        if (value.length === 0) searchParams.delete(key);
+      });*/
 
-    formData = new FormData(createMatterForm);
-    searchParams = new URLSearchParams(formData);
-    /*searchParams.forEach( (value, key) => {
-      if (value.length === 0) searchParams.delete(key);
-    });*/
-
-    fetch('/matter', {
+      fetch('/matter', {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           "X-CSRF-TOKEN": "{{ csrf_token() }}"
@@ -182,6 +119,58 @@
       .catch(error => {
         console.log(error);
       });
+    });
+  });
 
-  }, false);
+
+  var autocompleteJJ = (searchField, dataSource, targetField) => {
+    /* "searchField" is the element receiving the user input,
+     * "dataSource" is the Ajax resource URL, and
+     * "targetField" is an (optional) input field name receiving the "id" value
+     * The Ajax resource returns a list of JSON id/value pairs, sometimes a label
+     * */
+
+    // Start by removing stray result lists that can remain when clicking erratically
+    if (tmp = document.getElementById('matchList')) tmp.remove();
+    // Create a fresh result list attached to the current element
+    searchField.insertAdjacentHTML('afterend', '<div id="matchList" class="dropdown-menu bg-light"></div>');
+    var targetElement = "",
+      items = "",
+      selectedItem = "";
+    if (targetField) {
+      // The hidden input field is supposed to be the first
+      targetElement = document.getElementsByName(targetField)[0];
+    }
+    // Get items
+    var getItems = async (term) => {
+      if (term.length > 0) {
+        let res = await fetch(dataSource + '?term=' + term);
+        items = await res.json();
+        if (items.length === 0) {
+          $('#matchList').dropdown('hide');
+        } else {
+          $('#matchList').dropdown('show');
+          let html = items.map(
+            match => `<button class="dropdown-item py-1" type="button" id="${match.id ? match.id : match.value}" data-value="${match.value}">${match.label ? match.label : match.value}</button>`
+          ).join('');
+          matchList.innerHTML = html;
+        }
+      } else {
+        $('#matchList').dropdown('hide');
+      }
+    };
+
+    searchField.addEventListener('input', () => getItems(searchField.value));
+    matchList.onclick = (e) => {
+      // Retrieve complete selected item, in case it contains more than id, value or label
+      selectedItem = items.filter((item) => {
+        return item.value === e.target.dataset.value;
+      });
+      searchField.value = selectedItem[0].value;
+      if (targetField) {
+        targetElement.value = selectedItem[0].id;
+      }
+      matchList.remove();
+    };
+  }
 </script>
