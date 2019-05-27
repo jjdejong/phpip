@@ -135,7 +135,7 @@
     var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
     var resource = ""; // Identifies the REST resource for CRUD operations
 
-    // Ajax fill the opened modal and set global parameters
+    // Ajax fill the opened modal and process
     $("#ajaxModal").on("show.bs.modal", function(event) {
       var modalTrigger = event.relatedTarget;
       relatedUrl = modalTrigger.href;
@@ -152,7 +152,120 @@
         .then(html => {
           this.querySelector('.modal-body').innerHTML = html;
         });
+
+      ajaxModal.addEventListener('click', (e) => {
+        if (e.target.hasAttribute('data-ac')) {
+          autocompleteJJ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
+        }
+        if (e.target.id === 'createMatterSubmit') {
+          formData = new FormData(createMatterForm);
+          searchParams = new URLSearchParams(formData);
+          /*searchParams.forEach( (value, key) => {
+            if (value.length === 0) searchParams.delete(key);
+          });*/
+
+          fetch('/matter', {
+            headers: {
+              "X-Requested-With": "XMLHttpRequest",
+              "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            method: 'POST',
+            body: searchParams
+          })
+          .then(response => {
+            if (!response.ok) {
+              return response.json();
+            } else {
+              return response.text();
+            }
+          })
+          .then(data => {
+            if (data.errors) {
+              // Form validation error notification
+              Object.entries(data.errors).forEach(([key, value]) => {
+                let inputElt = createMatterForm.elements[key];
+                // "key" matches with both the element's name and id, so inputElt can contain two input elements (the hidden one with id=key and the visible one with name=key)
+                if (inputElt.length) {
+                  // If defined, inputElt contains two elements and we need the visible one (the second one)
+                  inputElt = inputElt[1];
+                }
+                inputElt.placeholder = value;
+                inputElt.classList.add('is-invalid');
+              });
+              footerAlert.innerHTML = data.message;
+              footerAlert.classList.add('alert-danger');
+            } else {
+              // Redirect to the created matter (link returned by MatterController.store())
+              location.href = data;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        };
+      });
     });
+
+
+    // Ajax reset modal to default when it is closed
+    $("#ajaxModal").on("hide.bs.modal", function(event) {
+      this.querySelector('.modal-body').innerHTML = "Ajax body placeholder";
+      this.querySelector('.modal-title').innerHTML = "Ajax title placeholder";
+      this.querySelector('.modal-dialog').className = "modal-dialog";
+      footerAlert.innerHTML = "";
+      footerAlert.classList.remove('alert-danger');
+    });
+
+    var autocompleteJJ = (searchField, dataSource, targetField) => {
+      /* "searchField" is the element receiving the user input,
+       * "dataSource" is the Ajax resource URL, and
+       * "targetField" is an (optional) input field name receiving the "id" value
+       * The Ajax resource returns a list of JSON id/value pairs, sometimes a label
+       * */
+
+      // Start by removing stray result lists that can remain when clicking erratically
+      if (tmp = document.getElementById('matchList')) tmp.remove();
+      // Create a fresh result list attached to the current element
+      searchField.insertAdjacentHTML('afterend', '<div id="matchList" class="dropdown-menu bg-light"></div>');
+      var targetElement = "",
+        items = "",
+        selectedItem = "";
+      if (targetField) {
+        // The hidden input field is supposed to be the first
+        targetElement = document.getElementsByName(targetField)[0];
+      }
+      // Get items
+      var getItems = async (term) => {
+        if (term.length > 0) {
+          let res = await fetch(dataSource + '?term=' + term);
+          items = await res.json();
+          if (items.length === 0) {
+            $('#matchList').dropdown('hide');
+          } else {
+            $('#matchList').dropdown('show');
+            let html = items.map(
+              match => `<button class="dropdown-item py-1" type="button" id="${match.id ? match.id : match.value}" data-value="${match.value}">${match.label ? match.label : match.value}</button>`
+            ).join('');
+            matchList.innerHTML = html;
+          }
+        } else {
+          $('#matchList').dropdown('hide');
+        }
+      };
+
+      searchField.addEventListener('input', () => getItems(searchField.value));
+      matchList.onclick = (e) => {
+        // Retrieve complete selected item, in case it contains more than id, value or label
+        selectedItem = items.filter((item) => {
+          return item.value === e.target.dataset.value;
+        });
+        searchField.value = selectedItem[0].value;
+        if (targetField) {
+          targetElement.value = selectedItem[0].id;
+        }
+        matchList.remove();
+      };
+    }
   </script>
 </body>
 

@@ -11,7 +11,7 @@
                             Categories
                         </div>
                         <div class="col-4">
-                            <a href="#newMatterModal" data-toggle="modal" class="btn btn-primary">Create matter</a>
+                            <a href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-remote="false" data-size="modal-sm" class="btn btn-primary" title="Create Matter">Create matter</a>
                         </div>
                     </div>
                 </div>

@@ -102,29 +102,6 @@
   });
 
 
-// Modals
-
-  // Ajax refresh various panels when a modal is closed
-  $("#ajaxModal").on("hide.bs.modal", function(event) {
-    if (resource === '/actor-pivot/') {
-      //$("#actorPanel").load("/matter/{{ $matter->id }} #actorPanel > div");
-      fetch("/matter/{{ $matter->id }}")
-        .then(response => response.text())
-        .then(html => {
-          let doc = new DOMParser().parseFromString(html, "text/html");
-          actorPanel.innerHTML = doc.getElementById('actorPanel').innerHTML;
-        });
-    } else {
-      $("#multiPanel").load("/matter/{{ $matter->id }} #multiPanel > div");
-    }
-    // Reset modal to default
-    this.querySelector('.modal-body').innerHTML = "Ajax body placeholder";
-    this.querySelector('.modal-title').innerHTML = "Ajax title placeholder";
-    this.querySelector('.modal-dialog').className = "modal-dialog";
-    footerAlert.innerHTML = "";
-    footerAlert.classList.remove('alert-danger');
-  });
-
 // Notes edition
 
   multiPanel.addEventListener('change', e => {
@@ -206,11 +183,25 @@
     }
   });
 
+  // Ajax refresh various panels when a modal is closed
+  $("#ajaxModal").on("hide.bs.modal", function(event) {
+    if (resource === '/actor-pivot/') {
+      fetch("/matter/{{ $matter->id }}")
+        .then(response => response.text())
+        .then(html => {
+          let doc = new DOMParser().parseFromString(html, "text/html");
+          actorPanel.innerHTML = doc.getElementById('actorPanel').innerHTML;
+        });
+    } else {
+      $("#multiPanel").load("/matter/{{ $matter->id }} #multiPanel > div");
+    }
+  });
+
   // Generic in-place edition of input fields
   ajaxModal.addEventListener("change", e => {
     if (e.target && e.target.matches("input.noformat")) {
       $.ajax({
-        url: resource + e.target.parentNode.parentNode.dataset.id,
+        url: resource + '/' + e.target.parentNode.parentNode.dataset.id,
         type: 'PUT',
         data: $(e.target).serialize()
       }).done(() => {

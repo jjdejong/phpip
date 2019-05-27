@@ -55,7 +55,7 @@ class MatterController extends Controller
             }
         } else {
             if ($category_code == '') {
-                $from_matter = collect(new Matter); // Create empty matter object
+                $from_matter = new Matter; // Create empty matter object to avoid undefined errors in view
             } else {
                 $ref_prefix = \App\Category::select('ref_prefix')->where('code', '=', $category_code)->first()['ref_prefix'];
                 $category=[
@@ -65,7 +65,6 @@ class MatterController extends Controller
                 ];
             }
         }
-
         return view('matter.create', compact('from_matter', 'operation', 'category'));
     }
 
