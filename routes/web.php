@@ -29,7 +29,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Matter Controller
     Route::get('matter/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\Matter::with('filing')->selectRaw('id as value, CONCAT(caseref, suffix) as label')
+        return App\Matter::with('filing')->selectRaw('id, CONCAT(caseref, suffix) as value')
                         ->where('caseref', 'like', "$term%")
                         ->take(10)->get();
     });
@@ -45,8 +45,8 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::post('matter/storeN', 'MatterController@storeN');
     Route::post('matter/clear-tasks', 'HomeController@clearTasks');
-    Route::post('matter/search', function (Request $request) {    
-        $matter_search = $request->input('matter_search'); 
+    Route::post('matter/search', function (Request $request) {
+        $matter_search = $request->input('matter_search');
         $option = $request->input('search_field');
         if ($option == "Ref") {
             $filter = array('Ref'  => $matter_search);

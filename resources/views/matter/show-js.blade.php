@@ -294,7 +294,7 @@
         }
       },
       select: function(event, ui) {
-        this.value = ui.item.value;
+        this.value = ui.item.id;
         this.blur();
       }
     });
@@ -395,6 +395,51 @@
     return false;
   });
 
+// Specific processing of the event list modal
+
+  $('#listModal').on("click", 'input[name="eventName"]', function() {
+    $(this).focus().autocomplete({
+      minLength: 2,
+      source: "/event-name/autocomplete/0",
+      select: (event, ui) => {
+        addEventForm['code'].value = ui.item.code;
+      },
+      change: (event, ui) => {
+        if (!ui.item)
+          this.value = "";
+      }
+    });
+  })
+
+  $('#listModal').on("click", "#alt_matter_id", function() {
+    $(this).autocomplete({
+      minLength: 2,
+      source: "/matter/autocomplete",
+      select: (event, ui) => {
+        addEventForm['alt_matter_id'][0].value = ui.item.id;
+      },
+      change: (event, ui) => {
+        if (!ui.item)
+          this.value = "";
+      }
+    });
+  });
+
+  $("#listModal").on("click", "#addEventSubmit", function() {
+    var request = $("#addEventForm").find("input").filter(function() {
+      return $(this).val().length > 0;
+    }).serialize(); // Filter out empty values
+    $.post('/event', request)
+      .done(() => {
+        $('#listModal').find(".modal-body").load("/matter/{{ $matter->id }}/events");
+      })
+      .fail((errors) => {
+        $.each(errors.responseJSON.errors, (key, item) => {
+          $("#addEventForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
+        });
+      });
+  });
+
 // Specific processing in the task list modal
 
   $("#listModal").on("click", "#addTaskToEvent", function() {
@@ -482,7 +527,7 @@
         }
       },
       select: function(event, ui) {
-        this.value = ui.item.value;
+        this.value = ui.item.id;
         $.ajax({
           url: '/classifier/' + $(this).closest("tr").data("classifier_id"),
           type: 'PUT',
@@ -495,8 +540,8 @@
     });
   });
 
-  $("#classifiersModal").on("shown.bs.collapse", "#addClassifierForm", function() {
-    $("#addClassifierForm").find('input[name="type"]').autocomplete({
+  $("#classifiersModal").on("click", 'input[name="type"]', function() {
+    $(this).autocomplete({
       minLength: 0,
       source: "/classifier-type/autocomplete/0",
       select: function(event, ui) {
@@ -510,9 +555,15 @@
       // Forces search with no characters upon focus
       $(this).autocomplete("search", "");
     });
-    $("#addClassifierForm").find('input[name="lnk_matter_id"]').autocomplete({
+  });
+
+  $("#classifiersModal").on("click",'#lnk_matter_id', function() {
+    $(this).autocomplete({
       minLength: 2,
       source: "/matter/autocomplete",
+      select: (event, ui) => {
+        addClassifierForm['lnk_matter_id'][0].value = ui.item.id;
+      },
       change: function(event, ui) {
         if (!ui.item)
           this.value = "";

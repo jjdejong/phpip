@@ -15,12 +15,13 @@ class EventController extends Controller {
      */
     public function store(Request $request) {
         $this->validate($request, [
-            'name' => 'required',
+            'code' => 'required',
+            'eventName' => 'required',
             'matter_id' => 'required|numeric',
             'event_date' => 'required_without:alt_matter_id|date'
         ]);
 
-        Event::create($request->except(['_token', '_method', 'name']));
+        Event::create($request->except(['_token', '_method', 'eventName']));
     }
 
     /**

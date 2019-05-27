@@ -79,7 +79,8 @@
                     <input type="text" class="form-control form-control-sm" size="10" name="value" placeholder="Value" />
                     <input type="url" class="form-control form-control-sm" size="16" name="url" placeholder="URL" />
                     <div class="ui-front">
-                      <input type="text" class="form-control form-control-sm" size="16" name="lnk_matter_id" placeholder="Linked to" />
+                      <input type="hidden" name="lnk_matter_id" value="">
+                      <input type="text" class="form-control form-control-sm" size="16" id="lnk_matter_id" placeholder="Linked to">
                     </div>
                     <div class="input-group-append">
                       <button type="button" class="btn btn-primary btn-sm" id="addClassifierSubmit">&check;</button>
