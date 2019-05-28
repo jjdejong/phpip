@@ -201,7 +201,7 @@
   ajaxModal.addEventListener("change", e => {
     if (e.target && e.target.matches("input.noformat")) {
       $.ajax({
-        url: resource + '/' + e.target.parentNode.parentNode.dataset.id,
+        url: resource + e.target.parentNode.parentNode.dataset.id,
         type: 'PUT',
         data: $(e.target).serialize()
       }).done(() => {
