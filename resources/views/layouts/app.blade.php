@@ -141,6 +141,23 @@
       element.innerHTML = await res.text();
     }
 
+    var fetchREST = async (url, method, body) => {
+      res = await fetch(url, {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        method: method,
+        body: body
+      });
+      if (res.ok) {
+        data = await res.text();
+      } else {
+        data = await res.json();
+      }
+      return data;
+    }
+
     // Ajax fill the opened modal and process
     $("#ajaxModal").on("show.bs.modal", function(event) {
       var modalTrigger = event.relatedTarget;
@@ -162,21 +179,7 @@
             if (value.length === 0) searchParams.delete(key);
           });*/
 
-          fetch('/matter', {
-            headers: {
-              "X-Requested-With": "XMLHttpRequest",
-              "X-CSRF-TOKEN": "{{ csrf_token() }}"
-            },
-            method: 'POST',
-            body: searchParams
-          })
-          .then(response => {
-            if (!response.ok) {
-              return response.json();
-            } else {
-              return response.text();
-            }
-          })
+          fetchREST('/matter', 'POST', searchParams)
           .then(data => {
             if (data.errors) {
               // Form validation error notification
@@ -214,10 +217,10 @@
       footerAlert.classList.remove('alert-danger');
     });
 
-    var autocompleteJJ = (searchField, dataSource, targetField) => {
+    var autocompleteJJ = (searchField, dataSource, targetName) => {
       /* "searchField" is the element receiving the user input,
        * "dataSource" is the Ajax resource URL, and
-       * "targetField" is an (optional) input field name receiving the "id" value
+       * "targetName" is an (optional) input field name receiving the "id" value
        * The Ajax resource returns a list of JSON id/value pairs, sometimes a label
        * */
 
@@ -228,9 +231,9 @@
       var targetElement = "",
         items = "",
         selectedItem = "";
-      if (targetField) {
+      if (targetName) {
         // The hidden input field is supposed to be the first
-        targetElement = document.getElementsByName(targetField)[0];
+        targetElement = searchField.form[targetName][0];
       }
       // Get items
       var getItems = async (term) => {
@@ -254,12 +257,12 @@
       searchField.oninput = () => getItems(searchField.value);
       matchList.onclick = (e) => {
         // Retrieve complete selected item, in case it contains more than id, value or label
-        selectedItem = items.filter((item) => {
+        selectedItem = items.find((item) => {
           return item.value === e.target.dataset.value;
         });
-        searchField.value = selectedItem[0].value;
-        if (targetField) {
-          targetElement.value = selectedItem[0].id;
+        searchField.value = selectedItem.value;
+        if (targetName) {
+          targetElement.value = selectedItem.id;
         }
         matchList.remove();
       };

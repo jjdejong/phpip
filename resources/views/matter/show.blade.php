@@ -54,15 +54,15 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       </div>
       @endforeach
       <div>
-        <a class="badge badge-pill badge-primary float-right" role="button" data-toggle="collapse" href="#addTitleForm">+</a>
+        <a class="badge badge-pill badge-primary float-right" role="button" data-toggle="collapse" href="#addTitleCollapse">+</a>
       </div>
-      <div id="addTitleForm" class="collapse">
-        <form>
+      <div id="addTitleCollapse" class="collapse">
+        <form id="addTitleForm" autocomplete="off">
           <div class="form-row">
             <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}" />
             <input type="hidden" name="type_code" />
             <div class="col-2">
-              <input type="text" class="form-control form-control-sm" name="type" placeholder="Type" autocomplete="off" />
+              <input id="type_code" type="text" class="form-control form-control-sm" name="type" placeholder="Type" autocomplete="off">
             </div>
             <div class="col-10">
               <div class="input-group">

@@ -121,7 +121,7 @@
 
   // Show the title creation form when the title panel is empty
   if (!titlePanel.querySelector('.row')) {
-    $("#addTitleForm").collapse("show");
+    $("#addTitleCollapse").collapse("show");
   }
 
   $("#titlePanel").on("keydown", ".titleItem", function(e) {
@@ -144,7 +144,7 @@
       $(this).addClass("border border-info");
   });
 
-  $("#titlePanel").on("shown.bs.collapse", "#addTitleForm", function() {
+  $("#titlePanel").on("shown.bs.collapse", "#addTitleCollapse", function() {
     $(this).find('input[name="type"]').autocomplete({
       minLength: 0,
       source: "/classifier-type/autocomplete/1",
