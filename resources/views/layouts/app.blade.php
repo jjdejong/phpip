@@ -135,6 +135,12 @@
     var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
     var resource = ""; // Identifies the REST resource for CRUD operations
 
+    // Ajax fill an element from a url returning HTML
+    var fetchInto = async (url, element) => {
+      res = await fetch(url);
+      element.innerHTML = await res.text();
+    }
+
     // Ajax fill the opened modal and process
     $("#ajaxModal").on("show.bs.modal", function(event) {
       var modalTrigger = event.relatedTarget;
@@ -142,17 +148,9 @@
       resource = modalTrigger.dataset.resource;
       if (modalTrigger.hasAttribute('data-size')) this.querySelector('.modal-dialog').classList.add(modalTrigger.dataset.size);
       this.querySelector('.modal-title').innerHTML = modalTrigger.title;
-      /*var doFetch = async (url, selector) => {
-        res = await fetch(url);
-        this.querySelector(selector).innerHTML = await res.text();
-      }
-      doFetch(relatedUrl, '.modal-body');*/
-      fetch(relatedUrl)
-        .then(response => response.text())
-        .then(html => {
-          this.querySelector('.modal-body').innerHTML = html;
-        });
+      fetchInto(relatedUrl, this.querySelector('.modal-body'));
 
+      // Process click events in the modal
       ajaxModal.addEventListener('click', (e) => {
         if (e.target.hasAttribute('data-ac')) {
           autocompleteJJ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
@@ -208,7 +206,7 @@
 
 
     // Ajax reset modal to default when it is closed
-    $("#ajaxModal").on("hide.bs.modal", function(event) {
+    $("#ajaxModal").on("hidden.bs.modal", function(event) {
       this.querySelector('.modal-body').innerHTML = "Ajax body placeholder";
       this.querySelector('.modal-title').innerHTML = "Ajax title placeholder";
       this.querySelector('.modal-dialog').className = "modal-dialog";
@@ -253,7 +251,7 @@
         }
       };
 
-      searchField.addEventListener('input', () => getItems(searchField.value));
+      searchField.oninput = () => getItems(searchField.value);
       matchList.onclick = (e) => {
         // Retrieve complete selected item, in case it contains more than id, value or label
         selectedItem = items.filter((item) => {
