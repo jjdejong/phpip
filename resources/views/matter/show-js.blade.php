@@ -176,13 +176,6 @@
 
 // Generic ajaxModal functions
 
-  // Mark a modified input field
-  document.body.addEventListener("input", e => {
-    if (e.target && e.target.matches("input.noformat, textarea")) {
-      e.target.classList.add("bg-warning");
-    }
-  });
-
   // Ajax refresh various panels when a modal is closed
   $("#ajaxModal").on("hide.bs.modal", function(event) {
     if (resource === '/actor-pivot/') {
@@ -194,24 +187,6 @@
         });
     } else {
       $("#multiPanel").load("/matter/{{ $matter->id }} #multiPanel > div");
-    }
-  });
-
-  // Generic in-place edition of input fields
-  ajaxModal.addEventListener("change", e => {
-    if (e.target && e.target.matches("input.noformat")) {
-      $.ajax({
-        url: resource + e.target.parentNode.parentNode.dataset.id,
-        type: 'PUT',
-        data: $(e.target).serialize()
-      }).done(() => {
-        $("#ajaxModal").find(".modal-body").load(relatedUrl);
-        $("#footerAlert").removeClass("alert-danger").html("");
-      }).fail((errors) => {
-        $.each(errors.responseJSON.errors, (key, item) => {
-          $("#footerAlert").html(item).addClass("alert-danger");
-        });
-      });
     }
   });
 

@@ -217,6 +217,35 @@
       footerAlert.classList.remove('alert-danger');
     });
 
+    // Mark a modified input field
+    app.addEventListener("input", e => {
+      if (e.target && e.target.matches("input.noformat, textarea")) {
+        e.target.classList.add("bg-warning");
+      }
+    });
+
+    // Generic in-place edition of input fields
+    ajaxModal.addEventListener("change", e => {
+      if (e.target && e.target.matches("input.noformat")) {
+        let params = new URLSearchParams();
+        params.append(e.target.name, e.target.value);
+        fetchREST(resource + e.target.parentNode.parentNode.dataset.id, 'PUT', params)
+        .then(data => {
+          if (data.errors) {
+            footerAlert.innerHTML = Object.values(data.errors)[0];
+            footerAlert.classList.add('alert-danger');
+          } else {
+            fetchInto(relatedUrl, ajaxModal.querySelector(".modal-body"));
+            footerAlert.classList.remove("alert-danger");
+            footerAlert.innerHTML = "";
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      }
+    });
+
     var autocompleteJJ = (searchField, dataSource, targetName) => {
       /* "searchField" is the element receiving the user input,
        * "dataSource" is the Ajax resource URL, and
