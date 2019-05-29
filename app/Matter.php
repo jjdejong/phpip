@@ -410,7 +410,7 @@ class Matter extends Model
                 $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'applnk.matter_id')->where([
                     ['applnk.role', 'APP'],
                     ['applnk.display_order', 1]
-                ])
+                ]);
             }
         )
         ->leftJoin(DB::raw('matter_actor_lnk dellnk
