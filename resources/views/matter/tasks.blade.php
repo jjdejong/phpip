@@ -2,6 +2,7 @@
     <thead class="thead-light">
         <tr>
             <th>Event/Tasks</th>
+            <th></th>
             <th>Due date</th>
             <th>OK</th>
             <th>Date</th>
@@ -17,8 +18,8 @@
     @foreach ( $events as $event )
     <tbody>
         <tr class="reveal-hidden">
-            <td colspan="11">
-                <span style="position: relative; left: -10px; margin-right: 10px;">{{ $event->info->name . ": " . $event->event_date }}</span>
+            <td colspan="12">
+                <span style="position: relative; margin-right: 10px;">{{ $event->info->name . ": " . $event->event_date }}</span>
                 <a href="javascript:void(0);" id="addTaskToEvent" class="hidden-action" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
                     &CirclePlus;
                 </a>
@@ -30,7 +31,10 @@
         @foreach ($event->tasks as $task)
         <tr class="reveal-hidden {{ $task->done ? 'text-success' : 'text-danger' }}" data-id="{{ $task->id }}">
             <td nowrap>
-                {{ $task->info->name }} <input type="text" class="form-control noformat" name="detail" value="{{ $task->detail }}">
+                <span style="position: relative; left: 10px; margin-right: 10px;">{{ $task->info->name }}</span>
+            </td>
+            <td>
+                <input type="text" class="form-control noformat" name="detail" value="{{ $task->detail }}">
             </td>
             <td>
                 <input type="date" class="form-control noformat" name="due_date" value="{{ $task->due_date }}">
