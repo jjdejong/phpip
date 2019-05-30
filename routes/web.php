@@ -137,11 +137,12 @@ Route::group(['middleware' => 'auth'], function () {
                         ->where('type', 'like', "$term%")->get();
     });
 
+    /* DUPLICATE - use /event-name/autocomplete instead
     Route::get('event/autocomplete', function (Request $request) {
         $term = $request->input('term');
         return App\EventName::select('name as label', 'code as value')
                         ->where('name', 'like', "$term%")->get();
-    });
+    });*/
 
     Route::resource('matter', 'MatterController');
     Route::apiResource('task', 'TaskController');
