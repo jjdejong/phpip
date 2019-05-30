@@ -29,7 +29,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Matter Controller
     Route::get('matter/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\Matter::with('filing')->selectRaw('id, CONCAT(caseref, suffix) as value')
+        return App\Matter::with('filing')->selectRaw('id as `key`, CONCAT(caseref, suffix) as value')
                         ->where('caseref', 'like', "$term%")
                         ->take(10)->get();
     });
@@ -65,12 +65,12 @@ Route::group(['middleware' => 'auth'], function () {
         $term = $request->input('term');
         $newref = App\Matter::where('caseref', 'like', "$term%")->max('caseref');
         $newref++;
-        return [['id' => 0, 'value' => $newref ]];
+        return [['key' => 0, 'value' => $newref ]];
     });
 
     Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
         $term = $request->input('term');
-        $results = App\EventName::select('name as value', 'code')
+        $results = App\EventName::select('name as value', 'code as key')
                 ->where('name', 'like', "%$term%")
                 ->where('is_task', $is_task);
         return $results->take(10)->get();
@@ -95,7 +95,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('user/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\User::select('name as label', 'login as value')
+        return App\User::select('name as value', 'login as key')
                         ->whereNotNull('login')
                         ->where('name', 'like', "%$term%")
                         ->take(10)->get();
@@ -120,20 +120,20 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('country/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        $list = App\Country::select('name as value', 'iso as id')
+        $list = App\Country::select('name as value', 'iso as key')
                         ->where('name', 'like', "$term%")->get();
         return $list;
     });
 
     Route::get('category/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\Category::select('category as value', 'code as id')
+        return App\Category::select('category as value', 'code as key')
                         ->where('category', 'like', "$term%")->get();
     });
 
     Route::get('type/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\Type::select('type as value', 'code as id')
+        return App\Type::select('type as value', 'code as key')
                         ->where('type', 'like', "$term%")->get();
     });
 

@@ -42,7 +42,8 @@
   <div class="form-group row">
     <label for="responsible" class="col-3 col-form-label font-weight-bold">Responsible</label>
     <div class="col-9">
-      <input type="text" class="form-control" id="responsible" data-ac="/user/autocomplete" name="responsible" value="{{ $from_matter->responsible ?? Auth::user()->login }}" autocomplete="off">
+      <input type="hidden" name="responsible" value="{{ $from_matter->responsible ?? Auth::user()->login }}">
+      <input type="text" class="form-control" id="responsible" data-ac="/user/autocomplete" data-actarget="responsible" placeholder="{{ $from_matter->responsible ?? Auth::user()->name }}" autocomplete="off">
     </div>
   </div>
 

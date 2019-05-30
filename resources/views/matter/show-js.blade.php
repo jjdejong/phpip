@@ -190,7 +190,7 @@
     }
   });
 
-  $('#ajaxModal').on("click", 'input[name="assigned_to"].noformat', function() {
+  /*$('#ajaxModal').on("click", 'input[name="assigned_to"].noformat', function() {
     $(this).autocomplete({
       minLength: 2,
       source: "/user/autocomplete",
@@ -200,11 +200,11 @@
         }
       },
       select: function(event, ui) {
-        this.value = ui.item.value;
+        this.value = ui.item.key;
         this.blur(); // Removing focus causes the "change" event to trigger and submit the value via the default functionality attached to the "input.noformat" fields
       }
     });
-  });
+  });*/
 
   $('#ajaxModal').on("click", 'input[name="actor_id"].noformat, input[name="company_id"].noformat', function() {
     $(this).autocomplete({
@@ -237,7 +237,7 @@
     });
   });
 
-  $('#ajaxModal').on("click", 'input[name="alt_matter_id"].noformat', function() {
+  /*$('#ajaxModal').on("click", 'input[name="alt_matter_id"].noformat', function() {
     $(this).autocomplete({
       minLength: 2,
       source: "/matter/autocomplete",
@@ -247,15 +247,15 @@
         }
       },
       select: function(event, ui) {
-        this.value = ui.item.id;
+        this.value = ui.item.key;
         this.blur();
       }
     });
-  });
+  });*/
 
   // Specific to Advanced matter edition
 
-  $('#ajaxModal').on("click", 'input[name="origin"],input[name="country"]', function() {
+  /*$('#ajaxModal').on("click", 'input[name="origin"],input[name="country"]', function() {
     $(this).autocomplete({
       minLength: 1,
       source: "/country/autocomplete",
@@ -276,7 +276,7 @@
         });
       }
     });
-  });
+  });*/
 
   $('#ajaxModal').on("click", 'input[name="parent_id"],input[name="container_id"]', function() {
     $(this).autocomplete({
@@ -301,7 +301,7 @@
     });
   });
 
-  $('#ajaxModal').on("click", 'input[name="responsible"]', function() {
+  /*$('#ajaxModal').on("click", 'input[name="responsible"]', function() {
     $(this).autocomplete({
       minLength: 1,
       source: "/user/autocomplete",
@@ -322,7 +322,7 @@
         });
       }
     });
-  });
+  });*/
 
   $("#ajaxModal").on("click", "#deleteMatter", function() {
     $.ajax({
@@ -350,7 +350,7 @@
 
 // Specific processing of the event list modal
 
-  $('#ajaxModal').on("click", 'input[name="eventName"]', function() {
+  /*$('#ajaxModal').on("click", 'input[name="eventName"]', function() {
     $(this).focus().autocomplete({
       minLength: 2,
       source: "/event-name/autocomplete/0",
@@ -362,9 +362,9 @@
           this.value = "";
       }
     });
-  })
+  })*/
 
-  $('#ajaxModal').on("click", "#alt_matter_id", function() {
+  /*$('#ajaxModal').on("click", "#alt_matter_id", function() {
     $(this).autocomplete({
       minLength: 2,
       source: "/matter/autocomplete",
@@ -376,7 +376,7 @@
           this.value = "";
       }
     });
-  });
+  });*/
 
   $("#ajaxModal").on("click", "#addEventSubmit", function() {
     var request = $("#addEventForm").find("input").filter(function() {

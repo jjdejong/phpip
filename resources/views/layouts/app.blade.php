@@ -158,7 +158,7 @@
       return data;
     }
 
-    // Ajax fill the opened modal and process
+    // Ajax fill the opened modal and process events
     $("#ajaxModal").on("show.bs.modal", function(event) {
       var modalTrigger = event.relatedTarget;
       relatedUrl = modalTrigger.href;
@@ -170,7 +170,7 @@
       // Process click events in the modal
       ajaxModal.addEventListener('click', (e) => {
         if (e.target.hasAttribute('data-ac')) {
-          autocompleteJJ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
+          autocompleteJQ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
         }
         if (e.target.id === 'createMatterSubmit') {
           formData = new FormData(createMatterForm);
@@ -274,7 +274,7 @@
           } else {
             $('#matchList').dropdown('show');
             let html = items.map(
-              match => `<button class="dropdown-item py-1" type="button" id="${match.id ? match.id : match.value}" data-value="${match.value}">${match.label ? match.label : match.value}</button>`
+              match => `<button class="dropdown-item py-1" type="button" id="${match.key ? match.key : match.value}" data-value="${match.value}">${match.label ? match.label : match.value}</button>`
             ).join('');
             matchList.innerHTML = html;
           }
@@ -289,12 +289,44 @@
         selectedItem = items.find((item) => {
           return item.value === e.target.dataset.value;
         });
-        searchField.value = selectedItem.value;
         if (targetName) {
-          targetElement.value = selectedItem.id;
+          // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
+          searchField.value = selectedItem.value;
+          targetElement.value = selectedItem.key;
+        } else {
+          // Used for content editable fields where the same field is used for sending the id to the server
+          searchField.value = selectedItem.key;
         }
         matchList.remove();
       };
+    }
+
+    var autocompleteJQ = (searchField, dataSource, targetName) => {
+      let targetElement = "";
+      if (targetName) {
+        // The hidden input field is supposed to be the first
+        targetElement = searchField.form[targetName][0];
+      }
+      $(searchField).autocomplete({
+        minLength: 2,
+        source: dataSource,
+        change: function(event, ui) {
+          if (!ui.item) {
+            searchField.value = "";
+          }
+        },
+        select: function(event, ui) {
+          if (targetName) {
+            // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
+            searchField.value = ui.item.value;
+            targetElement.value = ui.item.key;
+          } else {
+            // Used for content editable fields where the same field is used for sending the id to the server
+            searchField.value = ui.item.key;
+          }
+          searchField.blur(); // Removing focus causes the "change" event to trigger and submit the value via the default functionality attached to the "input.noformat" fields
+        }
+      });
     }
   </script>
 </body>
