@@ -5,28 +5,28 @@
     <label for="category" class="col-3 col-form-label font-weight-bold">Category</label>
     <div class="col-9">
       <input type="hidden" name="category_code" value="{{ $from_matter->category_code ?? ( $category['code'] ?? '') }}" />
-      <input id="category_code" type="text" class="form-control" data-ac="/category/autocomplete" data-actarget="category_code" value="{{ $category['name'] ?? ( $from_matter->category->category ??  '' ) }}" autocomplete="off">
+      <input type="text" class="form-control" data-ac="/category/autocomplete" data-actarget="category_code" value="{{ $category['name'] ?? ( $from_matter->category->category ??  '' ) }}" autocomplete="off">
     </div>
   </div>
   <div class="form-group row">
     <label for="country" class="col-3 col-form-label font-weight-bold">Country</label>
     <div class="col-9">
       <input type="hidden" name="country" value="{{ $from_matter->country ?? '' }}" />
-      <input id="country" type="text" class="form-control" data-ac="/country/autocomplete" data-actarget="country" value="{{ $from_matter->countryInfo->name ?? '' }}" autocomplete="off">
+      <input type="text" class="form-control" data-ac="/country/autocomplete" data-actarget="country" value="{{ $from_matter->countryInfo->name ?? '' }}" autocomplete="off">
     </div>
   </div>
   <div class="form-group row">
     <label for="origin" class="col-3 col-form-label">Origin</label>
     <div class="col-9">
       <input type="hidden" name="origin" value="{{ $from_matter->origin ?? '' }}" />
-      <input id="origin" type="text" class="form-control" data-ac="/country/autocomplete" data-actarget="origin" value="{{ $from_matter->originInfo->name ?? '' }}" autocomplete="off">
+      <input type="text" class="form-control" data-ac="/country/autocomplete" data-actarget="origin" value="{{ $from_matter->originInfo->name ?? '' }}" autocomplete="off">
     </div>
   </div>
   <div class="form-group row">
     <label for="type_code" class="col-3 col-form-label">Type</label>
     <div class="col-9">
       <input type="hidden" name="type_code" value="{{ $from_matter->type_code ?? '' }}" />
-      <input id="type_code" type="text" class="form-control" data-ac="/type/autocomplete" data-actarget="type_code" value="{{ $from_matter->type->type ?? '' }}" autocomplete="off">
+      <input type="text" class="form-control" data-ac="/type/autocomplete" data-actarget="type_code" value="{{ $from_matter->type->type ?? '' }}" autocomplete="off">
     </div>
   </div>
   <div class="form-group row">
@@ -43,7 +43,7 @@
     <label for="responsible" class="col-3 col-form-label font-weight-bold">Responsible</label>
     <div class="col-9">
       <input type="hidden" name="responsible" value="{{ $from_matter->responsible ?? Auth::user()->login }}">
-      <input type="text" class="form-control" id="responsible" data-ac="/user/autocomplete" data-actarget="responsible" placeholder="{{ $from_matter->responsible ?? Auth::user()->name }}" autocomplete="off">
+      <input type="text" class="form-control" data-ac="/user/autocomplete" data-actarget="responsible" placeholder="{{ $from_matter->responsible ?? Auth::user()->name }}" autocomplete="off">
     </div>
   </div>
 

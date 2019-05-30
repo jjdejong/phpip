@@ -77,10 +77,10 @@
         <td colspan="11">
             <form id="addTaskForm" class="form-inline">
                 <input type="hidden" name="trigger_id" value="" id="trigger_id">
-                <input type="hidden" name="code" value="" id="task_code">
                 <div class="input-group">
                     <div class="ui-front">
-                        <input type="text" class="form-control form-control-sm" size="12" name="name" placeholder="Name">
+                        <input type="hidden" name="code" value="">
+                        <input type="text" class="form-control form-control-sm" size="12" name="name" placeholder="Task" data-ac="/event-name/autocomplete/1" data-actarget="code">
                     </div>
                     <input type="text" class="form-control form-control-sm" size="16" name="detail" placeholder="Detail">
                     <div class="ui-front">
@@ -91,7 +91,8 @@
                     <input type="text" class="form-control form-control-sm" size="3" name="currency" placeholder="EUR">
                     <input type="text" class="form-control form-control-sm" size="6" name="time_spent" placeholder="Time">
                     <div class="ui-front">
-                        <input type="text" class="form-control form-control-sm" size="10" name="assigned_to" placeholder="Assigned to">
+                        <input type="hidden" name="assigned_to" value="">
+                        <input type="text" class="form-control form-control-sm" size="10" placeholder="Assigned to" data-ac="/user/autocomplete" data-actarget="assigned_to">
                     </div>
                     <input type="text" class="form-control form-control-sm" size="20" name="notes" placeholder="Notes">
                     <div class="input-group-append">

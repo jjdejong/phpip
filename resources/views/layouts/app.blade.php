@@ -262,7 +262,7 @@
         selectedItem = "";
       if (targetName) {
         // The hidden input field is supposed to be the first
-        targetElement = searchField.form[targetName][0];
+        targetElement = searchField.form[targetName];
       }
       // Get items
       var getItems = async (term) => {
@@ -305,7 +305,7 @@
       let targetElement = "";
       if (targetName) {
         // The hidden input field is supposed to be the first
-        targetElement = searchField.form[targetName][0];
+        targetElement = searchField.form[targetName];
       }
       $(searchField).autocomplete({
         minLength: 2,

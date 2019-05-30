@@ -19,14 +19,14 @@
           <div class="input-group">
             <div class="ui-front">
               <input type="hidden" name="code" value="">
-              <input type="text" class="form-control form-control-sm" id="code" name="eventName" data-ac="/event-name/autocomplete/0" data-actarget="code">
+              <input type="text" class="form-control form-control-sm" name="eventName" data-ac="/event-name/autocomplete/0" data-actarget="code">
               <input type="date" class="form-control form-control-sm" name="event_date">
             </div>
             <input type="text" class="form-control form-control-sm" name="detail">
             <input type="text" class="form-control form-control-sm" name="notes">
             <div class="ui-front">
               <input type="hidden" name="alt_matter_id" value="">
-              <input type="text" class="form-control form-control-sm" id="alt_matter_id" data-ac="/matter/autocomplete" data-actarget="alt_matter_id">
+              <input type="text" class="form-control form-control-sm" data-ac="/matter/autocomplete" data-actarget="alt_matter_id">
             </div>
             <div class="input-group-append">
               <button type="button" class="btn btn-primary btn-sm" id="addEventSubmit">&check;</button>

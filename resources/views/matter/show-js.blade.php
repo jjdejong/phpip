@@ -190,22 +190,6 @@
     }
   });
 
-  /*$('#ajaxModal').on("click", 'input[name="assigned_to"].noformat', function() {
-    $(this).autocomplete({
-      minLength: 2,
-      source: "/user/autocomplete",
-      change: function(event, ui) {
-        if (!ui.item) {
-          this.value = "";
-        }
-      },
-      select: function(event, ui) {
-        this.value = ui.item.key;
-        this.blur(); // Removing focus causes the "change" event to trigger and submit the value via the default functionality attached to the "input.noformat" fields
-      }
-    });
-  });*/
-
   $('#ajaxModal').on("click", 'input[name="actor_id"].noformat, input[name="company_id"].noformat', function() {
     $(this).autocomplete({
       minLength: 2,
@@ -237,23 +221,7 @@
     });
   });
 
-  /*$('#ajaxModal').on("click", 'input[name="alt_matter_id"].noformat', function() {
-    $(this).autocomplete({
-      minLength: 2,
-      source: "/matter/autocomplete",
-      change: function(event, ui) {
-        if (!ui.item) {
-          this.value = "";
-        }
-      },
-      select: function(event, ui) {
-        this.value = ui.item.key;
-        this.blur();
-      }
-    });
-  });*/
-
-  // Specific to Advanced matter edition
+    // Specific to Advanced matter edition
 
   /*$('#ajaxModal').on("click", 'input[name="origin"],input[name="country"]', function() {
     $(this).autocomplete({
@@ -398,7 +366,7 @@
   $("#ajaxModal").on("click", "#addTaskToEvent", function() {
     this.parentNode.parentNode.parentNode.insertAdjacentHTML('beforeend', addTaskFormTemplate.innerHTML);
     addTaskForm['trigger_id'].value = this.dataset.event_id;
-    $("#addTaskForm").find('input[name="name"]').focus().autocomplete({
+    /*$("#addTaskForm").find('input[name="name"]').focus().autocomplete({
       minLength: 2,
       source: "/event-name/autocomplete/1",
       select: function(event, ui) {
@@ -416,7 +384,7 @@
         if (!ui.item)
           this.value = "";
       }
-    });
+    });*/
   });
 
   $("#ajaxModal").on("click", "#addTaskSubmit", function() {
