@@ -547,7 +547,7 @@
 
 //  Generate summary and copy
 
-  $("#summaryModal").on("click", "#sumButton", function(event) {
+  $("#ajaxModal").on("click", "#sumButton", function(event) {
     /* write to the clipboard now */
     //var text = document.getElementById("tocopy").textContent;
     var node = document.getElementById("tocopy")

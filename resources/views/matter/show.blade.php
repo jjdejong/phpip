@@ -366,17 +366,19 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                     <a class="font-weight-bold badge badge-primary"
                         href="/matter/{{ $matter->id }}/description/en"
                         data-toggle="modal"
-                        data-target="#summaryModal"
+                        data-target="#ajaxModal"
                         data-remote="false"
                         data-resource="/event"
+                        data-size="modal-lg" 
                         title="Copy a summary in English">
                         &boxbox; EN
                     </a>
                     <a class="font-weight-bold badge badge-primary"
                         href="/matter/{{ $matter->id }}/description/fr"
                         data-toggle="modal"
-                        data-target="#summaryModal"
+                        data-target="#ajaxModal"
                         data-remote="false"
+                        data-size="modal-lg" 
                         data-resource="/event"
                         title="Copy a summary in French">
                         &boxbox; FR
