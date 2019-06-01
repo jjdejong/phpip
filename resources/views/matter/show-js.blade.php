@@ -290,7 +290,7 @@
 // Specific processing in the task list modal
 
   $("#ajaxModal").on("click", "#addTaskToEvent", function() {
-    this.parentNode.parentNode.parentNode.insertAdjacentHTML('beforeend', addTaskFormTemplate.innerHTML);
+    this.closest('tbody').insertAdjacentHTML('beforeend', addTaskFormTemplate.innerHTML);
     addTaskForm['trigger_id'].value = this.dataset.event_id;
   });
 

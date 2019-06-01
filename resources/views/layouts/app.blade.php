@@ -133,9 +133,8 @@
   @yield('script')
   <script>
     var relatedUrl = "", // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
-      resource = "", // Identifies the REST resource for CRUD operations
-      currentModal = classifiersModal; // Initialize with an existing modal to avoid undefined errors - will be overwritten when necessary
-      
+      resource = ""; // Identifies the REST resource for CRUD operations
+
     // Ajax fill an element from a url returning HTML
     var fetchInto = async (url, element) => {
       res = await fetch(url);
@@ -163,7 +162,6 @@
     // Ajax fill the opened modal and process events within
     $(".modal").on("show.bs.modal", function(event) {
       var modalTrigger = event.relatedTarget;
-      currentModal = this;
       if (this.id === 'ajaxModal') {
         relatedUrl = modalTrigger.href;
         this.querySelector('.modal-title').innerHTML = modalTrigger.title;
@@ -204,8 +202,29 @@
           });
         };
       });
-    });
 
+      // Generic in-place edition of input fields in a modal
+      this.addEventListener("change", e => {
+        if (e.target && e.target.matches("input.noformat")) {
+          let params = new URLSearchParams();
+          params.append(e.target.name, e.target.value);
+          fetchREST(resource + e.target.closest('tr').dataset.id, 'PUT', params)
+          .then(data => {
+            if (data.errors) {
+              footerAlert.innerHTML = Object.values(data.errors)[0];
+              footerAlert.classList.add('alert-danger');
+            } else {
+              fetchInto(relatedUrl, this.querySelector(".modal-body"));
+              footerAlert.classList.remove("alert-danger");
+              footerAlert.innerHTML = "";
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        }
+      });
+    });
 
     // Reset ajaxModal to default when it is closed
     $("#ajaxModal").on("hidden.bs.modal", function(event) {
@@ -222,29 +241,6 @@
         e.target.classList.add("bg-warning");
       }
     });
-
-    // Generic in-place edition of input fields
-    app.addEventListener("change", e => {
-      if (e.target && e.target.matches("input.noformat")) {
-        let params = new URLSearchParams();
-        params.append(e.target.name, e.target.value);
-        fetchREST(resource + e.target.closest('tr').dataset.id, 'PUT', params)
-        .then(data => {
-          if (data.errors) {
-            footerAlert.innerHTML = Object.values(data.errors)[0];
-            footerAlert.classList.add('alert-danger');
-          } else {
-            fetchInto(relatedUrl, currentModal.querySelector(".modal-body"));
-            footerAlert.classList.remove("alert-danger");
-            footerAlert.innerHTML = "";
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-      }
-    });
-
 
     /* Custom autocomplete function using native JS
      * "searchField" is the element receiving the user input,
