@@ -86,7 +86,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('classifier-type/autocomplete/{main_display}', function (Request $request, $main_display) {
         $term = $request->input('term');
-        $results = App\ClassifierType::select('type as value', 'code')
+        $results = App\ClassifierType::select('type as value', 'code as key')
                 ->where('type', 'like', "%$term%")
                 ->where('main_display', $main_display)
                 ->orderBy('type');

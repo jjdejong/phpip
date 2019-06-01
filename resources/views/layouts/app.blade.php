@@ -132,8 +132,9 @@
   </div>
   @yield('script')
   <script>
-    var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
-    var resource = ""; // Identifies the REST resource for CRUD operations
+    var relatedUrl = "", // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
+      resource = "", // Identifies the REST resource for CRUD operations
+      currentModal = classifiersModal; // Initialize with an existing modal to avoid undefined errors - will be overwritten when necessary
 
     // Ajax fill an element from a url returning HTML
     var fetchInto = async (url, element) => {
@@ -141,6 +142,7 @@
       element.innerHTML = await res.text();
     }
 
+    // Perform REST operations with native JS
     var fetchREST = async (url, method, body) => {
       res = await fetch(url, {
         headers: {
@@ -158,26 +160,28 @@
       return data;
     }
 
-    // Ajax fill the opened modal and process events
-    $("#ajaxModal").on("show.bs.modal", function(event) {
+    // Ajax fill the opened modal and process events within
+    $(".modal").on("show.bs.modal", function(event) {
       var modalTrigger = event.relatedTarget;
+      currentModal = this;
+      if (this.id === 'ajaxModal') {
       relatedUrl = modalTrigger.href;
-      resource = modalTrigger.dataset.resource;
-      if (modalTrigger.hasAttribute('data-size')) this.querySelector('.modal-dialog').classList.add(modalTrigger.dataset.size);
       this.querySelector('.modal-title').innerHTML = modalTrigger.title;
+        if (modalTrigger.hasAttribute('data-size')) this.querySelector('.modal-dialog').classList.add(modalTrigger.dataset.size);
       fetchInto(relatedUrl, this.querySelector('.modal-body'));
+      }
+      resource = modalTrigger.dataset.resource;
 
       // Process click events in the modal
-      ajaxModal.addEventListener('click', (e) => {
+      this.addEventListener('click', (e) => {
         if (e.target.hasAttribute('data-ac')) {
+          // Attach autocompletion
           autocompleteJQ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
         }
+
         if (e.target.id === 'createMatterSubmit') {
           formData = new FormData(createMatterForm);
           searchParams = new URLSearchParams(formData);
-          /*searchParams.forEach( (value, key) => {
-            if (value.length === 0) searchParams.delete(key);
-          });*/
 
           fetchREST('/matter', 'POST', searchParams)
           .then(data => {
@@ -185,11 +189,6 @@
               // Form validation error notification
               Object.entries(data.errors).forEach(([key, value]) => {
                 let inputElt = createMatterForm.elements[key];
-                // "key" matches with both the element's name and id, so inputElt can contain two input elements (the hidden one with id=key and the visible one with name=key)
-                if (inputElt.length) {
-                  // If defined, inputElt contains two elements and we need the visible one (the second one)
-                  inputElt = inputElt[1];
-                }
                 inputElt.placeholder = value;
                 inputElt.classList.add('is-invalid');
               });
@@ -208,7 +207,7 @@
     });
 
 
-    // Ajax reset modal to default when it is closed
+    // Reset ajaxModal to default when it is closed
     $("#ajaxModal").on("hidden.bs.modal", function(event) {
       this.querySelector('.modal-body').innerHTML = "Ajax body placeholder";
       this.querySelector('.modal-title').innerHTML = "Ajax title placeholder";
@@ -218,24 +217,24 @@
     });
 
     // Mark a modified input field
-    app.addEventListener("input", e => {
+    currentModal.addEventListener("input", e => {
       if (e.target && e.target.matches("input.noformat, textarea")) {
         e.target.classList.add("bg-warning");
       }
     });
 
     // Generic in-place edition of input fields
-    ajaxModal.addEventListener("change", e => {
+    currentModal.addEventListener("change", e => {
       if (e.target && e.target.matches("input.noformat")) {
         let params = new URLSearchParams();
         params.append(e.target.name, e.target.value);
-        fetchREST(resource + e.target.parentNode.parentNode.dataset.id, 'PUT', params)
+        fetchREST(resource + e.target.closest('tr').dataset.id, 'PUT', params)
         .then(data => {
           if (data.errors) {
             footerAlert.innerHTML = Object.values(data.errors)[0];
             footerAlert.classList.add('alert-danger');
           } else {
-            fetchInto(relatedUrl, ajaxModal.querySelector(".modal-body"));
+            fetchInto(relatedUrl, currentModal.querySelector(".modal-body"));
             footerAlert.classList.remove("alert-danger");
             footerAlert.innerHTML = "";
           }
@@ -246,13 +245,14 @@
       }
     });
 
-    var autocompleteJJ = (searchField, dataSource, targetName) => {
-      /* "searchField" is the element receiving the user input,
+
+    /* Custom autocomplete function using native JS
+     * "searchField" is the element receiving the user input,
        * "dataSource" is the Ajax resource URL, and
        * "targetName" is an (optional) input field name receiving the "id" value
-       * The Ajax resource returns a list of JSON id/value pairs, sometimes a label
+     * The Ajax resource returns a list of JSON key/value pairs, sometimes a label and other data
        * */
-
+    var autocompleteJJ = (searchField, dataSource, targetName) => {
       // Start by removing stray result lists that can remain when clicking erratically
       if (tmp = document.getElementById('matchList')) tmp.remove();
       // Create a fresh result list attached to the current element

@@ -223,29 +223,6 @@
 
     // Specific to Advanced matter edition
 
-  /*$('#ajaxModal').on("click", 'input[name="origin"],input[name="country"]', function() {
-    $(this).autocomplete({
-      minLength: 1,
-      source: "/country/autocomplete",
-      change: function(event, ui) {
-        if (!ui.item) {
-          this.value = "";
-        }
-      },
-      select: function(event, ui) {
-        this.value = ui.item.id;
-        $.ajax({
-          url: resource + $(this).closest("card").data("id"),
-          type: 'PUT',
-          data: $(this).serialize()
-        }).done(function() {
-          $("#ajaxModal").find(".modal-body").load(relatedUrl);
-          $("#footerAlert").removeClass("alert-danger").html("");
-        });
-      }
-    });
-  });*/
-
   $('#ajaxModal').on("click", 'input[name="parent_id"],input[name="container_id"]', function() {
     $(this).autocomplete({
       minLength: 1,
@@ -268,29 +245,6 @@
       }
     });
   });
-
-  /*$('#ajaxModal').on("click", 'input[name="responsible"]', function() {
-    $(this).autocomplete({
-      minLength: 1,
-      source: "/user/autocomplete",
-      change: function(event, ui) {
-        if (!ui.item) {
-          this.value = "";
-        }
-      },
-      select: function(event, ui) {
-        this.value = ui.item.value;
-        $.ajax({
-          url: resource + $(this).closest("card").data("id"),
-          type: 'PUT',
-          data: $(this).serialize()
-        }).done(function() {
-          $("#ajaxModal").find(".modal-body").load(relatedUrl);
-          $("#footerAlert").removeClass("alert-danger").html("");
-        });
-      }
-    });
-  });*/
 
   $("#ajaxModal").on("click", "#deleteMatter", function() {
     $.ajax({
@@ -318,34 +272,6 @@
 
 // Specific processing of the event list modal
 
-  /*$('#ajaxModal').on("click", 'input[name="eventName"]', function() {
-    $(this).focus().autocomplete({
-      minLength: 2,
-      source: "/event-name/autocomplete/0",
-      select: (event, ui) => {
-        addEventForm['code'].value = ui.item.code;
-      },
-      change: (event, ui) => {
-        if (!ui.item)
-          this.value = "";
-      }
-    });
-  })*/
-
-  /*$('#ajaxModal').on("click", "#alt_matter_id", function() {
-    $(this).autocomplete({
-      minLength: 2,
-      source: "/matter/autocomplete",
-      select: (event, ui) => {
-        addEventForm['alt_matter_id'][0].value = ui.item.id;
-      },
-      change: (event, ui) => {
-        if (!ui.item)
-          this.value = "";
-      }
-    });
-  });*/
-
   $("#ajaxModal").on("click", "#addEventSubmit", function() {
     var request = $("#addEventForm").find("input").filter(function() {
       return $(this).val().length > 0;
@@ -366,25 +292,6 @@
   $("#ajaxModal").on("click", "#addTaskToEvent", function() {
     this.parentNode.parentNode.parentNode.insertAdjacentHTML('beforeend', addTaskFormTemplate.innerHTML);
     addTaskForm['trigger_id'].value = this.dataset.event_id;
-    /*$("#addTaskForm").find('input[name="name"]').focus().autocomplete({
-      minLength: 2,
-      source: "/event-name/autocomplete/1",
-      select: function(event, ui) {
-        $("#addTaskForm").find('input[name="code"]').val(ui.item.code);
-      },
-      change: function(event, ui) {
-        if (!ui.item)
-          this.value = "";
-      }
-    });
-    $("#addTaskForm").find('input[name="assigned_to"]').autocomplete({
-      minLength: 2,
-      source: "/user/autocomplete",
-      change: function(event, ui) {
-        if (!ui.item)
-          this.value = "";
-      }
-    });*/
   });
 
   $("#ajaxModal").on("click", "#addTaskSubmit", function() {
@@ -423,7 +330,7 @@
 
 // Classifiers modal processing
 
-  $('#classifiersModal').on("change", "input.noformat", function(e) {
+  /*$('#classifiersModal').on("change", "input.noformat", function(e) {
     $.ajax({
       url: '/classifier/' + $(this).closest("tr").data("classifier_id"),
       type: 'PUT',
@@ -436,9 +343,9 @@
         $("#classifiersModal").find(".modal-footer .alert").html(item).addClass('alert-danger');
       });
     });
-  });
+  });*/
 
-  $('#classifiersModal').on("click", 'input[name="lnk_matter_id"].noformat', function() {
+  /*$('#classifiersModal').on("click", 'input[name="lnk_matter_id"].noformat', function() {
     $(this).autocomplete({
       minLength: 2,
       source: "/matter/autocomplete",
@@ -459,9 +366,9 @@
         });
       }
     });
-  });
+  });*/
 
-  $("#classifiersModal").on("click", 'input[name="type"]', function() {
+  /*$("#classifiersModal").on("click", 'input[name="type"]', function() {
     $(this).autocomplete({
       minLength: 0,
       source: "/classifier-type/autocomplete/0",
@@ -476,9 +383,9 @@
       // Forces search with no characters upon focus
       $(this).autocomplete("search", "");
     });
-  });
+  });*/
 
-  $("#classifiersModal").on("click",'#lnk_matter_id', function() {
+  /*$("#classifiersModal").on("click",'#lnk_matter_id', function() {
     $(this).autocomplete({
       minLength: 2,
       source: "/matter/autocomplete",
@@ -490,7 +397,7 @@
           this.value = "";
       }
     });
-  });
+  });*/
 
   $("#classifiersModal").on("click", "#addClassifierSubmit", function() {
     $.post('/classifier', $("#addClassifierForm").serialize())
