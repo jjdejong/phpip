@@ -135,7 +135,7 @@
     var relatedUrl = "", // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
       resource = "", // Identifies the REST resource for CRUD operations
       currentModal = classifiersModal; // Initialize with an existing modal to avoid undefined errors - will be overwritten when necessary
-
+      
     // Ajax fill an element from a url returning HTML
     var fetchInto = async (url, element) => {
       res = await fetch(url);
@@ -165,10 +165,10 @@
       var modalTrigger = event.relatedTarget;
       currentModal = this;
       if (this.id === 'ajaxModal') {
-      relatedUrl = modalTrigger.href;
-      this.querySelector('.modal-title').innerHTML = modalTrigger.title;
+        relatedUrl = modalTrigger.href;
+        this.querySelector('.modal-title').innerHTML = modalTrigger.title;
         if (modalTrigger.hasAttribute('data-size')) this.querySelector('.modal-dialog').classList.add(modalTrigger.dataset.size);
-      fetchInto(relatedUrl, this.querySelector('.modal-body'));
+        fetchInto(relatedUrl, this.querySelector('.modal-body'));
       }
       resource = modalTrigger.dataset.resource;
 
@@ -217,14 +217,14 @@
     });
 
     // Mark a modified input field
-    currentModal.addEventListener("input", e => {
+    app.addEventListener("input", e => {
       if (e.target && e.target.matches("input.noformat, textarea")) {
         e.target.classList.add("bg-warning");
       }
     });
 
     // Generic in-place edition of input fields
-    currentModal.addEventListener("change", e => {
+    app.addEventListener("change", e => {
       if (e.target && e.target.matches("input.noformat")) {
         let params = new URLSearchParams();
         params.append(e.target.name, e.target.value);
@@ -248,10 +248,10 @@
 
     /* Custom autocomplete function using native JS
      * "searchField" is the element receiving the user input,
-       * "dataSource" is the Ajax resource URL, and
-       * "targetName" is an (optional) input field name receiving the "id" value
+     * "dataSource" is the Ajax resource URL, and
+     * "targetName" is an (optional) input field name receiving the "id" value
      * The Ajax resource returns a list of JSON key/value pairs, sometimes a label and other data
-       * */
+     * */
     var autocompleteJJ = (searchField, dataSource, targetName) => {
       // Start by removing stray result lists that can remain when clicking erratically
       if (tmp = document.getElementById('matchList')) tmp.remove();
