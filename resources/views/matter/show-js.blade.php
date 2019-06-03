@@ -399,10 +399,10 @@
     });
   });*/
 
-  $("#classifiersModal").on("click", "#addClassifierSubmit", function() {
+  $("#ajaxModal").on("click", "#addClassifierSubmit", function() {
     $.post('/classifier', $("#addClassifierForm").serialize())
       .done(function() {
-        $('#classifiersModal').load("/matter/{{ $matter->id }} #classifiersModal > div");
+        $('#ajaxModal').find(".modal-body").load(relatedUrl);
       }).fail(function(errors) {
         $.each(errors.responseJSON.errors, function(key, item) {
           $("#addClassifierForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
@@ -410,12 +410,12 @@
       });
   });
 
-  $("#classifiersModal").on("click", "#deleteClassifier", function() {
+  $("#ajaxModal").on("click", "#deleteClassifier", function() {
     $.ajax({
-      url: '/classifier/' + $(this).closest("tr").data("classifier_id"),
+      url: '/classifier/' + $(this).closest("tr").data("id"),
       type: 'DELETE'
     }).done(function() {
-      $('#classifiersModal').load("/matter/{{ $matter->id }} #classifiersModal > div");
+      $('#ajaxModal').find(".modal-body").load(relatedUrl);
     });
     return false;
   });

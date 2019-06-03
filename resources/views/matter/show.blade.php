@@ -285,7 +285,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <div class="card col-6 p-0 reveal-hidden">
         <div class="card-header font-weight-bold p-1">
           Classifiers
-          <a class="hidden-action float-right font-weight-bold" href="#classifiersModal" data-toggle="modal" data-remote="false" data-resource="/classifier/" title="Classifier detail">
+          <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/classifiers" data-target="#ajaxModal" data-toggle="modal" data-remote="false" data-resource="/classifier/" title="Classifier detail">
             &vellip;
           </a>
         </div>
@@ -388,9 +388,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     </div>
   </div>
 </div>
-
-<!-- Modals -->
-@include('partials.matter-show-modals')
 
 @stop
 

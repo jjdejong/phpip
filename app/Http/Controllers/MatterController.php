@@ -352,6 +352,12 @@ class MatterController extends Controller
         return view('matter.roleActors', compact('role_group', 'matter'));
     }
 
+    public function classifiers(Matter $matter)
+    {
+        $matter->with(['classifiers']);
+        return view('matter.classifiers', compact('matter'));
+    }
+
     public function description(Matter $matter, $lang)
     {
         $description = $matter->getDescription($matter->id, $lang);
