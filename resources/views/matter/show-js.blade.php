@@ -224,41 +224,18 @@
     });
   });
 
-    // Specific to Advanced matter edition
-
-  $('#ajaxModal').on("click", 'input[name="parent_id"],input[name="container_id"]', function() {
-    $(this).autocomplete({
-      minLength: 1,
-      source: "/matter/autocomplete",
-      change: function(event, ui) {
-        if (!ui.item) {
-          this.value = "";
-        }
-      },
-      select: function(event, ui) {
-        this.value = ui.item.value;
-        $.ajax({
-          url: resource + $(this).closest("card").data("id"),
-          type: 'PUT',
-          data: $(this).serialize()
-        }).done(function() {
-          $("#ajaxModal").find(".modal-body").load(relatedUrl);
-          $("#footerAlert").removeClass("alert-danger").html("");
-        });
-      }
-    });
-  });
-
   $("#ajaxModal").on("click", "#deleteMatter", function() {
-    $.ajax({
-      url: '/matter/' + $(this).closest("card").data("id"),
-      type: 'DELETE'
-    }).done(function() {
-      location.href = "/matter";
-    }).fail(function(errors) {
-      alert(errors.responseJSON.message);
-    });
-    return false;
+    if (confirm("Deleting the matter. Continue anyway?")) {
+        $.ajax({
+        url: '/matter/' + $(this).closest("card").data("id"),
+        type: 'DELETE'
+        }).done(function() {
+        location.href = "/matter";
+        }).fail(function(errors) {
+        alert(errors.responseJSON.message);
+        });
+        return false;
+    }
   });
 
 // Specific processing in the actor/role list modal
