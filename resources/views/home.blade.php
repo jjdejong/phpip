@@ -7,17 +7,14 @@
             <div class="card">
                 <div class="card-header py-1">
                     <div class="row">
-                        <div class="col-8">
+                        <div class="lead col-8">
                             Categories
                         </div>
                         <div class="col-4">
                             <a href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-remote="false" data-size="modal-sm" class="btn btn-primary" title="Create Matter">Create matter</a>
                         </div>
                     </div>
-                </div>
-
-                <div class="card-body pt-1">
-                    <div class="row sticky-top bg-light font-weight-bold">
+                    <div class="row font-weight-bold">
                         <div class="col-8">
                             Category
                         </div>
@@ -27,6 +24,9 @@
                         <div class="col-1">
                         </div>
                     </div>
+                </div>
+
+                <div class="card-body pt-1">
                     @if (session('status'))
                         <div class="alert alert-success">
                             {{ session('status') }}
@@ -57,16 +57,12 @@
             </div>
             <div class="card mt-1">
                 <div class="card-header">
-
                     <div class="row">
-                        <div class="col-12">
+                        <div class="lead col-12">
                             Users tasks
                         </div>
                     </div>
-                </div>
-
-                <div class="card-body pt-1">
-                    <div class="row sticky-top bg-light font-weight-bold">
+                    <div class="row font-weight-bold">
                         <div class="col-6">
                             User
                         </div>
@@ -77,6 +73,9 @@
                             Most urgent
                         </div>
                     </div>
+                </div>
+
+                <div class="card-body pt-1">
                     @foreach ($taskscount as $group)
                         @if ($group->no_of_tasks > 0)
                         <div class="row">
@@ -103,7 +102,7 @@
             <div class="card">
                 <div class="card-header py-1">
                     <div class="row">
-                        <div class="col-3">
+                        <div class="lead col-3">
                             <b>Open tasks</b>
                         </div>
                         <div class="col-5">
@@ -125,9 +124,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-body pt-1"  id="tasklist">
-                    <div class="row sticky-top bg-light font-weight-bold">
+                    <div class="row font-weight-bold">
                         <div class="col-6">
                             Tasks
                         </div>
@@ -141,6 +138,8 @@
                             Clear
                         </div>
                     </div>
+                </div>
+                <div class="card-body pt-1"  id="tasklist">
                 @if (is_array($tasks) )
                   @foreach ($tasks as $task)
                     <div class="row">
@@ -178,7 +177,7 @@
             <div class="card mt-1">
                 <div class="card-header py-1">
                     <div class="row">
-                        <div class="col-3">
+                        <div class="lead col-3">
                             <b>Open renewals</b>
                         </div>
                         <div class="col-5">
@@ -200,10 +199,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="card-body pt-1" id="renewallist">
-                    <div class="row sticky-top bg-light font-weight-bold">
+                    <div class="row font-weight-bold">
                         <div class="col-6">
                             Renewals
                         </div>
@@ -217,6 +213,9 @@
                             Clear
                         </div>
                     </div>
+                </div>
+
+                <div class="card-body pt-1" id="renewallist">
                     @if (is_array($renewals) )
                       @foreach ($renewals as $task)
                         <div class="row">
