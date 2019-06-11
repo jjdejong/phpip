@@ -159,11 +159,11 @@
                           </a>
                         </div>
                         @if ($task->due_date < date('Y-m-d'))
-                            <div class="col-2 text-danger">{{ $task->due_date}}</div>
+                            <div class="col-2 text-danger">{{  date_format(date_create($task->due_date), 'd/m/Y') }}</div>
                         @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
-                            <div  class="col-2 text-warning">{{ $task->due_date}}</div>
+                            <div  class="col-2 text-warning">{{ date_format(date_create($task->due_date), 'd/m/Y') }}</div>
                         @else
-                            <div  class="col-2">{{ $task->due_date}}</div>
+                            <div  class="col-2">{{ date_format(date_create($task->due_date), 'd/m/Y') }}</div>
                         @endif
                         <div  class="col-1"><input id="{{ $task->id }}" class="clear-open-task" type="checkbox" /></div>
                     </div>
@@ -235,11 +235,11 @@
                             </a>
                           </div>
                           @if ($task->due_date < date('Y-m-d'))
-                              <div class="col-2 text-danger">{{ $task->due_date}}</div>
+                              <div class="col-2 text-danger">{{ date_format(date_create($task->due_date), 'd/m/Y') }}</div>
                           @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
-                              <div  class="col-2 text-warning">{{ $task->due_date}}</div>
+                              <div  class="col-2 text-warning">{{ date_format(date_create($task->due_date), 'd/m/Y') }}</div>
                           @else
-                              <div  class="col-2">{{ $task->due_date}}</div>
+                              <div  class="col-2">{{ date_format(date_create($task->due_date), 'd/m/Y') }}</div>
                           @endif
                           <div  class="col-1"><input id="{{ $task->id }}" class="clear-ren-task" type="checkbox" /></div>
                         </div>
