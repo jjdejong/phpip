@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth'], function () {
     //Route::get('matter/{matter}', 'MatterController@show')->middleware('can:view-noclient'); // Breaks the Route::resource method
     Route::get('matter/{matter}/events', 'MatterController@events');
     Route::get('matter/{matter}/tasks', 'MatterController@tasks');
+    Route::get('matter/{matter}/classifiers', 'MatterController@classifiers');
     Route::get('matter/{matter}/renewals', 'MatterController@renewals');
     Route::get('matter/{matter}/roleActors/{role}', 'MatterController@actors');
     Route::get('matter/{matter}/description/{lang}', 'MatterController@description');
