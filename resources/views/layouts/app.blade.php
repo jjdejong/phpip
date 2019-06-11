@@ -237,7 +237,7 @@
 
     // Mark a modified input field
     app.addEventListener("input", e => {
-      if (e.target && e.target.matches("input.noformat, textarea")) {
+      if (e.target && e.target.matches("input.noformat, textarea, [contenteditable]")) {
         e.target.classList.add("bg-warning");
       }
     });
