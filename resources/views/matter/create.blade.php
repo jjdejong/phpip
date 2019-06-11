@@ -33,9 +33,9 @@
     <label for="caseref" class="col-3 col-form-label font-weight-bold">Caseref</label>
     <div class="col-9">
       @if ( $operation == 'child' )
-      <input type="text" class="form-control" id="caseref" name="caseref" value="{{ $from_matter->caseref ?? '' }}" readonly />
+      <input type="text" class="form-control" name="caseref" value="{{ $from_matter->caseref ?? '' }}" readonly />
       @else
-      <input type="text" class="form-control" id="caseref" data-ac="/matter/new-caseref" name="caseref" value="{{ $from_matter->caseref ?? ( $category['next_caseref'] ?? '') }}" autocomplete="off">
+      <input type="text" class="form-control" data-ac="/matter/new-caseref" name="caseref" value="{{ $from_matter->caseref ?? ( $category['next_caseref'] ?? '') }}" autocomplete="off">
       @endif
     </div>
   </div>

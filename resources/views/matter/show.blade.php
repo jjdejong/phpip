@@ -60,8 +60,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         <form id="addTitleForm" autocomplete="off">
           <div class="form-row">
             <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}" />
-            <input type="hidden" name="type_code" />
             <div class="col-2">
+              <input type="hidden" name="type_code">
               <input id="type_code" type="text" class="form-control form-control-sm" name="type" placeholder="Type" autocomplete="off">
             </div>
             <div class="col-10">
@@ -369,7 +369,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                         data-target="#ajaxModal"
                         data-remote="false"
                         data-resource="/event"
-                        data-size="modal-lg" 
+                        data-size="modal-lg"
                         title="Copy a summary in English">
                         &boxbox; EN
                     </a>
@@ -378,7 +378,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                         data-toggle="modal"
                         data-target="#ajaxModal"
                         data-remote="false"
-                        data-size="modal-lg" 
+                        data-size="modal-lg"
                         data-resource="/event"
                         title="Copy a summary in French">
                         &boxbox; FR

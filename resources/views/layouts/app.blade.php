@@ -119,7 +119,7 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-              Ajax body placeholder
+              Ajax body placeholder (is supposed to receive a table where each tr has an attribute data-id)
             </div>
             <div class="modal-footer">
               <span id="footerAlert" class="alert float-left"></span>
@@ -160,15 +160,13 @@
     }
 
     // Ajax fill the opened modal and process events within
-    $(".modal").on("show.bs.modal", function(event) {
+    $("#ajaxModal").on("show.bs.modal", function(event) {
       var modalTrigger = event.relatedTarget;
-      if (this.id === 'ajaxModal') {
-        relatedUrl = modalTrigger.href;
-        this.querySelector('.modal-title').innerHTML = modalTrigger.title;
-        if (modalTrigger.hasAttribute('data-size')) this.querySelector('.modal-dialog').classList.add(modalTrigger.dataset.size);
-        fetchInto(relatedUrl, this.querySelector('.modal-body'));
-      }
+      relatedUrl = modalTrigger.href;
       resource = modalTrigger.dataset.resource;
+      this.querySelector('.modal-title').innerHTML = modalTrigger.title;
+      if (modalTrigger.hasAttribute('data-size')) this.querySelector('.modal-dialog').classList.add(modalTrigger.dataset.size);
+      fetchInto(relatedUrl, this.querySelector('.modal-body'));
 
       // Process click events in the modal
       this.addEventListener('click', (e) => {
@@ -186,7 +184,10 @@
             if (data.errors) {
               // Form validation error notification
               Object.entries(data.errors).forEach(([key, value]) => {
-                let inputElt = createMatterForm.elements[key];
+                let inputElt = createMatterForm.querySelector('[data-actarget="' + key + '"]');
+                if (!inputElt) {
+                  inputElt = createMatterForm.elements[key];
+                }
                 inputElt.placeholder = value;
                 inputElt.classList.add('is-invalid');
               });

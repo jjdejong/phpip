@@ -77,7 +77,7 @@
       });
     });
 
-    document.getElementById('addActorSubmit').onclick = () => {
+    addActorSubmit.onclick = () => {
       //var currentForm = this.parentNode;
       var request = $('#addActorForm').find("input").filter(function() {
         return $(this).val().length > 0;
@@ -96,7 +96,7 @@
     };
 
     // Close popover by clicking the cancel button
-    document.getElementById('popoverCancel').onclick = () => {
+    popoverCancel.onclick = () => {
       $('.popover').popover('dispose');
     };
   });
@@ -106,13 +106,16 @@
 
   multiPanel.addEventListener('change', e => {
     if (e.target && e.target.matches("#notes")) {
-      $.ajax({
-        type: 'PUT',
-        url: "/matter/{{ $matter->id }}",
-        data: {
-          notes: $("#notes").val()
+      let params = new URLSearchParams();
+      params.append('notes', e.target.value);
+      fetchREST("/matter/{{ $matter->id }}", "PUT", params)
+      .then(data => {
+        if (data.errors){
+          console.log(data.errors);
+        } else {
+          e.target.classList.remove('bg-warning');
         }
-      }).done(e.target.classList.remove("bg-warning"));
+      });
     }
   });
 
@@ -327,77 +330,6 @@
       });
     }
   });
-
-// Classifiers modal processing
-
-  /*$('#classifiersModal').on("change", "input.noformat", function(e) {
-    $.ajax({
-      url: '/classifier/' + $(this).closest("tr").data("classifier_id"),
-      type: 'PUT',
-      data: $(this).serialize()
-    }).done(function() {
-      $('.bg-warning').removeClass("bg-warning");
-      $("#classifiersModal").find(".alert").removeClass("alert-danger").html("");
-    }).fail(function(errors) {
-      $.each(errors.responseJSON.errors, function(key, item) {
-        $("#classifiersModal").find(".modal-footer .alert").html(item).addClass('alert-danger');
-      });
-    });
-  });*/
-
-  /*$('#classifiersModal').on("click", 'input[name="lnk_matter_id"].noformat', function() {
-    $(this).autocomplete({
-      minLength: 2,
-      source: "/matter/autocomplete",
-      change: function(event, ui) {
-        if (!ui.item) {
-          this.value = "";
-        }
-      },
-      select: function(event, ui) {
-        this.value = ui.item.id;
-        $.ajax({
-          url: '/classifier/' + $(this).closest("tr").data("classifier_id"),
-          type: 'PUT',
-          data: $(this).serialize()
-        }).done(function() {
-          $('#classifiersModal').load("/matter/{{ $matter->id }} #classifiersModal > div");
-          $("#classifiersModal").find(".alert").removeClass("alert-danger").html("");
-        });
-      }
-    });
-  });*/
-
-  /*$("#classifiersModal").on("click", 'input[name="type"]', function() {
-    $(this).autocomplete({
-      minLength: 0,
-      source: "/classifier-type/autocomplete/0",
-      select: function(event, ui) {
-        addClassifierForm['type_code'].value = ui.item.code;
-      },
-      change: function(event, ui) {
-        if (!ui.item)
-          this.value = "";
-      }
-    }).focus(function() {
-      // Forces search with no characters upon focus
-      $(this).autocomplete("search", "");
-    });
-  });*/
-
-  /*$("#classifiersModal").on("click",'#lnk_matter_id', function() {
-    $(this).autocomplete({
-      minLength: 2,
-      source: "/matter/autocomplete",
-      select: (event, ui) => {
-        addClassifierForm['lnk_matter_id'][0].value = ui.item.id;
-      },
-      change: function(event, ui) {
-        if (!ui.item)
-          this.value = "";
-      }
-    });
-  });*/
 
   $("#ajaxModal").on("click", "#addClassifierSubmit", function() {
     $.post('/classifier', $("#addClassifierForm").serialize())
