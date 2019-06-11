@@ -36,7 +36,7 @@
     @foreach ($ruleslist as $rule)
     <tr data-id="{{ $rule->id }}" class="reveal-hidden">
       <td>
-        <a href="/rule/{{ $rule->id }}" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Rule data" data-source="/rule" data-resource="/rule/">
+        <a href="/rule/{{ $rule->id }}" data-toggle="modal" data-target="#ajaxModal" data-remote="false" title="Rule data" data-source="/rule" data-resource="/rule/">
           {{ $rule->taskInfo->name }}
         </a>
       </td>

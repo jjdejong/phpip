@@ -1,17 +1,21 @@
 <div id="edit-rule-content">
+  <form>
     <input type="hidden" name="rule_id" id="rule-id" value="{{ $ruleInfo->id }}">
     <fieldset>
         <legend>Task rule details <span class="badge badge-light">{{ $ruleInfo->id }}</span></legend>
         <table class="table table-sm table-hover" data-id="{{ $ruleInfo->id }}" data-source="/rule/">
             <tr>
                 <td><label for="task" class="required-field" title="{{ $ruleComments['task'] }}">Task</label></td>
-                <td class="ui-front"><input class="form-control noformat" name="task" value="{{ empty($ruleInfo->taskInfo) ? '' : $ruleInfo->taskInfo->name }}"></td>
+                <td class="ui-front">
+                    <input type="text" class="form-control noformat" name="task" data-ac="/country/autocomplete" data-actarget="task" value="{{ empty($ruleInfo->taskInfo) ? '' : $ruleInfo->taskInfo->name }}"></td>
                 <td><label for="detail" title="{{ $ruleComments['detail'] }}">Detail</label></td>
                 <td><input id="detail" class="form-control noformat" name="detail" value="{{ $ruleInfo->detail }}"></td>
             </tr>
-            <tr>
+            <tr  data-id="{{ $ruleInfo->id }}" >
                 <td><label for="for_country" title="{{ $ruleComments['for_country'] }}">Country</label></td>
-                <td class="ui-front"><input type="text" class="form-control noformat" name="for_country" value="{{ empty($ruleInfo->country) ? '' : $ruleInfo->country->name }}"></td>
+                <td class="ui-front">
+                    <input type="text" class="form-control noformat" name="for_country" data-ac="/country/autocomplete" data-actarget="for_country"
+                      value="{{ empty($ruleInfo->country) ? '' : $ruleInfo->country->name }}"></td>
                 <td><label for="is_active" title="{{ $ruleComments['active'] }}">Is active</label></td>
                 <td>
                     <div class="form-check form-check-inline">
@@ -26,9 +30,13 @@
             </tr>
             <tr>
                 <td><label for="for_origin" title="{{ $ruleComments['for_origin'] }}">Origin</label></td>
-                <td class="ui-front"><input class="form-control noformat" name="for_origin" value="{{ empty($ruleInfo->origin) ? '' : $ruleInfo->origin->name }}"></td>
+                <td class="ui-front">
+                    <input type="text" class="form-control noformat" name="for_origin" data-ac="/country/autocomplete" data-actarget="for_origin"
+                    value="{{ empty($ruleInfo->origin) ? '' : $ruleInfo->origin->name }}"></td>
                 <td><label for="for_category" title="{{ $ruleComments['for_category'] }}">Category</label></td>
-                <td class="ui-front"><input class="form-control noformat" name="for_category" value="{{ empty($ruleInfo->category) ? '' : $ruleInfo->category->category }}"></td>
+                <td class="ui-front">
+                    <input type="hidden" name="for_category"  value="">
+                    <input type="text" class="form-control noformat" id="for_category" data-ac="/country/autocomplete" data-actarget="for_category" name="for_category" value="{{ empty($ruleInfo->category) ? '' : $ruleInfo->category->category }}"></td>
             </tr>
             <tr>
                 <td>
@@ -37,7 +45,8 @@
                 </td>
                 <td><textarea data-field="#updateNotes" id="notes" class="form-control noformat" name="notes" cols="" rows="">{{ $ruleInfo->notes }}</textarea></td>
                 <td><label for="for_type" title="{{ $ruleComments['for_type'] }}">Type</label></td>
-                <td class="ui-front"><input class="form-control noformat" name="for_type" value="{{ empty($ruleInfo->type) ? '' : $ruleInfo->type->type }}"></td>
+                <td class="ui-front">
+                    <input type="text" class="form-control noformat" name="for_type" data-ac="/country/autocomplete" data-actarget="for_type" name="for_type" value="{{ empty($ruleInfo->type) ? '' : $ruleInfo->type->type }}"></td>
             </tr>
         </table>
     </fieldset>
@@ -46,7 +55,8 @@
         <table class="table table-sm table-hover" data-id="{{ $ruleInfo->id }}">
             <tr>
                 <td><label for="trigger_event" title="{{ $ruleComments['trigger_event'] }}">Trigger event</label></td>
-                <td class="ui-front"><input class="form-control noformat" name="trigger_event" value="{{ empty($ruleInfo->trigger) ? '' : $ruleInfo->trigger->name }}"></td>
+                <td class="ui-front">
+                    <input type="text" class="form-control noformat" name="trigger_event" data-ac="/country/autocomplete" data-actarget="trigger_event" name="trigger_event" value="{{ empty($ruleInfo->trigger) ? '' : $ruleInfo->trigger->name }}"></td>
                 <td><label for="use_parent" title="{{ $ruleComments['use_parent'] }}">Use parent</label></td>
                 <td>
                     <div class="form-check form-check-inline">
@@ -91,7 +101,8 @@
             </tr>
             <tr>
                 <td><label for="condition_event" title="{{ $ruleComments['condition_event'] }}">Condition event</label></td>
-                <td class="ui-front"><input class="form-control noformat" name="condition_event" value="{{ empty($ruleInfo->condition_eventInfo) ? '' : $ruleInfo->condition_eventInfo->name }}"></td>
+                <td class="ui-front">
+                    <input type="text" class="form-control noformat" name="condition_event" data-ac="/country/autocomplete" data-actarget="condition_event" name="condition_event" value="{{ empty($ruleInfo->condition_eventInfo) ? '' : $ruleInfo->condition_eventInfo->name }}"></td>
                 <td><label for="use_priority" title="{{ $ruleComments['use_priority'] }}">Use priority</label></td>
                 <td>
                     <div class="form-check form-check-inline">
@@ -106,9 +117,11 @@
             </tr>
             <tr>
                 <td><label for="abort_on" title="{{ $ruleComments['abort_on'] }}">Abort on</label></td>
-                <td class="ui-front"><input class="form-control noformat" name="abort_on" value="{{ empty($ruleInfo->abort_onInfo) ? '' : $ruleInfo->abort_onInfo->name }}"></td>
+                <td class="ui-front">
+                    <input type="text" class="form-control noformat" name="abort_on" data-ac="/country/autocomplete" data-actarget="abort_on" name="abort_on" value="{{ empty($ruleInfo->abort_onInfo) ? '' : $ruleInfo->abort_onInfo->name }}"></td>
                 <td><label for="responsible" title="{{ $ruleComments['responsible'] }}">Responsible</label></td>
-                <td class="ui-front"><input class="form-control noformat" name="responsible" value="{{ empty($ruleInfo->responsibleInfo) ? '' : $ruleInfo->responsibleInfo->name }}"></td>
+                <td class="ui-front">
+                    <input type="text" class="form-control noformat" name="responsible" data-ac="/country/autocomplete" data-actarget="responsible" name="responsible" value="{{ empty($ruleInfo->responsibleInfo) ? '' : $ruleInfo->responsibleInfo->name }}"></td>
             </tr>
             <tr>
                 <td><label for="days" title="{{ $ruleComments['days'] }}">Days</label></td>
@@ -144,4 +157,5 @@
         </table>
         <button type="button" class="btn btn-danger" title="Delete rule" id="delete-rule" data-dismiss="modal" data-id="{{ $ruleInfo->id }}">Delete</button>
     </fieldset>
+  </form>
 </div>

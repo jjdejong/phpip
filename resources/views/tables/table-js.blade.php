@@ -90,7 +90,7 @@
     }, 500));
 
 // Specific in place edition of rule
-    $('#infoModal').on("click", 'input[type="radio"]', function () {
+    $('#ajaxModal').on("click", 'input[type="radio"]', function () {
         var mydata = {};
         mydata[this.name] = this.value;
         mydata['_method'] = "PUT";
@@ -99,7 +99,7 @@
                 $("#infoModal").find(".modal-body").load(relatedUrl);
             });
     });
-
+/*
     $('#infoModal').on("click", 'input[name="for_country"],input[name="country"],input[name="for_origin"]', function () {
         $(this).autocomplete({
             minLength: 2,
@@ -119,7 +119,6 @@
             }
         });
     });
-
     $('#infoModal').on("click", 'input[name="task"]', function () {
         $(this).autocomplete({
             minLength: 1,
@@ -181,6 +180,7 @@
         });
     });
 
+
     $('#infoModal').on("click", "input[name$='event'],input[name='abort_on']", function () {
         $(this).autocomplete({
             minLength: 1,
@@ -220,7 +220,7 @@
             }
         });
     });
-
+*/
     $('#rule-list').on("click", '.delete-from-list', function () {
         var del_conf = confirm("Deleting rule " + $(this).closest("tr").data("id") + " from table?");
         if (del_conf === 1) {
