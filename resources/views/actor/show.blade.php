@@ -22,13 +22,13 @@
             </tr>
             <tr>
                 <td><label for="company_id" title="{{ $actorComments['company_id'] }}">Employer</label></td>
-                <td class="ui-front"><input type="text" class="noformat form-control" id="company_id" name="company_id" value="{{ empty($actorInfo->company) ? '' : $actorInfo->company->name }}"></td>
+                <td class="ui-front"><input type="text" class="noformat form-control" id="company_id" name="company_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->company) ? '' : $actorInfo->company->name }}"></td>
                 <td><label for="parent_id" title="{{ $actorComments['parent_id'] }}">Parent company</label></td>
-                <td class="ui-front"><input type="text" class="noformat form-control" id="parent_id" name="parent_id" value="{{ empty($actorInfo->parent) ? '' : $actorInfo->parent->name }}"></td>
+                <td class="ui-front"><input type="text" class="noformat form-control" id="parent_id" name="parent_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->parent) ? '' : $actorInfo->parent->name }}"></td>
             </tr>
             <tr>
                 <td><label for="site_id" title="{{ $actorComments['site_id'] }}">Work site</label></td>
-                <td class="ui-front"><input type="text" class="noformat form-control" id="site_id" name="site_id" value="{{ empty($actorInfo->site) ? '' : $actorInfo->site->name }}"></td>
+                <td class="ui-front"><input type="text" class="noformat form-control" id="site_id" name="site_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->site) ? '' : $actorInfo->site->name }}"></td>
                 <td><label for="phy_person" title="{{ $actorComments['phy_person'] }}">Person</label></td>
                 <td>
                     <div class="form-check form-check-inline">
@@ -43,7 +43,7 @@
             </tr>
             <tr>
                 <td><label for="nationality">Nationality</label></td>
-                <td class="ui-front"><input type="text" class="noformat form-control" name="nationality" value="{{ empty($actorInfo->nationalityInfo) ? '' : $actorInfo->nationalityInfo->name }}"></td>
+                <td class="ui-front"><input type="text" class="noformat form-control" name="nationality" data-ac="/country/autocomplete" value="{{ empty($actorInfo->nationalityInfo) ? '' : $actorInfo->nationalityInfo->name }}"></td>
                 <td><label for="small_entity" title="{{ $actorComments['small_entity'] }}">Entity</label></td>
                 <td>
                     <div class="form-check form-check-inline">
@@ -69,7 +69,7 @@
                 </td>
                 <td class="ui-front"><textarea id="address" data-field="#updateAddress" class="noformat form-control" name="address">{{ $actorInfo->address }}</textarea></td>
                 <td><label for="country">Country</label></td>
-                <td class="ui-front"><input type='text' class="noformat form-control" name="country" value="{{ empty($actorInfo->countryInfo) ? '' : $actorInfo->countryInfo->name }}"></td>
+                <td class="ui-front"><input type='text' class="noformat form-control" name="country" data-ac="/country/autocomplete" value="{{ empty($actorInfo->countryInfo) ? '' : $actorInfo->countryInfo->name }}"></td>
             </tr>
             <tr>
                 <td>
@@ -78,7 +78,7 @@
                 </td>
                 <td class="ui-front"><textarea data-field="#updateAddressM" id="address_mailing" class="noformat form-control" name="address_mailing">{{ $actorInfo->address_mailing }}</textarea> </td>
                 <td><label for="country_mailing">Country mailing</label></td>
-                <td class="ui-front"><input type='text' class="noformat form-control" name="country_mailing" value="{{ empty($actorInfo->country_mailingInfo ) ? '' : $actorInfo->country_mailingInfo->name }}"></td>
+                <td class="ui-front"><input type='text' class="noformat form-control" name="country_mailing" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_mailingInfo ) ? '' : $actorInfo->country_mailingInfo->name }}"></td>
             </tr>
             <tr>
                 <td>
@@ -87,7 +87,7 @@
                 </td>
                 <td class="ui-front"><textarea data-field="#updateAddressB" id="address_billing" class="noformat form-control" name="address_billing">{{ $actorInfo->address_billing }}</textarea></td>
                 <td><label for="country_billing">Country billing</label></td>
-                <td class="ui-front"><input class="noformat form-control" name="country_billing" value="{{ empty($actorInfo->country_billingInfo ) ? '' : $actorInfo->country_billingInfo->name }}"></td>
+                <td class="ui-front"><input class="noformat form-control" name="country_billing" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_billingInfo ) ? '' : $actorInfo->country_billingInfo->name }}"></td>
             </tr>
             <tr>
                 <td><label for="email">Email</label></td>

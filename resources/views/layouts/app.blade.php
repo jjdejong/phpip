@@ -209,7 +209,9 @@
         if (e.target && e.target.matches("input.noformat")) {
           let params = new URLSearchParams();
           params.append(e.target.name, e.target.value);
-          fetchREST(resource + e.target.closest('tr').dataset.id, 'PUT', params)
+          let id = e.target.closest('tr').dataset.id;
+          if (!id) id = e.target.closest('table').dataset.id;
+          fetchREST(resource + id, 'PUT', params)
           .then(data => {
             if (data.errors) {
               footerAlert.innerHTML = Object.values(data.errors)[0];
