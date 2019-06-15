@@ -142,7 +142,7 @@
     }
 
     // Perform REST operations with native JS
-    var fetchREST = async (url, method, body) => {
+    var fetchREST = async (url, method, body, reload = false) => {
       res = await fetch(url, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
@@ -176,31 +176,7 @@
         }
 
         if (e.target.id === 'createMatterSubmit') {
-          formData = new FormData(createMatterForm);
-          searchParams = new URLSearchParams(formData);
-
-          fetchREST('/matter', 'POST', searchParams)
-          .then(data => {
-            if (data.errors) {
-              // Form validation error notification
-              Object.entries(data.errors).forEach(([key, value]) => {
-                let inputElt = createMatterForm.querySelector('[data-actarget="' + key + '"]');
-                if (!inputElt) {
-                  inputElt = createMatterForm.elements[key];
-                }
-                inputElt.placeholder = value;
-                inputElt.classList.add('is-invalid');
-              });
-              footerAlert.innerHTML = data.message;
-              footerAlert.classList.add('alert-danger');
-            } else {
-              // Redirect to the created matter (link returned by MatterController.store())
-              location.href = data;
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
+          submitModalForm('/matter', createMatterForm, true);
         };
       });
 
@@ -227,16 +203,16 @@
           });
         }
       });
-    });
 
-    // Reset ajaxModal to default when it is closed
-    $("#ajaxModal").on("hidden.bs.modal", function(event) {
-      this.querySelector('.modal-body').innerHTML = "Ajax body placeholder";
-      this.querySelector('.modal-title').innerHTML = "Ajax title placeholder";
-      this.querySelector('.modal-dialog').className = "modal-dialog";
-      footerAlert.innerHTML = "";
-      footerAlert.classList.remove('alert-danger');
-    });
+      // Reset ajaxModal to default when it is closed
+      $(this).on("hidden.bs.modal", function(event) {
+        this.querySelector('.modal-body').innerHTML = "Ajax body placeholder";
+        this.querySelector('.modal-title').innerHTML = "Ajax title placeholder";
+        this.querySelector('.modal-dialog').className = "modal-dialog";
+        footerAlert.innerHTML = "";
+        footerAlert.classList.remove('alert-danger');
+      });
+    }); // End modal event processing
 
     // Mark a modified input field
     app.addEventListener("input", e => {
@@ -325,6 +301,35 @@
           }
           searchField.blur(); // Removing focus causes the "change" event to trigger and submit the value via the default functionality attached to the "input.noformat" fields
         }
+      });
+    }
+
+    var submitModalForm = (target, Form, redirect = false) => {
+      formData = new FormData(Form);
+      params = new URLSearchParams(formData);
+      fetchREST(target, 'POST', params)
+      .then(data => {
+        if (data.errors) {
+          // Form validation error notification
+          Object.entries(data.errors).forEach(([key, value]) => {
+            let inputElt = Form.querySelector('[data-actarget="' + key + '"]');
+            if (!inputElt) {
+              inputElt = Form.elements[key];
+            }
+            inputElt.placeholder = key + ' is required';
+            inputElt.classList.add('is-invalid');
+          });
+          footerAlert.innerHTML = data.message;
+          footerAlert.classList.add('alert-danger');
+        } else if (redirect) {
+          // Redirect to the created matter (link returned by MatterController.store())
+          location.href = data;
+        } else {
+          fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body'));
+        }
+      })
+      .catch(error => {
+        console.log(error);
       });
     }
   </script>

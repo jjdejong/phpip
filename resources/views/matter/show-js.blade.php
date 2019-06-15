@@ -269,12 +269,36 @@
 
 // Specific processing in the task list modal
 
-  $("#ajaxModal").on("click", "#addTaskToEvent", function() {
+  /*$("#ajaxModal").on("click", "#addTaskToEvent", function() {
     this.closest('tbody').insertAdjacentHTML('beforeend', addTaskFormTemplate.innerHTML);
     addTaskForm['trigger_id'].value = this.dataset.event_id;
+  });*/
+  ajaxModal.addEventListener('click', (e) => {
+    switch (e.target.id) {
+      case 'addTaskToEvent':
+        e.target.closest('tbody').insertAdjacentHTML('beforeend', addTaskFormTemplate.innerHTML);
+        addTaskForm['trigger_id'].value = e.target.dataset.event_id;
+        break;
+
+      case 'addTaskSubmit':
+        submitModalForm('/task', addTaskForm);
+        break;
+
+      case 'deleteTask':
+        fetchREST('/task/' + e.target.closest('tr').dataset.id, 'DELETE')
+        .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
+        break;
+
+      case 'deleteEvent':
+        if (confirm("Deleting the event will also delete the linked tasks. Continue anyway?")) {
+          fetchREST('/event/' + e.target.dataset.event_id, 'DELETE')
+          .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
+        }
+        break;
+    }
   });
 
-  $("#ajaxModal").on("click", "#addTaskSubmit", function() {
+  /*$("#ajaxModal").on("click", "#addTaskSubmit", function() {
     var request = $("#addTaskForm").find("input").filter(function() {
       return $(this).val().length > 0;
     }).serialize(); // Filter out empty values
@@ -306,7 +330,7 @@
         $('#ajaxModal').find(".modal-body").load(relatedUrl);
       });
     }
-  });
+  });*/
 
   $("#ajaxModal").on("click", "#addClassifierSubmit", function() {
     $.post('/classifier', $("#addClassifierForm").serialize())
