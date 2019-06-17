@@ -99,11 +99,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       Actors
       <a class="badge badge-pill badge-light hidden-action float-right" rel="popover" data-placement="right" href="#" title="Add Actor"
          data-content='<form id="addActorForm">
+                <input type="hidden" name="role" value="">
                 <input type="hidden" name="shared" value="1">
                 <input type="hidden" name="actor_id" value="">
                 <input type="hidden" name="company_id" value="">
                 <div class="ui-front">
-                    <input type="text" class="form-control form-control-sm" name="role" placeholder="Role">
+                    <input type="text" class="form-control form-control-sm" id="role" placeholder="Role">
                     <input type="text" class="form-control form-control-sm" id="actor_name" placeholder="Name">
                     <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
                 </div>

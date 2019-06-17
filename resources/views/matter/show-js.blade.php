@@ -32,7 +32,7 @@
               addActorForm.elements.actor_name.value = response.name;
             });
         } else {
-          addActorForm.actor_id.value = ui.item.id;
+          addActorForm.actor_id.value = ui.item.key;
           // Fills in actor's company information, if available
           addActorForm.company_id.value = ui.item.company_id;
         }
@@ -46,7 +46,7 @@
       }
     });
 
-    $('input[name="role"]').autocomplete({
+    $('input#role').autocomplete({
       minLength: 0,
       source: "/role/autocomplete",
       select: function(event, ui) {
@@ -61,6 +61,8 @@
         // Removes the entered value if it does not correspond to a suggestion
         if (!ui.item)
           this.value = "";
+        else
+          addActorForm.elements.role[0].value = ui.item.key;
       }
     }).focus(function() {
       // Triggers autocomplete search with 0 characters upon focus
