@@ -26,34 +26,14 @@
 
     });
 
-// Generic in-place edition of fields in a infoModal
-
-    $("#infoModal").on("keydown", "input.noformat", function (e) {
-        if (e.which === 13) {
-            e.preventDefault();
-            var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
-            $.post(resource + $(this).closest("table").data("id"), data)
-                .done(function () {
-                    $("#infoModal").find(".modal-body").load(relatedUrl);
-                    $("#infoModal").find(".alert").removeClass("alert-danger").html("");
-                })
-                .fail(function (errors) {
-                    $.each(errors.responseJSON, function (key, item) {
-                    $("#infoModal").find(".modal-footer .alert").html(item).addClass("alert-danger");
-                });
-            });
-        } else
-            $(this).parent("td").addClass("bg-warning");
-    });
-
 // Address and notes edition
-    $("#infoModal").on("keyup", "textarea.noformat", function () {
+    $("#ajaxModal").on("keyup", "textarea.noformat", function () {
         var field = $(this).data('field');
         $(field).removeClass('hidden-action');
         $(this).addClass('changed');
     });
 
-    $("#infoModal").on("click", "button.area", function () {
+    $("#ajaxModal").on("click", "button.area", function () {
         var field = $(this).data('field');
         var areaId = '#' + field
         var dataString = field + "=" + $(areaId).val();
@@ -64,7 +44,7 @@
                 data: dataString,
             });
             $(this).addClass('hidden-action');
-            $(areaId).removeClass('changed');
+            $(areaId).removeClass('bg-warning');
         }
         return false;
     });
@@ -91,74 +71,14 @@
     }, 500));
 
 // Specific in place edition of actor
-    $('#infoModal').on("click", 'input[type="radio"]', function () {
+    $('#ajaxModal').on("click", 'input[type="radio"]', function () {
         var mydata = {};
         mydata[this.name] = this.value;
         mydata['_method'] = "PUT";
         $.post(resource + $(this).closest("table").data("id"), mydata)
             .done(function () {
-                $("#infoModal").find(".modal-body").load(relatedUrl);
+                $("#ajaxModal").find(".modal-body").load(relatedUrl);
             })
-    });
-
-    $('#infoModal').on("click", 'input[name^="country"],input[name="nationality"]', function () {
-        $(this).autocomplete({
-            minLength: 1,
-            source: "/country/autocomplete",
-            change: function (event, ui) {
-                if (!ui.item)
-                    $(this).val("");
-            },
-            select: function (event, ui) {
-                this.value = ui.item.id;
-                var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
-                $.post(resource + $(this).closest("table").data("id"), data)
-                    .done(function () {
-                        $("#infoModal").find(".modal-body").load(relatedUrl);
-                        $("#infoModal").find(".alert").removeClass("alert-danger").html("");
-                    });
-            }
-        });
-    });
-
-    $('#infoModal').on("click", 'input[name="company_id"],input[name="parent_id"],input[name="site_id"]', function () {
-        $(this).autocomplete({
-            minLength: 2,
-            source: "/actor/autocomplete",
-            change: function (event, ui) {
-                if (!ui.item)
-                    $(this).val("");
-            },
-            select: function (event, ui) {
-                this.value = ui.item.id;
-                var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
-                $.post(resource + $(this).closest("table").data("id"), data)
-                    .done(function () {
-                        $("#infoModal").find(".modal-body").load(relatedUrl);
-                        $("#infoModal").find(".alert").removeClass("alert-danger").html("");
-                    });
-            }
-        });
-    });
-
-    $('#infoModal').on("click", 'input[name="default_role"]', function () {
-        $(this).autocomplete({
-            minLength: 1,
-            source: "/role/autocomplete",
-            change: function (event, ui) {
-                if (!ui.item)
-                    $(this).val("");
-            },
-            select: function (event, ui) {
-                this.value = ui.item.value;
-                var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
-                $.post(resource + $(this).closest("table").data("id"), data)
-                    .done(function () {
-                        $("#infoModal").find(".modal-body").load(relatedUrl);
-                        $("#infoModal").find(".alert").removeClass("alert-danger").html("");
-                    });
-            }
-        });
     });
 
     $('#actor-list').on("click", '.delete-from-list', function () {
@@ -172,18 +92,20 @@
         return false;
     });
 
-    $('#infoModal').on("click", '.delete-actor', function () {
+    $('#ajaxModal').on("click", '.delete-actor', function () {
         var del_conf = confirm("Deleting actor from table?");
         if (del_conf == 1) {
             var data = $.param({_method: "DELETE"});
             $.post('/actor/' + $(this).data("id"), data).done(function () {
-                $('#listModal').find(".modal-body").load(relatedUrl);
+                $('#ajaxModal').find(".modal-body").load(relatedUrl);
             });
         }
         return false;
     });
 
 // For creation rule modal view
+
+// THESE ALL NEED TO BE CHANGED TO USE ajaxModal
 
     $('#addModal').on("click", 'input[name="nationality_new"]', function () {
         $(this).autocomplete({

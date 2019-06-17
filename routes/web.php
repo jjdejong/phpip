@@ -115,7 +115,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('role/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\Role::select('name as label', 'code as value', 'shareable')
+        return App\Role::select('name as value', 'code as key', 'shareable')
                         ->where('name', 'like', "%$term%")->get();
     });
 
