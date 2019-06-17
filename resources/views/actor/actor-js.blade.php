@@ -84,7 +84,8 @@
             var data = $.param({_method: "DELETE"});
             $.post('/actor/' + $(this).closest("tr").data("id"), data).done(function () {
                 refreshActorList();
-            });
+            })
+            .fail(data => alert(data.responseJSON.message));
         }
         return false;
     });
@@ -95,7 +96,8 @@
             var data = $.param({_method: "DELETE"});
             $.post('/actor/' + $(this).data("id"), data).done(function () {
                 $('#ajaxModal').find(".modal-body").load(relatedUrl);
-            });
+            })
+            .fail(data => alert(data.responseJSON.message));;
         }
         return false;
     });
