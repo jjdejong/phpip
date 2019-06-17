@@ -176,9 +176,81 @@
           //.then(data => console.log(data));
         }
 
-        if (e.target.id === 'createMatterSubmit') {
-          submitModalForm('/matter', createMatterForm, true);
-        };
+        if (e.target.type === 'checkbox') {
+          var flag = 0;
+          if (e.target.checked)
+            flag = 1;
+          let params = new URLSearchParams();
+          params.append(e.target.name, flag);
+          fetchREST(resource + e.target.closest('tr').dataset.id, 'PUT', params)
+          .then( () => {
+            fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body'));
+            footerAlert.innerHTML = "";
+            footerAlert.classList.remove('alert-danger');
+          });
+        }
+
+        switch (e.target.id) {
+          case 'createMatterSubmit':
+            submitModalForm('/matter', createMatterForm, true);
+            break;
+
+          case 'deleteMatter':
+            if (confirm("Deleting the matter. Continue anyway?")) {
+              fetchREST('/matter/' + e.target.closest('card').dataset.id, 'DELETE')
+              .then((data) => {
+                if (data.message) {
+                  alert(data.message);
+                } else {
+                  location.href = "/matter";
+                }
+              });
+            }
+            break;
+
+          // Specific processing in the task list modal
+          case 'addTaskToEvent':
+            e.target.closest('tbody').insertAdjacentHTML('beforeend', addTaskFormTemplate.innerHTML);
+            addTaskForm['trigger_id'].value = e.target.dataset.event_id;
+            break;
+
+          case 'addTaskSubmit':
+            submitModalForm('/task', addTaskForm);
+            break;
+
+          case 'deleteTask':
+            fetchREST('/task/' + e.target.closest('tr').dataset.id, 'DELETE')
+            .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
+            break;
+
+          case 'deleteEvent':
+            if (confirm("Deleting the event will also delete the linked tasks. Continue anyway?")) {
+              fetchREST('/event/' + e.target.dataset.event_id, 'DELETE')
+              .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
+            }
+            break;
+
+          // Specific processing of the event list modal
+          case 'addEventSubmit':
+            submitModalForm('/event', addEventForm);
+            break;
+
+          // Classifier list modal
+          case 'addClassifierSubmit':
+            submitModalForm('/classifier', addClassifierForm);
+            break;
+
+          case 'deleteClassifier':
+            fetchREST('/classifier/' + e.target.closest('tr').dataset.id, 'DELETE')
+            .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
+            break;
+
+          // Specific processing in the actor/role list modal
+          case 'removeActor':
+            fetchREST('/actor-pivot/' + e.target.closest('tr').dataset.id, 'DELETE')
+            .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
+            break;
+        }
       });
 
       // Generic in-place edition of input fields in a modal

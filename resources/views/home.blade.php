@@ -149,6 +149,7 @@
                                 data-target="#ajaxModal"
                                 data-size="modal-lg"
                                 data-remote="false"
+                                data-resource="/task/"
                                 title="All tasks">
                             {{ $task->info->name }}{{ $task->detail ? " - ".$task->detail : "" }}
                           </a>
