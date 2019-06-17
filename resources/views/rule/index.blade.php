@@ -7,7 +7,7 @@
 @section('content')
 <legend>
   Rules
-  <a href="rule/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#addModal" data-remote="false" title="Rule data" data-source="/rule" data-resource="/rule/create/">Create rule</a>
+  <a href="rule/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" data-remote="false" title="Rule data" data-source="/rule" data-resource="/rule/create/">Create rule</a>
 </legend>
 <table class="table table-striped table-hover table-sm">
   <thead>
@@ -53,13 +53,6 @@
   @endforeach
   </tbody>
 </table>
-
-
-<!-- Modals -->
-@include('partials.table-show-modals')
-<div id="addModal" class="modal fade" role="dialog">
-@include('partials.generic-modals')
-</div>
 
 @endsection
 

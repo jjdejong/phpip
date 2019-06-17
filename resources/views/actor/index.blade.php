@@ -3,7 +3,7 @@
 @section('content')
 <legend>
     Actors
-    <a href="actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#addModal" data-remote="false" title="Actor data" data-resource="/actor/">Create actor</a>
+    <a href="actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" data-remote="false" title="Actor data" data-resource="/actor/">Create actor</a>
 </legend>
 <table class="table table-striped table-hover table-sm">
   <thead>
@@ -36,7 +36,7 @@
   <tbody id="actor-list">
     @foreach ($actorslist as $actor)
     <tr class="actor-list-row reveal-hidden" data-id="{{ $actor->id }}">
-      <td><a href="/actor/{{ $actor->id }}" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Actor data" data-resource="/actor/">
+      <td><a href="/actor/{{ $actor->id }}" data-toggle="modal" data-target="#ajaxModal" data-remote="false" title="Actor data" data-resource="/actor/">
           {{ $actor->name }}</a></td>
       <td>{{ $actor->first_name }}</td>
       <td>{{ $actor->display_name }}</td>
@@ -55,15 +55,6 @@
     @endforeach
   </tbody>
 </table>
-<!-- Modals -->
-@include('partials.table-show-modals')
-
-<div id="usedModal" class="modal fade" role="dialog">
-  @include('partials.generic-modals')
-</div>
-<div id="addModal" class="modal fade" role="dialog">
-  @include('partials.generic-modals')
-</div>
 
 @endsection
 
