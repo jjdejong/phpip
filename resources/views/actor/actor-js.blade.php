@@ -1,5 +1,4 @@
 <script>
-    var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
 
     function refreshActorList() {
         var url = '/actor?' + $("#filter").find("input").filter(function () {
@@ -17,11 +16,9 @@
             refreshActorList();
         });
 
-        // Display the modal view for used in
-        $("#usedModal").on("show.bs.modal", function (event) {
-            relatedUrl = $(event.relatedTarget).attr("href");
-            $(this).find(".modal-title").text($(event.relatedTarget).attr("title"));
-            $(this).find(".modal-body").load(relatedUrl);
+        // Display actor depencies in dropdown
+        $("#ajaxModal").on("show.bs.dropdown", "#usedInDropdown", function (event) {
+            $(this).find(".dropdown-menu").load(event.relatedTarget.href);
         });
 
     });

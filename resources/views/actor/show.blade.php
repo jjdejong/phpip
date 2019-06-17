@@ -132,8 +132,13 @@
         <button title="Delete actor" class="btn btn-danger delete-actor" data-dismiss="modal" data-id="{{ $actorInfo->id }}">
             Delete
         </button>
-        <a href="/actor/{{ $actorInfo->id }}/usedin" class="btn btn-info float-right" data-toggle="modal" data-target="#usedModal" data-remote="false" title="Actor used in matters or other actors" data-resource="/actor/">
-            &boxbox; Used in
-        </a>
+        <div class="btn-group dropup float-right" id="usedInDropdown">
+          <a href="/actor/{{ $actorInfo->id }}/usedin" class="btn btn-info dropdown-toggle" data-toggle="dropdown" title="Actor dependencies">
+              &boxbox; Used in
+          </a>
+          <div class="dropdown-menu">
+            Ajax Placeholder
+          </div>
+        </div>
     </fieldset>
 </div>
