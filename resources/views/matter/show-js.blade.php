@@ -16,9 +16,7 @@
     // First destroy existing popover when a new popover is opened
     $('.popover').siblings('.popover').first().popover('dispose');
 
-    var addActorForm = document.forms['addActorForm'];
-
-    $('#actor_name').autocomplete({
+    $('#actorName').autocomplete({
       minLength: 2,
       source: "/actor/autocomplete",
       select: function(event, ui) {
@@ -33,8 +31,6 @@
             });
         } else {
           addActorForm.actor_id.value = ui.item.key;
-          // Fills in actor's company information, if available
-          addActorForm.company_id.value = ui.item.company_id;
         }
       },
       change: function(event, ui) {
@@ -43,7 +39,7 @@
       }
     });
 
-    $('input#role').autocomplete({
+    $('input#roleName').autocomplete({
       minLength: 0,
       source: "/role/autocomplete",
       select: function(event, ui) {
@@ -56,10 +52,11 @@
       },
       change: function(event, ui) {
         // Removes the entered value if it does not correspond to a suggestion
-        if (!ui.item)
+        if (!ui.item) {
           this.value = "";
-        else
-          addActorForm.elements.role[0].value = ui.item.key;
+        } else {
+          addActorForm.role.value = ui.item.key;
+        }
       }
     }).focus(function() {
       // Triggers autocomplete search with 0 characters upon focus
@@ -77,21 +74,17 @@
     });
 
     addActorSubmit.onclick = () => {
-      //var currentForm = this.parentNode;
-      var request = $('#addActorForm').find("input").filter(function() {
-        return $(this).val().length > 0;
-      }).serialize(); // Filter out empty values
-      $.post('/actor-pivot', request)
-        .fail(function(errors) {
-          $.each(errors.responseJSON.errors, function(key, item) {
-            addActorForm[key].placeholder = item;
-            addActorForm[key].className += ' is-invalid';
-          });
-          $(".popover-body").find(".alert").html(errors.responseJSON.message).removeClass("d-none");
-        }).done(function() {
+      formData = new FormData(addActorForm);
+      params = new URLSearchParams(formData);
+      fetchREST('/actor-pivot', 'POST', params)
+      .then(data => {
+        if (data.errors) {
+          processSubmitErrors(data.errors, addActorForm);
+        } else {
           $('.popover').popover('hide');
           $("#actorPanel").load("/matter/{{ $matter->id }} #actorPanel > div");
-        });
+        }
+      });
     };
 
     // Close popover by clicking the cancel button
@@ -233,31 +226,9 @@
     return false;
   });
 
-// Specific processing of the event list modal
-
-  $("#ajaxModal").on("click", "#addEventSubmit", function() {
-    var request = $("#addEventForm").find("input").filter(function() {
-      return $(this).val().length > 0;
-    }).serialize(); // Filter out empty values
-    $.post('/event', request)
-      .done(() => {
-        $('#ajaxModal').find(".modal-body").load("/matter/{{ $matter->id }}/events");
-      })
-      .fail((errors) => {
-        $.each(errors.responseJSON.errors, (key, item) => {
-          $("#addEventForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
-        });
-      });
-  });
-
-// Specific processing in the task list modal
-
-  /*$("#ajaxModal").on("click", "#addTaskToEvent", function() {
-    this.closest('tbody').insertAdjacentHTML('beforeend', addTaskFormTemplate.innerHTML);
-    addTaskForm['trigger_id'].value = this.dataset.event_id;
-  });*/
   ajaxModal.addEventListener('click', (e) => {
     switch (e.target.id) {
+      // Specific processing in the task list modal
       case 'addTaskToEvent':
         e.target.closest('tbody').insertAdjacentHTML('beforeend', addTaskFormTemplate.innerHTML);
         addTaskForm['trigger_id'].value = e.target.dataset.event_id;
@@ -278,62 +249,22 @@
           .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
         }
         break;
+
+      // Specific processing of the event list modal
+      case 'addEventSubmit':
+        submitModalForm('/event', addEventForm);
+        break;
+
+      // Classifier list modal
+      case 'addClassifierSubmit':
+        submitModalForm('/classifier', addClassifierForm);
+        break;
+
+      case 'deleteClassifier':
+        fetchREST('/classifier/' + e.target.closest('tr').dataset.id, 'DELETE')
+        .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
+        break;
     }
-  });
-
-  /*$("#ajaxModal").on("click", "#addTaskSubmit", function() {
-    var request = $("#addTaskForm").find("input").filter(function() {
-      return $(this).val().length > 0;
-    }).serialize(); // Filter out empty values
-    $.post('/task', request)
-      .done(function() {
-        $('#ajaxModal').find(".modal-body").load("/matter/{{ $matter->id }}/tasks");
-      }).fail(function(errors) {
-        $.each(errors.responseJSON.errors, function(key, item) {
-          $("#addTaskForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
-        });
-      });
-  });
-
-  $("#ajaxModal").on("click", "#deleteTask", function() {
-    $.ajax({
-      url: '/task/' + $(this).closest("tr").data("id"),
-      type: 'DELETE'
-    }).done(function() {
-      $('#ajaxModal').find(".modal-body").load(relatedUrl);
-    });
-  });
-
-  $("#ajaxModal").on("click", "#deleteEvent", function() {
-    if (confirm("Deleting the event will also delete the linked tasks. Continue anyway?")) {
-      $.ajax({
-        url: '/event/' + $(this).data('event_id'),
-        type: 'DELETE'
-      }).done(function() {
-        $('#ajaxModal').find(".modal-body").load(relatedUrl);
-      });
-    }
-  });*/
-
-  $("#ajaxModal").on("click", "#addClassifierSubmit", function() {
-    $.post('/classifier', $("#addClassifierForm").serialize())
-      .done(function() {
-        $('#ajaxModal').find(".modal-body").load(relatedUrl);
-      }).fail(function(errors) {
-        $.each(errors.responseJSON.errors, function(key, item) {
-          $("#addClassifierForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
-        });
-      });
-  });
-
-  $("#ajaxModal").on("click", "#deleteClassifier", function() {
-    $.ajax({
-      url: '/classifier/' + $(this).closest("tr").data("id"),
-      type: 'DELETE'
-    }).done(function() {
-      $('#ajaxModal').find(".modal-body").load(relatedUrl);
-    });
-    return false;
   });
 
 //  Generate summary and copy

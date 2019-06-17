@@ -104,11 +104,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('actor/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        $list = App\Actor::select('name as value', 'id as key', 'company_id')
+        $list = App\Actor::select('name as value', 'id as key')
                         ->where('name', 'like', "%$term%")
                         ->take(10)->get();
         if ( $list->count() == 0 ) {
-          $list->push(['label' => 'Unknown. Create?', 'value' => 'create', 'company_id' => null]);
+          $list->push(['label' => 'Unknown. Create?', 'value' => 'create']);
         }
         return $list;
     });

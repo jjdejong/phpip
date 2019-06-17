@@ -173,6 +173,7 @@
         if (e.target.hasAttribute('data-ac')) {
           // Attach autocompletion
           autocompleteJQ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
+          //.then(data => console.log(data));
         }
 
         if (e.target.id === 'createMatterSubmit') {
@@ -300,6 +301,7 @@
             searchField.value = ui.item.key;
           }
           searchField.blur(); // Removing focus causes the "change" event to trigger and submit the value via the default functionality attached to the "input.noformat" fields
+          return ui.item;
         }
       });
     }
@@ -310,19 +312,11 @@
       fetchREST(target, 'POST', params)
       .then(data => {
         if (data.errors) {
-          // Form validation error notification
-          Object.entries(data.errors).forEach(([key, value]) => {
-            let inputElt = Form.querySelector('[data-actarget="' + key + '"]');
-            if (!inputElt) {
-              inputElt = Form.elements[key];
-            }
-            inputElt.placeholder = key + ' is required';
-            inputElt.classList.add('is-invalid');
-          });
+          processSubmitErrors(data.errors, Form);
           footerAlert.innerHTML = data.message;
           footerAlert.classList.add('alert-danger');
         } else if (redirect) {
-          // Redirect to the created matter (link returned by MatterController.store())
+          // Redirect to the created model (link returned by the controller store() function)
           location.href = data;
         } else {
           fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body'));
@@ -330,6 +324,17 @@
       })
       .catch(error => {
         console.log(error);
+      });
+    }
+
+    var processSubmitErrors = (errors, Form) => {
+      Object.entries(errors).forEach(([key, value]) => {
+        let inputElt = Form.querySelector('[data-actarget="' + key + '"]');
+        if (!inputElt) {
+          inputElt = Form.elements[key];
+        }
+        inputElt.placeholder = key + ' is required';
+        inputElt.className += ' is-invalid';
       });
     }
   </script>

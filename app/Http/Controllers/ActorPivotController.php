@@ -48,7 +48,9 @@ class ActorPivotController extends Controller
         $max = $i;
       }
 
-      $request->merge(['display_order' => $max + 1]);
+      $addedActor = Actor::find($request->actor_id);
+
+      $request->merge(['display_order' => $max + 1, 'company_id' => $addedActor->company_id]);
 
       try {
 				ActorPivot::create($request->except(['_token', '_method']));
@@ -92,7 +94,7 @@ class ActorPivotController extends Controller
         $actor->save();
       }
     }
-    
+
     /**
         * show Matters where actor is used
         * *

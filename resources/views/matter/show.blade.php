@@ -102,10 +102,9 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                 <input type="hidden" name="role" value="">
                 <input type="hidden" name="shared" value="1">
                 <input type="hidden" name="actor_id" value="">
-                <input type="hidden" name="company_id" value="">
                 <div class="ui-front">
-                    <input type="text" class="form-control form-control-sm" id="role" placeholder="Role">
-                    <input type="text" class="form-control form-control-sm" id="actor_name" placeholder="Name">
+                    <input type="text" class="form-control form-control-sm" id="roleName" data-actarget="role" placeholder="Role">
+                    <input type="text" class="form-control form-control-sm" id="actorName" data-actarget="actor_id" placeholder="Name">
                     <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
                 </div>
                 <div class="form-group">
@@ -141,9 +140,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                         <input type="hidden" name="role" value="{{ $role_group->first()->role_code }}">
                         <input type="hidden" name="shared" value="{{ $role_group->first()->shareable }}">
                         <input type="hidden" name="actor_id" value="">
-                        <input type="hidden" name="company_id" value="">
                         <div class="ui-front">
-                            <input type="text" class="form-control form-control-sm" id="actor_name" placeholder="Name">
+                            <input type="text" class="form-control form-control-sm" id="actorName" data-actarget="actor_id" placeholder="Name">
                             <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
                         </div>
                         <div class="form-group">

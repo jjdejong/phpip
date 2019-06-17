@@ -30,8 +30,8 @@
       <td class="ui-front"><input type="text" class="form-control noformat" name="lnk_matter_id" data-ac="/matter/autocomplete" placeholder="{{ $classifier->lnk_matter_id ? $classifier->linkedMatter->uid : '' }}"></td>
       <td>
         <input type="hidden" name="display_order" value="{{ $classifier->display_order }}" />
-        <a href="#" class="hidden-action" id="deleteClassifier" data-id="{{ $classifier->id }}" title="Delete classifier">
-          <span class="text-danger">&CircleMinus;</span>
+        <a href="#" class="hidden-action text-danger" id="deleteClassifier" title="Delete classifier">
+          &CircleMinus;
         </a>
       </td>
     </tr>
