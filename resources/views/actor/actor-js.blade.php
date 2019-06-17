@@ -12,32 +12,8 @@
 
     $(document).ready(function () {
 
-        // Ajax fill the opened modal and set global parameters
-        $("#infoModal").on("show.bs.modal", function (event) {
-            relatedUrl = $(event.relatedTarget).attr("href");
-            resource = $(event.relatedTarget).data("resource");
-            $(this).find(".modal-title").text($(event.relatedTarget).attr("title"));
-            $(this).find(".modal-body").load(relatedUrl);
-        });
         // Reload the actors list when closing the modal window
-        $("#infoModal").on("hide.bs.modal", function (event) {
-            refreshActorList();
-        });
-
-        // Display the modal view for creation of rule
-        $("#addModal").on("show.bs.modal", function (event) {
-            relatedUrl = $(event.relatedTarget).attr("href");
-            resource = $(event.relatedTarget).data("resource");
-            $(this).find(".modal-title").text($(event.relatedTarget).attr("title"));
-            $(this).find(".modal-body").load(relatedUrl);
-        });
-        // Reload the actors list when closing the modal window
-        $("#infoModal").on("hidden.bs.modal", function (event) {
-            refreshActorList();
-        });
-
-        $("#usedModal").on("hidden.bs.modal", function (event) {
-            $('#infoModal').modal('hide');
+        $("#ajaxModal").on("hide.bs.modal", function (event) {
             refreshActorList();
         });
 
