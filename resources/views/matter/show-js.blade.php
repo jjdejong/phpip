@@ -37,9 +37,6 @@
           addActorForm.company_id.value = ui.item.company_id;
         }
       },
-      open: function(event, ui) { // Change color of last suggestion (which is the "create actor" option)
-        $("ul").find(".ui-menu-item:last").addClass("text-success");
-      },
       change: function(event, ui) {
         if (!ui.item)
           this.value = "";
@@ -193,22 +190,6 @@
     } else {
       $("#multiPanel").load("/matter/{{ $matter->id }} #multiPanel > div");
     }
-  });
-
-  $('#ajaxModal').on("click", 'input[name="actor_id"].noformat, input[name="company_id"].noformat', function() {
-    $(this).autocomplete({
-      minLength: 2,
-      source: "/actor/autocomplete",
-      change: function(event, ui) {
-        if (!ui.item) {
-          this.value = "";
-        }
-      },
-      select: function(event, ui) {
-        this.value = ui.item.id;
-        this.blur();
-      }
-    });
   });
 
   $('#ajaxModal').on("click", 'input[type="checkbox"]', function() {
