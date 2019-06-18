@@ -32,28 +32,6 @@
         });
     });
 
-// Notes edition
-    /*$("#ajaxModal").on("keyup", "textarea.noformat", function () {
-        var field = $(this).data('field');
-        $(field).removeClass('hidden-action');
-        $(this).addClass('changed');
-    });
-
-    $("#ajaxModal").on("click", "button.area", function () {
-        var field = $(this).data('field');
-        var areaId = '#' + field;
-        if ($(areaId).hasClass('changed')) {
-            $.ajax({
-                type: 'PUT',
-                url: $(this).closest("table").data("source") + $(this).closest("table").data("id"),
-                data: field + "=" + $(areaId).val()
-            });
-            $(this).addClass('hidden-action');
-            $(areaId).removeClass('changed');
-        }
-        return false;
-    });*/
-
     $('.fiter-input').keyup(debounce(function () {
         if ($(this).val().length !== 0)
             $(this).css("background-color", "bisque");
@@ -64,15 +42,6 @@
     }, 500));
 
 // Specific in place edition of rule
-    $('#ajaxModal').on("click", 'input[type="radio"]', function () {
-        var mydata = {};
-        mydata[this.name] = this.value;
-        mydata['_method'] = "PUT";
-        $.post(resource + $(this).closest("table").data("id"), mydata)
-            .done(function () {
-                $("#ajaxModal").find(".modal-body").load(relatedUrl);
-            });
-    });
 
     $('#rule-list').on("click", '.delete-from-list', function () {
         var del_conf = confirm("Deleting rule " + $(this).closest("tr").data("id") + " from table?");
