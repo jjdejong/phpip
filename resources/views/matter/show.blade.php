@@ -62,7 +62,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}" />
             <div class="col-2">
               <input type="hidden" name="type_code">
-              <input id="type_code" type="text" class="form-control form-control-sm" name="type" placeholder="Type" autocomplete="off">
+              <input type="text" class="form-control form-control-sm" placeholder="Type" autocomplete="off">
             </div>
             <div class="col-10">
               <div class="input-group">
