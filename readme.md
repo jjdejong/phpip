@@ -5,7 +5,7 @@ The back-end for operating v2 is identical to that for v1 (Apache, PHP, MySQL, a
 # To get going
 
 * Clone the `phpip-v2` Git repository to a folder, say `phpip-v2`.
-* Install [composer](https://getcomposer.org/), then run `composer update` in the `phpip-v2` folder.
+* Install [composer](https://getcomposer.org/), then run `composer install` in the `phpip-v2` folder.
 * Create an `.env` file with your database credentials (copy and tailor the provided `.env.example` file).
 * Run `php artisan key:generate; php artisan config:clear` (a command-line php is required).
 
