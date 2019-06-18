@@ -255,7 +255,7 @@
 
       // Generic in-place edition of input fields in a modal
       this.addEventListener("change", e => {
-        if (e.target && e.target.matches("input.noformat")) {
+        if (e.target && e.target.matches(".noformat")) {
           let params = new URLSearchParams();
           params.append(e.target.name, e.target.value);
           let id = e.target.closest('tr').dataset.id;
@@ -290,7 +290,7 @@
     // Mark a modified input field
     app.addEventListener("input", e => {
       if (e.target && e.target.matches("input.noformat, textarea, [contenteditable]")) {
-        e.target.classList.add("bg-warning");
+        e.target.classList.add("border", "border-info");
       }
     });
 

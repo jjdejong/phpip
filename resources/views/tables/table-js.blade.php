@@ -33,7 +33,7 @@
     });
 
 // Notes edition
-    $("#ajaxModal").on("keyup", "textarea.noformat", function () {
+    /*$("#ajaxModal").on("keyup", "textarea.noformat", function () {
         var field = $(this).data('field');
         $(field).removeClass('hidden-action');
         $(this).addClass('changed');
@@ -52,7 +52,7 @@
             $(areaId).removeClass('changed');
         }
         return false;
-    });
+    });*/
 
     $('.fiter-input').keyup(debounce(function () {
         if ($(this).val().length !== 0)

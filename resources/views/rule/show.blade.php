@@ -41,9 +41,8 @@
             <tr>
                 <td>
                     <label for="notes" title="{{ $ruleComments['notes'] }}">Notes</label><br />
-                    <button type="button" data-field="notes" id="updateNotes" class="area hidden-action btn btn-primary btn-sm">&#9432; Save</button>
                 </td>
-                <td><textarea data-field="#updateNotes" id="notes" class="form-control noformat" name="notes" cols="" rows="">{{ $ruleInfo->notes }}</textarea></td>
+                <td><textarea class="form-control noformat" name="notes" cols="" rows="">{{ $ruleInfo->notes }}</textarea></td>
                 <td><label for="for_type" title="{{ $ruleComments['for_type'] }}">Type</label></td>
                 <td class="ui-front">
                     <input type="text" class="form-control noformat" name="for_type" data-ac="/type/autocomplete" value="{{ empty($ruleInfo->type) ? '' : $ruleInfo->type->type }}"></td>

@@ -24,7 +24,7 @@
     });
 
 // Address and notes edition
-    $("#ajaxModal").on("keyup", "textarea.noformat", function () {
+    /*$("#ajaxModal").on("keyup", "textarea.noformat", function () {
         var field = $(this).data('field');
         $(field).removeClass('hidden-action');
         $(this).addClass('changed');
@@ -32,7 +32,7 @@
 
     $("#ajaxModal").on("click", "button.area", function () {
         var field = $(this).data('field');
-        var areaId = '#' + field
+        var areaId = '#' + field;
         var dataString = field + "=" + $(areaId).val();
         if ($(areaId).hasClass('changed')) {
             $.ajax({
@@ -40,11 +40,11 @@
                 url: "/actor/" + $(this).closest("table").data("id"),
                 data: dataString,
             });
-            $(this).addClass('hidden-action');
-            $(areaId).removeClass('bg-warning');
+            this.classList.add('hidden-action');
+            $(areaId).removeClass('border', 'border-info');
         }
         return false;
-    });
+    });*/
 
 //$('.filter-input:input').onclick( function() {
     $('#physical').on('change', function () {

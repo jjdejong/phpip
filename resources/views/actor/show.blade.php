@@ -65,27 +65,24 @@
             <tr>
                 <td>
                     <label for="address">Address</label><br />
-                    <button type="button" data-field="address" class="area hidden-action btn btn-primary btn-sm" id="updateAddress">&check; Save</button>
                 </td>
-                <td class="ui-front"><textarea id="address" data-field="#updateAddress" class="noformat form-control" name="address">{{ $actorInfo->address }}</textarea></td>
+                <td class="ui-front"><textarea class="noformat form-control" name="address">{{ $actorInfo->address }}</textarea></td>
                 <td><label for="country">Country</label></td>
                 <td class="ui-front"><input type='text' class="noformat form-control" name="country" data-ac="/country/autocomplete" value="{{ empty($actorInfo->countryInfo) ? '' : $actorInfo->countryInfo->name }}"></td>
             </tr>
             <tr>
                 <td>
                     <label for="address_mailing">Address mailing</label><br />
-                    <button type="button" data-field="address_mailing" class="area hidden-action btn btn-primary btn-sm" id="updateAddressM">&check; Save</button>
                 </td>
-                <td class="ui-front"><textarea data-field="#updateAddressM" id="address_mailing" class="noformat form-control" name="address_mailing">{{ $actorInfo->address_mailing }}</textarea> </td>
+                <td class="ui-front"><textarea class="noformat form-control" name="address_mailing">{{ $actorInfo->address_mailing }}</textarea> </td>
                 <td><label for="country_mailing">Country mailing</label></td>
                 <td class="ui-front"><input type='text' class="noformat form-control" name="country_mailing" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_mailingInfo ) ? '' : $actorInfo->country_mailingInfo->name }}"></td>
             </tr>
             <tr>
                 <td>
                     <label for="address_billing">Address billing</label><br />
-                    <button type="button" data-field="address_billing" class="area hidden-action btn btn-primary btn-sm" id="updateAddressB">&check; Save</button>
                 </td>
-                <td class="ui-front"><textarea data-field="#updateAddressB" id="address_billing" class="noformat form-control" name="address_billing">{{ $actorInfo->address_billing }}</textarea></td>
+                <td class="ui-front"><textarea class="noformat form-control" name="address_billing">{{ $actorInfo->address_billing }}</textarea></td>
                 <td><label for="country_billing">Country billing</label></td>
                 <td class="ui-front"><input class="noformat form-control" name="country_billing" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_billingInfo ) ? '' : $actorInfo->country_billingInfo->name }}"></td>
             </tr>
@@ -124,9 +121,8 @@
             <tr>
                 <td>
                     <label for="notes" title="{{ $actorComments['notes'] }}">Notes</label><br />
-                    <button type="button" data-field="notes" id="updateNotes" class="area hidden-action btn btn-primary btn-sm">&check; Save</button>
                 </td>
-                <td colspan="3" class="ui-front"><textarea data-field="#updateNotes" id="notes" class="noformat form-control" name="address_billing">{{ $actorInfo->notes }}</textarea></td>
+                <td colspan="3" class="ui-front"><textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea></td>
             </tr>
         </table>
         <button title="Delete actor" class="btn btn-danger delete-actor" data-dismiss="modal" data-id="{{ $actorInfo->id }}">

@@ -105,7 +105,7 @@
         if (data.errors){
           console.log(data.errors);
         } else {
-          e.target.classList.remove('bg-warning');
+          e.target.classList.remove('border', 'border-info');
         }
       });
     }
