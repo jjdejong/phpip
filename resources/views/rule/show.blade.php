@@ -4,17 +4,17 @@
     <fieldset>
         <legend>Task rule details <span class="badge badge-light">{{ $ruleInfo->id }}</span></legend>
         <table class="table table-sm table-hover" data-id="{{ $ruleInfo->id }}" data-source="/rule/">
-            <tr data-id="{{ $ruleInfo->id }}">
+            <tr>
                 <td><label for="task" class="required-field" title="{{ $ruleComments['task'] }}">Task</label></td>
                 <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="task" data-ac="/country/autocomplete" data-actarget="task" value="{{ empty($ruleInfo->taskInfo) ? '' : $ruleInfo->taskInfo->name }}"></td>
+                    <input type="text" class="form-control noformat" name="task" data-ac="/event-name/autocomplete/1" placeholder="{{ $ruleInfo->taskInfo->name }}"></td>
                 <td><label for="detail" title="{{ $ruleComments['detail'] }}">Detail</label></td>
-                <td><input id="detail" class="form-control noformat" name="detail" value="{{ $ruleInfo->detail }}"></td>
+                <td><input class="form-control noformat" name="detail" value="{{ $ruleInfo->detail }}"></td>
             </tr>
-            <tr data-id="{{ $ruleInfo->id }}" >
+            <tr>
                 <td><label for="for_country" title="{{ $ruleComments['for_country'] }}">Country</label></td>
                 <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="for_country" data-ac="/country/autocomplete" data-actarget="for_country"
+                    <input type="text" class="form-control noformat" name="for_country" data-ac="/country/autocomplete"
                       value="{{ empty($ruleInfo->country) ? '' : $ruleInfo->country->name }}"></td>
                 <td><label for="is_active" title="{{ $ruleComments['active'] }}">Is active</label></td>
                 <td>
@@ -28,17 +28,17 @@
                     </div>
                 </td>
             </tr>
-            <tr data-id="{{ $ruleInfo->id }}">
+            <tr>
                 <td><label for="for_origin" title="{{ $ruleComments['for_origin'] }}">Origin</label></td>
                 <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="for_origin" data-ac="/country/autocomplete" data-actarget="for_origin"
+                    <input type="text" class="form-control noformat" name="for_origin" data-ac="/country/autocomplete"
                     value="{{ empty($ruleInfo->origin) ? '' : $ruleInfo->origin->name }}"></td>
                 <td><label for="for_category" title="{{ $ruleComments['for_category'] }}">Category</label></td>
                 <td class="ui-front">
                     <input type="hidden" name="for_category"  value="">
-                    <input type="text" class="form-control noformat" id="for_category" data-ac="/country/autocomplete" data-actarget="for_category" name="for_category" value="{{ empty($ruleInfo->category) ? '' : $ruleInfo->category->category }}"></td>
+                    <input type="text" class="form-control noformat" name="for_category" data-ac="/category/autocomplete" value="{{ empty($ruleInfo->category) ? '' : $ruleInfo->category->category }}"></td>
             </tr>
-            <tr data-id="{{ $ruleInfo->id }}">
+            <tr>
                 <td>
                     <label for="notes" title="{{ $ruleComments['notes'] }}">Notes</label><br />
                     <button type="button" data-field="notes" id="updateNotes" class="area hidden-action btn btn-primary btn-sm">&#9432; Save</button>
@@ -46,17 +46,17 @@
                 <td><textarea data-field="#updateNotes" id="notes" class="form-control noformat" name="notes" cols="" rows="">{{ $ruleInfo->notes }}</textarea></td>
                 <td><label for="for_type" title="{{ $ruleComments['for_type'] }}">Type</label></td>
                 <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="for_type" data-ac="/country/autocomplete" data-actarget="for_type" name="for_type" value="{{ empty($ruleInfo->type) ? '' : $ruleInfo->type->type }}"></td>
+                    <input type="text" class="form-control noformat" name="for_type" data-ac="/type/autocomplete" value="{{ empty($ruleInfo->type) ? '' : $ruleInfo->type->type }}"></td>
             </tr>
         </table>
     </fieldset>
     <fieldset>
         <legend>Rule details</legend>
         <table class="table table-sm table-hover" data-id="{{ $ruleInfo->id }}">
-            <tr data-id="{{ $ruleInfo->id }}">
+            <tr>
                 <td><label for="trigger_event" title="{{ $ruleComments['trigger_event'] }}">Trigger event</label></td>
                 <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="trigger_event" data-ac="/country/autocomplete" data-actarget="trigger_event" name="trigger_event" value="{{ empty($ruleInfo->trigger) ? '' : $ruleInfo->trigger->name }}"></td>
+                    <input type="text" class="form-control noformat" name="trigger_event" data-ac="/event-name/autocomplete/0" value="{{ empty($ruleInfo->trigger) ? '' : $ruleInfo->trigger->name }}"></td>
                 <td><label for="use_parent" title="{{ $ruleComments['use_parent'] }}">Use parent</label></td>
                 <td>
                     <div class="form-check form-check-inline">
@@ -69,7 +69,7 @@
                     </div>
                 </td>
             </tr>
-            <tr data-id="{{ $ruleInfo->id }}">
+            <tr>
                 <td><label for="use_before" title="{{ $ruleComments['use_before'] }}">Use before</label></td>
                 <td><input type="date" class="form-control noformat" name="use_before" value="{{ $ruleInfo->use_before != '' ?  $ruleInfo->use_before: '...' }}"></td>
                 <td><label for="clear_task" title="{{ $ruleComments['clear_task'] }}">Clear task</label></td>
@@ -84,7 +84,7 @@
                     </div>
                 </td>
             </tr>
-            <tr data-id="{{ $ruleInfo->id }}">
+            <tr>
                 <td><label for="use_after" title="{{ $ruleComments['use_after'] }}">Use after</label></td>
                 <td><input type="date" class="form-control noformat" name="use_after" value="{{ $ruleInfo->use_after != "" ?  $ruleInfo->use_after: "..." }}"></td>
                 <td><label for="delete_task" title="{{ $ruleComments['delete_task'] }}">Delete task</label></td>
@@ -99,10 +99,10 @@
                     </div>
                 </td>
             </tr>
-            <tr data-id="{{ $ruleInfo->id }}">
+            <tr>
                 <td><label for="condition_event" title="{{ $ruleComments['condition_event'] }}">Condition event</label></td>
                 <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="condition_event" data-ac="/country/autocomplete" data-actarget="condition_event" name="condition_event" value="{{ empty($ruleInfo->condition_eventInfo) ? '' : $ruleInfo->condition_eventInfo->name }}"></td>
+                    <input type="text" class="form-control noformat" name="condition_event" data-ac="/event-name/autocomplete/0" value="{{ empty($ruleInfo->condition_eventInfo) ? '' : $ruleInfo->condition_eventInfo->name }}"></td>
                 <td><label for="use_priority" title="{{ $ruleComments['use_priority'] }}">Use priority</label></td>
                 <td>
                     <div class="form-check form-check-inline">
@@ -115,33 +115,33 @@
                     </div>
                 </td>
             </tr>
-            <tr data-id="{{ $ruleInfo->id }}">
+            <tr>
                 <td><label for="abort_on" title="{{ $ruleComments['abort_on'] }}">Abort on</label></td>
                 <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="abort_on" data-ac="/country/autocomplete" data-actarget="abort_on" name="abort_on" value="{{ empty($ruleInfo->abort_onInfo) ? '' : $ruleInfo->abort_onInfo->name }}"></td>
+                    <input type="text" class="form-control noformat" name="abort_on" data-ac="/event-name/autocomplete/0" value="{{ empty($ruleInfo->abort_onInfo) ? '' : $ruleInfo->abort_onInfo->name }}"></td>
                 <td><label for="responsible" title="{{ $ruleComments['responsible'] }}">Responsible</label></td>
                 <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="responsible" data-ac="/country/autocomplete" data-actarget="responsible" name="responsible" value="{{ empty($ruleInfo->responsibleInfo) ? '' : $ruleInfo->responsibleInfo->name }}"></td>
+                    <input type="text" class="form-control noformat" name="responsible" data-ac="/user/autocomplete" value="{{ empty($ruleInfo->responsibleInfo) ? '' : $ruleInfo->responsibleInfo->name }}"></td>
             </tr>
-            <tr data-id="{{ $ruleInfo->id }}">
+            <tr>
                 <td><label for="days" title="{{ $ruleComments['days'] }}">Days</label></td>
                 <td><input class="form-control noformat" name="days" value="{{ $ruleInfo->days }}"></td>
                 <td><label for="cost" title="{{ $ruleComments['cost'] }}">Cost</label></td>
                 <td><input class="form-control noformat" name="cost" value="{{ $ruleInfo->cost }}"></td>
             </tr>
-            <tr data-id="{{ $ruleInfo->id }}">
+            <tr>
                 <td><label for="months" title="{{ $ruleComments['months'] }}">Months</label></td>
                 <td><input class="form-control noformat" name="months" value="{{ $ruleInfo->months }}"></td>
                 <td><label for="fee" title="{{ $ruleComments['fee'] }}">Fee</label></td>
                 <td><input class="form-control noformat" name="fee" value="{{ $ruleInfo->fee }}"></td>
             </tr>
-            <tr data-id="{{ $ruleInfo->id }}">
+            <tr>
                 <td><label for="years" title="{{ $ruleComments['years'] }}">Years</label></td>
                 <td><input class="form-control noformat" name="years" value="{{ $ruleInfo->years }}"></td>
                 <td><label for="currency" title="{{ $ruleComments['currency'] }}">Currency</label></td>
                 <td><input type="text" maxlength="3" class="form-control noformat" name="currency" value="{{ $ruleInfo->currency }}"></td>
             </tr>
-            <tr data-id="{{ $ruleInfo->id }}">
+            <tr>
                 <td><label for="end_of_month" title="{{ $ruleComments['end_of_month'] }}">End of month</label></td>
                 <td>
                     <div class="form-check form-check-inline">

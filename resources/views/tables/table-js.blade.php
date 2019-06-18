@@ -13,16 +13,8 @@
 
     $(document).ready(function () {
 
-        // Ajax fill the opened modal and set global parameters
-        $("#infoModal").on("show.bs.modal", function (event) {
-            relatedUrl = $(event.relatedTarget).attr("href");
-            sourceUrl = $(event.relatedTarget).data("source");  // Used to refresh the list
-            resource = $(event.relatedTarget).data("resource");
-            $(this).find(".modal-title").text($(event.relatedTarget).attr("title"));
-            $(this).find(".modal-body").load(relatedUrl);
-        });
         // Reload the rules list when closing the modal window
-        $("#infoModal").on("hidden.bs.modal", function (event) {
+        $("#ajaxModal").on("hidden.bs.modal", function (event) {
             refreshRuleList();
         });
 
@@ -40,32 +32,14 @@
         });
     });
 
-// Generic in-place edition of fields in a listModal
-    $("#infoModal").on("keydown", "input.noformat", function (e) {
-        if (e.which === 13) {
-            e.preventDefault();
-            var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
-            $.post(resource + $(this).closest("table").data("id"), data)
-                .done(function () {
-                    $("#infoModal").find(".modal-body").load(relatedUrl);
-                    $("#infoModal").find(".alert").removeClass("alert-danger").html("");
-                }).fail(function (errors) {
-                    $.each(errors.responseJSON, function (key, item) {
-                    $("#infoModal").find(".modal-footer .alert").html(item).addClass("alert-danger");
-                });
-            });
-        } else
-            $(this).parent("td").addClass("bg-warning");
-    });
-
 // Notes edition
-    $("#infoModal").on("keyup", "textarea.noformat", function () {
+    $("#ajaxModal").on("keyup", "textarea.noformat", function () {
         var field = $(this).data('field');
         $(field).removeClass('hidden-action');
         $(this).addClass('changed');
     });
 
-    $("#infoModal").on("click", "button.area", function () {
+    $("#ajaxModal").on("click", "button.area", function () {
         var field = $(this).data('field');
         var areaId = '#' + field;
         if ($(areaId).hasClass('changed')) {
@@ -80,7 +54,7 @@
         return false;
     });
 
-    $('.filter-input').keyup(debounce(function () {
+    $('.fiter-input').keyup(debounce(function () {
         if ($(this).val().length !== 0)
             $(this).css("background-color", "bisque");
         else
@@ -96,131 +70,10 @@
         mydata['_method'] = "PUT";
         $.post(resource + $(this).closest("table").data("id"), mydata)
             .done(function () {
-                $("#infoModal").find(".modal-body").load(relatedUrl);
+                $("#ajaxModal").find(".modal-body").load(relatedUrl);
             });
     });
-/*
-    $('#infoModal').on("click", 'input[name="for_country"],input[name="country"],input[name="for_origin"]', function () {
-        $(this).autocomplete({
-            minLength: 2,
-            source: "/country/autocomplete",
-            change: function (event, ui) {
-                if (!ui.item)
-                    $(this).val("");
-            },
-            select: function (event, ui) {
-                this.value = ui.item.id;
-                var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
-                $.post(resource + $(this).closest("table").data("id"), data)
-                    .done(function () {
-                        $("#infoModal").find(".modal-body").load(relatedUrl);
-                        $("#infoModal").find(".alert").removeClass("alert-danger").html("");
-                    });
-            }
-        });
-    });
-    $('#infoModal').on("click", 'input[name="task"]', function () {
-        $(this).autocomplete({
-            minLength: 1,
-            source: "/task-name/autocomplete/1",
-            change: function (event, ui) {
-                if (!ui.item)
-                    $(this).val("");
-            },
-            select: function (event, ui) {
-                this.value = ui.item.value;
-                var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
-                $.post(resource + $(this).closest("table").data("id"), data)
-                    .done(function () {
-                        $("#infoModal").find(".modal-body").load(relatedUrl);
-                        $("#infoModal").find(".alert").removeClass("alert-danger").html("");
-                    });
-            }
-        });
-    });
 
-    $('#infoModal').on("click", 'input[name$="category"]', function () {
-        $(this).autocomplete({
-            minLength: 2,
-            source: "/category/autocomplete",
-            change: function (event, ui) {
-                if (!ui.item)
-                    $(this).val("");
-            },
-            select: function (event, ui) {
-                this.value = ui.item.id;
-                var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
-                $.post(resource + $(this).closest("table").data("id"), data)
-                    .done(function () {
-                        $("#infoModal").find(".modal-body").load(relatedUrl);
-                        $("#infoModal").find(".alert").removeClass("alert-danger").html("");
-                    });
-            }
-        });
-    });
-
-
-    $('#infoModal').on("click", 'input[name="for_type"]', function () {
-        $(this).autocomplete({
-            minLength: 2,
-            source: "/type/autocomplete",
-            change: function (event, ui) {
-                if (!ui.item)
-                    $(this).val("");
-            },
-            select: function (event, ui) {
-                this.value = ui.item.id;
-                var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
-                $.post(resource + $(this).closest("table").data("id"), data)
-                    .done(function () {
-                        $("#infoModal").find(".modal-body").load(relatedUrl);
-                        $("#infoModal").find(".alert").removeClass("alert-danger").html("");
-                    });
-            }
-        });
-    });
-
-
-    $('#infoModal').on("click", "input[name$='event'],input[name='abort_on']", function () {
-        $(this).autocomplete({
-            minLength: 1,
-            source: "/event/autocomplete",
-            change: function (event, ui) {
-                if (!ui.item)
-                    $(this).val("");
-            },
-            select: function (event, ui) {
-                this.value = ui.item.value;
-                var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
-                $.post(resource + $(this).closest("table").data("id"), data)
-                    .done(function () {
-                        $("#infoModal").find(".modal-body").load(relatedUrl);
-                        $("#infoModal").find(".alert").removeClass("alert-danger").html("");
-                    });
-            }
-        });
-    });
-
-    $('#infoModal').on("click", 'input[name$="responsible"].noformat', function () {
-        $(this).autocomplete({
-            minLength: 2,
-            source: "/user/autocomplete",
-            change: function (event, ui) {
-                if (!ui.item)
-                    $(this).val("");
-            },
-            select: function (event, ui) {
-                this.value = ui.item.value;
-                var data = $.param({_method: "PUT"}) + "&" + $(this).serialize();
-                $.post(resource + $(this).closest("table").data("id"), data)
-                    .done(function () {
-                        $("#infoModal").find(".modal-body").load(relatedUrl);
-                        $("#infoModal").find(".alert").removeClass("alert-danger").html("");
-                    });
-            }
-        });
-    });
-*/
     $('#rule-list').on("click", '.delete-from-list', function () {
         var del_conf = confirm("Deleting rule " + $(this).closest("tr").data("id") + " from table?");
         if (del_conf === 1) {
@@ -238,7 +91,7 @@
         if (del_conf === 1) {
             var data = $.param({_method: "DELETE"});
             $.post('/eventname/' + $(this).closest("tr").data("id"), data).done(function () {
-                $('#listModal').find(".modal-body").load(relatedUrl);
+                $('#ajaxModal').find(".modal-body").load(relatedUrl);
             });
             sourceUrl = $(this).data("source");  // Used to refresh the list
             refreshRuleList();
@@ -246,24 +99,24 @@
         return false;
     });
 
-    $('#infoModal').on("click", '#delete-rule', function () {
+    $('#ajaxModal').on("click", '#delete-rule', function () {
         var del_conf = confirm("Deleting rule from table?");
         if (del_conf === 1) {
             var data = $.param({_method: "DELETE"});
             $.post('/rule/' + $(this).data("id"), data).done(function () {
-                $('#listModal').find(".modal-body").load(relatedUrl);
+                $('#ajaxModal').find(".modal-body").load(relatedUrl);
             });
         }
         return false;
     });
 
 
-    $('#infoModal').on("click", '#delete-ename', function () {
+    $('#ajaxModal').on("click", '#delete-ename', function () {
         var del_conf = confirm("Deleting event name from table?");
         if (del_conf === 1) {
             var data = $.param({_method: "DELETE"});
             $.post('/eventname/' + $(this).data("id"), data).done(function () {
-                $('#listModal').find(".modal-body").load(relatedUrl);
+                $('#ajaxModal').find(".modal-body").load(relatedUrl);
             });
         }
         return false;
@@ -274,7 +127,7 @@
     $('#addModal').on("click", 'input[name="task_new"]', function () {
         $(this).autocomplete({
             minLength: 1,
-            source: "/task-name/autocomplete/1",
+            source: "/event-name/autocomplete/1",
             change: function (event, ui) {
                 if (!ui.item)
                     $(this).val("");
@@ -354,7 +207,7 @@
     $('#addModal').on("click", 'input[name="trigger_event_new"]', function () {
         $(this).autocomplete({
             minLength: 1,
-            source: "/task-name/autocomplete/0",
+            source: "/event-name/autocomplete/0",
             change: function (event, ui) {
                 if (!ui.item)
                     $(this).val("");
@@ -370,7 +223,7 @@
     $('#addModal').on("click", 'input[name="condition_event_new"]', function () {
         $(this).autocomplete({
             minLength: 1,
-            source: "/task-name/autocomplete/0",
+            source: "/event-name/autocomplete/0",
             change: function (event, ui) {
                 if (!ui.item)
                     $(this).val("");

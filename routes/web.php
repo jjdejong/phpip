@@ -77,14 +77,6 @@ Route::group(['middleware' => 'auth'], function () {
         return $results->take(10)->get();
     });
 
-    Route::get('task-name/autocomplete/{is_task}', function (Request $request, $is_task) {
-        $term = $request->input('term');
-        $results = App\EventName::select('name as label', 'code as value')
-                ->where('name', 'like', "%$term%")
-                ->where('is_task', $is_task);
-        return $results->take(10)->get();
-    });
-
     Route::get('classifier-type/autocomplete/{main_display}', function (Request $request, $main_display) {
         $term = $request->input('term');
         $results = App\ClassifierType::select('type as value', 'code as key')
