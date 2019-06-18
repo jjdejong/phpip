@@ -27,12 +27,11 @@ class ClassifierController extends Controller
     {
     	$this->validate($request, [
     		'matter_id' => 'required',
-    		'type' => 'required',
     		'type_code' => 'required',
     		'value' => 'required_without:lnk_matter_id'
     	]);
 
-    	Classifier::create($request->except(['_token', '_method', 'type']));
+    	Classifier::create($request->except(['_token', '_method']));
     }
 
     /**

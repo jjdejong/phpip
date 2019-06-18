@@ -140,11 +140,11 @@
   });
 
   $("#titlePanel").on("shown.bs.collapse", "#addTitleCollapse", function() {
-    $(this).find('input[name="type"]').autocomplete({
+    $(this).find('input[placeholder="Type"]').autocomplete({
       minLength: 0,
       source: "/classifier-type/autocomplete/1",
       select: function(event, ui) {
-        $("#addTitleForm").find('input[name="type_code"]').val(ui.item.code);
+        addTitleForm['type_code'].value = ui.item.key;
       },
       change: function(event, ui) {
         if (!ui.item)
