@@ -98,12 +98,7 @@ class MatterController extends Controller
             $request->merge(['idx' => $idx + 1]);
         }
 
-        try {
-            $new_matter = Matter::create($request->except(['_token', '_method', 'operation', 'origin_id', 'priority']));
-        } catch (Exception $e) {
-            report($e);
-            return false;
-        }
+        $new_matter = Matter::create($request->except(['_token', '_method', 'operation', 'origin_id', 'priority']));
 
         switch ($request->operation) {
           case 'child':

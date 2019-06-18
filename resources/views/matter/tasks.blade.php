@@ -80,7 +80,7 @@
                 <div class="input-group">
                     <div class="ui-front">
                         <input type="hidden" name="code" value="">
-                        <input type="text" class="form-control form-control-sm" size="12" name="name" placeholder="Task" data-ac="/event-name/autocomplete/1" data-actarget="code">
+                        <input type="text" class="form-control form-control-sm" size="12" placeholder="Task" data-ac="/event-name/autocomplete/1" data-actarget="code">
                     </div>
                     <input type="text" class="form-control form-control-sm" size="16" name="detail" placeholder="Detail">
                     <div class="ui-front">

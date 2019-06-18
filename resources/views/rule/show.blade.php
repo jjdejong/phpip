@@ -56,7 +56,7 @@
             <tr>
                 <td><label for="trigger_event" title="{{ $ruleComments['trigger_event'] }}">Trigger event</label></td>
                 <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="trigger_event" data-ac="/event-name/autocomplete/0" value="{{ empty($ruleInfo->trigger) ? '' : $ruleInfo->trigger->name }}"></td>
+                    <input type="text" class="form-control noformat" name="trigger_event" data-ac="/event-name/autocomplete/0" placeholder="{{ $ruleInfo->trigger->name }}"></td>
                 <td><label for="use_parent" title="{{ $ruleComments['use_parent'] }}">Use parent</label></td>
                 <td>
                     <div class="form-check form-check-inline">

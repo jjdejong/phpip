@@ -51,19 +51,19 @@ class RuleController extends Controller
 
     {
         $rule = new Rule ;
-        $ruleInfo = $rule->with('country', 
+        $ruleInfo = $rule->with('country',
 			'trigger',
 			'country',
 			'category',
-			'origin', 
-			'type', 
+			'origin',
+			'type',
 			'taskInfo',
 			'condition_eventInfo',
 			'abort_onInfo',
 			'responsibleInfo'
 			)->find($n);
 		//	$rule->getRuleInfo($n);
-        
+
         $ruleComments = $rule->getTableComments('task_rules');
         return view('rule.show', compact('ruleInfo', 'ruleComments') );
     }
@@ -85,13 +85,20 @@ class RuleController extends Controller
      */
     public function update(Request $request, Rule $rule)
     {
-    	    	
+      $this->validate($request, [
+  			'cost' => 'nullable|numeric',
+  			'years' => 'nullable|numeric',
+  			'months' => 'nullable|numeric',
+  			'days' => 'nullable|numeric',
+  			'fee' => 'nullable|numeric'
+    	]);
+
     	$rule->update($request->except(['_token', '_method']));
     }
 
     public function store(Request $request)
     {
-    	$validator = Validator::make($request->all(), [
+    	$this->validate($request, [
 			'task' => 'required',
 			'trigger_event' => 'required',
 			'cost' => 'nullable|numeric',
@@ -102,8 +109,8 @@ class RuleController extends Controller
     	]);
     	$input = $request->all();
     	$to_retain = ['_token', '_method'];
-    	if($validator->passes()){
-			foreach ($input as $i =>$value) {				
+
+			foreach ($input as $i =>$value) {
 				if (strpos($i, '_new')) {
 					array_push($to_retain,$i);
 				}
@@ -111,13 +118,11 @@ class RuleController extends Controller
 					array_push($to_retain,$i);
 				}
 			}
-			
-			Rule::create($request->except($to_retain));
-			return Response::json(['success' => '1']);
-		}
-		return Response::json(['errors' => $validator->errors()]);
+
+      Rule::create($request->except($to_retain));
+
     }
-    
+
 /*    public function create(Request $request)
     {
     	$rule = new Rule ;

@@ -17,14 +17,13 @@ class TaskController extends Controller {
     public function store(Request $request) {
         $request->validate([
             'trigger_id' => 'required|numeric',
-            'name' => 'required',
             'due_date' => 'required|date',
             'done_date' => 'nullable|date',
             'cost' => 'nullable|numeric',
             'fee' => 'nullable|numeric'
         ]);
 
-        Task::create($request->except(['_token', '_method', 'name']));
+        Task::create($request->except(['_token', '_method']));
     }
 
     /**
