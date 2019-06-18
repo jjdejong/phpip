@@ -32,11 +32,11 @@
                 <td><label for="phy_person" title="{{ $actorComments['phy_person'] }}">Person</label></td>
                 <td>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="phy_person" id="phy_person" value="1" {{ $actorInfo->phy_person ? 'checked="checked"' : "" }}>
+                        <input class="form-check-input noformat" type="radio" name="phy_person" value="1" {{ $actorInfo->phy_person ? 'checked' : '' }}>
                         <label class="form-check-label" for="phy_person">Physical</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="phy_person" id="phy_person" value="0" {{ $actorInfo->phy_person ? "" : 'checked="checked"'}}>
+                        <input class="form-check-input noformat" type="radio" name="phy_person" value="0" {{ $actorInfo->phy_person ? '' : 'checked'}}>
                         <label class="form-check-label" for="phy_person">Legal</label>
                     </div>
                 </td>
@@ -47,11 +47,11 @@
                 <td><label for="small_entity" title="{{ $actorComments['small_entity'] }}">Entity</label></td>
                 <td>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="small_entity" id="small_entity" value="1" {{ $actorInfo->small_entity ? 'checked="checked"' : "" }}>
+                        <input class="form-check-input noformat" type="radio" name="small_entity" value="1" {{ $actorInfo->small_entity ? 'checked' : '' }}>
                         <label class="form-check-label" for="small_entity">Small</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="small_entity" id="small_entity" value="0" {{ $actorInfo->small_entity ? "" : 'checked="checked"'}}>
+                        <input class="form-check-input noformat" type="radio" name="small_entity" value="0" {{ $actorInfo->small_entity ? '' : 'checked'}}>
                         <label class="form-check-label" for="small_entity">Large</label>
                     </div>
                 </td>
@@ -103,11 +103,11 @@
                 <td><label for="warn" title="{{ $actorComments['warn'] }}">Warn</label></td>
                 <td>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="warn" id="warn" value="1" {{ $actorInfo->warn ? 'checked="checked"' : "" }}>
+                        <input class="form-check-input noformat" type="radio" name="warn" value="1" {{ $actorInfo->warn ? 'checked' : '' }}>
                         <label class="form-check-label" for="warn">Yes</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="warn" id="warn" value="0" {{ $actorInfo->warn ? "" : 'checked="checked"'}}>
+                        <input class="form-check-input noformat" type="radio" name="warn" value="0" {{ $actorInfo->warn ? '' : 'checked'}}>
                         <label class="form-check-label" for="warn">No</label>
                     </div>
                 </td>

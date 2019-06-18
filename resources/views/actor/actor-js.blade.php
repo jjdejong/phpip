@@ -23,30 +23,6 @@
 
     });
 
-// Address and notes edition
-    /*$("#ajaxModal").on("keyup", "textarea.noformat", function () {
-        var field = $(this).data('field');
-        $(field).removeClass('hidden-action');
-        $(this).addClass('changed');
-    });
-
-    $("#ajaxModal").on("click", "button.area", function () {
-        var field = $(this).data('field');
-        var areaId = '#' + field;
-        var dataString = field + "=" + $(areaId).val();
-        if ($(areaId).hasClass('changed')) {
-            $.ajax({
-                type: 'PUT',
-                url: "/actor/" + $(this).closest("table").data("id"),
-                data: dataString,
-            });
-            this.classList.add('hidden-action');
-            $(areaId).removeClass('border', 'border-info');
-        }
-        return false;
-    });*/
-
-//$('.filter-input:input').onclick( function() {
     $('#physical').on('change', function () {
         refreshActorList();
     });
@@ -68,15 +44,6 @@
     }, 500));
 
 // Specific in place edition of actor
-    $('#ajaxModal').on("click", 'input[type="radio"]', function () {
-        var mydata = {};
-        mydata[this.name] = this.value;
-        mydata['_method'] = "PUT";
-        $.post(resource + $(this).closest("table").data("id"), mydata)
-            .done(function () {
-                $("#ajaxModal").find(".modal-body").load(relatedUrl);
-            })
-    });
 
     $('#actor-list').on("click", '.delete-from-list', function () {
         var del_conf = confirm("Deleting actor from table?");

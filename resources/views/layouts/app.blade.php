@@ -176,20 +176,6 @@
           //.then(data => console.log(data));
         }
 
-        if (e.target.type === 'checkbox') {
-          var flag = 0;
-          if (e.target.checked)
-            flag = 1;
-          let params = new URLSearchParams();
-          params.append(e.target.name, flag);
-          fetchREST(resource + e.target.closest('tr').dataset.id, 'PUT', params)
-          .then( () => {
-            fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body'));
-            footerAlert.innerHTML = "";
-            footerAlert.classList.remove('alert-danger');
-          });
-        }
-
         switch (e.target.id) {
           case 'createMatterSubmit':
             submitModalForm('/matter', createMatterForm, true);
@@ -257,6 +243,13 @@
       this.addEventListener("change", e => {
         if (e.target && e.target.matches(".noformat")) {
           let params = new URLSearchParams();
+          if (e.target.type === 'checkbox') {
+            if (e.target.checked) {
+              e.target.value = 1;
+            } else {
+              e.target.value = 0;
+            }
+          }
           params.append(e.target.name, e.target.value);
           let id = e.target.closest('tr').dataset.id;
           if (!id) id = e.target.closest('table').dataset.id;
@@ -289,7 +282,7 @@
 
     // Mark a modified input field
     app.addEventListener("input", e => {
-      if (e.target && e.target.matches("input.noformat, textarea, [contenteditable]")) {
+      if (e.target && e.target.matches(".noformat, textarea, [contenteditable]")) {
         e.target.classList.add("border", "border-info");
       }
     });

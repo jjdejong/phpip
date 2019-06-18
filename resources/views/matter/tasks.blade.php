@@ -40,7 +40,7 @@
                 <input type="date" class="form-control noformat" name="due_date" value="{{ $task->due_date }}">
             </td>
             <td>
-                <input type="checkbox" name="done" {{ $task->done ? 'checked' : '' }}>
+                <input type="checkbox" class="noformat" name="done" {{ $task->done ? 'checked' : '' }}>
             </td>
             <td>
                 <input type="date" class="form-control noformat" name="done_date" value="{{ $task->done_date }}">
