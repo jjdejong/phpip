@@ -6,7 +6,8 @@ use App\Task;
 //use App\Event;
 use Illuminate\Http\Request;
 
-class TaskController extends Controller {
+class TaskController extends Controller
+{
 
     /**
      * Store a newly created resource in storage.
@@ -14,7 +15,8 @@ class TaskController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $request->validate([
             'trigger_id' => 'required|numeric',
             'due_date' => 'required|date',
@@ -32,7 +34,8 @@ class TaskController extends Controller {
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function show(Task $task) {
+    public function show(Task $task)
+    {
         //
     }
 
@@ -43,7 +46,8 @@ class TaskController extends Controller {
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task) {
+    public function update(Request $request, Task $task)
+    {
         $this->validate($request, [
             'due_date' => 'date',
             'done_date' => 'nullable|date',
@@ -65,8 +69,8 @@ class TaskController extends Controller {
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Task $task) {
+    public function destroy(Task $task)
+    {
         $task->delete();
     }
-
 }
