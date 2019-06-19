@@ -51,11 +51,11 @@
   <fieldset class="form-group">
     <legend>Use current {{ $from_matter->category->category ?? 'matter' }} as:</legend>
     <div class="form-check">
-      <input class="form-check-input" type="radio" name="priority" value="1" checked="checked" id="priority" />
+      <input class="form-check-input" type="radio" name="priority" value="1" checked="checked">
       <label class="form-check-label" for="priority">Priority application</label>
     </div>
     <div class="form-check">
-      <input class="form-check-input" type="radio" name="priority" value="0" id="parent" />
+      <input class="form-check-input" type="radio" name="priority" value="0">
       <label class="form-check-label" for="parent">Parent application</label>
     </div>
   </fieldset>

@@ -173,7 +173,6 @@
         if (e.target.hasAttribute('data-ac')) {
           // Attach autocompletion
           autocompleteJQ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
-          //.then(data => console.log(data));
         }
 
         switch (e.target.id) {
@@ -236,7 +235,37 @@
             fetchREST('/actor-pivot/' + e.target.closest('tr').dataset.id, 'DELETE')
             .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
             break;
+
+          // Nationalize modal
+          case 'nationalizeSubmit':
+            submitModalForm('/matter/storeN', natMatterForm, true);
+            break;
+
+          case 'addCountry':
+            $(e.target).autocomplete({
+              minLength: 2,
+              source: "/country/autocomplete",
+              select: function(event, ui) {
+                var new_country = '<div class="input-group" id="country-' + ui.item.key + '"> \
+                  <input type="hidden" name="ncountry[]" value="' + ui.item.key + '"> \
+                  <input type="text" class="form-control" readonly value="' + ui.item.value + '"> \
+                  <div class="input-group-append"> \
+                    <button class="btn btn-outline-danger" type="button" title="Remove ' + ui.item.value + '">&CircleMinus;</button> \
+                  </div> \
+                </div>';
+                ncountries.innerHTML += new_country;
+              },
+              close: function(event, ui) {
+                e.target.value = "";
+              }
+            });
+            break;
         }
+
+        if (e.target.matches('#ncountries .btn-outline-danger')) {
+          e.target.parentNode.parentNode.remove();
+        }
+
       });
 
       // Generic in-place edition of input fields in a modal
@@ -366,7 +395,6 @@
             searchField.value = ui.item.key;
           }
           searchField.blur(); // Removing focus causes the "change" event to trigger and submit the value via the default functionality attached to the "input.noformat" fields
-          return ui.item;
         }
       });
     }
