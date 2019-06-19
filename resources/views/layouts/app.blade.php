@@ -246,14 +246,11 @@
               minLength: 2,
               source: "/country/autocomplete",
               select: function(event, ui) {
-                var new_country = '<div class="input-group" id="country-' + ui.item.key + '"> \
-                  <input type="hidden" name="ncountry[]" value="' + ui.item.key + '"> \
-                  <input type="text" class="form-control" readonly value="' + ui.item.value + '"> \
-                  <div class="input-group-append"> \
-                    <button class="btn btn-outline-danger" type="button" title="Remove ' + ui.item.value + '">&CircleMinus;</button> \
-                  </div> \
-                </div>';
-                ncountries.innerHTML += new_country;
+                var newCountry = appendCountryTemplate.content.children[0];
+                newCountry.id = 'country-' + ui.item.key;
+                newCountry.children[0].value = ui.item.key;
+                newCountry.children[1].value = ui.item.value;
+                ncountries.appendChild(newCountry);
               },
               close: function(event, ui) {
                 e.target.value = "";

@@ -12,7 +12,7 @@
 			<input type="hidden" name="ncountry[]" value="{{ $iso }}" />
 			<input type="text" class="form-control" readonly value="{{ $name }}" />
 			<div class="input-group-append">
-				<button class="btn btn-outline-danger" type="button" id="{{ $iso }}" title="Remove {{ $iso }}">&CircleMinus;</button>
+				<button class="btn btn-outline-danger" type="button" id="{{ $iso }}" title="Remove {{ $iso }}">&times;</button>
 			</div>
 		</div>
 		@endforeach
@@ -20,10 +20,20 @@
 	<div class="input-group">
 		<input type="text" class="form-control" placeholder="Add country" id="addCountry">
 		<div class="input-group-append">
-			<span class="input-group-text">&oplus;</span>
+			<span class="input-group-text">&plus;</span>
 		</div>
 	</div>
 	<div id="add-matter-actions">
 		<button type="button" class="btn btn-primary" id="nationalizeSubmit">Submit</button>
 	</div>
 </form>
+
+<template id="appendCountryTemplate">
+	<div class="input-group">
+		<input type="hidden" name="ncountry[]">
+		<input type="text" class="form-control" value="" readonly>
+		<div class="input-group-append">
+			<button class="btn btn-outline-danger" type="button">&times;</button>
+		</div>
+	</div>
+</template>
