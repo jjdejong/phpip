@@ -2,7 +2,7 @@
 
 @section('content')
 <div id="events-tab">Event names</div>
-<a href="eventname/create" data-toggle="modal" data-target="#addModal" data-remote="false" title="Event name" data-resource="/eventname/create/">Add a new event name</a>
+<a href="eventname/create" data-toggle="modal" data-target="#ajaxModal" data-remote="false" title="Event name" data-resource="/eventname/create/">Add a new event name</a>
   <table class="table table-striped table-hover table-sm">
     <thead>
       <tr>
@@ -22,7 +22,7 @@
 
       @foreach ($enameslist as $event)
       <tr class="rule-list-row reveal-hidden" data-id="{{ $event->code }}">
-        <td><a href="/eventname/{{ $event->code }}" data-source="/eventname" data-toggle="modal" data-target="#infoModal" data-remote="false" title="Event name info" data-resource="/eventname/">
+        <td><a href="/eventname/{{ $event->code }}" data-source="/eventname" data-toggle="modal" data-target="#ajaxModal" data-remote="false" title="Event name info" data-resource="/eventname/">
             {{ $event->code }}</a></td>
         <td>{{ $event->name }}</td>
         <td>{{ $event->notes }}</td>
@@ -35,7 +35,7 @@
   </table>
 
 <!-- Modals -->
-@include('partials.table-show-modals')
+
 <div id="addModal" class="modal fade" role="dialog">
   @include('partials.generic-modals')
 </div>
