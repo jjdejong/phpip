@@ -169,21 +169,21 @@
       fetchInto(relatedUrl, this.querySelector('.modal-body'));
     }); // End modal event processing
 
-      // Process click events in the modal
-      ajaxModal.addEventListener('click', (e) => {
-        if (e.target.hasAttribute('data-ac')) {
-          // Attach autocompletion
-          autocompleteJQ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
-        }
+    // Process click events in the modal
+    ajaxModal.addEventListener('click', (e) => {
+      if (e.target.hasAttribute('data-ac')) {
+        // Attach autocompletion
+        autocompleteJQ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
+      }
 
-        switch (e.target.id) {
-          case 'createMatterSubmit':
-            submitModalForm('/matter', createMatterForm, true);
-            break;
+      switch (e.target.id) {
+        case 'createMatterSubmit':
+          submitModalForm('/matter', createMatterForm, true);
+          break;
 
-          case 'deleteMatter':
-            if (confirm("Deleting the matter. Continue anyway?")) {
-              fetchREST('/matter/' + e.target.closest('card').dataset.id, 'DELETE')
+        case 'deleteMatter':
+          if (confirm("Deleting the matter. Continue anyway?")) {
+            fetchREST('/matter/' + e.target.closest('card').dataset.id, 'DELETE')
               .then((data) => {
                 if (data.message) {
                   alert(data.message);
@@ -191,96 +191,96 @@
                   location.href = "/matter";
                 }
               });
-            }
-            break;
+          }
+          break;
 
           // Specific processing in the task list modal
-          case 'addTaskToEvent':
-            e.target.closest('tbody').insertAdjacentHTML('beforeend', addTaskFormTemplate.innerHTML);
-            addTaskForm['trigger_id'].value = e.target.dataset.event_id;
-            break;
+        case 'addTaskToEvent':
+          e.target.closest('tbody').insertAdjacentHTML('beforeend', addTaskFormTemplate.innerHTML);
+          addTaskForm['trigger_id'].value = e.target.dataset.event_id;
+          break;
 
-          case 'addTaskSubmit':
-            submitModalForm('/task', addTaskForm);
-            break;
+        case 'addTaskSubmit':
+          submitModalForm('/task', addTaskForm);
+          break;
 
-          case 'deleteTask':
-            fetchREST('/task/' + e.target.closest('tr').dataset.id, 'DELETE')
+        case 'deleteTask':
+          fetchREST('/task/' + e.target.closest('tr').dataset.id, 'DELETE')
             .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
-            break;
+          break;
 
-          case 'deleteEvent':
-            if (confirm("Deleting the event will also delete the linked tasks. Continue anyway?")) {
-              fetchREST('/event/' + e.target.dataset.event_id, 'DELETE')
+        case 'deleteEvent':
+          if (confirm("Deleting the event will also delete the linked tasks. Continue anyway?")) {
+            fetchREST('/event/' + e.target.dataset.event_id, 'DELETE')
               .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
-            }
-            break;
+          }
+          break;
 
           // Specific processing of the event list modal
-          case 'addEventSubmit':
-            submitModalForm('/event', addEventForm);
-            break;
+        case 'addEventSubmit':
+          submitModalForm('/event', addEventForm);
+          break;
 
           // Classifier list modal
-          case 'addClassifierSubmit':
-            submitModalForm('/classifier', addClassifierForm);
-            break;
+        case 'addClassifierSubmit':
+          submitModalForm('/classifier', addClassifierForm);
+          break;
 
-          case 'deleteClassifier':
-            fetchREST('/classifier/' + e.target.closest('tr').dataset.id, 'DELETE')
+        case 'deleteClassifier':
+          fetchREST('/classifier/' + e.target.closest('tr').dataset.id, 'DELETE')
             .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
-            break;
+          break;
 
           // Specific processing in the actor/role list modal
-          case 'removeActor':
-            fetchREST('/actor-pivot/' + e.target.closest('tr').dataset.id, 'DELETE')
+        case 'removeActor':
+          fetchREST('/actor-pivot/' + e.target.closest('tr').dataset.id, 'DELETE')
             .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
-            break;
+          break;
 
           // Nationalize modal
-          case 'nationalizeSubmit':
-            submitModalForm('/matter/storeN', natMatterForm, true);
-            break;
+        case 'nationalizeSubmit':
+          submitModalForm('/matter/storeN', natMatterForm, true);
+          break;
 
-          case 'addCountry':
-            $(e.target).autocomplete({
-              minLength: 2,
-              source: "/country/autocomplete",
-              select: function(event, ui) {
-                var newCountry = appendCountryTemplate.content.children[0];
-                newCountry.id = 'country-' + ui.item.key;
-                newCountry.children[0].value = ui.item.key;
-                newCountry.children[1].value = ui.item.value;
-                ncountries.appendChild(newCountry);
-              },
-              close: function(event, ui) {
-                e.target.value = "";
-              }
-            });
-            break;
-        }
-
-        if (e.target.matches('#ncountries .btn-outline-danger')) {
-          e.target.parentNode.parentNode.remove();
-        }
-
-      });
-
-      // Generic in-place edition of input fields in a modal
-      ajaxModal.addEventListener("change", e => {
-        if (e.target && e.target.matches(".noformat")) {
-          let params = new URLSearchParams();
-          if (e.target.type === 'checkbox') {
-            if (e.target.checked) {
-              e.target.value = 1;
-            } else {
-              e.target.value = 0;
+        case 'addCountry':
+          $(e.target).autocomplete({
+            minLength: 2,
+            source: "/country/autocomplete",
+            select: function(event, ui) {
+              var newCountry = appendCountryTemplate.content.children[0];
+              newCountry.id = 'country-' + ui.item.key;
+              newCountry.children[0].value = ui.item.key;
+              newCountry.children[1].value = ui.item.value;
+              ncountries.appendChild(newCountry);
+            },
+            close: function(event, ui) {
+              e.target.value = "";
             }
+          });
+          break;
+      }
+
+      if (e.target.matches('#ncountries .btn-outline-danger')) {
+        e.target.parentNode.parentNode.remove();
+      }
+
+    });
+
+    // Generic in-place edition of input fields in a modal
+    ajaxModal.addEventListener("change", e => {
+      if (e.target && e.target.matches(".noformat")) {
+        let params = new URLSearchParams();
+        if (e.target.type === 'checkbox') {
+          if (e.target.checked) {
+            e.target.value = 1;
+          } else {
+            e.target.value = 0;
           }
-          params.append(e.target.name, e.target.value);
-          let id = e.target.closest('tr').dataset.id;
-          if (!id) id = e.target.closest('table').dataset.id;
-          fetchREST(resource + id, 'PUT', params)
+        }
+        params.append(e.target.name, e.target.value);
+        let id = e.target.closest('tr').dataset.id;
+        if (!id) id = e.target.closest('table').dataset.id;
+        fetchREST(resource + id, 'PUT', params)
           .then(data => {
             if (data.errors) {
               footerAlert.innerHTML = Object.values(data.errors)[0];
@@ -294,17 +294,17 @@
           .catch(error => {
             console.log(error);
           });
-        }
-      });
+      }
+    });
 
-      // Reset ajaxModal to default when it is closed
-      $('#ajaxModal').on("hidden.bs.modal", function(event) {
-        this.querySelector('.modal-body').innerHTML = "Ajax body placeholder";
-        this.querySelector('.modal-title').innerHTML = "Ajax title placeholder";
-        this.querySelector('.modal-dialog').className = "modal-dialog";
-        footerAlert.innerHTML = "";
-        footerAlert.classList.remove('alert-danger');
-      });
+    // Reset ajaxModal to default when it is closed
+    $('#ajaxModal').on("hidden.bs.modal", function(event) {
+      this.querySelector('.modal-body').innerHTML = "Ajax body placeholder";
+      this.querySelector('.modal-title').innerHTML = "Ajax title placeholder";
+      this.querySelector('.modal-dialog').className = "modal-dialog";
+      footerAlert.innerHTML = "";
+      footerAlert.classList.remove('alert-danger');
+    });
 
 
     // Mark a modified input field
@@ -401,21 +401,21 @@
       formData = new FormData(Form);
       params = new URLSearchParams(formData);
       fetchREST(target, 'POST', params)
-      .then(data => {
-        if (data.errors) {
-          processSubmitErrors(data.errors, Form);
-          footerAlert.innerHTML = data.message;
-          footerAlert.classList.add('alert-danger');
-        } else if (redirect) {
-          // Redirect to the created model (link returned by the controller store() function)
-          location.href = data;
-        } else {
-          fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body'));
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
+        .then(data => {
+          if (data.errors) {
+            processSubmitErrors(data.errors, Form);
+            footerAlert.innerHTML = data.message;
+            footerAlert.classList.add('alert-danger');
+          } else if (redirect) {
+            // Redirect to the created model (link returned by the controller store() function)
+            location.href = data;
+          } else {
+            fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body'));
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
 
     var processSubmitErrors = (errors, Form) => {
