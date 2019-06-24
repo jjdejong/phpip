@@ -167,9 +167,10 @@
       this.querySelector('.modal-title').innerHTML = modalTrigger.title;
       if (modalTrigger.hasAttribute('data-size')) this.querySelector('.modal-dialog').classList.add(modalTrigger.dataset.size);
       fetchInto(relatedUrl, this.querySelector('.modal-body'));
+    }); // End modal event processing
 
       // Process click events in the modal
-      this.addEventListener('click', (e) => {
+      ajaxModal.addEventListener('click', (e) => {
         if (e.target.hasAttribute('data-ac')) {
           // Attach autocompletion
           autocompleteJQ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
@@ -266,7 +267,7 @@
       });
 
       // Generic in-place edition of input fields in a modal
-      this.addEventListener("change", e => {
+      ajaxModal.addEventListener("change", e => {
         if (e.target && e.target.matches(".noformat")) {
           let params = new URLSearchParams();
           if (e.target.type === 'checkbox') {
@@ -285,7 +286,7 @@
               footerAlert.innerHTML = Object.values(data.errors)[0];
               footerAlert.classList.add('alert-danger');
             } else {
-              fetchInto(relatedUrl, this.querySelector(".modal-body"));
+              fetchInto(relatedUrl, ajaxModal.querySelector(".modal-body"));
               footerAlert.classList.remove("alert-danger");
               footerAlert.innerHTML = "";
             }
@@ -297,14 +298,14 @@
       });
 
       // Reset ajaxModal to default when it is closed
-      $(this).on("hidden.bs.modal", function(event) {
+      $('#ajaxModal').on("hidden.bs.modal", function(event) {
         this.querySelector('.modal-body').innerHTML = "Ajax body placeholder";
         this.querySelector('.modal-title').innerHTML = "Ajax title placeholder";
         this.querySelector('.modal-dialog').className = "modal-dialog";
         footerAlert.innerHTML = "";
         footerAlert.classList.remove('alert-danger');
       });
-    }); // End modal event processing
+
 
     // Mark a modified input field
     app.addEventListener("input", e => {
