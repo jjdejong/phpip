@@ -32,7 +32,7 @@
         });
     });
 
-    $('.fiter-input').keyup(debounce(function () {
+    $('.filter-input').keyup(debounce(function () {
         if ($(this).val().length !== 0)
             $(this).css("background-color", "bisque");
         else
