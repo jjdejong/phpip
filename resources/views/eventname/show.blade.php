@@ -50,7 +50,7 @@
                 </span>
                 </tr>
 			</table>
-		<button title="Delete event name" id="delete-ename" data-dismiss="modal" data-id="{{ $enameInfo->code }}" style="float: right; margin-top: 10px; margin-right: 16px;">
+        <button type="button" class="btn btn-danger" title="Delete event name" id="delete-ename" data-dismiss="modal" data-id="{{ $enameInfo->code }}">
 			&times; Delete
 		</button>
 	</fieldset>
