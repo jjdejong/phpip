@@ -173,15 +173,22 @@
 
   // Ajax refresh various panels when a modal is closed
   $("#ajaxModal").on("hide.bs.modal", function(event) {
-    if (resource === '/actor-pivot/') {
-      fetch("/matter/{{ $matter->id }}")
-        .then(response => response.text())
-        .then(html => {
-          let doc = new DOMParser().parseFromString(html, "text/html");
-          actorPanel.innerHTML = doc.getElementById('actorPanel').innerHTML;
-        });
-    } else {
-      $("#multiPanel").load("/matter/{{ $matter->id }} #multiPanel > div");
+    switch (resource) {
+      case '/actor-pivot/':
+        fetch("/matter/{{ $matter->id }}")
+          .then(response => response.text())
+          .then(html => {
+            let doc = new DOMParser().parseFromString(html, "text/html");
+            actorPanel.innerHTML = doc.getElementById('actorPanel').innerHTML;
+          });
+        break;
+      case '/event/':
+      case '/task/':
+        $("#multiPanel").load("/matter/{{ $matter->id }} #multiPanel > div");
+        break;
+      case '/matter/':
+        $("#dependencyPanel").load("/matter/{{ $matter->id }} #dependencyPanel > div");
+        break;
     }
   });
 

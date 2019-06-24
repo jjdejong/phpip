@@ -10,7 +10,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 @section('content')
 
 <div class="row card-deck mb-1">
-  <div class="card border-primary col-3 p-0">
+  <div id="dependencyPanel" class="card border-primary col-3 p-0">
     <div class="card-header bg-primary text-white reveal-hidden lead p-1">
       <a class="bg-primary text-white" href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
       ({{ $matter->category->category }})
