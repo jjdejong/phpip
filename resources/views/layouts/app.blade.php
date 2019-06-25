@@ -141,6 +141,12 @@
       element.innerHTML = await res.text();
     }
 
+    var reloadPart = async (url, partId) => {
+      res = await fetch(url);
+      let doc = new DOMParser().parseFromString(await res.text(), "text/html");
+      document.getElementById(partId).innerHTML = doc.getElementById(partId).innerHTML;
+    }
+
     // Perform REST operations with native JS
     var fetchREST = async (url, method, body, reload = false) => {
       res = await fetch(url, {

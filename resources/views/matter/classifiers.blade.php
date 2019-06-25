@@ -27,7 +27,7 @@
     <tr class="reveal-hidden" data-id="{{ $classifier->id }}">
       <td><input type="text" class="form-control noformat" name="value" value="{{ $classifier->value }}" /></td>
       <td><input type="text" class="form-control noformat" name="url" value="{{ $classifier->url }}" /></td>
-      <td class="ui-front"><input type="text" class="form-control noformat" name="lnk_matter_id" data-ac="/matter/autocomplete" placeholder="{{ $classifier->lnk_matter_id ? $classifier->linkedMatter->uid : '' }}"></td>
+      <td class="ui-front"><input type="text" class="form-control noformat" name="lnk_matter_id" data-ac="/matter/autocomplete" value="{{ $classifier->lnk_matter_id ? $classifier->linkedMatter->uid : '' }}"></td>
       <td>
         <input type="hidden" name="display_order" value="{{ $classifier->display_order }}" />
         <a href="#" class="hidden-action text-danger" id="deleteClassifier" title="Delete classifier">

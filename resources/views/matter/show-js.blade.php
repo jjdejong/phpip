@@ -82,7 +82,7 @@
           processSubmitErrors(data.errors, addActorForm);
         } else {
           $('.popover').popover('hide');
-          $("#actorPanel").load("/matter/{{ $matter->id }} #actorPanel > div");
+          reloadPart("/matter/{{ $matter->id }}", 'actorPanel');
         }
       });
     };
@@ -133,7 +133,7 @@
           value: title
         }
       }).done(function() {
-        $('#titlePanel').load("/matter/{{ $matter->id }} #titlePanel > div");
+        reloadPart("/matter/{{ $matter->id }}", 'titlePanel');
       });
     } else
       $(this).addClass("border border-info");
@@ -161,7 +161,7 @@
     }).serialize(); // Filter out empty values
     $.post('/classifier', request)
       .done(function() {
-        $('#titlePanel').load("/matter/{{ $matter->id }} #titlePanel > div");
+        reloadPart("/matter/{{ $matter->id }}", 'titlePanel');
       }).fail(function(errors) {
         $.each(errors.responseJSON.errors, function(key, item) {
           $("#addTitleForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
@@ -175,19 +175,15 @@
   $("#ajaxModal").on("hide.bs.modal", function(event) {
     switch (resource) {
       case '/actor-pivot/':
-        fetch("/matter/{{ $matter->id }}")
-          .then(response => response.text())
-          .then(html => {
-            let doc = new DOMParser().parseFromString(html, "text/html");
-            actorPanel.innerHTML = doc.getElementById('actorPanel').innerHTML;
-          });
+        reloadPart("/matter/{{ $matter->id }}", 'actorPanel');
         break;
       case '/event/':
       case '/task/':
-        $("#multiPanel").load("/matter/{{ $matter->id }} #multiPanel > div");
+      case '/classifier/':
+        reloadPart("/matter/{{ $matter->id }}", 'multiPanel');
         break;
       case '/matter/':
-        $("#dependencyPanel").load("/matter/{{ $matter->id }} #dependencyPanel > div");
+        reloadPart("/matter/{{ $matter->id }}", 'refsPanel');
         break;
     }
   });

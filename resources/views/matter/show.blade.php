@@ -10,7 +10,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 @section('content')
 
 <div class="row card-deck mb-1">
-  <div id="dependencyPanel" class="card border-primary col-3 p-0">
+  <div id="refsPanel" class="card border-primary col-3 p-0">
     <div class="card-header bg-primary text-white reveal-hidden lead p-1">
       <a class="bg-primary text-white" href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
       ({{ $matter->category->category }})
@@ -288,7 +288,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             &vellip;
           </a>
         </div>
-        <div class="card-body p-1" id="classifier-panel" style="overflow: auto;">
+        <div class="card-body p-1" id="classifierPanel" style="overflow: auto;">
           @foreach ( $classifiers as $type => $classifier_group )
           <div class="row">
             <span class="col-2"><strong>{{ $type }}</strong></span>
@@ -327,7 +327,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           Related Matters
           <span class="float-right">&#9432;</span>
         </div>
-        <div class="card-body p-1" id="related-panel" style="overflow: auto;">
+        <div class="card-body p-1" id="relationsPanel" style="overflow: auto;">
           @if ( $matter->has('family') )
           <p>
             <strong>Fam</strong>
@@ -361,7 +361,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                     Copy summary
                     <span class="float-right">&#9432;</span>
                 </div>
-                <div class="card-body p-1" id="related-panel" style="overflow: auto;">
+                <div class="card-body p-1" id="relationsPanel" style="overflow: auto;">
                     <a class="font-weight-bold badge badge-primary"
                         href="/matter/{{ $matter->id }}/description/en"
                         data-toggle="modal"
