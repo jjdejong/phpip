@@ -348,7 +348,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       </div>
     </div>
     <div class="row card-deck">
-            <div class="card col-9 p-0">
+      <div class="card col-9 p-0">
         <div class="card-header font-weight-bold p-1">
           Notes
         </div>
@@ -356,34 +356,34 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           <textarea id="notes" class="form-control noformat" name="notes" autocomplete="off">{{ $matter->notes }}</textarea>
         </div>
       </div>
-            <div class="card border-info col-3 p-0">
-                <div class="card-header font-weight-bold bg-info text-white p-1">
-                    Copy summary
-                    <span class="float-right">&#9432;</span>
-                </div>
-                <div class="card-body p-1" id="relationsPanel" style="overflow: auto;">
-                    <a class="font-weight-bold badge badge-primary"
-                        href="/matter/{{ $matter->id }}/description/en"
-                        data-toggle="modal"
-                        data-target="#ajaxModal"
-                        data-remote="false"
-                        data-resource="/event"
-                        data-size="modal-lg"
-                        title="Copy a summary in English">
-                        &boxbox; EN
-                    </a>
-                    <a class="font-weight-bold badge badge-primary"
-                        href="/matter/{{ $matter->id }}/description/fr"
-                        data-toggle="modal"
-                        data-target="#ajaxModal"
-                        data-remote="false"
-                        data-size="modal-lg"
-                        data-resource="/event"
-                        title="Copy a summary in French">
-                        &boxbox; FR
-                    </a>
-                </div>
-            </div>
+      <div class="card border-info col-3 p-0">
+        <div class="card-header font-weight-bold bg-info text-white p-1">
+          Copy summary
+          <span class="float-right">&#9432;</span>
+        </div>
+        <div class="card-body p-1" id="relationsPanel" style="overflow: auto;">
+          <a class="font-weight-bold badge badge-primary"
+              href="/matter/{{ $matter->id }}/description/en"
+              data-toggle="modal"
+              data-target="#ajaxModal"
+              data-remote="false"
+              data-resource="/event"
+              data-size="modal-lg"
+              title="Copy a summary in English">
+              &boxbox; EN
+          </a>
+          <a class="font-weight-bold badge badge-primary"
+              href="/matter/{{ $matter->id }}/description/fr"
+              data-toggle="modal"
+              data-target="#ajaxModal"
+              data-remote="false"
+              data-size="modal-lg"
+              data-resource="/event"
+              title="Copy a summary in French">
+              &boxbox; FR
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
