@@ -6,15 +6,15 @@
         <table class="table table-sm table-hover" data-id="{{ $ruleInfo->id }}" data-source="/rule/">
             <tr>
                 <td><label for="task" class="required-field" title="{{ $ruleComments['task'] }}">Task</label></td>
-                <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="task" data-ac="/event-name/autocomplete/1" placeholder="{{ $ruleInfo->taskInfo->name }}"></td>
+                <td>
+                    <input type="text" class="form-control noformat" name="task" list="ajaxDatalist" data-ac="/event-name/autocomplete/1" placeholder="{{ $ruleInfo->taskInfo->name }}"></td>
                 <td><label for="detail" title="{{ $ruleComments['detail'] }}">Detail</label></td>
                 <td><input class="form-control noformat" name="detail" value="{{ $ruleInfo->detail }}"></td>
             </tr>
             <tr>
                 <td><label for="for_country" title="{{ $ruleComments['for_country'] }}">Country</label></td>
-                <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="for_country" data-ac="/country/autocomplete"
+                <td>
+                    <input type="text" class="form-control noformat" name="for_country" list="ajaxDatalist" data-ac="/country/autocomplete"
                       value="{{ empty($ruleInfo->country) ? '' : $ruleInfo->country->name }}"></td>
                 <td><label for="is_active" title="{{ $ruleComments['active'] }}">Is active</label></td>
                 <td>
@@ -30,13 +30,12 @@
             </tr>
             <tr>
                 <td><label for="for_origin" title="{{ $ruleComments['for_origin'] }}">Origin</label></td>
-                <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="for_origin" data-ac="/country/autocomplete"
+                <td>
+                    <input type="text" class="form-control noformat" name="for_origin" list="ajaxDatalist" data-ac="/country/autocomplete"
                     value="{{ empty($ruleInfo->origin) ? '' : $ruleInfo->origin->name }}"></td>
                 <td><label for="for_category" title="{{ $ruleComments['for_category'] }}">Category</label></td>
-                <td class="ui-front">
-                    <input type="hidden" name="for_category"  value="">
-                    <input type="text" class="form-control noformat" name="for_category" data-ac="/category/autocomplete" value="{{ empty($ruleInfo->category) ? '' : $ruleInfo->category->category }}"></td>
+                <td>
+                    <input type="text" class="form-control noformat" name="for_category" list="ajaxDatalist" data-ac="/category/autocomplete" value="{{ empty($ruleInfo->category) ? '' : $ruleInfo->category->category }}"></td>
             </tr>
             <tr>
                 <td>
@@ -44,8 +43,8 @@
                 </td>
                 <td><textarea class="form-control noformat" name="notes" cols="" rows="">{{ $ruleInfo->notes }}</textarea></td>
                 <td><label for="for_type" title="{{ $ruleComments['for_type'] }}">Type</label></td>
-                <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="for_type" data-ac="/type/autocomplete" value="{{ empty($ruleInfo->type) ? '' : $ruleInfo->type->type }}"></td>
+                <td>
+                    <input type="text" class="form-control noformat" name="for_type" list="ajaxDatalist" data-ac="/type/autocomplete" value="{{ empty($ruleInfo->type) ? '' : $ruleInfo->type->type }}"></td>
             </tr>
         </table>
     </fieldset>
@@ -54,8 +53,8 @@
         <table class="table table-sm table-hover" data-id="{{ $ruleInfo->id }}">
             <tr>
                 <td><label for="trigger_event" title="{{ $ruleComments['trigger_event'] }}">Trigger event</label></td>
-                <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="trigger_event" data-ac="/event-name/autocomplete/0" placeholder="{{ $ruleInfo->trigger->name }}"></td>
+                <td>
+                    <input type="text" class="form-control noformat" name="trigger_event" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" placeholder="{{ $ruleInfo->trigger->name }}"></td>
                 <td><label for="use_parent" title="{{ $ruleComments['use_parent'] }}">Use parent</label></td>
                 <td>
                     <div class="form-check form-check-inline">
@@ -100,8 +99,8 @@
             </tr>
             <tr>
                 <td><label for="condition_event" title="{{ $ruleComments['condition_event'] }}">Condition event</label></td>
-                <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="condition_event" data-ac="/event-name/autocomplete/0" value="{{ empty($ruleInfo->condition_eventInfo) ? '' : $ruleInfo->condition_eventInfo->name }}"></td>
+                <td>
+                    <input type="text" class="form-control noformat" name="condition_event" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" value="{{ empty($ruleInfo->condition_eventInfo) ? '' : $ruleInfo->condition_eventInfo->name }}"></td>
                 <td><label for="use_priority" title="{{ $ruleComments['use_priority'] }}">Use priority</label></td>
                 <td>
                     <div class="form-check form-check-inline">
@@ -116,11 +115,11 @@
             </tr>
             <tr>
                 <td><label for="abort_on" title="{{ $ruleComments['abort_on'] }}">Abort on</label></td>
-                <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="abort_on" data-ac="/event-name/autocomplete/0" value="{{ empty($ruleInfo->abort_onInfo) ? '' : $ruleInfo->abort_onInfo->name }}"></td>
+                <td>
+                    <input type="text" class="form-control noformat" name="abort_on" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" value="{{ empty($ruleInfo->abort_onInfo) ? '' : $ruleInfo->abort_onInfo->name }}"></td>
                 <td><label for="responsible" title="{{ $ruleComments['responsible'] }}">Responsible</label></td>
-                <td class="ui-front">
-                    <input type="text" class="form-control noformat" name="responsible" data-ac="/user/autocomplete" value="{{ empty($ruleInfo->responsibleInfo) ? '' : $ruleInfo->responsibleInfo->name }}"></td>
+                <td>
+                    <input type="text" class="form-control noformat" name="responsible" list="ajaxDatalist" data-ac="/user/autocomplete" value="{{ empty($ruleInfo->responsibleInfo) ? '' : $ruleInfo->responsibleInfo->name }}"></td>
             </tr>
             <tr>
                 <td><label for="days" title="{{ $ruleComments['days'] }}">Days</label></td>

@@ -110,6 +110,8 @@
     <main class="container">
       @yield('content')
 
+      <datalist id="ajaxDatalist"></datalist>
+
       <div id="ajaxModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
           <!-- Modal content-->
@@ -133,7 +135,8 @@
   @yield('script')
   <script>
     var relatedUrl = "", // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
-      resource = ""; // Identifies the REST resource for CRUD operations
+      resource = "", // Identifies the REST resource for CRUD operations
+      acList;
 
     // Ajax fill an element from a url returning HTML
     var fetchInto = async (url, element) => {
@@ -177,11 +180,6 @@
 
     // Process click events in the modal
     ajaxModal.addEventListener('click', (e) => {
-      if (e.target.hasAttribute('data-ac')) {
-        // Attach autocompletion
-        autocompleteJQ(e.target, e.target.dataset.ac, e.target.dataset.actarget);
-      }
-
       switch (e.target.id) {
         case 'createMatterSubmit':
           submitModalForm('/matter', createMatterForm, true);
@@ -194,7 +192,7 @@
                 if (data.message) {
                   alert(data.message);
                 } else {
-                  location.href = "/matter";
+                  location.href = document.referrer;
                 }
               });
           }
@@ -313,10 +311,30 @@
     });
 
 
-    // Mark a modified input field
+    // Process modified input fields
     app.addEventListener("input", e => {
-      if (e.target && e.target.matches(".noformat, textarea, [contenteditable]")) {
+      // Mark the field
+      if (e.target.matches(".noformat, textarea, [contenteditable]")) {
         e.target.classList.add("border", "border-info");
+      }
+
+      // Finalize datalist-based autocompletion
+      if (e.target.hasAttribute('data-ac')) {
+        if (e.inputType === "insertReplacementText") {
+          // An item was selected in the list
+          if (e.target.hasAttribute('data-actarget')) {
+            let selected = acList.find(item => {
+              return item.value === e.target.value;
+            });
+            actarget = e.target.form[e.target.dataset.actarget];
+            actarget.value = selected.key;
+          }
+          ajaxDatalist.innerHTML = "";
+          e.target.blur();
+        } else {
+          // Character has been typed, generate list
+          acQuery(e.target);
+        }
       }
     });
 
@@ -326,7 +344,7 @@
      * "targetName" is an (optional) input field name receiving the "id" value
      * The Ajax resource returns a list of JSON key/value pairs, sometimes a label and other data
      * */
-    var autocompleteJJ = (searchField, dataSource, targetName) => {
+    /*var autocompleteJJ = (searchField, dataSource, targetName) => {
       // Start by removing stray result lists that can remain when clicking erratically
       if (tmp = document.getElementById('matchList')) tmp.remove();
       // Create a fresh result list attached to the current element
@@ -373,7 +391,7 @@
         }
         matchList.remove();
       };
-    }
+    }*/
 
     var autocompleteJQ = (searchField, dataSource, targetName) => {
       let targetElement = "";
@@ -433,6 +451,29 @@
         inputElt.placeholder = key + ' is required';
         inputElt.className += ' is-invalid';
       });
+    }
+
+    var acQuery = async (target) => {
+      // clear any previously loaded options in the datalist
+      target.list.innerHTML = "";
+      // minimum number of characters before we start to generate suggestions
+      var min_characters = 1;
+      if (target.value.length < min_characters ) {
+        return false;
+      } else {
+        let res = await fetch(target.dataset.ac + '?term=' + target.value);
+        acList = await res.json();
+        acList.forEach(item => {
+          // Create a new <option> element
+          let option = document.createElement('option');
+          option.innerHTML = item.value;
+          if (!target.hasAttribute('data-actarget')) {
+            option.value = item.key;
+          }
+          // attach the option to the datalist element
+          target.list.appendChild(option);
+        });
+      }
     }
   </script>
 </body>

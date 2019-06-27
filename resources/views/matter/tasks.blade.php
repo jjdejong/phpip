@@ -57,8 +57,8 @@
             <td>
                 <input type="text" class="form-control noformat" size="6" name="time_spent" value="{{ $task->time_spent }}">
             </td>
-            <td class="ui-front">
-                <input type="text" class="form-control noformat" size="12" name="assigned_to" data-ac="/user/autocomplete" value="{{ $task->assigned_to }}">
+            <td>
+                <input type="text" class="form-control noformat" size="12" name="assigned_to" list="ajaxDatalist" data-ac="/user/autocomplete" value="{{ $task->assigned_to }}">
             </td>
             <td>
                 <input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}">
@@ -78,22 +78,22 @@
             <form id="addTaskForm" class="form-inline">
                 <input type="hidden" name="trigger_id" value="" id="trigger_id">
                 <div class="input-group">
-                    <div class="ui-front">
+
                         <input type="hidden" name="code" value="">
-                        <input type="text" class="form-control form-control-sm" size="12" placeholder="Task" data-ac="/event-name/autocomplete/1" data-actarget="code">
-                    </div>
+                        <input type="text" class="form-control form-control-sm" size="12" placeholder="Task" list="ajaxDatalist" data-ac="/event-name/autocomplete/1" data-actarget="code">
+
                     <input type="text" class="form-control form-control-sm" size="16" name="detail" placeholder="Detail">
-                    <div class="ui-front">
+
                         <input type="date" class="form-control form-control-sm" name="due_date">
-                    </div>
+
                     <input type="text" class="form-control form-control-sm" size="6" name="cost" placeholder="Cost">
                     <input type="text" class="form-control form-control-sm" size="6" name="fee" placeholder="Fee">
                     <input type="text" class="form-control form-control-sm" size="3" name="currency" placeholder="EUR">
                     <input type="text" class="form-control form-control-sm" size="6" name="time_spent" placeholder="Time">
-                    <div class="ui-front">
+
                         <input type="hidden" name="assigned_to" value="">
-                        <input type="text" class="form-control form-control-sm" size="10" placeholder="Assigned to" data-ac="/user/autocomplete" data-actarget="assigned_to">
-                    </div>
+                        <input type="text" class="form-control form-control-sm" size="10" placeholder="Assigned to" list="ajaxDatalist" data-ac="/user/autocomplete" data-actarget="assigned_to">
+
                     <input type="text" class="form-control form-control-sm" size="20" name="notes" placeholder="Notes">
                     <div class="input-group-append">
                         <button type="button" class="btn btn-primary btn-sm" id="addTaskSubmit">&check;</button>
