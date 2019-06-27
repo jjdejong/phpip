@@ -91,7 +91,7 @@
     popoverCancel.onclick = () => {
       $('.popover').popover('dispose');
     };
-  });
+  }); // End popover processing
 
 
 // Notes edition
@@ -168,8 +168,6 @@
         });
       });
   });
-
-// Generic ajaxModal functions
 
   // Ajax refresh various panels when a modal is closed
   $("#ajaxModal").on("hide.bs.modal", function(event) {

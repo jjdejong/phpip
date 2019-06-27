@@ -168,7 +168,7 @@
       return data;
     }
 
-    // Ajax fill the opened modal and process events within
+    // Ajax fill the opened modal
     $("#ajaxModal").on("show.bs.modal", function(event) {
       var modalTrigger = event.relatedTarget;
       relatedUrl = modalTrigger.href;
@@ -176,7 +176,12 @@
       this.querySelector('.modal-title').innerHTML = modalTrigger.title;
       if (modalTrigger.hasAttribute('data-size')) this.querySelector('.modal-dialog').classList.add(modalTrigger.dataset.size);
       fetchInto(relatedUrl, this.querySelector('.modal-body'));
-    }); // End modal event processing
+    });
+
+    // Run JS specific to modals when they are shown
+    /*$("#ajaxModal").on("shown.bs.modal", function(event) {
+
+    });*/
 
     // Process click events in the modal
     ajaxModal.addEventListener('click', (e) => {
@@ -458,7 +463,7 @@
       target.list.innerHTML = "";
       // minimum number of characters before we start to generate suggestions
       var min_characters = 1;
-      if (target.value.length < min_characters ) {
+      if (target.value.length < min_characters) {
         return false;
       } else {
         let res = await fetch(target.dataset.ac + '?term=' + target.value);
@@ -475,6 +480,42 @@
         });
       }
     }
+
+    // Drag and drop sorting functionality (see roleActors)
+    var dragItem;
+
+    ajaxModal.addEventListener('dragstart', e => {
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", null);
+      dragItem = e.target.parentNode;
+    });
+
+    ajaxModal.addEventListener('dragover', e => {
+      let destination = e.target.closest(dragItem.tagName);
+      if (dragItem.dataset.n > destination.dataset.n) {
+        destination.parentNode.insertBefore(dragItem, destination);
+      } else {
+        destination.parentNode.insertBefore(dragItem, destination.nextSibling);
+      }
+    });
+
+    ajaxModal.addEventListener('drop', e => {
+      e.preventDefault();
+    });
+
+    ajaxModal.addEventListener('dragend', () => {
+      for (tr of dragItem.parentNode.children) {
+        if (tr.rowIndex != tr.dataset.n) {
+          let display_order = tr.querySelector('[name="display_order"]');
+          display_order.value = tr.rowIndex;
+          tr.dataset.n = tr.rowIndex;
+          let params = new URLSearchParams();
+          params.append('display_order', display_order.value);
+          fetchREST(resource + tr.dataset.id, 'PUT', params);
+        };
+      }
+      dragItem = "";
+    });
   </script>
 </body>
 

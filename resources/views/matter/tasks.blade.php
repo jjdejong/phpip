@@ -52,9 +52,9 @@
   <tr>
     <td colspan="11">
       <form id="addTaskForm" class="form-inline">
-        <input type="hidden" name="trigger_id" value="" id="trigger_id">
+        <input type="hidden" name="trigger_id">
         <div class="input-group">
-          <input type="hidden" name="code" value="">
+          <input type="hidden" name="code">
           <input type="text" class="form-control form-control-sm" size="12" placeholder="Task" list="ajaxDatalist" data-ac="/event-name/autocomplete/1" data-actarget="code">
           <input type="text" class="form-control form-control-sm" size="16" name="detail" placeholder="Detail">
           <input type="date" class="form-control form-control-sm" name="due_date">
@@ -62,7 +62,7 @@
           <input type="text" class="form-control form-control-sm" size="6" name="fee" placeholder="Fee">
           <input type="text" class="form-control form-control-sm" size="3" name="currency" placeholder="EUR">
           <input type="text" class="form-control form-control-sm" size="6" name="time_spent" placeholder="Time">
-          <input type="hidden" name="assigned_to" value="">
+          <input type="hidden" name="assigned_to">
           <input type="text" class="form-control form-control-sm" size="10" placeholder="Assigned to" list="ajaxDatalist" data-ac="/user/autocomplete" data-actarget="assigned_to">
           <input type="text" class="form-control form-control-sm" size="20" name="notes" placeholder="Notes">
           <div class="input-group-append">
