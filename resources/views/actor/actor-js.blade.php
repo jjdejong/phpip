@@ -16,11 +16,6 @@
             refreshActorList();
         });
 
-        // Display actor depencies in dropdown
-        $("#ajaxModal").on("show.bs.dropdown", "#usedInDropdown", function (event) {
-            $(this).find(".dropdown-menu").load(event.relatedTarget.href);
-        });
-
     });
 
     $('#physical').on('change', function () {

@@ -178,6 +178,11 @@
       fetchInto(relatedUrl, this.querySelector('.modal-body'));
     });
 
+    // Display actor depencies in actor.show modal
+    $("#ajaxModal").on("show.bs.dropdown", "#usedInDropdown", function (event) {
+        fetchInto(event.relatedTarget.href, this.querySelector('.dropdown-menu'));
+    });
+
     // Run JS specific to modals when they are shown
     /*$("#ajaxModal").on("shown.bs.modal", function(event) {
 
