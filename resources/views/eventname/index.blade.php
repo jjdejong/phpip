@@ -2,7 +2,7 @@
 
 @section('content')
 <div id="events-tab">Event names</div>
-<a href="eventname/create" data-toggle="modal" data-target="#ajaxModal" data-remote="false" title="Event name" data-resource="/eventname/create/">Add a new event name</a>
+<a href="eventname/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" data-remote="false" title="Event name" data-resource="/eventname/">Add a new event name</a>
   <table class="table table-striped table-hover table-sm">
     <thead>
       <tr>
@@ -33,12 +33,6 @@
       @endforeach
     </tbody>
   </table>
-
-<!-- Modals -->
-
-<div id="addModal" class="modal fade" role="dialog">
-  @include('partials.generic-modals')
-</div>
 
 @endsection
 
