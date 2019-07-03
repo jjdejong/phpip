@@ -3,7 +3,7 @@
 @section('content')
 <legend>
     Actors
-    <a href="actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" data-remote="false" title="Actor data" data-resource="/actor/">Create actor</a>
+    <a href="actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" data-remote="false" title="Create Actor" data-resource="/actor/">Create actor</a>
 </legend>
 <table class="table table-striped table-hover table-sm">
   <thead>

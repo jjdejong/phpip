@@ -55,7 +55,6 @@
           </div>
         </td>
       </tr>
-
     </table>
   </fieldset>
   <fieldset>
@@ -114,10 +113,10 @@
       </tr>
       <tr>
         <td><label for="notes" title="{{ $actorComments['notes'] }}">Notes</label><br /></td>
-        <td colspan="3" class="ui-front"><textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea></td>
+        <td colspan="3"><textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea></td>
       </tr>
     </table>
-    <button title="Delete actor" class="btn btn-danger delete-actor" data-dismiss="modal" data-id="{{ $actorInfo->id }}">
+    <button id="deleteActor" title="Delete actor" class="btn btn-danger" data-dismiss="modal" data-id="{{ $actorInfo->id }}">
       Delete
     </button>
     <div class="btn-group dropup float-right" id="usedInDropdown">

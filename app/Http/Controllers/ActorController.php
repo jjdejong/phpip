@@ -36,8 +36,8 @@ class ActorController extends Controller
     public function create() {
         $table = new Actor;
         //TODO getTableComments is the same as in Rule.php. To render common
-        $tableComments = $table->getTableComments('actor');
-        return view('actor.create', compact('tableComments'));
+        $actorComments = $table->getTableComments('actor');
+        return view('actor.create', compact('actorComments'));
     }
 
     /**

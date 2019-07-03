@@ -272,6 +272,24 @@
             }
           });
           break;
+
+          // Actor create and show modals
+        case 'createActorSubmit':
+          submitModalForm('/actor', createActorForm);
+          break;
+
+        case 'deleteActor':
+          if (confirm("Deleting the actor " + e.target.dataset.id + ". Continue anyway?")) {
+            fetchREST('/actor/' + e.target.dataset.id, 'DELETE')
+              .then((data) => {
+                if (data.message) {
+                  alert("Couldn't delete actor. Check the dependencies. Database returned:" + data.message);
+                } else {
+                  location.href = document.referrer;
+                }
+              });
+          }
+          break;
       }
 
       if (e.target.matches('#ncountries .btn-outline-danger')) {

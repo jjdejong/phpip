@@ -52,23 +52,23 @@
         return false;
     });
 
-    $('#ajaxModal').on("click", '.delete-actor', function () {
-        var del_conf = confirm("Deleting actor from table?");
-        if (del_conf == 1) {
-            var data = $.param({_method: "DELETE"});
-            $.post('/actor/' + $(this).data("id"), data).done(function () {
-                $('#ajaxModal').find(".modal-body").load(relatedUrl);
-            })
-            .fail(data => alert(data.responseJSON.message));;
-        }
-        return false;
-    });
+    // $('#ajaxModal').on("click", '.delete-actor', function () {
+    //     var del_conf = confirm("Deleting actor from table?");
+    //     if (del_conf == 1) {
+    //         var data = $.param({_method: "DELETE"});
+    //         $.post('/actor/' + $(this).data("id"), data).done(function () {
+    //             $('#ajaxModal').find(".modal-body").load(relatedUrl);
+    //         })
+    //         .fail(data => alert(data.responseJSON.message));;
+    //     }
+    //     return false;
+    // });
 
 // For creation rule modal view
 
 // THESE ALL NEED TO BE CHANGED TO USE ajaxModal
 
-    $('#addModal').on("click", 'input[name="nationality_new"]', function () {
+    /*$('#addModal').on("click", 'input[name="nationality_new"]', function () {
         $(this).autocomplete({
             minLength: 1,
             source: "/country/autocomplete",
@@ -193,36 +193,36 @@
                 $('input[name="site_id"]').val(ui.item.id);
             }
         });
-    });
+    });*/
 
-    $(document).on("submit", "#createActorForm", function (e) {
-        e.preventDefault();
-        var $form = $(this);
-        var request = $("#createActorForm").find("input").filter(function () {
-            return $(this).val().length > 0
-        }).serialize(); // Filter out empty values
-        request = request + "&" + $("#createActorForm").find("textarea").filter(function () {
-            return $(this).val().length > 0
-        }).serialize();
-        var data = request;
-        console.log(request);
-        $.post('/actor', data, function (response) {
-            if (response.success) {
-                window.alert("Actor created.");
-                $('#addModal').modal("hide");
-                refreshActorList();
-            } else {
-                associate_errors(response['errors'], $form);
-            }
-        });
-    });
+    // $(document).on("submit", "#createActorForm", function (e) {
+    //     e.preventDefault();
+    //     var $form = $(this);
+    //     var request = $("#createActorForm").find("input").filter(function () {
+    //         return $(this).val().length > 0
+    //     }).serialize(); // Filter out empty values
+    //     request = request + "&" + $("#createActorForm").find("textarea").filter(function () {
+    //         return $(this).val().length > 0
+    //     }).serialize();
+    //     var data = request;
+    //     console.log(request);
+    //     $.post('/actor', data, function (response) {
+    //         if (response.success) {
+    //             window.alert("Actor created.");
+    //             $('#addModal').modal("hide");
+    //             refreshActorList();
+    //         } else {
+    //             associate_errors(response['errors'], $form);
+    //         }
+    //     });
+    // });
 
-    function associate_errors(errors, $form) {
-        $form.find('.form-control').removeClass('is-invalid').attr("placeholder", "");
-        for (index in errors) {
-            value = errors[index][0];
-            $form.find('input[name=' + index + '_new]').attr("placeholder", value).attr("title", value).addClass('is-invalid');
-            $form.find('input[name=' + index + ']').attr("placeholder", value).attr("title", value).addClass('is-invalid');
-        };
-    }
+    // function associate_errors(errors, $form) {
+    //     $form.find('.form-control').removeClass('is-invalid').attr("placeholder", "");
+    //     for (index in errors) {
+    //         value = errors[index][0];
+    //         $form.find('input[name=' + index + '_new]').attr("placeholder", value).attr("title", value).addClass('is-invalid');
+    //         $form.find('input[name=' + index + ']').attr("placeholder", value).attr("title", value).addClass('is-invalid');
+    //     };
+    // }
 </script>
