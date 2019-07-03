@@ -8,13 +8,34 @@
   $('body').popover({
     selector: '[rel="popover"]',
     template: popoverTemplate,
+    content: actorPopoverTemplate.content.firstElementChild,
     html: true,
     sanitize: false
   });
 
-  $('body').on("shown.bs.popover", '[rel="popover"]', function() {
+  // Process actor addition popovers
+  $('body').on("shown.bs.popover", '[rel="popover"]', function(e) {
     // First destroy existing popover when a new popover is opened
     $('.popover').siblings('.popover').first().popover('dispose');
+
+    if (e.target.hasAttribute('data-role_code')) {
+      // Change form based on role information
+      addActorForm['role'].value = e.target.dataset.role_code;
+      roleName.setAttribute('placeholder', e.target.dataset.role_name);
+      addActorForm['shared'].value = e.target.dataset.shareable;
+      if (e.target.dataset.shareable === "1") {
+        actorShared.checked = true;
+      } else {
+        actorNotShared.checked = true;
+      }
+    } else {
+      // Reset form to defaults
+      addActorForm['role'].value = "";
+      roleName.setAttribute('placeholder', 'Role');
+      addActorForm['shared'].value = "1";
+      actorShared.checked = true;
+    }
+
 
     $('#actorName').autocomplete({
       minLength: 2,
@@ -63,15 +84,13 @@
       $(this).autocomplete("search", "");
     });
 
-    $("body").on("change", '.popover input[name="matter_id"]', function() {
-      $('input[name="shared"]').val(function(index, value) {
-        if (value === 1) {
-          return 0;
-        } else {
-          return 1;
-        }
-      });
-    });
+    actorShared.onclick = () => {
+      addActorForm['shared'].value = "1";
+    }
+
+    actorNotShared.onclick = () => {
+      addActorForm['shared'].value = "0";
+    }
 
     addActorSubmit.onclick = () => {
       formData = new FormData(addActorForm);
@@ -81,7 +100,7 @@
         if (data.errors) {
           processSubmitErrors(data.errors, addActorForm);
         } else {
-          $('.popover').popover('hide');
+          $('.popover').popover('dispose');
           reloadPart("/matter/{{ $matter->id }}", 'actorPanel');
         }
       });
@@ -89,6 +108,7 @@
 
     // Close popover by clicking the cancel button
     popoverCancel.onclick = () => {
+      addActorForm.reset();
       $('.popover').popover('dispose');
     };
   }); // End popover processing

@@ -97,32 +97,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
   <div id="actorPanel" class="card col-3 border-secondary p-0">
     <div class="card-header reveal-hidden text-white bg-secondary font-weight-bold p-1">
       Actors
-      <a class="badge badge-pill badge-light hidden-action float-right" rel="popover" data-placement="right" href="#" title="Add Actor"
-         data-content='<form id="addActorForm">
-                <input type="hidden" name="role" value="">
-                <input type="hidden" name="shared" value="1">
-                <input type="hidden" name="actor_id" value="">
-                <div class="ui-front">
-                    <input type="text" class="form-control form-control-sm" id="roleName" data-actarget="role" placeholder="Role">
-                    <input type="text" class="form-control form-control-sm" id="actorName" data-actarget="actor_id" placeholder="Name">
-                    <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
-                </div>
-                <div class="form-group">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
-                        <label class="form-check-label" for="actorShared">Add to container and share</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
-                        <label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
-                    </div>
-                </div>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
-                    <button type="button" class="btn btn-outline-info btn-sm" id="popoverCancel">&times;</button>
-                </div>
-            </form>
-            <div class="alert alert-danger d-none" role="alert"></div>'>
+      <a class="badge badge-pill badge-light hidden-action float-right" rel="popover" data-placement="right" href="#" title="Add Actor">
         &plus;
       </a>
     </div>
@@ -136,31 +111,10 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             &#9998;
           </a>
           <a class="hidden-action float-right" data-placement="right" rel="popover" title="Add {{ $role_name }}"
-             data-content='<form id="addActorForm">
-                        <input type="hidden" name="role" value="{{ $role_group->first()->role_code }}">
-                        <input type="hidden" name="shared" value="{{ $role_group->first()->shareable }}">
-                        <input type="hidden" name="actor_id" value="">
-                        <div class="ui-front">
-                            <input type="text" class="form-control form-control-sm" id="actorName" data-actarget="actor_id" placeholder="Name">
-                            <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
-                        </div>
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}" {{ $role_group->first()->shareable ? "checked" : "" }}>
-                                <label class="form-check-label" for="actorShared">Add to container and share</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}" {{ $role_group->first()->shareable ? "" : "checked" }}>
-                                <label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
-                            </div>
-                        </div>
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
-                            <button type="button" class="btn btn-outline-info btn-sm" id="popoverCancel">&times;</button>
-                        </div>
-                    </form>
-                    <div class="alert alert-danger d-none" role="alert"></div>'
-            href="#">
+             data-role_name="{{ $role_name }}"
+             data-role_code="{{ $role_group->first()->role_code }}"
+             data-shareable="{{ $role_group->first()->shareable }}"
+             href="#">
             &oplus;
           </a>
         </div>
@@ -387,6 +341,34 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     </div>
   </div>
 </div>
+
+<template id="actorPopoverTemplate">
+  <form id="addActorForm" autocomplete="off">
+     <input type="hidden" name="role">
+     <input type="hidden" name="shared">
+     <input type="hidden" name="actor_id">
+     <div class="ui-front">
+       <input type="text" class="form-control form-control-sm" id="roleName" data-actarget="role" placeholder="Role">
+       <input type="text" class="form-control form-control-sm" id="actorName" data-actarget="actor_id" placeholder="Name">
+       <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
+     </div>
+     <div class="form-group">
+       <div class="form-check">
+         <input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
+         <label class="form-check-label" for="actorShared">Add to container and share</label>
+       </div>
+       <div class="form-check">
+         <input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
+         <label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
+       </div>
+     </div>
+     <div class="btn-group" role="group">
+       <button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
+       <button type="button" class="btn btn-outline-info btn-sm" id="popoverCancel">&times;</button>
+     </div>
+     <div class="alert alert-danger d-none" role="alert"></div>
+   </form>
+</template>
 
 @stop
 
