@@ -50,13 +50,7 @@ class ActorController extends Controller
         $request->validate([
             'name' => 'required|max:100'
         ]);
-        try {
-            $new_actor = Actor::create($request->except(['_token', '_method']));
-            return Response::json($new_actor);
-        } catch (Exception $e) {
-            report($e);
-            return false;
-        }
+        $new_actor = Actor::create($request->except(['_token', '_method']));
     }
 
     /**
