@@ -328,19 +328,23 @@
         e.target.classList.add("border", "border-info");
       }
 
-      // Finalize datalist-based autocompletion
+      // Process datalist-based autocompletion
       if (e.target.hasAttribute('data-ac')) {
         if (e.inputType === "insertReplacementText") {
-          // An item was selected in the list
-          if (e.target.hasAttribute('data-actarget')) {
+          // An item was selected in the list - finalize autocompletion
             let selected = acList.find(item => {
               return item.value === e.target.value;
             });
+          if (e.target.hasAttribute('data-actarget')) {
             actarget = e.target.form[e.target.dataset.actarget];
             actarget.value = selected.key;
           }
           ajaxDatalist.innerHTML = "";
           e.target.blur();
+          e.target.dispatchEvent(new CustomEvent("ac-done", {
+            bubbles: true,
+            detail: selected
+          }));
         } else {
           // Character has been typed, generate list
           acQuery(e.target);
@@ -463,6 +467,7 @@
       });
     }
 
+    // Generates autocompletion list
     var acQuery = async (target) => {
       // clear any previously loaded options in the datalist
       target.list.innerHTML = "";
