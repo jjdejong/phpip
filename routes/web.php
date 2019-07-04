@@ -99,8 +99,8 @@ Route::group(['middleware' => 'auth'], function () {
         $list = App\Actor::select('name as value', 'id as key')
                         ->where('name', 'like', "%$term%")
                         ->take(10)->get();
-        if ( $list->count() == 0 ) {
-          $list->push(['label' => 'Unknown. Create?', 'value' => 'create']);
+        if ( $list->count() < 5 ) {
+          $list->push(['label' => 'Unknown. Create?', 'key' => 'create']);
         }
         return $list;
     });

@@ -41,14 +41,14 @@
       minLength: 2,
       source: "/actor/autocomplete",
       select: function(event, ui) {
-        if (ui.item.value === 'create') { // Creates actor on the fly
+        if (ui.item.key === 'create') { // Creates actor on the fly
           $.post('/actor', {
               name: this.value.toUpperCase(),
               default_role: addActorForm.role.value
             })
             .done(function(response) {
               addActorForm.actor_id.value = response.id;
-              addActorForm.elements.actor_name.value = response.name;
+              actorName.value = response.name;
             });
         } else {
           addActorForm.actor_id.value = ui.item.key;

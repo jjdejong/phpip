@@ -51,6 +51,7 @@ class ActorController extends Controller
             'name' => 'required|max:100'
         ]);
         $new_actor = Actor::create($request->except(['_token', '_method']));
+        return $new_actor;
     }
 
     /**
