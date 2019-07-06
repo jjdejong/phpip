@@ -45,7 +45,7 @@
 
     $('#rule-list').on("click", '.delete-from-list', function () {
         var del_conf = confirm("Deleting rule " + $(this).closest("tr").data("id") + " from table?");
-        if (del_conf === 1) {
+        if (del_conf) {
             var data = $.param({_method: "DELETE"});
             $.post('/rule/' + $(this).closest("tr").data("id"), data).done(function () {
                 sourceUrl = "/rule?";  // Used to refresh the list
@@ -57,7 +57,7 @@
 
     $('#rule-list').on("click", '.delete-event-name', function (event) {
         var del_conf = confirm("Deleting event name from table?");
-        if (del_conf === 1) {
+        if (del_conf) {
             var data = $.param({_method: "DELETE"});
             $.post('/eventname/' + $(this).closest("tr").data("id"), data).done(function () {
                 $('#ajaxModal').find(".modal-body").load(relatedUrl);
@@ -69,26 +69,29 @@
     });
 
     $('#ajaxModal').on("click", '#delete-rule', function () {
-        var del_conf = confirm("Deleting rule from table?");
-        if (del_conf === 1) {
-            var data = $.param({_method: "DELETE"});
-            $.post('/rule/' + $(this).data("id"), data).done(function () {
-                $('#ajaxModal').find(".modal-body").load(relatedUrl);
-            });
-        }
-        return false;
+        if (confirm("Deleting rule from table?")) {
+            fetchREST('/rule/' + $(this).data("id"), 'DELETE')
+              .then((data) => {
+                if (data.message) {
+                  alert(data.message);
+                } else {
+                  location.href = document.referrer;
+                }
+              });
+          }
     });
 
-
     $('#ajaxModal').on("click", '#delete-ename', function () {
-        var del_conf = confirm("Deleting event name from table?");
-        if (del_conf === 1) {
-            var data = $.param({_method: "DELETE"});
-            $.post('/eventname/' + $(this).data("id"), data).done(function () {
-                $('#ajaxModal').find(".modal-body").load(relatedUrl);
-            });
-        }
-        return false;
+        if (confirm("Deleting event name from table?")) {
+            fetchREST('/eventname/' + $(this).data("id"), 'DELETE')
+              .then((data) => {
+                if (data.message) {
+                  alert(data.message);
+                } else {
+                  location.href = document.referrer;
+                }
+              });
+          }
     });
 
 // For creation rule modal view
