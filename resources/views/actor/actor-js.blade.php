@@ -4,7 +4,7 @@
         var url = '/actor?' + $("#filter").find("input").filter(function () {
             return $(this).val().length > 0
         }).serialize(); // Filter out empty values
-        $('#actor-list').load(url + ' #actor-list > tr', function () { // Refresh all the tr's in tbody#actor-list
+        $('#actorList').load(url + ' #actorList > tr', function () { // Refresh all the tr's in tbody#actorList
             window.history.pushState('', 'phpIP', url);
         })
     }
@@ -38,9 +38,7 @@
         refreshActorList();
     }, 500));
 
-// Specific in place edition of actor
-
-    $('#actor-list').on("click", '.delete-from-list', function () {
+    $('#actorList').on("click", '.delete-from-list', function () {
         var del_conf = confirm("Deleting actor from table?");
         if (del_conf == 1) {
             var data = $.param({_method: "DELETE"});

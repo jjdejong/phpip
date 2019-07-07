@@ -33,7 +33,7 @@
       <th></th>
     </tr>
   </thead>
-  <tbody id="actor-list">
+  <tbody id="actorList">
     @foreach ($actorslist as $actor)
     <tr class="actor-list-row reveal-hidden" data-id="{{ $actor->id }}">
       <td><a href="/actor/{{ $actor->id }}" data-toggle="modal" data-target="#ajaxModal" data-remote="false" title="Actor data" data-resource="/actor/">
