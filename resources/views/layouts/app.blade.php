@@ -121,7 +121,9 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-              Ajax body placeholder (is supposed to receive a table where each tr has an attribute data-id)
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
             </div>
             <div class="modal-footer">
               <span id="footerAlert" class="alert float-left"></span>
@@ -331,7 +333,7 @@
 
     // Reset ajaxModal to default when it is closed
     $('#ajaxModal').on("hidden.bs.modal", function(event) {
-      this.querySelector('.modal-body').innerHTML = "Ajax body placeholder";
+      this.querySelector('.modal-body').innerHTML = '<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
       this.querySelector('.modal-title').innerHTML = "Ajax title placeholder";
       this.querySelector('.modal-dialog').className = "modal-dialog";
       footerAlert.innerHTML = "";
