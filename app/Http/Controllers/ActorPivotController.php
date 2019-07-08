@@ -101,7 +101,7 @@ class ActorPivotController extends Controller
         */
     public function usedIn(int $actor) {
         $actorpivot = new ActorPivot();
-        $matter_dependencies = $actorpivot->with('matter','role')->where('actor_id',$actor)->get();
+        $matter_dependencies = $actorpivot->with('matter','role')->where('actor_id', $actor)->get()->take(25);
         $actor_model = new Actor();
         $other_dependencies = $actor_model->select(array('id', DB::Raw("concat_ws(' ', name, first_name) as Actor"), DB::Raw("(case ".$actor."
            when parent_id then 'Parent'

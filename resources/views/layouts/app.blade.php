@@ -181,8 +181,8 @@
     });
 
     // Display actor depencies in actor.show modal
-    $("#ajaxModal").on("show.bs.dropdown", "#usedInDropdown", function (event) {
-        fetchInto(event.relatedTarget.href, this.querySelector('.dropdown-menu'));
+    $(app).on("show.bs.tab", "#actorUsedInToggle", function (e) {
+      fetchInto(e.target.href, actorUsedIn);
     });
 
     // Run JS specific to modals when they are shown
@@ -191,7 +191,7 @@
     });*/
 
     // Process click events in the modal
-    ajaxModal.addEventListener('click', (e) => {
+    app.addEventListener('click', (e) => {
       switch (e.target.id) {
         case 'createMatterSubmit':
           submitModalForm('/matter', createMatterForm, true);
@@ -285,7 +285,8 @@
             fetchREST('/actor/' + e.target.dataset.id, 'DELETE')
               .then((data) => {
                 if (data.message) {
-                  alert("Couldn't delete actor. Check the dependencies. Database returned:" + data.message);
+                  alert("Couldn't delete actor. Check the dependencies. Database said: " + data.message);
+                  return false;
                 } else {
                   location.href = document.referrer;
                 }
