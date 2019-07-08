@@ -300,8 +300,8 @@
 
     });
 
-    // Generic in-place edition of input fields in a modal
-    ajaxModal.addEventListener("change", e => {
+    // Generic in-place edition of input fields
+    app.addEventListener("change", e => {
       if (e.target && e.target.matches(".noformat")) {
         let params = new URLSearchParams();
         if (e.target.type === 'checkbox') {
@@ -320,7 +320,11 @@
               footerAlert.innerHTML = Object.values(data.errors)[0];
               footerAlert.classList.add('alert-danger');
             } else {
+              if (window.ajaxPanel) {
+                fetchInto(relatedUrl, ajaxPanel);
+            } else {
               fetchInto(relatedUrl, ajaxModal.querySelector(".modal-body"));
+              }
               footerAlert.classList.remove("alert-danger");
               footerAlert.innerHTML = "";
             }

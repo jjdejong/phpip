@@ -50,6 +50,15 @@
         return false;
     });
 
+    actorList.addEventListener('click', e => {
+      if (e.target.hasAttribute('data-panel')) {
+        e.preventDefault();
+        relatedUrl = e.target.href;
+        resource = e.target.dataset.resource;
+        fetchInto(e.target.href, ajaxPanel);
+      }
+    });
+
     // $('#ajaxModal').on("click", '.delete-actor', function () {
     //     var del_conf = confirm("Deleting actor from table?");
     //     if (del_conf == 1) {
