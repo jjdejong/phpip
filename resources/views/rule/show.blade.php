@@ -6,7 +6,7 @@
       <table class="table table-sm table-hover" data-id="{{ $ruleInfo->id }}" data-source="/rule/">
         <tr>
           <td><label for="task" class="required-field" title="{{ $ruleComments['task'] }}">Task</label></td>
-          <td><input type="text" class="form-control noformat" name="task" list="ajaxDatalist" data-ac="/event-name/autocomplete/1" value="{{ $ruleInfo->taskInfo->name }}"></td>
+          <td><input type="text" class="form-control noformat" name="task" list="ajaxDatalist" data-ac="/event-name/autocomplete/1" placeholder="{{ $ruleInfo->taskInfo->name }}"></td>
           <td><label for="detail" title="{{ $ruleComments['detail'] }}">Detail</label></td>
           <td><input class="form-control noformat" name="detail" value="{{ $ruleInfo->detail }}"></td>
         </tr>
@@ -44,7 +44,7 @@
       <table class="table table-sm table-hover" data-id="{{ $ruleInfo->id }}">
         <tr>
           <td><label for="trigger_event" title="{{ $ruleComments['trigger_event'] }}">Trigger event</label></td>
-          <td><input type="text" class="form-control noformat" name="trigger_event" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" value="{{ $ruleInfo->trigger->name }}"></td>
+          <td><input type="text" class="form-control noformat" name="trigger_event" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" placeholder="{{ $ruleInfo->trigger->name }}"></td>
           <td><label for="use_parent" title="{{ $ruleComments['use_parent'] }}">Use parent</label></td>
           <td>
             <div class="form-check form-check-inline">
