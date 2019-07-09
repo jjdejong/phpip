@@ -7,6 +7,7 @@
 </legend>
 <div class="row">
   <div class="col">
+    <div class="card overflow-auto" style="max-height: 640px;">
     <table class="table table-striped table-hover table-sm col">
       <thead>
         <tr>
@@ -15,24 +16,18 @@
           <th>Display name</th>
           <th>Company</th>
           <th>Person</th>
-          <th>Delete</th>
+          <th>&times;</th>
         </tr>
         <tr id="filter" class="sticky-top">
           <th><input class="filter-input form-control form-control-sm" name="Name" value="{{ old('Name') }}"></th>
           <th colspan="3"></th>
-          <th>
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="btn btn-info">
-                <input type="radio" name="phy_person" id="physical" value="1" />Physical
-              </label>
-              <label class="btn btn-info">
-                <input type="radio" name="phy_person" id="legal" value="0" />Legal
-              </label>
-              <label class="btn btn-info active">
-                <input type="radio" name="phy_person" id="both" value="" />Both
-              </label>
-            </div>
-          <th></th>
+          <th colspan="2">
+            <select id="person" class="custom-select-sm" name="phy_person">
+              <option value="" selected>All</option>
+              <option value="1">Physical</option>
+              <option value="0">Legal</option>
+            </select>
+          </th>
         </tr>
       </thead>
       <tbody id="actorList">
@@ -61,7 +56,8 @@
       </tbody>
     </table>
   </div>
-  <div class="col-3">
+  </div>
+  <div class="col-4">
     <div class="card border-info">
       <div class="card-header bg-info">
         Actor information
@@ -71,8 +67,8 @@
           Click on actor name to view and edit details
         </div>
       </div>
-      <span id="footerAlert" class="alert float-left"></span>
     </div>
+    <span id="footerAlert" class="alert float-left"></span>
   </div>
 </div>
 

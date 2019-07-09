@@ -1,7 +1,7 @@
 <script>
 
     function refreshActorList() {
-        var url = '/actor?' + $("#filter").find("input").filter(function () {
+        var url = '/actor?' + $("#filter").find("input, select").filter(function () {
             return $(this).val().length > 0
         }).serialize(); // Filter out empty values
         $('#actorList').load(url + ' #actorList > tr', function () { // Refresh all the tr's in tbody#actorList
@@ -9,32 +9,11 @@
         })
     }
 
-    $(document).ready(function () {
-
-        // Reload the actors list when closing the modal window
-        $("#ajaxModal").on("hide.bs.modal", function (event) {
-            refreshActorList();
-        });
-
-    });
-
-    $('#physical').on('change', function () {
-        refreshActorList();
-    });
-
-    $('#legal').on('change', function () {
-        refreshActorList();
-    });
-
-    $('#both').on('change', function () {
+    $('#person').on('change', function () {
         refreshActorList();
     });
 
     $('.filter-input').keyup(debounce(function () {
-        if ($(this).val().length != 0)
-            $(this).css("background-color", "bisque");
-        else
-            $(this).css("background-color", "white");
         refreshActorList();
     }, 500));
 
@@ -49,27 +28,6 @@
         }
         return false;
     });
-
-    actorList.addEventListener('click', e => {
-      if (e.target.hasAttribute('data-panel')) {
-        e.preventDefault();
-        relatedUrl = e.target.href;
-        resource = e.target.dataset.resource;
-        fetchInto(e.target.href, ajaxPanel);
-      }
-    });
-
-    // $('#ajaxModal').on("click", '.delete-actor', function () {
-    //     var del_conf = confirm("Deleting actor from table?");
-    //     if (del_conf == 1) {
-    //         var data = $.param({_method: "DELETE"});
-    //         $.post('/actor/' + $(this).data("id"), data).done(function () {
-    //             $('#ajaxModal').find(".modal-body").load(relatedUrl);
-    //         })
-    //         .fail(data => alert(data.responseJSON.message));;
-    //     }
-    //     return false;
-    // });
 
 // For creation rule modal view
 

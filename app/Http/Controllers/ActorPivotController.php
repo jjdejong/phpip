@@ -101,13 +101,13 @@ class ActorPivotController extends Controller
         */
     public function usedIn(int $actor) {
         $actorpivot = new ActorPivot();
-        $matter_dependencies = $actorpivot->with('matter','role')->where('actor_id', $actor)->get()->take(25);
+        $matter_dependencies = $actorpivot->with('matter','role')->where('actor_id', $actor)->get()->take(50);
         $actor_model = new Actor();
         $other_dependencies = $actor_model->select(array('id', DB::Raw("concat_ws(' ', name, first_name) as Actor"), DB::Raw("(case ".$actor."
            when parent_id then 'Parent'
            when company_id then 'Company'
            when site_id then 'Site'
-         end) as Dependency")))->where('parent_id', $actor)->orWhere('company_id', $actor)->orWhere('site_id',$actor)->get();
+         end) as Dependency")))->where('parent_id', $actor)->orWhere('company_id', $actor)->orWhere('site_id',$actor)->get()->take(30);
         return view('actor.usedin', compact(['matter_dependencies','other_dependencies']));
 	}
 

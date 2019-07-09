@@ -190,7 +190,7 @@
 
     });*/
 
-    // Process click events in the modal
+    // Process click events
     app.addEventListener('click', (e) => {
       switch (e.target.id) {
         case 'createMatterSubmit':
@@ -295,8 +295,17 @@
           break;
       }
 
+      // Various functions used here and there
       if (e.target.matches('#ncountries .btn-outline-danger')) {
         e.target.parentNode.parentNode.remove();
+      }
+
+      if (e.target.hasAttribute('data-panel')) {
+        e.preventDefault();
+        relatedUrl = e.target.href;
+        resource = e.target.dataset.resource;
+        let panel = document.getElementById(e.target.dataset.panel);
+        fetchInto(e.target.href, panel);
       }
 
     });

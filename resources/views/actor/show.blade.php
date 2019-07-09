@@ -1,11 +1,14 @@
-<div class="card">
+<div class="card overflow-auto" style="height: 480px;">
   <div class="nav nav-tabs" role="tablist">
     <a class="nav-link active" data-toggle="tab" href="#actorMain" role="tab">Main</a>
     <a class="nav-link" data-toggle="tab" href="#actorContact" role="tab">Contact</a>
     <a class="nav-link" data-toggle="tab" href="#actorOther" role="tab">Other</a>
     <a class="nav-link" data-toggle="tab" id="actorUsedInToggle" href="/actor/{{ $actorInfo->id }}/usedin" data-target="#actorUsedIn" role="tab">Used in</a>
+    <button id="deleteActor" title="Delete actor" class="nav-link btn btn-outline-danger" data-dismiss="modal" data-id="{{ $actorInfo->id }}">
+      Delete
+    </button>
   </div>
-  <div class="tab-content overflow-auto" style="max-height: 420px;">
+  <div class="tab-content">
     <fieldset class="tab-pane fade show active" id="actorMain">
       <table class="table table-hover table-sm" data-id="{{ $actorInfo->id }}">
         <tr>
@@ -147,8 +150,5 @@
     <div class="tab-pane fade" id="actorUsedIn">
       <div class="spinner-border" role="status"></div>
     </div>
-    <button id="deleteActor" title="Delete actor" class="btn btn-danger" data-dismiss="modal" data-id="{{ $actorInfo->id }}">
-      Delete
-    </button>
   </div>
 </div>
