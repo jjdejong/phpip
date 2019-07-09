@@ -4,30 +4,16 @@
         var url = '/actor?' + $("#filter").find("input, select").filter(function () {
             return $(this).val().length > 0
         }).serialize(); // Filter out empty values
-        $('#actorList').load(url + ' #actorList > tr', function () { // Refresh all the tr's in tbody#actorList
-            window.history.pushState('', 'phpIP', url);
-        })
+        reloadPart(url, 'actorList')
+        .then(window.history.pushState('', 'phpIP', url));
     }
 
-    $('#person').on('change', function () {
-        refreshActorList();
-    });
+    person.onchange = () => refreshActorList();
 
     $('.filter-input').keyup(debounce(function () {
         refreshActorList();
     }, 500));
 
-    $('#actorList').on("click", '.delete-from-list', function () {
-        var del_conf = confirm("Deleting actor from table?");
-        if (del_conf == 1) {
-            var data = $.param({_method: "DELETE"});
-            $.post('/actor/' + $(this).closest("tr").data("id"), data).done(function () {
-                refreshActorList();
-            })
-            .fail(data => alert(data.responseJSON.message));
-        }
-        return false;
-    });
 
 // For creation rule modal view
 

@@ -18,7 +18,8 @@
     var url = '/matter?' + $(".btn-toolbar, #filter").find("input").filter(function() {
       return $(this).val().length > 0;
     }).serialize(); // Filter out empty values
-    $('#matter-list').load(url + ' #matter-list > tr', function() { // Refresh all the tr's in tbody#matter-list
+    reloadPart(url, 'matter-list')
+    .then( () => {
       contentUpdated();
       window.history.pushState('', 'phpIP', url);
     });

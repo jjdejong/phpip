@@ -16,13 +16,12 @@
           <th>Display name</th>
           <th>Company</th>
           <th>Person</th>
-          <th>&times;</th>
         </tr>
         <tr id="filter" class="sticky-top">
           <th><input class="filter-input form-control form-control-sm" name="Name" value="{{ old('Name') }}"></th>
           <th colspan="3"></th>
-          <th colspan="2">
-            <select id="person" class="custom-select-sm" name="phy_person">
+          <th>
+            <select id="person" class="custom-select-sm px-0" name="phy_person">
               <option value="" selected>All</option>
               <option value="1">Physical</option>
               <option value="0">Legal</option>
@@ -47,9 +46,6 @@
             @else
             Legal
             @endif
-          </td>
-          <td>
-            <a class="delete-from-list float-right text-danger hidden-action" data-id="{{ $actor->id }}" title="Delete actor" href="javascript:void(0);">&times;</a>
           </td>
         </tr>
         @endforeach
