@@ -22,7 +22,8 @@ class MatterController extends Controller
             'filter',
             'value',
             'sortkey',
-            'sortdir'
+            'sortdir',
+            'tab'
         ]);
 
         $matters = Matter::filter($request->input('sortkey', 'caseref'), $request->input('sortdir', 'asc'), $filters, $request->display_with, true);
