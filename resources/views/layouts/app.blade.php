@@ -31,10 +31,10 @@
           {{ config('app.name', 'phpIP') }}
         </a>
         @auth
-        <form method="POST" action="/matter/search">
+        <form class="form-inline" method="POST" action="/matter/search">
           @csrf
           <div class="input-group">
-            <input type="text" class="form-control" id="matter-search" name="matter_search" placeholder="Search" autocomplete="off">
+            <input type="search" class="form-control" id="matter-search" name="matter_search" placeholder="Search" autocomplete="off">
             <div class="input-group-append">
               <select class="custom-select btn btn-info" id="matter-option" name="search_field">
                 <option value="Ref" selected>Case reference</option>
@@ -180,7 +180,7 @@
       fetchInto(relatedUrl, this.querySelector('.modal-body'));
     });
 
-    // Display actor depencies in actor.show modal
+    // Display actor dependencies in corresponding tab
     $(app).on("show.bs.tab", "#actorUsedInToggle", function (e) {
       fetchInto(e.target.href, actorUsedIn);
     });

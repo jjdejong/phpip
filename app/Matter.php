@@ -332,6 +332,7 @@ class Matter extends Model
 
         return $matters;
     }
+
     public static function getCategoryMatterCount($user = null)
     {
         $authUserRole = Auth::user()->default_role;
@@ -349,6 +350,7 @@ class Matter extends Model
         }
         return $query->get();
     }
+
     public static function getDescription($id, $lang='en') {
         $query = Matter::select(DB::raw("CONCAT_WS('', caseref, suffix) AS Ref"),
                 'matter.country AS country',

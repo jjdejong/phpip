@@ -224,16 +224,10 @@
         <nav class="fixed-bottom">
           <ul class="pagination justify-content-center">
             <li class="page-item">
-              <a class="page-link" href="#" onclick="$('#matter-list').load('{!! $matters->previousPageUrl() !!}' + ' #matter-list > tr', function () {
-                                contentUpdated();
-                                window.history.pushState('', 'phpIP', '{!! $matters->previousPageUrl() !!}');
-                            });">&laquo;</a>
+              <a class="page-link" href="{{ $matters->previousPageUrl() }}">&laquo;</a>
             </li>
             <li class="page-item">
-              <a class="page-link" href="#" onclick="$('#matter-list').load('{!! $matters->nextPageUrl() !!}' + ' #matter-list > tr', function () {
-                                contentUpdated();
-                                window.history.pushState('', 'phpIP', '{!! $matters->nextPageUrl() !!}');
-                            });">&raquo;</a>
+              <a class="page-link" href="{{ $matters->nextPageUrl() }}">&raquo;</a>
             </li>
           </ul>
         </nav>

@@ -1,5 +1,5 @@
 {
-	"name" : "phpIP v2",
+	"name" : "jjdejong/phpip",
 	"description" : "IP matters docketing system",
     "keywords": [
 		"laravel",

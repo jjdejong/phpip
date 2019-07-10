@@ -317,9 +317,6 @@ class MatterController extends Controller
     public function events(Matter $matter)
     {
         $events = $matter->events->load('info');
-        /* = Event::with('info')
-          ->where('matter_id', $matter->id)
-          ->orderBy('event_date')->get(); */
         return view('matter.events', compact('events', 'matter'));
     }
 
