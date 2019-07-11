@@ -153,7 +153,7 @@
     }
 
     // Perform REST operations with native JS
-    var fetchREST = async (url, method, body, reload = false) => {
+    var fetchREST = async (url, method, body) => {
       res = await fetch(url, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
@@ -331,17 +331,15 @@
               footerAlert.classList.add('alert-danger');
             } else {
               if (window.ajaxPanel) {
-                fetchInto(relatedUrl, ajaxPanel);
-            } else {
-              fetchInto(relatedUrl, ajaxModal.querySelector(".modal-body"));
+                reloadPart(relatedUrl, e.target.closest('.tab-pane').id);
+              } else {
+                fetchInto(relatedUrl, ajaxModal.querySelector(".modal-body"));
               }
               footerAlert.classList.remove("alert-danger");
               footerAlert.innerHTML = "";
             }
           })
-          .catch(error => {
-            console.log(error);
-          });
+          .catch(error => console.log(error));
       }
     });
 
@@ -366,9 +364,9 @@
       if (e.target.hasAttribute('data-ac')) {
         if (e.inputType === "insertReplacementText") {
           // An item was selected in the list - finalize autocompletion
-            let selected = acList.find(item => {
-              return item.value === e.target.value;
-            });
+          let selected = acList.find(item => {
+            return item.value === e.target.value;
+          });
           if (e.target.hasAttribute('data-actarget')) {
             actarget = e.target.form[e.target.dataset.actarget];
             actarget.value = selected.key;
@@ -441,7 +439,7 @@
       };
     }*/
 
-    var autocompleteJQ = (searchField, dataSource, targetName) => {
+    /*var autocompleteJQ = (searchField, dataSource, targetName) => {
       let targetElement = "";
       if (targetName) {
         // The hidden input field is supposed to be the first
@@ -467,7 +465,7 @@
           searchField.blur(); // Removing focus causes the "change" event to trigger and submit the value via the default functionality attached to the "input.noformat" fields
         }
       });
-    }
+    }*/
 
     var submitModalForm = (target, Form, redirect = false) => {
       formData = new FormData(Form);

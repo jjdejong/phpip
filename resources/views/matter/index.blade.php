@@ -18,9 +18,7 @@
       return $(this).val().length > 0;
     }).serialize(); // Filter out empty values
     reloadPart(url, 'matter-list')
-    .then( () => {
-      window.history.pushState('', 'phpIP', url);
-    });
+    .then(window.history.pushState('', 'phpIP', url));
   }
 
   $(document).ready(function() {
