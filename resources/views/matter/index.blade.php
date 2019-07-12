@@ -13,80 +13,85 @@
 @section('script')
 <script type="text/javascript">
 
+  var url = new URL(window.location.href);
+
   function refreshMatterList() {
-    var url = '/matter?' + $(".btn-toolbar, #filter").find("input").filter(function() {
-      return $(this).val().length > 0;
-    }).serialize(); // Filter out empty values
-    reloadPart(url, 'matterList')
-    .then(window.history.pushState('', 'phpIP', url));
+    window.history.pushState('', 'phpIP', url);
+    reloadPart(url, 'matterList');
   }
 
-  //$(document).ready(function() {
-
-    $('.sortable').click(function() {
-      sortkey.value = this.dataset.sortkey;
-      sortdir.value = this.dataset.sortdir;
-      if (this.dataset.sortdir === 'asc') {
-        this.dataset.sortdir = 'desc';
-      } else {
-        this.dataset.sortdir = 'asc';
-      }
-      refreshMatterList();
-    });
-
-
-    filterControls.onchange = e => {
-      let url = window.location.href;
-      switch (e.target.id) {
-        case 'showStatus':
-          for (td of document.getElementsByClassName('display_status')) {
-            td.classList.remove('d-none');
-          }
-          for (td of document.getElementsByClassName('display_actor')) {
-            td.classList.add('d-none');
-          }
-          if (!url.match('tab=0')) {
-            url += '?tab=1';
-          } else {
-            url = url.replace('tab=0', 'tab=1');
-          }
-          window.history.pushState('', 'phpIP', url);
-          break;
-        case 'showActors':
-          for (td of document.getElementsByClassName('display_actor')) {
-            td.classList.remove('d-none');
-          }
-          for (td of document.getElementsByClassName('display_status')) {
-            td.classList.add('d-none');
-          }
-          url = url.replace('tab=1', 'tab=0');
-          window.history.pushState('', 'phpIP', url);
-          break;
-        case 'showAll':
-        case 'showContainers':
-        case 'showResponsible':
-          refreshMatterList();
-          break;
-      }
+  $('.sortable').click(function() {
+    url.searchParams.set('sortkey', this.dataset.sortkey);
+    url.searchParams.set('sortdir', this.dataset.sortdir);
+    if (this.dataset.sortdir === 'asc') {
+      this.dataset.sortdir = 'desc';
+    } else {
+      this.dataset.sortdir = 'asc';
     }
+    refreshMatterList();
+  });
 
-    exportList.onclick = e => {
-      var url = '/matter/export?' + $(".btn-toolbar, #filter").find("input").filter(function() {
-        return $(this).val().length > 0;
-      }).serialize();
-      e.preventDefault(); //stop the browser from following
-      window.location.href = url;
-    };
 
-    $('.filter-input').keyup(debounce(function() {
-      refreshMatterList();
-    }, 500));
+  filterButtons.onchange = e => {
+    switch (e.target.id) {
+      case 'showStatus':
+        for (td of document.getElementsByClassName('display_status')) {
+          td.classList.remove('d-none');
+        }
+        for (td of document.getElementsByClassName('display_actor')) {
+          td.classList.add('d-none');
+        }
+        url.searchParams.set('tab', '1');
+        window.history.pushState('', 'phpIP', url);
+        break;
+      case 'showActors':
+        for (td of document.getElementsByClassName('display_actor')) {
+          td.classList.remove('d-none');
+        }
+        for (td of document.getElementsByClassName('display_status')) {
+          td.classList.add('d-none');
+        }
+        url.searchParams.set('tab', '0');
+        window.history.pushState('', 'phpIP', url);
+        break;
+      case 'showAll':
+        url.searchParams.delete('Ctnr');
+        refreshMatterList();
+        break;
+      case 'showContainers':
+        url.searchParams.set('Ctnr', '1');
+        refreshMatterList();
+        break;
+      case 'showResponsible':
+        if (url.searchParams.has('responsible')) {
+          url.searchParams.delete('responsible');
+        } else {
+          url.searchParams.set('responsible', e.target.value);
+        }
+        refreshMatterList();
+        break;
+    }
+  }
 
-    clearFilters.onclick = () => {
-      window.location.href = '/matter';
-    };
+  exportList.onclick = e => {
+    let exportUrl = '/matter/export' + url.search;
+    e.preventDefault(); //stop the browser from following
+    window.location.href = exportUrl;
+  };
 
-  //});
+  $('.filter-input').keyup(debounce(function(e) {
+    if (e.target.value.length === 0) {
+      url.searchParams.delete(e.target.name);
+    } else {
+      url.searchParams.set(e.target.name, e.target.value);
+    }
+    refreshMatterList();
+  }, 500));
+
+  clearFilters.onclick = () => {
+    window.location.href = '/matter';
+  };
+
 </script>
 @stop
 
@@ -100,7 +105,7 @@
 
 @section('content')
 <div class="card mb-0">
-  <div id="filterControls" class="card-header">
+  <div id="filterButtons" class="card-header">
     <form class="btn-toolbar" role="toolbar">
       <div class="btn-group btn-group-toggle mr-3" data-toggle="buttons" id="containerAll">
         <label class="btn btn-info {{ Request::filled('Ctnr') ? '' : 'active' }}">
@@ -155,7 +160,7 @@
       <th class="display_status {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="Granted" data-sortdir="asc">Granted</a></th>
       <th class="display_status {{ $hideTab1 }}">Number</th>
     </tr>
-    <tr id="filter">
+    <tr>
       <td><input class="filter-input form-control form-control-sm" name="Ref" placeholder="Ref" value="{{ Request::get('Ref') }}"></td>
       <td><input class="filter-input form-control form-control-sm" size="3" name="Cat" placeholder="Cat" value="{{ Request::get('Cat') }}"></td>
       <td><input class="filter-input form-control form-control-sm" name="Status" placeholder="Status" value="{{ Request::get('Status') }}"></td>
