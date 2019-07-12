@@ -262,7 +262,8 @@ class MatterController extends Controller
             'filter',
             'value',
             'sortkey',
-            'sortdir'
+            'sortdir',
+            'tab'
         ]);
 
         $matter = new Matter();

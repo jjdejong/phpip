@@ -17,16 +17,16 @@
     var url = '/matter?' + $(".btn-toolbar, #filter").find("input").filter(function() {
       return $(this).val().length > 0;
     }).serialize(); // Filter out empty values
-    reloadPart(url, 'matter-list')
+    reloadPart(url, 'matterList')
     .then(window.history.pushState('', 'phpIP', url));
   }
 
-  $(document).ready(function() {
+  //$(document).ready(function() {
 
     $('.sortable').click(function() {
       sortkey.value = this.dataset.sortkey;
       sortdir.value = this.dataset.sortdir;
-      if (this.data.dataset.sortdir === 'asc') {
+      if (this.dataset.sortdir === 'asc') {
         this.dataset.sortdir = 'desc';
       } else {
         this.dataset.sortdir = 'asc';
@@ -34,61 +34,59 @@
       refreshMatterList();
     });
 
-    // Toggle the data to display
-    $('#show-status').change(function() {
-      for (td of document.getElementsByClassName('display_status')) {
-        td.classList.remove('d-none');
-      }
-      for (td of document.getElementsByClassName('display_actor')) {
-        td.classList.add('d-none');
-      }
+
+    filterControls.onchange = e => {
       let url = window.location.href;
-      if (!url.match('tab=0')) {
-        url += '?tab=1';
-      } else {
-        url = url.replace('tab=0', 'tab=1');
+      switch (e.target.id) {
+        case 'showStatus':
+          for (td of document.getElementsByClassName('display_status')) {
+            td.classList.remove('d-none');
+          }
+          for (td of document.getElementsByClassName('display_actor')) {
+            td.classList.add('d-none');
+          }
+          if (!url.match('tab=0')) {
+            url += '?tab=1';
+          } else {
+            url = url.replace('tab=0', 'tab=1');
+          }
+          window.history.pushState('', 'phpIP', url);
+          break;
+        case 'showActors':
+          for (td of document.getElementsByClassName('display_actor')) {
+            td.classList.remove('d-none');
+          }
+          for (td of document.getElementsByClassName('display_status')) {
+            td.classList.add('d-none');
+          }
+          url = url.replace('tab=1', 'tab=0');
+          window.history.pushState('', 'phpIP', url);
+          break;
+        case 'showAll':
+        case 'showContainers':
+        case 'showResponsible':
+          refreshMatterList();
+          break;
       }
-      window.history.pushState('', 'phpIP', url);
-    });
+    }
 
-    $('#show-actor').change(function() {
-      for (td of document.getElementsByClassName('display_actor')) {
-        td.classList.remove('d-none');
-      }
-      for (td of document.getElementsByClassName('display_status')) {
-        td.classList.add('d-none');
-      }
-      let url = window.location.href.replace('tab=1', 'tab=0');
-      window.history.pushState('', 'phpIP', url);
-    });
-
-    $('#show-all, #show-containers, #show-responsible').change(function() {
-      refreshMatterList();
-    });
-
-    $('#export').click(function(e) {
+    exportList.onclick = e => {
       var url = '/matter/export?' + $(".btn-toolbar, #filter").find("input").filter(function() {
         return $(this).val().length > 0;
       }).serialize();
       e.preventDefault(); //stop the browser from following
       window.location.href = url;
-    });
+    };
 
     $('.filter-input').keyup(debounce(function() {
       refreshMatterList();
     }, 500));
 
-    $('#clear-filters').click(function() {
-      $('#matter-list').load('/matter #matter-list > tr', function() {
-        $('#filter').find('input').val('').css('background-color', '#fff');
-        $('#mine-all > label.active').removeClass('active');
-        $('#container-all > label.active').removeClass('active');
-        $('#container-all > label:first').addClass('active');
-        window.history.pushState('', 'phpIP', '/matter');
-      });
-    });
+    clearFilters.onclick = () => {
+      window.location.href = '/matter';
+    };
 
-  });
+  //});
 </script>
 @stop
 
@@ -102,37 +100,37 @@
 
 @section('content')
 <div class="card mb-0">
-  <div class="card-header">
+  <div id="filterControls" class="card-header">
     <form class="btn-toolbar" role="toolbar">
-      <div class="btn-group btn-group-toggle mr-3" data-toggle="buttons" id="container-all">
+      <div class="btn-group btn-group-toggle mr-3" data-toggle="buttons" id="containerAll">
         <label class="btn btn-info {{ Request::filled('Ctnr') ? '' : 'active' }}">
-          <input type="radio" id="show-all" name="Ctnr" value=""> Show All
+          <input type="radio" id="showAll" name="Ctnr" value=""> Show All
         </label>
         <label class="btn btn-info {{ Request::filled('Ctnr') ? 'active' : '' }}">
-          <input type="radio" id="show-containers" name="Ctnr" value="1"> Show Containers
+          <input type="radio" id="showContainers" name="Ctnr" value="1"> Show Containers
         </label>
       </div>
       <div class="btn-group btn-group-toggle mr-3" data-toggle="buttons" id="actorStatus">
         <label class="btn btn-info {{ Request::get('tab') == 1 ? '' : 'active' }}">
-          <input type="radio" id="show-actor" name="tab" value="0"> Actor View
+          <input type="radio" id="showActors" name="tab" value="0"> Actor View
         </label>
         <label class="btn btn-info {{ Request::get('tab') == 1 ? 'active' : '' }}">
-          <input type="radio" id="show-status" name="tab" value="1"> Status View
+          <input type="radio" id="showStatus" name="tab" value="1"> Status View
         </label>
       </div>
-      <div class="btn-group-toggle mr-3" id="mine-all" data-toggle="buttons">
+      <div class="btn-group-toggle mr-3" id="mineAll" data-toggle="buttons">
         <label class="btn btn-info {{ Request::get('responsible') ? 'active' : '' }}">
-          <input class="responsible-filter" type="checkbox" id="show-responsible" name="responsible" value="{{ Auth::user ()->login }}"> Show Mine
+          <input type="checkbox" id="showResponsible" name="responsible" value="{{ Auth::user ()->login }}"> Show Mine
         </label>
       </div>
       <input type="hidden" id="sortkey" name="sortkey" value="{{ Request::get('sortkey') }}">
       <input type="hidden" id="sortdir" name="sortdir" value="{{ Request::get('sortdir') }}">
       <input type="hidden" name="display_with" value="{{ Request::get('display_with') }}">
       <div class="btn-group mr-3">
-        <button id="export" type="button" class="btn btn-primary"> &DownArrowBar; Export</button>
+        <button id="exportList" type="button" class="btn btn-primary"> &DownArrowBar; Export</button>
       </div>
       <div class="button-group">
-        <button id="clear-filters" type="button" class="btn btn-primary">&circlearrowright; Clear filters</button>
+        <button id="clearFilters" type="button" class="btn btn-primary">&circlearrowright; Clear filters</button>
       </div>
     </form>
   </div>
@@ -176,7 +174,7 @@
       <td class="display_status {{ $hideTab1 }}"><input class="filter-input form-control form-control-sm" name="GrtNo" placeholder="Number" value="{{ Request::get('GrtNo') }}"></td>
     </tr>
   </thead>
-  <tbody id="matter-list">
+  <tbody id="matterList">
     @foreach ($matters as $matter)
     @php // Format the publication number for searching on Espacenet
     $published = 0;
