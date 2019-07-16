@@ -17,8 +17,8 @@
           <th>Company</th>
           <th>Person</th>
         </tr>
-        <tr id="filter" class="sticky-top">
-          <th><input class="filter-input form-control form-control-sm" name="Name" value="{{ old('Name') }}"></th>
+        <tr id="filterFields">
+          <th><input class="form-control form-control-sm" name="Name" value="{{ Request::get('Name') }}"></th>
           <th colspan="3"></th>
           <th>
             <select id="person" class="custom-select-sm px-0" name="phy_person">
@@ -89,7 +89,7 @@
     refreshActorList();
   }
 
-  $('.filter-input').keyup(debounce(function (e) {
+  filterFields.addEventListener('input', debounce( e => {
     if (e.target.value.length === 0) {
       url.searchParams.delete(e.target.name);
     } else {
