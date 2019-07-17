@@ -159,21 +159,6 @@
       $(this).addClass("border border-info");
   });
 
-  $("#titlePanel").on("shown.bs.collapse", "#addTitleCollapse", function() {
-    $(this).find('input[placeholder="Type"]').autocomplete({
-      minLength: 0,
-      source: "/classifier-type/autocomplete/1",
-      select: function(event, ui) {
-        addTitleForm['type_code'].value = ui.item.key;
-      },
-      change: function(event, ui) {
-        if (!ui.item)
-          this.value = "";
-      }
-    }).focus(function() {
-      $(this).autocomplete("search", "");
-    });
-  });
 
   $("#titlePanel").on("click", "#addTitleSubmit", function() {
     var request = $("#addTitleForm").find("input").filter(function() {
