@@ -15,7 +15,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <a class="bg-primary text-white" href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
       ({{ $matter->category->category }})
       <a class="bg-primary text-white float-right hidden-action"
-         data-toggle="modal" data-target="#ajaxModal" data-remote="false" data-resource="/matter/" href="/matter/{{ $matter->id }}/edit" title="Advanced matter edition">
+         data-toggle="modal" data-target="#ajaxModal" data-resource="/matter/" href="/matter/{{ $matter->id }}/edit" title="Advanced matter edition">
         &#9998;
       </a>
     </div>
@@ -80,13 +80,13 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
   <div class="card border-info col-2 p-0">
     <div class="card-body">
-      <a class="btn btn-outline-info btn-block btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=clone" data-toggle="modal" data-target="#ajaxModal" data-remote="false" data-size="modal-sm" title="Clone {{ $matter->category->category }}">
+      <a class="btn btn-outline-info btn-block btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=clone" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Clone {{ $matter->category->category }}">
         &boxbox; Clone Matter
       </a>
-      <a class="btn btn-outline-info btn-block btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=child" data-toggle="modal" data-target="#ajaxModal" data-remote="false" data-size="modal-sm" title="Create child {{ $matter->category->category }}">
+      <a class="btn btn-outline-info btn-block btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=child" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Create child {{ $matter->category->category }}">
         &oplus; New Child
       </a>
-      <a class="btn btn-outline-info btn-block btn-sm {{ $matter->countryInfo->goesnational ? '' : 'disabled' }}" href="/matter/{{ $matter->id }}/createN" data-toggle="modal" data-target="#ajaxModal" data-remote="false" data-size="modal-sm" title="Enter {{ $matter->category->category }} in national phase">
+      <a class="btn btn-outline-info btn-block btn-sm {{ $matter->countryInfo->goesnational ? '' : 'disabled' }}" href="/matter/{{ $matter->id }}/createN" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Enter {{ $matter->category->category }} in national phase">
         &#9872; Enter Nat. Phase
       </a>
     </div>
@@ -106,7 +106,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <div class="card reveal-hidden border-secondary mb-1">
         <div class="card-header font-weight-bold p-1">
           {{ $role_name }}
-          <a class="hidden-action float-right ml-2" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" data-remote="false" title="Edit actors in {{ $role_group[0]->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}"
+          <a class="hidden-action float-right ml-2" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group[0]->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}"
             data-resource="/actor-pivot/">
             &#9998;
           </a>
@@ -128,7 +128,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               <a href="/actor/{{ $actor->actor_id }}"
                 data-toggle="modal"
                 data-target="#ajaxModal"
-                data-remote="false"
                 title="Actor data"
                 data-resource="/actor/">
               {{ $actor->display_name }}
@@ -162,7 +161,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <span class="col-3">Date</span>
             <span class="col-4">
               Number
-              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/events" data-toggle="modal" data-target="#ajaxModal" data-remote="false" data-size="modal-lg" title="All events" data-resource="/event/">
+              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/events" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All events" data-resource="/event/">
                 &vellip;
               </a>
             </span>
@@ -197,7 +196,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <span class="font-weight-bold col-9">Open Tasks</span>
             <span class="col-3">
               Due
-              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-remote="false" data-size="modal-lg" title="All tasks" data-resource="/task/">
+              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All tasks" data-resource="/task/">
                 &vellip;
               </a>
             </span>
@@ -220,7 +219,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <span class="font-weight-bold col-6">Renewals</span>
             <span class="col-6">
               Due
-              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-remote="false" data-size="modal-lg" title="All renewals" data-resource="/task/">
+              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All renewals" data-resource="/task/">
                 &vellip;
               </a>
             </span>
@@ -238,7 +237,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <div class="card col-6 p-0 reveal-hidden">
         <div class="card-header font-weight-bold p-1">
           Classifiers
-          <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/classifiers" data-target="#ajaxModal" data-toggle="modal" data-remote="false" data-resource="/classifier/" title="Classifier detail">
+          <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/classifiers" data-target="#ajaxModal" data-toggle="modal" data-resource="/classifier/" title="Classifier detail">
             &vellip;
           </a>
         </div>
@@ -320,7 +319,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               href="/matter/{{ $matter->id }}/description/en"
               data-toggle="modal"
               data-target="#ajaxModal"
-              data-remote="false"
               data-resource="/event"
               data-size="modal-lg"
               title="Copy a summary in English">
@@ -330,7 +328,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               href="/matter/{{ $matter->id }}/description/fr"
               data-toggle="modal"
               data-target="#ajaxModal"
-              data-remote="false"
               data-size="modal-lg"
               data-resource="/event"
               title="Copy a summary in French">

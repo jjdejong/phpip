@@ -11,7 +11,7 @@
                             Categories
                         </div>
                         <div class="col-4">
-                            <a href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-remote="false" data-size="modal-sm" class="btn btn-primary" title="Create Matter">Create matter</a>
+                            <a href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" class="btn btn-primary" title="Create Matter">Create matter</a>
                         </div>
                     </div>
                     <div class="row font-weight-bold">
@@ -44,7 +44,6 @@
                                 <a class="badge badge-primary hidden-action"
                                     href="/matter/create?operation=new&category={{$group->category_code}}"
                                     data-target="#ajaxModal"
-                                    data-remote="false"
                                     title="Create new {{ $group->category }}"
                                     data-toggle="modal"
                                     data-size="modal-sm" >
@@ -148,7 +147,6 @@
                                 data-toggle="modal"
                                 data-target="#ajaxModal"
                                 data-size="modal-lg"
-                                data-remote="false"
                                 data-resource="/task/"
                                 title="All tasks">
                             {{ $task->info->name }}{{ $task->detail ? " - ".$task->detail : "" }}
@@ -224,7 +222,6 @@
                             <a href="/matter/{{ $task->trigger->matter->id }}/renewals"
                                     data-toggle="modal"
                                     data-target="#ajaxModal"
-                                    data-remote="false"
                                     title="All tasks"
                                     data-size="modal-lg">
                               {{ $task->detail }}

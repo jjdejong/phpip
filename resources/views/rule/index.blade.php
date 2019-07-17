@@ -7,7 +7,7 @@
 @section('content')
 <legend>
   Rules
-  <a href="rule/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" data-remote="false" title="Rule data" data-source="/rule" data-resource="/rule/create/">Create rule</a>
+  <a href="rule/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Rule data" data-source="/rule" data-resource="/rule/create/">Create rule</a>
 </legend>
 <table class="table table-striped table-hover table-sm">
   <thead>
@@ -36,7 +36,7 @@
     @foreach ($ruleslist as $rule)
     <tr data-id="{{ $rule->id }}" class="reveal-hidden">
       <td>
-        <a href="/rule/{{ $rule->id }}" data-toggle="modal" data-target="#ajaxModal" data-remote="false" title="Rule data" data-source="/rule" data-resource="/rule/">
+        <a href="/rule/{{ $rule->id }}" data-toggle="modal" data-target="#ajaxModal" title="Rule data" data-source="/rule" data-resource="/rule/">
           {{ $rule->taskInfo->name }}
         </a>
       </td>
