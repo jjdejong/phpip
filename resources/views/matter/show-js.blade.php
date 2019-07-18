@@ -137,7 +137,7 @@
 
   // Ajax refresh various panels when a modal is closed
   $("#ajaxModal").on("hide.bs.modal", function(e) {
-    switch (relatedUrl.split('/')[5]) {
+    switch (contentSrc.split('/')[5]) {
       case 'roleActors':
         reloadPart(window.location.href, 'actorPanel');
         break;
@@ -150,7 +150,7 @@
         reloadPart(window.location.href, 'refsPanel');
         break;
     }
-    relatedUrl = "";
+    contentSrc = "";
   });
 
 //  Generate summary and copy

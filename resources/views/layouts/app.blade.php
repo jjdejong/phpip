@@ -135,7 +135,7 @@
     </main>
   </div>
   <script>
-    var relatedUrl = "", // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
+    var contentSrc = "", // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
       acList;
 
     // Ajax fill an element from a url returning HTML
@@ -171,10 +171,10 @@
     // Ajax fill the opened modal
     $("#ajaxModal").on("show.bs.modal", function(event) {
       var modalTrigger = event.relatedTarget;
-      relatedUrl = modalTrigger.href;
+      contentSrc = modalTrigger.href;
       this.querySelector('.modal-title').innerHTML = modalTrigger.title;
       if (modalTrigger.hasAttribute('data-size')) this.querySelector('.modal-dialog').classList.add(modalTrigger.dataset.size);
-      fetchInto(relatedUrl, this.querySelector('.modal-body'));
+      fetchInto(contentSrc, this.querySelector('.modal-body'));
     });
 
     // Display actor dependencies in corresponding tab
@@ -219,13 +219,13 @@
 
         case 'deleteTask':
           fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
-            .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
+            .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
           break;
 
         case 'deleteEvent':
           if (confirm("Deleting the event will also delete the linked tasks. Continue anyway?")) {
             fetchREST('/event/' + e.target.dataset.event_id, 'DELETE')
-              .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
+              .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
           }
           break;
 
@@ -241,13 +241,13 @@
 
         case 'deleteClassifier':
           fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
-            .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
+            .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
           break;
 
           // Specific processing in the actor/role list modal
         case 'removeActor':
           fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
-            .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
+            .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
           break;
 
           // Nationalize modal
@@ -302,7 +302,7 @@
         let markedRow = e.target.closest('tbody').querySelector('.table-info');
         if (markedRow) markedRow.classList.remove('table-info');
         e.target.closest('tr').classList.add('table-info');
-        relatedUrl = e.target.href;
+        contentSrc = e.target.href;
         let panel = document.getElementById(e.target.dataset.panel);
         fetchInto(e.target.href, panel);
       }
@@ -337,9 +337,9 @@
                 footerAlert.classList.add('alert-danger');
               } else {
                 if (window.ajaxPanel) {
-                  reloadPart(relatedUrl, e.target.closest('.tab-pane').id);
-                } else if (relatedUrl.length !== 0) {
-                  fetchInto(relatedUrl, ajaxModal.querySelector(".modal-body"));
+                  reloadPart(contentSrc, e.target.closest('.tab-pane').id);
+                } else if (contentSrc.length !== 0) {
+                  fetchInto(contentSrc, ajaxModal.querySelector(".modal-body"));
                 }
                 footerAlert.classList.remove("alert-danger");
                 footerAlert.innerHTML = "";
@@ -489,7 +489,7 @@
             // Redirect to the created model (link returned by the controller store() function)
             location.href = data;
           } else {
-            fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body'));
+            fetchInto(contentSrc, ajaxModal.querySelector('.modal-body'));
           }
         })
         .catch(error => {

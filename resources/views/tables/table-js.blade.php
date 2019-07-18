@@ -1,5 +1,5 @@
 <script>
-    var relatedUrl = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
+    var contentSrc = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
     var sourceUrl = "";  // Identifies what to reload when refreshing the list
 
     function refreshRuleList() {
@@ -20,11 +20,11 @@
 
         // Display the modal view for creation of record
         $("#addModal").on("show.bs.modal", function (event) {
-            relatedUrl = $(event.relatedTarget).attr("href");
+            contentSrc = $(event.relatedTarget).attr("href");
             sourceUrl = $(event.relatedTarget).data("source");   // Used to refresh the list
             resource = $(event.relatedTarget).data("resource");
             $(this).find(".modal-title").text($(event.relatedTarget).attr("title"));
-            $(this).find(".modal-body").load(relatedUrl);
+            $(this).find(".modal-body").load(contentSrc);
         });
         // Reload the rules list when closing the modal window
         $("#addModal").on("hidden.bs.modal", function (event) {
@@ -60,7 +60,7 @@
         if (del_conf) {
             var data = $.param({_method: "DELETE"});
             $.post('/eventname/' + $(this).closest("tr").data("id"), data).done(function () {
-                $('#ajaxModal').find(".modal-body").load(relatedUrl);
+                $('#ajaxModal').find(".modal-body").load(contentSrc);
             });
             sourceUrl = $(this).data("source");  // Used to refresh the list
             refreshRuleList();
