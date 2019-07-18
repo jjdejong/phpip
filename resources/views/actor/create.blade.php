@@ -53,5 +53,5 @@
       </tr>
     </table>
   </fieldset>
-	<button type="button" id="createActorSubmit" class="btn btn-primary" data-dismiss="modal">Create</button>
+	<button type="button" id="createActorSubmit" class="btn btn-primary">Create</button>
 </form>

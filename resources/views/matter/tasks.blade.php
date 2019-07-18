@@ -29,7 +29,7 @@
       </td>
     </tr>
     @foreach ($event->tasks as $task)
-    <tr class="reveal-hidden {{ $task->done ? 'text-success' : 'text-danger' }}" data-id="{{ $task->id }}">
+    <tr class="reveal-hidden {{ $task->done ? 'text-success' : 'text-danger' }}" data-resource="/task/{{ $task->id }}">
       <td nowrap><span style="position: relative; left: 10px; margin-right: 10px;">{{ $task->info->name }}</span></td>
       <td><input type="text" class="form-control noformat" name="detail" value="{{ $task->detail }}"></td>
       <td><input type="date" class="form-control noformat" name="due_date" value="{{ $task->due_date }}"></td>

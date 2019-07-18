@@ -134,10 +134,8 @@
       </div>
     </main>
   </div>
-  @yield('script')
   <script>
     var relatedUrl = "", // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
-      resource = "", // Identifies the REST resource for CRUD operations
       acList;
 
     // Ajax fill an element from a url returning HTML
@@ -174,7 +172,6 @@
     $("#ajaxModal").on("show.bs.modal", function(event) {
       var modalTrigger = event.relatedTarget;
       relatedUrl = modalTrigger.href;
-      resource = modalTrigger.dataset.resource;
       this.querySelector('.modal-title').innerHTML = modalTrigger.title;
       if (modalTrigger.hasAttribute('data-size')) this.querySelector('.modal-dialog').classList.add(modalTrigger.dataset.size);
       fetchInto(relatedUrl, this.querySelector('.modal-body'));
@@ -199,7 +196,7 @@
 
         case 'deleteMatter':
           if (confirm("Deleting the matter. Continue anyway?")) {
-            fetchREST('/matter/' + e.target.closest('card').dataset.id, 'DELETE')
+            fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
               .then((data) => {
                 if (data.message) {
                   alert(data.message);
@@ -221,7 +218,7 @@
           break;
 
         case 'deleteTask':
-          fetchREST('/task/' + e.target.closest('tr').dataset.id, 'DELETE')
+          fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
             .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
           break;
 
@@ -243,13 +240,13 @@
           break;
 
         case 'deleteClassifier':
-          fetchREST('/classifier/' + e.target.closest('tr').dataset.id, 'DELETE')
+          fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
             .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
           break;
 
           // Specific processing in the actor/role list modal
         case 'removeActor':
-          fetchREST('/actor-pivot/' + e.target.closest('tr').dataset.id, 'DELETE')
+          fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
             .then(() => fetchInto(relatedUrl, ajaxModal.querySelector('.modal-body')));
           break;
 
@@ -302,8 +299,10 @@
 
       if (e.target.hasAttribute('data-panel')) {
         e.preventDefault();
+        let markedRow = e.target.closest('tbody').querySelector('.table-info');
+        if (markedRow) markedRow.classList.remove('table-info');
+        e.target.closest('tr').classList.add('table-info');
         relatedUrl = e.target.href;
-        resource = e.target.dataset.resource;
         let panel = document.getElementById(e.target.dataset.panel);
         fetchInto(e.target.href, panel);
       }
@@ -322,24 +321,32 @@
           }
         }
         params.append(e.target.name, e.target.value);
-        let id = e.target.closest('tr').dataset.id;
-        if (!id) id = e.target.closest('table').dataset.id;
-        fetchREST(resource + id, 'PUT', params)
-          .then(data => {
-            if (data.errors) {
-              footerAlert.innerHTML = Object.values(data.errors)[0];
-              footerAlert.classList.add('alert-danger');
-            } else {
-              if (window.ajaxPanel) {
-                reloadPart(relatedUrl, e.target.closest('.tab-pane').id);
+        let resource = e.target.closest('[data-resource]').dataset.resource;
+        if (e.target.matches('.titleItem')) { // Handle titles in matter.show
+          if (e.target.value.trim().length === 0) {
+            fetchREST(resource, 'DELETE');
+          } else {
+            fetchREST(resource, 'PUT', params);
+          }
+          reloadPart(window.location.pathname, 'titlePanel');
+        } else { // Handle generic input fields
+          fetchREST(resource, 'PUT', params)
+            .then(data => {
+              if (data.errors) {
+                footerAlert.innerHTML = Object.values(data.errors)[0];
+                footerAlert.classList.add('alert-danger');
               } else {
-                fetchInto(relatedUrl, ajaxModal.querySelector(".modal-body"));
+                if (window.ajaxPanel) {
+                  reloadPart(relatedUrl, e.target.closest('.tab-pane').id);
+                } else if (relatedUrl.length !== 0) {
+                  fetchInto(relatedUrl, ajaxModal.querySelector(".modal-body"));
+                }
+                footerAlert.classList.remove("alert-danger");
+                footerAlert.innerHTML = "";
               }
-              footerAlert.classList.remove("alert-danger");
-              footerAlert.innerHTML = "";
-            }
-          })
-          .catch(error => console.log(error));
+            })
+            .catch(error => console.log(error));
+        }
       }
     });
 
@@ -383,6 +390,8 @@
         }
       }
     });
+
+    //ajaxModal.addEventListener('ac-done', item => console.log(item.detail));
 
     /* Custom autocomplete function using native JS
      * "searchField" is the element receiving the user input,
@@ -545,7 +554,7 @@
       e.preventDefault();
     });
 
-    ajaxModal.addEventListener('dragend', () => {
+    ajaxModal.addEventListener('dragend', e => {
       for (tr of dragItem.parentNode.children) {
         if (tr.rowIndex != tr.dataset.n) {
           let display_order = tr.querySelector('[name="display_order"]');
@@ -553,12 +562,13 @@
           tr.dataset.n = tr.rowIndex;
           let params = new URLSearchParams();
           params.append('display_order', display_order.value);
-          fetchREST(resource + tr.dataset.id, 'PUT', params);
+          fetchREST(tr.dataset.resource, 'PUT', params);
         };
       }
       dragItem = "";
     });
   </script>
+  @yield('script')
 </body>
 
 </html>

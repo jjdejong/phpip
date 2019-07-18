@@ -3,7 +3,7 @@
 @section('content')
 <legend>
     Actors
-    <a href="actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Create Actor" data-resource="/actor/">Create actor</a>
+    <a href="actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Create Actor">Create actor</a>
 </legend>
 <div class="row">
   <div class="col">
@@ -31,9 +31,9 @@
       </thead>
       <tbody id="actorList">
         @foreach ($actorslist as $actor)
-        <tr class="actor-list-row reveal-hidden" data-id="{{ $actor->id }}">
+        <tr class="reveal-hidden" data-id="{{ $actor->id }}">
           <td>
-            <a href="/actor/{{ $actor->id }}" data-panel="ajaxPanel" title="Actor data" data-resource="/actor/">
+            <a href="/actor/{{ $actor->id }}" data-panel="ajaxPanel" title="Actor data">
               {{ $actor->name }}
             </a>
           </td>

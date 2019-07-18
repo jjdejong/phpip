@@ -114,51 +114,12 @@
   }); // End popover processing
 
 
-// Notes edition
-
-  multiPanel.addEventListener('change', e => {
-    if (e.target && e.target.matches("#notes")) {
-      let params = new URLSearchParams();
-      params.append('notes', e.target.value);
-      fetchREST("/matter/{{ $matter->id }}", "PUT", params)
-      .then(data => {
-        if (data.errors){
-          console.log(data.errors);
-        } else {
-          e.target.classList.remove('border', 'border-info');
-        }
-      });
-    }
-  });
-
-
 // Titles processing
 
   // Show the title creation form when the title panel is empty
   if (!titlePanel.querySelector('.row')) {
     $("#addTitleCollapse").collapse("show");
   }
-
-  $("#titlePanel").on("keydown", ".titleItem", function(e) {
-    if (e.which === 13) {
-      e.preventDefault();
-      var method = "PUT";
-      var title = $(this).text().trim();
-      if (!title)
-        method = "DELETE";
-      $.ajax({
-        type: method,
-        url: '/classifier/' + $(this).attr("id"),
-        data: {
-          value: title
-        }
-      }).done(function() {
-        reloadPart("/matter/{{ $matter->id }}", 'titlePanel');
-      });
-    } else
-      $(this).addClass("border border-info");
-  });
-
 
   $("#titlePanel").on("click", "#addTitleSubmit", function() {
     var request = $("#addTitleForm").find("input").filter(function() {
@@ -175,20 +136,21 @@
   });
 
   // Ajax refresh various panels when a modal is closed
-  $("#ajaxModal").on("hide.bs.modal", function(event) {
-    switch (resource) {
-      case '/actor-pivot/':
-        reloadPart("/matter/{{ $matter->id }}", 'actorPanel');
+  $("#ajaxModal").on("hide.bs.modal", function(e) {
+    switch (relatedUrl.split('/')[5]) {
+      case 'roleActors':
+        reloadPart(window.location.href, 'actorPanel');
         break;
-      case '/event/':
-      case '/task/':
-      case '/classifier/':
-        reloadPart("/matter/{{ $matter->id }}", 'multiPanel');
+      case 'events':
+      case 'tasks':
+      case 'classifiers':
+        reloadPart(window.location.href, 'multiPanel');
         break;
-      case '/matter/':
-        reloadPart("/matter/{{ $matter->id }}", 'refsPanel');
+      case 'edit':
+        reloadPart(window.location.href, 'refsPanel');
         break;
     }
+    relatedUrl = "";
   });
 
 //  Generate summary and copy

@@ -15,7 +15,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <a class="bg-primary text-white" href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
       ({{ $matter->category->category }})
       <a class="bg-primary text-white float-right hidden-action"
-         data-toggle="modal" data-target="#ajaxModal" data-resource="/matter/" href="/matter/{{ $matter->id }}/edit" title="Advanced matter edition">
+         data-toggle="modal" data-target="#ajaxModal" href="/matter/{{ $matter->id }}/edit" title="Advanced matter edition">
         &#9998;
       </a>
     </div>
@@ -48,7 +48,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           @foreach ( $title_group as $title )
           @if ($title != $title_group->first()) <br>
           @endif
-          <div id="{{ $title->id }}" class="titleItem w-100" contenteditable="true">{{ $title->value }}</div>
+          <input data-resource="/classifier/{{ $title->id }}" class="titleItem noformat w-100" name="value" value="{{ $title->value }}" autocomplete="off">
           @endforeach
         </div>
       </div>
@@ -106,8 +106,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <div class="card reveal-hidden border-secondary mb-1">
         <div class="card-header font-weight-bold p-1">
           {{ $role_name }}
-          <a class="hidden-action float-right ml-2" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group[0]->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}"
-            data-resource="/actor-pivot/">
+          <a class="hidden-action float-right ml-2" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group[0]->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
             &#9998;
           </a>
           <a class="hidden-action float-right" data-placement="right" rel="popover" title="Add {{ $role_name }}"
@@ -128,8 +127,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               <a href="/actor/{{ $actor->actor_id }}"
                 data-toggle="modal"
                 data-target="#ajaxModal"
-                title="Actor data"
-                data-resource="/actor/">
+                title="Actor data">
               {{ $actor->display_name }}
               </a>
               @if ( $actor->show_ref && $actor->actor_ref )
@@ -161,7 +159,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <span class="col-3">Date</span>
             <span class="col-4">
               Number
-              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/events" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All events" data-resource="/event/">
+              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/events" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All events">
                 &vellip;
               </a>
             </span>
@@ -196,7 +194,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <span class="font-weight-bold col-9">Open Tasks</span>
             <span class="col-3">
               Due
-              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All tasks" data-resource="/task/">
+              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All tasks">
                 &vellip;
               </a>
             </span>
@@ -219,7 +217,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <span class="font-weight-bold col-6">Renewals</span>
             <span class="col-6">
               Due
-              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All renewals" data-resource="/task/">
+              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All renewals">
                 &vellip;
               </a>
             </span>
@@ -237,7 +235,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <div class="card col-6 p-0 reveal-hidden">
         <div class="card-header font-weight-bold p-1">
           Classifiers
-          <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/classifiers" data-target="#ajaxModal" data-toggle="modal" data-resource="/classifier/" title="Classifier detail">
+          <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/classifiers" data-target="#ajaxModal" data-toggle="modal" title="Classifier detail">
             &vellip;
           </a>
         </div>
@@ -305,8 +303,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         <div class="card-header font-weight-bold p-1">
           Notes
         </div>
-        <div class="card-body p-1" id="notes-panel" style="overflow: auto;">
-          <textarea id="notes" class="form-control noformat" name="notes" autocomplete="off">{{ $matter->notes }}</textarea>
+        <div class="card-body p-1" style="overflow: auto;">
+          <textarea id="notes" class="form-control noformat" name="notes" data-resource="/matter/{{ $matter->id }}">{{ $matter->notes }}</textarea>
         </div>
       </div>
       <div class="card border-info col-3 p-0">
@@ -319,7 +317,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               href="/matter/{{ $matter->id }}/description/en"
               data-toggle="modal"
               data-target="#ajaxModal"
-              data-resource="/event"
               data-size="modal-lg"
               title="Copy a summary in English">
               &boxbox; EN
@@ -329,7 +326,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               data-toggle="modal"
               data-target="#ajaxModal"
               data-size="modal-lg"
-              data-resource="/event"
               title="Copy a summary in French">
               &boxbox; FR
           </a>

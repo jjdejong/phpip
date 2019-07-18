@@ -35,7 +35,7 @@
   </thead>
   <tbody id="eventList">
     @foreach ( $events as $event )
-    <tr data-id="{{ $event->id }}">
+    <tr data-resource="/event/{{ $event->id }}">
       <td>{{ $event->info->name }}</td>
       <td><input type="date" class="form-control noformat" name="event_date" value="{{ $event->event_date }}"></td>
       <td><input type="text" class="form-control noformat" size="16" name="detail" value="{{ $event->detail }}"></td>

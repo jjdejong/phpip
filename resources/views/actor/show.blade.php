@@ -8,9 +8,9 @@
       Delete
     </button>
   </div>
-  <div class="tab-content">
+  <div class="tab-content" data-resource="/actor/{{ $actorInfo->id }}">
     <fieldset class="tab-pane fade show active" id="actorMain">
-      <table class="table table-hover table-sm" data-id="{{ $actorInfo->id }}">
+      <table class="table table-hover table-sm">
         <tr>
           <td><label for="name" class="required-field" title="{{ $actorComments['name'] }}">Name</label> </td>
           <td><input class="noformat form-control" name="name" value="{{ $actorInfo->name }}"></td>
@@ -72,7 +72,7 @@
       </table>
     </fieldset>
     <fieldset class="tab-pane fade" id="actorContact">
-      <table class="table table-hover table-sm" data-id="{{ $actorInfo->id }}">
+      <table class="table table-hover table-sm">
         <tr>
           <td><label for="address">Address</label><br /></td>
           <td><textarea class="noformat form-control" name="address">{{ $actorInfo->address }}</textarea></td>
@@ -108,7 +108,7 @@
       </table>
     </fieldset>
     <fieldset class="tab-pane fade" id="actorOther">
-      <table class="table table-hover table-sm" data-id="{{ $actorInfo->id }}">
+      <table class="table table-hover table-sm">
         <tr>
           <td><label for="VAT_number" title="{{ $actorComments['VAT_number'] }}">VAT no.</label></td>
           <td><input type='text' class="noformat form-control" name="VAT_number" value="{{ $actorInfo->VAT_number }}"></td>
