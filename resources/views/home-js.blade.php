@@ -43,17 +43,6 @@
         refreshRenewals();
     });
 
-    // Ajax fill the opened modal and set global parameters
-    $("#homeModal").on("show.bs.modal", function (event) {
-        contentSrc = $(event.relatedTarget).attr("href");
-        size = $(event.relatedTarget).data("size");
-
-        $(this).find(".modal-title").text($(event.relatedTarget).attr("title"));
-        $(this).find(".modal-dialog").removeClass("modal-lg");
-        $(this).find(".modal-dialog").addClass(size);
-        $(this).find(".modal-body").load(contentSrc);
-    });
-
     $('#clear-ren-tasks').click(function () {
         var tids = new Array();
         $('.clear-ren-task').each(function () {
