@@ -66,7 +66,7 @@ Route::group(['middleware' => 'auth'], function () {
         $term = $request->input('term');
         $newref = App\Matter::where('caseref', 'like', "$term%")->max('caseref');
         $newref++;
-        return [['key' => 0, 'value' => $newref ]];
+        return [['key' => $newref, 'value' => $newref ]];
     });
 
     Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {

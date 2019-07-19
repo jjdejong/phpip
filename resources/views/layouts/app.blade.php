@@ -32,7 +32,6 @@
         </a>
         @auth
         <form class="form-inline" method="POST" action="/matter/search">
-          @csrf
           <div class="input-group">
             <input type="search" class="form-control" id="matter-search" name="matter_search" placeholder="Search" autocomplete="off">
             <div class="input-group-append">
@@ -531,17 +530,20 @@
     var dragItem;
 
     ajaxModal.addEventListener('dragstart', e => {
-      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.dropEffect = "move";
       e.dataTransfer.setData("text/plain", null);
       dragItem = e.target.parentNode;
+      e.target.classList.replace('bg-light', 'bg-info');
     });
 
     ajaxModal.addEventListener('dragover', e => {
       let destination = e.target.closest(dragItem.tagName);
-      if (dragItem.dataset.n > destination.dataset.n) {
-        destination.parentNode.insertBefore(dragItem, destination);
-      } else {
-        destination.parentNode.insertBefore(dragItem, destination.nextSibling);
+      if (destination) {
+        if (dragItem.rowIndex > destination.rowIndex) {
+          destination.parentNode.insertBefore(dragItem, destination);
+        } else {
+          destination.parentNode.insertBefore(dragItem, destination.nextSibling);
+        }
       }
     });
 

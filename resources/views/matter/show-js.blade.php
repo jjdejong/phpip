@@ -36,20 +36,26 @@
       actorShared.checked = true;
     }
 
+    actorName.focus();
 
     $('#actorName').autocomplete({
       minLength: 2,
       source: "/actor/autocomplete",
       select: function(event, ui) {
         if (ui.item.key === 'create') { // Creates actor on the fly
-          $.post('/actor', {
+          /*$.post('/actor', {
               name: this.value.toUpperCase(),
               default_role: addActorForm.role.value
             })
             .done(function(response) {
               addActorForm.actor_id.value = response.id;
               actorName.value = response.name;
-            });
+            });*/
+          fetchREST('/actor', 'POST', new URLSearchParams('name=' + this.value.toUpperCase() + '&default_role=' + addActorForm.role.value))
+          .then( response => {
+            addActorForm.actor_id.value = response.id;
+            actorName.value = response.name;
+          });
         } else {
           addActorForm.actor_id.value = ui.item.key;
         }
