@@ -120,15 +120,6 @@ class RuleController extends Controller
         $input = $request->all();
         $to_retain = ['_token', '_method'];
 
-        foreach ($input as $i =>$value) {
-            if (strpos($i, '_new')) {
-                array_push($to_retain, $i);
-            }
-            if ($value == "...") {
-                array_push($to_retain, $i);
-            }
-        }
-
         return Rule::create($request->except($to_retain));
     }
 
