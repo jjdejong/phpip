@@ -52,12 +52,10 @@ class ActorPivotController extends Controller
 
       $request->merge(['display_order' => $max + 1, 'company_id' => $addedActor->company_id]);
 
-      try {
-				ActorPivot::create($request->except(['_token', '_method']));
-			} catch (Exception $e) {
-				report($e);
-				return false;
-			}
+      $new_actorPivot = ActorPivot::create($request->except(['_token', '_method']));
+
+      return $new_actorPivot;
+
     }
 
     /**
@@ -70,6 +68,7 @@ class ActorPivotController extends Controller
     public function update(Request $request, ActorPivot $actorPivot)
     {
     	$actorPivot->update($request->except(['_token', '_method']));
+      return response()->json(['success' => 'Link updated']);
     }
 
     /**
@@ -93,6 +92,8 @@ class ActorPivotController extends Controller
         $actor->display_order = $i;
         $actor->save();
       }
+
+      return response()->json(['success' => 'Actor unlinked']);
     }
 
     /**

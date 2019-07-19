@@ -160,12 +160,7 @@
         method: method,
         body: body
       });
-      if (res.ok) {
-        data = await res.text();
-      } else {
-        data = await res.json();
-      }
-      return data;
+      return res.json();
     }
 
     // Ajax fill the opened modal
@@ -476,7 +471,7 @@
       });
     }*/
 
-    var submitModalForm = (target, Form, redirect = false) => {
+    var submitModalForm = (target, Form) => {
       formData = new FormData(Form);
       params = new URLSearchParams(formData);
       fetchREST(target, 'POST', params)
@@ -485,9 +480,9 @@
             processSubmitErrors(data.errors, Form);
             footerAlert.innerHTML = data.message;
             footerAlert.classList.add('alert-danger');
-          } else if (redirect) {
+          } else if (data.redirect) {
             // Redirect to the created model (link returned by the controller store() function)
-            location.href = data;
+            location.href = data.redirect;
           } else {
             fetchInto(contentSrc, ajaxModal.querySelector('.modal-body'));
           }

@@ -103,6 +103,7 @@ class RuleController extends Controller
         ]);
 
         $rule->update($request->except(['_token', '_method']));
+        return response()->json(['success' => 'Rule updated']);
     }
 
     public function store(Request $request)
@@ -128,7 +129,7 @@ class RuleController extends Controller
             }
         }
 
-        Rule::create($request->except($to_retain));
+        return Rule::create($request->except($to_retain));
     }
 
     /*    public function create(Request $request)
@@ -147,5 +148,6 @@ class RuleController extends Controller
     public function destroy(Rule $rule)
     {
         $rule->delete();
+        return response()->json(['success' => 'Rule deleted']);
     }
 }

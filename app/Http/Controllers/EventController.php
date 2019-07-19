@@ -21,7 +21,7 @@ class EventController extends Controller {
             'event_date' => 'required_without:alt_matter_id|date'
         ]);
 
-        Event::create($request->except(['_token', '_method', 'eventName']));
+        return Event::create($request->except(['_token', '_method', 'eventName']));
     }
 
     /**
@@ -48,6 +48,7 @@ class EventController extends Controller {
         ]);
 
         $event->update($request->except(['_token', '_method']));
+        return response()->json(['success' => 'Event updated']);
     }
 
     /**
@@ -58,6 +59,7 @@ class EventController extends Controller {
      */
     public function destroy(Event $event) {
         $event->delete();
+        return response()->json(['success' => 'Event deleted']);
     }
 
 }

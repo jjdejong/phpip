@@ -50,8 +50,7 @@ class ActorController extends Controller
         $request->validate([
             'name' => 'required|max:100'
         ]);
-        $new_actor = Actor::create($request->except(['_token', '_method']));
-        return $new_actor;
+        return Actor::create($request->except(['_token', '_method']));
     }
 
     /**
@@ -86,6 +85,7 @@ class ActorController extends Controller
     public function update(Request $request, Actor $actor) {
 
         $actor->update($request->except(['_token', '_method']));
+        return response()->json(['success' => 'Actor updated']);
     }
 
     /**
@@ -94,9 +94,9 @@ class ActorController extends Controller
      * @param  \App\Actor  $actor
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
-        $actor = new Actor;
-        $actor->destroy($id);
+    public function destroy(Actor $actor) {
+        $actor->delete();
+        return response()->json(['success' => 'Actor deleted']);
     }
 
 }

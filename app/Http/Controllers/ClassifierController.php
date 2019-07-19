@@ -31,7 +31,7 @@ class ClassifierController extends Controller
     		'value' => 'required_without:lnk_matter_id'
     	]);
 
-    	Classifier::create($request->except(['_token', '_method']));
+    	return Classifier::create($request->except(['_token', '_method']));
     }
 
     /**
@@ -55,6 +55,7 @@ class ClassifierController extends Controller
     public function update(Request $request, Classifier $classifier)
     {
     	$classifier->update($request->except(['_token', '_method']));
+      return response()->json(['success' => 'Classifier updated']);
     }
 
     /**
@@ -65,6 +66,7 @@ class ClassifierController extends Controller
      */
     public function destroy(Classifier $classifier)
     {
-		$classifier->delete();
+		    $classifier->delete();
+        return response()->json(['success' => 'Classifier deleted']);
     }
 }

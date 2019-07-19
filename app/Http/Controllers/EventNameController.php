@@ -27,7 +27,7 @@ class EventNameController extends Controller
         if ( !is_null($Name)) {
 			$ename = $ename->where('name', 'like', $Name.'%');
 		}
-		
+
         $enameslist = $ename->get();
         return view('eventname.index', compact('enameslist') );
     }
@@ -53,15 +53,15 @@ class EventNameController extends Controller
      */
     public function store(Request $request)
     {
-    	$validator = Validator::make($request->all(), [
-			'code' => 'required|unique:event_name|max:5',
-			'name' => 'required|max:45',
-			'notes' => 'max:160'
+    	$request->validate([
+  			'code' => 'required|unique:event_name|max:5',
+  			'name' => 'required|max:45',
+  			'notes' => 'max:160'
     	]);
     	$input = $request->all();
     	$to_retain = ['_method'];
-    	if($validator->passes()){
-			foreach ($input as $i =>$value) {				
+
+			foreach ($input as $i =>$value) {
 				if (strpos($i, '_new')) {
 					array_push($to_retain,$i);
 				}
@@ -69,12 +69,9 @@ class EventNameController extends Controller
 					array_push($to_retain,$i);
 				}
 			}
-			
-			EventName::create($request->except($to_retain));
-			return Response::json(['success' => '1']);
+
+			return EventName::create($request->except($to_retain));
 		}
-		return Response::json(['errors' => $validator->errors()]);
-    }
 
     /**
      * Display the specified resource.
@@ -110,12 +107,10 @@ class EventNameController extends Controller
      * @param  \App\EventName  $eventName
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, EventName $eventName)
     {
-		$eventName = new EventName ;
-		
-		$result = $eventName::find($id)->update($request->except(['_token', '_method']));
-		return Response::json(['success' => $result]);
+    		$eventName->update($request->except(['_token', '_method']));
+    		return response()->json(['success' => 'Event name updated']);
     }
 
     /**
@@ -124,9 +119,9 @@ class EventNameController extends Controller
      * @param  \App\EventName  $eventName
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(EventName $eventName)
     {
-        $affected = EventName::destroy($id);
-        return Response::json(['deleted' => $affected ]);
+        $eventName->delete();
+        return response()->json(['success' => 'Event name deleted']);
     }
 }

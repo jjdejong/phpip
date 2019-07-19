@@ -25,7 +25,7 @@ class TaskController extends Controller
             'fee' => 'nullable|numeric'
         ]);
 
-        Task::create($request->except(['_token', '_method']));
+        return Task::create($request->except(['_token', '_method']));
     }
 
     /**
@@ -61,6 +61,7 @@ class TaskController extends Controller
         }
 
         $task->update($request->except(['_token', '_method']));
+        return response()->json(['success' => 'Task updated']);
     }
 
     /**
@@ -72,5 +73,6 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         $task->delete();
+        return response()->json(['success' => 'Task deleted']);
     }
 }

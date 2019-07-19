@@ -149,7 +149,7 @@ class MatterController extends Controller
           case 'new':
             break;
         }
-        return route('matter.show', [$new_matter]);
+        return response()->json(['redirect' => route('matter.show', [$new_matter])]);
     }
 
     /**
@@ -170,12 +170,7 @@ class MatterController extends Controller
         foreach ($request->ncountry as $country) {
             $request->merge(['country' => $country]);
 
-            try {
-                $new_matter = Matter::create($request->except(['_token', '_method', 'ncountry', 'origin_id']));
-            } catch (Exception $e) {
-                report($e);
-                return false;
-            }
+            $new_matter = Matter::create($request->except(['_token', '_method', 'ncountry', 'origin_id']));
 
             // Copy classifiers (from original matter's container, or from original matter if there is no container)
             if ($from_matter->container_id) {
@@ -199,7 +194,7 @@ class MatterController extends Controller
             $new_matter->save();
         }
 
-        return "/matter?Ref=$request->caseref";
+        return response()->json(['redirect' => "/matter?Ref=$request->caseref"]);
     }
 
     /**
@@ -237,6 +232,7 @@ class MatterController extends Controller
             'idx' => 'numeric|nullable'
         ]);
         $matter->update($request->except(['_token', '_method']));
+        return response()->json(['success' => 'Matter updated']);
     }
 
     /**
@@ -248,6 +244,7 @@ class MatterController extends Controller
     public function destroy(Matter $matter)
     {
         $matter->delete();
+        return response()->json(['success' => 'Matter deleted']);
     }
 
     /**
