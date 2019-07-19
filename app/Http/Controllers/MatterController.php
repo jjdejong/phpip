@@ -47,6 +47,7 @@ class MatterController extends Controller
     public function create(Request $request)
     {
         $operation = $request->input('operation', 'new'); // new, clone, child
+        $category = [];
         $category_code = $request->input('category');
         if ($operation != 'new') {
             $from_matter = Matter::with('container', 'countryInfo', 'originInfo', 'category', 'type')->find($request->matter_id);
@@ -55,9 +56,8 @@ class MatterController extends Controller
                 $from_matter->caseref = Matter::where('caseref', 'like', $from_matter->category->ref_prefix . '%')->max('caseref') + 1;
             }
         } else {
-            if ($category_code == '') {
-                $from_matter = new Matter; // Create empty matter object to avoid undefined errors in view
-            } else {
+            $from_matter = new Matter; // Create empty matter object to avoid undefined errors in view
+            if ($category_code != '') {
                 $ref_prefix = \App\Category::select('ref_prefix')->where('code', '=', $category_code)->first()['ref_prefix'];
                 $category=[
                     'code' => $category_code,
