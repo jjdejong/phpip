@@ -32,6 +32,7 @@
         </a>
         @auth
         <form class="form-inline" method="POST" action="/matter/search">
+          @csrf
           <div class="input-group">
             <input type="search" class="form-control" id="matter-search" name="matter_search" placeholder="Search" autocomplete="off">
             <div class="input-group-append">
