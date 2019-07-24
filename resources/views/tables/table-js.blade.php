@@ -1,7 +1,7 @@
 <script>
     var contentSrc = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
     var sourceUrl = "";  // Identifies what to reload when refreshing the list
-
+/*
     function refreshRuleList() {
         var url = sourceUrl + '?' + $("#filter").find("input").filter(function () {
             return $(this).val().length > 0;
@@ -9,7 +9,33 @@
         $('#rule-list').load(url + ' #rule-list > tr', function () { // Refresh all the tr's in tbody#matter-list
             window.history.pushState('', 'phpIP', url);
         });
+    }*/
+    
+    ruleList.addEventListener('click', e => {
+      if (e.target.hasAttribute('data-panel')) {
+        e.preventDefault();
+        relatedUrl = e.target.href;
+        resource = e.target.dataset.resource;
+        fetchInto(e.target.href, ajaxPanel);
+      }
+    });
+    
+    var url = new URL(window.location.href);
+
+    function refreshList() {
+        window.history.pushState('', 'phpIP', url)
+        reloadPart(url, 'ruleList');
     }
+
+    filter.addEventListener('input', debounce( e => {
+        if (e.target.value.length === 0) {
+        url.searchParams.delete(e.target.name);
+        } else {
+        url.searchParams.set(e.target.name, e.target.value);
+        }
+        refreshList();
+    }, 300));
+
 
     $(document).ready(function () {
 
@@ -31,7 +57,7 @@
             refreshRuleList();
         });
     });
-
+/*
     $('.filter-input').keyup(debounce(function () {
         if ($(this).val().length !== 0)
             $(this).css("background-color", "bisque");
@@ -40,10 +66,10 @@
         sourceUrl = $(this).data("source");   // Used to refresh the list
         refreshRuleList();
     }, 500));
-
+*/
 // Specific in place edition of rule
 
-    $('#rule-list').on("click", '.delete-from-list', function () {
+    $('#ruleList').on("click", '.delete-from-list', function () {
         var del_conf = confirm("Deleting rule " + $(this).closest("tr").data("id") + " from table?");
         if (del_conf) {
             var data = $.param({_method: "DELETE"});
@@ -55,7 +81,7 @@
         return false;
     });
 
-    $('#rule-list').on("click", '.delete-event-name', function (event) {
+    $('#ruleList').on("click", '.delete-event-name', function (event) {
         var del_conf = confirm("Deleting event name from table?");
         if (del_conf) {
             var data = $.param({_method: "DELETE"});

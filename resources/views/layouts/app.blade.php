@@ -255,6 +255,10 @@
           submitModalForm('/actor', createActorForm);
           break;
 
+        case 'createEventNameSubmit':
+          submitModalForm('/eventname', createEventForm);
+          break;
+
         case 'deleteActor':
           if (confirm("Deleting the actor " + e.target.dataset.id + ". Continue anyway?")) {
             fetchREST('/actor/' + e.target.dataset.id, 'DELETE')

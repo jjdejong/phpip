@@ -44,21 +44,16 @@
 	margin: 0px 0px 5px 10px;
 }
 
-.rule-info-set {
-	background: #EFEFEF;
-	border: 1px inset #888;
-}
-
 input {
 	border: 0px;
 }
 </style>
 
 <form id="createEventForm">
-	<fieldset class="rule-info-set">
-		<legend>New event name</legend>
-		<table class="table table-sm table-hover">
-                <tr><td><label for="code" title="{{ $tableComments['code'] }}"><b>Code</b></label>
+    <fieldset>
+        <table class="table table-sm table-hover">
+            <tr>
+                <td><label for="code" title="{{ $tableComments['code'] }}"><b>Code</b></label>
                 </td><td><input type="text" class="form-control form-control-sm" id="code" name="code" >
                 </td><td><label for="is_task" title="{{ $tableComments['is_task'] }}">Is task</label>
                 </td><td><span class="form-control form-control-sm" name="is_task">
@@ -100,17 +95,16 @@ input {
                         <input type="radio" name="uqtrigger" value="1"/> Yes&nbsp;&nbsp;
                         <input type="radio" name="uqtrigger" value="0"/> No
                      </span>
-				</td></tr><tr><td><label for="notes" title="{{ $tableComments['notes'] }}">Notes</label>
+                </td></tr><tr><td><label for="notes" title="{{ $tableComments['notes'] }}">Notes</label>
                 </td><td><textarea id="notes" class="form-control form-control-sm" name="notes"></textarea>
-				</td><td><label for="killer" title="{{ $tableComments['killer'] }}">Is killer</label>
+                </td><td><label for="killer" title="{{ $tableComments['killer'] }}">Is killer</label>
                 </td><td><span class="form-control form-control-sm" name="killer">
                         <input type="radio" name="killer" value="1"/> Yes&nbsp;&nbsp;
                         <input type="radio" name="killer" value="0"/> No
-                     </span>
-                 </td></tr>
-			</table>
-    <div id="error-box">
-    </div>
-	<button type="button" class="btn btn-danger">Create event name</button>
+                    </span>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <button type="button" id="createEventNameSubmit" class="btn btn-primary">Create event name</button>
 </form>
-

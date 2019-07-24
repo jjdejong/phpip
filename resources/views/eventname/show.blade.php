@@ -1,7 +1,7 @@
 <div id="edit-ename-content">
-	<fieldset class="ename-info-set">
+	<fieldset class="tab-pane ename-info-set" id="eventNameMain">
 		<legend>Event name details</legend>
-		<table class="table table-hover table-sm" data-id="{{ $enameInfo->code }}" data-source="/eventname/">
+		<table class="table table-hover table-sm" data-id="{{ $enameInfo->code }}" data-source="/eventname/" data-resource="/eventname/{{$enameInfo->code}}">
 			<tr>
 				<td><label for="code">Code</label></td>
 				<td><input class="noformat form-control" name="code" value="{{ $enameInfo->code }}"></td>
@@ -19,7 +19,7 @@
 			</tr>
 			<tr>
 				<td><label for="name" title="{{ $tableComments['name'] }}">Name</label></td>
-				<td><input class="form-control noformat" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" name="name" value="{{ $enameInfo->name }}"></td>
+				<td><input class="form-control noformat" name="name" value="{{ $enameInfo->name }}"></td>
 				<td><label for="status_event" title="{{ $tableComments['status_event'] }}">Is status event</label></td>
 				<td>
 					<div class="form-check form-check-inline">
