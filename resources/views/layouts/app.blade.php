@@ -255,7 +255,7 @@
             minLength: 2,
             source: "/country/autocomplete",
             select: function(event, ui) {
-              var newCountry = appendCountryTemplate.content.children[0];
+              let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
               newCountry.id = 'country-' + ui.item.key;
               newCountry.children[0].value = ui.item.key;
               newCountry.children[1].value = ui.item.value;
