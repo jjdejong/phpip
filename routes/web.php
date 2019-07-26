@@ -34,7 +34,6 @@ Route::group(['middleware' => 'auth'], function () {
                         ->take(10)->get();
     });
     Route::get('matter/export', 'MatterController@export');
-    //Route::get('matter/{matter}', 'MatterController@show')->middleware('can:view-noclient'); // Breaks the Route::resource method
     Route::get('matter/{matter}/events', 'MatterController@events');
     Route::get('matter/{matter}/tasks', 'MatterController@tasks');
     Route::get('matter/{matter}/classifiers', 'MatterController@classifiers');
@@ -129,13 +128,6 @@ Route::group(['middleware' => 'auth'], function () {
         return App\Type::select('type as value', 'code as key')
                         ->where('type', 'like', "$term%")->get();
     });
-
-    /* DUPLICATE - use /event-name/autocomplete instead
-    Route::get('event/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-        return App\EventName::select('name as label', 'code as value')
-                        ->where('name', 'like', "$term%")->get();
-    });*/
 
     Route::resource('matter', 'MatterController');
     Route::apiResource('task', 'TaskController');

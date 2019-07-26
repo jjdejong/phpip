@@ -250,23 +250,6 @@
           submitModalForm('/matter/storeN', natMatterForm, true);
           break;
 
-        case 'addCountry':
-          $(e.target).autocomplete({
-            minLength: 2,
-            source: "/country/autocomplete",
-            select: function(event, ui) {
-              let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
-              newCountry.id = 'country-' + ui.item.key;
-              newCountry.children[0].value = ui.item.key;
-              newCountry.children[1].value = ui.item.value;
-              ncountries.appendChild(newCountry);
-            },
-            close: function(event, ui) {
-              e.target.value = "";
-            }
-          });
-          break;
-
           // Actor create and show modals
         case 'createActorSubmit':
           submitModalForm('/actor', createActorForm);
@@ -367,7 +350,7 @@
         if (e.inputType === "insertReplacementText") {
           // An item was selected in the list - finalize autocompletion
           let selected = acList.find(item => {
-            return item.value === e.target.value;
+            return item.value === e.target.value || item.key === e.target.value;
           });
           if (e.target.hasAttribute('data-actarget')) {
             actarget = e.target.form[e.target.dataset.actarget];
@@ -386,7 +369,17 @@
       }
     });
 
-    //ajaxModal.addEventListener('ac-done', item => console.log(item.detail));
+    // Actions when an autocompletion is done
+    ajaxModal.addEventListener('ac-done', e => {
+      if (e.target.id == 'addCountry') {
+        let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
+        newCountry.id = 'country-' + e.detail.key;
+        newCountry.children[0].value = e.detail.key;
+        newCountry.children[1].value = e.detail.value;
+        ncountries.appendChild(newCountry);
+        e.target.value = "";
+      }
+    });
 
     /* Custom autocomplete function using native JS
      * "searchField" is the element receiving the user input,

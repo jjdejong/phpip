@@ -18,7 +18,7 @@
 		@endforeach
 	</div>
 	<div class="input-group">
-		<input type="text" class="form-control" placeholder="Add country" id="addCountry">
+		<input type="text" class="form-control" placeholder="Add country" list="ajaxDatalist" data-ac="/country/autocomplete" id="addCountry">
 		<div class="input-group-append">
 			<span class="input-group-text">&plus;</span>
 		</div>
