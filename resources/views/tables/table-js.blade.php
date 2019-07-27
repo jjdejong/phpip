@@ -66,7 +66,7 @@
         sourceUrl = $(this).data("source");   // Used to refresh the list
         refreshRuleList();
     }, 500));
-*/
+
 // Specific in place edition of rule
 
     $('#ruleList').on("click", '.delete-from-list', function () {
@@ -93,35 +93,41 @@
         }
         return false;
     });
-
-    $('#ajaxModal').on("click", '#delete-rule', function () {
+*/
+    $('#ajaxPanel').on("click", '#delete-rule', function () {
         if (confirm("Deleting rule from table?")) {
             fetchREST('/rule/' + $(this).data("id"), 'DELETE')
               .then((data) => {
-                if (data.message) {
+                if (data.message)
+                {
                   alert(data.message);
-                } else {
-                  location.href = document.referrer;
+                }
+                else
+                {
+                  location.href = document.location;
                 }
               });
           }
     });
 
-    $('#ajaxModal').on("click", '#delete-ename', function () {
+    $('#ajaxPanel').on("click", '#delete-ename', function () {
         if (confirm("Deleting event name from table?")) {
             fetchREST('/eventname/' + $(this).data("id"), 'DELETE')
               .then((data) => {
-                if (data.message) {
+                if (data.message)
+                {
                   alert(data.message);
-                } else {
-                  location.href = document.referrer;
-                }
+                } 
+                else
+                {
+                  location.href = document.location;
+                } 
               });
           }
     });
 
 // For creation rule modal view
-
+/*
     $('#addModal').on("click", 'input[name="task_new"]', function () {
         $(this).autocomplete({
             minLength: 1,
@@ -264,7 +270,7 @@
             }
         });
     });
-
+*/
     $(document).on("submit", "#createRuleForm", function (e) {
         e.preventDefault();
         var $form = $(this);
