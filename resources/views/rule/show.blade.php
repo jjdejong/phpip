@@ -1,8 +1,14 @@
-<div id="edit-rule-content">
-  <form>
-    <input type="hidden" name="rule_id" id="rule-id" value="{{ $ruleInfo->id }}">
-    <fieldset>
-      <legend>Task rule details <span class="badge badge-light">{{ $ruleInfo->id }}</span></legend>
+<div class="card overflow-auto" style="height: 480px;">
+  <div class="nav nav-tabs" role="tablist">
+    <a class="nav-link active" data-toggle="tab" href="#ruleMain" role="tab">Main</a>
+    <a class="nav-link" data-toggle="tab" href="#ruleDetail" role="tab">Details</a>
+    <button id="deleteRule" title="Delete rule" class="nav-link btn btn-outline-danger" data-dismiss="modal" data-id="{{ $ruleInfo->id }}">
+      Delete
+    </button>
+  </div>
+  <div class="tab-content" data-resource="/rule/{{ $ruleInfo->id }}">
+    <fieldset class="tab-pane fade show active" id="ruleMain">
+      <legend>Task rule <span class="badge badge-light">{{ $ruleInfo->id }}</span></legend>
       <table class="table table-sm table-hover" data-id="{{ $ruleInfo->id }}" data-source="/rule/">
         <tr>
           <td><label for="task" class="required-field" title="{{ $ruleComments['task'] }}">Task</label></td>
@@ -39,8 +45,7 @@
         </tr>
       </table>
     </fieldset>
-    <fieldset>
-      <legend>Rule details</legend>
+    <fieldset class="tab-pane fade" id="ruleDetail">
       <table class="table table-sm table-hover" data-id="{{ $ruleInfo->id }}">
         <tr>
           <td><label for="trigger_event" title="{{ $ruleComments['trigger_event'] }}">Trigger event</label></td>
@@ -140,7 +145,7 @@
           </td>
         </tr>
       </table>
-      <button type="button" class="btn btn-danger" title="Delete rule" id="delete-rule" data-dismiss="modal" data-id="{{ $ruleInfo->id }}">Delete</button>
     </fieldset>
-  </form>
+  </div>
+
 </div>
