@@ -37,7 +37,7 @@
     </table>
   </div>
   </div>
-  <div class="col-4">
+  <div class="col-5">
     <div class="card border-info">
       <div class="card-header bg-info">
         Event name information
