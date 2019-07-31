@@ -259,6 +259,10 @@
           submitModalForm('/eventname', createEventForm);
           break;
 
+        case 'createRuleSubmit':
+          submitModalForm('/rule', createRuleForm);
+          break;
+
         case 'deleteActor':
           if (confirm("Deleting the actor " + e.target.dataset.id + ". Continue anyway?")) {
             fetchREST('/actor/' + e.target.dataset.id, 'DELETE')
@@ -272,6 +276,36 @@
               });
           }
           break;
+
+        case 'deleteRule':
+          if (confirm("Deleting rule " + e.target.dataset.id + " from table?")) {
+            fetchREST('/rule/' + e.target.dataset.id, 'DELETE')
+              .then((data) => {
+                if (data.message)
+                {
+                  alert(data.message);
+                }
+                else
+                {
+                  location.href = document.referrer;
+                }
+              });
+          }
+
+        case 'deleteEName':
+          if (confirm("Deleting event name " + e.target.dataset.id + " from table?")) {
+            fetchREST('/eventname/' + e.target.dataset.id, 'DELETE')
+              .then((data) => {
+                if (data.message)
+                {
+                  alert(data.message);
+                } 
+                else
+                {
+                  location.href = document.referrer;
+                } 
+              });
+          }
       }
 
       // Various functions used here and there

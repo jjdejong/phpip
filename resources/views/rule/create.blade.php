@@ -144,6 +144,6 @@
     </fieldset>
     <div id="error-box">
     </div>
-    <button type="button" class="btn btn-danger" id="createRule">Create rule</button>
+    <button type="button" class="btn btn-danger" id="createRuleSubmit">Create rule</button>
 </form>
 
