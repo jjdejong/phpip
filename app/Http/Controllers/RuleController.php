@@ -111,10 +111,12 @@ class RuleController extends Controller
         $this->validate($request, [
             'task' => 'required',
             'trigger_event' => 'required',
+            'for_category' => 'required',
             'cost' => 'nullable|numeric',
-            'years' => 'nullable|numeric',
-            'months' => 'nullable|numeric',
-            'days' => 'nullable|numeric',
+            'years' => 'numeric',
+            'months' => 'numeric',
+            'days' => 'numeric',
+            'end_of_month' => 'numeric',
             'fee' => 'nullable|numeric'
         ]);
         $input = $request->all();
