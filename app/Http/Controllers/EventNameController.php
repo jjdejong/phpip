@@ -59,16 +59,7 @@ class EventNameController extends Controller
   			'notes' => 'max:160'
     	]);
     	$input = $request->all();
-    	$to_retain = ['_method'];
-
-			foreach ($input as $i =>$value) {
-				if (strpos($i, '_new')) {
-					array_push($to_retain,$i);
-				}
-				if ($value == "...") {
-					array_push($to_retain,$i);
-				}
-			}
+    	$to_retain = ['_token', '_method'];
 
 			return EventName::create($request->except($to_retain));
 		}
@@ -119,9 +110,9 @@ class EventNameController extends Controller
      * @param  \App\EventName  $eventName
      * @return \Illuminate\Http\Response
      */
-    public function destroy(EventName $eventName)
+    public function destroy($id)
     {
-        $eventName->delete();
+        EventName::destroy($id);
         return response()->json(['success' => 'Event name deleted']);
     }
 }
