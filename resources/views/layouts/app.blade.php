@@ -256,11 +256,11 @@
           break;
 
         case 'createEventNameSubmit':
-          submitModalForm('/eventname', createEventForm);
+          submitModal2Form('/eventname', createEventForm);
           break;
 
         case 'createRuleSubmit':
-          submitModalForm('/rule', createRuleForm);
+          submitModal2Form('/rule', createRuleForm);
           break;
 
         case 'deleteActor':
@@ -287,10 +287,11 @@
                 }
                 else
                 {
-                  location.href = document.referrer;
+                  location.href = document.URL;
                 }
               });
           }
+          break;
 
         case 'deleteEName':
           if (confirm("Deleting event name " + e.target.dataset.id + " from table?")) {
@@ -302,10 +303,11 @@
                 } 
                 else
                 {
-                  location.href = document.referrer;
+                  location.href = document.URL;
                 } 
               });
           }
+          break;
       }
 
       // Various functions used here and there
@@ -516,6 +518,24 @@
             location.href = data.redirect;
           } else {
             fetchInto(contentSrc, ajaxModal.querySelector('.modal-body'));
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+
+    var submitModal2Form = (target, Form) => {
+      formData = new FormData(Form);
+      params = new URLSearchParams(formData);
+      fetchREST(target, 'POST', params)
+        .then(data => {
+          if (data.errors) {
+            processSubmitErrors(data.errors, Form);
+            zoneAlert.innerHTML = data.message;
+            zoneAlert.classList.add('alert-danger');
+          } else {
+            location.href = document.referrer;
           }
         })
         .catch(error => {

@@ -236,7 +236,7 @@
             }
         });
     });
-*/
+
     $(document).on("submit", "#createRuleForm", function (e) {
         e.preventDefault();
         var $form = $(this);
@@ -256,7 +256,6 @@
         });
     });
 
-
     $(document).on("submit", "#createEventForm", function (e) {
         e.preventDefault();
         var $form = $(this);
@@ -275,6 +274,7 @@
             }
         });
     });
+*/
 
     function associate_errors(errors, $form) {
         $form.find('.form-control').removeClass('is-invalid').attr("placeholder", "").find('.help-text').text();

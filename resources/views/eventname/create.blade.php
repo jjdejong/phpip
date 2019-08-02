@@ -55,5 +55,6 @@
             </tr>
         </table>
     </fieldset>
-    <button type="button" id="createEventNameSubmit" class="btn btn-primary">Create event name</button>
+    <button type="button" id="createEventNameSubmit" class="btn btn-primary">Create event name</button><br>
+    <span id="zoneAlert" class="alert float-left"></span>
 </form>

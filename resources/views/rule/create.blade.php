@@ -3,7 +3,7 @@
         <legend>New task rule</legend>
         <table class="table table-sm table-hover">
             <tr>
-                <td><label for="task" title="{{ $ruleComments['task'] }}">Task</label></td>
+                <td><label for="task" title="{{ $ruleComments['task'] }} " class="required-field">Task</label></td>
                 <td class="ui-front">
                     <input type='hidden' name='task'>
                     <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/event-name/autocomplete/1" data-actarget="task" autocomplete="off" >
@@ -26,7 +26,7 @@
                 </td>
             </tr>
             <tr>
-                <td><label for="for_origin_new" title="{{ $ruleComments['for_origin'] }}">Origin</label></td>
+                <td><label for="for_origin_new" title="{{ $ruleComments['for_origin'] }}" class="required-field">Origin</label></td>
                 <td class="ui-front">
                     <input type='hidden' name='for_origin' id='for_origin'>
                     <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/country/autocomplete" data-actarget="for_origin" autocomplete="off">
@@ -52,7 +52,7 @@
         <legend>Rule details</legend>
         <table class="table table-sm table-hover">
             <tr>
-                <td><label for="trigger_event_new" title="{{ $ruleComments['trigger_event'] }}">Trigger event</label></td>
+                <td><label for="trigger_event_new" title="{{ $ruleComments['trigger_event'] }}" class="required-field">Trigger event</label></td>
                 <td class="ui-front">
                     <input type='hidden' name='trigger_event'>
                     <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" data-actarget="trigger_event" autocomplete="off">
@@ -121,7 +121,7 @@
             </tr>
             <tr>
                 <td><label for="months" title="{{ $ruleComments['months'] }}">Months</label></td>
-                <td><input type='number' min="1" max="12" class=" form-control form-control-sm" name="months"></td>
+                <td><input type='number' min="0" max="12" class=" form-control form-control-sm" name="months"></td>
                 <td><label for="fee" title="{{ $ruleComments['fee'] }}">Fee</label> </td>
                 <td><input type='text' class=" form-control form-control-sm" name="fee"></td>
             </tr>
@@ -144,6 +144,7 @@
     </fieldset>
     <div id="error-box">
     </div>
-    <button type="button" class="btn btn-danger" id="createRuleSubmit">Create rule</button>
+    <button type="button" class="btn btn-danger" id="createRuleSubmit" data-redirect="/rule">Create rule</button><br>
+    <span id="zoneAlert" class="alert float-left"></span>
 </form>
 
