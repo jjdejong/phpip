@@ -26,7 +26,7 @@ class MatterController extends Controller
             'tab'
         ]);
 
-        $matters = Matter::filter($request->input('sortkey', 'caseref'), $request->input('sortdir', 'asc'), $filters, $request->display_with, true);
+        $matters = Matter::filter($request->input('sortkey', 'id'), $request->input('sortdir', 'desc'), $filters, $request->display_with, true);
         $matters->appends($request->input())->links(); // Keep URL parameters in the paginator links
 
         return view('matter.index', compact('matters'));

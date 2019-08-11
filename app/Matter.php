@@ -165,7 +165,7 @@ class Matter extends Model
         return $this->belongsTo('App\Type');
     }
 
-    public static function filter($sortkey = 'caseref', $sortdir = 'asc', $multi_filter = [], $display_with = false, $paginated = false)
+    public static function filter($sortkey = 'id', $sortdir = 'desc', $multi_filter = [], $display_with = false, $paginated = false)
     {
         $query = Matter::select(
             DB::raw("CONCAT_WS('', caseref, suffix) AS Ref"),
