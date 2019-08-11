@@ -2,7 +2,7 @@
 
 @section('content')
 <legend>Event names
-    <a href="eventname/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Event name" data-resource="/eventname/">Create a new event name</a>
+  <a href="eventname/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Event name" data-resource="/eventname/">Create a new event name</a>
 </legend>
 <div class="row">
   <div class="col">
@@ -10,10 +10,10 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr>
-                <th>Code</th>
-                <th>Name</th>
-                <th>Notes</th>
-                <th>&nbsp;</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Notes</th>
+            <th>&nbsp;</th>
           </tr>
           <tr id="filter">
             <th><input class="filter-input form-control form-control-sm" data-source="/eventname" name="Code" placeholder="Code" value="{{ old('Code') }}"></th>
@@ -21,21 +21,21 @@
             <th colspan="2"></th>
           </tr>
         </thead>
-
         <tbody id="ruleList">
-
           @foreach ($enameslist as $event)
-            <tr class="reveal-hidden" data-id="{{ $event->code }}">
-                <td>
-                    <a href="/eventname/{{ $event->code }}" data-panel="#ajaxPanel" title="Event name info">
-                    {{ $event->code }}</a></td>
-                <td>{{ $event->name }}</td>
-                <td>{{ $event->notes }}</td>
-            </tr>
+          <tr class="reveal-hidden" data-id="{{ $event->code }}">
+            <td>
+              <a href="/eventname/{{ $event->code }}" data-panel="#ajaxPanel" title="Event name info">
+                {{ $event->code }}
+              </a>
+            </td>
+            <td>{{ $event->name }}</td>
+            <td>{{ $event->notes }}</td>
+          </tr>
           @endforeach
-      </tbody>
-    </table>
-  </div>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="col-5">
     <div class="card border-info">

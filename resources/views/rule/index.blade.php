@@ -10,7 +10,7 @@
     <div class="card overflow-auto" style="max-height: 640px;">
       <table class="table table-striped table-hover table-sm">
         <thead>
-            <tr class="sticky-top bg-light">
+          <tr class="sticky-top bg-light">
             <th>Task</th>
             <th>Detail</th>
             <th>Trigger event</th>
@@ -19,24 +19,24 @@
             <th>Origin</th>
             <th>Type</th>
             <th>&nbsp;&nbsp;</th>
-            </tr>
-            <tr id="filter">
-                <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Task" placeholder="Task" value="{{ old('Task') }}"></th>
-                <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Detail" placeholder="Detail" value="{{ old('Detail') }}"></th>
-                <th><input class="filter-input form-control form-control-sm" data-source="/rule" value="{{ old('Trigger') }}" name="Trigger"  placeholder="Trigger event"/></th>
-                <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Category" placeholder="Category" value="{{ old('Category') }}"></th>
-                <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Country" placeholder="Country" value="{{ old('Country') }}"/></th>
-                <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Origin" placeholder="Origin" value="{{ old('Origin') }}"></th>
-                <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Type" placeholder="Type" value="{{ old('Type') }}"></th>
-            </tr>
+          </tr>
+          <tr id="filter">
+            <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Task" placeholder="Task" value="{{ old('Task') }}"></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Detail" placeholder="Detail" value="{{ old('Detail') }}"></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/rule" value="{{ old('Trigger') }}" name="Trigger" placeholder="Trigger event" /></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Category" placeholder="Category" value="{{ old('Category') }}"></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Country" placeholder="Country" value="{{ old('Country') }}" /></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Origin" placeholder="Origin" value="{{ old('Origin') }}"></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Type" placeholder="Type" value="{{ old('Type') }}"></th>
+          </tr>
         </thead>
         <tbody id="ruleList">
-            @foreach ($ruleslist as $rule)
-            <tr data-id="{{ $rule->id }}" class="reveal-hidden">
+          @foreach ($ruleslist as $rule)
+          <tr data-id="{{ $rule->id }}" class="reveal-hidden">
             <td>
-                <a href="/rule/{{ $rule->id }}" data-panel="#ajaxPanel" title="Rule data">
+              <a href="/rule/{{ $rule->id }}" data-panel="#ajaxPanel" title="Rule data">
                 {{ $rule->taskInfo->name }}
-                </a>
+              </a>
             </td>
             <td>{{ $rule->detail }}</td>
             <td>{{ empty($rule->trigger) ? '' : $rule->trigger->name }}</td>
@@ -44,8 +44,8 @@
             <td>{{ empty($rule->country) ? '' : $rule->country->name }}</td>
             <td>{{ empty($rule->origin) ? '' : $rule->origin->name }}</td>
             <td>{{ empty($rule->type) ? '' : $rule->type->type }}</td>
-            </tr>
-        @endforeach
+          </tr>
+          @endforeach
         </tbody>
       </table>
     </div>
