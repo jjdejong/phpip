@@ -65,7 +65,7 @@
             <li><a class="nav-link" href={{ route('home') }}>Dashboard</a></li>
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                Matters <span class="caret"></span>
+                Matters
               </a>
 
               <ul class="dropdown-menu" role="menu">
@@ -78,7 +78,7 @@
 
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                Tables <span class="caret"></span>
+                Tables
               </a>
               <ul class="dropdown-menu" role="menu">
                 <a class="dropdown-item" href="{{ url('/rule/') }}">Edit rules</a>
@@ -89,7 +89,7 @@
 
             <li class="nav-item dropdown">
               <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                {{ Auth::user()->name }} <span class="caret"></span>
+                {{ Auth::user()->login }}
               </a>
 
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -300,11 +300,11 @@
                 if (data.message)
                 {
                   alert(data.message);
-                } 
+                }
                 else
                 {
                   location.href = document.URL;
-                } 
+                }
               });
           }
           break;

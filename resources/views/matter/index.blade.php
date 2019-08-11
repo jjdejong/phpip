@@ -36,20 +36,20 @@
   filterButtons.onchange = e => {
     switch (e.target.id) {
       case 'showStatus':
-        for (td of document.getElementsByClassName('display_status')) {
+        for (td of document.getElementsByClassName('tab1')) {
           td.classList.remove('d-none');
         }
-        for (td of document.getElementsByClassName('display_actor')) {
+        for (td of document.getElementsByClassName('tab0')) {
           td.classList.add('d-none');
         }
         url.searchParams.set('tab', '1');
         window.history.pushState('', 'phpIP', url);
         break;
       case 'showActors':
-        for (td of document.getElementsByClassName('display_actor')) {
+        for (td of document.getElementsByClassName('tab0')) {
           td.classList.remove('d-none');
         }
-        for (td of document.getElementsByClassName('display_status')) {
+        for (td of document.getElementsByClassName('tab1')) {
           td.classList.add('d-none');
         }
         url.searchParams.set('tab', '0');
@@ -136,7 +136,7 @@
         <button id="exportList" type="button" class="btn btn-primary"> &DownArrowBar; Export</button>
       </div>
       <div class="button-group">
-        <button id="clearFilters" type="button" class="btn btn-primary">&circlearrowright; Clear filters</button>
+        <button id="clearFilters" type="button" class="btn btn-primary">&larrpl; Clear filters</button>
       </div>
     </form>
   </div>
@@ -147,37 +147,37 @@
       <th><a href="#" class="sortable" data-sortkey="caseref" data-sortdir="desc">Reference</a></th>
       <th>Cat.</th>
       <th><a href="#" class="sortable" data-sortkey="Status" data-sortdir="asc">Status</a></th>
-      <th class="display_actor {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="Client" data-sortdir="asc">Client</a></th>
-      <th class="display_actor {{ $hideTab0 }}">Client&nbsp;Ref.</th>
-      <th class="display_actor {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="Agent" data-sortdir="asc">Agent</a></th>
-      <th class="display_actor {{ $hideTab0 }}">Agent&nbsp;Ref.</th>
-      <th class="display_actor {{ $hideTab0 }}">Title/Detail</th>
-      <th class="display_actor {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="Inventor1" data-sortdir="asc">Inventor</a></th>
-      <th class="display_status {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="Status_date" data-sortdir="asc">Date</a></th>
-      <th class="display_status {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="Filed" data-sortdir="asc">Filed</a></th>
-      <th class="display_status {{ $hideTab1 }}">Number</th>
-      <th class="display_status {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="Published" data-sortdir="asc">Published</a></th>
-      <th class="display_status {{ $hideTab1 }}">Number</th>
-      <th class="display_status {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="Granted" data-sortdir="asc">Granted</a></th>
-      <th class="display_status {{ $hideTab1 }}">Number</th>
+      <th class="tab0 {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="Client" data-sortdir="asc">Client</a></th>
+      <th class="tab0 {{ $hideTab0 }}">Client&nbsp;Ref.</th>
+      <th class="tab0 {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="Agent" data-sortdir="asc">Agent</a></th>
+      <th class="tab0 {{ $hideTab0 }}">Agent&nbsp;Ref.</th>
+      <th class="tab0 {{ $hideTab0 }}">Title/Detail</th>
+      <th class="tab0 {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="Inventor1" data-sortdir="asc">Inventor</a></th>
+      <th class="tab1 {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="Status_date" data-sortdir="asc">Date</a></th>
+      <th class="tab1 {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="Filed" data-sortdir="asc">Filed</a></th>
+      <th class="tab1 {{ $hideTab1 }}">Number</th>
+      <th class="tab1 {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="Published" data-sortdir="asc">Published</a></th>
+      <th class="tab1 {{ $hideTab1 }}">Number</th>
+      <th class="tab1 {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="Granted" data-sortdir="asc">Granted</a></th>
+      <th class="tab1 {{ $hideTab1 }}">Number</th>
     </tr>
     <tr id="filterFields">
       <td><input class="form-control form-control-sm" name="Ref" placeholder="Ref" value="{{ Request::get('Ref') }}"></td>
       <td><input class="form-control form-control-sm" size="3" name="Cat" placeholder="Cat" value="{{ Request::get('Cat') }}"></td>
       <td><input class="form-control form-control-sm" name="Status" placeholder="Status" value="{{ Request::get('Status') }}"></td>
-      <td class="display_actor {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Client" placeholder="Client" value="{{ Request::get('Client') }}"></td>
-      <td class="display_actor {{ $hideTab0 }}"><input class="form-control form-control-sm" size="8" name="ClRef" placeholder="Cl. Ref" value="{{ Request::get('ClRef') }}"></td>
-      <td class="display_actor {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Agent" placeholder="Agent" value="{{ Request::get('Agent') }}"></td>
-      <td class="display_actor {{ $hideTab0 }}"><input class="form-control form-control-sm" size="16" name="AgtRef" placeholder="Agt. Ref" value="{{ Request::get('AgtRef') }}"></td>
-      <td class="display_actor {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Title" placeholder="Title" value="{{ Request::get('Title') }}"></td>
-      <td class="display_actor {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Inventor1" placeholder="Inventor" value="{{ Request::get('Inventor1') }}"></td>
-      <td class="display_status {{ $hideTab1 }}"><input class="form-control form-control-sm" name="Status_date" placeholder="Date" value="{{ Request::get('Status_date') }}"></td>
-      <td class="display_status {{ $hideTab1 }}"><input class="form-control form-control-sm" name="Filed" placeholder="Filed" value="{{ Request::get('Filed') }}"></td>
-      <td class="display_status {{ $hideTab1 }}"><input class="form-control form-control-sm" name="FilNo" placeholder="Number" value="{{ Request::get('FilNo') }}"></td>
-      <td class="display_status {{ $hideTab1 }}"><input class="form-control form-control-sm" name="Published" placeholder="Published" value="{{ Request::get('Published') }}"></td>
-      <td class="display_status {{ $hideTab1 }}"><input class="form-control form-control-sm" name="PubNo" placeholder="Number" value="{{ Request::get('PubNo') }}"></td>
-      <td class="display_status {{ $hideTab1 }}"><input class="form-control form-control-sm" name="Granted" placeholder="Granted" value="{{ Request::get('Granted') }}"></td>
-      <td class="display_status {{ $hideTab1 }}"><input class="form-control form-control-sm" name="GrtNo" placeholder="Number" value="{{ Request::get('GrtNo') }}"></td>
+      <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Client" placeholder="Client" value="{{ Request::get('Client') }}"></td>
+      <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="8" name="ClRef" placeholder="Cl. Ref" value="{{ Request::get('ClRef') }}"></td>
+      <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Agent" placeholder="Agent" value="{{ Request::get('Agent') }}"></td>
+      <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="16" name="AgtRef" placeholder="Agt. Ref" value="{{ Request::get('AgtRef') }}"></td>
+      <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Title" placeholder="Title" value="{{ Request::get('Title') }}"></td>
+      <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Inventor1" placeholder="Inventor" value="{{ Request::get('Inventor1') }}"></td>
+      <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="Status_date" placeholder="Date" value="{{ Request::get('Status_date') }}"></td>
+      <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="Filed" placeholder="Filed" value="{{ Request::get('Filed') }}"></td>
+      <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="FilNo" placeholder="Number" value="{{ Request::get('FilNo') }}"></td>
+      <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="Published" placeholder="Published" value="{{ Request::get('Published') }}"></td>
+      <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="PubNo" placeholder="Number" value="{{ Request::get('PubNo') }}"></td>
+      <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="Granted" placeholder="Granted" value="{{ Request::get('Granted') }}"></td>
+      <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="GrtNo" placeholder="Number" value="{{ Request::get('GrtNo') }}"></td>
     </tr>
   </thead>
   <tbody id="matterList">
@@ -214,37 +214,28 @@
         {{ $matter->Status }}
         @endif
       </td>
-      <td class="display_actor {{ $hideTab0 }}">{{ $matter->Client }}</td>
-      <td class="display_actor {{ $hideTab0 }}">{{ $matter->ClRef }}</td>
-      <td class="display_actor {{ $hideTab0 }}">{{ $matter->Agent }}</td>
-      <td class="display_actor {{ $hideTab0 }}">{{ $matter->AgtRef }}</td>
+      <td class="tab0 {{ $hideTab0 }}">{{ $matter->Client }}</td>
+      <td class="tab0 {{ $hideTab0 }}">{{ $matter->ClRef }}</td>
+      <td class="tab0 {{ $hideTab0 }}">{{ $matter->Agent }}</td>
+      <td class="tab0 {{ $hideTab0 }}">{{ $matter->AgtRef }}</td>
       @if ( $matter->container_id )
-      <td class="display_actor {{ $hideTab0 }}">{{ $matter->Title2 }}</td>
+      <td class="tab0 {{ $hideTab0 }}">{{ $matter->Title2 }}</td>
       @else
-      <td class="display_actor {{ $hideTab0 }}">{{ $matter->Title }}</td>
+      <td class="tab0 {{ $hideTab0 }}">{{ $matter->Title }}</td>
       @endif
-      <td class="display_actor {{ $hideTab0 }}">{{ $matter->Inventor1 }}</td>
-      <td class="display_status {{ $hideTab1 }}">{{ $matter->Status_date }}</td>
-      <td class="display_status {{ $hideTab1 }}">{{ $matter->Filed }}</td>
-      <td class="display_status {{ $hideTab1 }}">{{ $matter->FilNo }}</td>
-      <td class="display_status {{ $hideTab1 }}">{{ $matter->Published }}</td>
-      <td class="display_status {{ $hideTab1 }}">{{ $matter->PubNo }}</td>
-      <td class="display_status {{ $hideTab1 }}">{{ $matter->Granted }}</td>
-      <td class="display_status {{ $hideTab1 }}">{{ $matter->GrtNo }}</td>
+      <td class="tab0 {{ $hideTab0 }}">{{ $matter->Inventor1 }}</td>
+      <td class="tab1 {{ $hideTab1 }}">{{ $matter->Status_date }}</td>
+      <td class="tab1 {{ $hideTab1 }}">{{ $matter->Filed }}</td>
+      <td class="tab1 {{ $hideTab1 }}">{{ $matter->FilNo }}</td>
+      <td class="tab1 {{ $hideTab1 }}">{{ $matter->Published }}</td>
+      <td class="tab1 {{ $hideTab1 }}">{{ $matter->PubNo }}</td>
+      <td class="tab1 {{ $hideTab1 }}">{{ $matter->Granted }}</td>
+      <td class="tab1 {{ $hideTab1 }}">{{ $matter->GrtNo }}</td>
     </tr>
     @endforeach
     <tr>
       <td colspan="9">
-        <nav class="fixed-bottom">
-          <ul class="pagination justify-content-center">
-            <li class="page-item">
-              <a class="page-link" href="{{ $matters->previousPageUrl() }}">&laquo;</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="{{ $matters->nextPageUrl() }}">&raquo;</a>
-            </li>
-          </ul>
-        </nav>
+        {{ $matters->links() }}
       </td>
     </tr>
   </tbody>

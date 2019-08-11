@@ -299,7 +299,7 @@ class Matter extends Model
 
         if (!empty($multi_filter)) {
             foreach ($multi_filter as $key => $value) {
-                if ($value != '' && $key != 'display' && $key != 'display_style') {
+                if ($value != '') {
                     if ($key == 'responsible') {
                         $query->whereRaw("'$value' IN (matter.responsible, del.login)");
                     } else {
@@ -341,8 +341,8 @@ class Matter extends Model
                 ->groupBy('category_code', 'category')
                 ->select('mc.category', 'category_code', DB::raw('count(*) as total'));
         if ($authUserRole == 'CLI') {
-            $query->join('matter_actor_lnk as cli', DB::raw("ifnull(matter.container_ID,matter.ID)"), '=', 'cli.matter_ID')
-            ->where([[ 'cli.role','CLI'],['cli.actor_id', $authUserId]]);
+            $query->join('matter_actor_lnk as cli', DB::raw("ifnull(matter.container_id, matter.id)"), '=', 'cli.matter_id')
+            ->where([[ 'cli.role', 'CLI'],['cli.actor_id', $authUserId]]);
         } else {
             if ($user) {
                 $query = $query->where('responsible', '=', $user);
