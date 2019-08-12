@@ -25,7 +25,7 @@
           @foreach ($enameslist as $event)
           <tr class="reveal-hidden" data-id="{{ $event->code }}">
             <td>
-              <a href="/eventname/{{ $event->code }}" data-panel="#ajaxPanel" title="Event name info">
+              <a href="/eventname/{{ $event->code }}" data-panel="ajaxPanel" title="Event name info">
                 {{ $event->code }}
               </a>
             </td>

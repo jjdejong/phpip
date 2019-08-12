@@ -34,7 +34,7 @@
           @foreach ($ruleslist as $rule)
           <tr data-id="{{ $rule->id }}" class="reveal-hidden">
             <td>
-              <a href="/rule/{{ $rule->id }}" data-panel="#ajaxPanel" title="Rule data">
+              <a href="/rule/{{ $rule->id }}" data-panel="ajaxPanel" title="Rule data">
                 {{ $rule->taskInfo->name }}
               </a>
             </td>

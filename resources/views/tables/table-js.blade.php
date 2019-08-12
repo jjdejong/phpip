@@ -11,15 +11,6 @@
         });
     }*/
 
-    ruleList.addEventListener('click', e => {
-      if (e.target.hasAttribute('data-panel')) {
-        e.preventDefault();
-        relatedUrl = e.target.href;
-        resource = e.target.dataset.resource;
-        fetchInto(e.target.href, ajaxPanel);
-      }
-    });
-
     var url = new URL(window.location.href);
 
     function refreshList() {

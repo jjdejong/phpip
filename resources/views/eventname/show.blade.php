@@ -1,7 +1,6 @@
-<div id="edit-ename-content">
-	<fieldset class="tab-pane ename-info-set" id="eventNameMain">
-		<legend>Event name details</legend>
-		<table class="table table-hover table-sm" data-id="{{ $enameInfo->code }}" data-source="/eventname/" data-resource="/eventname/{{$enameInfo->code}}">
+<div data-resource="/eventname/{{ $enameInfo->code }}">
+	<fieldset class="tab-pane" id="eventNameMain">
+		<table class="table table-hover table-sm">
 			<tr>
 				<td><label for="code">Code</label></td>
 				<td><input class="noformat form-control" name="code" value="{{ $enameInfo->code }}"></td>
@@ -97,5 +96,4 @@
 			Delete
 		</button>
 	</fieldset>
-
 </div>

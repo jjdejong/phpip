@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Validator;
 use App\EventName;
 use App\Actor;
 use Illuminate\Http\Request;
@@ -22,7 +21,7 @@ class EventNameController extends Controller
         $Name = $request->input ( 'Name' );
         $ename = EventName::query() ;
         if ( !is_null($Code)) {
-			$ename = $ename->where('code','like', $Code.'%');
+			       $ename = $ename->where('code','like', $Code.'%');
 		}
         if ( !is_null($Name)) {
 			$ename = $ename->where('name', 'like', $Name.'%');
@@ -58,10 +57,7 @@ class EventNameController extends Controller
   			'name' => 'required|max:45',
   			'notes' => 'max:160'
     	]);
-    	$input = $request->all();
-    	$to_retain = ['_token', '_method'];
-
-			return EventName::create($request->except($to_retain));
+			return EventName::create($request->except(['_token', '_method']));
 		}
 
     /**
@@ -71,24 +67,11 @@ class EventNameController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($n)
-
     {
-        $ename = new EventName ;
         $table = new Actor ;
-        $enameInfo = $ename->with('countryInfo')->with('categoryInfo')->with('default_responsibleInfo')->find($n);
         $tableComments = $table->getTableComments('event_name');
-        return view('eventname.show', compact('enameInfo', 'tableComments') );
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\EventName  $eventName
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(EventName $eventName)
-    {
-        //
+        $enameInfo = EventName::with(['countryInfo:iso,name', 'categoryInfo:code,category', 'default_responsibleInfo:id,login'])->find($n);
+        return view('eventname.show', compact('enameInfo', 'tableComments'));
     }
 
     /**
@@ -98,9 +81,10 @@ class EventNameController extends Controller
      * @param  \App\EventName  $eventName
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, EventName $eventName)
+    public function update(Request $request, $code)
     {
-    		$eventName->update($request->except(['_token', '_method']));
+    		$eventName = EventName::find($code);
+        $eventName->update($request->except(['_token', '_method']));
     		return response()->json(['success' => 'Event name updated']);
     }
 
