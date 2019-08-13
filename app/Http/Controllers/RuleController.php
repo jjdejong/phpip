@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Rule;
 use Response;
@@ -18,7 +17,7 @@ class RuleController extends Controller
         $Detail = $request->input('Detail');
         $Type = $request->input('Type');
         $Category = $request->input('Category');
-        $rule = new Rule ;
+        $rule = new Rule;
         if (! is_null($Task)) {
             $rule = $rule->whereHas('taskInfo', function ($q) use ($Task) {
                 $q->where('name', 'like', $Task.'%');
@@ -52,32 +51,34 @@ class RuleController extends Controller
                 $q->where('name', 'like', $Origin.'%');
             });
         }
-        $ruleslist = $rule->with('country:iso,name', 'trigger:code,name', 'category:code,category', 'origin:iso,name', 'type', 'taskInfo:code,name')
+        $ruleslist = $rule->with(['country:iso,name', 'trigger:code,name', 'category:code,category', 'origin:iso,name', 'type:code,type', 'taskInfo:code,name'])
             ->orderby('task')->get();
         return view('rule.index', compact('ruleslist'));
     }
 
-    public function show($n)
+    public function show(Rule $rule)
     {
-        $rule = new Rule ;
-        $ruleInfo = $rule->with(
-            'country',
-            'trigger',
-            'country',
-            'category',
-            'origin',
-            'type',
-            'taskInfo',
-            'condition_eventInfo',
-            'abort_onInfo',
-            'responsibleInfo'
-            )->find($n);
-        //	$rule->getRuleInfo($n);
+        $ruleInfo = $rule->load([
+          'trigger:code,name',
+          'country:iso,name',
+          'category:code,category',
+          'origin:iso,name',
+          'type:code,type',
+          'taskInfo:code,name',
+          'condition_eventInfo:code,name',
+          'abort_onInfo:code,name',
+          'responsibleInfo:id,name'
+        ]);
 
         $ruleComments = $rule->getTableComments('task_rules');
         return view('rule.show', compact('ruleInfo', 'ruleComments'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         $rule = new Rule ;
@@ -119,18 +120,8 @@ class RuleController extends Controller
             'end_of_month' => 'numeric',
             'fee' => 'nullable|numeric'
         ]);
-        $input = $request->all();
-        $to_retain = ['_token', '_method'];
-
-        return Rule::create($request->except($to_retain));
+        return Rule::create($request->except(['_token', '_method']));
     }
-
-    /*    public function create(Request $request)
-        {
-        	$rule = new Rule ;
-            $rule->add();
-        }
-    */
 
     /**
      * Remove the specified resource from storage.
