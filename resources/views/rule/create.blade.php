@@ -135,21 +135,21 @@
       </tr>
       <tr>
         <td><label for="days" title="{{ $ruleComments['days'] }}">Days</label></td>
-        <td><input type='number' min="0" class=" form-control form-control-sm" name="days"></td>
+        <td><input type="number" class=" form-control form-control-sm" name="days" value="0"></td>
         <td><label for="cost" title="{{ $ruleComments['cost'] }}">Cost</label> </td>
         <td><input class="form-control form-control-sm" name="cost"></td>
       </tr>
       <tr>
         <td><label for="months" title="{{ $ruleComments['months'] }}">Months</label></td>
-        <td><input type='number' min="0" max="12" class=" form-control form-control-sm" name="months"></td>
+        <td><input type="number" class=" form-control form-control-sm" name="months" value="0"></td>
         <td><label for="fee" title="{{ $ruleComments['fee'] }}">Fee</label> </td>
         <td><input type='text' class=" form-control form-control-sm" name="fee"></td>
       </tr>
       <tr>
         <td><label for="years" title="{{ $ruleComments['years'] }}">Years</label></td>
-        <td><input class="form-control form-control-sm" type='number' name="years"></td>
+        <td><input class="form-control form-control-sm" type='number' name="years" value="0"></td>
         <td><label for="currency" title="{{ $ruleComments['currency'] }}">Currency</label></td>
-        <td><input type="text" maxlength="3" class="form-control  form-control form-control-sm" name="currency"></td>
+        <td><input type="text" maxlength="3" class="form-control form-control-sm" name="currency"></td>
       </tr>
       <tr>
         <td><label title="{{ $ruleComments['end_of_month'] }}">End of month</label></td>

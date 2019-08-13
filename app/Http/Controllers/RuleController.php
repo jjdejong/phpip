@@ -117,7 +117,6 @@ class RuleController extends Controller
             'years' => 'numeric',
             'months' => 'numeric',
             'days' => 'numeric',
-            'end_of_month' => 'numeric',
             'fee' => 'nullable|numeric'
         ]);
         return Rule::create($request->except(['_token', '_method']));
