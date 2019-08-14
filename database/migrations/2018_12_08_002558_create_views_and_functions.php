@@ -218,14 +218,14 @@ VIEW `matter_classifiers` AS
      */
     public function down()
     {
-        DB::unprepared("DROP VIEW `task_list`");
-        DB::unprepared("DROP VIEW `event_lnk_list`");
-        DB::unprepared("DROP FUNCTION `actor_list`");
-        DB::unprepared("DROP FUNCTION `lowerword`");
-        DB::unprepared("DROP FUNCTION `matter_status`");
-        DB::unprepared("DROP FUNCTION `tcase`");
-        DB::unprepared("DROP EVENT `kill_expired`");
-        DB::unprepared("DROP VIEW `matter_classifiers`");
-        DB::unprepared("DROP VIEW `matter_actors`");
+        DB::unprepared("DROP VIEW IF EXISTS `task_list`");
+        DB::unprepared("DROP VIEW IF EXISTS `event_lnk_list`");
+        DB::unprepared("DROP FUNCTION IF EXISTS `actor_list`");
+        DB::unprepared("DROP FUNCTION IF EXISTS `lowerword`");
+        DB::unprepared("DROP FUNCTION IF EXISTS `matter_status`");
+        DB::unprepared("DROP FUNCTION IF EXISTS `tcase`");
+        DB::unprepared("DROP EVENT IF EXISTS `kill_expired`");
+        DB::unprepared("DROP VIEW IF EXISTS `matter_classifiers`");
+        DB::unprepared("DROP VIEW IF EXISTS `matter_actors`");
     }
 }

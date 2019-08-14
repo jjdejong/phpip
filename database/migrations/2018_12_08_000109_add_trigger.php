@@ -486,9 +486,9 @@ END");
         DB::unprepared("DROP TRIGGER IF EXISTS `cvalue_updater_log`");
         // For event
         DB::unprepared("DROP TRIGGER IF EXISTS `event_before_insert`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_insert");
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_update");
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_delete");
+        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_insert`");
+        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_update`");
+        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_delete`");
         // For event_name
         DB::unprepared("DROP TRIGGER IF EXISTS `ename_before_insert`");
         DB::unprepared("DROP TRIGGER IF EXISTS `ename_before_update`");
@@ -510,7 +510,7 @@ END");
         DB::unprepared("DROP TRIGGER IF EXISTS `mtype_updater_log`");
         // For tasks
         DB::unprepared("DROP TRIGGER IF EXISTS `task_before_insert`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `task_before_update` ");
+        DB::unprepared("DROP TRIGGER IF EXISTS `task_before_update`");
         // For task_rules
         DB::unprepared("DROP TRIGGER IF EXISTS `trules_before_insert`");
         DB::unprepared("DROP TRIGGER IF EXISTS `trules_before_update`");
