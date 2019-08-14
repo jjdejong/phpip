@@ -16,14 +16,14 @@ class CreateTaskTable extends Migration {
 		{
 			$table->engine = 'InnoDB';
 			$table->increments('id');
-			$table->integer('trigger_id')->unsigned()->index('trigger_id')->comment('Link to generating event');
+			$table->unsignedInteger('trigger_id')->index('trigger_id')->comment('Link to generating event');
 			$table->char('code', 5)->index('code')->comment('Task code. Link to event_names table');
 			$table->date('due_date')->index('due_date');
 			$table->char('assigned_to', 16)->nullable()->index('responsible')->comment('User responsible for the task (if not the user responsible for the case)');
 			$table->string('detail', 45)->nullable()->index('detail')->comment('Numbers or short comments');
 			$table->boolean('done')->nullable()->default(0)->comment('Set to 1 when task done');
 			$table->date('done_date')->nullable()->comment('Optional task completion date');
-			$table->integer('rule_used')->unsigned()->nullable()->index('task_rule')->comment('ID of the rule that was used to set this task');
+			$table->unsignedInteger('rule_used')->nullable()->index('task_rule')->comment('ID of the rule that was used to set this task');
 			$table->time('time_spent')->nullable()->comment('Time spent by attorney on task');
 			$table->string('notes', 150)->nullable();
 			$table->decimal('cost', 6)->nullable()->comment('The estimated or invoiced fee amount');

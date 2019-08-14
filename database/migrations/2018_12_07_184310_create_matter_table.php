@@ -23,8 +23,8 @@ class CreateMatterTable extends Migration {
 			$table->char('type_code', 5)->nullable()->index('type');
 			$table->boolean('idx')->nullable()->comment('Increment this to differentiate multiple patents filed in the same country in the same family');
 			$table->string('suffix', 16)->virtualAs('concat_ws("",concat_ws("-",concat_ws("/",`country`,`origin`),`type_code`),`idx`)');
-			$table->integer('parent_id')->unsigned()->nullable()->index('parent')->comment('Link to parent patent. Used to create a hierarchy');
-			$table->integer('container_id')->unsigned()->nullable()->index('container')->comment('Identifies the container matter from which this matter gathers its shared data. If null, this matter is a container');
+			$table->unsignedInteger('parent_id')->nullable()->index('parent')->comment('Link to parent patent. Used to create a hierarchy');
+			$table->unsignedInteger('container_id')->nullable()->index('container')->comment('Identifies the container matter from which this matter gathers its shared data. If null, this matter is a container');
 			$table->char('responsible', 16)->index('responsible')->comment('Database user responsible for the patent');
 			$table->boolean('dead')->nullable()->default(0)->comment('Indicates whether the case is removed from the watch system');
 			$table->text('notes', 65535)->nullable();

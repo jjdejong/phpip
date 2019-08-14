@@ -16,11 +16,11 @@ class CreateDefaultActorTable extends Migration {
 		{
 			$table->engine = 'InnoDB';
 			$table->increments('id');
-			$table->integer('actor_id')->unsigned()->index('actor_id');
+			$table->unsignedInteger('actor_id')->index('actor_id');
 			$table->char('role', 5)->index('role');
 			$table->char('for_category', 5)->nullable();
 			$table->char('for_country', 2)->nullable()->index('for_country');
-			$table->integer('for_client')->unsigned()->nullable()->index('for_client');
+			$table->unsignedInteger('for_client')->nullable()->index('for_client');
 			$table->boolean('shared')->default(0);
 		});
 	}

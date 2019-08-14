@@ -25,9 +25,9 @@ class CreateActorTable extends Migration {
 			$table->dateTime('last_login')->nullable();
 			$table->char('default_role', 5)->nullable()->index('default_role')->comment('Link to actor_role table. A same actor can have different roles - this is the default role of the actor. CAUTION: for database users, this sets the user ACLs.');
 			$table->string('function', 45)->nullable();
-			$table->integer('parent_id')->unsigned()->nullable()->index('parent')->comment('Parent company of this company (another actor), where applicable. Useful for linking several companies owned by a same corporation');
-			$table->integer('company_id')->unsigned()->nullable()->index('company')->comment('Mainly for inventors and contacts. ID of the actor\'s company or employer (another record in the actors table)');
-			$table->integer('site_id')->unsigned()->nullable()->index('site')->comment('Mainly for inventors and contacts. ID of the actor\'s company site (another record in the actors table), if the company has several sites that we want to differentiate');
+			$table->unsignedInteger('parent_id')->nullable()->index('parent')->comment('Parent company of this company (another actor), where applicable. Useful for linking several companies owned by a same corporation');
+			$table->unsignedInteger('company_id')->nullable()->index('company')->comment('Mainly for inventors and contacts. ID of the actor\'s company or employer (another record in the actors table)');
+			$table->unsignedInteger('site_id')->nullable()->index('site')->comment('Mainly for inventors and contacts. ID of the actor\'s company site (another record in the actors table), if the company has several sites that we want to differentiate');
 			$table->boolean('phy_person')->default(1)->comment('Physical person or not');
 			$table->char('nationality', 2)->nullable()->index('nationality');
 			$table->boolean('small_entity')->default(0)->comment('Small entity status used in a few countries (FR, US)');
