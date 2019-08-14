@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateView extends Migration
+class CreateViewsAndFunctions extends Migration
 {
     /**
      * Run the migrations.
@@ -11,9 +11,9 @@ class CreateView extends Migration
      */
     public function up()
     {
-        DB::statement("CREATE 
-    ALGORITHM = UNDEFINED 
-    DEFINER = `root`@`localhost` 
+        DB::statement("CREATE
+    ALGORITHM = UNDEFINED
+    DEFINER = `root`@`localhost`
     SQL SECURITY DEFINER
 VIEW `task_list` AS select `task`.`ID` AS `id`,
 `task`.`code` AS `code`,
@@ -35,29 +35,29 @@ VIEW `task_list` AS select `task`.`ID` AS `id`,
 ifnull(`task`.`assigned_to`,`matter`.`responsible`) AS `responsible`,
 `actor`.`login` AS `delegate`,
 `task`.`rule_used` AS `rule_used`,
-`matter`.`dead` AS `dead` 
-from (((((`matter` 
-left join `matter_actor_lnk` on(((ifnull(`matter`.`container_ID`,`matter`.`ID`) = `matter_actor_lnk`.`matter_ID`) and (`matter_actor_lnk`.`role` = 'DEL')))) 
-left join `actor` on((`actor`.`ID` = `matter_actor_lnk`.`actor_ID`))) 
-join `event` on((`matter`.`ID` = `event`.`matter_ID`))) 
-join `task` on((`task`.`trigger_ID` = `event`.`ID`))) 
+`matter`.`dead` AS `dead`
+from (((((`matter`
+left join `matter_actor_lnk` on(((ifnull(`matter`.`container_ID`,`matter`.`ID`) = `matter_actor_lnk`.`matter_ID`) and (`matter_actor_lnk`.`role` = 'DEL'))))
+left join `actor` on((`actor`.`ID` = `matter_actor_lnk`.`actor_ID`)))
+join `event` on((`matter`.`ID` = `event`.`matter_ID`)))
+join `task` on((`task`.`trigger_ID` = `event`.`ID`)))
 join `event_name` on((`task`.`code` = `event_name`.`code`)))");
-        DB::statement("CREATE 
-    ALGORITHM = UNDEFINED 
-    DEFINER = `root`@`localhost` 
-    SQL SECURITY DEFINER 
+        DB::statement("CREATE
+    ALGORITHM = UNDEFINED
+    DEFINER = `root`@`localhost`
+    SQL SECURITY DEFINER
 VIEW `event_lnk_list` AS select `event`.`ID` AS `id`,
 `event`.`code` AS `code`,
 `event`.`matter_ID` AS `matter_id`,
 if(isnull(`event`.`alt_matter_ID`),`event`.`event_date`,`lnk`.`event_date`) AS `event_date`,
 if(isnull(`event`.`alt_matter_ID`),`event`.`detail`,`lnk`.`detail`) AS `detail`,
-`matter`.`country` AS `country` 
-from ((`event` 
-    left join `event` `lnk` on(((`event`.`alt_matter_ID` = `lnk`.`matter_ID`) and (`lnk`.`code` = 'FIL')))) 
+`matter`.`country` AS `country`
+from ((`event`
+    left join `event` `lnk` on(((`event`.`alt_matter_ID` = `lnk`.`matter_ID`) and (`lnk`.`code` = 'FIL'))))
     left join `matter` on((`event`.`alt_matter_ID` = `matter`.`ID`)))");
         DB::unprepared("CREATE EVENT `kill_expired` ON SCHEDULE EVERY 1 WEEK STARTS '2017-01-31 20:23:25' ON COMPLETION PRESERVE DISABLE ON SLAVE COMMENT 'Updates the expired status of matters' DO CALL update_expired()");
         DB::unprepared("CREATE
-    DEFINER = `root`@`localhost` 
+    DEFINER = `root`@`localhost`
     FUNCTION `actor_list`(mid INT, arole TEXT) RETURNS text CHARSET utf8
     DETERMINISTIC
 BEGIN
@@ -69,8 +69,8 @@ BEGIN
 
 	RETURN alist;
 END");
-        DB::unprepared("CREATE 
-    DEFINER = `root`@`localhost` 
+        DB::unprepared("CREATE
+    DEFINER = `root`@`localhost`
     FUNCTION `lowerword`( str TEXT, word VARCHAR(5) ) RETURNS text CHARSET utf8
     DETERMINISTIC
 BEGIN
@@ -87,8 +87,8 @@ BEGIN
   END IF;
   RETURN str;
 END");
-        DB::unprepared("CREATE 
-    DEFINER = `root`@`localhost` 
+        DB::unprepared("CREATE
+    DEFINER = `root`@`localhost`
     FUNCTION `matter_status`(mid INT) RETURNS text CHARSET utf8
     DETERMINISTIC
 BEGIN
@@ -101,7 +101,7 @@ BEGIN
 	RETURN mstatus;
 END");
         DB::unprepared("CREATE
-    DEFINER = `root`@`localhost` 
+    DEFINER = `root`@`localhost`
     FUNCTION `tcase`( str TEXT) RETURNS text CHARSET utf8
     DETERMINISTIC
 BEGIN
@@ -146,12 +146,12 @@ BEGIN
   RETURN s;
 END");
         DB::unprepared(
-"CREATE 
-    ALGORITHM = UNDEFINED 
-    DEFINER = `root`@`localhost` 
+"CREATE
+    ALGORITHM = UNDEFINED
+    DEFINER = `root`@`localhost`
     SQL SECURITY DEFINER
 VIEW `matter_actors` AS
-    SELECT 
+    SELECT
         `pivot`.`id` AS `id`,
         `actor`.`id` AS `actor_id`,
         IFNULL(`actor`.`display_name`, `actor`.`name`) AS `display_name`,
@@ -185,12 +185,12 @@ VIEW `matter_actors` AS
         JOIN `actor_role` ON ((`pivot`.`role` = `actor_role`.`code`)))
     ORDER BY `actor_role`.`display_order` , `pivot`.`display_order`;");
         DB::unprepared(
-"CREATE 
-    ALGORITHM = UNDEFINED 
-    DEFINER = `root`@`localhost` 
-    SQL SECURITY DEFINER 
+"CREATE
+    ALGORITHM = UNDEFINED
+    DEFINER = `root`@`localhost`
+    SQL SECURITY DEFINER
 VIEW `matter_classifiers` AS
-    SELECT 
+    SELECT
         `classifier`.`id` AS `id`,
         `matter`.`id` AS `matter_id`,
         `classifier`.`type_code` AS `type_code`,

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration;
 
-class RecreateTasks extends Migration
+class CreateProcedureRecreateTasks extends Migration
 {
     /**
      * Run the migrations.
