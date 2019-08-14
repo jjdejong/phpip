@@ -30,8 +30,8 @@ class CreateTaskTable extends Migration {
 			$table->decimal('fee', 6)->nullable();
 			$table->char('currency', 3)->nullable()->default('EUR');
 			$table->char('creator', 16)->nullable();
-			$table->timestamp('updated')->nullable()->useCurrent();
 			$table->char('updater', 16)->nullable();
+			$table->timestamps();
 		});
 	}
 

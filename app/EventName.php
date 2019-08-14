@@ -9,10 +9,9 @@ class EventName extends Model
     protected $table = 'event_name';
     protected $primaryKey = 'code';
     protected $keyType = 'string';
-    protected $hidden = ['creator', 'updated', 'updater'];
-    protected $guarded = ['code', 'creator', 'updated', 'updater'];
+    protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
+    protected $guarded = ['code', 'creator', 'created_at', 'updated_at', 'updater'];
     public $incrementing = false;
-    public $timestamps = false;
 
     public function events() {
         return $this->hasMany('App\Event', 'code');

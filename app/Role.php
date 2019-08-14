@@ -8,8 +8,7 @@ class Role extends Model
 {
     protected $table = 'actor_role';
     protected $primaryKey = 'code';
-    protected $hidden = ['creator', 'updated', 'updater'];
-    protected $guarded = ['code', 'creator', 'updated', 'updater'];
+    protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
+    protected $guarded = ['code', 'creator', 'created_at', 'updated_at', 'updater'];
     public $incrementing = false;
-    public $timestamps = false;
 }

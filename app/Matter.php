@@ -9,9 +9,8 @@ use Illuminate\Support\Facades\Auth;
 class Matter extends Model
 {
     protected $table = 'matter';
-    public $timestamps = false; // removes timestamp updating in this table (done via MySQL triggers)
-    protected $hidden = ['creator', 'updated', 'updater'];
-    protected $guarded = ['id', 'creator', 'updated', 'updater'];
+    protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
+    protected $guarded = ['id', 'creator', 'created_at', 'updated_at', 'updater'];
 
     // use \Venturecraft\Revisionable\RevisionableTrait;
     // protected $revisionEnabled = true;
@@ -293,6 +292,8 @@ class Matter extends Model
         if ($display_with) {
             $query->where('matter_category.display_with', $display_with);
         }
+
+        // When the user is a client, limit the matters to client's own matters
         if ($authUserRole == 'CLI') {
             $query->whereRaw($authUserId . ' IN (cli.id, clic.id)');
         }

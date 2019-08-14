@@ -8,9 +8,8 @@ use Illuminate\Support\Facades\DB;
 class Actor extends Model
 {
     protected $table = 'actor';
-    public $timestamps = false;
-    protected $hidden = ['login', 'last_login', 'password', 'remember_token', 'creator', 'updated', 'updater'];
-    protected $guarded = ['id', 'password', 'creator', 'updated', 'updater'];
+    protected $hidden = ['login', 'last_login', 'password', 'remember_token', 'creator', 'created_at', 'updated_at', 'updater'];
+    protected $guarded = ['id', 'password', 'creator', 'created_at', 'updated_at', 'updater'];
 
     // use \Venturecraft\Revisionable\RevisionableTrait;
     // protected $revisionEnabled = true;

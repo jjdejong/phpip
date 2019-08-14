@@ -31,8 +31,8 @@ class CreateMatterTable extends Migration {
 			$table->date('expire_date')->nullable();
 			$table->smallInteger('term_adjust')->default(0)->comment('Patent term adjustment in days. Essentially for US patents.');
 			$table->char('creator', 16)->nullable()->comment('ID of the user who created the record');
-			$table->timestamp('updated')->nullable()->useCurrent()->comment('Record modification date');
 			$table->char('updater', 16)->nullable()->comment('ID of the user who last modified the record');
+			$table->timestamps();
 			$table->index(['caseref','container_id','origin','country','type_code','idx'], 'sort');
 			$table->unique(['category_code','caseref','suffix'], 'UID');
 		});

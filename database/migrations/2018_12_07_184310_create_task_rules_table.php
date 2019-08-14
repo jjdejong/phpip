@@ -43,8 +43,8 @@ class CreateTaskRulesTable extends Migration {
 			$table->char('responsible', 16)->nullable()->comment('The person (login) responsible for this task. If 0, insert the matter responsible.');
 			$table->text('notes', 65535)->nullable();
 			$table->char('creator', 16)->nullable();
-			$table->timestamp('updated')->nullable()->useCurrent();
 			$table->char('updater', 16)->nullable();
+			$table->timestamps();
 			$table->index(['trigger_event','for_country'], 'trigger_event');
 		});
 	}

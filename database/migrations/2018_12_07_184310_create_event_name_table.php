@@ -28,8 +28,8 @@ class CreateEventNameTable extends Migration {
 			$table->boolean('killer')->default(0)->comment('Indicates whether this event kills the patent (set patent.dead to 1)');
 			$table->string('notes', 160)->nullable();
 			$table->char('creator', 16)->nullable();
-			$table->timestamp('updated')->nullable()->useCurrent();
 			$table->char('updater', 16)->nullable();
+			$table->timestamps();
 		});
 	}
 

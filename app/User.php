@@ -10,7 +10,6 @@ class User extends Authenticatable
 {
     use Notifiable;
     protected $table = 'actor';
-    public $timestamps = false; // removes timestamp updating in this table (done via MySQL triggers)
 
     /**
      * The attributes that are mass assignable.

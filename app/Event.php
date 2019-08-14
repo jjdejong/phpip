@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     protected $table = 'event';
-    public $timestamps = false;
-    protected $hidden = ['creator', 'updated', 'updater'];
-    protected $guarded = ['id', 'creator', 'updated', 'updater'];
+    protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
+    protected $guarded = ['id', 'creator', 'created_at', 'updated_at', 'updater'];
 
     // use \Venturecraft\Revisionable\RevisionableTrait;
     // protected $revisionEnabled = true;

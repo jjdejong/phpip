@@ -23,8 +23,8 @@ class CreateEventTable extends Migration {
 			$table->string('detail', 45)->nullable()->index('number')->comment('Numbers or short comments');
 			$table->string('notes', 150)->nullable();
 			$table->char('creator', 16)->nullable();
-			$table->timestamp('updated')->nullable()->useCurrent();
 			$table->char('updater', 16)->nullable();
+			$table->timestamps();
 			$table->unique(['matter_id','code','event_date','alt_matter_id'], 'uqevent');
 		});
 	}

@@ -26,8 +26,8 @@ class CreateMatterActorLnkTable extends Migration {
 			$table->decimal('rate', 5)->nullable()->default(100.00)->comment('For co-owners - rate of ownership, or inventors');
 			$table->date('date')->nullable()->comment('A date field that can, for instance, contain the date of ownership acquisition');
 			$table->char('creator', 16)->nullable();
-			$table->timestamp('updated')->nullable()->useCurrent();
 			$table->char('updater', 16)->nullable();
+			$table->timestamps();
 			$table->unique(['matter_id','role','actor_id'], 'uqactor_role');
 		});
 	}

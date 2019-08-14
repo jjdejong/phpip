@@ -8,10 +8,9 @@ use Illuminate\Support\Facades\DB;
 class Rule extends Model
 {
     protected $table = 'task_rules';
-	public $timestamps = false; // removes timestamp updating in this table (done via MySQL triggers)
-	protected $hidden = ['creator', 'updated', 'updater'];
-	protected $guarded = ['id', 'creator', 'updated', 'updater'];
-    
+    protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
+    protected $guarded = ['id', 'creator', 'created_at', 'updated_at', 'updater'];
+
     public function country() {
 		return $this->belongsTo('App\Country', 'for_country','iso');
 	}
@@ -59,5 +58,5 @@ class Rule extends Model
                 }
                 return $comments;
         }
-        
+
 }

@@ -27,8 +27,8 @@ class CreateClassifierTable extends Migration
             $table->boolean('display_order')->default(1);
             $table->integer('lnk_matter_id')->unsigned()->nullable()->index('lnk_matter')->comment('Matter this case is linked to');
             $table->string('creator', 20)->nullable();
-            $table->timestamp('updated')->nullable()->useCurrent();
             $table->string('updater', 20)->nullable();
+            $table->timestamps();
 
             $table->primary(['id','matter_id']);
             $table->unique(['matter_id','type_code','lnk_matter_id'], 'uqlnk');
