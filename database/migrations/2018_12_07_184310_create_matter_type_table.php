@@ -31,7 +31,7 @@ class CreateMatterTypeTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('matter_type');
+		Schema::dropIfExists('matter_type');
 	}
 
 }

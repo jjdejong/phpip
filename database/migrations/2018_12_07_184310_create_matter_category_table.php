@@ -33,7 +33,7 @@ class CreateMatterCategoryTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('matter_category');
+		Schema::dropIfExists('matter_category');
 	}
 
 }

@@ -33,7 +33,7 @@ class CreateDefaultActorTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('default_actor');
+		Schema::dropIfExists('default_actor');
 	}
 
 }

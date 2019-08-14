@@ -59,7 +59,7 @@ class CreateActorTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('actor');
+		Schema::dropIfExists('actor');
 	}
 
 }

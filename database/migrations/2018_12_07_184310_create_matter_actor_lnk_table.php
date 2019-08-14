@@ -40,7 +40,7 @@ class CreateMatterActorLnkTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('matter_actor_lnk');
+		Schema::dropIfExists('matter_actor_lnk');
 	}
 
 }

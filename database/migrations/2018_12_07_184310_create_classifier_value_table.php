@@ -34,7 +34,7 @@ class CreateClassifierValueTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('classifier_value');
+		Schema::dropIfExists('classifier_value');
 	}
 
 }

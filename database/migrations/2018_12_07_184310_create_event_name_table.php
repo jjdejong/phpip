@@ -41,7 +41,7 @@ class CreateEventNameTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('event_name');
+		Schema::dropIfExists('event_name');
 	}
 
 }

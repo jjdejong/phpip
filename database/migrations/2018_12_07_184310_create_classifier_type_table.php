@@ -36,7 +36,7 @@ class CreateClassifierTypeTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('classifier_type');
+		Schema::dropIfExists('classifier_type');
 	}
 
 }

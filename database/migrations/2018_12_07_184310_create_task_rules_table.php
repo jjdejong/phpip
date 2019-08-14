@@ -57,7 +57,7 @@ class CreateTaskRulesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('task_rules');
+		Schema::dropIfExists('task_rules');
 	}
 
 }

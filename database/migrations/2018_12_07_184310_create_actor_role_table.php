@@ -38,7 +38,7 @@ class CreateActorRoleTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('actor_role');
+		Schema::dropIfExists('actor_role');
 	}
 
 }
