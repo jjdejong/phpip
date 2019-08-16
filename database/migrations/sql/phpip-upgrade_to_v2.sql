@@ -253,3 +253,18 @@ VIEW `matter_classifiers` AS
         JOIN `matter` ON ((IFNULL(`matter`.`container_id`, `matter`.`id`) = `classifier`.`matter_id`)))
         LEFT JOIN `classifier_value` ON ((`classifier_value`.`id` = `classifier`.`value_id`)))
     ORDER BY `classifier_type`.`display_order` , `classifier`.`display_order`;
+
+  -- Fix obsolete default date values
+  UPDATE actor set updated=NULL where updated like '0000-%';
+  UPDATE actor_role set updated=NULL where updated like '0000-%';
+  UPDATE classifier set updated=NULL where updated like '0000-%';
+  UPDATE classifier_type set updated=NULL where updated like '0000-%';
+  UPDATE classifier_value set updated=NULL where updated like '0000-%';
+  UPDATE event set updated=NULL where updated like '0000-%';
+  UPDATE event_name set updated=NULL where updated like '0000-%';
+  UPDATE matter set updated=NULL where updated like '0000-%';
+  UPDATE matter_actor_lnk set updated=NULL where updated like '0000-%';
+  UPDATE matter_category set updated=NULL where updated like '0000-%';
+  UPDATE matter_type set updated=NULL where updated like '0000-%';
+  UPDATE task set updated=NULL where updated like '0000-%';
+  UPDATE task_rules set updated=NULL where updated like '0000-%';
