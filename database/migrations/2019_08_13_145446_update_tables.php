@@ -53,6 +53,9 @@ class UpdateTables extends Migration
               $table->string('address_billing', 256)->comment('Billing address: street, zip and city')->nullable()->change();
               $table->boolean('warn')->default(0)->comment('The actor will be displayed in red in the matter view when set')->change();
             }
+            if ($t == 'matter') {
+              $table->boolean('dead')->default(0)->comment('Indicates that the case is no longer supervised. Automatically set by "killer events" like "Abandoned"')->change();
+            }
           });
         }
       }
