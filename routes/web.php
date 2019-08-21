@@ -18,10 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
-
-// Re-route registration requests to the home controller (thus disabling registration)
-Route::any('/register', 'HomeController@index');
+Auth::routes(['register' => false]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 

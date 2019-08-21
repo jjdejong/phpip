@@ -60,7 +60,6 @@
             <!-- Authentication Links -->
             @guest
             <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-            <!-- <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li> -->
             @else
             <li><a class="nav-link" href={{ route('home') }}>Dashboard</a></li>
             <li class="nav-item dropdown">
