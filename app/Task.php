@@ -45,7 +45,7 @@ class Task extends Model
             ->groupby('login');
 
         if ($role == 'CLI') {
-            $selectQuery->join('matter_actor_lnk as cli', DB::raw("ifnull(m.container_ID,m.ID)", '=', "cli.matter_ID"))
+            $selectQuery->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(m.container_id, m.id)'))
             ->where([[ 'cli.role','CLI'],['cli.actor_id', $userid]]);
         }
         return $selectQuery->get();

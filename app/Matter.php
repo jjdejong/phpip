@@ -328,11 +328,11 @@ class Matter extends Model
     {
         $authUserRole = Auth::user()->default_role;
         $authUserId = Auth::user()->id;
-        $query = Matter::leftJoin('matter_category as mc', 'mc.code', '=', 'matter.category_code')
+        $query = Matter::leftJoin('matter_category as mc', 'mc.code', 'matter.category_code')
                 ->groupBy('category_code', 'category')
                 ->select('mc.category', 'category_code', DB::raw('count(*) as total'));
         if ($authUserRole == 'CLI') {
-            $query->join('matter_actor_lnk as cli', DB::raw("ifnull(matter.container_id, matter.id)"), '=', 'cli.matter_id')
+            $query->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw("ifnull(matter.container_id, matter.id)"))
             ->where([[ 'cli.role', 'CLI'],['cli.actor_id', $authUserId]]);
         } else {
             if ($user) {
