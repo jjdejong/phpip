@@ -173,8 +173,8 @@ class Matter extends Model
                 'matter.origin',
                 'event_name.name AS Status',
                 'status.event_date AS Status_date',
-                DB::raw("COALESCE(cli.display_name, clic.display_name, cli.name, clic.name) AS Client"),
-                DB::raw("COALESCE(clilnk.actor_ref, lclic.actor_ref) AS ClRef"),
+                DB::raw("COALESCE(cli.display_name, cli.name) AS Client"),
+                'clilnk.actor_ref AS ClRef',
                 DB::raw("COALESCE(app.display_name, app.name) AS Applicant"),
                 DB::raw("COALESCE(agt.display_name, agt.name) AS Agent"),
                 'agtlnk.actor_ref AS AgtRef',
@@ -200,17 +200,7 @@ class Matter extends Model
             DB::raw('matter_actor_lnk clilnk
             JOIN actor cli ON cli.id = clilnk.actor_id'),
             function ($join) {
-                $join->on('matter.id', 'clilnk.matter_id')->where('clilnk.role', 'CLI');
-            }
-        )
-        ->leftJoin(
-            DB::raw('matter_actor_lnk lclic
-            JOIN actor clic ON clic.id = lclic.actor_id'),
-            function ($join) {
-                $join->on('matter.container_id', 'lclic.matter_id')->where([
-                    ['lclic.role', 'CLI'],
-                    ['lclic.shared', 1]
-                ]);
+                $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'clilnk.matter_id')->where('clilnk.role', 'CLI');
             }
         );
 
@@ -295,7 +285,7 @@ class Matter extends Model
 
         // When the user is a client, limit the matters to client's own matters
         if ($authUserRole == 'CLI') {
-            $query->whereRaw($authUserId . ' IN (cli.id, clic.id)');
+            $query->where('cli.id', $authUserId);
         }
 
         if (!empty($multi_filter)) {
@@ -312,12 +302,12 @@ class Matter extends Model
 
         if ($sortkey == 'caseref') {
             if ($sortdir == 'desc') {
-                $query->orderByRaw('matter.caseref DESC, matter.container_id, matter.origin, matter.country, matter.type_code, matter.idx');
+                $query->orderByRaw('matter.caseref DESC, matter.container_id');
             } else {
-                $query->orderByRaw('matter.caseref, matter.container_id, matter.origin, matter.country, matter.type_code, matter.idx');
+                $query->orderByRaw('matter.caseref, matter.container_id');
             }
         } else {
-            $query->orderByRaw("$sortkey $sortdir, matter.caseref, matter.origin, matter.country");
+            $query->orderByRaw("$sortkey $sortdir, matter.caseref");
         }
 
         if ($paginated) {
