@@ -40,13 +40,13 @@ class Task extends Model
                 DB::raw('MIN(task.due_date) as posix_urgent_date'),
                 DB::raw('ifnull(task.assigned_to, m.responsible) as login')
             )
-            ->where('m.dead', '=', 0)
+            ->where('m.dead', 0)
             ->where('task.done', 0)
             ->groupby('login');
 
         if ($role == 'CLI') {
             $selectQuery->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(m.container_id, m.id)'))
-            ->where([[ 'cli.role','CLI'],['cli.actor_id', $userid]]);
+            ->where('cli.actor_id', $userid);
         }
         return $selectQuery->get();
     }

@@ -65,6 +65,11 @@ class Matter extends Model
         return $this->hasMany('App\MatterActors');
     }
 
+    public function client()
+    {
+        return $this->hasMany('App\MatterActors')->where('role_code', 'CLI');
+    }
+
     public function actorPivot()
     {
         return $this->hasMany('App\ActorPivot');

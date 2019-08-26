@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Task;
 use App\Matter;
-use Response;
 
 class HomeController extends Controller
 {
@@ -31,21 +30,35 @@ class HomeController extends Controller
         // Filters
         $MyTasks = $request->input ( 'my_tasks' );
         $MyRenewals = $request->input ( 'my_renewals' );
-        
+
+        $userid = Auth::user()->id;
+        $role = Auth::user()->default_role;
+
         // Get list of active tasks
-        $tasks = Task::with(['info:code,name', 'trigger.matter:id,caseref,suffix'])->whereHas('trigger.matter', function ($query) {
+        $tasks = Task::with(['info:code,name', 'trigger.matter:id,caseref,suffix', 'trigger.matter.client:id,actor_id'])->whereHas('trigger.matter', function ($query) {
           $query->where('dead', 0);
         })->where('done', 0)->where('task.code', '!=', 'REN')->orderby('due_date');
         if ($MyTasks) {
             $tasks->where('assigned_to', Auth::user()->login);
         }
+        if ($role == 'CLI') {
+            $tasks->whereHas('trigger.matter.client', function ($query) use ($userid) {
+              $query->where('actor_id', $userid);
+            });
+        }
         $tasks = $tasks->simplePaginate(25)->all();
+
         // Get list of active renewals
-        $renewals = Task::with(['info:code,name', 'trigger.matter:id,caseref,suffix'])->whereHas('trigger.matter', function ($query) {
+        $renewals = Task::with(['info:code,name', 'trigger.matter:id,caseref,suffix', 'trigger.matter.client:id,actor_id'])->whereHas('trigger.matter', function ($query) {
           $query->where('dead', 0);
         })->where('done', 0)->where('task.code', 'REN')->orderby('due_date');
         if ($MyRenewals) {
             $renewals->where('assigned_to', Auth::user()->login);
+        }
+        if ($role == 'CLI') {
+            $renewals->whereHas('trigger.matter.client', function ($query) use ($userid) {
+              $query->where('actor_id', $userid);
+            });
         }
         $renewals = $renewals->simplePaginate(25)->all();
         // Count matters per categories
