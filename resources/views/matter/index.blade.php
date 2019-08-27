@@ -146,19 +146,19 @@
     <tr id="sortHeaders" class="bg-light">
       <th><a href="#" class="sortable" data-sortkey="caseref" data-sortdir="desc">Reference</a></th>
       <th>Cat.</th>
-      <th><a href="#" class="sortable" data-sortkey="Status" data-sortdir="asc">Status</a></th>
-      <th class="tab0 {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="Client" data-sortdir="asc">Client</a></th>
+      <th><a href="#" class="sortable" data-sortkey="event_name.name" data-sortdir="asc">Status</a></th>
+      <th class="tab0 {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="cli.name" data-sortdir="asc">Client</a></th>
       <th class="tab0 {{ $hideTab0 }}">Client&nbsp;Ref.</th>
-      <th class="tab0 {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="Agent" data-sortdir="asc">Agent</a></th>
+      <th class="tab0 {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="agt.name" data-sortdir="asc">Agent</a></th>
       <th class="tab0 {{ $hideTab0 }}">Agent&nbsp;Ref.</th>
       <th class="tab0 {{ $hideTab0 }}">Title/Detail</th>
-      <th class="tab0 {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="Inventor1" data-sortdir="asc">Inventor</a></th>
-      <th class="tab1 {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="Status_date" data-sortdir="asc">Date</a></th>
-      <th class="tab1 {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="Filed" data-sortdir="asc">Filed</a></th>
+      <th class="tab0 {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="inv.name" data-sortdir="asc">Inventor</a></th>
+      <th class="tab1 {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="status.event_date" data-sortdir="asc">Date</a></th>
+      <th class="tab1 {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="fil.event_date" data-sortdir="asc">Filed</a></th>
       <th class="tab1 {{ $hideTab1 }}">Number</th>
-      <th class="tab1 {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="Published" data-sortdir="asc">Published</a></th>
+      <th class="tab1 {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="pub.event_date" data-sortdir="asc">Published</a></th>
       <th class="tab1 {{ $hideTab1 }}">Number</th>
-      <th class="tab1 {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="Granted" data-sortdir="asc">Granted</a></th>
+      <th class="tab1 {{ $hideTab1 }}"><a href="#" class="sortable" data-sortkey="grt.event_date" data-sortdir="asc">Granted</a></th>
       <th class="tab1 {{ $hideTab1 }}">Number</th>
     </tr>
     <tr id="filterFields">

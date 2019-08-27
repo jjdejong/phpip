@@ -172,33 +172,34 @@ class Matter extends Model
     public static function filter($sortkey = 'id', $sortdir = 'desc', $multi_filter = [], $display_with = false, $paginated = false)
     {
         $query = Matter::select(
-            DB::raw("CONCAT_WS('', caseref, suffix) AS Ref"),
-                'matter.country AS country',
-                'matter.category_code AS Cat',
-                'matter.origin',
-                'event_name.name AS Status',
-                'status.event_date AS Status_date',
-                DB::raw("COALESCE(cli.display_name, cli.name) AS Client"),
-                'clilnk.actor_ref AS ClRef',
-                DB::raw("COALESCE(app.display_name, app.name) AS Applicant"),
-                DB::raw("COALESCE(agt.display_name, agt.name) AS Agent"),
-                'agtlnk.actor_ref AS AgtRef',
-                'classifier.value AS Title',
-                'classifier2.value AS Title2',
-                DB::raw("CONCAT_WS(' ', inv.name, inv.first_name) as Inventor1"),
-                'fil.event_date AS Filed',
-                'fil.detail AS FilNo',
-                'pub.event_date AS Published',
-                'pub.detail AS PubNo',
-                'grt.event_date AS Granted',
-                'grt.detail AS GrtNo',
-                'matter.id',
-                'matter.container_id',
-                'matter.parent_id',
-                'matter.responsible',
-                'del.login AS delegate',
-                'matter.dead',
-                DB::raw("IF(isnull(matter.container_id),1,0) AS Ctnr")
+            DB::raw("CONCAT(caseref, suffix) AS Ref"),
+            'matter.country AS country',
+            'matter.category_code AS Cat',
+            'matter.origin',
+            DB::raw("GROUP_CONCAT(DISTINCT event_name.name SEPARATOR '; ') AS Status"),
+            DB::raw("MIN(status.event_date) AS Status_date"),
+            DB::raw("GROUP_CONCAT(DISTINCT COALESCE(cli.display_name, cli.name) SEPARATOR '; ') AS Client"),
+            DB::raw("GROUP_CONCAT(DISTINCT clilnk.actor_ref SEPARATOR '; ') AS ClRef"),
+            DB::raw("GROUP_CONCAT(DISTINCT COALESCE(app.display_name, app.name) SEPARATOR '; ') AS Applicant"),
+            DB::raw("COALESCE(agt.display_name, agt.name) AS Agent"),
+            'agtlnk.actor_ref AS AgtRef',
+            'classifier.value AS Title',
+            'classifier2.value AS Title2',
+            DB::raw("CONCAT_WS(' ', inv.name, inv.first_name) as Inventor1"),
+            'fil.event_date AS Filed',
+            'fil.detail AS FilNo',
+            'pub.event_date AS Published',
+            'pub.detail AS PubNo',
+            'grt.event_date AS Granted',
+            'grt.detail AS GrtNo',
+            'matter.id',
+            'matter.container_id',
+            'matter.parent_id',
+            'matter.type_code',
+            'matter.responsible',
+            'del.login AS delegate',
+            'matter.dead',
+            DB::raw("IF(isnull(matter.container_id),1,0) AS Ctnr")
         )
         ->join('matter_category', 'matter.category_code', 'matter_category.code')
         ->leftJoin(
@@ -244,17 +245,14 @@ class Matter extends Model
             DB::raw('matter_actor_lnk applnk
             JOIN actor app ON app.id = applnk.actor_id'),
             function ($join) {
-                $join->on('matter.id', 'applnk.matter_id')->where([
-                    ['applnk.role', 'APP'],
-                    ['applnk.display_order', 1]
-                ]);
+                $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'applnk.matter_id')->where('applnk.role', 'APP');
             }
         )
         ->leftJoin(
             DB::raw('matter_actor_lnk dellnk
             JOIN actor del ON del.id = dellnk.actor_id'),
             function ($join) {
-                $join->on(DB::raw('ifnull(matter.container_id,matter.id)'), 'dellnk.matter_id')->where('dellnk.role', 'DEL');
+                $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'dellnk.matter_id')->where('dellnk.role', 'DEL');
             }
         )
         ->leftJoin('event AS fil', function ($join) {
@@ -296,23 +294,82 @@ class Matter extends Model
         if (!empty($multi_filter)) {
             foreach ($multi_filter as $key => $value) {
                 if ($value != '') {
-                    if ($key == 'responsible') {
-                        $query->whereRaw("'$value' IN (matter.responsible, del.login)");
-                    } else {
-                        $query->having("$key", 'LIKE', "$value%");
+                    switch($key) {
+                        case 'Ref':
+                            $query->where('caseref', 'LIKE', "$value%");
+                            break;
+                        case 'Cat':
+                            $query->where('category_code', 'LIKE', "$value%");
+                            break;
+                        case 'Status':
+                            $query->where('event_name.name', 'LIKE', "$value%");
+                            break;
+                        case 'Status_date':
+                            $query->where('status.event_date', 'LIKE', "$value%");
+                            break;
+                        case 'Client':
+                            $query->where('cli.name', 'LIKE', "$value%");
+                            break;
+                        case 'ClRef':
+                            $query->where('cli.actor_ref', 'LIKE', "$value%");
+                            break;
+                        case 'Applicant':
+                            $query->where('app.name', 'LIKE', "$value%");
+                            break;
+                        case 'Agent':
+                            $query->where('agt.name', 'LIKE', "$value%");
+                            break;
+                        case 'AgtRef':
+                            $query->where('agt.actor_ref', 'LIKE', "$value%");
+                            break;
+                        case 'Title':
+                            $query->where('classifier.value', 'LIKE', "%$value%");
+                            break;
+                        case 'Inventor1':
+                            $query->where('inv.name', 'LIKE', "$value%");
+                            break;
+                        case 'Filed':
+                            $query->where('fil.event_date', 'LIKE', "$value%");
+                            break;
+                        case 'FilNo':
+                            $query->where('fil.detail', 'LIKE', "$value%");
+                            break;
+                        case 'Published':
+                            $query->where('pub.event_date', 'LIKE', "$value%");
+                            break;
+                        case 'PubNo':
+                            $query->where('pub.detail', 'LIKE', "$value%");
+                            break;
+                        case 'Granted':
+                            $query->where('grt.event_date', 'LIKE', "$value%");
+                            break;
+                        case 'GrtNo':
+                            $query->where('grt.detail', 'LIKE', "$value%");
+                            break;
+                        case 'responsible':
+                            $query->whereRaw("'$value' IN (matter.responsible, del.login)");
+                            break;
+                        case 'Ctnr':
+                            if ($value) {
+                              $query->whereNull('container_id');
+                            }
+                            break;
+                        default:
+                            $query->where($key, 'LIKE', "$value%");
+                            break;
                     }
                 }
             }
         }
 
         if ($sortkey == 'caseref') {
+            $query->groupBy('matter.caseref', 'matter.container_id', 'matter.origin', 'matter.country', 'matter.type_code', 'matter.idx');
             if ($sortdir == 'desc') {
-                $query->orderByRaw('matter.caseref DESC, matter.container_id');
-            } else {
-                $query->orderByRaw('matter.caseref, matter.container_id');
+                $query->orderBy('matter.caseref', 'DESC');
             }
         } else {
-            $query->orderByRaw("$sortkey $sortdir, matter.caseref");
+            $query->groupBy($sortkey, 'matter.caseref', 'matter.container_id', 'matter.origin', 'matter.country', 'matter.type_code', 'matter.idx')
+            ->orderBy($sortkey, $sortdir);
         }
 
         if ($paginated) {
@@ -320,11 +377,6 @@ class Matter extends Model
         } else {
             $matters = $query->get();
         }
-
-        /* \Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
-          var_dump($query->sql);
-          var_dump($query->bindings);
-          }); */
 
         return $matters;
     }
