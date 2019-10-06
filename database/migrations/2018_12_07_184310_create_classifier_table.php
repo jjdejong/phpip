@@ -30,7 +30,6 @@ class CreateClassifierTable extends Migration
             $table->string('updater', 20)->nullable();
             $table->timestamps();
 
-            $table->primary(['id','matter_id']);
             $table->unique(['matter_id','type_code','lnk_matter_id'], 'uqlnk');
             $table->unique(['matter_id','type_code',DB::raw('value(10)')], 'uqvalue');
             $table->unique(['matter_id','type_code','value_id'], 'uqvalue_id');
