@@ -12,6 +12,7 @@ class ActorRoleTableSeeder extends Seeder
     public function run()
     {
         require 'actor_role.php';
+
         DB::table('actor_role')->insert($actor_role);        
     }
 }

@@ -12,6 +12,10 @@ class EventNameTableSeeder extends Seeder
     public function run()
     {
         require 'event_name.php';
-        App\EventName::create($event_name);
+        
+        $table = new  App\EventName();
+        foreach($event_name as $line) {
+            $table->insert($line);
+        }
     }
 }

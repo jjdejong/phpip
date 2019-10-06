@@ -13,7 +13,10 @@ class MatterCategoryTableSeeder extends Seeder
     {
         require 'matter_category.php';
         Schema::disableForeignKeyConstraints();
-        App\Category::create($matter_category);
+        $table = new  App\Category();
+        foreach($matter_category as $line) {
+            $table->insert($line);
+        }
         Schema::enableForeignKeyConstraints();
     }
 }
