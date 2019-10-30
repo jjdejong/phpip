@@ -158,8 +158,8 @@
             {{ date_format(date_create($task->due_date), 'd/m/Y') }}
           </div>
           @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
-          <div class="col-2 text-warning">
-            {{ date_format(date_create($task->due_date), 'd/m/Y') }}
+          <div class="col-2">
+            <font color="purple">{{ date_format(date_create($task->due_date), 'd/m/Y') }}</font>
           </div>
           @else
           <div class="col-2">
@@ -238,8 +238,8 @@
             {{ date_format(date_create($task->due_date), 'd/m/Y') }}
           </div>
           @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
-          <div class="col-2 text-warning">
-            {{ date_format(date_create($task->due_date), 'd/m/Y') }}
+          <div class="col-2">
+            <font color="purple">{{ date_format(date_create($task->due_date), 'd/m/Y') }}</font>
           </div>
           @else
           <div class="col-2">
