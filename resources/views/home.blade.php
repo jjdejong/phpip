@@ -84,8 +84,8 @@
             {{ $group->urgent_date }}
           </div>
           @elseif ($group->posix_urgent_date < date('Y-m-d', strtotime("+1 week")))
-          <div class="col-3 text-warning">
-            {{ $group->urgent_date }}
+          <div class="col-3">
+            <font color="purple">{{ $group->urgent_date }}</font>
           </div>
           @else
           <div class="col-3">
