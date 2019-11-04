@@ -1,5 +1,5 @@
 /* Run this script on an existing schema */
-
+SET SESSION sql_mode ='';
 -- Make actor table compatible with Laravel authentication
 ALTER TABLE `actor`
 CHANGE COLUMN `password` `password` VARCHAR(60) DEFAULT NULL;
@@ -268,3 +268,52 @@ VIEW `matter_classifiers` AS
   UPDATE matter_type set updated=NULL where updated like '0000-%';
   UPDATE task set updated=NULL where updated like '0000-%';
   UPDATE task_rules set updated=NULL where updated like '0000-%';
+  
+  -- Create additional tables required by Laravel
+CREATE TABLE IF NOT EXISTS `password_resets` (
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  KEY `password_resets_email_index` (`email`)
+);
+
+CREATE TABLE IF NOT EXISTS `migrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+INSERT INTO `migrations` (`id`,`migration`,`batch`) VALUES (1,'2014_10_12_100000_create_password_resets_table',1),
+(2,'2018_12_07_184310_create_actor_role_table',1),
+(3,'2018_12_07_184310_create_actor_table',1),
+(4,'2018_12_07_184310_create_classifier_table',1),
+(5,'2018_12_07_184310_create_classifier_type_table',1),
+(6,'2018_12_07_184310_create_classifier_value_table',1),
+(7,'2018_12_07_184310_create_country_table',1),
+(8,'2018_12_07_184310_create_default_actor_table',1),
+(9,'2018_12_07_184310_create_event_name_table',1),
+(10,'2018_12_07_184310_create_event_table',1),
+(11,'2018_12_07_184310_create_matter_actor_lnk_table',1),
+(12,'2018_12_07_184310_create_matter_category_table',1),
+(13,'2018_12_07_184310_create_matter_table',1),
+(14,'2018_12_07_184310_create_matter_type_table',1),
+(15,'2018_12_07_184310_create_task_rules_table',1),
+(16,'2018_12_07_184310_create_task_table',1),
+(17,'2018_12_07_184312_add_foreign_keys_to_actor_table',1),
+(18,'2018_12_07_184312_add_foreign_keys_to_classifier_table',1),
+(19,'2018_12_07_184312_add_foreign_keys_to_classifier_type_table',1),
+(20,'2018_12_07_184312_add_foreign_keys_to_classifier_value_table',1),
+(21,'2018_12_07_184312_add_foreign_keys_to_default_actor_table',1),
+(22,'2018_12_07_184312_add_foreign_keys_to_event_name_table',1),
+(23,'2018_12_07_184312_add_foreign_keys_to_event_table',1),
+(24,'2018_12_07_184312_add_foreign_keys_to_matter_actor_lnk_table',1),
+(25,'2018_12_07_184312_add_foreign_keys_to_matter_category_table',1),
+(26,'2018_12_07_184312_add_foreign_keys_to_matter_table',1),
+(27,'2018_12_07_184312_add_foreign_keys_to_task_rules_table',1),
+(28,'2018_12_07_184312_add_foreign_keys_to_task_table',1),
+(29,'2018_12_08_000109_add_trigger',1),
+(30,'2018_12_08_002558_create_views_and_functions',1),
+(31,'2019_03_07_171752_create_procedure_recalculate_tasks',1),
+(32,'2019_03_07_171910_create_procedure_recreate_tasks',1),
+(33,'2019_03_07_171939_create_procedure_update_expired',1);
