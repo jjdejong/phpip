@@ -10,6 +10,7 @@ class ActorPivot extends Pivot
     protected $table = 'matter_actor_lnk';
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
     protected $guarded = ['id', 'creator', 'created_at', 'updated_at', 'updater'];
+    protected $touches = ['matter'];
 
     // use \Venturecraft\Revisionable\RevisionableTrait;
     // protected $revisionEnabled = true;

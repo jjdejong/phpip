@@ -11,6 +11,7 @@ class Task extends Model
     protected $table = 'task';
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
     protected $guarded = ['id', 'creator', 'created_at', 'updated_at', 'updater'];
+    protected $touches = ['matter'];
 
     // use \Venturecraft\Revisionable\RevisionableTrait;
     // protected $revisionEnabled = true;
@@ -26,6 +27,10 @@ class Task extends Model
     public function trigger()
     {
         return $this->belongsTo('App\Event', 'trigger_id');
+    }
+
+    public function matter() {
+        return $this->hasOneThrough('App\Matter', 'App\Event', 'id', 'id', 'trigger_id', 'matter_id');
     }
 
     public static function getUsersOpenTaskCount()

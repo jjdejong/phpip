@@ -9,6 +9,7 @@ class Classifier extends Model
     protected $table = 'classifier';
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
     protected $guarded = ['id', 'creator', 'created_at', 'updated_at', 'updater'];
+    protected $touches = ['matter'];
 
     // use \Venturecraft\Revisionable\RevisionableTrait;
     // protected $revisionEnabled = true;

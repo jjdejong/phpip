@@ -9,6 +9,7 @@ class Event extends Model
     protected $table = 'event';
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
     protected $guarded = ['id', 'creator', 'created_at', 'updated_at', 'updater'];
+    protected $touches = ['matter'];
 
     // use \Venturecraft\Revisionable\RevisionableTrait;
     // protected $revisionEnabled = true;
@@ -17,7 +18,7 @@ class Event extends Model
     // protected $historyLimit = 500; //Maintain a maximum of 500 changes at any point of time, while cleaning up old revisions.
 
     public function info() {
-        return $this->belongsTo('App\EventName', 'code');
+        return $this->hasOne('App\EventName', 'code', 'code');
     }
 
     public function matter() {
