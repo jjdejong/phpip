@@ -9,6 +9,7 @@ class Country extends Model {
     protected $table = 'country';
     protected $primaryKey = 'iso';
     public $incrementing = false;
+    protected $keyType = 'string';
     public $timestamps = false;
     protected $hidden = ['name_DE', 'name_FR', 'iso3', 'numcode'];
 

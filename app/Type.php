@@ -9,6 +9,7 @@ class Type extends Model
     protected $table = 'matter_type';
     protected $primaryKey = 'code';
     public $incrementing = false;
+    protected $keyType = 'string';
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
     protected $guarded = ['code', 'creator', 'created_at', 'updated_at', 'updater'];
 }
