@@ -12,8 +12,8 @@ class CreateProcedureRecalculateTasks extends Migration
      */
     public function up()
     {
-        DB::unprepared(
-          "CREATE DEFINER=`root`@`localhost` PROCEDURE `recalculate_tasks`(IN Pmatter_id int, IN Ptrig_code char(5))
+        DB::unprepared("CREATE
+          PROCEDURE `recalculate_tasks`(IN Pmatter_id int, IN Ptrig_code char(5))
           proc: BEGIN
           	DECLARE vtrigevent_date, vdue_date, vbase_date DATE DEFAULT NULL;
           	DECLARE vtask_id, vtrigevent_id, vdays, vmonths, vyears, vrecurring, vpta INT DEFAULT NULL;

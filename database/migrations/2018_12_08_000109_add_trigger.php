@@ -12,17 +12,17 @@ class AddTrigger extends Migration
      */
     public function up()
     {   // For actor
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `actor_creator_log` BEFORE INSERT ON `actor` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `actor_creator_log` BEFORE INSERT ON `actor` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `actor_updater_log` BEFORE UPDATE ON `actor` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1);");
+        DB::unprepared("CREATE TRIGGER `actor_updater_log` BEFORE UPDATE ON `actor` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1);");
 
         // For actor_role
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `arole_create_log` BEFORE INSERT ON `actor_role` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `arole_create_log` BEFORE INSERT ON `actor_role` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `arole_modify_log` BEFORE UPDATE ON `actor_role` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `arole_modify_log` BEFORE UPDATE ON `actor_role` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
 
         // For classifier
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `classifier_BEFORE_INSERT` BEFORE INSERT ON `classifier` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `classifier_BEFORE_INSERT` BEFORE INSERT ON `classifier` FOR EACH ROW
           BEGIN
           	SET NEW.creator=SUBSTRING_INDEX(USER(),'@',1);
               IF NEW.type_code = 'TITEN' THEN

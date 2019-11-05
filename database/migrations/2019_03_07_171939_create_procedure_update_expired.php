@@ -12,8 +12,8 @@ class CreateProcedureUpdateExpired extends Migration
      */
     public function up()
     {
-        DB::unprepared(
-          "CREATE DEFINER=`root`@`localhost` PROCEDURE `update_expired`()
+        DB::unprepared("CREATE
+          PROCEDURE `update_expired`()
           BEGIN
           	DECLARE vmatter_id INTEGER;
             DECLARE vexpire_date DATE;
