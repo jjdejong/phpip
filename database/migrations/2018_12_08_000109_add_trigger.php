@@ -33,20 +33,20 @@ class AddTrigger extends Migration
           END;"
         );
 
-        DB::unprepared( "CREATE DEFINER = `phpip`@`localhost` TRIGGER `classifier_updater_log` BEFORE UPDATE ON `classifier` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1);");
+        DB::unprepared( "CREATE TRIGGER `classifier_updater_log` BEFORE UPDATE ON `classifier` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1);");
 
         // For classifier_type
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `ctype_creator_log` BEFORE INSERT ON `classifier_type` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `ctype_creator_log` BEFORE INSERT ON `classifier_type` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `ctype_updater_log` BEFORE UPDATE ON `classifier_type` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1);");
+        DB::unprepared("CREATE TRIGGER `ctype_updater_log` BEFORE UPDATE ON `classifier_type` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1);");
 
         // For classifier value
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `cvalue_creator_log` BEFORE INSERT ON `classifier_value` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `cvalue_creator_log` BEFORE INSERT ON `classifier_value` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `cvalue_updater_log` BEFORE UPDATE ON `classifier_value` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `cvalue_updater_log` BEFORE UPDATE ON `classifier_value` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
 
         // For event
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `event_before_insert` BEFORE INSERT ON `event` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `event_before_insert` BEFORE INSERT ON `event` FOR EACH ROW
           BEGIN
           	DECLARE vdate DATE DEFAULT NULL;
 
@@ -63,7 +63,7 @@ class AddTrigger extends Migration
           END"
         );
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW
           trig: BEGIN
             DECLARE vdue_date, vbase_date, vexpiry, tmp_date DATE DEFAULT NULL;
             DECLARE vcontainer_id, vid_uqtask, vrule_id, vdays, vmonths, vyears, vpta, vid, vcli_ann_agt INT DEFAULT NULL;
@@ -216,7 +216,7 @@ class AddTrigger extends Migration
           END trig"
         );
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `event_before_update` BEFORE UPDATE ON `event` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `event_before_update` BEFORE UPDATE ON `event` FOR EACH ROW
           BEGIN
           	DECLARE vdate DATE DEFAULT NULL;
 
@@ -229,7 +229,7 @@ class AddTrigger extends Migration
           END"
         );
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW
           trig: BEGIN
             DECLARE vdue_date, vbase_date DATE DEFAULT NULL;
             DECLARE vtask_id, vdays, vmonths, vyears, vrecurring, vpta, vid INT DEFAULT NULL;
@@ -316,7 +316,7 @@ class AddTrigger extends Migration
           END trig"
         );
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `event_after_delete` AFTER DELETE ON `event` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `event_after_delete` AFTER DELETE ON `event` FOR EACH ROW
           BEGIN
           	IF OLD.code IN ('PRI','PFIL') THEN
           		CALL recalculate_tasks(OLD.matter_id, 'FIL');
@@ -337,11 +337,11 @@ class AddTrigger extends Migration
         );
 
         // For event_name
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `ename_before_insert` BEFORE INSERT ON `event_name` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `ename_before_insert` BEFORE INSERT ON `event_name` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `ename_before_update` BEFORE UPDATE ON `event_name` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `ename_before_update` BEFORE UPDATE ON `event_name` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `ename_after_update` AFTER UPDATE ON `event_name` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `ename_after_update` AFTER UPDATE ON `event_name` FOR EACH ROW
           BEGIN
           	IF IFNULL(NEW.default_responsible,0) != IFNULL(OLD.default_responsible,0) THEN
           		UPDATE task SET assigned_to=NEW.default_responsible
@@ -351,9 +351,9 @@ class AddTrigger extends Migration
         );
 
         // For matter
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `matter_before_insert` BEFORE INSERT ON `matter` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `matter_before_insert` BEFORE INSERT ON `matter` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `matter_after_insert` AFTER INSERT ON `matter` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `matter_after_insert` AFTER INSERT ON `matter` FOR EACH ROW
           BEGIN
           	DECLARE vactorid, vshared INT DEFAULT NULL;
           	DECLARE vrole CHAR(5) DEFAULT NULL;
@@ -370,7 +370,7 @@ class AddTrigger extends Migration
           	END IF;
           END");
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `matter_before_update` BEFORE UPDATE ON `matter` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `matter_before_update` BEFORE UPDATE ON `matter` FOR EACH ROW
           BEGIN
             set new.updater=SUBSTRING_INDEX(USER(),'@',1);
 
@@ -381,7 +381,7 @@ class AddTrigger extends Migration
           END"
         );
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `matter_after_update` AFTER UPDATE ON `matter` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `matter_after_update` AFTER UPDATE ON `matter` FOR EACH ROW
           BEGIN
             IF NEW.responsible != OLD.responsible THEN
             	UPDATE task JOIN event ON (task.trigger_id=event.id AND event.matter_id=NEW.id) SET task.assigned_to=NEW.responsible
@@ -391,9 +391,9 @@ class AddTrigger extends Migration
         );
 
         // For matter_actor_lnk
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `malnk_before_insert` BEFORE INSERT ON `matter_actor_lnk` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `malnk_before_insert` BEFORE INSERT ON `matter_actor_lnk` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `malnk_after_insert` AFTER INSERT ON `matter_actor_lnk` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `malnk_after_insert` AFTER INSERT ON `matter_actor_lnk` FOR EACH ROW
           BEGIN
           	DECLARE vcli_ann_agt INT DEFAULT NULL;
 
@@ -413,31 +413,31 @@ class AddTrigger extends Migration
           END"
         );
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `malnk_before_update` BEFORE UPDATE ON `matter_actor_lnk` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)" );
+        DB::unprepared("CREATE TRIGGER `malnk_before_update` BEFORE UPDATE ON `matter_actor_lnk` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)" );
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `matter_actor_lnk_AFTER_UPDATE` AFTER UPDATE ON `matter_actor_lnk` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `matter_actor_lnk_AFTER_UPDATE` AFTER UPDATE ON `matter_actor_lnk` FOR EACH ROW
           BEGIN
           	UPDATE matter SET updated = Now(), updater = SUBSTRING_INDEX(USER(),'@',1) WHERE matter.id=NEW.matter_id;
           END"
         );
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `matter_actor_lnk_AFTER_DELETE` AFTER DELETE ON `matter_actor_lnk` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `matter_actor_lnk_AFTER_DELETE` AFTER DELETE ON `matter_actor_lnk` FOR EACH ROW
           BEGIN
           	UPDATE matter SET updated = Now(), updater = SUBSTRING_INDEX(USER(),'@',1) WHERE matter.id=OLD.matter_id;
           END"
         );
 
         // For matter_category
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `mcateg_creator_log` BEFORE INSERT ON `matter_category` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `mcateg_creator_log` BEFORE INSERT ON `matter_category` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `mcateg_updater_log` BEFORE UPDATE ON `matter_category` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `mcateg_updater_log` BEFORE UPDATE ON `matter_category` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `mtype_creator_log` BEFORE INSERT ON `matter_type` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `mtype_creator_log` BEFORE INSERT ON `matter_type` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `mtype_updater_log` BEFORE UPDATE ON `matter_type` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `mtype_updater_log` BEFORE UPDATE ON `matter_type` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
 
         // For tasks
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `task_before_insert` BEFORE INSERT ON task FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `task_before_insert` BEFORE INSERT ON task FOR EACH ROW
           BEGIN
           	DECLARE vflag BOOLEAN;
           	DECLARE vresp CHAR(16);
@@ -459,7 +459,7 @@ class AddTrigger extends Migration
           END"
         );
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW
           BEGIN
           	SET NEW.updater=SUBSTRING_INDEX(USER(),'@',1);
           	IF NEW.done_date IS NOT NULL AND OLD.done_date IS NULL AND OLD.done = 0 THEN
@@ -481,11 +481,11 @@ class AddTrigger extends Migration
         );
 
         // For task_rules
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `trules_before_insert` BEFORE INSERT ON `task_rules` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `trules_before_insert` BEFORE INSERT ON `task_rules` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `trules_before_update` BEFORE UPDATE ON `task_rules` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
+        DB::unprepared("CREATE TRIGGER `trules_before_update` BEFORE UPDATE ON `task_rules` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE DEFINER = `phpip`@`localhost` TRIGGER `trules_after_update` AFTER UPDATE ON `task_rules` FOR EACH ROW
+        DB::unprepared("CREATE TRIGGER `trules_after_update` AFTER UPDATE ON `task_rules` FOR EACH ROW
           BEGIN
           	IF (NEW.fee != OLD.fee OR NEW.cost != OLD.cost) THEN
           		UPDATE task SET fee=NEW.fee, cost=NEW.cost WHERE rule_used=NEW.id AND done=0;
