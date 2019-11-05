@@ -1,6 +1,4 @@
 #!/bin/bash
-# Uncomment if user should not be prompted for a MySQL password
-# export DEBIAN_FRONTEND=noninteractive
 echo "
 ********************************
 Updating Ubuntu
@@ -29,6 +27,10 @@ cp .env.example .env
 php artisan key:generate
 php artisan config:clear
 cp doc/phpip.conf /etc/apache2/sites-enabled/
+chmod -R g+rw storage
+chmod -R g+rw bootstrap/cache
+chgrp -R www-data storage
+chgrp -R www-data bootstrap/cache
 service apache2 reload
 echo "
 ********************************
