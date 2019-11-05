@@ -61,7 +61,7 @@ class UpdateTables extends Migration
       }
 
       DB::unprepared("DROP TRIGGER IF EXISTS `event_after_insert`");
-      DB::unprepared("CREATE DEFINER = `root`@`localhost` TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW
+      DB::unprepared("CREATE TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW
         trig: BEGIN
           DECLARE vdue_date, vbase_date, vexpiry, tmp_date DATE DEFAULT NULL;
           DECLARE vcontainer_id, vid_uqtask, vrule_id, vdays, vmonths, vyears, vpta, vid, vcli_ann_agt INT DEFAULT NULL;
@@ -209,7 +209,7 @@ class UpdateTables extends Migration
       );
 
       DB::unprepared("DROP TRIGGER IF EXISTS `event_after_update`");
-      DB::unprepared("CREATE DEFINER = `root`@`localhost` TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW
+      DB::unprepared("CREATE TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW
         trig: BEGIN
           DECLARE vdue_date, vbase_date DATE DEFAULT NULL;
           DECLARE vtask_id, vdays, vmonths, vyears, vrecurring, vpta, vid INT DEFAULT NULL;
@@ -293,7 +293,7 @@ class UpdateTables extends Migration
       );
 
       DB::unprepared("DROP TRIGGER IF EXISTS `event_after_delete`");
-      DB::unprepared("CREATE DEFINER = `root`@`localhost` TRIGGER `event_after_delete` AFTER DELETE ON `event` FOR EACH ROW
+      DB::unprepared("CREATE TRIGGER `event_after_delete` AFTER DELETE ON `event` FOR EACH ROW
         BEGIN
           IF OLD.code IN ('PRI','PFIL') THEN
             CALL recalculate_tasks(OLD.matter_id, 'FIL');
@@ -312,7 +312,7 @@ class UpdateTables extends Migration
       );
 
       DB::unprepared("DROP TRIGGER IF EXISTS `malnk_after_insert`");
-      DB::unprepared("CREATE DEFINER = `root`@`localhost` TRIGGER `malnk_after_insert` AFTER INSERT ON `matter_actor_lnk` FOR EACH ROW
+      DB::unprepared("CREATE TRIGGER `malnk_after_insert` AFTER INSERT ON `matter_actor_lnk` FOR EACH ROW
         BEGIN
           DECLARE vcli_ann_agt INT DEFAULT NULL;
 
