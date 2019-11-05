@@ -1,5 +1,0 @@
-The software is under development, so many changes can occur. To stay up to date, dont forget to regularly pull the new commits by running:
-* `git pull` and
-* `composer install`
-
-The database structure may be updated too, so you need to apply the new migration scripts in `database/migrations`. Just run `php artisan migrate` in the root folder, which will apply the latest scripts.

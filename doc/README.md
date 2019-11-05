@@ -1,42 +1,160 @@
-# Introduction #
+The back-end for operating is a web server (Apache, PHP, MySQL, and a virtual host setup pointing to the `public` sub-folder...). You need MySQL version 5.7 or greater (or MariaDB 10.2 or greater), supporting virtual columns.
 
-phpIP is a web tool for managing an IP rights portfolio, especially patents. It is intended to satisfy most needs of an IP law firm. The tool was designed to be flexible and simple to use. It is based on an Apache-MySQL-PHP framework.
+These instructions are provided for Ubuntu Server editions. They have been tested with 18.04 (Bionic). You may need to adapt them for other Linux distributions.
 
+_NOTE that the user interface has only been developed and tested with recent FireFox releases (60 is known to not work). There may be artifacts with other web browsers - share your issues with us._
 
-There are many IP rights management tools out there. They are all proprietary and pretty expensive. It is not the cost, in fact, that led us to designing our own system, because the design resources we spent could equate to the cost of a couple of years license and maintenance fees of existing systems. We found that existing systems are overkill for our needs, because they are designed to satisfy the needs of a majority – hence they have more features than what each individual user needs, so they are very complex to use, yet not all specific needs of the individual user are satisfied. So the user needs to adapt to the system, whereas it should be the other way round.
+# 0. Automated installation #
 
-Since we are patent attorneys and don't have resources for selling and maintaining our software, yet would like others to benefit from it, and hopefully contribute, we decided to open source it. This is an important step in reaching the goal of creating a tool adapted to the user's specific needs. We also designed phpIP to be extremely flexible, so that, hopefully, most users will be able to configure it (and not redesign it) to fit their needs.
+A fully unattended installation script is available for a _fresh_ install of a vanilla Ubuntu Bionic server. Download it on your server, make it executable, and run it with sudo:
+```
+wget https://github.com/jjdejong/phpip-v2/raw/master/doc/install-phpip-bionic.sh
+chmod a+x install-phpip-bionic.sh
+sudo ./install-phpip-bionic.sh 
+```
+You may then skip the rest of the below instructions up to the "Upgrading" section. If something doesn't work, check the below details.
 
-# Basic structure of phpIP #
+# 1. Installing the required packages #
 
-## “Micro-kernel” structure ##
+Make sure your software is up to date and you have the universe repository enabled. In a console, type:
+```
+sudo add-apt-repository universe
+sudo apt update
+sudo apt upgrade
+```
 
-The database is articulated around a central table called _“matter”_ (such as patents, trademarks or designs), that contains minimal information for each matter (essentially a category, a case reference, a country, and an expire date). Information that will be the substance of a matter is freely linked to each matter, in any number, from additional tables: _actors, events, tasks,_ and _classifiers_. We found that anything useful in a matter fits in one of these four tables.
+## 1.1. Apache, PHP and MySQL #
 
-**Actors** are any person or company involved in a matter (applicants, inventors, client, agents...). Each actor can be linked to a matter with any of several roles, and a same actor can be linked to a matter with multiple roles, for instance an inventor can also be an applicant. A client (company) can also be an applicant. All variations are possible.
+Install these and other needed dependencies (Git and Composer) as follows:
+    
+In a console, type:
 
-The roles are contained in the _actor\_role table_.
+```
+sudo apt install lamp-server^ php7.2-simplexml php7.2-mbstring unzip git-core composer
+```
+Create the database `phpip` accessible with all privileges by user `phpip` with password `phpip` (change that in production!):
+```
+echo "CREATE DATABASE phpip; GRANT ALL PRIVILEGES ON phpip.* TO phpip@localhost IDENTIFIED BY 'phpip';" | sudo mysql
+```
+(This command assumes that mysql has been freshly installed with default options, where no password is required for root when running mysql with sudo.)
 
-Actors are linked to matters through a link table called _matter\_actor\_lnk_. This link table contains additional information about the specific link, such as the actor's role, his reference (for clients and agents), his company, a date, his order of display among other actors with the same role...
+## 1.2. phpIP #
 
-**Events** are related to the history of the matter and show how the matter is progressing. They basically have a name and a date. They can be a link to another matter if that other matter is involved in the progress of the current matter (see more details below).
+The code can be installed anywhere with the virtual server approach, but it makes sense to install it in `/var/www/html/phpip`. Create the folder and change its owner to yourself so that you don't need to use `sudo` to work there:
+```
+sudo mkdir /var/www/html/phpip
+sudo chown <your login> /var/www/html/phpip
+```
+Clone the `phpip-v2` Git repository to the folder `/var/www/html/phpip`:
+```
+git clone https://github.com/jjdejong/phpip-v2.git /var/www/html/phpip
+```
+Install Laravel's dependencies:
+```
+cd /var/www/html/phpip
+composer install
+```
+Create an `.env` file with your database credentials. You can copy the provided `.env.example` file (and tailor it later):
+```
+cp .env.example .env
+```
+Generate a fresh Laravel configuration:
+```
+php artisan key:generate
+php artisan config:clear
+```
+Set some write permissions for the web server:
+```
+chmod -R g+rw storage
+chmod -R g+rw bootstrap/cache
+chgrp -R www-data storage
+chgrp -R www-data bootstrap/cache
+```
 
-**Tasks** are triggered by specific events. They have a name, a deadline, a “done” flag, and an optional “done date”. For instance, in a patent, an event tracking an “examiner action” issued by a patent office will trigger a “Response” task having a deadline three months after the examiner action date.
+# 2. Configuring Apache #
 
-Tasks can be added manually to events. Some tasks are created automatically based on information in a _task\_rules table_, when corresponding trigger events are entered for the matter.
+## 2.1 Quick start and check #
 
-**Classifiers** are other pieces of useful information that do not correspond to the above, such as keywords, business units, patent classification... and also links to related matters, for instance patents around a same invention. They have a type and a value, or a link to another matter. The value can be free-text stored in the _classifier_ table itself (a value that is specific to the matter and not reused in other matters), or an index in a _classifier\_value_ table containing values that can be used multiple times (such as a list of products or business units).
+To run a quick test, point your browser to `http://localhost/phpip/public`.
 
-## No duplication of information ##
+You should see a cover page with a login link. You won't get past that, because no tables or users have been installed yet in MySQL.
 
-One key feature of phpIP is that any piece of information, even if it is used in multiple matters, say patents, is stored in one place only. We use two mechanisms for that:
+## 2.2 Virtual host in Apache #
 
-**Linked events**
+This is maybe the most complex configuration section.
 
-For instance, the priority date of a second patent is the filing date of a first patent. In traditional systems, this date is copied into a record related to the second patent. What if the filing date of the first patent is changed? Well, the system or user needs to make sure the date is updated in the second patent. In phpIP, the priority date of the second patent is an event linked to the filing event of the first patent. If the filing date of the first patent is changed, that change is automatically reflected in the priority event of the second patent, and tasks that rely on this date are updated.
+  * In the console, type:
+```
+sudo nano /etc/apache2/sites-enabled/phpip.conf
+```
+  * Paste the following in nano's edit window:
+```
+<VirtualHost *:80>
+    ServerName phpip.local
+    DocumentRoot /var/www/html/phpip/public
+    ErrorLog /var/log/phpip-apache2/error.log
+    CustomLog /var/log/apache2/phpip-access.log combined
+</VirtualHost>
+<Directory /var/www/html/phpip/public>
+    Options Indexes MultiViews FollowSymLinks
+    DirectoryIndex index.php
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+</Directory>
+```
+Enable mod\_rewrite in Apache:
+```
+sudo a2enmod rewrite
+```
+Save and reload Apache:
+```
+sudo systemctl restart apache2
+```
+You then need to create a DNS entry mapping name "phpip.local", i.e. the value of parameter **ServerName** in the above **VirtualHost** definition, to the IP address of your server. If this is obscure to you, the simplest is to add the following line in the "hosts" file of the workstations that will access phpIP:
+```
+<your server's IP address>    phpip.local
+```
+On Windows workstations, the "hosts" file is usually in:
+<font color='blue'>c:\windows\system32\drivers\etc\hosts</font>
 
-**Containers for shared information**
+On Macs and Linux workstations, it is located in <font color='blue'>/etc/hosts</font>.
 
-In phpIP, the first matter in a series of related matters, for instance the first filed patent in a family, is a container for information common to all patents in the family, for instance client, inventors and applicants. Classifiers are also shared. Each subsequent created matter in the family shares this information from the container without duplication. If the information needs to be changed, it is changed in one place for all family members. The user may configure what type of information is shared by default and he has the option to change that as he adds the information.
+Now point your browser to http://phpip.local.
 
-These features make queries for displaying all data related to a matter more complex, but this is all handled by the user interface, so it is transparent to the end user. You will need to be more careful if you intend to write advanced queries but we have provided some view tables that list all the data related to each matter (and hence make the linked event and container techniques transparent).
+You should see the cover page and login link again. You still won't get past that, because you have no database yet.
+
+# 3. Database
+
+## 3.1 Starting a new database
+
+* Run `php artisan migrate --seed`
+This creates a blank database with basic configuration. You're ready to go with the credentials `phpipuser:changeme`.
+
+* For playing around with sample data, further run `php artisan db:seed --class=SampleSeeder`.
+
+## 3.2 Migrating an existing v1 installation
+
+### Migrate the v1 database
+
+* Backup the `phpip` MySQL schema.
+* Upgrade the `phpip` schema with the script provided in `/database/migrations/sql`.
+* Apply further updates to the tables using Laravel's "migration" process, i.e. run `php artisan migrate` from the root folder - this will apply any new script present in `database/migrations` since last running that command.
+
+### Migrate the passwords
+
+You need to update the `password` field of your users. Logins are based on the `login` and `password` fields in the `actor` table only (they are no longer replicated in the MySQL users table). Authorizations will be implemented through the `default_role` field of the users.
+
+The passwords are hashed with _bcrypt_ instead of _md5_, and don't use a user-provided salt. So you need to change all the md5+salt passwords of v1 to _bcrypt_ ones. 
+
+* **Using the password reset functionality of the UI:** make sure your users have emails and configure your mail service in the `.env` file. If you have no mail service, set `MAIL_DRIVER=log`. In the login screen, use the "Reset password" function. A reset mail will be sent with a link to change the password. If you have no mail service the reset mail body is logged in `/storage/logs/<latest file>`. Copy the reset link you find there in your browser, and you're done.
+* **Or changing the password hashes manually** in the `actor` table with a bcrypt hash. You can generate a bcrypt hash using the command `php -r 'echo password_hash("your password",PASSWORD_BCRYPT) . "\n";'`.
+
+To fire a quick test, run `php artisan serve`, and point your browser to http://localhost:8000.
+
+## 3.3 Upgrading
+The software is under development, so many changes can occur. To stay up to date, dont forget to regularly pull the new commits by running:
+* `git pull` and
+* `composer install`
+
+The database structure may be updated too, so you need to apply the new migration scripts in `database/migrations`. Just run `php artisan migrate` in the root folder, which will apply the latest scripts.
