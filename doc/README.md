@@ -1,6 +1,6 @@
 # Introduction #
 
-phpIP is a web tool developed by [Omnipat](http://www.omnipat.fr/?lang=en) for managing an IP rights portfolio, especially patents. It is intended to satisfy most needs of an IP law firm. The tool was designed to be flexible and simple to use. It is based on an Apache-MySQL-PHP framework.
+phpIP is a web tool for managing an IP rights portfolio, especially patents. It is intended to satisfy most needs of an IP law firm. The tool was designed to be flexible and simple to use. It is based on an Apache-MySQL-PHP framework.
 
 
 There are many IP rights management tools out there. They are all proprietary and pretty expensive. It is not the cost, in fact, that led us to designing our own system, because the design resources we spent could equate to the cost of a couple of years license and maintenance fees of existing systems. We found that existing systems are overkill for our needs, because they are designed to satisfy the needs of a majority – hence they have more features than what each individual user needs, so they are very complex to use, yet not all specific needs of the individual user are satisfied. So the user needs to adapt to the system, whereas it should be the other way round.
@@ -40,5 +40,3 @@ For instance, the priority date of a second patent is the filing date of a first
 In phpIP, the first matter in a series of related matters, for instance the first filed patent in a family, is a container for information common to all patents in the family, for instance client, inventors and applicants. Classifiers are also shared. Each subsequent created matter in the family shares this information from the container without duplication. If the information needs to be changed, it is changed in one place for all family members. The user may configure what type of information is shared by default and he has the option to change that as he adds the information.
 
 These features make queries for displaying all data related to a matter more complex, but this is all handled by the user interface, so it is transparent to the end user. You will need to be more careful if you intend to write advanced queries but we have provided some view tables that list all the data related to each matter (and hence make the linked event and container techniques transparent).
-
-[Jean J. de Jong](http://www.omnipat.fr/management-team/jean-jacques-de-jong/?lang=en)

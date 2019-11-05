@@ -24,11 +24,12 @@ Getting phpIP from GitHub
 cd /var/www/html
 git clone https://github.com/jjdejong/phpip-v2.git phpip
 cd phpip
+composer install
+cp .env.example .env
 php artisan key:generate
 php artisan config:clear
 cp doc/phpip.conf /etc/apache2/sites-enabled/
 service apache2 reload
-cp .env.example .env
 echo "
 ********************************
 Installing database
