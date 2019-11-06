@@ -119,7 +119,8 @@ class RuleController extends Controller
             'days' => 'numeric',
             'fee' => 'nullable|numeric'
         ]);
-        return Rule::create($request->except(['_token', '_method']));
+        Rule::create($request->except(['_token', '_method']));
+        return response()->json(['redirect' => route('rule.index')]);
     }
 
     /**

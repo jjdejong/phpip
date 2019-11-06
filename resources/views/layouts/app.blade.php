@@ -255,11 +255,11 @@
           break;
 
         case 'createEventNameSubmit':
-          submitModal2Form('/eventname', createEventForm);
+          submitModalForm('/eventname', createEventForm);
           break;
 
         case 'createRuleSubmit':
-          submitModal2Form('/rule', createRuleForm);
+          submitModalForm('/rule', createRuleForm);
           break;
 
         case 'deleteActor':
@@ -517,24 +517,6 @@
             location.href = data.redirect;
           } else {
             fetchInto(contentSrc, ajaxModal.querySelector('.modal-body'));
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
-
-    var submitModal2Form = (target, Form) => {
-      formData = new FormData(Form);
-      params = new URLSearchParams(formData);
-      fetchREST(target, 'POST', params)
-        .then(data => {
-          if (data.errors) {
-            processSubmitErrors(data.errors, Form);
-            zoneAlert.innerHTML = data.message;
-            zoneAlert.classList.add('alert-danger');
-          } else {
-            location.href = document.referrer;
           }
         })
         .catch(error => {

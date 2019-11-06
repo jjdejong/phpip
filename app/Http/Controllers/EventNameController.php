@@ -56,7 +56,8 @@ class EventNameController extends Controller
             'name' => 'required|max:45',
             'notes' => 'max:160'
         ]);
-        return EventName::create($request->except(['_token', '_method']));
+        EventName::create($request->except(['_token', '_method']));
+        return response()->json(['redirect' => route('eventname.index')]);
     }
 
     /**

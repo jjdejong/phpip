@@ -50,7 +50,8 @@ class ActorController extends Controller
         $request->validate([
             'name' => 'required|max:100'
         ]);
-        return Actor::create($request->except(['_token', '_method']));
+        Actor::create($request->except(['_token', '_method'])); 
+        return response()->json(['redirect' => route('actor.index')]);
     }
 
     /**
