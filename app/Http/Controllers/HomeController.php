@@ -46,7 +46,7 @@ class HomeController extends Controller
               $query->where('actor_id', $userid);
             });
         }
-        $tasks = $tasks->simplePaginate(25)->all();
+        $tasks = $tasks->simplePaginate(100)->all();
 
         // Get list of active renewals
         $renewals = Task::with(['info:code,name', 'trigger.matter:id,caseref,suffix', 'trigger.matter.client:id,actor_id'])->whereHas('trigger.matter', function ($query) {
@@ -60,7 +60,7 @@ class HomeController extends Controller
               $query->where('actor_id', $userid);
             });
         }
-        $renewals = $renewals->simplePaginate(25)->all();
+        $renewals = $renewals->simplePaginate(200)->all();
         // Count matters per categories
         $categories = Matter::getCategoryMatterCount();
         $taskscount = Task::getUsersOpenTaskCount();
