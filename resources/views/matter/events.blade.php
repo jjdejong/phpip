@@ -18,12 +18,12 @@
           <input type="hidden" name="matter_id" value="{{ $matter->id }}">
           <div class="input-group">
             <input type="hidden" name="code" value="">
-            <input type="text" class="form-control form-control-sm" name="eventName" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" data-actarget="code">
+            <input type="text" class="form-control form-control-sm" name="eventName" placeholder="Event" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" data-actarget="code">
             <input type="date" class="form-control form-control-sm" name="event_date">
-            <input type="text" class="form-control form-control-sm" name="detail">
-            <input type="text" class="form-control form-control-sm" name="notes">
+            <input type="text" class="form-control form-control-sm" name="detail" placeholder="Detail">
+            <input type="text" class="form-control form-control-sm" name="notes" placeholder="Notes">
             <input type="hidden" name="alt_matter_id" value="">
-            <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/matter/autocomplete" data-actarget="alt_matter_id">
+            <input type="text" class="form-control form-control-sm"  placeholder="Refers to" list="ajaxDatalist" data-ac="/matter/autocomplete" data-actarget="alt_matter_id">
             <div class="input-group-append">
               <button type="button" class="btn btn-primary btn-sm" id="addEventSubmit">&check;</button>
               <button type="reset" class="btn btn-outline-primary btn-sm">&times;</button>
