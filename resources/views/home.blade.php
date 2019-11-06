@@ -27,11 +27,6 @@
       </div>
 
       <div class="card-body pt-1">
-        @if (session('status'))
-        <div class="alert alert-success">
-          {{ session('status') }}
-        </div>
-        @endif
         @foreach ($categories as $group)
         <div class="row reveal-hidden">
           <div class="col-8">
@@ -260,6 +255,12 @@
     </div>
   </div>
 </div>
+
+@if (session('status'))
+<div class="alert alert-success">
+  {{ session('status') }}
+</div>
+@endif
 
 @stop
 
