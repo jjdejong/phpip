@@ -296,7 +296,7 @@ class Matter extends Model
                 if ($value != '') {
                     switch($key) {
                         case 'Ref':
-                            $query->where('caseref', 'LIKE', "$value%");
+                            $query->where(DB::raw("CONCAT(caseref, suffix)"), 'LIKE', "$value%");
                             break;
                         case 'Cat':
                             $query->where('category_code', 'LIKE', "$value%");
