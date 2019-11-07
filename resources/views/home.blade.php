@@ -30,7 +30,7 @@
         @foreach ($categories as $group)
         <div class="row reveal-hidden">
           <div class="col-8">
-            {{$group->category }}
+            <a href="/matter?Cat={{ $group->category_code }}">{{ $group->category }}</a>
           </div>
           <div class="col-3">
             {{ $group->total }}
