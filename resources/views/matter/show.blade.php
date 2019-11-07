@@ -11,7 +11,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 <div class="row card-deck mb-1">
   <div id="refsPanel" class="card border-primary col-3 p-0">
-    <div class="card-header bg-primary text-white reveal-hidden lead p-1">
+    <div class="card-header bg-primary text-white reveal-hidden lead p-1"  {!! $matter->dead ? 'style="text-decoration: line-through;"' : '' !!}>
       <a class="bg-primary text-white" href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
       ({{ $matter->category->category }})
       <a class="bg-primary text-white float-right hidden-action"
