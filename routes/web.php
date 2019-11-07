@@ -68,7 +68,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
         $term = $request->input('term');
         $results = App\EventName::select('name as value', 'code as key')
-                ->where('name', 'like', "%$term%")
+                ->where('name', 'like', "$term%")
                 ->where('is_task', $is_task);
         return $results->take(10)->get();
     });
@@ -76,7 +76,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('classifier-type/autocomplete/{main_display}', function (Request $request, $main_display) {
         $term = $request->input('term');
         $results = App\ClassifierType::select('type as value', 'code as key')
-                ->where('type', 'like', "%$term%")
+                ->where('type', 'like', "$term%")
                 ->where('main_display', $main_display)
                 ->orderBy('type');
         return $results->take(10)->get();
@@ -86,14 +86,14 @@ Route::group(['middleware' => 'auth'], function () {
         $term = $request->input('term');
         return App\User::select('name as value', 'login as key')
                         ->whereNotNull('login')
-                        ->where('name', 'like', "%$term%")
+                        ->where('name', 'like', "$term%")
                         ->take(10)->get();
     });
 
     Route::get('actor/autocomplete', function (Request $request) {
         $term = $request->input('term');
         $list = App\Actor::select('name as value', 'id as key')
-                        ->where('name', 'like', "%$term%")
+                        ->where('name', 'like', "$term%")
                         ->take(10)->get();
         if ( $list->count() < 5 ) {
           $list->push(['label' => 'Unknown. Create?', 'key' => 'create']);
@@ -104,7 +104,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('role/autocomplete', function (Request $request) {
         $term = $request->input('term');
         return App\Role::select('name as value', 'code as key', 'shareable')
-                        ->where('name', 'like', "%$term%")->get();
+                        ->where('name', 'like', "$term%")->get();
     });
 
     Route::get('country/autocomplete', function (Request $request) {
