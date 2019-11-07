@@ -311,7 +311,7 @@ class Matter extends Model
                             $query->where('cli.name', 'LIKE', "$value%");
                             break;
                         case 'ClRef':
-                            $query->where('cli.actor_ref', 'LIKE', "$value%");
+                            $query->where('clilnk.actor_ref', 'LIKE', "$value%");
                             break;
                         case 'Applicant':
                             $query->where('app.name', 'LIKE', "$value%");
@@ -320,7 +320,7 @@ class Matter extends Model
                             $query->where('agt.name', 'LIKE', "$value%");
                             break;
                         case 'AgtRef':
-                            $query->where('agt.actor_ref', 'LIKE', "$value%");
+                            $query->where('agtlnk.actor_ref', 'LIKE', "$value%");
                             break;
                         case 'Title':
                             $query->where('classifier.value', 'LIKE', "%$value%");
