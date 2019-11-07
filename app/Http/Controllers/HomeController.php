@@ -30,6 +30,7 @@ class HomeController extends Controller
         // Filters
         $MyTasks = $request->input ( 'my_tasks' );
         $MyRenewals = $request->input ( 'my_renewals' );
+        $user_dashboard = $request->user_dashboard;
 
         $userid = Auth::user()->id;
         $role = Auth::user()->default_role;
@@ -41,12 +42,6 @@ class HomeController extends Controller
         if ($MyTasks) {
             $tasks->where('assigned_to', Auth::user()->login);
         }
-        if ($role == 'CLI') {
-            $tasks->whereHas('trigger.matter.client', function ($query) use ($userid) {
-              $query->where('actor_id', $userid);
-            });
-        }
-        $tasks = $tasks->simplePaginate(100)->all();
 
         // Get list of active renewals
         $renewals = Task::with(['info:code,name', 'trigger.matter:id,caseref,suffix', 'trigger.matter.client:id,actor_id'])->whereHas('trigger.matter', function ($query) {
@@ -56,10 +51,26 @@ class HomeController extends Controller
             $renewals->where('assigned_to', Auth::user()->login);
         }
         if ($role == 'CLI') {
+            $tasks->whereHas('trigger.matter.client', function ($query) use ($userid) {
+              $query->where('actor_id', $userid);
+            });
             $renewals->whereHas('trigger.matter.client', function ($query) use ($userid) {
               $query->where('actor_id', $userid);
             });
         }
+        if ($user_dashboard) {
+          $tasks->where (function ($q) use ($user_dashboard) {
+              $q->whereHas('trigger.matter', function ($query) use ($user_dashboard) {
+                $query->where('responsible', $user_dashboard);
+              })->orWhere('assigned_to', $user_dashboard);
+          });
+          $renewals->where (function ($q) use ($user_dashboard) {
+              $q->whereHas('trigger.matter', function ($query) use ($user_dashboard) {
+                $query->where('responsible', $user_dashboard);
+              })->orWhere('assigned_to', $user_dashboard);
+          });
+        }
+        $tasks = $tasks->simplePaginate(100)->all();
         $renewals = $renewals->simplePaginate(200)->all();
         // Count matters per categories
         $categories = Matter::getCategoryMatterCount();

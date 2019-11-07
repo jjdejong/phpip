@@ -72,7 +72,7 @@
         @if ($group->no_of_tasks > 0)
         <div class="row">
           <div class="col-6">
-            {{$group->login }}
+            <a href="/home?user_dashboard={{ $group->login }}">{{ $group->login }}</a>
           </div>
           <div class="col-3">
             {{ $group->no_of_tasks }}
