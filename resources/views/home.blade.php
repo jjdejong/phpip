@@ -5,13 +5,13 @@
 <div class="row card-deck">
   <div class="col-4">
     <div class="card">
-      <div class="card-header py-1">
+      <div class="card-header">
         <div class="row">
           <div class="lead col-8">
             Categories
           </div>
           <div class="col-4">
-            <a href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" class="btn btn-primary" title="Create Matter">Create matter</a>
+            <a href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" class="btn btn-primary float-right" title="Create Matter">Create matter</a>
           </div>
         </div>
         <div class="row font-weight-bold">
@@ -26,7 +26,7 @@
         </div>
       </div>
 
-      <div class="card-body pt-1">
+      <div class="card-body pt-1" style="min-height: 80px;">
         @foreach ($categories as $group)
         <div class="row reveal-hidden">
           <div class="col-8">
@@ -47,8 +47,11 @@
     <div class="card mt-1">
       <div class="card-header">
         <div class="row">
-          <div class="lead col-12">
+          <div class="lead col-8">
             Users tasks
+          </div>
+          <div class="col-4">
+            <button class="btn btn-light text-light" disabled>I</button> {{--  This invisible button is only for improving the layout! --}}
           </div>
         </div>
         <div class="row font-weight-bold">
@@ -64,7 +67,7 @@
         </div>
       </div>
 
-      <div class="card-body pt-1">
+      <div class="card-body pt-1" style="min-height: 80px;">
         @foreach ($taskscount as $group)
         @if ($group->no_of_tasks > 0)
         <div class="row">
@@ -95,7 +98,7 @@
   </div>
   <div class="col-8" id="filter">
     <div class="card">
-      <div class="card-header py-1">
+      <div class="card-header">
         <div class="row">
           <div class="lead col-3">
             Open tasks
@@ -134,7 +137,7 @@
           </div>
         </div>
       </div>
-      <div class="card-body pt-1" id="tasklist">
+      <div class="card-body pt-1" id="tasklist" style="min-height: 80px;">
         @if (is_array($tasks) )
         @foreach ($tasks as $task)
         <div class="row">
@@ -174,7 +177,7 @@
       </div>
     </div>
     <div class="card mt-1">
-      <div class="card-header py-1">
+      <div class="card-header">
         <div class="row">
           <div class="lead col-3">
             Open renewals
@@ -214,7 +217,7 @@
         </div>
       </div>
 
-      <div class="card-body pt-1" id="renewallist">
+      <div class="card-body pt-1" id="renewallist" style="min-height: 80px;">
         @if (is_array($renewals) )
         @foreach ($renewals as $task)
         <div class="row">
