@@ -292,6 +292,8 @@ class Matter extends Model
         }
 
         if (!empty($multi_filter)) {
+            $sortkey = 'caseref';
+            $sortdir = 'asc';
             foreach ($multi_filter as $key => $value) {
                 if ($value != '') {
                     switch($key) {
