@@ -24,7 +24,7 @@ $classifiers = $matter->classifiers->groupBy('type_name');
   </tbody>
   <tbody class="sortable">
     @foreach($classifier_group as $classifier)
-    <tr class="reveal-hidden" data-id="{{ $classifier->id }}">
+    <tr class="reveal-hidden" data-resource="/classifier/{{ $classifier->id }}">
       <td><input type="text" class="form-control noformat" name="value" value="{{ $classifier->value }}"></td>
       <td><input type="text" class="form-control noformat" name="url" value="{{ $classifier->url }}"></td>
       <td><input type="text" class="form-control noformat" name="lnk_matter_id" list="ajaxDatalist" data-ac="/matter/autocomplete" value="{{ $classifier->lnk_matter_id ? $classifier->linkedMatter->uid : '' }}"></td>

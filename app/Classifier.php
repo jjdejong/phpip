@@ -26,4 +26,9 @@ class Classifier extends Model
     {
         return $this->belongsTo('App\Matter', 'lnk_matter_id');
     }
+
+    public function matter()
+    {
+        return $this->belongsTo('App\Matter');
+    }
 }
