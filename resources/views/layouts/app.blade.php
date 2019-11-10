@@ -211,11 +211,6 @@
           submitModalForm('/task', addTaskForm);
           break;
 
-        case 'deleteTask':
-          fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
-            .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
-          break;
-
         case 'deleteEvent':
           if (confirm("Deleting the event will also delete the linked tasks. Continue anyway?")) {
             fetchREST('/event/' + e.target.dataset.event_id, 'DELETE')
@@ -233,12 +228,9 @@
           submitModalForm('/classifier', addClassifierForm);
           break;
 
+          // Generic processing of deletions
+        case 'deleteTask':
         case 'deleteClassifier':
-          fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
-            .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
-          break;
-
-          // Specific processing in the actor/role list modal
         case 'removeActor':
           fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
             .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
