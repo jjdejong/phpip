@@ -94,7 +94,7 @@ class Event extends Model
                     $href = 'http://www.ipo.gov.uk/p-ipsum/Case/ApplicationNumber/' . $CC . $cleanednumber;
                     break;
                 case 'EM':
-                    $href = 'https://oami.europa.eu/eSearch/#details/trademarks/' . $cleanednumber;
+                    $href = 'https://euipo.europa.eu/eSearch/#details/trademarks/' . $cleanednumber;
                     break;
             }
         }
