@@ -244,7 +244,7 @@
 
           // Actor create and show modals
         case 'createActorSubmit':
-          submitModalForm('/actor', createActorForm);
+          submitModal2Form('/actor', createActorForm);
           break;
 
         case 'createEventNameSubmit':
