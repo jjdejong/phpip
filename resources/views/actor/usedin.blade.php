@@ -9,7 +9,7 @@ $adeps = $other_dependencies->groupBy('Dependency');
   @forelse($mdeps as $role => $rmdeps)
     <p><b>{{ $role }}:</b>
     @foreach($rmdeps as $mal)
-      <a href="/matter/{{$mal->matter_id}}" target="_blank">{{ $mal->matter->UID }}</a>
+      <a href="/matter/{{$mal->matter_id}}" target="_blank">{{ $mal->matter->uid }}</a>
     @endforeach
     </p>
   @empty
