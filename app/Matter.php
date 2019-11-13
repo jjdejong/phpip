@@ -18,13 +18,6 @@ class Matter extends Model
     // protected $revisionCleanup = true; //Remove old revisions (works only when used with $historyLimit)
     // protected $historyLimit = 500; //Maintain a maximum of 500 changes at any point of time, while cleaning up old revisions.
 
-    protected $appends = ['uid']; // Allows eager loading of uid
-
-    public function getUidAttribute()
-    {
-        return $this->caseref . $this->suffix;
-    }
-
     public function family()
     { // Gets other family members (where clause is ignored by eager loading)
         return $this->hasMany('App\Matter', 'caseref', 'caseref')
@@ -172,7 +165,7 @@ class Matter extends Model
     public static function filter($sortkey = 'id', $sortdir = 'desc', $multi_filter = [], $display_with = false, $paginated = false)
     {
         $query = Matter::select(
-            DB::raw("CONCAT(caseref, suffix) AS Ref"),
+            'matter.uid AS Ref',
             'matter.country AS country',
             'matter.category_code AS Cat',
             'matter.origin',
@@ -298,7 +291,7 @@ class Matter extends Model
                 if ($value != '') {
                     switch($key) {
                         case 'Ref':
-                            $query->where(DB::raw("CONCAT(caseref, suffix)"), 'LIKE', "$value%");
+                            $query->where('uid', 'LIKE', "$value%");
                             break;
                         case 'Cat':
                             $query->where('category_code', 'LIKE', "$value%");
@@ -402,7 +395,7 @@ class Matter extends Model
     }
 
     public static function getDescription($id, $lang='en') {
-        $query = Matter::select(DB::raw("CONCAT_WS('', caseref, suffix) AS Ref"),
+        $query = Matter::select('uid AS Ref',
                 'matter.country AS country',
                 'matter.category_code AS Cat',
                 'matter.origin',

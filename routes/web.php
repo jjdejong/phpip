@@ -26,9 +26,9 @@ Route::group(['middleware' => 'auth'], function () {
     // Matter Controller
     Route::get('matter/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\Matter::with('filing')->selectRaw('id as `key`, CONCAT(caseref, suffix) as value')
-                        ->where('caseref', 'like', "$term%")
-                        ->take(10)->get();
+        return App\Matter::with('filing')->select('id as key, uid as value')
+                        ->where('uid', 'like', "$term%")
+                        ->take(15)->get();
     });
     Route::get('matter/export', 'MatterController@export');
     Route::get('matter/{matter}/events', 'MatterController@events');

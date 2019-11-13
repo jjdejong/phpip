@@ -37,7 +37,7 @@ class HomeController extends Controller
         $role = Auth::user()->default_role;
 
         // Get list of active tasks
-        $tasks = Task::with(['info:code,name', 'trigger.matter:id,caseref,suffix', 'trigger.matter.client:id,actor_id'])->whereHas('trigger.matter', function ($query) {
+        $tasks = Task::with(['info:code,name', 'trigger.matter:id,uid', 'trigger.matter.client:id,actor_id'])->whereHas('trigger.matter', function ($query) {
           $query->where('dead', 0);
         })->where('done', 0)->where('task.code', '!=', 'REN')->orderby('due_date');
         if ($MyTasks) {
@@ -45,7 +45,7 @@ class HomeController extends Controller
         }
 
         // Get list of active renewals
-        $renewals = Task::with(['info:code,name', 'trigger.matter:id,caseref,suffix', 'trigger.matter.client:id,actor_id'])->whereHas('trigger.matter', function ($query) {
+        $renewals = Task::with(['info:code,name', 'trigger.matter:id,uid', 'trigger.matter.client:id,actor_id'])->whereHas('trigger.matter', function ($query) {
           $query->where('dead', 0);
         })->where('done', 0)->where('task.code', 'REN')->orderby('due_date');
         if ($MyRenewals) {
