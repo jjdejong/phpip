@@ -82,6 +82,7 @@
               <ul class="dropdown-menu" role="menu">
                 <a class="dropdown-item" href="{{ url('/rule/') }}">Edit rules</a>
                 <a class="dropdown-item" href="{{ url('/eventname/') }}">Edit event names</a>
+                <a class="dropdown-item" href="{{ url('/category/') }}">Edit category</a>
                 <a class="dropdown-item" href="{{ url('/actor/') }}">Actors</a>
               </ul>
             </li>
@@ -211,6 +212,11 @@
           submitModalForm('/task', addTaskForm);
           break;
 
+        case 'deleteTask':
+          fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
+            .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
+          break;
+
         case 'deleteEvent':
           if (confirm("Deleting the event will also delete the linked tasks. Continue anyway?")) {
             fetchREST('/event/' + e.target.dataset.event_id, 'DELETE')
@@ -228,9 +234,12 @@
           submitModalForm('/classifier', addClassifierForm);
           break;
 
-          // Generic processing of deletions
-        case 'deleteTask':
         case 'deleteClassifier':
+          fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
+            .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
+          break;
+
+          // Specific processing in the actor/role list modal
         case 'removeActor':
           fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
             .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
@@ -247,11 +256,15 @@
           break;
 
         case 'createEventNameSubmit':
-          submitModalForm('/eventname', createEventForm);
+          submitModal2Form('/eventname', createEventForm);
+          break;
+
+        case 'createCategorySubmit':
+          submitModal2Form('/category', createCategoryForm);
           break;
 
         case 'createRuleSubmit':
-          submitModalForm('/rule', createRuleForm);
+          submitModal2Form('/rule', createRuleForm);
           break;
 
         case 'deleteActor':
@@ -509,6 +522,24 @@
             location.href = data.redirect;
           } else {
             fetchInto(contentSrc, ajaxModal.querySelector('.modal-body'));
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+
+    var submitModal2Form = (target, Form) => {
+      formData = new FormData(Form);
+      params = new URLSearchParams(formData);
+      fetchREST(target, 'POST', params)
+        .then(data => {
+          if (data.errors) {
+            processSubmitErrors(data.errors, Form);
+            zoneAlert.innerHTML = data.message;
+            zoneAlert.classList.add('alert-danger');
+          } else {
+            location.href = document.referrer;
           }
         })
         .catch(error => {
