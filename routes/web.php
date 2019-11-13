@@ -26,7 +26,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Matter Controller
     Route::get('matter/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\Matter::with('filing')->select('id as key, uid as value')
+        return App\Matter::with('filing')->select('id as key', 'uid as value')
                         ->where('uid', 'like', "$term%")
                         ->take(15)->get();
     });
@@ -141,7 +141,7 @@ Route::group(['middleware' => 'auth'], function () {
     /* Route::get('matter/{matter}/actors', function (App\Matter $matter) {
       //$actors = $matter->with('container.actors.actor:id,name,display_name,company_id', 'actors.actor:id,name,display_name,company_id')->get();
       return $matter->actors;
-      });
+    });
 
       Route::get('matter/{matter}/classifiers', function (App\Matter $matter) {
       return $matter->classifiers->where('main_display', 0);
