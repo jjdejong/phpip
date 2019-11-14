@@ -98,6 +98,7 @@
         if (data.errors) {
           processSubmitErrors(data.errors, addActorForm);
         } else {
+          addActorForm.reset();
           $('.popover').popover('dispose');
           reloadPart("/matter/{{ $matter->id }}", 'actorPanel');
         }

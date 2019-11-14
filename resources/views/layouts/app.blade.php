@@ -417,61 +417,6 @@
       }
     });
 
-    /* Custom autocomplete function using native JS
-     * "searchField" is the element receiving the user input,
-     * "dataSource" is the Ajax resource URL, and
-     * "targetName" is an (optional) input field name receiving the "id" value
-     * The Ajax resource returns a list of JSON key/value pairs, sometimes a label and other data
-     * */
-    /*var autocompleteJJ = (searchField, dataSource, targetName) => {
-      // Start by removing stray result lists that can remain when clicking erratically
-      if (tmp = document.getElementById('matchList')) tmp.remove();
-      // Create a fresh result list attached to the current element
-      searchField.insertAdjacentHTML('afterend', '<div id="matchList" class="dropdown-menu bg-light"></div>');
-      var targetElement = "",
-        items = "",
-        selectedItem = "";
-      if (targetName) {
-        // The hidden input field is supposed to be the first
-        targetElement = searchField.form[targetName];
-      }
-      // Get items
-      var getItems = async (term) => {
-        if (term.length > 0) {
-          let res = await fetch(dataSource + '?term=' + term);
-          items = await res.json();
-          if (items.length === 0) {
-            $('#matchList').dropdown('hide');
-          } else {
-            $('#matchList').dropdown('show');
-            let html = items.map(
-              match => `<button class="dropdown-item py-1" type="button" id="${match.key ? match.key : match.value}" data-value="${match.value}">${match.label ? match.label : match.value}</button>`
-            ).join('');
-            matchList.innerHTML = html;
-          }
-        } else {
-          $('#matchList').dropdown('hide');
-        }
-      };
-
-      searchField.oninput = () => getItems(searchField.value);
-      matchList.onclick = (e) => {
-        // Retrieve complete selected item, in case it contains more than id, value or label
-        selectedItem = items.find((item) => {
-          return item.value === e.target.dataset.value;
-        });
-        if (targetName) {
-          // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
-          searchField.value = selectedItem.value;
-          targetElement.value = selectedItem.key;
-        } else {
-          // Used for content editable fields where the same field is used for sending the id to the server
-          searchField.value = selectedItem.key;
-        }
-        matchList.remove();
-      };
-    }*/
-
     /*var autocompleteJQ = (searchField, dataSource, targetName) => {
       let targetElement = "";
       if (targetName) {
