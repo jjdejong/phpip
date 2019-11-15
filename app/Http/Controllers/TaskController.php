@@ -49,7 +49,7 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         $this->validate($request, [
-            'due_date' => 'date',
+            'due_date' => 'required|date',
             'done_date' => 'nullable|date',
             'cost' => 'nullable|numeric',
             'fee' => 'nullable|numeric'

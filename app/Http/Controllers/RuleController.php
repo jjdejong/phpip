@@ -100,7 +100,9 @@ class RuleController extends Controller
             'years' => 'nullable|numeric',
             'months' => 'nullable|numeric',
             'days' => 'nullable|numeric',
-            'fee' => 'nullable|numeric'
+            'fee' => 'nullable|numeric',
+            'use_before' => 'date',
+            'use_after' => 'date'
         ]);
 
         $rule->update($request->except(['_token', '_method']));
@@ -117,7 +119,9 @@ class RuleController extends Controller
             'years' => 'numeric',
             'months' => 'numeric',
             'days' => 'numeric',
-            'fee' => 'nullable|numeric'
+            'fee' => 'nullable|numeric',
+            'use_before' => 'date',
+            'use_after' => 'date'
         ]);
         Rule::create($request->except(['_token', '_method']));
         return response()->json(['redirect' => route('rule.index')]);

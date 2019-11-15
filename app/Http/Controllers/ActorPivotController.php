@@ -30,7 +30,8 @@ class ActorPivotController extends Controller
       $request->validate([
         'matter_id' => 'required|numeric',
         'actor_id'  => 'required|numeric',
-        'role'      => 'required'
+        'role'      => 'required',
+        'date'      => 'date'
       ]);
 
       // Fix display order indexes if wrong
@@ -52,10 +53,7 @@ class ActorPivotController extends Controller
 
       $request->merge(['display_order' => $max + 1, 'company_id' => $addedActor->company_id]);
 
-      $new_actorPivot = ActorPivot::create($request->except(['_token', '_method']));
-
-      return $new_actorPivot;
-
+      return = ActorPivot::create($request->except(['_token', '_method']));
     }
 
     /**
@@ -67,7 +65,10 @@ class ActorPivotController extends Controller
      */
     public function update(Request $request, ActorPivot $actorPivot)
     {
-    	$actorPivot->update($request->except(['_token', '_method']));
+      $request->validate([
+        'date' => 'date'
+      ]);
+      $actorPivot->update($request->except(['_token', '_method']));
       return response()->json(['success' => 'Link updated']);
     }
 

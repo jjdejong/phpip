@@ -81,7 +81,8 @@ class MatterController extends Controller
             'category_code' => 'required',
             'caseref' => 'required',
             'country' => 'required',
-            'responsible' => 'required'
+            'responsible' => 'required',
+            'expire_date' => 'date'
         ]);
 
         // Unique UID handling
@@ -229,7 +230,8 @@ class MatterController extends Controller
     {
         $request->validate([
             'term_adjust' => 'numeric',
-            'idx' => 'numeric|nullable'
+            'idx' => 'numeric|nullable',
+            'expire_date' => 'date'
         ]);
         $matter->update($request->except(['_token', '_method']));
         return response()->json(['success' => 'Matter updated']);
