@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class Task extends Model
 {
@@ -12,6 +13,10 @@ class Task extends Model
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
     protected $guarded = ['id', 'creator', 'created_at', 'updated_at', 'updater'];
     protected $touches = ['matter'];
+    protected $dates = [
+        'due_date',
+        'done_date'
+    ];
 
     // use \Venturecraft\Revisionable\RevisionableTrait;
     // protected $revisionEnabled = true;

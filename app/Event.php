@@ -10,6 +10,9 @@ class Event extends Model
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
     protected $guarded = ['id', 'creator', 'created_at', 'updated_at', 'updater'];
     protected $touches = ['matter'];
+    protected $dates = [
+      'event_date'
+    ];
 
     // use \Venturecraft\Revisionable\RevisionableTrait;
     // protected $revisionEnabled = true;
