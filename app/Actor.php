@@ -9,7 +9,7 @@ class Actor extends Model
 {
     protected $table = 'actor';
     protected $hidden = ['login', 'last_login', 'password', 'remember_token', 'creator', 'created_at', 'updated_at', 'updater'];
-    protected $guarded = ['id', 'password', 'creator', 'created_at', 'updated_at', 'updater'];
+    protected $guarded = ['id', 'password', 'created_at', 'updated_at'];
 
     // use \Venturecraft\Revisionable\RevisionableTrait;
     // protected $revisionEnabled = true;

@@ -8,7 +8,7 @@ class Event extends Model
 {
     protected $table = 'event';
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
-    protected $guarded = ['id', 'creator', 'created_at', 'updated_at', 'updater'];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $touches = ['matter'];
     protected $dates = [
       'event_date'

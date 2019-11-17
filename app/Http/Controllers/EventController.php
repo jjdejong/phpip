@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class EventController extends Controller {
@@ -20,7 +21,7 @@ class EventController extends Controller {
             'matter_id' => 'required|numeric',
             'event_date' => 'required_without:alt_matter_id|date'
         ]);
-
+        $request->merge([ 'creator' => Auth::user()->login ]);
         return Event::create($request->except(['_token', '_method', 'eventName']));
     }
 
@@ -46,7 +47,7 @@ class EventController extends Controller {
             'event_date' => 'date',
             'alt_matter_id' => 'nullable|numeric'
         ]);
-
+        $request->merge([ 'updater' => Auth::user()->login ]);
         $event->update($request->except(['_token', '_method']));
         return response()->json(['success' => 'Event updated']);
     }

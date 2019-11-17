@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Task;
 //use App\Event;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -24,7 +25,7 @@ class TaskController extends Controller
             'cost' => 'nullable|numeric',
             'fee' => 'nullable|numeric'
         ]);
-
+        $request->merge([ 'creator' => Auth::user()->login ]);
         return Task::create($request->except(['_token', '_method']));
     }
 
@@ -54,7 +55,7 @@ class TaskController extends Controller
             'cost' => 'nullable|numeric',
             'fee' => 'nullable|numeric'
         ]);
-
+        $request->merge([ 'updater' => Auth::user()->login ]);
         // Remove task rule when due date is manually changed
         if ($request->has('due_date')) {
             $request->merge(['rule_used' => null]);

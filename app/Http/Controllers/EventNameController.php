@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\EventName;
 use App\Actor;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Response;
 
@@ -56,6 +57,7 @@ class EventNameController extends Controller
             'name' => 'required|max:45',
             'notes' => 'max:160'
         ]);
+        $request->merge([ 'creator' => Auth::user()->login ]);
         EventName::create($request->except(['_token', '_method']));
         return response()->json(['redirect' => route('eventname.index')]);
     }
@@ -81,9 +83,9 @@ class EventNameController extends Controller
      * @param  \App\EventName  $eventName
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $code)
+    public function update(Request $request, EventName $eventName)
     {
-        $eventName = EventName::find($code);
+        $request->merge([ 'updater' => Auth::user()->login ]);
         $eventName->update($request->except(['_token', '_method']));
         return response()->json(['success' => 'Event name updated']);
     }

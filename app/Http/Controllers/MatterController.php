@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Matter;
 use App\Event;
 use App\ActorPivot;
-// use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -94,6 +94,8 @@ class MatterController extends Controller
             ['type_code', $request->type_code]
         ]);
 
+        $request->merge([ 'creator' => Auth::user()->login ]);
+
         $idx = $matters->count();
 
         if ($idx > 0) {
@@ -169,7 +171,10 @@ class MatterController extends Controller
         $from_matter = Matter::with('priority', 'filing', 'classifiersNative')->find($origin_id);
 
         foreach ($request->ncountry as $country) {
-            $request->merge(['country' => $country]);
+            $request->merge([
+              'country' => $country,
+              'creator' => Auth::user()->login
+            ]);
 
             $new_matter = Matter::create($request->except(['_token', '_method', 'ncountry', 'origin_id']));
 
@@ -233,6 +238,7 @@ class MatterController extends Controller
             'idx' => 'numeric|nullable',
             'expire_date' => 'date'
         ]);
+        $request->merge([ 'updater' => Auth::user()->login ]);
         $matter->update($request->except(['_token', '_method']));
         return response()->json(['success' => 'Matter updated']);
     }

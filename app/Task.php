@@ -11,7 +11,7 @@ class Task extends Model
 {
     protected $table = 'task';
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
-    protected $guarded = ['id', 'creator', 'created_at', 'updated_at', 'updater'];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $touches = ['matter'];
     protected $dates = [
         'due_date',

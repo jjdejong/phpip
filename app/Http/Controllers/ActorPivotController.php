@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\ActorPivot;
 use App\Actor;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -51,7 +52,11 @@ class ActorPivotController extends Controller
 
       $addedActor = Actor::find($request->actor_id);
 
-      $request->merge(['display_order' => $max + 1, 'company_id' => $addedActor->company_id]);
+      $request->merge([
+        'display_order' => $max + 1,
+        'creator' => Auth::user()->login,
+        'company_id' => $addedActor->company_id
+      ]);
 
       return = ActorPivot::create($request->except(['_token', '_method']));
     }
@@ -68,6 +73,7 @@ class ActorPivotController extends Controller
       $request->validate([
         'date' => 'date'
       ]);
+      $request->merge([ 'updater' => Auth::user()->login ]);
       $actorPivot->update($request->except(['_token', '_method']));
       return response()->json(['success' => 'Link updated']);
     }

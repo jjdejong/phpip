@@ -11,5 +11,5 @@ class ClassifierType extends Model {
     public $incrementing = false;
     protected $keyType = 'string';
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
-    protected $guarded = ['code', 'creator', 'created_at', 'updated_at', 'updater'];
+    protected $guarded = ['code', 'created_at', 'updated_at'];
 }

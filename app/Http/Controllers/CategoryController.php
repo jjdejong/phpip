@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Actor;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Response;
 
@@ -56,6 +57,7 @@ class CategoryController extends Controller
             'category' => 'required|max:45',
             'display_with' => 'required'
         ]);
+        $request->merge([ 'creator' => Auth::user()->login ]);
         return Category::create($request->except(['_token', '_method']));
     }
 
@@ -80,9 +82,9 @@ class CategoryController extends Controller
      * @param  string $code
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $code)
+    public function update(Request $request, Category $category)
     {
-        $category = Category::find($code);
+        $request->merge([ 'updater' => Auth::user()->login ]);
         $category->update($request->except(['_token', '_method']));
         return response()->json(['success' => 'Category updated']);
     }

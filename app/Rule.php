@@ -9,7 +9,7 @@ class Rule extends Model
 {
     protected $table = 'task_rules';
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
-    protected $guarded = ['id', 'creator', 'created_at', 'updated_at', 'updater'];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
     public function country() {
 		return $this->belongsTo('App\Country', 'for_country','iso');

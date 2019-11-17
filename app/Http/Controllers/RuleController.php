@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Rule;
+use Illuminate\Support\Facades\Auth;
 use Response;
 
 class RuleController extends Controller
@@ -104,7 +105,7 @@ class RuleController extends Controller
             'use_before' => 'date',
             'use_after' => 'date'
         ]);
-
+        $request->merge([ 'updater' => Auth::user()->login ]);
         $rule->update($request->except(['_token', '_method']));
         return response()->json(['success' => 'Rule updated']);
     }
@@ -123,6 +124,7 @@ class RuleController extends Controller
             'use_before' => 'date',
             'use_after' => 'date'
         ]);
+        $request->merge([ 'creator' => Auth::user()->login ]);
         Rule::create($request->except(['_token', '_method']));
         return response()->json(['redirect' => route('rule.index')]);
     }

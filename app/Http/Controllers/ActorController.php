@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actor;
 use Illuminate\Http\Request;
-//use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use Response;
 
 class ActorController extends Controller
@@ -50,6 +50,7 @@ class ActorController extends Controller
         $request->validate([
             'name' => 'required|max:100'
         ]);
+        $request->merge([ 'creator' => Auth::user()->login ]);
         return Actor::create($request->except(['_token', '_method']));
     }
 
@@ -83,7 +84,7 @@ class ActorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Actor $actor) {
-
+        $request->merge([ 'updater' => Auth::user()->login ]);
         $actor->update($request->except(['_token', '_method']));
         return response()->json(['success' => 'Actor updated']);
     }
