@@ -170,7 +170,7 @@ class MatterController extends Controller
         ]);
 
         $origin_id = $request->origin_id;
-        $from_matter = Matter::with('priority', 'filing', 'classifiersNative')->find($origin_id);
+        $from_matter = Matter::with('priority', 'filing', 'publication', 'grant', 'classifiersNative')->find($origin_id);
 
         foreach ($request->ncountry as $country) {
             $request->merge([
@@ -192,9 +192,12 @@ class MatterController extends Controller
             // Copy shared events from original matter
             $new_matter->priority()->createMany($from_matter->priority->toArray());
             $new_matter->filing()->create($from_matter->filing->toArray());
-            $new_matter->publication()->create($from_matter->publication->toArray());
-            $new_matter->grant()->create($from_matter->grant->toArray());
-
+            if ($from_matter->publication()->exists()) {
+              $new_matter->publication()->create($from_matter->publication->toArray());
+            }
+            if ($from_matter->grant()->exists()) {
+              $new_matter->grant()->create($from_matter->grant->toArray());
+            }
 
             // Insert "entered" event
             $new_matter->events()->create(["code" => 'ENT', "event_date" => date('Y-m-d')]);
@@ -203,7 +206,7 @@ class MatterController extends Controller
             $new_matter->save();
         }
 
-        return response()->json(['redirect' => "/matter?Ref=$request->caseref"]);
+        return response()->json(['redirect' => "/matter?Ref=$request->caseref&origin=$from_matter->country"]);
     }
 
     /**
