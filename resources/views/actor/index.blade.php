@@ -7,7 +7,7 @@
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card overflow-auto" style="max-height: 640px;">
+    <div class="card">
     <table class="table table-striped table-hover table-sm col">
       <thead>
         <tr>
@@ -51,6 +51,9 @@
         @endforeach
       </tbody>
     </table>
+    <div class="mx-auto">
+      {{ $actorslist->links() }}
+    </div>
   </div>
   </div>
   <div class="col-4">

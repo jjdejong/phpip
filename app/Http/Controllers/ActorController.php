@@ -24,7 +24,8 @@ class ActorController extends Controller
         if (!is_null($Phy_person)) {
             $actor = $actor->where('phy_person', $Phy_person);
         }
-        $actorslist = $actor->with('company')->orderby('name')->get();
+        $actorslist = $actor->with('company')->orderby('name')->paginate(21);
+        $actorslist->appends($request->input())->links();
         return view('actor.index', compact('actorslist'));
     }
 
