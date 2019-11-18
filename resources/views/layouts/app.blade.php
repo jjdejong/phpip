@@ -473,8 +473,7 @@
             zoneAlert.innerHTML = data.message;
             zoneAlert.classList.add('alert-danger');
           } else {
-
-            //location.reload();
+            location.reload();
           }
         })
         .catch(error => {

@@ -11,16 +11,6 @@ use Illuminate\Http\Request;
 class ActorPivotController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -30,9 +20,9 @@ class ActorPivotController extends Controller
     {
       $request->validate([
         'matter_id' => 'required|numeric',
-        'actor_id'  => 'required|numeric',
-        'role'      => 'required',
-        'date'      => 'date'
+        'actor_id' => 'required|numeric',
+        'role' => 'required',
+        'date' => 'date'
       ]);
 
       // Fix display order indexes if wrong
@@ -58,7 +48,7 @@ class ActorPivotController extends Controller
         'company_id' => $addedActor->company_id
       ]);
 
-      return = ActorPivot::create($request->except(['_token', '_method']));
+      return ActorPivot::create($request->except(['_token', '_method']));
     }
 
     /**
@@ -104,19 +94,21 @@ class ActorPivotController extends Controller
     }
 
     /**
-        * show Matters where actor is used
-        * *
-        */
-    public function usedIn(int $actor) {
-        $actorpivot = new ActorPivot();
-        $matter_dependencies = $actorpivot->with('matter','role')->where('actor_id', $actor)->get()->take(50);
-        $actor_model = new Actor();
-        $other_dependencies = $actor_model->select(array('id', DB::Raw("concat_ws(' ', name, first_name) as Actor"), DB::Raw("(case ".$actor."
-           when parent_id then 'Parent'
-           when company_id then 'Company'
-           when site_id then 'Site'
-         end) as Dependency")))->where('parent_id', $actor)->orWhere('company_id', $actor)->orWhere('site_id',$actor)->get()->take(30);
-        return view('actor.usedin', compact(['matter_dependencies','other_dependencies']));
-	}
+     * show Matters where actor is used
+     *
+     */
+    public function usedIn(int $actor)
+    {
+      $actorpivot = new ActorPivot();
+      $matter_dependencies = $actorpivot->with('matter','role')->where('actor_id', $actor)->get()->take(50);
+      $actor_model = new Actor();
+      $other_dependencies = $actor_model->select('id', DB::Raw("concat_ws(' ', name, first_name) as Actor"), DB::Raw("(
+        case " . $actor . "
+          when parent_id then 'Parent'
+          when company_id then 'Company'
+          when site_id then 'Site'
+        end) as Dependency"))->where('parent_id', $actor)->orWhere('company_id', $actor)->orWhere('site_id',$actor)->get()->take(30);
+      return view('actor.usedin', compact(['matter_dependencies','other_dependencies']));
+    }
 
 }
