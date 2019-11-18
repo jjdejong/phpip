@@ -142,6 +142,7 @@
         break;
       case 'events':
       case 'tasks':
+      case 'renewals':
       case 'classifiers':
         reloadPart(window.location.href, 'multiPanel');
         break;
