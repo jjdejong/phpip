@@ -59,7 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::get('matter/new-caseref', function (Request $request) {
-        $term = $request->input('term');
+        $term = $request->term;
         $newref = App\Matter::where('caseref', 'like', "$term%")->max('caseref');
         $newref++;
         return [['key' => $newref, 'value' => $newref ]];

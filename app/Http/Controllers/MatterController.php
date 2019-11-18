@@ -53,17 +53,19 @@ class MatterController extends Controller
             $from_matter = Matter::with('container', 'countryInfo', 'originInfo', 'category', 'type')->find($request->matter_id);
             if ($operation == 'clone') {
                 // Generate the next available caseref based on the prefix
-                $from_matter->caseref = $from_matter->category->ref_prefix.strval(DB::table('matter')->where('caseref', 'like',$from_matter->category->ref_prefix . '%')->max(DB::raw("CAST( TRIM( LEADING '".$from_matter->category->ref_prefix."' FROM `caseref`) AS UNSIGNED)")) + 1);
+                $from_matter->caseref = DB::table('matter')->where('caseref', 'like', $from_matter->category->ref_prefix . '%')->max('caseref');
+                ++$from_matter->caseref;
             }
         } else {
             $from_matter = new Matter; // Create empty matter object to avoid undefined errors in view
             if ($category_code != '') {
-                $ref_prefix = \App\Category::select('ref_prefix')->where('code', '=', $category_code)->first()['ref_prefix'];
+                $ref_prefix = \App\Category::find($category_code)['ref_prefix'];
                 $category=[
                     'code' => $category_code,
-                    'next_caseref' =>  $ref_prefix.strval(DB::table('matter')->where('caseref', 'like', $ref_prefix . '%')->max(DB::raw("CAST( TRIM( LEADING '".$ref_prefix."' FROM `caseref`) AS UNSIGNED)")) +1),
-                    'name' => \App\Category::select('category')->where('code', '=', $category_code)->first()['category']
+                    'next_caseref' =>  DB::table('matter')->where('caseref', 'like', $ref_prefix . '%')->max('caseref'),
+                    'name' => \App\Category::find($category_code)['category']
                 ];
+                ++$category['next_caseref'];
             }
         }
         return view('matter.create', compact('from_matter', 'operation', 'category'));

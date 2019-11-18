@@ -306,11 +306,14 @@
           break;
       }
 
-      // Various functions used here and there
+      /* Various functions used here and there */
+
+      // Nationalize modal
       if (e.target.matches('#ncountries .btn-outline-danger')) {
         e.target.parentNode.parentNode.remove();
       }
 
+      // Highlight the item displayed in the ajaxPanel
       if (e.target.hasAttribute('data-panel')) {
         e.preventDefault();
         let markedRow = e.target.closest('tbody').querySelector('.table-info');
