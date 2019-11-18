@@ -189,11 +189,12 @@ class MatterController extends Controller
                 $new_matter->container_id = $origin_id;
             }
 
-            // Copy priority claims from original matter
+            // Copy shared events from original matter
             $new_matter->priority()->createMany($from_matter->priority->toArray());
-
-            // Copy filing from original matter
             $new_matter->filing()->create($from_matter->filing->toArray());
+            $new_matter->publication()->create($from_matter->publication->toArray());
+            $new_matter->grant()->create($from_matter->grant->toArray());
+
 
             // Insert "entered" event
             $new_matter->events()->create(["code" => 'ENT', "event_date" => date('Y-m-d')]);
