@@ -53,7 +53,7 @@ class MatterController extends Controller
             $from_matter = Matter::with('container', 'countryInfo', 'originInfo', 'category', 'type')->find($request->matter_id);
             if ($operation == 'clone') {
                 // Generate the next available caseref based on the prefix
-                $from_matter->caseref = DB::table('matter')->where('caseref', 'like', $from_matter->category->ref_prefix . '%')->max('caseref');
+                $from_matter->caseref = Matter::where('caseref', 'like', $from_matter->category->ref_prefix . '%')->max('caseref');
                 ++$from_matter->caseref;
             }
         } else {
@@ -62,7 +62,7 @@ class MatterController extends Controller
                 $ref_prefix = \App\Category::find($category_code)['ref_prefix'];
                 $category=[
                     'code' => $category_code,
-                    'next_caseref' =>  DB::table('matter')->where('caseref', 'like', $ref_prefix . '%')->max('caseref'),
+                    'next_caseref' =>  Matter::where('caseref', 'like', $ref_prefix . '%')->max('caseref'),
                     'name' => \App\Category::find($category_code)['category']
                 ];
                 ++$category['next_caseref'];
