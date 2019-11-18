@@ -267,7 +267,7 @@
                   alert("Couldn't delete actor. Check the dependencies. Database said: " + data.message);
                   return false;
                 } else {
-                  location.href = document.referrer;
+                  location.reload();
                 }
               });
           }
@@ -277,13 +277,10 @@
           if (confirm("Deleting rule " + e.target.dataset.id + " from table?")) {
             fetchREST('/rule/' + e.target.dataset.id, 'DELETE')
               .then((data) => {
-                if (data.message)
-                {
+                if (data.message) {
                   alert(data.message);
-                }
-                else
-                {
-                  location.href = document.URL;
+                } else {
+                  location.reload();
                 }
               });
           }
@@ -293,13 +290,10 @@
           if (confirm("Deleting event name " + e.target.dataset.id + " from table?")) {
             fetchREST('/eventname/' + e.target.dataset.id, 'DELETE')
               .then((data) => {
-                if (data.message)
-                {
+                if (data.message) {
                   alert(data.message);
-                }
-                else
-                {
-                  location.href = document.URL;
+                } else {
+                  location.reload();
                 }
               });
           }
@@ -479,7 +473,8 @@
             zoneAlert.innerHTML = data.message;
             zoneAlert.classList.add('alert-danger');
           } else {
-            location.href = document.referrer;
+
+            //location.reload();
           }
         })
         .catch(error => {
