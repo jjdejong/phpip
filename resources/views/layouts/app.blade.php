@@ -74,7 +74,7 @@
                 <a class="dropdown-item" href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" title="Create Matter">New</a>
               </ul>
             </li>
-
+            @can('view')
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                 Tables
@@ -86,7 +86,7 @@
                 <a class="dropdown-item" href="{{ url('/actor/') }}">Actors</a>
               </ul>
             </li>
-
+            @endcan
             <li class="nav-item dropdown">
               <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                 {{ Auth::user()->login }}

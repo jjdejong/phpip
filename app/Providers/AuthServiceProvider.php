@@ -13,7 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        // 'App\Model' => 'App\Policies\ModelPolicy',
     ];
 
     /**
@@ -25,8 +25,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define ( 'view-noclient', function ($user) {
-        	return $user->default_role !== 'CLI';
-        });
+        //
     }
 }
