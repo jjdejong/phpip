@@ -33,46 +33,13 @@ class HomeController extends Controller
         $MyRenewals = $request->input ( 'my_renewals' );
         $user_dashboard = $request->user_dashboard;
 
-        $userid = Auth::user()->id;
-        $role = Auth::user()->default_role;
-
         // Get list of active tasks
-        $tasks = Task::with(['info:code,name', 'trigger.matter:id,uid', 'trigger.matter.client:id,actor_id'])->whereHas('trigger.matter', function ($query) {
-          $query->where('dead', 0);
-        })->where('done', 0)->where('task.code', '!=', 'REN')->orderby('due_date');
-        if ($MyTasks) {
-            $tasks->where('assigned_to', Auth::user()->login);
-        }
+        $task = new Task;
+        $tasks = $task->openTasks(false, $MyTasks, $user_dashboard)->take(100)->get();
 
         // Get list of active renewals
-        $renewals = Task::with(['info:code,name', 'trigger.matter:id,uid', 'trigger.matter.client:id,actor_id'])->whereHas('trigger.matter', function ($query) {
-          $query->where('dead', 0);
-        })->where('done', 0)->where('task.code', 'REN')->orderby('due_date');
-        if ($MyRenewals) {
-            $renewals->where('assigned_to', Auth::user()->login);
-        }
-        if ($role == 'CLI') {
-            $tasks->whereHas('trigger.matter.client', function ($query) use ($userid) {
-              $query->where('actor_id', $userid);
-            });
-            $renewals->whereHas('trigger.matter.client', function ($query) use ($userid) {
-              $query->where('actor_id', $userid);
-            });
-        }
-        if ($user_dashboard) {
-          $tasks->where (function ($q) use ($user_dashboard) {
-              $q->whereHas('trigger.matter', function ($query) use ($user_dashboard) {
-                $query->where('responsible', $user_dashboard);
-              })->orWhere('assigned_to', $user_dashboard);
-          });
-          $renewals->where (function ($q) use ($user_dashboard) {
-              $q->whereHas('trigger.matter', function ($query) use ($user_dashboard) {
-                $query->where('responsible', $user_dashboard);
-              })->orWhere('assigned_to', $user_dashboard);
-          });
-        }
-        $tasks = $tasks->simplePaginate(100)->all();
-        $renewals = $renewals->simplePaginate(200)->all();
+        $renewals = $task->openTasks(true, $MyTasks, $user_dashboard)->take(200)->get();
+
         // Count matters per categories
         $categories = Matter::getCategoryMatterCount();
         $taskscount = Task::getUsersOpenTaskCount();

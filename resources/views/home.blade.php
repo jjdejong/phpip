@@ -59,10 +59,10 @@
             User
           </div>
           <div class="col-3">
-            Open tasks
+            Open
           </div>
           <div class="col-3">
-            Most urgent
+            Hottest
           </div>
         </div>
       </div>
@@ -77,11 +77,11 @@
           <div class="col-3">
             {{ $group->no_of_tasks }}
           </div>
-          @if ($group->posix_urgent_date < date('Y-m-d'))
+          @if ($group->urgent_date < date('Y-m-d'))
           <div class="col-3 text-danger">
             {{ $group->urgent_date }}
           </div>
-          @elseif ($group->posix_urgent_date < date('Y-m-d', strtotime("+1 week")))
+          @elseif ($group->urgent_date < date('Y-m-d', strtotime("+1 week")))
           <div class="col-3">
             <font color="purple">{{ $group->urgent_date }}</font>
           </div>
@@ -138,17 +138,17 @@
         </div>
       </div>
       <div class="card-body pt-1" id="tasklist" style="min-height: 80px;">
-        @if (is_array($tasks) )
+        @isset($tasks)
         @foreach ($tasks as $task)
         <div class="row">
           <div class="col-6">
-            <a href="/matter/{{ $task->trigger->matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" data-resource="/task/" title="All tasks">
-              {{ $task->info->name }}{{ $task->detail ? " - ".$task->detail : "" }}
+            <a href="/matter/{{ $task->matter_id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" data-resource="/task/" title="All tasks">
+              {{ $task->name }}{{ $task->detail ? " - ".$task->detail : "" }}
             </a>
           </div>
           <div class="col-3">
-            <a href="/matter/{{ $task->trigger->matter->id }}">
-              {{ $task->trigger->matter->uid }}
+            <a href="/matter/{{ $task->matter_id }}">
+              {{ $task->uid }}
             </a>
           </div>
           @if ($task->due_date < date('Y-m-d'))
@@ -173,7 +173,7 @@
         <div class="row text-danger">
           The list is empty
         </div>
-        @endif
+      @endisset
       </div>
     </div>
     <div class="card mt-1">
@@ -218,17 +218,17 @@
       </div>
 
       <div class="card-body pt-1" id="renewallist" style="min-height: 80px;">
-        @if (is_array($renewals) )
+        @isset($renewals)
         @foreach ($renewals as $task)
         <div class="row">
           <div class="col-6">
-            <a href="/matter/{{ $task->trigger->matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" title="All tasks" data-size="modal-lg">
+            <a href="/matter/{{ $task->matter_id }}/renewals" data-toggle="modal" data-target="#ajaxModal" title="All tasks" data-size="modal-lg">
               {{ $task->detail }}
             </a>
           </div>
           <div class="col-3">
-            <a href="/matter/{{ $task->trigger->matter->id }}">
-              {{ $task->trigger->matter->uid }}
+            <a href="/matter/{{ $task->matter_id }}">
+              {{ $task->uid }}
             </a>
           </div>
           @if ($task->due_date < date('Y-m-d'))
@@ -253,7 +253,7 @@
         <div class="row text-danger">
           The list is empty
         </div>
-        @endif
+      @endisset
       </div>
     </div>
   </div>
