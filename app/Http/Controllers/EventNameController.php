@@ -65,40 +65,40 @@ class EventNameController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\EventName  $eventName
+     * @param  \App\EventName  $eventname
      * @return \Illuminate\Http\Response
      */
-    public function show($n)
+    public function show(EventName $eventname)
     {
-        $table = new Actor ;
+        $table = new Actor;
         $tableComments = $table->getTableComments('event_name');
-        $enameInfo = EventName::with(['countryInfo:iso,name', 'categoryInfo:code,category', 'default_responsibleInfo:id,name'])->find($n);
-        return view('eventname.show', compact('enameInfo', 'tableComments'));
+        $eventname->with(['countryInfo:iso,name', 'categoryInfo:code,category', 'default_responsibleInfo:id,name']);
+        return view('eventname.show', compact('eventname', 'tableComments'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\EventName  $eventName
+     * @param  \App\EventName  $eventname
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, EventName $eventName)
+    public function update(Request $request, EventName $eventname)
     {
         $request->merge([ 'updater' => Auth::user()->login ]);
-        $eventName->update($request->except(['_token', '_method']));
+        $eventname->update($request->except(['_token', '_method']));
         return response()->json(['success' => 'Event name updated']);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\EventName  $eventName
+     * @param  \App\EventName  $eventname
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(EventName  $eventname)
     {
-        EventName::destroy($id);
+        $eventname->delete();
         return response()->json(['success' => 'Event name deleted']);
     }
 }

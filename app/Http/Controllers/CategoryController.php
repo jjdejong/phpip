@@ -64,15 +64,15 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  Category $category
      * @return \Illuminate\Http\Response
      */
-    public function show($n)
+    public function show(Category $category)
     {
-        $table = new Actor ;
+        $table = new Actor;
         $tableComments = $table->getTableComments('matter_category');
-        $categoryInfo = Category::with(['displayWithInfo:code,category'])->find($n);
-        return view('category.show', compact('categoryInfo', 'tableComments'));
+        $category->with(['displayWithInfo:code,category']);
+        return view('category.show', compact('category', 'tableComments'));
     }
 
     /**
@@ -92,12 +92,12 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int  $id
+     * @param int  Category $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        Category::destroy($id);
+        $category->delete();
         return response()->json(['success' => 'Category deleted']);
     }
 }
