@@ -25,6 +25,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('client', function ($user) {
+          return $user->default_role === 'CLI';
+        });
     }
 }
