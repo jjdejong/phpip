@@ -472,6 +472,9 @@
             processSubmitErrors(data.errors, Form);
             zoneAlert.innerHTML = data.message;
             zoneAlert.classList.add('alert-danger');
+          } else if (data.redirect) {
+            // Redirect to the created model (link returned by the controller store() function)
+            location.href = data.redirect;
           } else {
             location.reload();
           }
