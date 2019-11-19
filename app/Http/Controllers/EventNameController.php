@@ -72,7 +72,7 @@ class EventNameController extends Controller
     {
         $table = new Actor;
         $tableComments = $table->getTableComments('event_name');
-        $eventname->with(['countryInfo:iso,name', 'categoryInfo:code,category', 'default_responsibleInfo:id,name']);
+        $eventname->load(['countryInfo:iso,name', 'categoryInfo:code,category', 'default_responsibleInfo:id,name']);
         return view('eventname.show', compact('eventname', 'tableComments'));
     }
 

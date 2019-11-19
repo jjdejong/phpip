@@ -34,7 +34,7 @@ class MatterController extends Controller
 
     public function show(Matter $matter)
     {
-        $matter->with(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers']);
+        $matter->load(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers']);
         return view('matter.show', compact('matter'));
     }
 
@@ -360,7 +360,7 @@ class MatterController extends Controller
 
     public function classifiers(Matter $matter)
     {
-        $matter->with(['classifiers']);
+        $matter->load(['classifiers']);
         return view('matter.classifiers', compact('matter'));
     }
 

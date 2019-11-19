@@ -71,7 +71,7 @@ class CategoryController extends Controller
     {
         $table = new Actor;
         $tableComments = $table->getTableComments('matter_category');
-        $category->with(['displayWithInfo:code,category']);
+        $category->load(['displayWithInfo:code,category']);
         return view('category.show', compact('category', 'tableComments'));
     }
 
