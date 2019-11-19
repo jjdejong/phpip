@@ -1,4 +1,10 @@
 <div class="card overflow-auto" style="height: 480px;">
+  {{-- <div class="form-group row">
+    <label class="col" for="trigger_event" title="{{ $ruleComments['trigger_event'] }}">Trigger event</label>
+    <div class="col">
+      <input type="text" class="form-control noformat" name="trigger_event" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" placeholder="{{ $ruleInfo->trigger->name }}">
+    </div>
+  </div> --}}
   <div class="nav nav-tabs" role="tablist">
     <a class="nav-link active" data-toggle="tab" href="#ruleMain" role="tab">Main</a>
     <a class="nav-link" data-toggle="tab" href="#ruleDetail" role="tab">Details</a>
@@ -8,17 +14,36 @@
   </div>
   <div class="tab-content" data-resource="/rule/{{ $ruleInfo->id }}">
     <fieldset class="tab-pane fade show active" id="ruleMain">
-      <legend>Task rule <span class="badge badge-light">{{ $ruleInfo->id }}</span></legend>
       <table class="table table-sm table-hover" data-id="{{ $ruleInfo->id }}" data-source="/rule/">
+        <tr>
+          <td><label for="trigger_event" title="{{ $ruleComments['trigger_event'] }}">Trigger event</label></td>
+          <td><input type="text" class="form-control noformat" name="trigger_event" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" placeholder="{{ $ruleInfo->trigger->name }}"></td>
+        </tr>
         <tr>
           <td><label for="task" class="required-field" title="{{ $ruleComments['task'] }}">Task</label></td>
           <td><input type="text" class="form-control noformat" name="task" list="ajaxDatalist" data-ac="/event-name/autocomplete/1" placeholder="{{ $ruleInfo->taskInfo->name }}"></td>
+        </tr>
+        <tr>
           <td><label for="detail" title="{{ $ruleComments['detail'] }}">Detail</label></td>
           <td><input class="form-control noformat" name="detail" value="{{ $ruleInfo->detail }}"></td>
         </tr>
         <tr>
+          <td><label for="for_category" title="{{ $ruleComments['for_category'] }}">Category</label></td>
+          <td><input type="text" class="form-control noformat" name="for_category" list="ajaxDatalist" data-ac="/category/autocomplete" value="{{ empty($ruleInfo->category) ? '' : $ruleInfo->category->category }}"></td>
+        </tr>
+        <tr>
           <td><label for="for_country" title="{{ $ruleComments['for_country'] }}">Country</label></td>
           <td><input type="text" class="form-control noformat" name="for_country" list="ajaxDatalist" data-ac="/country/autocomplete" value="{{ empty($ruleInfo->country) ? '' : $ruleInfo->country->name }}"></td>
+        </tr>
+        <tr>
+          <td><label for="for_origin" title="{{ $ruleComments['for_origin'] }}">Origin</label></td>
+          <td><input type="text" class="form-control noformat" name="for_origin" list="ajaxDatalist" data-ac="/country/autocomplete" value="{{ empty($ruleInfo->origin) ? '' : $ruleInfo->origin->name }}"></td>
+        </tr>
+        <tr>
+          <td><label for="for_type" title="{{ $ruleComments['for_type'] }}">Type</label></td>
+          <td><input type="text" class="form-control noformat" name="for_type" list="ajaxDatalist" data-ac="/type/autocomplete" value="{{ empty($ruleInfo->type) ? '' : $ruleInfo->type->type }}"></td>
+        </tr>
+        <tr>
           <td><label for="is_active" title="{{ $ruleComments['active'] }}">Is active</label></td>
           <td>
             <div class="form-check form-check-inline">
@@ -32,16 +57,8 @@
           </td>
         </tr>
         <tr>
-          <td><label for="for_origin" title="{{ $ruleComments['for_origin'] }}">Origin</label></td>
-          <td><input type="text" class="form-control noformat" name="for_origin" list="ajaxDatalist" data-ac="/country/autocomplete" value="{{ empty($ruleInfo->origin) ? '' : $ruleInfo->origin->name }}"></td>
-          <td><label for="for_category" title="{{ $ruleComments['for_category'] }}">Category</label></td>
-          <td><input type="text" class="form-control noformat" name="for_category" list="ajaxDatalist" data-ac="/category/autocomplete" value="{{ empty($ruleInfo->category) ? '' : $ruleInfo->category->category }}"></td>
-        </tr>
-        <tr>
           <td><label for="notes" title="{{ $ruleComments['notes'] }}">Notes</label><br /></td>
-          <td><textarea class="form-control noformat" name="notes" cols="" rows="">{{ $ruleInfo->notes }}</textarea></td>
-          <td><label for="for_type" title="{{ $ruleComments['for_type'] }}">Type</label></td>
-          <td><input type="text" class="form-control noformat" name="for_type" list="ajaxDatalist" data-ac="/type/autocomplete" value="{{ empty($ruleInfo->type) ? '' : $ruleInfo->type->type }}"></td>
+          <td><textarea class="form-control noformat" name="notes" rows="4">{{ $ruleInfo->notes }}</textarea></td>
         </tr>
       </table>
     </fieldset>
