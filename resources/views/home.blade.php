@@ -118,7 +118,7 @@
               <div class="input-group-prepend">
                 <button class="btn btn-outline-primary" type="button" id="clear-open-tasks">Clear selected on</button>
               </div>
-              <input type="date" class="form-control" name="datetaskcleardate" id="taskcleardate">
+              <input type="text" class="form-control" name="datetaskcleardate" id="taskcleardate" value="{{ now()->format('Y-m-d') }}">
             </div>
           </div>
         </div>

@@ -165,7 +165,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             </span>
           </div>
         </div>
-        <div class="card-body p-1" id="status-panel" style="overflow: auto;">
+        <div class="card-body p-1" id="status-panel" style="overflow: auto; min-height: 80px;">
           @foreach ( $matter->events->where('info.status_event', 1) as $event )
           <div class="row">
             <span class="col-5">{{ $event->info->name }}</span>
@@ -223,7 +223,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             </span>
           </div>
         </div>
-        <div class="card-body p-1" id="renewal-panel" style="overflow: auto;">
+        <div class="card-body p-1" id="renewal-panel" style="overflow: auto; min-height: 80px;">
           @foreach ( $matter->renewalsPending->take(3) as $task )
           <div class="row">
             <span class="col-4">{{ $task->detail }}</span>
@@ -303,7 +303,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         <div class="card-header font-weight-bold p-1">
           Notes
         </div>
-        <div class="card-body p-1" style="overflow: auto;">
+        <div class="card-body p-1" style="overflow: auto; min-height: 60px;">
           <textarea id="notes" class="form-control noformat" name="notes" data-resource="/matter/{{ $matter->id }}">{{ $matter->notes }}</textarea>
         </div>
       </div>

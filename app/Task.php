@@ -62,7 +62,8 @@ class Task extends Model
 
     public function openTasks($renewals, $mytasks, $user_dasboard)
     {
-        $tasks = $this->join('event_name as en', 'task.code', 'en.code')
+        $tasks = $this->select('task.id', 'en.name', 'task.detail', 'task.due_date', 'event.matter_id', 'matter.uid')
+        ->join('event_name as en', 'task.code', 'en.code')
         ->join('event', 'task.trigger_id', 'event.id')
         ->join('matter', 'event.matter_id', 'matter.id')
         ->where('task.done', 0)

@@ -43,7 +43,7 @@ class HomeController extends Controller
         // Count matters per categories
         $categories = Matter::getCategoryMatterCount();
         $taskscount = Task::getUsersOpenTaskCount();
-        return view('home',compact('tasks','renewals','categories','taskscount'));
+        return view('home', compact('tasks', 'renewals', 'categories', 'taskscount'));
     }
 
     /**
@@ -52,25 +52,19 @@ class HomeController extends Controller
      */
     public function clearTasks(Request $request)
     {
-    	$validator = Validator::make($request->all(), [
-        'done_date' => 'bail|required|date',
-        ]);
-    	if($validator->passes()){
-            $tids = $request->input('task_ids');
-            $done_date = $request->input('done_date');
-            $updated = 0;
-            foreach($tids as $id) {
-                $task = Task::find($id);
-                $task->done_date = $done_date;
-                $task->done = 1;
-                $returncode = $task->save();
-                if ($returncode) $updated = $updated + 1;
-            }
-            return Response::json(['not_updated' => (count($tids) - $updated),
-            'errors' =>'']);
-		}
-		return Response::json(['errors' => $validator->errors()]);
-
+    	$this->validate($request, [
+        'done_date' => 'bail|required',
+      ]);
+      $tids = $request->task_ids;
+      $done_date = $request->done_date;
+      $updated = 0;
+      foreach($tids as $id) {
+          $task = Task::find($id);
+          $task->done_date = $done_date;
+          $returncode = $task->save();
+          if ($returncode) $updated++;
+      }
+      return Response::json(['not_updated' => (count($tids) - $updated), 'errors' =>'']);
     }
 
 }
