@@ -152,6 +152,11 @@ class MatterController extends Controller
             }
             break;
           case 'new':
+            $received_event = new Event([
+              'code' => 'REC',
+              'event_date' => now()
+            ]);
+            $new_matter->events()->save($received_event);
             break;
         }
         return response()->json(['redirect' => route('matter.show', [$new_matter])]);
