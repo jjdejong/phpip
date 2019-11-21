@@ -1,18 +1,21 @@
 
 // Body
-$body-bg: #f8fafc;
+$body-bg: #1e2331;
+//$body-color: #eee;
+//$card-bg: #000;
 
 // Typography
-$font-family-sans-serif: "Open Sans Condensed", sans-serif;
-$font-size-base: 0.9rem;
-$line-height-base: 1.2;
+$font-family-sans-serif: "Roboto", sans-serif;
+$font-size-base: 0.8rem;
+$line-height-base: 1.1;
+
 
 // Spacing
 $grid-gutter-width: 6px;
 
 // Colors
 $primary: #586992;
-//$info: #8eb4cb;
+$info: #618faa;
 $blue: #3490dc;
 $indigo: #6574cd;
 $purple: #9561e2;
@@ -23,3 +26,7 @@ $yellow: #ffed4a;
 $green: #38c172;
 $teal: #4dc0b5;
 $cyan: #6cb2eb;
+
+$enable-gradients: true;
+$enable-shadows: true;
+

@@ -116,7 +116,7 @@
 // Titles processing
 
   // Show the title creation form when the title panel is empty
-  if (!titlePanel.querySelector('.row')) {
+  if (!titlePanel.querySelector('dt')) {
     $("#addTitleCollapse").collapse("show");
   }
 

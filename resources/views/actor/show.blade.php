@@ -1,10 +1,10 @@
 <div class="card overflow-auto" style="height: 480px;">
-  <div class="nav nav-tabs" role="tablist">
-    <a class="nav-link active" data-toggle="tab" href="#actorMain" role="tab">Main</a>
-    <a class="nav-link" data-toggle="tab" href="#actorContact" role="tab">Contact</a>
-    <a class="nav-link" data-toggle="tab" href="#actorOther" role="tab">Other</a>
-    <a class="nav-link" data-toggle="tab" id="actorUsedInToggle" href="/actor/{{ $actorInfo->id }}/usedin" data-target="#actorUsedIn" role="tab">Used in</a>
-    <button id="deleteActor" title="Delete actor" class="nav-link btn btn-outline-danger" data-dismiss="modal" data-id="{{ $actorInfo->id }}">
+  <div class="nav nav-pills" role="tablist">
+    <a class="nav-item nav-link active" data-toggle="tab" href="#actorMain" role="tab">Main</a>
+    <a class="nav-item nav-link" data-toggle="tab" href="#actorContact" role="tab">Contact</a>
+    <a class="nav-item nav-link" data-toggle="tab" href="#actorOther" role="tab">Other</a>
+    <a class="nav-item nav-link" data-toggle="tab" id="actorUsedInToggle" href="/actor/{{ $actorInfo->id }}/usedin" data-target="#actorUsedIn" role="tab">Used in</a>
+    <button id="deleteActor" title="Delete actor" class="nav-item nav-link btn btn-outline-danger" data-dismiss="modal" data-id="{{ $actorInfo->id }}">
       Delete
     </button>
   </div>

@@ -4,21 +4,20 @@
 
 <div class="row card-deck">
   <div class="col-4">
-    <div class="card">
-      <div class="card-header">
+    <div class="card border-primary">
+      <div class="card-header text-white bg-primary p-1">
         <div class="row">
-          <div class="lead col-8">
+          <div class="lead col-6">
             Categories
           </div>
-          <div class="col-4">
-            <a href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" class="btn btn-primary float-right" title="Create Matter">Create matter</a>
+          <div class="col-6">
+            <a href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" class="btn btn-info float-right" title="Create Matter">Create matter</a>
           </div>
         </div>
-        <div class="row font-weight-bold">
-          <div class="col-8">
-            Category
+        <div class="row mt-1">
+          <div class="col-7">
           </div>
-          <div class="col-3">
+          <div class="col-4">
             Count
           </div>
           <div class="col-1">
@@ -26,7 +25,7 @@
         </div>
       </div>
 
-      <div class="card-body pt-1" style="min-height: 80px;">
+      <div class="card-body bg-light pt-1" style="min-height: 80px;">
         @foreach ($categories as $group)
         <div class="row reveal-hidden">
           <div class="col-8">
@@ -44,19 +43,18 @@
         @endforeach
       </div>
     </div>
-    <div class="card mt-1">
-      <div class="card-header">
+    <div class="card border-primary mt-1">
+      <div class="card-header text-white bg-primary p-1">
         <div class="row">
           <div class="lead col-8">
             Users tasks
           </div>
           <div class="col-4">
-            <button class="btn btn-light text-light" disabled>I</button> {{--  This invisible button is only for improving the layout! --}}
+            <button class="btn btn-transparent text-primary" disabled>I</button> {{--  This invisible button is only for improving the layout! --}}
           </div>
         </div>
-        <div class="row font-weight-bold">
+        <div class="row mt-1">
           <div class="col-6">
-            User
           </div>
           <div class="col-3">
             Open
@@ -67,7 +65,7 @@
         </div>
       </div>
 
-      <div class="card-body pt-1" style="min-height: 80px;">
+      <div class="card-body bg-light pt-1" style="min-height: 80px;">
         @foreach ($taskscount as $group)
         @if ($group->no_of_tasks > 0)
         <div class="row">
@@ -79,17 +77,13 @@
           </div>
           @if ($group->urgent_date < date('Y-m-d'))
           <div class="col-3 text-danger">
-            {{ $group->urgent_date }}
-          </div>
           @elseif ($group->urgent_date < date('Y-m-d', strtotime("+1 week")))
-          <div class="col-3">
-            <font color="purple">{{ $group->urgent_date }}</font>
-          </div>
+          <div class="col-3" style="color: purple;">
           @else
           <div class="col-3">
+          @endif
             {{ $group->urgent_date }}
           </div>
-          @endif
         </div>
         @endif
       @endforeach
@@ -97,8 +91,8 @@
     </div>
   </div>
   <div class="col-8" id="filter">
-    <div class="card">
-      <div class="card-header">
+    <div class="card border-primary">
+      <div class="card-header text-white bg-primary p-1">
         <div class="row">
           <div class="lead col-3">
             Open tasks
@@ -116,15 +110,14 @@
           <div class="col-4">
             <div class="input-group">
               <div class="input-group-prepend">
-                <button class="btn btn-outline-primary" type="button" id="clear-open-tasks">Clear selected on</button>
+                <button class="btn btn-light" type="button" id="clear-open-tasks">Clear selected on</button>
               </div>
               <input type="text" class="form-control" name="datetaskcleardate" id="taskcleardate" value="{{ now()->format('Y-m-d') }}">
             </div>
           </div>
         </div>
-        <div class="row font-weight-bold">
+        <div class="row mt-1">
           <div class="col-6">
-            Tasks
           </div>
           <div class="col-3">
             Matter
@@ -137,7 +130,7 @@
           </div>
         </div>
       </div>
-      <div class="card-body pt-1" id="tasklist" style="min-height: 80px;">
+      <div class="card-body bg-light pt-1" id="tasklist" style="min-height: 80px;">
         @isset($tasks)
         @foreach ($tasks as $task)
         <div class="row">
@@ -153,19 +146,17 @@
           </div>
           @if ($task->due_date < date('Y-m-d'))
           <div class="col-2 text-danger">
-            {{ date_format(date_create($task->due_date), 'd/m/Y') }}
-          </div>
           @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
-          <div class="col-2">
-            <font color="purple">{{ date_format(date_create($task->due_date), 'd/m/Y') }}</font>
-          </div>
+          <div class="col-2" style="color: purple;">
           @else
           <div class="col-2">
-            {{ date_format(date_create($task->due_date), 'd/m/Y') }}
-          </div>
           @endif
+            {{ $task->due_date }}
+          </div>
           <div class="col-1">
-            <input id="{{ $task->id }}" class="clear-open-task" type="checkbox">
+            <div class="float-right">
+              <input id="{{ $task->id }}" class="bg-dark text-light clear-open-task" type="checkbox">
+            </div>
           </div>
         </div>
         @endforeach
@@ -176,8 +167,8 @@
       @endisset
       </div>
     </div>
-    <div class="card mt-1">
-      <div class="card-header">
+    <div class="card border-primary mt-1">
+      <div class="card-header text-white bg-primary p-1">
         <div class="row">
           <div class="lead col-3">
             Open renewals
@@ -195,15 +186,14 @@
           <div class="col-4">
             <div class="input-group">
               <div class="input-group-prepend">
-                <button class="btn btn-outline-primary" type="button" id="clear-ren-tasks">Clear selected on</button>
+                <button class="btn btn-light" type="button" id="clear-ren-tasks">Clear selected on</button>
               </div>
-              <input type="date" class="form-control" name="renewalcleardate" id="renewalcleardate">
+              <input type="text" class="form-control" name="renewalcleardate" id="renewalcleardate" value="{{ now()->format('Y-m-d') }}">
             </div>
           </div>
         </div>
-        <div class="row font-weight-bold">
+        <div class="row mt-1">
           <div class="col-6">
-            Renewals
           </div>
           <div class="col-3">
             Matter
@@ -217,7 +207,7 @@
         </div>
       </div>
 
-      <div class="card-body pt-1" id="renewallist" style="min-height: 80px;">
+      <div class="card-body bg-light pt-1" id="renewallist" style="min-height: 80px;">
         @isset($renewals)
         @foreach ($renewals as $task)
         <div class="row">
@@ -233,19 +223,17 @@
           </div>
           @if ($task->due_date < date('Y-m-d'))
           <div class="col-2 text-danger">
-            {{ date_format(date_create($task->due_date), 'd/m/Y') }}
-          </div>
           @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
-          <div class="col-2">
-            <font color="purple">{{ date_format(date_create($task->due_date), 'd/m/Y') }}</font>
-          </div>
+          <div class="col-2" style="color: purple;">
           @else
           <div class="col-2">
-            {{ date_format(date_create($task->due_date), 'd/m/Y') }}
-          </div>
           @endif
+            {{ $task->due_date }}
+          </div>
           <div class="col-1">
-            <input id="{{ $task->id }}" class="clear-ren-task" type="checkbox">
+            <div class="float-right">
+              <input id="{{ $task->id }}" class="clear-ren-task" type="checkbox">
+            </div>
           </div>
         </div>
         @endforeach

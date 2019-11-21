@@ -7,26 +7,21 @@
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card">
+    <div class="card border-primary">
     <table class="table table-striped table-hover table-sm col">
       <thead>
-        <tr>
-          <th>Name</th>
-          <th>First name</th>
-          <th>Display name</th>
-          <th>Company</th>
-          <th>Person</th>
-        </tr>
-        <tr id="filterFields">
-          <th><input class="form-control form-control-sm" name="Name" value="{{ Request::get('Name') }}"></th>
-          <th colspan="3"></th>
-          <th>
+        <tr id="filterFields" class="bg-primary text-light">
+          <td><input class="form-control form-control-sm" name="Name" placeholder="Name" value="{{ Request::get('Name') }}"></td>
+          <td>First name</td>
+          <td>Display name</td>
+          <td>Company <span class="float-right">Person</span></td>
+          <td>
             <select id="person" class="custom-select-sm px-0" name="phy_person">
               <option value="" selected>All</option>
               <option value="1">Physical</option>
               <option value="0">Legal</option>
             </select>
-          </th>
+          </td>
         </tr>
       </thead>
       <tbody id="actorList">
@@ -58,7 +53,7 @@
   </div>
   <div class="col-4">
     <div class="card border-info">
-      <div class="card-header bg-info">
+      <div class="card-header bg-info text-light">
         Actor information
       </div>
       <div class="card-body p-2" id="ajaxPanel">
