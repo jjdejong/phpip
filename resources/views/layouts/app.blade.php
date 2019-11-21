@@ -335,11 +335,11 @@
         let resource = e.target.closest('[data-resource]').dataset.resource;
         if (e.target.matches('.titleItem')) { // Handle titles in matter.show
           if (e.target.value.trim().length === 0) {
-            fetchREST(resource, 'DELETE');
+            fetchREST(resource, 'DELETE').then(data => reloadPart(window.location.pathname, 'titlePanel'));
           } else {
-            fetchREST(resource, 'PUT', params);
+            fetchREST(resource, 'PUT', params)
+            .then(data => e.target.classList.remove('border', 'border-info'));
           }
-          reloadPart(window.location.pathname, 'titlePanel');
         } else { // Handle generic input fields
           fetchREST(resource, 'PUT', params)
             .then(data => {
