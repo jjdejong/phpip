@@ -80,10 +80,10 @@
                 Tables
               </a>
               <ul class="dropdown-menu" role="menu">
-                <a class="dropdown-item" href="{{ url('/rule/') }}">Edit rules</a>
-                <a class="dropdown-item" href="{{ url('/eventname/') }}">Edit event names</a>
-                <a class="dropdown-item" href="{{ url('/category/') }}">Edit category</a>
                 <a class="dropdown-item" href="{{ url('/actor/') }}">Actors</a>
+                <a class="dropdown-item" href="{{ url('/rule/') }}">Rules</a>
+                <a class="dropdown-item" href="{{ url('/eventname/') }}">Event names</a>
+                <a class="dropdown-item" href="{{ url('/category/') }}">Categories</a>
               </ul>
             </li>
           @endcannot

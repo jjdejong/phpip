@@ -25,7 +25,7 @@
         </div>
       </div>
 
-      <div class="card-body bg-light pt-1" style="min-height: 80px;">
+      <div class="card-body pt-1" style="min-height: 80px;">
         @foreach ($categories as $group)
         <div class="row reveal-hidden">
           <div class="col-8">
@@ -65,7 +65,7 @@
         </div>
       </div>
 
-      <div class="card-body bg-light pt-1" style="min-height: 80px;">
+      <div class="card-body pt-1" style="min-height: 80px;">
         @foreach ($taskscount as $group)
         @if ($group->no_of_tasks > 0)
         <div class="row">
@@ -130,7 +130,7 @@
           </div>
         </div>
       </div>
-      <div class="card-body bg-light pt-1" id="tasklist" style="min-height: 80px;">
+      <div class="card-body pt-1" id="tasklist" style="min-height: 80px;">
         @isset($tasks)
         @foreach ($tasks as $task)
         <div class="row">
@@ -207,7 +207,7 @@
         </div>
       </div>
 
-      <div class="card-body bg-light pt-1" id="renewallist" style="min-height: 80px;">
+      <div class="card-body pt-1" id="renewallist" style="min-height: 80px;">
         @isset($renewals)
         @foreach ($renewals as $task)
         <div class="row">

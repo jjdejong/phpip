@@ -1,14 +1,8 @@
-<div class="card overflow-auto" style="height: 480px;">
-  {{-- <div class="form-group row">
-    <label class="col" for="trigger_event" title="{{ $ruleComments['trigger_event'] }}">Trigger event</label>
-    <div class="col">
-      <input type="text" class="form-control noformat" name="trigger_event" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" placeholder="{{ $ruleInfo->trigger->name }}">
-    </div>
-  </div> --}}
-  <div class="nav nav-tabs" role="tablist">
-    <a class="nav-link active" data-toggle="tab" href="#ruleMain" role="tab">Main</a>
-    <a class="nav-link" data-toggle="tab" href="#ruleDetail" role="tab">Details</a>
-    <button id="deleteRule" title="Delete rule" class="nav-link btn btn-outline-danger" data-dismiss="modal" data-id="{{ $ruleInfo->id }}">
+<div class="card" style="height: 480px;">
+  <div class="nav nav-pills" role="tablist">
+    <a class="nav-item nav-link active" data-toggle="tab" href="#ruleMain" role="tab">Main</a>
+    <a class="nav-item nav-link" data-toggle="tab" href="#ruleDetail" role="tab">Details</a>
+    <button id="deleteRule" title="Delete rule" class="nav-item nav-link btn btn-outline-danger" data-dismiss="modal" data-id="{{ $ruleInfo->id }}">
       Delete
     </button>
   </div>
@@ -164,5 +158,4 @@
       </table>
     </fieldset>
   </div>
-
 </div>

@@ -4,7 +4,7 @@
 			<tr>
 				<td><label for="code">Code</label></td>
 				<td><input class="noformat form-control" name="code" value="{{ $category->code }}"></td>
-				<td><label for="category" title="{{ $tableComments['category'] }}">Category name</label></td>
+				<td><label for="category" title="{{ $tableComments['category'] }}">Name</label></td>
 				<td><input class="form-control noformat" name="category" value="{{ $category->category }}"></td>
 			</tr>
 			<tr>

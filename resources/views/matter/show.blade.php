@@ -11,7 +11,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 <div class="row card-deck mb-1">
   <div id="refsPanel" class="card border-primary col-3 p-0">
-    <div class="card-header bg-primary text-white reveal-hidden lead p-1"  {!! $matter->dead ? 'style="text-decoration: line-through;"' : '' !!}>
+    <div class="card-header bg-primary text-light reveal-hidden lead p-1"  {!! $matter->dead ? 'style="text-decoration: line-through;"' : '' !!}>
       <a class="bg-primary text-white" href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
       ({{ $matter->category->category }})
       <a class="bg-primary text-white float-right hidden-action"
@@ -110,10 +110,10 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <div class="card reveal-hidden border-secondary mb-1">
         <div class="card-header bg-primary text-light p-1">
           {{ $role_name }}
-          <a class="hidden-action float-right ml-2" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group[0]->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
+          <a class="hidden-action float-right text-light font-weight-bold ml-2" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group[0]->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
             &#9998;
           </a>
-          <a class="hidden-action float-right" data-placement="right" rel="popover" title="Add {{ $role_name }}"
+          <a class="hidden-action float-right text-light font-weight-bold" data-placement="right" rel="popover" title="Add {{ $role_name }}"
              data-role_name="{{ $role_name }}"
              data-role_code="{{ $role_group->first()->role_code }}"
              data-shareable="{{ $role_group->first()->shareable }}"
@@ -163,8 +163,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <span class="col-3">Date</span>
             <span class="col-4">
               Number
-              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/events" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All events">
-                &vellip;
+              <a class="hidden-action float-right text-light font-weight-bold" href="/matter/{{ $matter->id }}/events" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All events">
+                &nbsp;&vellip;&nbsp;
               </a>
             </span>
           </div>
@@ -198,8 +198,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <span class="col-9">Open Tasks</span>
             <span class="col-3">
               Due
-              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All tasks">
-                &vellip;
+              <a class="hidden-action float-right text-light font-weight-bold" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All tasks">
+                &nbsp;&vellip;&nbsp;
               </a>
             </span>
           </div>
@@ -221,8 +221,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <span class="col-6">Renewals</span>
             <span class="col-6">
               Due
-              <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All renewals">
-                &vellip;
+              <a class="hidden-action float-right text-light font-weight-bold" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All renewals">
+                &nbsp;&vellip;&nbsp;
               </a>
             </span>
           </div>
@@ -239,8 +239,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <div class="card col-6 p-0 border-primary reveal-hidden">
         <div class="card-header p-1 bg-primary text-light">
           Classifiers
-          <a class="hidden-action float-right font-weight-bold" href="/matter/{{ $matter->id }}/classifiers" data-target="#ajaxModal" data-toggle="modal" title="Classifier detail">
-            &vellip;
+          <a class="hidden-action float-right text-light font-weight-bold" href="/matter/{{ $matter->id }}/classifiers" data-target="#ajaxModal" data-toggle="modal" title="Classifier detail">
+            &nbsp;&vellip;&nbsp;
           </a>
         </div>
         <div class="card-body p-1" id="classifierPanel" style="overflow: auto;">

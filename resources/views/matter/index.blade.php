@@ -233,11 +233,12 @@
           <td class="tab1 {{ $hideTab1 }}">{{ $matter->GrtNo }}</td>
         </tr>
         @endforeach
+    <tr>
+      <td colspan="9">
+        {{ $matters->links() }}
+      </td>
+    </tr>
       </tbody>
     </table>
-  </div>
-  <div class="card-footer py-0">
-    <div class="mx-auto">{{ $matters->links() }}</div>
-  </div>
-</div>
+
 @stop

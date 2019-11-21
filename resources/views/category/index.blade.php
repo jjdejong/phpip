@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<legend>Categories
+<legend class="text-light">
+  Categories
   <a href="category/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Category" data-resource="/category/">Create a new Category</a>
 </legend>
 <div class="row">
@@ -9,16 +10,10 @@
     <div class="card overflow-auto" style="max-height: 640px;">
       <table class="table table-striped table-hover table-sm">
         <thead>
-          <tr>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Display with</th>
-            <th>&nbsp;</th>
-          </tr>
-          <tr id="filter">
-            <th><input class="filter-input form-control form-control-sm" data-source="/category" name="Code" placeholder="Code" value="{{ old('Code') }}"></th>
-            <th><input class="filter-input form-control form-control-sm" data-source="/category" name="Category" placeholder="Category" value="{{ old('Category') }}"></th>
-            <th colspan="2"></th>
+          <tr id="filter" class="bg-primary text-light">
+            <td><input class="filter-input form-control form-control-sm" data-source="/category" name="Code" placeholder="Code" value="{{ old('Code') }}"></td>
+            <td><input class="filter-input form-control form-control-sm" data-source="/category" name="Category" placeholder="Category" value="{{ old('Category') }}"></td>
+            <td colspan="2">Display with</th>
           </tr>
         </thead>
         <tbody id="ruleList">
@@ -39,7 +34,7 @@
   </div>
   <div class="col-5">
     <div class="card border-info">
-      <div class="card-header bg-info">
+      <div class="card-header bg-info text-light">
         Category information
       </div>
       <div class="card-body p-2" id="ajaxPanel">

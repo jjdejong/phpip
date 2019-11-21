@@ -53,7 +53,8 @@ class RuleController extends Controller
             });
         }
         $ruleslist = $rule->with(['country:iso,name', 'trigger:code,name', 'category:code,category', 'origin:iso,name', 'type:code,type', 'taskInfo:code,name'])
-            ->orderby('task')->get();
+            ->orderby('task')->paginate(21);
+        $ruleslist->appends($request->input())->links();
         return view('rule.index', compact('ruleslist'));
     }
 

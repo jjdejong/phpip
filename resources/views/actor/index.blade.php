@@ -1,55 +1,57 @@
 @extends('layouts.app')
 
 @section('content')
-<legend>
+<legend class="text-light">
     Actors
     <a href="actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Create Actor">Create actor</a>
 </legend>
 <div class="row">
   <div class="col">
     <div class="card border-primary">
-    <table class="table table-striped table-hover table-sm col">
-      <thead>
-        <tr id="filterFields" class="bg-primary text-light">
-          <td><input class="form-control form-control-sm" name="Name" placeholder="Name" value="{{ Request::get('Name') }}"></td>
-          <td>First name</td>
-          <td>Display name</td>
-          <td>Company <span class="float-right">Person</span></td>
-          <td>
-            <select id="person" class="custom-select-sm px-0" name="phy_person">
-              <option value="" selected>All</option>
-              <option value="1">Physical</option>
-              <option value="0">Legal</option>
-            </select>
-          </td>
-        </tr>
-      </thead>
-      <tbody id="actorList">
-        @foreach ($actorslist as $actor)
-        <tr class="reveal-hidden" data-id="{{ $actor->id }}">
-          <td>
-            <a href="/actor/{{ $actor->id }}" data-panel="ajaxPanel" title="Actor data">
-              {{ $actor->name }}
-            </a>
-          </td>
-          <td>{{ $actor->first_name }}</td>
-          <td>{{ $actor->display_name }}</td>
-          <td>{{ empty($actor->company) ? '' : $actor->company->name }}</td>
-          <td>
-            @if ($actor->phy_person)
-            Physical
-            @else
-            Legal
-            @endif
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
-    <div class="mx-auto">
-      {{ $actorslist->links() }}
+      <table class="table table-striped table-hover table-sm col">
+        <thead>
+          <tr id="filterFields" class="bg-primary text-light">
+            <td><input class="form-control form-control-sm" name="Name" placeholder="Name" value="{{ Request::get('Name') }}"></td>
+            <td>First name</td>
+            <td>Display name</td>
+            <td>Company <span class="float-right">Person</span></td>
+            <td>
+              <select id="person" class="custom-select-sm px-0" name="phy_person">
+                <option value="" selected>All</option>
+                <option value="1">Physical</option>
+                <option value="0">Legal</option>
+              </select>
+            </td>
+          </tr>
+        </thead>
+        <tbody id="actorList">
+          @foreach ($actorslist as $actor)
+          <tr class="reveal-hidden" data-id="{{ $actor->id }}">
+            <td>
+              <a href="/actor/{{ $actor->id }}" data-panel="ajaxPanel" title="Actor data">
+                {{ $actor->name }}
+              </a>
+            </td>
+            <td>{{ $actor->first_name }}</td>
+            <td>{{ $actor->display_name }}</td>
+            <td>{{ empty($actor->company) ? '' : $actor->company->name }}</td>
+            <td>
+              @if ($actor->phy_person)
+              Physical
+              @else
+              Legal
+              @endif
+            </td>
+          </tr>
+          @endforeach
+          <tr>
+            <td colspan="5">
+              {{ $actorslist->links() }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </div>
   </div>
   <div class="col-4">
     <div class="card border-info">

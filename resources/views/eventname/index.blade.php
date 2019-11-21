@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<legend>Event names
+<legend class="text-light">
+  Event names
   <a href="eventname/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Event name" data-resource="/eventname/">Create a new event name</a>
 </legend>
 <div class="row">
@@ -9,16 +10,10 @@
     <div class="card overflow-auto" style="max-height: 640px;">
       <table class="table table-striped table-hover table-sm">
         <thead>
-          <tr>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Notes</th>
-            <th>&nbsp;</th>
-          </tr>
-          <tr id="filter">
-            <th><input class="filter-input form-control form-control-sm" data-source="/eventname" name="Code" placeholder="Code" value="{{ old('Code') }}"></th>
-            <th><input class="filter-input form-control form-control-sm" data-source="/eventname" name="Name" placeholder="Name" value="{{ old('Name') }}"></th>
-            <th colspan="2"></th>
+          <tr id="filter" class="bg-primary text-light">
+            <td><input class="filter-input form-control form-control-sm" data-source="/eventname" name="Code" placeholder="Code" value="{{ old('Code') }}"></td>
+            <td><input class="filter-input form-control form-control-sm" data-source="/eventname" name="Name" placeholder="Name" value="{{ old('Name') }}"></td>
+            <td colspan="2">Notes</td>
           </tr>
         </thead>
         <tbody id="ruleList">
@@ -39,7 +34,7 @@
   </div>
   <div class="col-5">
     <div class="card border-info">
-      <div class="card-header bg-info">
+      <div class="card-header bg-info text-light">
         Event name information
       </div>
       <div class="card-body p-2" id="ajaxPanel">
