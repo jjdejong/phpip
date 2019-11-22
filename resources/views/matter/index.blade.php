@@ -218,7 +218,7 @@
           <td class="tab0 {{ $hideTab0 }}">{{ $matter->ClRef }}</td>
           <td class="tab0 {{ $hideTab0 }}">{{ $matter->Agent }}</td>
           <td class="tab0 {{ $hideTab0 }}">{{ $matter->AgtRef }}</td>
-          @if ( $matter->container_id )
+          @if ( $matter->container_id && $matter->Title2 )
           <td class="tab0 {{ $hideTab0 }}">{{ $matter->Title2 }}</td>
           @else
           <td class="tab0 {{ $hideTab0 }}">{{ $matter->Title }}</td>
