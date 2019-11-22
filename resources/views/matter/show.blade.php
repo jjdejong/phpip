@@ -212,7 +212,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     </div>
     <div class="row card-deck mb-1">
       <div class="card col-2 p-0 border-primary reveal-hidden" style="min-height: 138px;">
-        <div class="card-header p-1 bg-primary text-light">
+        <div class="card-header p-1 bg-primary text-warning">
           <div class="row">
             <span class="col-6">Renewals</span>
             <span class="col-6">
@@ -241,9 +241,9 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
         <div class="card-body p-1" id="classifierPanel" style="overflow: auto;">
           @foreach ( $classifiers as $type => $classifier_group )
-          <div class="row">
-            <span class="col-2"><strong>{{ $type }}</strong></span>
-            <span class="col-10">
+          <dl class="row mb-1">
+            <dt class="col-3">{{ $type }}</dt>
+            <dd class="col-9 mb-1">
               @foreach ( $classifier_group as $classifier )
               @if ( $classifier->url )
               <a href="{{ $classifier->url }}" target="_blank">{{ $classifier->value }}</a>
@@ -258,18 +258,18 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               <a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
               @endforeach
               @endif
-            </span>
-          </div>
+            </dd>
+          </dl>
           @endforeach
           @if ( !in_array('Link', $classifiers->keys()->all()) && !$matter->linkedBy->isEmpty() )
-          <div class="row">
-            <span class="col-1"><strong>Link</strong></span>
-            <span class="col-11">
+          <dl class="row mb-1">
+            <dt class="col-2">Link</dt>
+            <dd class="col-10 mb-1">
               @foreach ( $matter->linkedBy as $linkedBy )
               <a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
               @endforeach
-            </span>
-          </div>
+            </dd>
+          </dl>
           @endif
         </div>
       </div>
@@ -279,40 +279,39 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           <span class="float-right">&#9432;</span>
         </div>
         <div class="card-body p-1" id="relationsPanel" style="overflow: auto;">
-          @if ( $matter->has('family') )
-          <p>
-            <strong>Fam</strong>
-            @foreach ( $matter->family as $member )
-            <a class="badge badge-primary font-weight-light" href="/matter/{{ $member->id }}">{{ $member->suffix }}</a>
-            @endforeach
-          </p>
-          @endif
+          @isset ( $matter->family )
+          <dl class="mb-1">
+            <dt>Fam</dt>
+            <dd class="mb-1">
+              @foreach ( $matter->family as $member )
+              <a class="badge badge-primary font-weight-light" href="/matter/{{ $member->id }}">{{ $member->suffix }}</a>
+              @endforeach
+            </dd>
+          </dl>
+          @endisset
           @foreach ( $matter->priorityTo->groupBy('caseref') as $caseref => $family )
-          <p>
-            <strong>{{ $caseref }}</strong>
-            @foreach ( $family as $rmatter )
-            <a class="badge badge-primary" href="/matter/{{ $rmatter->id }}">{{ $rmatter->suffix }}</a>
-            @endforeach
-          </p>
+          <dl class="mb-1">
+            <dt>{{ $caseref }}</dt>
+            <dd class="mb-1">
+              @foreach ( $family as $rmatter )
+              <a class="badge badge-primary" href="/matter/{{ $rmatter->id }}">{{ $rmatter->suffix }}</a>
+              @endforeach
+            </dd>
+          </dl>
           @endforeach
         </div>
       </div>
     </div>
     <div class="row card-deck">
-      <div class="card col-9 p-0 border-secondary" style="min-height: 100px;">
+      <div class="card col-12 p-0 border-secondary" style="min-height: 100px;">
         <div class="card-header p-1 bg-secondary text-light">
           Notes
         </div>
         <div class="card-body p-1" style="overflow: auto;">
           <textarea id="notes" class="form-control noformat" name="notes" data-resource="/matter/{{ $matter->id }}">{{ $matter->notes }}</textarea>
         </div>
-      </div>
-      <div class="card border-info col-3 p-0">
-        <div class="card-header bg-info text-white p-1">
-          Copy summary
-          <span class="float-right">&#9432;</span>
-        </div>
-        <div class="card-body p-1" id="relationsPanel" style="overflow: auto;">
+        <div class="card-footer p-1">
+          Summaries:
           <a class="font-weight-light badge badge-primary"
               href="/matter/{{ $matter->id }}/description/en"
               data-toggle="modal"

@@ -25,7 +25,7 @@
         </tr>
         <tr>
           <td><label for="login" title="{{ $actorComments['login'] }}">Login</label></td>
-          <td><input class="noformat form-control" name="login" value="{{ $actorInfo->login }}"></td>
+          <td><input type="text" class="noformat form-control" name="login" value="{{ $actorInfo->login }}"></td>
         </tr>
         <tr>
           <td><label for="default_role" title="{{ $actorComments['default_role'] }}">Default role</label></td>
@@ -33,7 +33,7 @@
         </tr>
         <tr>
           <td><label for="function" title="{{ $actorComments['function'] }}">Function</label></td>
-          <td><input class="noformat form-control" name="function" value="{{ $actorInfo->function }}"></td>
+          <td><input type="text" class="noformat form-control" name="function" value="{{ $actorInfo->function }}"></td>
         </tr>
         <tr>
           <td><label for="company_id" title="{{ $actorComments['company_id'] }}">Employer</label></td>
