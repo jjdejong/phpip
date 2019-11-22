@@ -29,7 +29,7 @@
         </tr>
         <tr>
           <td><label for="default_role" title="{{ $actorComments['default_role'] }}">Default role</label></td>
-          <td><input type="text" class="noformat form-control" name="default_role" list="ajaxDatalist" data-ac="/role/autocomplete" value="{{ empty($actorInfo->droleInfo) ? '' : $actorInfo->droleInfo->name }}" autocomplete="off"></td>
+          <td><input type="text" class="noformat form-control" name="default_role" data-ac="/role/autocomplete" value="{{ empty($actorInfo->droleInfo) ? '' : $actorInfo->droleInfo->name }}" autocomplete="off"></td>
         </tr>
         <tr>
           <td><label for="function" title="{{ $actorComments['function'] }}">Function</label></td>
@@ -37,7 +37,7 @@
         </tr>
         <tr>
           <td><label for="company_id" title="{{ $actorComments['company_id'] }}">Employer</label></td>
-          <td><input type="text" class="noformat form-control" name="company_id" list="ajaxDatalist" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->company) ? '' : $actorInfo->company->name }}" autocomplete="off"></td>
+          <td><input type="text" class="noformat form-control" name="company_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->company) ? '' : $actorInfo->company->name }}" autocomplete="off"></td>
         </tr>
         <tr>
           <td><label for="phy_person" title="{{ $actorComments['phy_person'] }}">Person</label></td>
@@ -54,7 +54,7 @@
         </tr>
         <tr>
           <td><label for="nationality">Nationality</label></td>
-          <td><input type="text" class="noformat form-control" name="nationality" list="ajaxDatalist" data-ac="/country/autocomplete" value="{{ empty($actorInfo->nationalityInfo) ? '' : $actorInfo->nationalityInfo->name }}" autocomplete="off"></td>
+          <td><input type="text" class="noformat form-control" name="nationality" data-ac="/country/autocomplete" value="{{ empty($actorInfo->nationalityInfo) ? '' : $actorInfo->nationalityInfo->name }}" autocomplete="off"></td>
         </tr>
         <tr>
           <td><label for="small_entity" title="{{ $actorComments['small_entity'] }}">Entity</label></td>
@@ -79,7 +79,7 @@
         </tr>
         <tr>
           <td><label for="country">Country</label></td>
-          <td><input type='text' class="noformat form-control" name="country" list="ajaxDatalist" data-ac="/country/autocomplete" value="{{ empty($actorInfo->countryInfo) ? '' : $actorInfo->countryInfo->name }}" autocomplete="off"></td>
+          <td><input type='text' class="noformat form-control" name="country" data-ac="/country/autocomplete" value="{{ empty($actorInfo->countryInfo) ? '' : $actorInfo->countryInfo->name }}" autocomplete="off"></td>
         </tr>
         <tr>
           <td><label for="address_mailing">Address mailing</label><br /></td>
@@ -87,7 +87,7 @@
         </tr>
         <tr>
           <td><label for="country_mailing">Country mailing</label></td>
-          <td><input type='text' class="noformat form-control" name="country_mailing" list="ajaxDatalist" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_mailingInfo ) ? '' : $actorInfo->country_mailingInfo->name }}" autocomplete="off"></td>
+          <td><input type='text' class="noformat form-control" name="country_mailing" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_mailingInfo ) ? '' : $actorInfo->country_mailingInfo->name }}" autocomplete="off"></td>
         </tr>
         <tr>
           <td><label for="address_billing">Address billing</label><br /></td>
@@ -95,7 +95,7 @@
         </tr>
         <tr>
           <td><label for="country_billing">Country billing</label></td>
-          <td><input class="noformat form-control" name="country_billing" list="ajaxDatalist" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_billingInfo ) ? '' : $actorInfo->country_billingInfo->name }}" autocomplete="off"></td>
+          <td><input class="noformat form-control" name="country_billing" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_billingInfo ) ? '' : $actorInfo->country_billingInfo->name }}" autocomplete="off"></td>
         </tr>
         <tr>
           <td><label for="email">Email</label></td>
@@ -136,11 +136,11 @@
         </tr>
         <tr>
           <td><label for="parent_id" title="{{ $actorComments['parent_id'] }}">Parent company</label></td>
-          <td><input type="text" class="noformat form-control" name="parent_id" list="ajaxDatalist" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->parent) ? '' : $actorInfo->parent->name }}" autocomplete="off"></td>
+          <td><input type="text" class="noformat form-control" name="parent_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->parent) ? '' : $actorInfo->parent->name }}" autocomplete="off"></td>
         </tr>
         <tr>
           <td><label for="site_id" title="{{ $actorComments['site_id'] }}">Work site</label></td>
-          <td><input type="text" class="noformat form-control" name="site_id" list="ajaxDatalist" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->site) ? '' : $actorInfo->site->name }}" autocomplete="off"></td>
+          <td><input type="text" class="noformat form-control" name="site_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->site) ? '' : $actorInfo->site->name }}" autocomplete="off"></td>
         <tr>
           <td><label for="notes" title="{{ $actorComments['notes'] }}">Notes</label><br /></td>
           <td colspan="3"><textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea></td>

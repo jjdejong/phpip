@@ -6,7 +6,7 @@
         <td><label for="task" title="{{ $ruleComments['task'] }} " class="required-field">Task</label></td>
         <td >
           <input type='hidden' name='task'>
-          <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/event-name/autocomplete/1" data-actarget="task" autocomplete="off">
+          <input type="text" class="form-control form-control-sm" data-ac="/event-name/autocomplete/1" data-actarget="task" autocomplete="off">
         </td>
         <td><label for="detail" title="{{ $ruleComments['detail'] }}">Detail</label></td>
         <td><input id="detail" class="form-control form-control-sm" name="detail"></td>
@@ -15,7 +15,7 @@
         <td><label for="for_country_new" title="{{ $ruleComments['for_country'] }}">Country</label></td>
         <td class="ui-front">
           <input type='hidden' name='for_country'>
-          <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/country/autocomplete" data-actarget="for_country" autocomplete="off">
+          <input type="text" class="form-control form-control-sm" data-ac="/country/autocomplete" data-actarget="for_country" autocomplete="off">
         </td>
         <td><label title="{{ $ruleComments['active'] }}">Is active</label></td>
         <td>
@@ -33,12 +33,12 @@
         <td><label title="{{ $ruleComments['for_origin'] }}" class="required-field">Origin</label></td>
         <td>
           <input type='hidden' name='for_origin'>
-          <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/country/autocomplete" data-actarget="for_origin" autocomplete="off">
+          <input type="text" class="form-control form-control-sm" data-ac="/country/autocomplete" data-actarget="for_origin" autocomplete="off">
         </td>
         <td><label for="for_category_new" title="{{ $ruleComments['for_category'] }}">Category</label></td>
         <td>
           <input type='hidden' name='for_category'>
-          <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/category/autocomplete" data-actarget="for_category" autocomplete="off">
+          <input type="text" class="form-control form-control-sm" data-ac="/category/autocomplete" data-actarget="for_category" autocomplete="off">
         </td>
       </tr>
       <tr>
@@ -47,7 +47,7 @@
         <td><label title="{{ $ruleComments['for_type'] }}">Type</label></td>
         <td>
           <input type='hidden' name='for_type'>
-          <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/type/autocomplete" data-actarget="for_type" autocomplete="off">
+          <input type="text" class="form-control form-control-sm" data-ac="/type/autocomplete" data-actarget="for_type" autocomplete="off">
         </td>
       </tr>
     </table>
@@ -59,7 +59,7 @@
         <td><label for="trigger_event_new" title="{{ $ruleComments['trigger_event'] }}" class="required-field">Trigger event</label></td>
         <td>
           <input type='hidden' name='trigger_event'>
-          <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" data-actarget="trigger_event" autocomplete="off">
+          <input type="text" class="form-control form-control-sm" data-ac="/event-name/autocomplete/0" data-actarget="trigger_event" autocomplete="off">
         </td>
         <td><label title="{{ $ruleComments['use_parent'] }}">Use parent</label></td>
         <td>
@@ -107,7 +107,7 @@
         <td><label for="condition_event_new" title="{{ $ruleComments['condition_event'] }}">Condition event</label></td>
         <td>
           <input type='hidden' name='condition_event'>
-          <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" data-actarget="condition_event" autocomplete="off">
+          <input type="text" class="form-control form-control-sm" data-ac="/event-name/autocomplete/0" data-actarget="condition_event" autocomplete="off">
         </td>
         <td><label title="{{ $ruleComments['use_priority'] }}">Use priority</label></td>
         <td>
@@ -125,12 +125,12 @@
         <td><label for="abort_on_new" title="{{ $ruleComments['abort_on'] }}">Abort on</label></td>
         <td>
           <input type='hidden' name='abort_on'>
-          <input class="form-control form-control-sm" list="ajaxDatalist" data-ac="/event-name/autocomplete/0" data-actarget="abort_on" autocomplete="off">
+          <input class="form-control form-control-sm" data-ac="/event-name/autocomplete/0" data-actarget="abort_on" autocomplete="off">
         </td>
         <td><label for="responsible" title="{{ $ruleComments['responsible'] }}">Responsible</label></td>
         <td>
           <input type='hidden' name='responsible'>
-          <input type='text' class="form-control form-control-sm" list="ajaxDatalist" data-ac="/user/autocomplete" data-actarget="responsible" autocomplete="off">
+          <input type='text' class="form-control form-control-sm" data-ac="/user/autocomplete" data-actarget="responsible" autocomplete="off">
         </td>
       </tr>
       <tr>

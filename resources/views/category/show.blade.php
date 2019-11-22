@@ -11,7 +11,7 @@
 				<td><label for="ref_prefix" title="{{ $tableComments['ref_prefix'] }}">Reference prefix</label></td>
 				<td><input class="form-control noformat" type='text' name="ref_prefix" value="{{ $category->ref_prefix }}"></input>
 				<td><label for="display_with" title="{{ $tableComments['display_with'] }}">Display with</label></td>
-				<td><input type="text" class="form-control noformat" list="ajaxDatalist" data-ac="/category/autocomplete" name="display_with" value="{{ empty($category->display_with) ? '' : $category->displayWithInfo->category }}"></td>
+				<td><input type="text" class="form-control noformat" data-ac="/category/autocomplete" name="display_with" value="{{ empty($category->display_with) ? '' : $category->displayWithInfo->category }}"></td>
 			</tr>
 		</table>
 		<button type="button" class="btn btn-danger" title="Delete category" id="deleteCategory" data-dismiss="modal" data-id="{{ $category->code }}">

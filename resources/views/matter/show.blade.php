@@ -42,15 +42,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
   </div>
 
   <div class="card col-7 border-secondary p-1">
-    {{-- <div id="titlePanel" class="card-body p-1"> --}}
     <dl id="titlePanel">
       @foreach ( $titles as $type => $title_group )
         <dt class="mt-2">
           {{ $type }}
         </dt>
         @foreach ( $title_group as $title )
-          {{-- @if ($title != $title_group->first()) <br>
-          @endif --}}
           <dl class="mb-0">
             <input data-resource="/classifier/{{ $title->id }}" class="titleItem noformat w-100" name="value" value="{{ $title->value }}" autocomplete="off">
           </dl>
@@ -65,7 +62,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}" />
             <div class="col-2">
               <input type="hidden" name="type_code">
-              <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/classifier-type/autocomplete/1" data-actarget="type_code" placeholder="Type" autocomplete="off">
+              <input type="text" class="form-control form-control-sm" data-ac="/classifier-type/autocomplete/1" data-actarget="type_code" placeholder="Type" autocomplete="off">
             </div>
             <div class="col-10">
               <div class="input-group">
@@ -79,7 +76,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </form>
       </div>
     </dl>
-    {{-- </div> --}}
   </div>
 
   <div class="card border-secondary bg-secondary col-2 p-0">

@@ -53,28 +53,27 @@
         }
       },
       change: function(event, ui) {
-        if (!ui.item)
+        if (!ui.item) {
           this.value = "";
+        }
       }
     });
 
     $('input#roleName').autocomplete({
       minLength: 0,
       source: "/role/autocomplete",
-      select: function(event, ui) {
-        addActorForm.shared.value = ui.item.shareable;
-        if (ui.item.shareable) {
-          addActorForm.elements.actorShared.checked = true;
-        } else {
-          addActorForm.elements.actorNotShared.checked = true;
-        }
-      },
       change: function(event, ui) {
-        // Removes the entered value if it does not correspond to a suggestion
         if (!ui.item) {
+          // Removes the entered value if it does not correspond to a suggestion
           this.value = "";
         } else {
           addActorForm.role.value = ui.item.key;
+          addActorForm.shared.value = ui.item.shareable;
+          if (ui.item.shareable) {
+            addActorForm.elements.actorShared.checked = true;
+          } else {
+            addActorForm.elements.actorNotShared.checked = true;
+          }
         }
       }
     }).focus(function() {

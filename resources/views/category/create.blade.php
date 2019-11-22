@@ -12,7 +12,7 @@
         <td><input type="text" class="form-control form-control-sm" name="ref_prefix"></td>
         <td><label for="display_with" title="{{ $tableComments['display_with'] }}"><b>Display with</b></label></td><td>
           <input type='hidden' name='display_with'>
-          <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/category/autocomplete" data-actarget="display_with" autocomplete="off">
+          <input type="text" class="form-control form-control-sm" data-ac="/category/autocomplete" data-actarget="display_with" autocomplete="off">
         </td>
       </tr>
     </table>

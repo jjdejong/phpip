@@ -109,9 +109,6 @@
     </nav>
     <main class="container">
       @yield('content')
-
-      <datalist id="ajaxDatalist"></datalist>
-
       <div id="ajaxModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
           <!-- Modal content-->
@@ -363,7 +360,7 @@
 
     // Reset ajaxModal to default when it is closed
     $('#ajaxModal').on("hidden.bs.modal", function(event) {
-      this.querySelector('.modal-body').innerHTML = '<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
+      this.querySelector('.modal-body').innerHTML = '<div class="spinner-border" role="status"></div>';
       this.querySelector('.modal-title').innerHTML = "Ajax title placeholder";
       this.querySelector('.modal-dialog').className = "modal-dialog";
       footerAlert.innerHTML = "";
@@ -371,76 +368,51 @@
     });
 
 
-    // Process modified input fields
+    // Process modified input fields and prepare for autocompletion
     app.addEventListener("input", e => {
       // Mark the field
       if (e.target.matches(".noformat, textarea, [contenteditable]")) {
         e.target.classList.add("border", "border-info");
       }
 
-      // Process datalist-based autocompletion
-      if (e.target.hasAttribute('data-ac')) {
-        if (e.inputType === "insertReplacementText") {
-          // An item was selected in the list - finalize autocompletion
-          let selected = acList.find(item => {
-            return item.value === e.target.value || item.key === e.target.value;
-          });
-          if (e.target.hasAttribute('data-actarget')) {
-            actarget = e.target.form[e.target.dataset.actarget];
-            actarget.value = selected.key;
-          }
-          ajaxDatalist.innerHTML = "";
-          e.target.blur();
-          e.target.dispatchEvent(new CustomEvent("ac-done", {
-            bubbles: true,
-            detail: selected
-          }));
-        } else {
-          // Character has been typed, generate list
-          acQuery(e.target);
+      // ui-front class required for showing selection list with jQuery autocomplete in modals
+      if ( e.target.closest('.modal-content') ) {
+        if (e.target.closest('tr')) {
+          e.target.closest('tr').classList.add('ui-front');
         }
       }
-    });
 
-    // Actions when an autocompletion is done
-    ajaxModal.addEventListener('ac-done', e => {
-      if (e.target.id == 'addCountry') {
-        let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
-        newCountry.id = 'country-' + e.detail.key;
-        newCountry.children[0].value = e.detail.key;
-        newCountry.children[1].value = e.detail.value;
-        ncountries.appendChild(newCountry);
-        e.target.value = "";
+      // Process autocomplete fields
+      if ( e.target.hasAttribute('data-ac') ) {
+        $(e.target).autocomplete({
+          autoFocus: true,
+          source: e.target.dataset.ac,
+          select: (event, ui) => {
+            if (e.target.id == 'addCountry') {
+              let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
+              newCountry.id = 'country-' + ui.item.key;
+              newCountry.children[0].value = ui.item.key;
+              newCountry.children[1].value = ui.item.value;
+              ncountries.appendChild(newCountry);
+              e.target.value = "";
+            } else if ( e.target.hasAttribute('data-actarget') ) {
+                // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
+                e.target.value = ui.item.value;
+                e.target.form[e.target.dataset.actarget].value = ui.item.key;
+            } else {
+              // Used for content editable fields where the same field is used for sending the id to the server
+              e.target.value = ui.item.key;
+              e.target.blur();
+            }
+          },
+          change: (event, ui) => {
+            if (!ui.item) {
+              e.target.value = "";
+            }
+          }
+        });
       }
     });
-
-    /*var autocompleteJQ = (searchField, dataSource, targetName) => {
-      let targetElement = "";
-      if (targetName) {
-        // The hidden input field is supposed to be the first
-        targetElement = searchField.form[targetName];
-      }
-      $(searchField).autocomplete({
-        minLength: 2,
-        source: dataSource,
-        change: function(event, ui) {
-          if (!ui.item) {
-            searchField.value = "";
-          }
-        },
-        select: function(event, ui) {
-          if (targetName) {
-            // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
-            searchField.value = ui.item.value;
-            targetElement.value = ui.item.key;
-          } else {
-            // Used for content editable fields where the same field is used for sending the id to the server
-            searchField.value = ui.item.key;
-          }
-          searchField.blur(); // Removing focus causes the "change" event to trigger and submit the value via the default functionality attached to the "input.noformat" fields
-        }
-      });
-    }*/
 
     var submitModalForm = (target, Form) => {
       formData = new FormData(Form);
@@ -493,30 +465,6 @@
         inputElt.placeholder = key + ' is required';
         inputElt.className += ' is-invalid';
       });
-    }
-
-    // Generates autocompletion list
-    var acQuery = async (target) => {
-      // clear any previously loaded options in the datalist
-      target.list.innerHTML = "";
-      // minimum number of characters before we start to generate suggestions
-      var min_characters = 1;
-      if (target.value.length < min_characters) {
-        return false;
-      } else {
-        let res = await fetch(target.dataset.ac + '?term=' + target.value);
-        acList = await res.json();
-        acList.forEach(item => {
-          // Create a new <option> element
-          let option = document.createElement('option');
-          option.innerHTML = item.value;
-          if (!target.hasAttribute('data-actarget')) {
-            option.value = item.key;
-          }
-          // attach the option to the datalist element
-          target.list.appendChild(option);
-        });
-      }
     }
 
     // Drag and drop sorting functionality (see roleActors)

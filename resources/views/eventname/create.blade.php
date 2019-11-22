@@ -36,7 +36,7 @@
         </td>
         <td>
           <input type='hidden' name='default_responsible'>
-          <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/user/autocomplete" data-actarget="default_responsible" autocomplete="off">
+          <input type="text" class="form-control form-control-sm" data-ac="/user/autocomplete" data-actarget="default_responsible" autocomplete="off">
         </td>
         <td><label title="{{ $tableComments['use_matter_resp'] }}">Use matter responsible</label></td>
         <td>
@@ -54,7 +54,7 @@
         <td><label for="country" title="{{ $tableComments['country'] }}">Country</label></td>
         <td>
           <input type='hidden' name='country'>
-          <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/country/autocomplete" data-actarget="country" autocomplete="off">
+          <input type="text" class="form-control form-control-sm" data-ac="/country/autocomplete" data-actarget="country" autocomplete="off">
         </td>
         <td><label title="{{ $tableComments['unique'] }}">Is unique</label></td>
         <td>
@@ -70,7 +70,7 @@
       <tr>
         <td><label for="category" title="{{ $tableComments['category'] }}">Category</label></td><td>
           <input type='hidden' name='category'>
-          <input type="text" class="form-control form-control-sm" list="ajaxDatalist" data-ac="/category/autocomplete" data-actarget="category" autocomplete="off">
+          <input type="text" class="form-control form-control-sm" data-ac="/category/autocomplete" data-actarget="category" autocomplete="off">
         </td>
         <td><label title="{{ $tableComments['uqtrigger'] }}">Unique trigger</label></td>
         <td>

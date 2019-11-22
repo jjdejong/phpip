@@ -19,7 +19,7 @@
         <td>Country</td>
         <td>
           @if($country_edit == 1)
-          <input type="text" class="form-control noformat" name="country" list="ajaxDatalist" data-ac="/country/autocomplete" data-actarget="country" value="{{ $matter->countryInfo->name }}">
+          <input type="text" class="form-control noformat" name="country" data-ac="/country/autocomplete" data-actarget="country" value="{{ $matter->countryInfo->name }}">
           @else
           {{ $matter->countryInfo->name }}
           @endif
@@ -28,7 +28,7 @@
       <tr>
         <td>Origin</td>
         <td>
-          <input type="text" class="form-control noformat" name="origin" list="ajaxDatalist" data-ac="/country/autocomplete" data-actarget="origin" value="{{  empty($matter->originInfo) ? '' : $matter->originInfo->name  }}">
+          <input type="text" class="form-control noformat" name="origin" data-ac="/country/autocomplete" data-actarget="origin" value="{{  empty($matter->originInfo) ? '' : $matter->originInfo->name  }}">
         </td>
         <td>Type</td>
         <td>
@@ -51,20 +51,20 @@
         </td>
         <td>Responsible</td>
         <td>
-          <input type="text" class="form-control-plaintext noformat" name="responsible" list="ajaxDatalist" data-ac="/user/autocomplete" data-actarget="responsible" value="{{ empty($matter->responsible) ? '' : $matter->responsible }}">
+          <input type="text" class="form-control-plaintext noformat" name="responsible" data-ac="/user/autocomplete" data-actarget="responsible" value="{{ empty($matter->responsible) ? '' : $matter->responsible }}">
         </td>
       </tr>
       <tr>
         <td>Parent</td>
         <td>
           <div style="vertical-align: baseline;">
-            <input type="text" class="form-control-plaintext noformat" name="parent_id" list="ajaxDatalist" data-ac="/matter/autocomplete" data-actarget="parent_id" value="{{ empty($matter->parent) ? '' : $matter->parent->UID }}">
+            <input type="text" class="form-control-plaintext noformat" name="parent_id" data-ac="/matter/autocomplete" data-actarget="parent_id" value="{{ empty($matter->parent) ? '' : $matter->parent->UID }}">
           </div>
         </td>
         <td>Container
         </td>
         <td>
-          <input type="text" class="form-control-plaintext noformat" name="container_id" list="ajaxDatalist" data-ac="/matter/autocomplete" data-actarget="container_id" value="{{ empty($matter->container) ? '' : $matter->container->UID }}">
+          <input type="text" class="form-control-plaintext noformat" name="container_id" data-ac="/matter/autocomplete" data-actarget="container_id" value="{{ empty($matter->container) ? '' : $matter->container->UID }}">
         </td>
       </tr>
       <tr>

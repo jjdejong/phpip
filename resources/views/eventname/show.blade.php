@@ -33,7 +33,7 @@
 			</tr>
 			<tr>
 				<td><label for="category" title="{{ $tableComments['category'] }}">Category</label></td>
-				<td><input type="text" class="form-control noformat" list="ajaxDatalist" data-ac="/category/autocomplete" name="category" value="{{ empty($eventname->categoryInfo) ? '' : $eventname->categoryInfo->category }}"></td>
+				<td><input type="text" class="form-control noformat" data-ac="/category/autocomplete" name="category" value="{{ empty($eventname->categoryInfo) ? '' : $eventname->categoryInfo->category }}"></td>
 				<td><label for="use_matter_resp" title="{{ $tableComments['use_matter_resp'] }}">Use matter responsible</label></td>
 				<td>
 					<div class="form-check form-check-inline">
@@ -48,7 +48,7 @@
 			</tr>
 			<tr>
 				<td><label for="country" title="{{ $tableComments['country'] }}">Country</label></td>
-				<td><input type="text" class="form-control noformat" name="country" list="ajaxDatalist" data-ac="/country/autocomplete" value="{{ empty($eventname->countryInfo) ? '' : $eventname->countryInfo->name }}"></td>
+				<td><input type="text" class="form-control noformat" name="country" data-ac="/country/autocomplete" value="{{ empty($eventname->countryInfo) ? '' : $eventname->countryInfo->name }}"></td>
 				<td><label for="unique" title="{{ $tableComments['unique'] }}">Is unique</label></td>
 				<td>
 					<div class="form-check form-check-inline">
@@ -63,7 +63,7 @@
 			</tr>
 			<tr>
 				<td><label for="default_responsible" title="{{ $tableComments['default_responsible'] }}">Default responsible</label></td>
-				<td><input type="text" class="form-control noformat" list="ajaxDatalist" data-ac="/user/autocomplete" name="default_responsible" value="{{ empty($eventname->default_responsibleInfo) ? "" : $eventname->default_responsibleInfo->name }}"></td>
+				<td><input type="text" class="form-control noformat" data-ac="/user/autocomplete" name="default_responsible" value="{{ empty($eventname->default_responsibleInfo) ? "" : $eventname->default_responsibleInfo->name }}"></td>
 				<td><label for="uqtrigger" title="{{ $tableComments['uqtrigger'] }}">Unique trigger</label></td>
 				<td>
 					<div class="form-check form-check-inline">

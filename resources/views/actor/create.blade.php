@@ -17,7 +17,7 @@
         <td><label for="default_role" title="{{ $actorComments['default_role'] }}">Default role</label></td>
         <td>
 					<input type="hidden" name="default_role">
-					<input type="text" class="form-control" list="ajaxDatalist" data-ac="/role/autocomplete" data-actarget="default_role" autocomplete="off">
+					<input type="text" class="form-control" data-ac="/role/autocomplete" data-actarget="default_role" autocomplete="off">
 				</td>
         <td><label for="function" title="{{ $actorComments['function'] }}">Function</label></td>
         <td><input class="form-control" name="function"></td>
@@ -26,7 +26,7 @@
         <td><label for="company_id" title="{{ $actorComments['company_id'] }}">Employer</label></td>
         <td>
 					<input type="hidden"  name="company_id">
-					<input type="text" class="form-control" list="ajaxDatalist" data-ac="/actor/autocomplete" data-actarget="company_id" autocomplete="off">
+					<input type="text" class="form-control" data-ac="/actor/autocomplete" data-actarget="company_id" autocomplete="off">
 				</td>
         <td></td>
         <td></td>
@@ -42,7 +42,7 @@
         <td><label for="country">Country</label></td>
         <td>
 					<input type="hidden" name="country">
-					<input type='text' class="form-control" list="ajaxDatalist" data-ac="/country/autocomplete" data-actarget="country" autocomplete="off">
+					<input type='text' class="form-control" data-ac="/country/autocomplete" data-actarget="country" autocomplete="off">
 				</td>
       </tr>
       <tr>
