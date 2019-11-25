@@ -84,12 +84,13 @@
                     PhpIP
                 </div>
                 <div class="subtitle m-b-md">
-                    IP rights portfolio manager and docketing system 
+                    IP rights portfolio manager and docketing system
                 </div>
 
                 <div class="links">
-                    <a href="https://github.com/jjdejong/phpip-v2/wiki">Documentation</a>
-                    <a href="https://github.com/jjdejong/phpip-v2">Retreive sources on GitHub</a>
+                    <a href="https://github.com/jjdejong/phpip/wiki">Documentation</a>
+                    <a href="https://github.com/jjdejong/phpip/issues">Submit bugs</a>
+                    <a href="https://github.com/jjdejong/phpip">Retreive sources on GitHub</a>
                 </div>
             </div>
         </div>

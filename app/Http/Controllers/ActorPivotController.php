@@ -45,7 +45,8 @@ class ActorPivotController extends Controller
       $request->merge([
         'display_order' => $max + 1,
         'creator' => Auth::user()->login,
-        'company_id' => $addedActor->company_id
+        'company_id' => $addedActor->company_id,
+        'date' => Now()
       ]);
 
       return ActorPivot::create($request->except(['_token', '_method']));
