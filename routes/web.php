@@ -110,7 +110,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('country/autocomplete', function (Request $request) {
         $term = $request->input('term');
         $list = App\Country::select('name as value', 'iso as key')
-                        ->where('name', 'like', "$term%")->get();
+                        ->where('name', 'like', "$term%")
+                        ->orWhere('iso', 'like', "$term%")->get();
         return $list;
     });
 
