@@ -13,11 +13,6 @@
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}"></script>
 
-  <!-- Fonts
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-        -->
-
   <!-- Styles -->
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
   @yield('style')
@@ -165,7 +160,9 @@
       var modalTrigger = event.relatedTarget;
       contentSrc = modalTrigger.href;
       this.querySelector('.modal-title').innerHTML = modalTrigger.title;
-      if (modalTrigger.hasAttribute('data-size')) this.querySelector('.modal-dialog').classList.add(modalTrigger.dataset.size);
+      if (modalTrigger.hasAttribute('data-size')) {
+        this.querySelector('.modal-dialog').classList.add(modalTrigger.dataset.size);
+      }
       fetchInto(contentSrc, this.querySelector('.modal-body'));
     });
 
@@ -173,11 +170,6 @@
     $(app).on("show.bs.tab", "#actorUsedInToggle", function (e) {
       fetchInto(e.target.href, actorUsedIn);
     });
-
-    // Run JS specific to modals when they are shown
-    /*$("#ajaxModal").on("shown.bs.modal", function(event) {
-
-    });*/
 
     // Process click events
     app.addEventListener('click', (e) => {
@@ -308,7 +300,9 @@
       if (e.target.hasAttribute('data-panel')) {
         e.preventDefault();
         let markedRow = e.target.closest('tbody').querySelector('.table-info');
-        if (markedRow) markedRow.classList.remove('table-info');
+        if (markedRow) {
+          markedRow.classList.remove('table-info');
+        }
         e.target.closest('tr').classList.add('table-info');
         contentSrc = e.target.href;
         let panel = document.getElementById(e.target.dataset.panel);
@@ -335,7 +329,7 @@
             fetchREST(resource, 'DELETE').then(data => reloadPart(window.location.pathname, 'titlePanel'));
           } else {
             fetchREST(resource, 'PUT', params)
-            .then(data => e.target.classList.remove('border', 'border-info'));
+            .then(e.target.classList.remove('border', 'border-info'));
           }
         } else { // Handle generic input fields
           fetchREST(resource, 'PUT', params)
@@ -344,10 +338,12 @@
                 footerAlert.innerHTML = Object.values(data.errors)[0];
                 footerAlert.classList.add('alert-danger');
               } else {
-                if (window.ajaxPanel) {
-                  reloadPart(contentSrc, e.target.closest('.tab-pane').id);
-                } else if (contentSrc.length !== 0) {
+                if (!window.ajaxPanel && contentSrc.length !== 0) {
+                  // Reload modal with updated content
                   fetchInto(contentSrc, ajaxModal.querySelector(".modal-body"));
+                } else {
+                  // Don't reload but set border back to normal
+                  e.target.classList.remove('border', 'border-info');
                 }
                 footerAlert.classList.remove("alert-danger");
                 footerAlert.innerHTML = "";
