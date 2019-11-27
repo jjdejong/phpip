@@ -40,34 +40,16 @@
           <td><input type="text" class="noformat form-control" name="company_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->company) ? '' : $actorInfo->company->name }}" autocomplete="off"></td>
         </tr>
         <tr>
-          <td><label for="phy_person" title="{{ $actorComments['phy_person'] }}">Person</label></td>
-          <td>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input noformat" type="radio" name="phy_person" value="1" {{ $actorInfo->phy_person ? 'checked' : '' }}>
-              <label class="form-check-label" for="phy_person">Physical</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input noformat" type="radio" name="phy_person" value="0" {{ $actorInfo->phy_person ? '' : 'checked'}}>
-              <label class="form-check-label" for="phy_person">Legal</label>
-            </div>
-          </td>
+          <td><label for="phy_person" title="{{ $actorComments['phy_person'] }}">Physical Person</label></td>
+          <td><input type="checkbox" class="form-control noformat" name="phy_person" {{ $actorInfo->phy_person ? 'checked' : '' }}></td>
         </tr>
         <tr>
           <td><label for="nationality">Nationality</label></td>
           <td><input type="text" class="noformat form-control" name="nationality" data-ac="/country/autocomplete" value="{{ empty($actorInfo->nationalityInfo) ? '' : $actorInfo->nationalityInfo->name }}" autocomplete="off"></td>
         </tr>
         <tr>
-          <td><label for="small_entity" title="{{ $actorComments['small_entity'] }}">Entity</label></td>
-          <td>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input noformat" type="radio" name="small_entity" value="1" {{ $actorInfo->small_entity ? 'checked' : '' }}>
-              <label class="form-check-label" for="small_entity">Small</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input noformat" type="radio" name="small_entity" value="0" {{ $actorInfo->small_entity ? '' : 'checked'}}>
-              <label class="form-check-label" for="small_entity">Large</label>
-            </div>
-          </td>
+          <td><label for="small_entity" title="{{ $actorComments['small_entity'] }}">Small Entity</label></td>
+          <td><input type="checkbox" class="form-control noformat" name="small_entity" {{ $actorInfo->small_entity ? 'checked' : '' }}></td>
         </tr>
       </table>
     </fieldset>
@@ -115,16 +97,7 @@
         </tr>
         <tr>
           <td><label for="warn" title="{{ $actorComments['warn'] }}">Warn</label></td>
-          <td>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input noformat" type="radio" name="warn" value="1" {{ $actorInfo->warn ? 'checked' : '' }}>
-              <label class="form-check-label" for="warn">Yes</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input noformat" type="radio" name="warn" value="0" {{ $actorInfo->warn ? '' : 'checked'}}>
-              <label class="form-check-label" for="warn">No</label>
-            </div>
-          </td>
+          <td><input type="checkbox" class="form-control noformat" name="warn" {{ $actorInfo->warn ? 'checked' : '' }}></td>
         </tr>
         <tr>
           <td><label for="registration_no" title="{{ $actorComments['registration_no'] }}">Registration no.</label></td>

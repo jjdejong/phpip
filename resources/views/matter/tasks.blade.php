@@ -42,7 +42,7 @@
       <td><input type="text" class="form-control noformat" size="6" name="time_spent" value="{{ $task->time_spent }}"></td> --}}
       <td><input type="text" class="form-control noformat" name="assigned_to" data-ac="/user/autocomplete" value="{{ $task->assigned_to }}"></td>
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"></td>
-      <td><a href="javascript:void(0);" class="hidden-action text-danger" id="deleteTask" title="Delete task">&CircleTimes;</a></td>
+      <td><a href="#" class="hidden-action text-danger" id="deleteTask" title="Delete task">&CircleTimes;</a></td>
     </tr>
     @endforeach
   </tbody>

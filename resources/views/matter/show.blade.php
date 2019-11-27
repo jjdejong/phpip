@@ -48,9 +48,9 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           {{ $type }}
         </dt>
         @foreach ( $title_group as $title )
-          <dl class="mb-0">
+          <dd class="mb-0">
             <input data-resource="/classifier/{{ $title->id }}" class="titleItem noformat w-100" name="value" value="{{ $title->value }}" autocomplete="off">
-          </dl>
+          </dd>
         @endforeach
       @endforeach
       <div>
