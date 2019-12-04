@@ -16,7 +16,11 @@
           <tr>
             <th></th>
             <th>Count</th>
-            <td><span class="float-right text-secondary">New</span></td>
+            <td>
+              @cannot('client')
+              <span class="float-right text-secondary">New</span>
+              @endcannot
+            </td>
           </tr>
           @foreach ($categories as $group)
           <tr class="reveal-hidden">
@@ -27,9 +31,11 @@
               {{ $group->total }}
             </td>
             <td class="py-0">
+              @cannot('client')
               <a class="badge badge-primary hidden-action float-right" href="/matter/create?operation=new&category={{$group->category_code}}" data-target="#ajaxModal" title="Create new {{ $group->category }}" data-toggle="modal" data-size="modal-sm">
                 &plus;
               </a>
+              @endcannot
             </td>
           </tr>
           @endforeach
