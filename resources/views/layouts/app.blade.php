@@ -16,6 +16,13 @@
   <!-- Styles -->
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
   @yield('style')
+  @can('client')
+    <style>
+      input.noformat {
+        pointer-events: none;
+      }
+    </style>
+  @endcan
 </head>
 
 <body>
@@ -66,7 +73,9 @@
                 <a class="dropdown-item" href="{{ url('/matter/') }}">All</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=PAT') }}">Patents</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=TM') }}">Trademarks</a>
+                @cannot('client')
                 <a class="dropdown-item" href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" title="Create Matter">New</a>
+                @endcannot
               </ul>
             </li>
             @cannot('client')
@@ -81,7 +90,7 @@
                 <a class="dropdown-item" href="{{ url('/category/') }}">Categories</a>
               </ul>
             </li>
-          @endcannot
+            @endcannot
             <li class="nav-item dropdown">
               <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                 {{ Auth::user()->login }}
