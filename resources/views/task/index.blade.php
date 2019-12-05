@@ -19,7 +19,7 @@
       @else
       <div class="col-2">
       @endif
-        {{ $task->due_date->isoFormat('L') }}
+        {{ $task->due_date }}
       </div>
       <div class="col-1 px-4">
         <input id="{{ $task->id }}" class="clear-open-task" type="checkbox">
