@@ -10,6 +10,13 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
 
+    public function index(Request $request)
+    {
+        $task = new Task;
+        $tasks = $task->openTasks($request->renewals, $request->my_tasks, $request->user_dashboard)->take(200)->get();
+        return view('task.index', compact('tasks'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -37,7 +44,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        return $task;
     }
 
     /**

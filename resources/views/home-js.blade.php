@@ -1,47 +1,26 @@
 <style type="text/css">
     .card-body {
-        max-height: 250px;
+        max-height: 300px;
+        min-height: 80px;
         overflow: auto;
-    }
-    .card-body .row:hover {
-        background-color: #eeeeee;
     }
 </style>
 <script>
 
-    function refreshTasks() {
-        var url = '/home?' + $("#filter").find("input").filter(function () {
-            return $(this).val().length > 0;
-        }).serialize(); // Filter out empty values
-        $('#tasklist').load(url + ' #tasklist > div', function () { // Refresh all the card-body's in #tasklist
-            window.history.pushState('', 'phpIP', url);
-        });
+    function refreshTasks(flag) {
+        var url = '/task?my_tasks=' + flag;
+        fetchInto(url, tasklist);
     }
 
-    function refreshRenewals() {
-        var url = '/home?' + $("#filter").find("input").filter(function () {
-            return $(this).val().length > 0;
-        }).serialize(); // Filter out empty values
-        $('#renewallist').load(url + ' #renewallist > div', function () { // Refresh all the card-body in #renewallist
-            window.history.pushState('', 'phpIP', url);
-        });
+    function refreshRenewals(flag) {
+        var url = '/task?renewals=1&my_tasks=' + flag;
+        fetchInto(url, renewallist);
     }
 
-    $('#mytasks').on('change', function () {
-        refreshTasks();
-    });
-
-    $('#alltasks').on('change', function () {
-        refreshTasks();
-    });
-
-    $('#allrenewals').on('change', function () {
-        refreshRenewals();
-    });
-
-    $('#myrenewals').on('change', function () {
-        refreshRenewals();
-    });
+    mytasks.onchange = () => { refreshTasks(1); }
+    alltasks.onchange = () => { refreshTasks(0); }
+    allrenewals.onchange = () => {refreshRenewals(0);}
+    myrenewals.onchange = () => {refreshRenewals(1);}
 
     $('#clear-ren-tasks').click(function () {
         var tids = new Array();

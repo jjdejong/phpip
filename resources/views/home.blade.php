@@ -11,7 +11,7 @@
         <a href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" class="btn btn-primary float-right" title="Create Matter">Create matter</a>
         @endcannot
       </div>
-      <div class="card-body pt-0" style="min-height: 80px; max-height: 300px;">
+      <div class="card-body pt-0">
         <table  class="table table-striped table-sm">
           <tr>
             <th></th>
@@ -49,7 +49,7 @@
         <button class="btn btn-transparent text-info float-right" disabled>I</button> {{--  This invisible button is only for improving the layout! --}}
         @endcannot
       </div>
-      <div class="card-body pt-1" style="min-height: 80px;">
+      <div class="card-body pt-1">
         <table class="table table-striped table-sm">
           <tr>
             <th></th>
@@ -90,6 +90,7 @@
           </div>
           @cannot('client')
           <div class="col-5">
+            @if(!Request::filled('user_dashboard'))
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
               <label class="btn btn-info active">
                 <input type="radio" name="my_tasks" id="alltasks" value="0">Everyone
@@ -98,6 +99,7 @@
                 <input type="radio" name="my_tasks" id="mytasks" value="1">{{ Auth::user()->login }}
               </label>
             </div>
+            @endif
           </div>
           <div class="col-4">
             <div class="input-group">
@@ -123,7 +125,7 @@
           </div>
         </div>
       </div>
-      <div class="card-body p-1" id="tasklist" style="min-height: 80px;">
+      <div class="card-body p-1" id="tasklist">
         @isset($tasks)
         <table class="table table-striped table-sm">
           @foreach ($tasks as $task)
@@ -170,6 +172,7 @@
           </div>
           @cannot('client')
           <div class="col-5">
+            @if(!Request::filled('user_dashboard'))
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
               <label class="btn btn-info active">
                 <input type="radio" name="my_renewals" id="allrenewals" value="0">Everyone
@@ -178,6 +181,7 @@
                 <input type="radio" name="my_renewals" id="myrenewals" value="1">{{ Auth::user()->login }}
               </label>
             </div>
+            @endif
           </div>
           <div class="col-4">
             <div class="input-group">
@@ -204,15 +208,15 @@
         </div>
       </div>
 
-      <div class="card-body p-1" id="renewallist" style="min-height: 80px;">
+      <div class="card-body p-1" id="renewallist">
         @isset($renewals)
         <table class="table table-striped table-sm">
           @foreach ($renewals as $task)
           <tr>
             <td class="row py-0">
-              <div class="col-6 pl-4">
+              <div class="col-6">
                 <a href="/matter/{{ $task->matter_id }}/renewals" data-toggle="modal" data-target="#ajaxModal" title="All tasks" data-size="modal-lg">
-                  {{ $task->detail }}
+                  {{ $task->name }} - {{ $task->detail }}
                 </a>
               </div>
               <div class="col-3">
