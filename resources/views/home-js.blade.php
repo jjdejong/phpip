@@ -9,11 +9,17 @@
 
     function refreshTasks(flag) {
         var url = '/task?my_tasks=' + flag;
+        @if(Request::filled('user_dashboard'))
+        url += '&user_dashboard={{ Request::get('user_dashboard') }}';
+        @endif
         fetchInto(url, tasklist);
     }
 
     function refreshRenewals(flag) {
         var url = '/task?renewals=1&my_tasks=' + flag;
+        @if(Request::filled('user_dashboard'))
+        url += '&user_dashboard={{ Request::get('user_dashboard') }}';
+        @endif
         fetchInto(url, renewallist);
     }
 
