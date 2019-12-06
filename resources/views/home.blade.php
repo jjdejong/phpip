@@ -104,7 +104,7 @@
           <div class="col-4">
             <div class="input-group">
               <div class="input-group-prepend">
-                <button class="btn btn-light" type="button" id="clear-open-tasks">Clear selected on</button>
+                <button class="btn btn-light" type="button" id="clearOpenTasks">Clear selected on</button>
               </div>
               <input type="text" class="form-control" name="datetaskcleardate" id="taskcleardate" value="{{ now()->format('Y-m-d') }}">
             </div>
@@ -186,7 +186,7 @@
           <div class="col-4">
             <div class="input-group">
               <div class="input-group-prepend">
-                <button class="btn btn-light" type="button" id="clear-ren-tasks">Clear selected on</button>
+                <button class="btn btn-light" type="button" id="clearRenewals">Clear selected on</button>
               </div>
               <input type="text" class="form-control" name="renewalcleardate" id="renewalcleardate" value="{{ now()->format('Y-m-d') }}">
             </div>

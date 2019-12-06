@@ -17,53 +17,53 @@
         fetchInto(url, renewallist);
     }
 
+    @if(!Request::filled('user_dashboard'))
     mytasks.onchange = () => { refreshTasks(1); }
     alltasks.onchange = () => { refreshTasks(0); }
-    allrenewals.onchange = () => {refreshRenewals(0);}
-    myrenewals.onchange = () => {refreshRenewals(1);}
+    allrenewals.onchange = () => { refreshRenewals(0); }
+    myrenewals.onchange = () => { refreshRenewals(1); }
+    @endif
 
-    $('#clear-ren-tasks').click(function () {
-        var tids = new Array();
-        $('.clear-ren-task').each(function () {
-            if ($(this).is(':checked'))
-                tids.push($(this).attr('id'));
-        });
-        if (tids.length === 0) {
-            alert("No tasks selected for clearing!");
-            return;
+    clearRenewals.onclick = (e) => {
+      var tids = new Array();
+      renewallist.querySelectorAll('input:checked').forEach( (current) => {
+        tids.push(current.id);
+      });
+      if (tids.length === 0) {
+        alert("No tasks selected for clearing!");
+        return;
+      }
+      $.post('/matter/clear-tasks',
+        { task_ids: tids, done_date: renewalcleardate.value },
+        function (response) {
+          if (response.errors === '') {
+            refreshRenewals(0);
+          } else {
+            alert(response.errors.done_date);
+          }
         }
-        $.post('/matter/clear-tasks',
-                {task_ids: tids, done_date: $('#renewalcleardate').val()},
-                function (response) {
-                    if (response.errors === '') {
-                        refreshRenewals();
-                    } else {
-                        alert(response.errors.done_date);
-                    }
-                }
-        );
-    });
+      );
+    }
 
-    $('#clear-open-tasks').click(function () {
-        var tids = new Array();
-        $('.clear-open-task').each(function () {
-            if ($(this).is(':checked'))
-                tids.push($(this).attr('id'));
-        });
-        if (tids.length === 0) {
-            alert("No tasks selected for clearing!");
-            return;
+    clearOpenTasks.onclick = (e) => {
+      var tids = new Array();
+      tasklist.querySelectorAll('input:checked').forEach( (current) => {
+        tids.push(current.id);
+      });
+      if (tids.length === 0) {
+        alert("No tasks selected for clearing!");
+        return;
+      }
+      $.post('/matter/clear-tasks',
+        { task_ids: tids, done_date: taskcleardate.value },
+        function (response) {
+          if (response.errors === '') {
+            refreshTasks(0);
+          } else {
+            alert(response.errors.done_date);
+          }
         }
-        $.post('/matter/clear-tasks',
-                {task_ids: tids, done_date: $('#taskcleardate').val()},
-                function (response) {
-                    if (response.errors === '') {
-                        refreshTasks();
-                    } else {
-                        alert(response.errors.done_date);
-                    }
-                }
-        );
-    });
+      );
+    }
 
 </script>
