@@ -11,6 +11,7 @@ try {
   window.Popper = require('popper.js').default;
   window.$ = window.jQuery = require('jquery');
   require('bootstrap');
+  require('jquery-ui/ui/widgets/autocomplete')
   // Registering the CSRF Token as a common header with Ajax so that all
   // outgoing HTTP requests automatically have it attached.
   let token = document.head.querySelector('meta[name="csrf-token"]');
@@ -20,6 +21,22 @@ try {
     }
   });
 } catch (e) {}
+
+// Adapt jquery-ui to use Bootstrap
+(function( $, undefined ) {
+	// Conversion of menu classes to Bootstrap
+  $.ui.menu.prototype.options.classes[ "ui-widget" ] = "";
+  $.ui.menu.prototype.options.classes[ "ui-widget-content" ] = "";
+  $.ui.menu.prototype.options.classes[ "ui-autocomplete" ] = "dropdown";
+  $.ui.menu.prototype.options.classes[ "ui-autocomplete-input" ] = "form-control";
+	$.ui.menu.prototype.options.classes[ "ui-menu" ] = "dropdown-menu";
+	$.ui.menu.prototype.options.classes[ "ui-menu-icons" ] = "";
+	$.ui.menu.prototype.options.classes[ "ui-menu-icon" ] = "";
+	$.ui.menu.prototype.options.classes[ "ui-menu-item" ] = "dropdown-item";
+	$.ui.menu.prototype.options.classes[ "ui-menu-divider" ] = "";
+	$.ui.menu.prototype.options.classes[ "ui-menu-item-wrapper" ] = "";
+})(jQuery);
+
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

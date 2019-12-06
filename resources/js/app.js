@@ -6,7 +6,6 @@
  */
 
 require('./bootstrap');
-import 'jquery-ui/ui/widgets/autocomplete.js';
 
 //window.Vue = require('vue');
 
