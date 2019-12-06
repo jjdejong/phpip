@@ -7,9 +7,11 @@
       <th>Notes</th>
       <th>
         Refers to
+        @cannot('client')
         <a data-toggle="collapse" href="tr.collapse" class="badge badge-info float-right" id="addEvent" title="Add event">
           &plus;
         </a>
+        @endcannot
       </th>
     </tr>
     <tr id="addEventRow" class="collapse">

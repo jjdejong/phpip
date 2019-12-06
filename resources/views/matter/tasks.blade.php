@@ -17,14 +17,16 @@
   @foreach ( $events as $event )
   <tbody>
     <tr class="reveal-hidden">
-      <td colspan="12">
+      <td colspan="8">
         <span style="position: relative; margin-right: 10px;">{{ $event->info->name . ": " . $event->event_date }}</span>
+        @cannot('client')
         <a href="#" id="addTaskToEvent" class="hidden-action" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
           &CirclePlus;
         </a>
         <a href="#" class="hidden-action text-danger ml-2" id="deleteEvent" data-event_id="{{ $event->id }}" title="Delete event">
           &CircleTimes;
         </a>
+        @endcannot
       </td>
     </tr>
     @foreach ($event->tasks as $task)
@@ -42,7 +44,11 @@
       <td><input type="text" class="form-control noformat" size="6" name="time_spent" value="{{ $task->time_spent }}"></td> --}}
       <td><input type="text" class="form-control noformat" name="assigned_to" data-ac="/user/autocomplete" value="{{ $task->assigned_to }}"></td>
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"></td>
-      <td><a href="#" class="hidden-action text-danger" id="deleteTask" title="Delete task">&CircleTimes;</a></td>
+      <td>
+        @cannot('client')
+        <a href="#" class="hidden-action text-danger" id="deleteTask" title="Delete task">&CircleTimes;</a>
+        @endcannot
+      </td>
     </tr>
     @endforeach
   </tbody>
