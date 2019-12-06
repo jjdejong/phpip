@@ -126,42 +126,7 @@
         </div>
       </div>
       <div class="card-body p-1" id="tasklist">
-        @isset($tasks)
-        <table class="table table-striped table-sm">
-          @foreach ($tasks as $task)
-          <tr>
-            <td class="row py-0">
-              <div class="col-6">
-                <a href="/matter/{{ $task->matter_id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" data-resource="/task/" title="All tasks">
-                  {{ $task->name }}{{ $task->detail ? " - ".$task->detail : "" }}
-                </a>
-              </div>
-              <div class="col-3">
-                <a href="/matter/{{ $task->matter_id }}">
-                  {{ $task->uid }}
-                </a>
-              </div>
-          @if ($task->due_date < date('Y-m-d'))
-              <div class="col-2 text-danger">
-          @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
-              <div class="col-2" style="color: purple;">
-              @else
-              <div class="col-2">
-              @endif
-            {{ $task->due_date }}
-              </div>
-              <div class="col-1 px-4">
-                <input id="{{ $task->id }}" class="clear-open-task" type="checkbox">
-              </div>
-            </td>
-          </tr>
-          @endforeach
-        </table>
-        @else
-        <div class="row text-danger">
-          The list is empty
-        </div>
-      @endisset
+        @include('task.index', ['isrenewals' => '0'])
       </div>
     </div>
     <div class="card border-primary mt-1">
@@ -209,42 +174,8 @@
       </div>
 
       <div class="card-body p-1" id="renewallist">
-        @isset($renewals)
-        <table class="table table-striped table-sm">
-          @foreach ($renewals as $task)
-          <tr>
-            <td class="row py-0">
-              <div class="col-6">
-                <a href="/matter/{{ $task->matter_id }}/renewals" data-toggle="modal" data-target="#ajaxModal" title="All tasks" data-size="modal-lg">
-                  {{ $task->name }} - {{ $task->detail }}
-                </a>
-              </div>
-              <div class="col-3">
-                <a href="/matter/{{ $task->matter_id }}">
-                  {{ $task->uid }}
-                </a>
-              </div>
-          @if ($task->due_date < date('Y-m-d'))
-              <div class="col-2 text-danger">
-          @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
-              <div class="col-2" style="color: purple;">
-              @else
-              <div class="col-2">
-              @endif
-            {{ $task->due_date }}
-              </div>
-              <div class="col-1 px-4">
-                <input id="{{ $task->id }}" class="clear-ren-task" type="checkbox">
-              </div>
-            </td>
-          </tr>
-          @endforeach
-        </table>
-        @else
-        <div class="row text-danger">
-          The list is empty
-        </div>
-      @endisset
+        @php $tasks = $renewals @endphp
+        @include('task.index', ['isrenewals' => '1'])
       </div>
     </div>
   </div>

@@ -16,7 +16,7 @@
     }
 
     function refreshRenewals(flag) {
-        var url = '/task?renewals=1&my_tasks=' + flag;
+        var url = '/task?isrenewals=1&my_tasks=' + flag;
         @if(Request::filled('user_dashboard'))
         url += '&user_dashboard={{ Request::get('user_dashboard') }}';
         @endif

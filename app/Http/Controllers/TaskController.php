@@ -13,9 +13,13 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $task = new Task;
-        $renewals = $request->renewals;
-        $tasks = $task->openTasks($renewals, $request->my_tasks, $request->user_dashboard)->take(200)->get();
-        return view('task.index', compact('tasks', 'renewals'));
+        $isrenewals = $request->isrenewals;
+        $nrecords = 100;
+        if ($isrenewals) {
+          $nrecords = 200;
+        }
+        $tasks = $task->openTasks($isrenewals, $request->my_tasks, $request->user_dashboard)->take($nrecords)->get();
+        return view('task.index', compact('tasks', 'isrenewals'));
     }
 
     /**

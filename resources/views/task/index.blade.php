@@ -3,7 +3,7 @@
   <tr>
     <td class="row py-0">
       <div class="col-6">
-        <a href="/matter/{{ $task->matter_id }}/{{ $renewals ? 'renewals' : 'tasks' }}" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" data-resource="/task/" title="All tasks">
+        <a href="/matter/{{ $task->matter_id }}/{{ $isrenewals ? 'renewals' : 'tasks' }}" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" data-resource="/task/" title="All tasks">
           {{ $task->name }}{{ $task->detail ? " - ".$task->detail : "" }}
         </a>
       </div>
@@ -14,8 +14,8 @@
       </div>
       @if ($task->due_date < now())
       <div class="col-2 text-danger">
-      @elseif ($task->due_date < now()->addWeek())
-      <div class="col-2" style="color: purple;">
+      @elseif ($task->due_date < now()->addWeeks(2))
+      <div class="col-2" style="color: orange;">
       @else
       <div class="col-2">
       @endif
