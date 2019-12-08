@@ -273,17 +273,9 @@
             Manage renewals
           </div>
           <div class="col-3">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="btn btn-info active">
-                <input type="radio" name="my_renewals" id="allrenewals" value="0">Everyone
-              </label>
-              <label class="btn btn-info">
-                <input type="radio" name="my_renewals" id="myrenewals" value="1">{{ Auth::user()->login }}
-              </label>
                 <div class="button-group">
                     <button id="clearFilters" type="button" class="btn btn-primary">&larrpl; Clear filters</button>
                 </div>
-            </div>
           </div>
           <div class="col-12">
             <div class="nav nav-pills" id="tabsGroup">
