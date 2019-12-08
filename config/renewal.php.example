@@ -1,0 +1,41 @@
+<?php
+
+return ["validity" => [
+            "instruct_before" => 30,
+            "fee_factor" => 1.2,
+            "before" => 8,
+            "before_last" => 2,
+            ],
+    "api" => [
+        'dolibarr_url' => 'http://localhost/dolibarr/htdocs/api/index.php',
+        'DOLAPIKEY' => 'your Dolibarr key',
+        'fk_account' => 2,
+        ],
+        "xml" => [
+        'header' => '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE batch-payment  SYSTEM "batch-payment-v2-00.dtd" >
+<batch-payment dtd-version="" date-produced="" ro="">
+	<header>
+		<sender>
+			<name>NAME</name>
+			<registered-number></registered-number>
+		</sender>
+		<send-date></send-date>
+		<payment-reference-id>TRANSACTION</payment-reference-id>
+	</header>
+	<detail>',
+	'footer' => '</detail>
+	<trailer>
+		<mode-of-payment payment-type="deposit">
+			<deposit-account>
+				<account-no>DEPOSIT</account-no>
+			</deposit-account>
+		</mode-of-payment>
+		<batch-pay-total-amount currency="">TOTAL</batch-pay-total-amount>
+		<total-records>COUNT</total-records>
+	</trailer>
+</batch-payment>',
+        'EP_deposit' => 'Your account',
+        'FR_deposit' => 'Your account',
+        ],
+];

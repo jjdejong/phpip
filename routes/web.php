@@ -26,10 +26,12 @@ Route::group(['middleware' => 'auth'], function () {
     // Matter Controller
     Route::get('matter/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\Matter::with('filing')->select('id as key', 'uid as value')
-                        ->where('uid', 'like', "$term%")
-                        ->take(15)->get();
+        return App\Matter::with('filing')->selectRaw('id as `key`, CONCAT(caseref, suffix) as value')
+                        ->where('caseref', 'like', "$term%")
+                        ->take(10)->get();
     });
+    Route::get('matter/listforactor/{dname}', 'ActorPivotController@filesByActor');
+    Route::get('matter/{matter}/info', 'MatterController@info');
     Route::get('matter/export', 'MatterController@export');
     Route::get('matter/{matter}/events', 'MatterController@events');
     Route::get('matter/{matter}/tasks', 'MatterController@tasks');
@@ -42,6 +44,17 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::post('matter/storeN', 'MatterController@storeN');
     Route::post('matter/clear-tasks', 'HomeController@clearTasks');
+
+    Route::post('renewal/order', 'RenewalController@renewalOrder');
+    Route::post('renewal/call', 'RenewalController@firstcall');
+    Route::post('renewal/reminder', 'RenewalController@remindercall');
+    Route::post('renewal/invoice', 'RenewalController@invoice');
+    Route::post('renewal/topay', 'RenewalController@topay');
+    Route::post('renewal/done', 'RenewalController@done');
+    Route::post('renewal/lastcall', 'RenewalController@lastcall');
+    Route::post('renewal/receipt', 'RenewalController@receipt');
+    Route::post('renewal/closing', 'RenewalController@closing');
+
     Route::post('matter/search', function (Request $request) {
         $matter_search = $request->input('matter_search');
         $option = $request->input('search_field');
@@ -59,7 +72,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::get('matter/new-caseref', function (Request $request) {
-        $term = $request->term;
+        $term = $request->input('term');
         $newref = App\Matter::where('caseref', 'like', "$term%")->max('caseref');
         $newref++;
         return [['key' => $newref, 'value' => $newref ]];
@@ -68,7 +81,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
         $term = $request->input('term');
         $results = App\EventName::select('name as value', 'code as key')
-                ->where('name', 'like', "$term%")
+                ->where('name', 'like', "%$term%")
                 ->where('is_task', $is_task);
         return $results->take(10)->get();
     });
@@ -76,7 +89,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('classifier-type/autocomplete/{main_display}', function (Request $request, $main_display) {
         $term = $request->input('term');
         $results = App\ClassifierType::select('type as value', 'code as key')
-                ->where('type', 'like', "$term%")
+                ->where('type', 'like', "%$term%")
                 ->where('main_display', $main_display)
                 ->orderBy('type');
         return $results->take(10)->get();
@@ -86,14 +99,14 @@ Route::group(['middleware' => 'auth'], function () {
         $term = $request->input('term');
         return App\User::select('name as value', 'login as key')
                         ->whereNotNull('login')
-                        ->where('name', 'like', "$term%")
+                        ->where('name', 'like', "%$term%")
                         ->take(10)->get();
     });
 
     Route::get('actor/autocomplete', function (Request $request) {
         $term = $request->input('term');
         $list = App\Actor::select('name as value', 'id as key')
-                        ->where('name', 'like', "$term%")
+                        ->where('name', 'like', "%$term%")
                         ->take(10)->get();
         if ( $list->count() < 5 ) {
           $list->push(['label' => 'Unknown. Create?', 'key' => 'create']);
@@ -104,14 +117,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('role/autocomplete', function (Request $request) {
         $term = $request->input('term');
         return App\Role::select('name as value', 'code as key', 'shareable')
-                        ->where('name', 'like', "$term%")->get();
+                        ->where('name', 'like', "%$term%")->get();
     });
 
     Route::get('country/autocomplete', function (Request $request) {
         $term = $request->input('term');
         $list = App\Country::select('name as value', 'iso as key')
-                        ->where('name', 'like', "$term%")
-                        ->orWhere('iso', 'like', "$term%")->get();
+                        ->where('name', 'like', "$term%")->get();
         return $list;
     });
 
@@ -130,19 +142,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('matter', 'MatterController');
     Route::apiResource('task', 'TaskController');
     Route::apiResource('event', 'EventController');
-    Route::resource('category', 'CategoryController');
     Route::resource('actor', 'ActorController');
     Route::get('actor/{actor}/usedin','ActorPivotController@usedIn');
     Route::resource('eventname', 'EventNameController');
+    Route::resource('category', 'CategoryController');
     Route::resource('rule', 'RuleController');
     Route::apiResource('actor-pivot', 'ActorPivotController');
     Route::apiResource('classifier', 'ClassifierController');
+    Route::resource('renewal', 'RenewalController');
 
     // Testing - not used
     /* Route::get('matter/{matter}/actors', function (App\Matter $matter) {
       //$actors = $matter->with('container.actors.actor:id,name,display_name,company_id', 'actors.actor:id,name,display_name,company_id')->get();
       return $matter->actors;
-    });
+      });
 
       Route::get('matter/{matter}/classifiers', function (App\Matter $matter) {
       return $matter->classifiers->where('main_display', 0);

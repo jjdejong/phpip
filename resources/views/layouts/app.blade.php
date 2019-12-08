@@ -75,6 +75,7 @@
                 <a class="dropdown-item" href="{{ url('/matter?display_with=TM') }}">Trademarks</a>
                 @cannot('client')
                 <a class="dropdown-item" href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" title="Create Matter">New</a>
+                <a class="dropdown-item" href="{{ url('/renewal') }}">Manage renewals</a>
                 @endcannot
               </ul>
             </li>
