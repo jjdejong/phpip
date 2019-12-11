@@ -347,7 +347,7 @@
                 footerAlert.innerHTML = Object.values(data.errors)[0];
                 footerAlert.classList.add('alert-danger');
               } else {
-                if (!window.ajaxPanel && contentSrc.length !== 0) {
+                if (!window.ajaxPanel && contentSrc.length !== 0 && !e.target.closest('.tab-content')) {
                   // Reload modal with updated content
                   fetchInto(contentSrc, ajaxModal.querySelector(".modal-body"));
                 } else {

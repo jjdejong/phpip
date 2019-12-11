@@ -58,7 +58,7 @@
     <fieldset class="tab-pane fade" id="actorContact">
       <table class="table table-striped table-sm">
         <tr>
-          <td><label for="address">Address</label><br /></td>
+          <td><label for="address">Address</label></td>
           <td><textarea class="noformat form-control" name="address">{{ $actorInfo->address }}</textarea></td>
         </tr>
         <tr>
@@ -66,7 +66,7 @@
           <td><input type='text' class="noformat form-control" name="country" data-ac="/country/autocomplete" value="{{ empty($actorInfo->countryInfo) ? '' : $actorInfo->countryInfo->name }}" autocomplete="off"></td>
         </tr>
         <tr>
-          <td><label for="address_mailing">Address mailing</label><br /></td>
+          <td><label for="address_mailing">Address mailing</label></td>
           <td><textarea class="noformat form-control" name="address_mailing">{{ $actorInfo->address_mailing }}</textarea> </td>
         </tr>
         <tr>
@@ -74,7 +74,7 @@
           <td><input type='text' class="noformat form-control" name="country_mailing" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_mailingInfo ) ? '' : $actorInfo->country_mailingInfo->name }}" autocomplete="off"></td>
         </tr>
         <tr>
-          <td><label for="address_billing">Address billing</label><br /></td>
+          <td><label for="address_billing">Address billing</label></td>
           <td><textarea class="noformat form-control" name="address_billing">{{ $actorInfo->address_billing }}</textarea></td>
         </tr>
         <tr>
@@ -117,8 +117,8 @@
           <td><label for="site_id" title="{{ $actorComments['site_id'] }}">Work site</label></td>
           <td><input type="text" class="noformat form-control" name="site_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->site) ? '' : $actorInfo->site->name }}" autocomplete="off"></td>
         <tr>
-          <td><label for="notes" title="{{ $actorComments['notes'] }}">Notes</label><br /></td>
-          <td colspan="3"><textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea></td>
+          <td><label for="notes" title="{{ $actorComments['notes'] }}">Notes</label></td>
+          <td><textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea></td>
         </tr>
       </table>
     </fieldset>
