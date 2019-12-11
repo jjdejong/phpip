@@ -161,17 +161,17 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
   <div id="multiPanel" class="card col-9 p-0" style="background: transparent;">
     <div class="row card-deck mb-1">
       <div class="card col-6 p-0 border-primary reveal-hidden" style="min-height: 138px;">
-        <div class="card-header bg-primary text-light p-1">
-          <div class="row">
+        <div class="card-header bg-primary p-1">
+          <a class="row text-light text-decoration-none" href="/matter/{{ $matter->id }}/events" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All events">
             <span class="col-5">Status</span>
             <span class="col-3">Date</span>
             <span class="col-4">
               Number
-              <a class="hidden-action float-right text-light font-weight-bold" href="/matter/{{ $matter->id }}/events" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All events">
-                &nbsp;&vellip;&nbsp;
-              </a>
+              <span class="hidden-action float-right">
+                &equiv;
+              </span>
             </span>
-          </div>
+          </a>
         </div>
         <div class="card-body p-1" id="status-panel" style="overflow: auto;">
           @foreach ( $matter->events->where('info.status_event', 1) as $event )
@@ -197,16 +197,16 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
       </div>
       <div class="card col-6 p-0 border-primary reveal-hidden">
-        <div class="card-header p-1 bg-primary text-warning">
-          <div class="row">
+        <div class="card-header p-1 bg-primary">
+          <a class="row text-warning text-decoration-none" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All tasks">
             <span class="col-9">Open Tasks</span>
             <span class="col-3">
               Due
-              <a class="hidden-action float-right text-light font-weight-bold" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All tasks">
-                &nbsp;&vellip;&nbsp;
-              </a>
+              <span class="hidden-action float-right">
+                &equiv;
+              </span>
             </span>
-          </div>
+          </a>
         </div>
         <div class="card-body p-1" id="opentask-panel" style="overflow: auto;">
           @foreach ( $matter->tasksPending as $task )
@@ -220,16 +220,16 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     </div>
     <div class="row card-deck mb-1">
       <div class="card col-2 p-0 border-primary reveal-hidden" style="min-height: 138px;">
-        <div class="card-header p-1 bg-primary text-warning">
-          <div class="row">
+        <div class="card-header p-1 bg-primary">
+          <a class="row text-warning text-decoration-none" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All renewals">
             <span class="col-6">Renewals</span>
             <span class="col-6">
               Due
-              <a class="hidden-action float-right text-light font-weight-bold" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All renewals">
-                &nbsp;&vellip;&nbsp;
-              </a>
+              <span class="hidden-action float-right">
+                &equiv;
+              </span>
             </span>
-          </div>
+          </a>
         </div>
         <div class="card-body p-1" id="renewal-panel" style="overflow: auto;">
           @foreach ( $matter->renewalsPending->take(3) as $task )
@@ -241,10 +241,14 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
       </div>
       <div class="card col-6 p-0 border-primary reveal-hidden">
-        <div class="card-header p-1 bg-primary text-light">
-          Classifiers
-          <a class="hidden-action float-right text-light font-weight-bold" href="/matter/{{ $matter->id }}/classifiers" data-target="#ajaxModal" data-toggle="modal" title="Classifier detail">
-            &nbsp;&vellip;&nbsp;
+        <div class="card-header p-1 bg-primary">
+          <a class="row text-light text-decoration-none" href="/matter/{{ $matter->id }}/classifiers" data-target="#ajaxModal" data-toggle="modal" title="Classifier detail">
+            <div class="col">
+              Classifiers
+              <span class="hidden-action float-right">
+                &equiv;
+              </span>
+            </div>
           </a>
         </div>
         <div class="card-body p-1" id="classifierPanel" style="overflow: auto;">
