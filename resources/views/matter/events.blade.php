@@ -1,18 +1,18 @@
 <table class="table table-hover table-sm">
   <thead class="thead-light">
     <tr>
-      <th>Event</th>
-      <th>Date</th>
-      <th>Number</th>
-      <th>Notes</th>
       <th>
-        Refers to
+        Event
         @cannot('client')
-        <a data-toggle="collapse" href="tr.collapse" class="badge badge-info float-right" id="addEvent" title="Add event">
+        <a data-toggle="collapse" class="badge badge-pill badge-info font-weight-normal ml-2" href="#addEventRow" id="addEvent" title="Add event">
           &plus;
         </a>
         @endcannot
       </th>
+      <th>Date</th>
+      <th>Number</th>
+      <th>Notes</th>
+      <th>Refers to</th>
     </tr>
     <tr id="addEventRow" class="collapse">
       <td colspan="5">
