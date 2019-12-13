@@ -130,7 +130,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             @foreach ( $role_group as $actor)
             <li class="text-truncate {{ $actor->inherited ? 'font-italic' : '' }}">
               @if ( $actor->warn )
-              <span title="Special instructions">&#9888;</span>
+              <span class="text-danger" title="Special instructions">&#9888;</span>
               @endif
               <a href="/actor/{{ $actor->actor_id }}"
                 data-toggle="modal"
