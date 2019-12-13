@@ -127,12 +127,13 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
         <div class="card-body p-1" style="max-height: 80px; overflow: auto;">
           <ul class="list-unstyled mb-0">
-            @foreach ( $role_group as $actor)
+            @foreach ( $role_group as $actor )
             <li class="text-truncate {{ $actor->inherited ? 'font-italic' : '' }}">
               @if ( $actor->warn )
-              <span class="text-danger" title="Special instructions">&#9888;</span>
+              <span title="Special instructions">&#9888;</span>
               @endif
-              <a href="/actor/{{ $actor->actor_id }}"
+              <a @if ($actor->warn) class="text-danger" @endif
+                href="/actor/{{ $actor->actor_id }}"
                 data-toggle="modal"
                 data-target="#ajaxModal"
                 title="Actor data">
