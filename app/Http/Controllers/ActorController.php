@@ -15,14 +15,20 @@ class ActorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request) {
-        $Name = $request->input('Name');
-        $Phy_person = $request->input('phy_person');
         $actor = new Actor;
-        if (!is_null($Name)) {
-            $actor = $actor->where('name', 'like', $Name . '%');
+        if ($request->filled('Name')) {
+            $actor = $actor->where('name', 'like', $request->Name . '%');
         }
-        if (!is_null($Phy_person)) {
-            $actor = $actor->where('phy_person', $Phy_person);
+        switch ($request->selector) {
+          case 'phy_p':
+            $actor = $actor->where('phy_person', 1);
+            break;
+          case 'leg_p':
+            $actor = $actor->where('phy_person', 0);
+            break;
+          case 'warn':
+            $actor = $actor->where('warn', 1);
+            break;
         }
         $actorslist = $actor->with('company')->orderby('name')->paginate(21);
         $actorslist->appends($request->input())->links();
@@ -87,7 +93,7 @@ class ActorController extends Controller
     public function update(Request $request, Actor $actor) {
         $request->merge([ 'updater' => Auth::user()->login ]);
         $actor->update($request->except(['_token', '_method']));
-        return response()->json(['success' => 'Actor updated']);
+        return response()->json(['success' => '1']);
     }
 
     /**
