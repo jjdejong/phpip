@@ -113,7 +113,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         <div class="card-header bg-primary text-light p-1">
           {{ $role_name }}
           @cannot('client')
-          <a class="hidden-action float-right text-light font-weight-bold ml-2" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group[0]->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
+          <a class="hidden-action float-right text-light font-weight-bold ml-2" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group->first()->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
             &#9998;
           </a>
           <a class="hidden-action float-right text-light font-weight-bold" data-placement="right" rel="popover" title="Add {{ $role_name }}"
@@ -148,7 +148,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               @if ( $actor->show_date && $actor->date )
               ({{ $actor->date }})
               @endif
-              @if ( $actor->show_rate && $actor->rate )
+              @if ( $actor->show_rate && $actor->rate != '100' )
               &nbsp;- {{ $actor->rate }}
               @endif
             </li>
