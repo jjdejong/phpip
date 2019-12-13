@@ -16,10 +16,11 @@
             <td>Display name</td>
             <td>Company <span class="float-right">Person</span></td>
             <td>
-              <select id="person" class="custom-select-sm px-0" name="phy_person">
+              <select id="person" class="custom-select-sm px-0" name="selector">
                 <option value="" selected>All</option>
-                <option value="1">Physical</option>
-                <option value="0">Legal</option>
+                <option value="phy_p">Physical</option>
+                <option value="leg_p">Legal</option>
+                <option value="warn">Warn</option>
               </select>
             </td>
           </tr>
@@ -28,7 +29,7 @@
           @foreach ($actorslist as $actor)
           <tr class="reveal-hidden" data-id="{{ $actor->id }}">
             <td>
-              <a href="/actor/{{ $actor->id }}" data-panel="ajaxPanel" title="Actor data">
+              <a @if($actor->warn) class="text-danger text-decoration-none" @endif href="/actor/{{ $actor->id }}" data-panel="ajaxPanel" title="Actor data">
                 {{ $actor->name }}
               </a>
             </td>
