@@ -195,7 +195,7 @@ class RenewalController extends Controller
                         $earlier = min($earlier, $due_date);
                     }
                     $renewal = [];
-                    $desc= "B".$ren['caseref'].$ren['suffix']." : Annuité du titre n°".$ren['number'];
+                    $desc= $ren['caseref'].$ren['suffix']." : Annuité du titre n°".$ren['number'];
                     if ($ren['event_name']=='FIL') {$desc.=" déposé le ";}
                     if ($ren['event_name']=='GRT' or $ren['event_name']=='PR') {$desc.=" délivré le ";}
                     $desc.= $fmt->format(strtotime($ren['event_date']));
