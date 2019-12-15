@@ -424,10 +424,10 @@
                     {!! $task->grace_period ? "&#9888;" : "" !!}
                 </div>
                 <div class="col-3">
-                    <input class="form-control noformat" name="cost" value="{{ $task->grace_period ? $task->cost_sup : $task->cost }}">
+                    {{ $prices[$task->id]['cost']  }}
                 </div>
                 <div class="col-3">
-                    <input class="form-control noformat" name="fee" value="{{  $task->grace_period ? $task->fee_sup : $task->fee }}">
+                    {{ $prices[$task->id]['fee']  }}
                 </div>
             </div>
           </div>

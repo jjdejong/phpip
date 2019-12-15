@@ -82,13 +82,12 @@ class RenewalController extends Controller
         if (! ($with_step || $with_invoice)) {
             $renewals = $renewals->where('done',0);
         }
+        $prices = $this->prices($renewals->pluck('id'),0);
         $renewals = $renewals->simplePaginate(100)->all();
         //$renewals->appends($request->input())->links(); // Keep URL parameters in the paginator links
-        return view('renewals.index', compact('renewals','step', 'invoice_step', 'tab'));
+        return view('renewals.index', compact('renewals','step', 'invoice_step', 'tab','prices'));
     }
-    /*
-    la mise à jour à la fin ne correspond pas, il faut mettre en accord avec la requête.
-    */
+
     public function firstcall(Request $request)
     { 
         $notify_type[0] = 'first';
@@ -159,6 +158,7 @@ class RenewalController extends Controller
         for ($grace = 0; $grace < count($notify_type); $grace++)
         {
             $resql = Renewal::whereIn('id',$ids)->orderBy( 'client_dn', "ASC")->where('grace_period',$grace)->get();
+            $prices = $this->prices($ids, $grace == 0 ? 0 : 2 );
             $num=$resql->count(); 
             $sum = $sum + $num;
             if ($grace == 1 && $sum === 0)
@@ -207,20 +207,11 @@ class RenewalController extends Controller
                     $renewal['annuity'] = $ren['detail'];
                     $tx_tva = 0.2;
                     $renewal['tx_tva'] =  $tx_tva * 100;
-                    if ($grace) {
-                        $cost = $ren['cost_sup'];
-                        $fee =  $ren['fee_sup'];
-                    }
-                    else
-                    {
-                        $cost = $ren['cost'];
-                        $fee =  $ren['fee'];
-                    }
-                    $renewal['cost'] =  number_format($cost, 2, ',',' ');
-                    $renewal['fee'] =  number_format($fee * $fee_factor, 2, ',',' ');
-                    $renewal['tva'] =  $fee * $fee_factor *  $tx_tva;
-                    $renewal['total_ht'] = number_format($fee * $fee_factor + $cost, 2, ',',' ');
-                    $renewal['total'] = number_format($fee * $fee_factor * (1 + $tx_tva) + $cost, 2, ',',' ');
+                    $renewal['cost'] =  number_format($prices[$ren['id']]['cost'], 2, ',',' ');
+                    $renewal['fee'] =  number_format($prices[$ren['id']]['fee'] * $fee_factor, 2, ',',' ');
+                    $renewal['tva'] =  $prices[$ren['id']]['fee'] * $fee_factor *  $tx_tva;
+                    $renewal['total_ht'] = number_format($prices[$ren['id']]['fee'] * $fee_factor + $prices[$ren['id']]['cost'], 2, ',',' ');
+                    $renewal['total'] = number_format($prices[$ren['id']]['fee'] * $fee_factor * (1 + $tx_tva) + $prices[$ren['id']]['cost'], 2, ',',' ');
                     $total = $total + floatval($renewal['total']);
                     $total_ht = $total_ht + floatval($renewal['total_ht']);
                     $client_precedent = $client;
@@ -253,8 +244,9 @@ class RenewalController extends Controller
                             // No contact registered, using client email
                             $user = new User();
                             $user = $user->where('id',$ren['client_id'])->first();
-                            if  ($user->email == '')
-                                return "No email address for $user->name.";
+                            if  ($user->email == '') {
+                                return "No email address for $ren['client_dn'].";
+                            }
                             array_push($email_list,['email' => $user->email, 'name' =>$user->first_name.' '.$user->name]);
                         }
                         else {
@@ -371,21 +363,20 @@ class RenewalController extends Controller
                     {
                         $fee = $ren['fee'];
                         if( strtotime($ren['done_date']) < $ren['due_date']) {
-                        // late payment
-                            $fee = $ren['fee'] * 1.2 ;
-                            $cost =  $ren['cost'];
+                            // late payment
+                            $prices = $this->prices([$ren['id']],1);
                         }
                         else
                         {
-                            $fee = $ren['fee_sup'];
-                            $cost =  $ren['cost_sup'];
+                            $prices = $this->prices([$ren['id']],2);
                         }
                     }
                     else
                     {
-                        $fee = $ren['fee'];
-                        $cost =  $ren['cost'];
+                            $prices = $this->prices([$ren['id']],0);
                     }
+                    $fee = $prices[$ren['id']]['fee'];
+                    $cost = $prices[$ren['id']]['cost'];
                     if ($cost != 0) 
                     {
                         $desc.="\nHonoraires pour la surveillance et le paiement";
@@ -699,5 +690,51 @@ class RenewalController extends Controller
 
         $renewal->update($request->except(['_token', '_method']));
         return response()->json(['success' => 'Renewal updated']);
+    }
+
+    public function prices($ids, $level) 
+    {
+        $renewals = Renewal::whereIn('id',$ids)->get();
+        $prices=[];
+        $fee_factor = config('renewal.validity.fee_factor');
+        foreach($renewals as $ren) {
+            if ($level == 0)
+            // standard prices
+            {
+                if ($ren['sme_status'] === 1) {
+                    $prices[$ren['id']]['fee'] = $ren['fee_reduced'] ;
+                    $prices[$ren['id']]['cost'] = $ren['cost_reduced'] ;
+                }
+                else {
+                    $prices[$ren['id']]['fee'] = $ren['fee'] ;
+                    $prices[$ren['id']]['cost'] = $ren['cost'] ;
+                }
+            }
+            elseif ($level == 1)
+            // standard prices with urgency
+            {
+                if ($ren['sme_status'] === 1) {
+                    $prices[$ren['id']]['fee'] = $ren['fee_reduced'] * $fee_factor ;
+                    $prices[$ren['id']]['cost'] = $ren['cost_reduced'] ;
+                }
+                else {
+                    $prices[$ren['id']]['fee'] = $ren['fee']  * $fee_factor;
+                    $prices[$ren['id']]['cost'] = $ren['cost'] ;
+                }
+            }
+            elseif ($level == 2)
+            //  prices in grace period
+            {
+                if ($ren['sme_status'] === 1) {
+                    $prices[$ren['id']]['fee'] = $ren['fee_sup_reduced'] ;
+                    $prices[$ren['id']]['cost'] = $ren['cost_sup_reduced'] ;
+                }
+                else {
+                    $prices[$ren['id']]['fee'] = $ren['fee_sup'] ;
+                    $prices[$ren['id']]['cost'] = $ren['cost_sup'] ;
+                }
+            }
+        }
+    return $prices;
     }
 }

@@ -22,14 +22,6 @@ class RenewalListView extends Migration
         `task`.`done` AS `done`,
         `task`.`done_date` AS `done_date`,
         `event`.`matter_id` AS `matter_id`,
-        `fees`.`cost` AS `cost`,
-        `fees`.`fee` AS `fee`,
-        `fees`.`cost_reduced` AS `cost_reduced`,
-        `fees`.`fee_reduced` AS `fee_reduced`,
-        `fees`.`cost_sup` AS `cost_sup`,
-        `fees`.`fee_sup` AS `fee_sup`,
-        `fees`.`fee_sup_reduced` AS `fee_sup_reduced`,
-        `fees`.`cost_sup_reduced` AS `cost_sup_reduced`,
         `task`.`trigger_id` AS `trigger_id`,
         `matter`.`category_code` AS `category`,
         `matter`.`caseref` AS `caseref`,
@@ -48,18 +40,19 @@ class RenewalListView extends Migration
         `pa_cli`.`email` AS `email`,
         ifnull(`task`.`assigned_to`,`matter`.`responsible`) AS `responsible`,
         `cla`.`value` AS `title`,
+        (select 1 from  `classifier` `sme` where ifnull(`matter`.`container_id`,`matter`.`id`) = `sme`.`matter_id` and `sme`.`type_code` = 'SME') AS `sme_status`,
         `ev`.`detail` AS `pub_num`,
         `task`.`step` AS `step`,
         `task`.`grace_period` AS `grace_period`,
         `task`.`invoice_step` AS `invoice_step` 
-        from ((((((((((`matter` left join `matter_actor_lnk` `pmal_app` on(ifnull(`matter`.`container_id`,`matter`.`id`) = `pmal_app`.`matter_id` and `pmal_app`.`role` = 'APP')) 
+        from ((((((((((`matter` 
+        left join `matter_actor_lnk` `pmal_app` on(ifnull(`matter`.`container_id`,`matter`.`id`) = `pmal_app`.`matter_id` and `pmal_app`.`role` = 'APP')) 
         left join `actor` `pa_app` on(`pa_app`.`id` = `pmal_app`.`actor_id`)) 
         left join `matter_actor_lnk` `pmal_cli` on(ifnull(`matter`.`container_id`,`matter`.`id`) = `pmal_cli`.`matter_id` and `pmal_cli`.`role` = 'CLI')) 
         left join `country` `mcountry` on(`mcountry`.`iso` = `matter`.`country`)) 
         left join `actor` `pa_cli` on(`pa_cli`.`id` = `pmal_cli`.`actor_id`)) join `event` on(`matter`.`id` = `event`.`matter_id`)) 
         left join `event` `ev` on(`matter`.`id` = `ev`.`matter_id` and `ev`.`code` = 'PUB')) join `task` on(`task`.`trigger_id` = `event`.`id`)) 
         left join `classifier` `cla` on(ifnull(`matter`.`container_id`,`matter`.`id`) = `cla`.`matter_id` and `cla`.`type_code` = 'TITOF')) 
-        left join `fees` on(`fees`.`for_country` = `matter`.`country` and `fees`.`for_category` = `matter`.`category_code` and `fees`.`qt` = `task`.`detail`)) 
         where `task`.`code` = 'REN' and `matter`.`dead` = 0 group by `task`.`id`"
         );
     }
