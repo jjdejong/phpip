@@ -81,8 +81,8 @@ class Task extends Model
 
         if (Auth::user()->default_role == 'CLI') {
             $tasks->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
-            ->where('mal.role', 'CLI')
-            ->where('mal.actor_id', Auth::user()->id);
+            ->where('cli.role', 'CLI')
+            ->where('cli.actor_id', Auth::user()->id);
         }
 
         if ($user_dasboard) {
