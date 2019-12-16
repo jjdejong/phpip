@@ -55,6 +55,7 @@ class Task extends Model
 
         if ($role == 'CLI') {
             $selectQuery->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(m.container_id, m.id)'))
+            ->where('cli.role', 'CLI')
             ->where('cli.actor_id', $userid);
         }
         return $selectQuery->get();
