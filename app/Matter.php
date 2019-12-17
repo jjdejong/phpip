@@ -166,7 +166,7 @@ class Matter extends Model
         return $this->belongsTo('App\Type');
     }
 
-    public static function filter($sortkey = 'id', $sortdir = 'desc', $multi_filter = [], $display_with = false, $paginated = false)
+    public static function filter($sortkey = 'id', $sortdir = 'desc', $multi_filter = [], $display_with = false, $include_dead = false, $paginated = false)
     {
         $query = Matter::select(
             'matter.uid AS Ref',
@@ -288,7 +288,7 @@ class Matter extends Model
             $query->where('cli.id', $authUserId);
         }
 
-        if (!empty($multi_filter)) {
+        if (!empty($multi_filter) && empty($multi_filter['Cat'])) {
             $sortkey = 'caseref';
             $sortdir = 'asc';
             foreach ($multi_filter as $key => $value) {
@@ -359,6 +359,11 @@ class Matter extends Model
                     }
                 }
             }
+        }
+
+        // Do not display dead families unless desired
+        if ( !$include_dead ) {
+          $query->whereRaw('(select count(1) from matter m where m.caseref = matter.caseref and m.dead = 0) > 0');
         }
 
         if ($sortkey == 'caseref') {
