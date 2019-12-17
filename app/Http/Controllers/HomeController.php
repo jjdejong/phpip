@@ -28,17 +28,12 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        // Filters
-        $MyTasks = $request->input('my_tasks');
-        $MyRenewals = $request->input('my_renewals');
-        $user_dashboard = $request->user_dashboard;
-
         // Get list of active tasks
         $task = new Task;
-        $tasks = $task->openTasks(false, $MyTasks, $user_dashboard)->take(100)->get();
+        $tasks = $task->openTasks(false, $request->what_tasks, $request->user_dashboard)->take(100)->get();
 
         // Get list of active renewals
-        $renewals = $task->openTasks(true, $MyRenewals, $user_dashboard)->take(200)->get();
+        $renewals = $task->openTasks(true, $request->what_renewals, $request->user_dashboard)->take(200)->get();
 
         // Count matters per categories
         $categories = Matter::getCategoryMatterCount();

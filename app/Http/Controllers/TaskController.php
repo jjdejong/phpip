@@ -18,7 +18,7 @@ class TaskController extends Controller
         if ($isrenewals) {
           $nrecords = 200;
         }
-        $tasks = $task->openTasks($isrenewals, $request->my_tasks, $request->user_dashboard)->take($nrecords)->get();
+        $tasks = $task->openTasks($isrenewals, $request->what_tasks, $request->user_dashboard)->take($nrecords)->get();
         return view('task.index', compact('tasks', 'isrenewals'));
     }
 
