@@ -55,12 +55,12 @@
         url.searchParams.set('tab', '0');
         window.history.pushState('', 'phpIP', url);
         break;
-      case 'showAll':
-        url.searchParams.delete('Ctnr');
-        refreshMatterList();
-        break;
       case 'showContainers':
-        url.searchParams.set('Ctnr', '1');
+        if (url.searchParams.has('Ctnr')) {
+          url.searchParams.delete('Ctnr');
+        } else {
+          url.searchParams.set('Ctnr', '1');
+        }
         refreshMatterList();
         break;
       case 'showResponsible':
@@ -68,6 +68,14 @@
           url.searchParams.delete('responsible');
         } else {
           url.searchParams.set('responsible', e.target.value);
+        }
+        refreshMatterList();
+        break;
+      case 'includeDead':
+        if (url.searchParams.has('include_dead')) {
+          url.searchParams.delete('include_dead');
+        } else {
+          url.searchParams.set('include_dead', '1');
         }
         refreshMatterList();
         break;
@@ -108,12 +116,9 @@
 <div class="card border-primary mb-0">
   <div id="filterButtons" class="card-header bg-primary p-1">
     <form class="btn-toolbar" role="toolbar">
-      <div class="btn-group btn-group-toggle mr-3" data-toggle="buttons" id="containerAll">
-        <label class="btn btn-info {{ Request::filled('Ctnr') ? '' : 'active' }}">
-          <input type="radio" id="showAll" name="Ctnr" value=""> Show All
-        </label>
-        <label class="btn btn-info {{ Request::filled('Ctnr') ? 'active' : '' }}">
-          <input type="radio" id="showContainers" name="Ctnr" value="1"> Show Containers
+      <div class="btn-group-toggle mr-3" data-toggle="buttons">
+        <label class="btn btn-info {{ Request::get('Ctnr') ? 'active' : '' }}">
+          <input type="checkbox" id="showContainers" name="Ctnr"> Show Containers
         </label>
       </div>
       <div class="btn-group btn-group-toggle mr-3" data-toggle="buttons" id="actorStatus">
@@ -127,6 +132,11 @@
       <div class="btn-group-toggle mr-3" id="mineAll" data-toggle="buttons">
         <label class="btn btn-info {{ Request::get('responsible') ? 'active' : '' }}">
           <input type="checkbox" id="showResponsible" name="responsible" value="{{ Auth::user ()->login }}"> Show Mine
+        </label>
+      </div>
+      <div class="btn-group-toggle mr-3" data-toggle="buttons">
+        <label class="btn btn-info {{ Request::get('include_dead') ? 'active' : '' }}">
+          <input type="checkbox" id="includeDead" name="include_dead"> Include Dead
         </label>
       </div>
       <input type="hidden" id="sortkey" name="sortkey" value="{{ Request::get('sortkey') }}">
@@ -163,7 +173,7 @@
         </tr>
         <tr id="filterFields">
           <td><input class="form-control form-control-sm" name="Ref" placeholder="Ref" value="{{ Request::get('Ref') }}"></td>
-          <td><input class="form-control form-control-sm" size="3" name="Cat" placeholder="Cat" value="{{ Request::get('Cat') }}"></td>
+          <td><input class="form-control form-control-sm px-0" size="3" name="Cat" placeholder="Cat" value="{{ Request::get('Cat') }}"></td>
           <td><input class="form-control form-control-sm" name="Status" placeholder="Status" value="{{ Request::get('Status') }}"></td>
           <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Client" placeholder="Client" value="{{ Request::get('Client') }}"></td>
           <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="8" name="ClRef" placeholder="Cl. Ref" value="{{ Request::get('ClRef') }}"></td>
