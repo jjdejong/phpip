@@ -67,7 +67,7 @@
             </td>
               @if ($group->urgent_date < now())
             <td class="text-danger">
-            @elseif ($group->urgent_date < now()->addWeek())
+            @elseif ($group->urgent_date < now()->addWeeks(2))
             <td style="color: purple;">
               @else
             <td>
@@ -84,20 +84,27 @@
   <div class="col-8" id="filter">
     <div class="card border-primary">
       <div class="card-header text-white bg-primary p-1">
-        <div class="row">
-          <div class="lead col-3">
+        <form class="row">
+          <div class="lead col-2">
             Open tasks
           </div>
           @cannot('client')
-          <div class="col-5">
+          <div class="col-6">
             @if(!Request::filled('user_dashboard'))
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="btn btn-info active">
-                <input type="radio" name="my_tasks" id="alltasks" value="0">Everyone
-              </label>
-              <label class="btn btn-info">
-                <input type="radio" name="my_tasks" id="mytasks" value="1">{{ Auth::user()->login }}
-              </label>
+            <div class="input-group">
+              <div class="btn-group btn-group-toggle input-group-prepend" data-toggle="buttons">
+                <label class="btn btn-info active">
+                  <input type="radio" name="what_tasks" id="alltasks" value="0" checked>Everyone
+                </label>
+                <label class="btn btn-info">
+                  <input type="radio" name="what_tasks" id="mytasks" value="1">{{ Auth::user()->login }}
+                </label>
+                <label class="btn btn-info">
+                  <input type="radio" name="what_tasks" id="clientTasks" value="2">Client
+                </label>
+              </div>
+              <input type="hidden" id="clientId" name="client_id" autocomplete="off">
+              <input type="text" class="form-control mr-3" data-ac="/actor/autocomplete" data-actarget="client_id" placeholder="Select Client" autocomplete="off">
             </div>
             @endif
           </div>
@@ -106,11 +113,11 @@
               <div class="input-group-prepend">
                 <button class="btn btn-light" type="button" id="clearOpenTasks">Clear selected on</button>
               </div>
-              <input type="text" class="form-control" name="datetaskcleardate" id="taskcleardate" value="{{ now()->format('Y-m-d') }}">
+              <input type="text" class="form-control mr-2" name="datetaskcleardate" id="taskcleardate" value="{{ now()->format('Y-m-d') }}">
             </div>
           </div>
           @endcannot
-        </div>
+        </form>
         <div class="row mt-1">
           <div class="col-6">
           </div>
@@ -132,18 +139,21 @@
     <div class="card border-primary mt-1">
       <div class="card-header text-white bg-primary p-1">
         <div class="row">
-          <div class="lead col-3">
+          <div class="lead col-2">
             Open renewals
           </div>
           @cannot('client')
-          <div class="col-5">
+          <div class="col-6">
             @if(!Request::filled('user_dashboard'))
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
               <label class="btn btn-info active">
-                <input type="radio" name="my_renewals" id="allrenewals" value="0">Everyone
+                <input type="radio" name="what_renewals" id="allrenewals" value="0">Everyone
               </label>
               <label class="btn btn-info">
-                <input type="radio" name="my_renewals" id="myrenewals" value="1">{{ Auth::user()->login }}
+                <input type="radio" name="what_renewals" id="myrenewals" value="1">{{ Auth::user()->login }}
+              </label>
+              <label class="btn btn-info">
+                <input type="radio" name="what_renewals" id="clientRenewals" value="2">Client
               </label>
             </div>
             @endif
@@ -153,7 +163,7 @@
               <div class="input-group-prepend">
                 <button class="btn btn-light" type="button" id="clearRenewals">Clear selected on</button>
               </div>
-              <input type="text" class="form-control" name="renewalcleardate" id="renewalcleardate" value="{{ now()->format('Y-m-d') }}">
+              <input type="text" class="form-control mr-2" name="renewalcleardate" id="renewalcleardate" value="{{ now()->format('Y-m-d') }}">
             </div>
           </div>
           @endcannot

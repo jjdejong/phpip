@@ -61,7 +61,7 @@ class Task extends Model
         return $selectQuery->get();
     }
 
-    public function openTasks($renewals, $mytasks, $user_dasboard)
+    public function openTasks($renewals, $what_tasks, $user_dasboard)
     {
         $tasks = $this->select('task.id', 'en.name', 'task.detail', 'task.due_date', 'event.matter_id', 'matter.uid')
         ->join('event_name as en', 'task.code', 'en.code')
@@ -70,8 +70,15 @@ class Task extends Model
         ->where('task.done', 0)
         ->where('matter.dead', 0);
 
-        if($mytasks) {
+        if($what_tasks == 1) {
             $tasks->where('assigned_to', Auth::user()->login);
+        }
+
+        // A client is defined for querying the tasks
+        if($what_tasks > 1) {
+            $tasks->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
+            ->where('cli.role', 'CLI')
+            ->where('cli.actor_id', $what_tasks);
         }
 
         if ($renewals) {

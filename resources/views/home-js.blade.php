@@ -7,8 +7,14 @@
 </style>
 <script>
 
+  var lastTasksFlag = 0, lastRenewalsFlag = 0;
+
     function refreshTasks(flag) {
-        var url = '/task?my_tasks=' + flag;
+        lastTasksFlag = flag;
+        if (flag === '2') {
+          flag = clientId.value;
+        }
+        var url = '/task?what_tasks=' + flag;
         @if(Request::filled('user_dashboard'))
         url += '&user_dashboard={{ Request::get('user_dashboard') }}';
         @endif
@@ -16,7 +22,11 @@
     }
 
     function refreshRenewals(flag) {
-        var url = '/task?isrenewals=1&my_tasks=' + flag;
+        lastRenewalsFlag = flag;
+        if (flag === '2') {
+          flag = clientId.value;
+        }
+        var url = '/task?isrenewals=1&what_tasks=' + flag;
         @if(Request::filled('user_dashboard'))
         url += '&user_dashboard={{ Request::get('user_dashboard') }}';
         @endif
@@ -24,10 +34,14 @@
     }
 
     @if(!Request::filled('user_dashboard'))
-    mytasks.onchange = () => { refreshTasks(1); }
-    alltasks.onchange = () => { refreshTasks(0); }
-    allrenewals.onchange = () => { refreshRenewals(0); }
-    myrenewals.onchange = () => { refreshRenewals(1); }
+    filter.onchange = (e) => {
+      if (e.target.name === 'what_tasks') {
+        refreshTasks(e.target.value);
+      }
+      if (e.target.name === 'what_renewals') {
+        refreshRenewals(e.target.value);
+      }
+    }
     @endif
 
     clearRenewals.onclick = (e) => {
@@ -43,7 +57,7 @@
         { task_ids: tids, done_date: renewalcleardate.value },
         function (response) {
           if (response.errors === '') {
-            refreshRenewals(0);
+            refreshRenewals(lastRenewalsFlag);
           } else {
             alert(response.errors.done_date);
           }
@@ -64,7 +78,7 @@
         { task_ids: tids, done_date: taskcleardate.value },
         function (response) {
           if (response.errors === '') {
-            refreshTasks(0);
+            refreshTasks(lastTasksFlag);
           } else {
             alert(response.errors.done_date);
           }
