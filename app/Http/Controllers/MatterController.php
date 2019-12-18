@@ -187,13 +187,14 @@ class MatterController extends Controller
             $new_matter = Matter::create($request->except(['_token', '_method', 'ncountry', 'origin_id']));
 
             // Copy classifiers (from original matter's container, or from original matter if there is no container)
+            /*** THIS IS NOT NECESSARY - classifiers are necessarily inherited here! ***
             if ($from_matter->container_id) {
                 $new_matter->classifiersNative()->createMany($from_matter->container->classifiersNative->toArray());
                 $new_matter->container_id = $from_matter->container_id;
             } else {
                 $new_matter->classifiersNative()->createMany($from_matter->classifiersNative->toArray());
                 $new_matter->container_id = $origin_id;
-            }
+            } */
 
             // Copy shared events from original matter
             $new_matter->priority()->createMany($from_matter->priority->toArray());
