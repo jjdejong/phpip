@@ -7,7 +7,7 @@
 </style>
 <script>
 
-  var lastTasksFlag = 0, lastRenewalsFlag = 0;
+  var lastTasksFlag = 0;
 
     function refreshTasks(flag) {
         lastTasksFlag = flag;
@@ -19,30 +19,15 @@
         url += '&user_dashboard={{ Request::get('user_dashboard') }}';
         @endif
         fetchInto(url, tasklist);
-    }
-
-    function refreshRenewals(flag) {
-        lastRenewalsFlag = flag;
-        if (flag === '2') {
-          flag = clientId.value;
-        }
-        var url = '/task?isrenewals=1&what_tasks=' + flag;
-        @if(Request::filled('user_dashboard'))
-        url += '&user_dashboard={{ Request::get('user_dashboard') }}';
-        @endif
+        url += '&isrenewals=1';
         fetchInto(url, renewallist);
     }
 
-    @if(!Request::filled('user_dashboard'))
     filter.onchange = (e) => {
       if (e.target.name === 'what_tasks') {
         refreshTasks(e.target.value);
       }
-      if (e.target.name === 'what_renewals') {
-        refreshRenewals(e.target.value);
-      }
     }
-    @endif
 
     clearRenewals.onclick = (e) => {
       var tids = new Array();
@@ -57,7 +42,7 @@
         { task_ids: tids, done_date: renewalcleardate.value },
         function (response) {
           if (response.errors === '') {
-            refreshRenewals(lastRenewalsFlag);
+            refreshTasks(lastTasksFlag);
           } else {
             alert(response.errors.done_date);
           }

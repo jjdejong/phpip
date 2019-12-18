@@ -90,15 +90,16 @@
           </div>
           @cannot('client')
           <div class="col-6">
-            @if(!Request::filled('user_dashboard'))
             <div class="input-group">
               <div class="btn-group btn-group-toggle input-group-prepend" data-toggle="buttons">
                 <label class="btn btn-info active">
                   <input type="radio" name="what_tasks" id="alltasks" value="0" checked>Everyone
                 </label>
+                @if(!Request::filled('user_dashboard'))
                 <label class="btn btn-info">
                   <input type="radio" name="what_tasks" id="mytasks" value="1">{{ Auth::user()->login }}
                 </label>
+                @endif
                 <label class="btn btn-info">
                   <input type="radio" name="what_tasks" id="clientTasks" value="2">Client
                 </label>
@@ -106,7 +107,6 @@
               <input type="hidden" id="clientId" name="client_id" autocomplete="off">
               <input type="text" class="form-control mr-3" data-ac="/actor/autocomplete" data-actarget="client_id" placeholder="Select Client" autocomplete="off">
             </div>
-            @endif
           </div>
           <div class="col-4">
             <div class="input-group">
@@ -139,26 +139,11 @@
     <div class="card border-primary mt-1">
       <div class="card-header text-white bg-primary p-1">
         <div class="row">
-          <div class="lead col-2">
+          <div class="lead col-8">
             Open renewals
           </div>
           @cannot('client')
-          <div class="col-6">
-            @if(!Request::filled('user_dashboard'))
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="btn btn-info active">
-                <input type="radio" name="what_renewals" id="allrenewals" value="0">Everyone
-              </label>
-              <label class="btn btn-info">
-                <input type="radio" name="what_renewals" id="myrenewals" value="1">{{ Auth::user()->login }}
-              </label>
-              <label class="btn btn-info">
-                <input type="radio" name="what_renewals" id="clientRenewals" value="2">Client
-              </label>
-            </div>
-            @endif
-          </div>
-          <div class="col-4">
+          <div class="col">
             <div class="input-group">
               <div class="input-group-prepend">
                 <button class="btn btn-light" type="button" id="clearRenewals">Clear selected on</button>
