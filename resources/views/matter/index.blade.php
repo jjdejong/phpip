@@ -185,7 +185,7 @@
           @endcannot
           <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="8" name="ClRef" placeholder="Cl. Ref" value="{{ Request::get('ClRef') }}"></td>
           @can('client')
-          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Client" placeholder="Applicant" value="{{ Request::get('Applicant') }}"></td>
+          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Applicant" placeholder="Applicant" value="{{ Request::get('Applicant') }}"></td>
           @endcan
           <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Agent" placeholder="Agent" value="{{ Request::get('Agent') }}"></td>
           <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="16" name="AgtRef" placeholder="Agt. Ref" value="{{ Request::get('AgtRef') }}"></td>
