@@ -157,8 +157,13 @@
           <th><a href="#" class="sortable" data-sortkey="caseref" data-sortdir="desc">Reference</a></th>
           <th>Cat.</th>
           <th><a href="#" class="sortable" data-sortkey="event_name.name" data-sortdir="asc">Status</a></th>
+          @cannot('client')
           <th class="tab0 {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="cli.name" data-sortdir="asc">Client</a></th>
+          @endcannot
           <th class="tab0 {{ $hideTab0 }}">Client&nbsp;Ref.</th>
+          @can('client')
+          <th class="tab0 {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="app.name" data-sortdir="asc">Applicant</a></th>
+          @endcan
           <th class="tab0 {{ $hideTab0 }}"><a href="#" class="sortable" data-sortkey="agt.name" data-sortdir="asc">Agent</a></th>
           <th class="tab0 {{ $hideTab0 }}">Agent&nbsp;Ref.</th>
           <th class="tab0 {{ $hideTab0 }}">Title/Detail</th>
@@ -175,8 +180,13 @@
           <td><input class="form-control form-control-sm" name="Ref" placeholder="Ref" value="{{ Request::get('Ref') }}"></td>
           <td><input class="form-control form-control-sm px-0" size="3" name="Cat" placeholder="Cat" value="{{ Request::get('Cat') }}"></td>
           <td><input class="form-control form-control-sm" name="Status" placeholder="Status" value="{{ Request::get('Status') }}"></td>
+          @cannot('client')
           <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Client" placeholder="Client" value="{{ Request::get('Client') }}"></td>
+          @endcannot
           <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="8" name="ClRef" placeholder="Cl. Ref" value="{{ Request::get('ClRef') }}"></td>
+          @can('client')
+          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Client" placeholder="Applicant" value="{{ Request::get('Applicant') }}"></td>
+          @endcan
           <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Agent" placeholder="Agent" value="{{ Request::get('Agent') }}"></td>
           <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="16" name="AgtRef" placeholder="Agt. Ref" value="{{ Request::get('AgtRef') }}"></td>
           <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Title" placeholder="Title" value="{{ Request::get('Title') }}"></td>
@@ -224,8 +234,13 @@
             {{ $matter->Status }}
             @endif
           </td>
+          @cannot('client')
           <td class="tab0 {{ $hideTab0 }}">{{ $matter->Client }}</td>
+          @endcannot
           <td class="tab0 {{ $hideTab0 }}">{{ $matter->ClRef }}</td>
+          @can('client')
+          <td class="tab0 {{ $hideTab0 }}">{{ $matter->Applicant }}</td>
+          @endcan
           <td class="tab0 {{ $hideTab0 }}">{{ $matter->Agent }}</td>
           <td class="tab0 {{ $hideTab0 }}">{{ $matter->AgtRef }}</td>
           @if ( $matter->container_id && $matter->Title2 )
