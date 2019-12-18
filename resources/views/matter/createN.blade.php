@@ -23,9 +23,7 @@
 			<span class="input-group-text">&plus;</span>
 		</div>
 	</div>
-	<div id="add-matter-actions">
-		<button type="button" class="btn btn-primary" id="nationalizeSubmit">Submit</button>
-	</div>
+	<button type="button" class="btn btn-primary btn-block mt-2" id="nationalizeSubmit">Submit</button>
 </form>
 
 <template id="appendCountryTemplate">

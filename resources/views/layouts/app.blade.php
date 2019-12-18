@@ -400,7 +400,8 @@
               newCountry.children[0].value = ui.item.key;
               newCountry.children[1].value = ui.item.value;
               ncountries.appendChild(newCountry);
-              e.target.value = "";
+              // Wait for the new country entry to be added to the DOM before resetting the input field
+              setTimeout(() => { addCountry.value = ""; }, 0);
             } else if ( e.target.hasAttribute('data-actarget') ) {
                 // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
                 e.target.value = ui.item.value;
