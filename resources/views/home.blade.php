@@ -104,8 +104,8 @@
                   <input type="radio" name="what_tasks" id="clientTasks" value="2">Client
                 </label>
               </div>
-              <input type="hidden" id="clientId" name="client_id" autocomplete="off">
-              <input type="text" class="form-control mr-3" data-ac="/actor/autocomplete" data-actarget="client_id" placeholder="Select Client" autocomplete="off">
+              <input type="hidden" id="clientId" name="client_id">
+              <input type="text" class="form-control mr-3" data-ac="/actor/autocomplete" data-actarget="client_id" placeholder="Select Client">
             </div>
           </div>
           <div class="col-4">
