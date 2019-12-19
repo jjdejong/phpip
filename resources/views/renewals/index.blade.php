@@ -38,57 +38,33 @@
         boxes[i].checked = newValue;
     }
   });
-  /*
-  grace.addEventListener('change', e => {
-    if (e.target.checked) {
-        // Filter with grace period
-        url.searchParams.set(e.target.name, e.target.value);
-    }
-    else
-    {
-        // Filter without grace period
-        url.searchParams.delete(e.target.name);
-    }
-    refreshList();
-  });*/
 
     // Load list according to corresponding tab
     tabsGroup.addEventListener("click", function (e) {
-        new_url = window.location.pathname;
-        sep = '?';
+        url.searchParams.delete('step');
+        url.searchParams.delete('invoice_step');
+        url.searchParams.delete('tab');
         if(e.target.hasAttribute('step')) {
-            new_url = new_url + sep + "step=" + e.target.getAttribute('step');
-            sep = '&';
+            url.searchParams.set('step', e.target.getAttribute('step'));
         }
         if(e.target.hasAttribute('invoice_step')) {
-            new_url = new_url + sep + "invoice_step=" + e.target.getAttribute('invoice_step');
-            sep = '&';
+            url.searchParams.set('invoice_step', e.target.getAttribute('invoice_step'));
         }
         if(e.target.hasAttribute('href')) {
-            new_url = new_url + sep + "tab=" + e.target.getAttribute('href').substr(1);
-            sep = '&';
+            url.searchParams.set('tab', e.target.getAttribute('href'));
         }
-        window.history.pushState('', 'phpIP', new_url);
-        reloadPart(new_url, 'renewalList');
+        window.history.pushState('', 'phpIP', url);
+        reloadPart(url, 'renewalList');
     });
 
     clearFilters.onclick = () => {
-        var old_url = new URL(window.location.href);
-        var searchParams = new URLSearchParams(old_url.search);
-        new_url = '/renewal'
-        sep = '?';
-        if ( searchParams.has('step')) {
-            new_url = new_url + sep + 'step=' + searchParams.get('step');
-            sep = '&';
+        var mySearchParams = url.searchParams;
+        for ( key of mySearchParams.keys()) {
+            if ( (key != 'step') && (key != 'invoice_step') && (key != 'tab')) {
+                mySearchParams.delete(key);
+            }
         }
-        if ( searchParams.has('tab')) {
-            new_url = new_url + sep + 'tab=' + searchParams.get('tab');
-            sep = '&';
-        }
-        if ( searchParams.has('invoice_step')) {
-            new_url = new_url + sep + 'invoice_step=' + searchParams.get('invoice_step');
-        }
-        window.location.href = new_url;
+        refreshList();
     };
   
     doneRenewals.addEventListener("click",function (b) {
@@ -151,9 +127,10 @@
         {
             var string = JSON.stringify({task_ids: tids});
         }
-        url = new URL(window.location.href);
+        context_url = new URL(window.location.href);
         await submitUpdate(string, action_url).catch(err => alert(err));
-        reloadPart(url,'renewalList');
+        window.history.pushState('', 'phpIP', context_url);
+        reloadPart(context_url,'renewalList');
         // withdraw spinner
         button.removeChild(document.getElementsByClassName('spinner-border')[0]);
     }
