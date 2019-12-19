@@ -169,9 +169,9 @@ class RenewalController extends Controller
             if ($num != 0)
             {
                 $i=0;
-                $ren = $resql[0]->toArray();
                 while ($i < $num)
                 {
+                    $ren = $resql[$i]->toArray();
                     $client = $ren['client_dn'];
                     $email = $ren['email'];
                     $due_date = strtotime($ren['due_date']);
@@ -219,8 +219,7 @@ class RenewalController extends Controller
                     array_push($renewals, $renewal);
                     if ($i < $num) 
                     {
-                        $ren = $resql[$i];
-                        $client = $ren['client_dn'];
+                        $client = $resql[$i]['client_dn'];
                     }
                     if ($client != $client_precedent || $i == $num) 
                     {
@@ -245,7 +244,7 @@ class RenewalController extends Controller
                             $user = new User();
                             $user = $user->where('id',$ren['client_id'])->first();
                             if  ($user->email == '') {
-                                return "No email address for $ren['client_dn'].";
+                                return "No email address for ".$ren['client_dn'];
                             }
                             array_push($email_list,['email' => $user->email, 'name' =>$user->first_name.' '.$user->name]);
                         }
@@ -324,9 +323,9 @@ class RenewalController extends Controller
             else
             {
                 $i=0;
-                $ren = $resql[0];
                 while ($i < $num)
                 {
+                    $ren = $resql[$i];
                     $client = $ren['client_dn'];
                     if ($premier_passage) 
                     {
@@ -413,8 +412,7 @@ class RenewalController extends Controller
                     $i++;
                     if ($i < $num) 
                     {
-                        $ren = $resql[$i];
-                        $client = $ren['client_dn'];
+                        $client = $resql[$i]['client_dn'];
                     }
                     if ($client != $client_precedent || $i == $num) 
                     {
