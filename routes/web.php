@@ -22,6 +22,8 @@ Auth::routes(['register' => false]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('matter/listforactor/{dname}', 'MatterController@filesByActor');
+Route::get('matter/{matter}/info', 'MatterController@info');
 Route::group(['middleware' => 'auth'], function () {
     // Matter Controller
     Route::get('matter/autocomplete', function (Request $request) {
