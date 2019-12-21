@@ -88,6 +88,7 @@
                 <a class="dropdown-item" href="{{ url('/rule/') }}">Rules</a>
                 <a class="dropdown-item" href="{{ url('/eventname/') }}">Event names</a>
                 <a class="dropdown-item" href="{{ url('/category/') }}">Categories</a>
+                <a class="dropdown-item" href="{{ url('/role/') }}">Actor roles</a>
               </ul>
             </li>
             @endcannot
@@ -253,6 +254,10 @@
           submitModal2Form('/category', createCategoryForm);
           break;
 
+        case 'createRoleSubmit':
+          submitModal2Form('/role', createRoleForm);
+          break;
+
         case 'createRuleSubmit':
           submitModal2Form('/rule', createRuleForm);
           break;
@@ -296,8 +301,20 @@
               });
           }
           break;
-      }
 
+        case 'deleteRole':
+          if (confirm("Deleting actor role " + e.target.dataset.id + " from table?")) {
+            fetchREST('/role/' + e.target.dataset.id, 'DELETE')
+              .then((data) => {
+                if (data.message) {
+                  alert(data.message);
+                } else {
+                  location.reload();
+                }
+              });
+          }
+          break;
+      }
       /* Various functions used here and there */
 
       // Nationalize modal
