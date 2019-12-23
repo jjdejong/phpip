@@ -119,19 +119,22 @@
     $("#addTitleCollapse").collapse("show");
   }
 
-  $("#titlePanel").on("click", "#addTitleSubmit", function() {
-    var request = $("#addTitleForm").find("input, select").filter(function() {
-      return $(this).val().length > 0;
-    }).serialize(); // Filter out empty values
-    $.post('/classifier', request)
-      .done(function() {
-        reloadPart("/matter/{{ $matter->id }}", 'titlePanel');
-      }).fail(function(errors) {
-        $.each(errors.responseJSON.errors, function(key, item) {
-          $("#addTitleForm").find('input[name=' + key + ']').attr("placeholder", item).addClass('is-invalid');
+  titlePanel.onclick = e => {
+    if (e.target.id == 'addTitleSubmit') {
+      formData = new FormData(addTitleForm);
+      params = new URLSearchParams(formData);
+      fetchREST('/classifier', 'POST', params)
+        .then( data => {
+          if (data.errors) {
+            processSubmitErrors(data.errors, addTitleForm);
+            footerAlert.innerHTML = data.message;
+            footerAlert.classList.add('alert-danger');
+          } else {
+            reloadPart("/matter/{{ $matter->id }}", 'titlePanel');
+          }
         });
-      });
-  });
+    }
+  }
 
   // Ajax refresh various panels when a modal is closed
   $("#ajaxModal").on("hide.bs.modal", function(e) {
@@ -154,20 +157,22 @@
 
 //  Generate summary and copy
 
-  $("#ajaxModal").on("click", "#sumButton", function(event) {
-    /* write to the clipboard now */
-    //var text = document.getElementById("tocopy").textContent;
-    var node = document.getElementById("tocopy")
+  ajaxModal.onclick = e => {
+    if (e.target.id == 'sumButton') {
+      /* write to the clipboard now */
+      //var text = document.getElementById("tocopy").textContent;
+      var node = document.getElementById("tocopy")
 
-    var selection = getSelection();
-    selection.removeAllRanges();
+      var selection = getSelection();
+      selection.removeAllRanges();
 
-    var range = document.createRange();
-    range.selectNodeContents(node);
-    selection.addRange(range);
+      var range = document.createRange();
+      range.selectNodeContents(node);
+      selection.addRange(range);
 
-    var success = document.execCommand('copy');
-    selection.removeAllRanges();
-    return success;
-  });
+      var success = document.execCommand('copy');
+      selection.removeAllRanges();
+      return success;
+    }
+  }
 </script>
