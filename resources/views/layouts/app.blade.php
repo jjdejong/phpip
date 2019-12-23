@@ -232,6 +232,7 @@
         case 'deleteTask':
         case 'deleteClassifier':
         case 'removeActor':
+        case 'deleteDActor':
           fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
             .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
           break;
@@ -244,6 +245,10 @@
           // Actor create and show modals
         case 'createActorSubmit':
           submitModal2Form('/actor', createActorForm);
+          break;
+
+        case 'createDActorSubmit':
+          submitModal2Form('/dactor', createDActorForm);
           break;
 
         case 'createEventNameSubmit':
