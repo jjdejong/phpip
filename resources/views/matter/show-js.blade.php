@@ -120,7 +120,7 @@
   }
 
   $("#titlePanel").on("click", "#addTitleSubmit", function() {
-    var request = $("#addTitleForm").find("input").filter(function() {
+    var request = $("#addTitleForm").find("input, select").filter(function() {
       return $(this).val().length > 0;
     }).serialize(); // Filter out empty values
     $.post('/classifier', request)
