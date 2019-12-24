@@ -90,6 +90,7 @@
                 <a class="dropdown-item" href="{{ url('/category/') }}">Categories</a>
                 <a class="dropdown-item" href="{{ url('/role/') }}">Actor roles</a>
                 <a class="dropdown-item" href="{{ url('/default_actor/') }}">Default actors</a>
+                <a class="dropdown-item" href="{{ url('/type/') }}">Matter types</a>
               </ul>
             </li>
             @endcannot
@@ -264,6 +265,10 @@
           submitModal2Form('/role', createRoleForm);
           break;
 
+        case 'createTypeSubmit':
+          submitModal2Form('/type', createTypeForm);
+          break;
+
         case 'createRuleSubmit':
           submitModal2Form('/rule', createRuleForm);
           break;
@@ -311,6 +316,19 @@
         case 'deleteRole':
           if (confirm("Deleting actor role " + e.target.dataset.id + " from table?")) {
             fetchREST('/role/' + e.target.dataset.id, 'DELETE')
+              .then((data) => {
+                if (data.message) {
+                  alert(data.message);
+                } else {
+                  location.reload();
+                }
+              });
+          }
+          break;
+
+        case 'deleteType':
+          if (confirm("Deleting matter type " + e.target.dataset.id + " from table?")) {
+            fetchREST('/type/' + e.target.dataset.id, 'DELETE')
               .then((data) => {
                 if (data.message) {
                   alert(data.message);

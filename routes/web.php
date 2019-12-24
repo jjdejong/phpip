@@ -132,6 +132,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('event', 'EventController');
     Route::resource('category', 'CategoryController');
     Route::resource('role', 'RoleController');
+    Route::resource('type', 'MatterTypeController');
     Route::resource('default_actor', 'DefaultActorController');
     Route::resource('actor', 'ActorController');
     Route::get('actor/{actor}/usedin','ActorPivotController@usedIn');
