@@ -89,6 +89,7 @@
                 <a class="dropdown-item" href="{{ url('/eventname/') }}">Event names</a>
                 <a class="dropdown-item" href="{{ url('/category/') }}">Categories</a>
                 <a class="dropdown-item" href="{{ url('/role/') }}">Actor roles</a>
+                <a class="dropdown-item" href="{{ url('/default_actor/') }}">Default actors</a>
               </ul>
             </li>
             @endcannot
@@ -248,7 +249,7 @@
           break;
 
         case 'createDActorSubmit':
-          submitModal2Form('/dactor', createDActorForm);
+          submitModal2Form('/default_actor', createDActorForm);
           break;
 
         case 'createEventNameSubmit':

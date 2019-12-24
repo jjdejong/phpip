@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Dactor extends Model
+class DefaultActor extends Model
 {
     protected $table = 'default_actor';
     protected $guarded = ['created_at', 'updated_at'];

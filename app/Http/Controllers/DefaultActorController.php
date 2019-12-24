@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Dactor;
+use App\DefaultActor;
 use App\Actor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Response;
 
-class DactorController extends Controller
+class DefaultActorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,35 +22,35 @@ class DactorController extends Controller
         $Country = $request->input('Country');
         $Category = $request->input('Category');
         $Client = $request->input('Client');
-        $dactor = new Dactor;
+        $default_actor = new DefaultActor;
 
         if (! is_null($Actor)) {
-            $dactor = $dactor->whereHas('actor', function ($q) use ($Actor) {
+            $default_actor = $default_actor->whereHas('actor', function ($q) use ($Actor) {
                 $q->where('name', 'like', $Actor.'%');
             });
         }
         if (! is_null($Role)) {
-            $dactor = $dactor->whereHas('roleInfo', function ($q) use ($Role) {
+            $default_actor = $default_actor->whereHas('roleInfo', function ($q) use ($Role) {
                 $q->where('name', 'like', $Role.'%');
             });
         }
         if (! is_null($Country)) {
-            $dactor = $dactor->whereHas('country', function ($q) use ($Country) {
+            $default_actor = $default_actor->whereHas('country', function ($q) use ($Country) {
                 $q->where('name', 'like', $Country.'%');
             });
         }
         if (! is_null($Category)) {
-            $dactor = $dactor->whereHas('category', function ($q) use ($Category) {
+            $default_actor = $default_actor->whereHas('category', function ($q) use ($Category) {
                 $q->where('category', 'like', $Category.'%');
             });
         }
         if (! is_null($Client)) {
-            $dactor = $dactor->whereHas('client', function ($q) use ($Client) {
+            $default_actor = $default_actor->whereHas('client', function ($q) use ($Client) {
                 $q->where('name', 'like', $Client.'%');
             });
         }
-        $dactors = $dactor->with(['roleInfo:code,name','actor:id,name','client:id,name','category:code,category','country:iso,name'])->get();
-        return view('dactor.index', compact('dactors'));
+        $default_actors = $default_actor->with(['roleInfo:code,name','actor:id,name','client:id,name','category:code,category','country:iso,name'])->get();
+        return view('default_actor.index', compact('default_actors'));
     }
 
 
@@ -63,7 +63,7 @@ class DactorController extends Controller
     {
         $table = new Actor ;
         $tableComments = $table->getTableComments('default_actor');
-        return view('dactor.create', compact('tableComments'));
+        return view('default_actor.create', compact('tableComments'));
     }
 
     /**
@@ -78,21 +78,21 @@ class DactorController extends Controller
             'actor_id' => 'required',
             'role' => 'required'
         ]);
-        return Dactor::create($request->except(['_token', '_method']));
+        return DefaultActor::create($request->except(['_token', '_method']));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Role $dactor
+     * @param  Role $default_actor
      * @return \Illuminate\Http\Response
      */
-    public function show(Dactor $dactor)
+    public function show(DefaultActor $default_actor)
     {
         $table = new Actor;
         $tableComments = $table->getTableComments('default_actor');
-        $dactor->with(['roleInfo:code,name','actor:id,name','client:id,name','category:code,category','country:iso,name'])->get();
-        return view('dactor.show', compact('dactor', 'tableComments'));
+        $default_actor->with(['roleInfo:code,name','actor:id,name','client:id,name','category:code,category','country:iso,name'])->get();
+        return view('default_actor.show', compact('default_actor', 'tableComments'));
     }
 
     /**
@@ -102,7 +102,7 @@ class DactorController extends Controller
      * @param  string $code
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Dactor $dactor)
+    public function update(Request $request, DefaultActor $default_actor)
     { 
         if($request->has('actor_id') && is_null($request->actor_id)) {
             return response(json_encode(['message' => "The given data was invalid",
@@ -113,19 +113,19 @@ class DactorController extends Controller
                                                                 'errors' =>['role' => ['The role is required']]]), 422);
         }
         $request->merge([ 'updater' => Auth::user()->login ]);
-        $dactor->update($request->except(['_token', '_method']));
+        $default_actor->update($request->except(['_token', '_method']));
         return response()->json(['success' => 'Entry updated']);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int  Dactor $dactor
+     * @param int  DefaultActor $default_actor
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Dactor $dactor)
+    public function destroy(DefaultActor $default_actor)
     {
-        $dactor->delete();
+        $default_actor->delete();
         return response()->json(['success' => 'Entry deleted']);
     }
 }
