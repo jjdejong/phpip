@@ -14,7 +14,7 @@
 				<td><input type="text" class="form-control noformat" data-ac="/category/autocomplete" name="display_with" value="{{ empty($category->display_with) ? '' : $category->displayWithInfo->category }}"></td>
 			</tr>
 		</table>
-		<button type="button" class="btn btn-danger" title="Delete category" id="deleteCategory" data-dismiss="modal" data-id="{{ $category->code }}">
+		<button type="button" class="btn btn-danger" title="Delete category" id="deleteCategory" data-message="category {{$category->category }}" data-url='/category/{{ $category->code }}'>
 			Delete
 		</button>
 	</fieldset>

@@ -2,7 +2,7 @@
   <div class="nav nav-pills" role="tablist">
     <a class="nav-item nav-link active" data-toggle="tab" href="#ruleMain" role="tab">Main</a>
     <a class="nav-item nav-link" data-toggle="tab" href="#ruleDetail" role="tab">Details</a>
-    <button id="deleteRule" title="Delete rule" class="nav-item nav-link btn btn-outline-danger" data-dismiss="modal" data-id="{{ $ruleInfo->id }}">
+    <button id="deleteRule" title="Delete rule" class="nav-item nav-link btn btn-outline-danger" data-url='/rule/{{ $ruleInfo->id }}' data-message="the rule {{ $ruleInfo->taskInfo->name  }}" >
       Delete
     </button>
   </div>

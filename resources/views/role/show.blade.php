@@ -30,7 +30,7 @@
                 <td colspan=3><textarea class="form-control noformat" name="notes">{{ $role->notes }}</textarea></td>
             </tr>
 		</table>
-		<button type="button" class="btn btn-danger" title="Delete role" id="deleteRole" data-dismiss="modal" data-id="{{ $role->code }}">
+		<button type="button" class="btn btn-danger" title="Delete role" id="deleteRole" data-message="the role {{ $role->name  }}" data-url='/role/{{ $role->code }}'>
 			Delete
 		</button>
 	</fieldset>

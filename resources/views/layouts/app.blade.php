@@ -234,7 +234,6 @@
         case 'deleteTask':
         case 'deleteClassifier':
         case 'removeActor':
-        case 'deleteDActor':
           fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
             .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
           break;
@@ -274,11 +273,17 @@
           break;
 
         case 'deleteActor':
-          if (confirm("Deleting the actor " + e.target.dataset.id + ". Continue anyway?")) {
-            fetchREST('/actor/' + e.target.dataset.id, 'DELETE')
+        case 'deleteRule':
+        case 'deleteEName':
+        case 'deleteRole':
+        case 'deleteType':
+        case 'deleteDActor':
+        case 'deleteCategory':
+          if (confirm("Deleting  "+   e.target.dataset.message + ". Continue anyway?")) {
+            fetchREST(e.target.dataset.url, 'DELETE')
               .then((data) => {
                 if (data.message) {
-                  alert("Couldn't delete actor. Check the dependencies. Database said: " + data.message);
+                  alert("Couldn't delete " + e.target.dataset.message+ ". Check the dependencies. Database said: " + data.message);
                   return false;
                 } else {
                   location.reload();
@@ -286,59 +291,7 @@
               });
           }
           break;
-
-        case 'deleteRule':
-          if (confirm("Deleting rule " + e.target.dataset.id + " from table?")) {
-            fetchREST('/rule/' + e.target.dataset.id, 'DELETE')
-              .then((data) => {
-                if (data.message) {
-                  alert(data.message);
-                } else {
-                  location.reload();
-                }
-              });
-          }
-          break;
-
-        case 'deleteEName':
-          if (confirm("Deleting event name " + e.target.dataset.id + " from table?")) {
-            fetchREST('/eventname/' + e.target.dataset.id, 'DELETE')
-              .then((data) => {
-                if (data.message) {
-                  alert(data.message);
-                } else {
-                  location.reload();
-                }
-              });
-          }
-          break;
-
-        case 'deleteRole':
-          if (confirm("Deleting actor role " + e.target.dataset.id + " from table?")) {
-            fetchREST('/role/' + e.target.dataset.id, 'DELETE')
-              .then((data) => {
-                if (data.message) {
-                  alert(data.message);
-                } else {
-                  location.reload();
-                }
-              });
-          }
-          break;
-
-        case 'deleteType':
-          if (confirm("Deleting matter type " + e.target.dataset.id + " from table?")) {
-            fetchREST('/type/' + e.target.dataset.id, 'DELETE')
-              .then((data) => {
-                if (data.message) {
-                  alert(data.message);
-                } else {
-                  location.reload();
-                }
-              });
-          }
-          break;
-      }
+    }
       /* Various functions used here and there */
 
       // Nationalize modal

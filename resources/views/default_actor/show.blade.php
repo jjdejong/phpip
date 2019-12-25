@@ -20,7 +20,7 @@
                 <td><input type="checkbox" class="form-control noformat" name="shared" {{ $default_actor->shared ? 'checked' : '' }}></td>
             </tr>
 		</table>
-		<button type="button" class="btn btn-danger" title="Delete entry" id="deleteDActor" data-dismiss="modal" data-id="{{ $default_actor->id }}">
+		<button type="button" class="btn btn-danger" title="Delete entry" id="deleteDActor" data-message="entry for {{ $default_actor->actor->name  }}" data-url='/default_actor/{{ $default_actor->id }}'>
 			Delete
 		</button>
 	</fieldset>
