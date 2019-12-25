@@ -103,8 +103,8 @@ class RuleController extends Controller
             'months' => 'nullable|numeric',
             'days' => 'nullable|numeric',
             'fee' => 'nullable|numeric',
-            'use_before' => 'date',
-            'use_after' => 'date'
+            'use_before' => 'nullable|date',
+            'use_after' => 'nullable|date'
         ]);
         $request->merge([ 'updater' => Auth::user()->login ]);
         $rule->update($request->except(['_token', '_method']));
@@ -122,8 +122,8 @@ class RuleController extends Controller
             'months' => 'numeric',
             'days' => 'numeric',
             'fee' => 'nullable|numeric',
-            'use_before' => 'date',
-            'use_after' => 'date'
+            'use_before' => 'nullable|date',
+            'use_after' => 'nullable|date'
         ]);
         $request->merge([ 'creator' => Auth::user()->login ]);
         Rule::create($request->except(['_token', '_method']));
