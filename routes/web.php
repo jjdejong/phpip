@@ -85,8 +85,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('user/autocomplete', function (Request $request) {
         $term = $request->input('term');
         return App\User::select('name as value', 'login as key')
-                        ->whereNotNull('login')
                         ->where('name', 'like', "$term%")
+                        ->orWhere('login', 'like', "$term%")
                         ->take(10)->get();
     });
 
