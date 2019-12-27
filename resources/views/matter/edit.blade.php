@@ -5,7 +5,7 @@
         <th>
           @if($cat_edit == 1)
           <select name="category_code" class="custom-select noformat">
-            @foreach ( $cats as $cat )
+            @foreach ( $categories as $cat )
             <option value="{{ $cat->code }}" {{ $matter->category_code == $cat->code ? 'selected' : "" }}>
               {{ $cat->category }}
             </option>
@@ -55,24 +55,22 @@
           Caseref
         </td>
         <td>
-          <input type="text" class="form-control noformat" id="caseref" name="caseref" value="{{ $matter->caseref }}">
+          <input type="text" class="form-control noformat" name="caseref" value="{{ $matter->caseref }}">
         </td>
         <td>Responsible</td>
         <td>
-          <input type="text" class="form-control noformat" name="responsible" data-ac="/user/autocomplete" data-actarget="responsible" value="{{ empty($matter->responsible) ? '' : $matter->responsible }}">
+          <input type="text" class="form-control noformat" name="responsible" data-ac="/user/autocomplete" placeholder="{{ $matter->responsible }}">
         </td>
       </tr>
       <tr>
         <td>Parent</td>
         <td>
-          <div style="vertical-align: baseline;">
-            <input type="text" class="form-control noformat" name="parent_id" data-ac="/matter/autocomplete" data-actarget="parent_id" value="{{ empty($matter->parent) ? '' : $matter->parent->UID }}">
-          </div>
+          <input type="text" class="form-control noformat" name="parent_id" data-ac="/matter/autocomplete" value="{{ empty($matter->parent) ? '' : $matter->parent->uid }}">
         </td>
         <td>Container
         </td>
         <td>
-          <input type="text" class="form-control noformat" name="container_id" data-ac="/matter/autocomplete" data-actarget="container_id" value="{{ empty($matter->container) ? '' : $matter->container->UID }}">
+          <input type="text" class="form-control noformat" name="container_id" data-ac="/matter/autocomplete" value="{{ empty($matter->container) ? '' : $matter->container->uid }}">
         </td>
       </tr>
       <tr>
