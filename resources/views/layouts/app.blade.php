@@ -91,6 +91,7 @@
                 <a class="dropdown-item" href="{{ url('/role/') }}">Actor roles</a>
                 <a class="dropdown-item" href="{{ url('/default_actor/') }}">Default actors</a>
                 <a class="dropdown-item" href="{{ url('/type/') }}">Matter types</a>
+                <a class="dropdown-item" href="{{ url('/classifier_type/') }}">Classifier types</a>
               </ul>
             </li>
             @endcannot
@@ -272,12 +273,17 @@
           submitModal2Form('/rule', createRuleForm);
           break;
 
+        case 'createClassifierTypeSubmit':
+          submitModal2Form('/classifier_type', createClassifierTypeForm);
+          break;
+
         case 'deleteActor':
         case 'deleteRule':
         case 'deleteEName':
         case 'deleteRole':
         case 'deleteType':
         case 'deleteDActor':
+        case 'deleteClassifierType':
         case 'deleteCategory':
           if (confirm("Deleting  "+   e.target.dataset.message + ". Continue anyway?")) {
             fetchREST(e.target.dataset.url, 'DELETE')

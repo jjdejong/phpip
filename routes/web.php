@@ -131,6 +131,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('task', 'TaskController');
     Route::apiResource('event', 'EventController');
     Route::resource('category', 'CategoryController');
+    Route::resource('classifier_type', 'ClassifierTypeController');
     Route::resource('role', 'RoleController');
     Route::resource('type', 'MatterTypeController');
     Route::resource('default_actor', 'DefaultActorController');
