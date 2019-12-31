@@ -375,7 +375,7 @@
         </div>    
       </div>
       <div class="card-body pt-2" id="renewalList">
-        @if (is_array($renewals) )
+        @if (count($renewals) !== 0 )
         @foreach ($renewals as $task)
         <div class="row overlay" data-resource="/task/{{ $task->id }}">
           <div class="col-2">
@@ -426,6 +426,7 @@
           </div>
         </div>
         @endforeach
+        {{ $renewals->links() }}
         @else
         <div class="row text-danger">
           The list is empty

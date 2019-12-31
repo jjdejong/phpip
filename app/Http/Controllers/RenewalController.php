@@ -83,8 +83,7 @@ class RenewalController extends Controller
             $renewals = $renewals->where('done',0);
         }
         $prices = $this->prices($renewals->pluck('id'),0);
-        $renewals = $renewals->simplePaginate(100)->all();
-        //$renewals->appends($request->input())->links(); // Keep URL parameters in the paginator links
+        $renewals = $renewals->simplePaginate( config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')) );
         return view('renewals.index', compact('renewals','step', 'invoice_step', 'tab','prices'));
     }
 

@@ -1,6 +1,9 @@
 <?php
 
-return ["validity" => [
+return ["general" => [
+            "paginate" => 30,
+            ],
+    "validity" => [
             "instruct_before" => 30,
             "fee_factor" => 1.2,
             "before" => 8,
@@ -11,7 +14,7 @@ return ["validity" => [
         'DOLAPIKEY' => 'your Dolibarr key',
         'fk_account' => 2,
         ],
-        "xml" => [
+    "xml" => [
         'header' => '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE batch-payment  SYSTEM "batch-payment-v2-00.dtd" >
 <batch-payment dtd-version="" date-produced="" ro="">
