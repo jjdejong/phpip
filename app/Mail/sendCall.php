@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -35,6 +36,10 @@ class sendCall extends Mailable
         $this->total_ht = $total_ht;
         $this->subject = $subject;
         $this->dest = $dest;
+        // Added to ask for receipt confirmation
+        $this->callbacks[]=( function($message){
+            $message->getHeaders()->addTextHeader('X-Confirm-Reading-To', Auth::user()->email);
+        });
     }
 
     /**
