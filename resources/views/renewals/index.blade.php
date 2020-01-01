@@ -5,7 +5,7 @@
 <script type="text/javascript">
 
   var url = new URL(window.location.href)
-  
+
   function refreshList() {
     window.history.pushState('', 'phpIP', url);
     reloadPart(url, 'renewalList');
@@ -15,7 +15,7 @@
     if (e.target.name !== "selectAll") {
         if (e.target.value.length === 0 || (e.target.name == "grace_period" && ! e.target.checked)) {
             url.searchParams.delete(e.target.name);
-        } 
+        }
         else {
             url.searchParams.set(e.target.name, e.target.value);
         }
@@ -66,7 +66,7 @@
         }
         refreshList();
     };
-  
+
     doneRenewals.addEventListener("click",function (b) {
             msgAction = "resetting";
             actionRenewals(b.target,msgAction, '/renewal/done');
@@ -96,7 +96,7 @@
             msgAction = "reminder";
             actionRenewals(b.target,msgAction,'/renewal/reminder')
     });
-    
+
     receiptRenewals.addEventListener("click",function (b) {
             msgAction = "registering receipt";
             actionRenewals(b.target,msgAction,'/renewal/receipt')
@@ -106,7 +106,27 @@
             msgAction = "closing renewals";
             actionRenewals(b.target,msgAction,'/renewal/closing')
     });
-    
+
+    abandonRenewals.addEventListener("click",function (b) {
+            msgAction = "abandon renewals";
+            actionRenewals(b.target,msgAction,'/renewal/abandon')
+    });
+
+    lapsedRenewals.addEventListener("click",function (b) {
+            msgAction = "lapsed renewals";
+            actionRenewals(b.target,msgAction,'/renewal/lapsing')
+    });
+
+    lapsingRenewals.addEventListener("click",function (b) {
+            msgAction = "lapsed renewals";
+            actionRenewals(b.target,msgAction,'/renewal/lapsing')
+    });
+
+    sendLapsedRenewals.addEventListener("click",function (b) {
+            msgAction = "lapse communications sent";
+            actionRenewals(b.target,msgAction,'/renewal/closing')
+    });
+
     async function actionRenewals(button, msgAction, action_url) {
         // Active spinner
         button.insertAdjacentHTML('afterbegin', '<i class="spinner-border spinner-border-sm" role="status" />');
@@ -155,12 +175,12 @@
                 else
                 {
                     reject("Something went wrong.\n");
-                }            
+                }
             }
             xhr.send(string);
         });
     }
-    
+
     xmlRenewals.addEventListener("click",function () {
         var tids = getSelected();
         if (tids.length === 0) {
@@ -223,7 +243,7 @@
         xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'));
         xhr.send(string);
     });
-    
+
     function getSelected() {
         var tids = new Array();
         var boxes = document.getElementsByClassName('clear-ren-task');
@@ -234,7 +254,7 @@
         }
         return tids;
     };
-    
+
 </script>
 
 @stop
@@ -261,7 +281,9 @@
                 <a class="nav-item nav-link {{ ($tab === 'p3' ) ? 'active' : '' }}" href="#p3" data-toggle="tab" step="4">Payment</a>
                 <a class="nav-item nav-link {{ ($tab === 'p4' ) ? 'active' : '' }}" href="#p4" data-toggle="tab" step="6">Receipts</a>
                 <a class="nav-item nav-link {{ ($tab === 'p5' ) ? 'active' : '' }}" href="#p5" data-toggle="tab" step="8">Receipts received</a>
-                <a class="nav-item nav-link {{ ($tab === 'p6' ) ? 'active' : '' }}" href="#p6" data-toggle="tab" step="10">Closed</a>
+                <a class="nav-item nav-link {{ ($tab === 'p6' ) ? 'active' : '' }}" href="#p6" data-toggle="tab" step="12">Abandoned</a>
+                <a class="nav-item nav-link {{ ($tab === 'p9' ) ? 'active' : '' }}" href="#p9" data-toggle="tab" step="14">Lapsed</a>
+                <a class="nav-item nav-link {{ ($tab === 'p10' ) ? 'active' : '' }}" href="#p10" data-toggle="tab" step="10">Closed</a>
                 <a class="nav-item nav-link {{ ($tab === 'p7' ) ? 'active' : '' }}" href="#p7" data-toggle="tab" invoice_step="1">Invoicing</a>
                 <a class="nav-item nav-link {{ ($tab === 'p8' ) ? 'active' : '' }}" href="#p8" data-toggle="tab" invoice_step="2">Invoiced</a>
             </div>
@@ -288,13 +310,19 @@
                 <button class="btn btn-outline-primary" type="button" id="sendReceiptsRenewals">Send receipts</button>
             </div>
             <div class="input-group tab-pane {{ ($tab === 'p6' ) ? 'active' : ''}}" id="p6">
-                Closed renewals
+                <button class="btn btn-outline-primary" type="button" id="lapsingRenewals">Lapse</button>
             </div>
             <div class="input-group tab-pane {{ ($tab === 'p7' ) ? 'active' : ''}}" id="p7">
                 <button class="btn btn-outline-primary" type="button" id="invoiceRenewals">Invoice</button>
             </div>
             <div class="input-group tab-pane {{ ($tab === 'p8' ) ? 'active' : ''}}" id="p8">
                 Invoiced renewals
+            </div>
+            <div class="input-group tab-pane {{ ($tab === 'p9' ) ? 'active' : ''}}" id="p9">
+                    <button class="btn btn-outline-primary" type="button" id="sendLapsedRenewals">Send lapse communication</button>
+            </div>
+            <div class="input-group tab-pane {{ ($tab === 'p10' ) ? 'active' : ''}}" id="p10">
+            Closed renewals
             </div>
           </div>
         </div>
@@ -335,7 +363,7 @@
           <div class="col-1">
             Select
           </div>
-        </div>      
+        </div>
         <div class="row">
             <div class="input-group"  id="filterFields">
                 <div class="col-2">
@@ -363,7 +391,7 @@
                     </div>
                 </div>
                 <div class="col-1">
-                    <input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">        
+                    <input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">
                 </div>
                 <div class="col-1">
                     <input type="date" class="form-control form-control-sm" name="Untildate" id="Untildate" title="Until selected date" value="{{ Request::get('Untildate') }}">
@@ -372,7 +400,7 @@
                     <input  class="text-center" name="selectAll" id="selectAll" type="checkbox" title="Select/unselect all">
                 </div>
             </div>
-        </div>    
+        </div>
       </div>
       <div class="card-body pt-2" id="renewalList">
         @if (count($renewals) !== 0 )
