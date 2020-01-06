@@ -632,7 +632,6 @@ class RenewalController extends Controller
      */
     public function renewalOrder(Request $request)
     {
-        //Locale::setDefault('fr-FR');
         $fmt = new IntlDateFormatter(
             config('app.locale'),
             IntlDateFormatter::FULL,IntlDateFormatter::FULL,
