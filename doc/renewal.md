@@ -5,12 +5,12 @@ This part of the application allow to manage calls to renew industrial property 
 The access is from the menu `Matters/Manage renewals`.
 Different steps are accessible. At each step, specific action buttons listed below the row of step buttons are proposed. At each step, a contextual list of renewal tasks is displayed. Actions act on selected rows.
 ## First call ##
-The available action is to send first calls. After sending, tasks are transferred to step `Reminder`.
+The available action is to send first calls. After sending, tasks are transferred to step `Reminder`. The price values are issued from `fee` and `cost` columns from `fees` table, or from `fee_reduced` and `cost_reduced` columns according to the presence of the classifier "SME status" recorded in the matter.
 ## Reminder ##
 The available actions are:
 - `Send reminder` to send reminder calls. Only the subject of the message is changed, the content is still the same as the first call.
-- `Send last reminder` to send reminder just before the due date. After sending, tasks are tagged with "grace period" tick.
-- `Register order` to mark that instructions has been given to pay. Tasks are then transferred to `Payment` step.
+- `Send last reminder` to send reminder just before the due date. After sending, tasks are tagged with "grace period" tick. The price values are issued from `fee` and `cost` columns from `fees` table, or from `fee_reduced` and `cost_reduced` columns according to the presence of the classifier "SME status" recorded in the matter, but `fees` or `fee_reduced` value is changed with the `fee_factor` from the configuration.
+- `Register order` to mark that instructions has been received to pay. Tasks are then transferred to `Payment` step.
 - `Abandon` to mark that instructions has been given to abandon the case. Tasks are then transferred to `Abandoned` step and marked as done.
 - `Lapsed` to mark that office has declared that the case is lapsed, without received instructions. Tasks are then transferred to `Closed` step.
 
@@ -31,14 +31,14 @@ The available actions are:
 - `Send lapse communication` is used to register that the communication from the office has been sent. There is no more action to do and the case is in `closed` step.
 
 ## Invoicing ##
-- `Invoice` generates invoices, tasks being grouped by client, using Dolibarr. Tasks are transferred to `Invoiced` step.
+- `Invoice` generates invoices, tasks being grouped by client, using Dolibarr. Tasks are transferred to `Invoiced` step. The price values are issued from `fees` and `cost` columns from `fees` table, or from `fee_reduced` and `cost_reduced` columns according to the presence of the classifier "SME status" recorded in the matter. When `grace period` is ticked and the due date is not over, `fee_factor` is applied. When the due date is over the done date, the price values are issued from `fees_sup` and `cost_sup` columns from `fees` table, or from `fee_sup_reduced` and `cost_sup_reduced` columns according to the presence of the classifier "SME status" recorded in the matter.
 
 ## Invoiced ##
 This step displays the list of already invoiced tasks. There is no more action to do.
 
 # Settings #
 ## General ##
-Some settings are included in the file `config/renewal.php`. The format is the one of an array in PHP. The array is subdivided in several sections
+Some settings are included in the file `config/renewal.php`. The syntax is the one of an array in PHP. The array is subdivided in several sections
 - `general`:
  - `paginate` set the number of lines in the page listing renewals.
 - `api`: used to specify access to Dolibarr application, allowing invoicing. If other tool is wanted for invoicing, the function `invoice` in RenewalController.php is to hack.
@@ -56,7 +56,8 @@ Some settings are included in the file `config/renewal.php`. The format is the o
 Note that the payment portals of different offices will ignore some of these fields.
 
 ## Email templates ##
-The message of the emails are blade templates stored in `resources/views/email`. `firstcall.blade.php` is used for first call and reminders.`lastcall.blade.php` is used for last reminder just before the grace period. `warncall.blade.php` is used for reminders in grace period.
+The Laravel's emailing backend is used for sending emails. Report to Laravel configuration according to your infrastructure for settings.
+The message of the emails are blade templates stored in `resources/views/email`. `firstcall.blade.php` is used for first call and reminders. `lastcall.blade.php` is used for last reminder just before the grace period. `warncall.blade.php` is used for reminders in grace period.
 They use the variables:
 - `$dest` for salutations;
 - `$instruction_date`
