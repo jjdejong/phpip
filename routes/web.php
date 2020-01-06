@@ -153,6 +153,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('actor-pivot', 'ActorPivotController');
     Route::apiResource('classifier', 'ClassifierController');
     Route::resource('renewal', 'RenewalController');
+    Route::resource('fee', 'FeeController');
 
     // Testing - not used
     /* Route::get('matter/{matter}/actors', function (App\Matter $matter) {

@@ -258,6 +258,10 @@
           submitModal2Form('/rule', createRuleForm);
           break;
 
+        case 'createFeeSubmit':
+          submitModal2Form('/fee', createFeeForm);
+          break;
+
         case 'deleteActor':
           if (confirm("Deleting the actor " + e.target.dataset.id + ". Continue anyway?")) {
             fetchREST('/actor/' + e.target.dataset.id, 'DELETE')
