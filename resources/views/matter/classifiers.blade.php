@@ -44,8 +44,14 @@ $classifiers = $matter->classifiers->groupBy('type_name');
         <form id="addClassifierForm" class="form-inline">
           <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
           <div class="input-group">
-            <input type="hidden" name="type_code" value="">
-            <input type="text" class="form-control form-control-sm" size="16" placeholder="Type" data-ac="/classifier-type/autocomplete/0" data-actarget="type_code">
+            <select name="type_code" class="custom-select">
+              <option value=""></option>
+              @foreach ( $classifierTypes as $cType )
+              <option value="{{ $cType->code }}">
+                {{ $cType->type }}
+              </option>
+              @endforeach
+            </select>
             <input type="text" class="form-control form-control-sm" size="10" name="value" placeholder="Value">
             <input type="url" class="form-control form-control-sm" size="16" name="url" placeholder="URL">
             <input type="hidden" name="lnk_matter_id" value="">

@@ -53,7 +53,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'code' => 'required|unique:event_name|max:5',
+            'code' => 'required|unique:matter_category|max:5',
             'category' => 'required|max:45',
             'display_with' => 'required'
         ]);

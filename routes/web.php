@@ -100,8 +100,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('user/autocomplete', function (Request $request) {
         $term = $request->input('term');
         return App\User::select('name as value', 'login as key')
-                        ->whereNotNull('login')
                         ->where('name', 'like', "$term%")
+                        ->orWhere('login', 'like', "$term%")
                         ->take(10)->get();
     });
 
@@ -146,6 +146,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('task', 'TaskController');
     Route::apiResource('event', 'EventController');
     Route::resource('category', 'CategoryController');
+    Route::resource('classifier_type', 'ClassifierTypeController');
+    Route::resource('role', 'RoleController');
+    Route::resource('type', 'MatterTypeController');
+    Route::resource('default_actor', 'DefaultActorController');
     Route::resource('actor', 'ActorController');
     Route::get('actor/{actor}/usedin','ActorPivotController@usedIn');
     Route::resource('eventname', 'EventNameController');

@@ -3,7 +3,7 @@
     <legend>New task rule</legend>
     <table class="table table-sm">
       <tr>
-        <td><label for="task" title="{{ $ruleComments['task'] }} " class="required-field">Task</label></td>
+        <td><label for="task" title="{{ $ruleComments['task'] }} " class="required-field"><b>Task</b></label></td>
         <td >
           <input type='hidden' name='task'>
           <input type="text" class="form-control form-control-sm" data-ac="/event-name/autocomplete/1" data-actarget="task" autocomplete="off">
@@ -35,7 +35,7 @@
           <input type='hidden' name='for_origin'>
           <input type="text" class="form-control form-control-sm" data-ac="/country/autocomplete" data-actarget="for_origin" autocomplete="off">
         </td>
-        <td><label for="for_category_new" title="{{ $ruleComments['for_category'] }}">Category</label></td>
+        <td><label for="for_category_new" title="{{ $ruleComments['for_category'] }}"><b>Category</b></label></td>
         <td>
           <input type='hidden' name='for_category'>
           <input type="text" class="form-control form-control-sm" data-ac="/category/autocomplete" data-actarget="for_category" autocomplete="off">
@@ -56,7 +56,7 @@
     <legend>Rule details</legend>
     <table class="table table-sm">
       <tr>
-        <td><label for="trigger_event_new" title="{{ $ruleComments['trigger_event'] }}" class="required-field">Trigger event</label></td>
+        <td><label for="trigger_event_new" title="{{ $ruleComments['trigger_event'] }}" class="required-field"><b>Trigger event</b></label></td>
         <td>
           <input type='hidden' name='trigger_event'>
           <input type="text" class="form-control form-control-sm" data-ac="/event-name/autocomplete/0" data-actarget="trigger_event" autocomplete="off">

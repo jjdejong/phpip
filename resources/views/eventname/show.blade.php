@@ -92,7 +92,7 @@
 				</td>
 			</tr>
 		</table>
-		<button type="button" class="btn btn-danger" title="Delete event name" id="deleteEName" data-dismiss="modal" data-id="{{ $eventname->code }}">
+		<button type="button" class="btn btn-danger" title="Delete event name" id="deleteEName" data-message="event name {{ $eventname->name  }}" data-url='/eventname/{{ $eventname->code }}'>
 			Delete
 		</button>
 	</fieldset>

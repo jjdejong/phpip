@@ -89,6 +89,10 @@
                 <a class="dropdown-item" href="{{ url('/rule/') }}">Rules</a>
                 <a class="dropdown-item" href="{{ url('/eventname/') }}">Event names</a>
                 <a class="dropdown-item" href="{{ url('/category/') }}">Categories</a>
+                <a class="dropdown-item" href="{{ url('/role/') }}">Actor roles</a>
+                <a class="dropdown-item" href="{{ url('/default_actor/') }}">Default actors</a>
+                <a class="dropdown-item" href="{{ url('/type/') }}">Matter types</a>
+                <a class="dropdown-item" href="{{ url('/classifier_type/') }}">Classifier types</a>
               </ul>
             </li>
             @endcannot
@@ -246,6 +250,10 @@
           submitModal2Form('/actor', createActorForm);
           break;
 
+        case 'createDActorSubmit':
+          submitModal2Form('/default_actor', createDActorForm);
+          break;
+
         case 'createEventNameSubmit':
           submitModal2Form('/eventname', createEventForm);
           break;
@@ -254,10 +262,19 @@
           submitModal2Form('/category', createCategoryForm);
           break;
 
+        case 'createRoleSubmit':
+          submitModal2Form('/role', createRoleForm);
+          break;
+
+        case 'createTypeSubmit':
+          submitModal2Form('/type', createTypeForm);
+          break;
+
         case 'createRuleSubmit':
           submitModal2Form('/rule', createRuleForm);
           break;
 
+<<<<<<< HEAD
         case 'createFeeSubmit':
           submitModal2Form('/fee', createFeeForm);
           break;
@@ -274,35 +291,33 @@
                 }
               });
           }
+=======
+        case 'createClassifierTypeSubmit':
+          submitModal2Form('/classifier_type', createClassifierTypeForm);
+>>>>>>> master
           break;
 
+        case 'deleteActor':
         case 'deleteRule':
-          if (confirm("Deleting rule " + e.target.dataset.id + " from table?")) {
-            fetchREST('/rule/' + e.target.dataset.id, 'DELETE')
-              .then((data) => {
-                if (data.message) {
-                  alert(data.message);
-                } else {
-                  location.reload();
-                }
-              });
-          }
-          break;
-
         case 'deleteEName':
-          if (confirm("Deleting event name " + e.target.dataset.id + " from table?")) {
-            fetchREST('/eventname/' + e.target.dataset.id, 'DELETE')
+        case 'deleteRole':
+        case 'deleteType':
+        case 'deleteDActor':
+        case 'deleteClassifierType':
+        case 'deleteCategory':
+          if (confirm("Deleting  "+   e.target.dataset.message + ". Continue anyway?")) {
+            fetchREST(e.target.dataset.url, 'DELETE')
               .then((data) => {
                 if (data.message) {
-                  alert(data.message);
+                  alert("Couldn't delete " + e.target.dataset.message+ ". Check the dependencies. Database said: " + data.message);
+                  return false;
                 } else {
                   location.reload();
                 }
               });
           }
           break;
-      }
-
+    }
       /* Various functions used here and there */
 
       // Nationalize modal

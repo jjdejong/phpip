@@ -5,7 +5,7 @@
     <a class="nav-item nav-link" data-toggle="tab" href="#actorOther" role="tab">Other</a>
     <a class="nav-item nav-link" data-toggle="tab" id="actorUsedInToggle" href="/actor/{{ $actorInfo->id }}/usedin" data-target="#actorUsedIn" role="tab">Used in</a>
     @cannot('client')
-    <button id="deleteActor" title="Delete actor" class="nav-item nav-link btn btn-outline-danger" data-dismiss="modal" data-id="{{ $actorInfo->id }}">
+    <button id="deleteActor" title="Delete actor" class="nav-item nav-link btn btn-outline-danger"  data-url='/actor/{{ $actorInfo->id }}' data-message="the actor {{ $actorInfo->name }}">
       Delete
     </button>
     @endcannot

@@ -9,32 +9,31 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
-    protected $table = 'actor';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password', 'login',
-    ];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Password mutator for hashing the cleartext password as it is stored
+    public function setPasswordAttribute($value) {
+        $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function matters() {
+        return $this->hasMany('App\Matter', 'responsible', 'login');
+    }
+
+    public function tasks() {
+        return $this->matters()->has('tasksPending')->with('tasksPending');
+    }
+
+    public function renewals() {
+        return $this->matters()->has('renewalsPending')->with('renewalsPending');
+    }
 }
