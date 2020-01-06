@@ -274,27 +274,12 @@
           submitModal2Form('/rule', createRuleForm);
           break;
 
-<<<<<<< HEAD
         case 'createFeeSubmit':
           submitModal2Form('/fee', createFeeForm);
           break;
 
-        case 'deleteActor':
-          if (confirm("Deleting the actor " + e.target.dataset.id + ". Continue anyway?")) {
-            fetchREST('/actor/' + e.target.dataset.id, 'DELETE')
-              .then((data) => {
-                if (data.message) {
-                  alert("Couldn't delete actor. Check the dependencies. Database said: " + data.message);
-                  return false;
-                } else {
-                  location.reload();
-                }
-              });
-          }
-=======
         case 'createClassifierTypeSubmit':
           submitModal2Form('/classifier_type', createClassifierTypeForm);
->>>>>>> master
           break;
 
         case 'deleteActor':
