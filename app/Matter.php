@@ -288,7 +288,7 @@ class Matter extends Model
             $query->where('cli.id', $authUserId);
         }
 
-        if (!empty($multi_filter) && empty($multi_filter['Cat'])) {
+        if (!empty($multi_filter)) {
             $sortkey = 'caseref';
             $sortdir = 'asc';
             foreach ($multi_filter as $key => $value) {
