@@ -54,8 +54,7 @@ class ClassifierTypeController extends Controller
     {
         $request->validate([
             'code' => 'required|unique:classifier_type|max:5',
-            'type' => 'required|max:45',
-            'main_display' => 'required'
+            'type' => 'required|max:45'
         ]);
         $request->merge([ 'creator' => Auth::user()->login ]);
         return ClassifierType::create($request->except(['_token', '_method']));
