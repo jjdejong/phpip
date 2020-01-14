@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use App\Task;
 use App\Renewal;
-use App\User;
+use App\Actor;
 use App\MatterActors;
 use App\Mail\sendCall;
 use Locale;
@@ -240,12 +240,12 @@ class RenewalController extends Controller
                         $email_list = [];
                         if ($contacts->count() === 0) {
                             // No contact registered, using client email
-                            $user = new User();
-                            $user = $user->where('id',$ren['client_id'])->first();
-                            if  ($user->email == '') {
+                            $contact = new \App\Actor();
+                            $contact = $contact->where('id',$ren['client_id'])->first();
+                            if  ($contact->email == '') {
                                 return "No email address for ".$ren['client_dn'];
                             }
-                            array_push($email_list,['email' => $user->email, 'name' =>$user->first_name.' '.$user->name]);
+                            array_push($email_list,['email' => $contact->email, 'name' =>$contact->first_name.' '.$contact->name]);
                         }
                         else {
                             foreach ($contacts as $contact) {
