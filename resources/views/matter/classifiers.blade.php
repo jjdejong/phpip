@@ -45,7 +45,7 @@ $classifiers = $matter->classifiers->groupBy('type_name');
           <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
           <div class="input-group">
             <select name="type_code" class="custom-select">
-              <option value=""></option>
+              <option value="">Select Type</option>
               @foreach ( $classifierTypes as $cType )
               <option value="{{ $cType->code }}">
                 {{ $cType->type }}

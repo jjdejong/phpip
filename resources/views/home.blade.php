@@ -119,10 +119,13 @@
           @endcannot
         </form>
         <div class="row mt-1">
-          <div class="col-6">
+          <div class="col-4">
+          </div>
+          <div class="col-2">
+            Matter
           </div>
           <div class="col-3">
-            Matter
+            Description
           </div>
           <div class="col-2">
             Due date
@@ -154,10 +157,13 @@
           @endcannot
         </div>
         <div class="row mt-1">
-          <div class="col-6">
+          <div class="col-4">
+          </div>
+          <div class="col-2">
+            Matter
           </div>
           <div class="col-3">
-            Matter
+            Description
           </div>
           <div class="col-2">
             Due date
