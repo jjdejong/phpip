@@ -37,8 +37,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('matter/{matter}/renewals', 'MatterController@renewals');
     Route::get('matter/{matter}/roleActors/{role}', 'MatterController@actors');
     Route::get('matter/{matter}/description/{lang}', 'MatterController@description');
-    Route::get('matter/{from_matter}/createN', function (Matter $from_matter) {
-        return view('matter.createN', compact('from_matter'));
+    Route::get('matter/{parent_matter}/createN', function (Matter $parent_matter) {
+        return view('matter.createN', compact('parent_matter'));
     });
     Route::post('matter/storeN', 'MatterController@storeN');
     Route::post('matter/clear-tasks', 'HomeController@clearTasks');

@@ -52,14 +52,14 @@ class MatterController extends Controller
         $category = [];
         $category_code = $request->input('category');
         if ($operation != 'new') {
-            $from_matter = Matter::with('container', 'countryInfo', 'originInfo', 'category', 'type')->find($request->matter_id);
+            $parent_matter = Matter::with('container', 'countryInfo', 'originInfo', 'category', 'type')->find($request->matter_id);
             if ($operation == 'clone') {
                 // Generate the next available caseref based on the prefix
-                $from_matter->caseref = Matter::where('caseref', 'like', $from_matter->category->ref_prefix . '%')->max('caseref');
-                ++$from_matter->caseref;
+                $parent_matter->caseref = Matter::where('caseref', 'like', $parent_matter->category->ref_prefix . '%')->max('caseref');
+                ++$parent_matter->caseref;
             }
         } else {
-            $from_matter = new Matter; // Create empty matter object to avoid undefined errors in view
+            $parent_matter = new Matter; // Create empty matter object to avoid undefined errors in view
             if ($category_code != '') {
                 $ref_prefix = \App\Category::find($category_code)['ref_prefix'];
                 $category=[
@@ -71,7 +71,7 @@ class MatterController extends Controller
             }
         }
         $types = \App\Type::all();
-        return view('matter.create', compact('from_matter', 'operation', 'category', 'types'));
+        return view('matter.create', compact('parent_matter', 'operation', 'category', 'types'));
     }
 
     /**
@@ -107,51 +107,51 @@ class MatterController extends Controller
             $request->merge(['idx' => $idx + 1]);
         }
 
-        $new_matter = Matter::create($request->except(['_token', '_method', 'operation', 'origin_id', 'priority']));
+        $new_matter = Matter::create($request->except(['_token', '_method', 'operation', 'parent_id', 'priority']));
 
         switch ($request->operation) {
           case 'child':
-            $from_matter = Matter::with('priority')->find($request->origin_id);
+            $parent_matter = Matter::with('priority')->find($request->parent_id);
             // Copy priority claims from original matter
-            $new_matter->priority()->createMany($from_matter->priority->toArray());
-            $new_matter->container_id = $from_matter->container_id ?? $request->origin_id;
+            $new_matter->priority()->createMany($parent_matter->priority->toArray());
+            $new_matter->container_id = $parent_matter->container_id ?? $request->parent_id;
             if ($request->priority) {
                 $event = new Event(
-                    ['code' => 'PRI', 'alt_matter_id' => $request->origin_id]
+                    ['code' => 'PRI', 'alt_matter_id' => $request->parent_id]
                 );
             } else {
-                $new_matter->parent_id = $request->origin_id;
+                $new_matter->parent_id = $request->parent_id;
                 $event = new Event(
-                    ['code' => 'PFIL', 'alt_matter_id' => $request->origin_id]
+                    ['code' => 'PFIL', 'alt_matter_id' => $request->parent_id]
                 );
             }
             $new_matter->events()->save($event);
             $new_matter->save();
             break;
           case 'clone':
-            $from_matter = Matter::with('priority', 'classifiersNative', 'actorPivot')->find($request->origin_id);
+            $parent_matter = Matter::with('priority', 'classifiersNative', 'actorPivot')->find($request->parent_id);
             // Copy priority claims from original matter
-            $new_matter->priority()->createMany($from_matter->priority->toArray());
+            $new_matter->priority()->createMany($parent_matter->priority->toArray());
             // Copy actors from original matter (cannot use Eloquent relationships because they do not handle unique key constraints)
-            $actors = $from_matter->actorPivot;
+            $actors = $parent_matter->actorPivot;
             $new_matter_id = $new_matter->id;
             $actors->each(function ($item) use ($new_matter_id) {
                 $item->matter_id = $new_matter_id;
                 $item->id = null;
             });
             ActorPivot::insertIgnore($actors->toArray());
-            if ($from_matter->container_id) {
+            if ($parent_matter->container_id) {
                 // Copy shared actors and classifiers from original matter's container
-                $actors = $from_matter->container->actorPivot->where('shared', 1);
+                $actors = $parent_matter->container->actorPivot->where('shared', 1);
                 $actors->each(function ($item) use ($new_matter_id) {
                     $item->matter_id = $new_matter_id;
                     $item->id = null;
                 });
                 ActorPivot::insertIgnore($actors->toArray());
-                $new_matter->classifiersNative()->createMany($from_matter->container->classifiersNative->toArray());
+                $new_matter->classifiersNative()->createMany($parent_matter->container->classifiersNative->toArray());
             } else {
                 // Copy classifiers from original matter
-                $new_matter->classifiersNative()->createMany($from_matter->classifiersNative->toArray());
+                $new_matter->classifiersNative()->createMany($parent_matter->classifiersNative->toArray());
             }
             break;
           case 'new':
@@ -177,8 +177,8 @@ class MatterController extends Controller
             'ncountry' => 'required:array'
         ]);
 
-        $origin_id = $request->origin_id;
-        $from_matter = Matter::with('priority', 'filing', 'publication', 'grant', 'classifiersNative')->find($origin_id);
+        $parent_id = $request->parent_id;
+        $parent_matter = Matter::with('priority', 'filing', 'publication', 'grant', 'classifiersNative')->find($parent_id);
 
         foreach ($request->ncountry as $country) {
             $request->merge([
@@ -186,36 +186,27 @@ class MatterController extends Controller
               'creator' => Auth::user()->login
             ]);
 
-            $new_matter = Matter::create($request->except(['_token', '_method', 'ncountry', 'origin_id']));
-
-            // Copy classifiers (from original matter's container, or from original matter if there is no container)
-            /*** THIS IS NOT NECESSARY - classifiers are necessarily inherited here! ***
-            if ($from_matter->container_id) {
-                $new_matter->classifiersNative()->createMany($from_matter->container->classifiersNative->toArray());
-                $new_matter->container_id = $from_matter->container_id;
-            } else {
-                $new_matter->classifiersNative()->createMany($from_matter->classifiersNative->toArray());
-                $new_matter->container_id = $origin_id;
-            } */
+            $new_matter = Matter::create($request->except(['_token', '_method', 'ncountry', 'parent_id']));
 
             // Copy shared events from original matter
-            $new_matter->priority()->createMany($from_matter->priority->toArray());
-            $new_matter->filing()->create($from_matter->filing->toArray());
-            if ($from_matter->publication()->exists()) {
-              $new_matter->publication()->create($from_matter->publication->toArray());
+            $new_matter->priority()->createMany($parent_matter->priority->toArray());
+            $new_matter->filing()->create($parent_matter->filing->toArray());
+            if ($parent_matter->publication()->exists()) {
+              $new_matter->publication()->create($parent_matter->publication->toArray());
             }
-            if ($from_matter->grant()->exists()) {
-              $new_matter->grant()->create($from_matter->grant->toArray());
+            if ($parent_matter->grant()->exists()) {
+              $new_matter->grant()->create($parent_matter->grant->toArray());
             }
 
             // Insert "entered" event
             $new_matter->events()->create(["code" => 'ENT', "event_date" => date('Y-m-d')]);
 
-            $new_matter->parent_id = $origin_id;
+            $new_matter->parent_id = $parent_id;
+            $new_matter->container_id = $parent_matter->container_id ?? $parent_id;
             $new_matter->save();
         }
 
-        return response()->json(['redirect' => "/matter?Ref=$request->caseref&origin=$from_matter->country"]);
+        return response()->json(['redirect' => "/matter?Ref=$request->caseref&origin=$parent_matter->country"]);
     }
 
     /**

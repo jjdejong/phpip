@@ -1,13 +1,13 @@
 <form id="natMatterForm" class="ui-front">
-	<input type="hidden" name="caseref" value="{{ $from_matter->caseref }}" />
-	<input type="hidden" name="category_code" value="{{ $from_matter->category_code }}" />
-	<input type="hidden" name="origin" value="{{ $from_matter->country }}" />
-	<input type="hidden" name="type_code" value="{{ $from_matter->type_code }}" />
-	<input type="hidden" name="idx" value="{{ $from_matter->idx }}" />
-	<input type="hidden" name="origin_id" value="{{ $from_matter->id }}" />
-	<input type="hidden" name="responsible" value="{{ $from_matter->responsible }}" />
+	<input type="hidden" name="caseref" value="{{ $parent_matter->caseref }}" />
+	<input type="hidden" name="category_code" value="{{ $parent_matter->category_code }}" />
+	<input type="hidden" name="origin" value="{{ $parent_matter->country }}" />
+	<input type="hidden" name="type_code" value="{{ $parent_matter->type_code }}" />
+	<input type="hidden" name="idx" value="{{ $parent_matter->idx }}" />
+	<input type="hidden" name="parent_id" value="{{ $parent_matter->id }}" />
+	<input type="hidden" name="responsible" value="{{ $parent_matter->responsible }}" />
 	<div id="ncountries">
-		@foreach( $from_matter->countryInfo->natcountries as $iso => $name )
+		@foreach( $parent_matter->countryInfo->natcountries as $iso => $name )
 		<div class="input-group" id="country-{{ $iso }}">
 			<input type="hidden" name="ncountry[]" value="{{ $iso }}" />
 			<input type="text" class="form-control" readonly value="{{ $name }}" />
