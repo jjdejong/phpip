@@ -119,12 +119,12 @@
           @endcannot
         </form>
         <div class="row mt-1">
-          <div class="col-4">
+          <div class="col">
           </div>
           <div class="col-2">
             Matter
           </div>
-          <div class="col-3">
+          <div class="col">
             Description
           </div>
           <div class="col-2">
@@ -157,12 +157,12 @@
           @endcannot
         </div>
         <div class="row mt-1">
-          <div class="col-4">
+          <div class="col">
           </div>
           <div class="col-2">
             Matter
           </div>
-          <div class="col-3">
+          <div class="col">
             Description
           </div>
           <div class="col-2">
