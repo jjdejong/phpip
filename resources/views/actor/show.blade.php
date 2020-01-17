@@ -31,7 +31,7 @@
         </tr>
         <tr>
           <td><label for="default_role" title="{{ $actorComments['default_role'] }}">Default role</label></td>
-          <td><input type="text" class="noformat form-control" name="default_role" data-ac="/role/autocomplete" value="{{ empty($actorInfo->droleInfo) ? '' : $actorInfo->droleInfo->name }}" autocomplete="off"></td>
+          <td><input type="text" class="noformat form-control" name="default_role" data-ac="/role/autocomplete" value="{{ empty($actorInfo->droleInfo) ? '' : $actorInfo->droleInfo->name }}" {{ $actorInfo->login ? 'disabled' : 'autocomplete=off' }}></td>
         </tr>
         <tr>
           <td><label for="function" title="{{ $actorComments['function'] }}">Function</label></td>
