@@ -289,8 +289,12 @@ class Matter extends Model
         }
 
         if (!empty($multi_filter)) {
-            $sortkey = 'caseref';
-            $sortdir = 'asc';
+            // When no filters are set, sorting is done by descending matter id's to see the most recent matters first.
+            // As soon as a filter is set, sorting is done by default by caseref instead of by id, ascending.
+            if ($sortkey == 'id') {
+              $sortkey = 'caseref';
+              $sortdir = 'asc';
+            }
             foreach ($multi_filter as $key => $value) {
                 if ($value != '') {
                     switch($key) {
@@ -366,6 +370,7 @@ class Matter extends Model
           $query->whereRaw('(select count(1) from matter m where m.caseref = matter.caseref and m.dead = 0) > 0');
         }
 
+        // Sorting by caseref is special - set additional conditions here
         if ($sortkey == 'caseref') {
             $query->groupBy('matter.caseref', 'matter.container_id', 'matter.origin', 'matter.country', 'matter.type_code', 'matter.idx');
             if ($sortdir == 'desc') {
