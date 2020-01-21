@@ -43,7 +43,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     </div>
   </div>
 
-  <div class="card col-7 border-secondary p-1">
+  <div class="card col border-secondary p-1">
     <dl id="titlePanel">
       @foreach ( $titles as $type => $title_group )
         <dt class="mt-2">
@@ -63,7 +63,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           <div class="form-row">
             <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}" />
             <div class="col-2">
-              <select name="type_code" class="custom-select">
+              <select name="type_code" class="custom-select custom-select-sm">
                 <option value=""></option>
                 @foreach ( $titleTypes as $tType )
                 <option value="{{ $tType->code }}">
@@ -85,6 +85,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       </div>
     </dl>
   </div>
+  @if ( in_array('Image', $classifiers->keys()->all()) )
+    <div class="card col-3 border-dark bg-dark p-1">
+      <img src="/classifier/{{ $classifiers['Image'][0]->id }}/img" class="card-img-top" style="max-height: 150px; object-fit: contain;" />
+    </div>
+  @endif
 
   <div class="card border-secondary bg-secondary col-2 p-0">
     <div class="card-body">
@@ -263,30 +268,32 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           <dl class="row mb-1">
             <dt class="col-3">{{ $type }}</dt>
             <dd class="col-9 mb-1">
-              @foreach ( $classifier_group as $classifier )
-              @if ( $classifier->url )
+            @if ( $type != 'Image' )
+                @foreach ( $classifier_group as $classifier )
+                  @if ( $classifier->url )
               <a href="{{ $classifier->url }}" target="_blank">{{ $classifier->value }}</a>
-              @elseif ( $classifier->lnk_matter_id )
+                  @elseif ( $classifier->lnk_matter_id )
               <a href="/matter/{{ $classifier->lnk_matter_id }}">{{ $classifier->linkedMatter->uid }}</a>
-              @else
+                  @else
               {{ $classifier->value }}
-              @endif
-              @endforeach
-              @if ( $type == 'Link' )
-              @foreach ( $matter->linkedBy as $linkedBy )
+                  @endif
+                @endforeach
+                @if ( $type == 'Link' )
+                  @foreach ( $matter->linkedBy as $linkedBy )
               <a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
-              @endforeach
-              @endif
+                  @endforeach
+                @endif
             </dd>
           </dl>
+            @endif
           @endforeach
           @if ( !in_array('Link', $classifiers->keys()->all()) && !$matter->linkedBy->isEmpty() )
           <dl class="row mb-1">
             <dt class="col-2">Link</dt>
             <dd class="col-10 mb-1">
-              @foreach ( $matter->linkedBy as $linkedBy )
+                @foreach ( $matter->linkedBy as $linkedBy )
               <a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
-              @endforeach
+                @endforeach
             </dd>
           </dl>
           @endif

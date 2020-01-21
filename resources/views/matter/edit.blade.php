@@ -4,7 +4,7 @@
       <tr>
         <th>
           @if($cat_edit == 1)
-          <select name="category_code" class="custom-select noformat">
+          <select name="category_code" class="noformat">
             @foreach ( $categories as $cat )
             <option value="{{ $cat->code }}" {{ $matter->category_code == $cat->code ? 'selected' : "" }}>
               {{ $cat->category }}
@@ -40,7 +40,7 @@
         </td>
         <td>Type</td>
         <td>
-          <select name="type_code" class="custom-select noformat">
+          <select name="type_code" class="noformat">
             <option value=""></option>
             @foreach ( $types as $type )
             <option value="{{ $type->code }}" {{ $matter->type_code == $type->code ? 'selected' : "" }}>

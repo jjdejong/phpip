@@ -16,7 +16,7 @@
             <td>Display name</td>
             <td>Company <span class="float-right">Person</span></td>
             <td>
-              <select id="person" class="custom-select-sm px-0" name="selector">
+              <select id="person" class="custom-select custom-select-sm px-0" name="selector">
                 <option value="" selected>All</option>
                 <option value="phy_p">Physical</option>
                 <option value="leg_p">Legal</option>

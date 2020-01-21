@@ -33,12 +33,12 @@
           {{ config('app.name', 'phpIP') }}
         </a>
         @auth
-        <form class="form-inline" method="POST" action="/matter/search">
+        <form method="POST" action="/matter/search">
           @csrf
           <div class="input-group">
             <input type="search" class="form-control" id="matter-search" name="matter_search" placeholder="Search" autocomplete="off">
             <div class="input-group-append">
-              <select class="custom-select btn btn-info" id="matter-option" name="search_field">
+              <select class="custom-select" id="matter-option" name="search_field">
                 <option value="Ref" selected>Case reference</option>
                 <option value="Responsible">Responsible</option>
               </select>
@@ -141,7 +141,7 @@
   </div>
   <script>
     var contentSrc = "", // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
-      acList;
+      cTypeCode = '';
 
     // Ajax fill an element from a url returning HTML
     var fetchInto = async (url, element) => {
@@ -320,9 +320,9 @@
 
     });
 
-    // Generic in-place edition of input fields
     app.addEventListener("change", e => {
-      if (e.target && e.target.matches(".noformat")) {
+      // Generic in-place edition of input fields
+      if (e.target.matches(".noformat")) {
         let params = new URLSearchParams();
         if (e.target.type === 'checkbox') {
           if (e.target.checked) {
@@ -360,6 +360,21 @@
             })
             .catch(error => console.log(error));
         }
+      }
+      // matter.classifiers addClassifierForm - replace input fields with file upload field when selecting an image type
+      if (e.target.name === 'type_code' && e.target.value === 'IMG') {
+        for (elt of addClassifierForm.getElementsByClassName('hideForFile')) {
+          elt.classList.add('d-none');
+        }
+        forFile.classList.remove('d-none');
+        cTypeCode = 'IMG'
+      }
+      if (e.target.name === 'type_code' && e.target.value !== 'IMG' && cTypeCode === 'IMG') {
+        for (elt of addClassifierForm.getElementsByClassName('hideForFile')) {
+          elt.classList.remove('d-none');
+        }
+        forFile.classList.add('d-none');
+        cTypeCode = ''
       }
     });
 
@@ -423,7 +438,7 @@
     var submitModalForm = (target, Form) => {
       formData = new FormData(Form);
       params = new URLSearchParams(formData);
-      fetchREST(target, 'POST', params)
+      fetchREST(target, 'POST', formData)
         .then(data => {
           if (data.errors) {
             processSubmitErrors(data.errors, Form);

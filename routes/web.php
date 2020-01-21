@@ -127,6 +127,11 @@ Route::group(['middleware' => 'auth'], function () {
                         ->where('type', 'like', "$term%")->get();
     });
 
+    Route::get('classifier/{classifier}/img', function ( App\Classifier $classifier) {
+        return response($classifier->img)
+            ->header('Content-Type', $classifier->value);
+    });
+
     Route::resource('matter', 'MatterController');
     Route::apiResource('task', 'TaskController');
     Route::apiResource('event', 'EventController');
