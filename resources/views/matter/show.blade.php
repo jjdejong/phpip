@@ -265,37 +265,37 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
         <div class="card-body p-1" id="classifierPanel" style="overflow: auto;">
           @foreach ( $classifiers as $type => $classifier_group )
-          <dl class="row mb-1">
-            <dt class="col-3">{{ $type }}</dt>
-            <dd class="col-9 mb-1">
             @if ( $type != 'Image' )
+            <div class="card">
+              <div class="card-body p-1">
+                <b>{{ $type }}</b>
                 @foreach ( $classifier_group as $classifier )
                   @if ( $classifier->url )
-              <a href="{{ $classifier->url }}" target="_blank">{{ $classifier->value }}</a>
+                    <a href="{{ $classifier->url }}" class="badge badge-primary font-weight-light" target="_blank">{{ $classifier->value }}</a>
                   @elseif ( $classifier->lnk_matter_id )
-              <a href="/matter/{{ $classifier->lnk_matter_id }}">{{ $classifier->linkedMatter->uid }}</a>
+                    <a href="/matter/{{ $classifier->lnk_matter_id }}" class="badge badge-primary font-weight-light">{{ $classifier->linkedMatter->uid }}</a>
                   @else
-              {{ $classifier->value }}
+                    <div class="badge badge-secondary font-weight-light">{{ $classifier->value }}</div>
                   @endif
                 @endforeach
                 @if ( $type == 'Link' )
                   @foreach ( $matter->linkedBy as $linkedBy )
-              <a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
+                    <a href="/matter/{{ $linkedBy->id }}" class="badge badge-primary font-weight-light">{{ $linkedBy->uid }}</a>
                   @endforeach
                 @endif
-            </dd>
-          </dl>
+              </div>
+            </div>
             @endif
           @endforeach
           @if ( !in_array('Link', $classifiers->keys()->all()) && !$matter->linkedBy->isEmpty() )
-          <dl class="row mb-1">
-            <dt class="col-2">Link</dt>
-            <dd class="col-10 mb-1">
+          <div class="card">
+            <div class="card-body p-1">
+              <b>Link</b>
                 @foreach ( $matter->linkedBy as $linkedBy )
-              <a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
+                  <a href="/matter/{{ $linkedBy->id }}" class="badge badge-primary font-weight-light">{{ $linkedBy->uid }}</a>
                 @endforeach
-            </dd>
-          </dl>
+            </div>
+          </div>
           @endif
         </div>
       </div>
