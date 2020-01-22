@@ -188,7 +188,7 @@
     app.addEventListener('click', (e) => {
       switch (e.target.id) {
         case 'createMatterSubmit':
-          submitModalForm('/matter', createMatterForm, true);
+          submitModalForm('/matter', createMatterForm);
           break;
 
         case 'deleteMatter':
@@ -211,7 +211,7 @@
           break;
 
         case 'addTaskSubmit':
-          submitModalForm('/task', addTaskForm);
+          submitModalForm('/task', addTaskForm, 'reloadModal');
           break;
 
         case 'deleteEvent':
@@ -223,12 +223,12 @@
 
           // Specific processing of the event list modal
         case 'addEventSubmit':
-          submitModalForm('/event', addEventForm);
+          submitModalForm('/event', addEventForm, 'reloadModal');
           break;
 
           // Classifier list modal
         case 'addClassifierSubmit':
-          submitModalForm('/classifier', addClassifierForm);
+          submitModalForm('/classifier', addClassifierForm, 'reloadModal');
           break;
 
           // Generic processing of deletions
@@ -241,40 +241,40 @@
 
           // Nationalize modal
         case 'nationalizeSubmit':
-          submitModalForm('/matter/storeN', natMatterForm, true);
+          submitModalForm('/matter/storeN', natMatterForm);
           break;
 
           // Actor create and show modals
         case 'createActorSubmit':
-          submitModal2Form('/actor', createActorForm);
+          submitModalForm('/actor', createActorForm);
           break;
 
         case 'createDActorSubmit':
-          submitModal2Form('/default_actor', createDActorForm);
+          submitModalForm('/default_actor', createDActorForm);
           break;
 
         case 'createEventNameSubmit':
-          submitModal2Form('/eventname', createEventForm);
+          submitModalForm('/eventname', createEventForm);
           break;
 
         case 'createCategorySubmit':
-          submitModal2Form('/category', createCategoryForm);
+          submitModalForm('/category', createCategoryForm);
           break;
 
         case 'createRoleSubmit':
-          submitModal2Form('/role', createRoleForm);
+          submitModalForm('/role', createRoleForm);
           break;
 
         case 'createTypeSubmit':
-          submitModal2Form('/type', createTypeForm);
+          submitModalForm('/type', createTypeForm);
           break;
 
         case 'createRuleSubmit':
-          submitModal2Form('/rule', createRuleForm);
+          submitModalForm('/rule', createRuleForm);
           break;
 
         case 'createClassifierTypeSubmit':
-          submitModal2Form('/classifier_type', createClassifierTypeForm);
+          submitModalForm('/classifier_type', createClassifierTypeForm);
           break;
 
         case 'deleteActor':
@@ -435,41 +435,24 @@
       }
     });
 
-    var submitModalForm = (target, Form) => {
+    var submitModalForm = (target, Form, after) => {
       formData = new FormData(Form);
       params = new URLSearchParams(formData);
       fetchREST(target, 'POST', formData)
         .then(data => {
           if (data.errors) {
-            processSubmitErrors(data.errors, Form);
             footerAlert.innerHTML = data.message;
             footerAlert.classList.add('alert-danger');
-          } else if (data.redirect) {
-            // Redirect to the created model (link returned by the controller store() function)
-            location.href = data.redirect;
-          } else {
-            fetchInto(contentSrc, ajaxModal.querySelector('.modal-body'));
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
-
-    var submitModal2Form = (target, Form) => {
-      formData = new FormData(Form);
-      params = new URLSearchParams(formData);
-      fetchREST(target, 'POST', params)
-        .then(data => {
-          if (data.errors) {
             processSubmitErrors(data.errors, Form);
-            zoneAlert.innerHTML = data.message;
-            zoneAlert.classList.add('alert-danger');
           } else if (data.redirect) {
             // Redirect to the created model (link returned by the controller store() function)
             location.href = data.redirect;
           } else {
-            location.reload();
+            if (after === 'reloadModal') {
+              fetchInto(contentSrc, ajaxModal.querySelector('.modal-body'));
+            } else { // reloadPage
+              location.reload();
+            }
           }
         })
         .catch(error => {
@@ -483,8 +466,12 @@
         if (!inputElt) {
           inputElt = Form.elements[key];
         }
-        inputElt.placeholder = key + ' is required';
-        inputElt.className += ' is-invalid';
+        if (inputElt.type === 'file') {
+          footerAlert.append(' ' + value[0]);
+        } else {
+          inputElt.placeholder = key + ' is required';
+        }
+        inputElt.classList.add('is-invalid');
       });
     }
 

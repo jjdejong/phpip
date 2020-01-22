@@ -20,7 +20,7 @@
             <th><input class="filter-input form-control form-control-sm" data-source="/rule" name="Type" placeholder="Type" value="{{ old('Type') }}"></th>
           </tr>
         </thead>
-        <tbody id="ruleList">
+        <tbody id="tableList">
           @foreach ($ruleslist as $rule)
           <tr data-id="{{ $rule->id }}" class="reveal-hidden">
             <td>
@@ -56,7 +56,6 @@
         </div>
       </div>
     </div>
-    <span id="footerAlert" class="alert float-left"></span>
   </div>
 </div>
 @endsection

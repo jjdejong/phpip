@@ -32,5 +32,4 @@
     </table>
   </fieldset>
   <button type="button" id="createRoleSubmit" class="btn btn-primary">Create role</button><br>
-  <span id="zoneAlert" class="alert float-left"></span>
 </form>

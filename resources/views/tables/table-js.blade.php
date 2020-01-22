@@ -1,21 +1,11 @@
 <script>
     var contentSrc = ""; // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
     var sourceUrl = "";  // Identifies what to reload when refreshing the list
-/*
-    function refreshRuleList() {
-        var url = sourceUrl + '?' + $("#filter").find("input").filter(function () {
-            return $(this).val().length > 0;
-        }).serialize(); // Filter out empty values
-        $('#rule-list').load(url + ' #rule-list > tr', function () { // Refresh all the tr's in tbody#matter-list
-            window.history.pushState('', 'phpIP', url);
-        });
-    }*/
-
     var url = new URL(window.location.href);
 
     function refreshList() {
       window.history.pushState('', 'phpIP', url)
-      reloadPart(url, 'ruleList');
+      reloadPart(url, 'tableList');
     }
 
     filter.addEventListener('input', debounce( e => {

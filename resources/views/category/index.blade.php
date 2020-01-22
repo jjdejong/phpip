@@ -16,7 +16,7 @@
             <td colspan="2">Display with</th>
           </tr>
         </thead>
-        <tbody id="ruleList">
+        <tbody id="tableList">
           @foreach ($categories as $category)
           <tr class="reveal-hidden" data-id="{{ $category->code }}">
             <td>
@@ -43,7 +43,6 @@
         </div>
       </div>
     </div>
-    <span id="footerAlert" class="alert float-left"></span>
   </div>
 </div>
 

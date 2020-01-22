@@ -18,5 +18,4 @@
     </table>
   </fieldset>
   <button type="button" id="createCategorySubmit" class="btn btn-primary">Create category</button><br>
-  <span id="zoneAlert" class="alert float-left"></span>
 </form>

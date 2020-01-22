@@ -27,5 +27,4 @@
     </table>
   </fieldset>
   <button type="button" id="createDActorSubmit" class="btn btn-primary">Create entry</button><br>
-  <span id="zoneAlert" class="alert float-left"></span>
 </form>
