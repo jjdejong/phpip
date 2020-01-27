@@ -18,7 +18,7 @@ class UpdateTables7 extends Migration
         $table->binary('img', 16777215)->after('value')->nullable();
       });*/
       DB::statement("ALTER TABLE classifier ADD COLUMN img MEDIUMBLOB NULL AFTER value");
-      DB::table('classifier_type')->insert(['code' => 'IMG', 'type' => 'Image']);
+      DB::table('classifier_type')->insertOrIgnore(['code' => 'IMG', 'type' => 'Image']);
     }
 
     /**

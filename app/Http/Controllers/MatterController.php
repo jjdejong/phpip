@@ -139,7 +139,7 @@ class MatterController extends Controller
                 $item->matter_id = $new_matter_id;
                 $item->id = null;
             });
-            ActorPivot::insertIgnore($actors->toArray());
+            ActorPivot::insertOrIgnore($actors->toArray());
             if ($parent_matter->container_id) {
                 // Copy shared actors and classifiers from original matter's container
                 $actors = $parent_matter->container->actorPivot->where('shared', 1);
@@ -147,7 +147,7 @@ class MatterController extends Controller
                     $item->matter_id = $new_matter_id;
                     $item->id = null;
                 });
-                ActorPivot::insertIgnore($actors->toArray());
+                ActorPivot::insertOrIgnore($actors->toArray());
                 $new_matter->classifiersNative()->createMany($parent_matter->container->classifiersNative->toArray());
             } else {
                 // Copy classifiers from original matter
