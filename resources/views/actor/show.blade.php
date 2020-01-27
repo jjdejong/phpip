@@ -116,6 +116,7 @@
         <tr>
           <td><label for="site_id" title="{{ $actorComments['site_id'] }}">Work site</label></td>
           <td><input type="text" class="noformat form-control" name="site_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->site) ? '' : $actorInfo->site->name }}" autocomplete="off"></td>
+        </tr>
         <tr>
           <td><label for="notes" title="{{ $actorComments['notes'] }}">Notes</label></td>
           <td><textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea></td>

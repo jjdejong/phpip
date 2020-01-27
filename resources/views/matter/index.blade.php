@@ -33,7 +33,7 @@
     }
   }
 
-  filterButtons.onchange = e => {
+  filterButtons.onclick = e => {
     switch (e.target.id) {
       case 'showStatus':
         for (td of document.getElementsByClassName('tab1')) {
