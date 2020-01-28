@@ -1,9 +1,12 @@
 <form id="createUserForm" autocomplete="off">
   <table class="table table-borderless">
     <tr>
-      <td>
+      <td width="50%">
 				<label for="name" class="required-field" title="{{ $userComments['name'] }}">Name *</label>
 				<input class="form-control" name="name" placeholder="NAME Firstname">
+				<small class="form-text text-muted">
+  				If the user exists in the actor table, convert the actor to a user by supplying a login <a href="/actor">here</a>
+				</small>
 			</td>
       <td>
 				<label for="login" title="{{ $userComments['login'] }}">Login *</label>
