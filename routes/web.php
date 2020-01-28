@@ -107,6 +107,13 @@ Route::group(['middleware' => 'auth'], function () {
                         ->where('name', 'like', "$term%")->get();
     });
 
+    Route::get('dbrole/autocomplete', function (Request $request) {
+        $term = $request->input('term');
+        return App\Role::select('name as value', 'code as key')
+                        ->where('name', 'like', "$term%")
+                        ->whereIn('code', ['CLI', 'DBA', 'DBRW', 'DBRO'])->get();
+    });
+
     Route::get('country/autocomplete', function (Request $request) {
         $term = $request->input('term');
         $list = App\Country::select('name as value', 'iso as key')
@@ -141,6 +148,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('type', 'MatterTypeController');
     Route::resource('default_actor', 'DefaultActorController');
     Route::resource('actor', 'ActorController');
+    Route::resource('user', 'UserController');
     Route::get('actor/{actor}/usedin','ActorPivotController@usedIn');
     Route::resource('eventname', 'EventNameController');
     Route::resource('rule', 'RuleController');

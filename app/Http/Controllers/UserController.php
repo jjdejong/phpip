@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Response;
 
 class UserController extends Controller
@@ -14,13 +15,13 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request) {
-        $Name = $request->Name;
         $user = new User;
-        if (!is_null($Name)) {
-            $user = $user->where('name', 'like', $Name . '%');
+        if ($request->filled('Name')) {
+            $user = $user->where('name', 'like', $request->Name . '%');
         }
-        $users = $user->with('company, role')->orderby('name')->get();
-        return view('user.index', compact('users'));
+        $userslist = $user->with('company')->orderby('name')->paginate(21);
+        $userslist->appends($request->input())->links();
+        return view('user.index', compact('userslist'));
     }
 
     /**
@@ -29,10 +30,9 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $table = new Actor;
-        //TODO getTableComments is the same as in Rule.php. To render common
+        $table = new \App\Actor;
         $userComments = $table->getTableComments('actor');
-        return view('user.create', compact('actorComments'));
+        return view('user.create', compact('userComments'));
     }
 
     /**
@@ -44,11 +44,13 @@ class UserController extends Controller
     public function store(Request $request) {
         $request->validate([
             'name' => 'required|max:100',
-            'login' => 'required',
-            'email' => 'required|email'
-            'password' => 'required|confirmed'
+            'login' => 'required|unique:users',
+            'password' => 'required|confirmed|min:8',
+            'email' => 'required|email',
+            'default_role' => 'required'
         ]);
-        return User::create($request->except(['_token', '_method']));
+        $request->merge([ 'creator' => Auth::user()->login ]);
+        return User::create($request->except(['_token', '_method', 'password_confirmation']));
     }
 
     /**
@@ -58,9 +60,10 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(User $user) {
-        $userInfo = $user->load(['company:id,name', 'droleInfo']);
-        $userComments = $user->getTableComments('actor');
-        return view('user.show', compact('userInfo', 'actorComments'));
+        $userInfo = $user->load(['company:id,name', 'roleInfo']);
+        $table = new \App\Actor;
+        $userComments = $table->getTableComments('actor');
+        return view('user.show', compact('userInfo', 'userComments'));
     }
 
     /**
@@ -81,9 +84,15 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user) {
-
+        $request->validate([
+            'login' => 'sometimes|required|unique:users',
+            'password' => 'sometimes|required|min:8',
+            'email' => 'sometimes|required|email',
+            'default_role' => 'sometimes|required'
+        ]);
+        $request->merge([ 'updater' => Auth::user()->login ]);
         $user->update($request->except(['_token', '_method']));
-        return response()->json(['success' => 'User updated']);
+        return response()->json(['success' => '1']);
     }
 
     /**

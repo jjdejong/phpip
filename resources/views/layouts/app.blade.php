@@ -85,6 +85,7 @@
               </a>
               <ul class="dropdown-menu" role="menu">
                 <a class="dropdown-item" href="{{ url('/actor/') }}">Actors</a>
+                <a class="dropdown-item" href="{{ url('/user/') }}">DB Users</a>
                 <a class="dropdown-item" href="{{ url('/rule/') }}">Rules</a>
                 <a class="dropdown-item" href="{{ url('/eventname/') }}">Event names</a>
                 <a class="dropdown-item" href="{{ url('/category/') }}">Categories</a>
@@ -239,14 +240,16 @@
             .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
           break;
 
-          // Nationalize modal
         case 'nationalizeSubmit':
           submitModalForm('/matter/storeN', natMatterForm);
           break;
 
-          // Actor create and show modals
         case 'createActorSubmit':
           submitModalForm('/actor', createActorForm);
+          break;
+
+        case 'createUserSubmit':
+          submitModalForm('/user', createUserForm);
           break;
 
         case 'createDActorSubmit':
@@ -344,15 +347,22 @@
           fetchREST(resource, 'PUT', params)
             .then(data => {
               if (data.errors) {
-                footerAlert.innerHTML = Object.values(data.errors)[0];
-                footerAlert.classList.add('alert-danger');
+                if (ajaxModal.matches('.show')) {
+                  footerAlert.innerHTML = Object.values(data.errors)[0];
+                  footerAlert.classList.add('alert-danger');
+                } else {
+                  e.target.classList.remove('border-info', 'is-valid');
+                  e.target.classList.add('border-danger');
+                  e.target.value = Object.values(data.errors)[0];
+                }
               } else {
                 if (!window.ajaxPanel && contentSrc.length !== 0 && !e.target.closest('.tab-content')) {
                   // Reload modal with updated content
                   fetchInto(contentSrc, ajaxModal.querySelector(".modal-body"));
                 } else {
                   // Don't reload but set border back to normal
-                  e.target.classList.remove('border', 'border-info');
+                  e.target.classList.remove('border-info', 'border-danger');
+                  e.target.classList.add('is-valid');
                 }
                 footerAlert.classList.remove("alert-danger");
                 footerAlert.innerHTML = "";
