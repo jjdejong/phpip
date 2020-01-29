@@ -14,7 +14,7 @@
     </tr>
     <tr>
       <td><label for="default_role" title="{{ $userComments['default_role'] }}">Role</label></td>
-      <td><input type="text" class="noformat form-control" name="default_role" data-ac="/dbrole/autocomplete" value="{{ empty($userInfo->roleInfo) ? '' : $userInfo->roleInfo->name }}" autocomplete="off"></td>
+      <td><input type="text" class="noformat form-control" name="default_role" data-ac="/dbrole/autocomplete" data-aclength="0" value="{{ empty($userInfo->roleInfo) ? '' : $userInfo->roleInfo->name }}" autocomplete="off"></td>
     </tr>
     <tr>
       <td><label for="email">Email</label></td>

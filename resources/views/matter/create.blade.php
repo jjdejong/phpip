@@ -25,14 +25,8 @@
   <div class="form-group row">
     <label for="type_code" class="col-4 col-form-label">Type</label>
     <div class="col-8">
-      <select name="type_code" class="custom-select">
-        <option value=""></option>
-        @foreach ( $types as $type )
-        <option value="{{ $type->code }}" {{ $parent_matter->type_code == $type->code ? 'selected' : "" }}>
-          {{ $type->type }}
-        </option>
-        @endforeach
-      </select>
+      <input type="hidden" name="type_code" value="{{ $parent_matter->type_code ?? '' }}" />
+      <input type="text" class="form-control" data-ac="/type/autocomplete" data-actarget="type_code" data-aclength="0" placeholder="{{ $parent_matter->type->type ?? '' }}" autocomplete="off">
     </div>
   </div>
   <div class="form-group row">
@@ -68,6 +62,6 @@
   @endif
 
   <div>
-    <button type="button" id="createMatterSubmit" class="btn btn-primary">Create</button>
+    <button type="button" id="createMatterSubmit" class="btn btn-primary btn-block">Create</button>
   </div>
 </form>

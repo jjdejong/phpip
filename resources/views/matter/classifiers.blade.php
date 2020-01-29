@@ -45,14 +45,8 @@ $classifiers = $matter->classifiers->groupBy('type_name');
           <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
           <div class="form-row form-row-sm">
             <div class="col p-1">
-              <select name="type_code" class="custom-select custom-select-sm px-0">
-                <option value="">Select Type</option>
-                @foreach ( $classifierTypes as $cType )
-                <option value="{{ $cType->code }}">
-                  {{ $cType->type }}
-                </option>
-                @endforeach
-              </select>
+              <input type="hidden" name="type_code" value="">
+              <input type="text" class="form-control form-control-sm" size="16" placeholder="Type" data-ac="/classifier-type/autocomplete/0" data-actarget="type_code" data-aclength="0">
             </div>
             <div class="col p-1 hideForFile">
               <input type="text" class="form-control form-control-sm px-1" name="value" placeholder="Value">

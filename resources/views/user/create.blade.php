@@ -27,7 +27,7 @@
       <td>
 				<label for="default_role" title="{{ $userComments['default_role'] }}">Role *</label>
 				<input type="hidden" name="default_role">
-				<input type="text" class="form-control" data-ac="/dbrole/autocomplete" data-actarget="default_role">
+				<input type="text" class="form-control" data-ac="/dbrole/autocomplete" data-actarget="default_role" data-aclength="0">
 			</td>
       <td>
 				<label for="company_id" title="{{ $userComments['company_id'] }}">Company</label>

@@ -63,14 +63,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           <div class="form-row">
             <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}" />
             <div class="col-2">
-              <select name="type_code" class="custom-select custom-select-sm">
-                <option value=""></option>
-                @foreach ( $titleTypes as $tType )
-                <option value="{{ $tType->code }}">
-                  {{ $tType->type }}
-                </option>
-                @endforeach
-              </select>
+              <input type="hidden" name="type_code">
+              <input type="text" class="form-control form-control-sm" data-ac="/classifier-type/autocomplete/1" data-actarget="type_code" data-aclength="0" placeholder="Type" autocomplete="off">
             </div>
             <div class="col-10">
               <div class="input-group">

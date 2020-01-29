@@ -300,7 +300,8 @@
               });
           }
           break;
-    }
+      }
+
       /* Various functions used here and there */
 
       // Nationalize modal
@@ -404,19 +405,28 @@
       if (e.target.matches(".noformat, textarea, [contenteditable]")) {
         e.target.classList.add("border", "border-info");
       }
+    });
 
-      // ui-front class required for showing selection list with jQuery autocomplete in modals
-      if ( e.target.closest('.modal-content') ) {
+    app.addEventListener("focusin", e => {
+      // Process autocomplete fields
+      if ( e.target.hasAttribute('data-ac') ) {
+        var aclength = 2;
+        if ( e.target.hasAttribute('data-aclength') ) {
+          aclength = e.target.dataset.aclength;
+        }
         if (e.target.closest('tr')) {
           e.target.closest('tr').classList.add('ui-front');
         }
-      }
-
-      // Process autocomplete fields
-      if ( e.target.hasAttribute('data-ac') ) {
         $(e.target).autocomplete({
           autoFocus: true,
+          minLength: aclength,
           source: e.target.dataset.ac,
+          create: function(event, ui) {
+            // Fires search immediately (but selection does not trigger blur or change)
+            // if ( aclength == 0 ) {
+            //   $(this).autocomplete("search", "");
+            // }
+          },
           select: (event, ui) => {
             if (e.target.id == 'addCountry') {
               let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
@@ -440,6 +450,7 @@
             if (!ui.item) {
               e.target.value = "";
             }
+            $(e.target).autocomplete('destroy');
           }
         });
       }
