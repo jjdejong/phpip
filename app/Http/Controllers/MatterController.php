@@ -36,8 +36,7 @@ class MatterController extends Controller
     public function show(Matter $matter)
     {
         $matter->load(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers']);
-        $titleTypes = \App\ClassifierType::where('main_display', 1)->get();
-        return view('matter.show', compact('matter', 'titleTypes'));
+        return view('matter.show', compact('matter'));
     }
 
     /**
@@ -70,8 +69,7 @@ class MatterController extends Controller
                 ++$category['next_caseref'];
             }
         }
-        $types = \App\Type::all();
-        return view('matter.create', compact('parent_matter', 'operation', 'category', 'types'));
+        return view('matter.create', compact('parent_matter', 'operation', 'category'));
     }
 
     /**
@@ -225,9 +223,7 @@ class MatterController extends Controller
             $cat_edit = 1;
             $country_edit = 1;
         }
-        $categories = \App\Category::all();
-        $types = \App\Type::all();
-        return view("matter.edit", compact(['matter','categories','types','cat_edit', 'country_edit']));
+        return view("matter.edit", compact(['matter', 'cat_edit', 'country_edit']));
     }
 
     /**
@@ -361,8 +357,7 @@ class MatterController extends Controller
     public function classifiers(Matter $matter)
     {
         $matter->load(['classifiers']);
-        $classifierTypes = \App\ClassifierType::where('main_display', 0)->get();
-        return view('matter.classifiers', compact('matter', 'classifierTypes'));
+        return view('matter.classifiers', compact('matter'));
     }
 
     public function description(Matter $matter, $lang)
