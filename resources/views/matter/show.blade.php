@@ -61,14 +61,14 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <div id="addTitleCollapse" class="collapse">
         <form id="addTitleForm" autocomplete="off">
           <div class="form-row">
-            <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}" />
+            <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
             <div class="col-2">
               <input type="hidden" name="type_code">
               <input type="text" class="form-control form-control-sm" data-ac="/classifier-type/autocomplete/1" data-actarget="type_code" data-aclength="0" placeholder="Type" autocomplete="off">
             </div>
             <div class="col-10">
               <div class="input-group">
-                <input type="text" class="form-control form-control-sm" name="value" placeholder="Value" autocomplete="off" />
+                <input type="text" class="form-control form-control-sm" name="value" placeholder="Value" autocomplete="off">
                 <div class="input-group-append">
                   <button type="button" class="btn btn-primary btn-sm" id="addTitleSubmit">&check;</button>
                 </div>
@@ -81,7 +81,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
   </div>
   @if ( in_array('Image', $classifiers->keys()->all()) )
     <div class="card col-3 border-dark bg-dark p-1">
-      <img src="/classifier/{{ $classifiers['Image'][0]->id }}/img" class="card-img-top" style="max-height: 150px; object-fit: contain;" />
+      <img src="/classifier/{{ $classifiers['Image'][0]->id }}/img" class="card-img-top" style="max-height: 150px; object-fit: contain;">
     </div>
   @endif
 
@@ -365,12 +365,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
        <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
      </div>
      <div class="form-group">
-       <div class="form-check">
-         <input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
+       <div class="form-check my-1">
+         <input class="form-check-input mt-0" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
          <label class="form-check-label" for="actorShared">Add to container and share</label>
        </div>
-       <div class="form-check">
-         <input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
+       <div class="form-check my-1">
+         <input class="form-check-input mt-0" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
          <label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
        </div>
      </div>
