@@ -210,15 +210,10 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
       </div>
       <div class="card col-6 p-0 border-primary reveal-hidden">
-        <div class="card-header p-1 bg-primary">
-          <a class="row text-warning text-decoration-none" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All tasks">
-            <span class="col-9">Open Tasks</span>
-            <span class="col-3">
-              Due
-              <span class="hidden-action float-right">
+        <div class="card-header text-warning p-1 bg-primary">
+          Open Tasks Due
+          <a class="text-warning text-decoration-none hidden-action float-right stretched-link" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All tasks"><span class="">
                 &equiv;
-              </span>
-            </span>
           </a>
         </div>
         <div class="card-body p-1" id="opentask-panel" style="overflow: auto;">
@@ -233,15 +228,10 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     </div>
     <div class="row card-deck mb-1">
       <div class="card col-2 p-0 border-primary reveal-hidden" style="min-height: 138px;">
-        <div class="card-header p-1 bg-primary">
-          <a class="row text-warning text-decoration-none" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All renewals">
-            <span class="col-6">Renewals</span>
-            <span class="col-6">
-            Due
-              <span class="hidden-action float-right">
+        <div class="card-header text-warning p-1 bg-primary">
+          Renewals Due
+          <a class="text-warning text-decoration-none hidden-action float-right stretched-link" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All renewals">
               &equiv;
-              </span>
-            </span>
             </a>
         </div>
         <div class="card-body p-1" id="renewal-panel" style="overflow: auto;">
