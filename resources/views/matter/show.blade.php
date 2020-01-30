@@ -22,7 +22,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       @endcannot
     </div>
     <div class="card-body p-1">
-      <dl class="row">
+      <dl class="row mb-0">
         @if ($matter->container_id)
         <dt class="col-4">Container:</dt>
         <dd class="col-8 mb-1">
@@ -33,19 +33,21 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         @endif
         @if ($matter->parent_id)
         <dt class="col-4">Parent:</dt>
-        <dd class="col-8 mn-1">
+        <dd class="col-8 mb-1">
           <a href="/matter/{{ $matter->parent_id }}" title="See parent">
             {{ $matter->parent->uid }}
           </a>
         </dd>
         @endif
-        <dt class="col-4">Responsible:</dt>
-        <dd class="col-8 mb-1">{{$matter->responsible}}</dd>
         @if ($matter->expire_date)
         <dt class="col-4">Expiry:</dt>
-        <dd class="col-8 mb-1">{{ Carbon\Carbon::parse($matter->expire_date)->isoFormat('L') }}</dd>
+        <dd class="col-8">{{ Carbon\Carbon::parse($matter->expire_date)->isoFormat('L') }}</dd>
         @endif
       </dl>
+      <div class="alert alert-info text-center py-1 mb-0">
+        <b>Responsible:</b>
+        {{$matter->responsible}}
+      </div>
     </div>
     <div class="card-footer p-1">
       @cannot('client')
@@ -270,16 +272,16 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                 <b>{{ $type }}</b>
                 @foreach ( $classifier_group as $classifier )
                   @if ( $classifier->url )
-                    <a href="{{ $classifier->url }}" class="badge badge-primary font-weight-light" target="_blank">{{ $classifier->value }}</a>
+                    <a href="{{ $classifier->url }}" class="badge badge-primary align-middle font-weight-light" target="_blank">{{ $classifier->value }}</a>
                   @elseif ( $classifier->lnk_matter_id )
-                    <a href="/matter/{{ $classifier->lnk_matter_id }}" class="badge badge-primary font-weight-light">{{ $classifier->linkedMatter->uid }}</a>
+                    <a href="/matter/{{ $classifier->lnk_matter_id }}" class="badge badge-primary align-middle font-weight-light">{{ $classifier->linkedMatter->uid }}</a>
                   @else
-                    <div class="badge badge-secondary font-weight-light">{{ $classifier->value }}</div>
+                    <div class="badge badge-secondary align-middle font-weight-light">{{ $classifier->value }}</div>
                   @endif
                 @endforeach
                 @if ( $type == 'Link' )
                   @foreach ( $matter->linkedBy as $linkedBy )
-                    <a href="/matter/{{ $linkedBy->id }}" class="badge badge-primary font-weight-light">{{ $linkedBy->uid }}</a>
+                    <a href="/matter/{{ $linkedBy->id }}" class="badge badge-primary align-middle font-weight-light">{{ $linkedBy->uid }}</a>
                   @endforeach
                 @endif
               </div>
@@ -291,7 +293,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <div class="card-body p-1">
               <b>Link</b>
                 @foreach ( $matter->linkedBy as $linkedBy )
-                  <a href="/matter/{{ $linkedBy->id }}" class="badge badge-primary font-weight-light">{{ $linkedBy->uid }}</a>
+                  <a href="/matter/{{ $linkedBy->id }}" class="badge badge-primary align-middle font-weight-light">{{ $linkedBy->uid }}</a>
                 @endforeach
             </div>
           </div>
