@@ -410,7 +410,7 @@
     app.addEventListener("focusin", e => {
       // Process autocomplete fields
       if ( e.target.hasAttribute('data-ac') ) {
-        var aclength = 2;
+        var aclength = 1;
         if ( e.target.hasAttribute('data-aclength') ) {
           aclength = e.target.dataset.aclength;
         }
@@ -437,9 +437,16 @@
               // Wait for the new country entry to be added to the DOM before resetting the input field
               setTimeout(() => { addCountry.value = ""; }, 0);
             } else if ( e.target.hasAttribute('data-actarget') ) {
-                // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
-                e.target.value = ui.item.value;
-                e.target.form[e.target.dataset.actarget].value = ui.item.key;
+              // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
+              e.target.value = ui.item.value;
+              e.target.form[e.target.dataset.actarget].value = ui.item.key;
+              if (window.createMatterForm && e.target.dataset.actarget == 'category_code') {
+                // We're in a matter creation form - fill caseref with corresponding new value
+                fetchREST('/matter/new-caseref?term=' + ui.item.prefix, 'GET')
+                .then(data => {
+                  createMatterForm.caseref.value = data[0].value;
+                });
+              }
             } else {
               // Used for content editable fields where the same field is used for sending the id to the server
               e.target.value = ui.item.key;

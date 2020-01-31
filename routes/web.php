@@ -61,7 +61,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('matter/new-caseref', function (Request $request) {
         $term = $request->term;
         $newref = App\Matter::where('caseref', 'like', "$term%")->max('caseref');
-        $newref++;
+        if ($newref) {
+          $newref++;
+        } else {
+          $newref = strtoupper($term);
+        }
         return [['key' => $newref, 'value' => $newref ]];
     });
 
@@ -124,7 +128,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('category/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\Category::select('category as value', 'code as key')
+        return App\Category::select('category as value', 'code as key', 'ref_prefix as prefix')
                         ->where('category', 'like', "$term%")->get();
     });
 
