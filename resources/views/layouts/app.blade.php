@@ -142,7 +142,7 @@
   </div>
   <script>
     var contentSrc = "", // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
-      cTypeCode = '';
+      cTypeCode = ''; // Used for toggling image file input in matter.classifiers
 
     // Ajax fill an element from a url returning HTML
     var fetchInto = async (url, element) => {
@@ -373,14 +373,14 @@
         }
       }
       // matter.classifiers addClassifierForm - replace input fields with file upload field when selecting an image type
-      if (e.target.name === 'type_code' && e.target.value === 'IMG') {
+      if (e.target.dataset.actarget === 'type_code' && e.target.value === 'Image') {
         for (elt of addClassifierForm.getElementsByClassName('hideForFile')) {
           elt.classList.add('d-none');
         }
         forFile.classList.remove('d-none');
         cTypeCode = 'IMG'
       }
-      if (e.target.name === 'type_code' && e.target.value !== 'IMG' && cTypeCode === 'IMG') {
+      if (e.target.dataset.actarget === 'type_code' && e.target.value !== 'Image' && cTypeCode === 'IMG') {
         for (elt of addClassifierForm.getElementsByClassName('hideForFile')) {
           elt.classList.remove('d-none');
         }
