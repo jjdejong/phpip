@@ -38,7 +38,7 @@ class sendCall extends Mailable
         $this->dest = $dest;
         // Added to ask for receipt confirmation
         $this->callbacks[]=( function($message){
-            $message->getHeaders()->addTextHeader('X-Confirm-Reading-To', Auth::user()->email);
+            $message->getHeaders()->addTextHeader('X-Confirm-Reading-To', '<'.Auth::user()->email.'>');
         });
     }
 
