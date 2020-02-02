@@ -10,6 +10,7 @@ use App\Task;
 use App\Renewal;
 use App\Actor;
 use App\MatterActors;
+use App\RenewalsLogs;
 use App\Mail\sendCall;
 use Locale;
 use IntlDateFormatter;
@@ -154,8 +155,15 @@ class RenewalController extends Controller
         $client_precedent="ZZZZZZZZZZZZZZZZZZZZZZZZ";
         $premier_passage=true;
         $sum = 0;
+        // For logs
+        $newjob = RenewalsLogs::max('job_id');
+        $newjob++;
+        $data_log = [];
         for ($grace = 0; $grace < count($notify_type); $grace++)
         {
+            $from_step =  ($notify_type[$grace] == 'first') ? 0 : 2 ;
+            $from_grace =  ($notify_type[$grace] == 'last') ? 0 : null ;
+            $to_grace =  ($notify_type[$grace] == 'last') ? 1 : null ;
             $resql = Renewal::whereIn('id',$ids)->orderBy( 'client_dn', "ASC")->where('grace_period',$grace)->get();
             $prices = $this->prices($ids, $grace == 0 ? 0 : 2 );
             $num=$resql->count();
@@ -215,7 +223,13 @@ class RenewalController extends Controller
                     $total_ht = $total_ht + floatval($renewal['total_ht']);
                     $client_precedent = $client;
                     $i++;
-                    array_push($renewals, $renewal);
+                    $log_line = ['task_id' => $ren['id'],'job_id' => $newjob, 'from_step' => $from_step, 'to_step' => 2, 'creator' => Auth::user()->login];
+                    if (! is_null($from_grace))
+                      $log_line[] = ['$to_grace' => $from_grace];
+                    if (! is_null($to_grace))
+                      $log_line[] = ['$to_grace' => $to_grace];
+                    $data[] = $log_line;
+                    $renewals[] = $renewal;
                     if ($i < $num)
                     {
                         $client = $resql[$i]['client_dn'];
@@ -267,6 +281,7 @@ class RenewalController extends Controller
                         $renewals = [];
                     }
                 }
+                RenewalsLogs::insert($data);
             }
         }
         return $sum;
