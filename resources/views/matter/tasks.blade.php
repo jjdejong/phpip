@@ -18,7 +18,7 @@
   <tbody>
     <tr class="reveal-hidden">
       <td colspan="8">
-        <span style="position: relative; margin-right: 10px;">{{ $event->info->name . ": " . $event->event_date }}</span>
+        <span style="position: relative; margin-right: 10px;">{{ $event->info->name . ": " . Carbon\Carbon::parse($event->event_date)->isoFormat('L') }}</span>
         @cannot('client')
         <a href="#" id="addTaskToEvent" class="hidden-action" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
           &CirclePlus;

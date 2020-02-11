@@ -23,5 +23,4 @@
     </table>
   </fieldset>
   <button type="button" id="createClassifierTypeSubmit" class="btn btn-primary">Create type</button><br>
-  <span id="zoneAlert" class="alert float-left"></span>
 </form>

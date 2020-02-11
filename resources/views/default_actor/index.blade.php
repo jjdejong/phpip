@@ -18,7 +18,7 @@
             <td><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Client" placeholder="Client" value="{{ old('Client') }}"></td>
           </tr>
         </thead>
-        <tbody id="ruleList">
+        <tbody id="tableList">
           @foreach ($default_actors as $default_actor)
           <tr class="reveal-hidden" data-id="{{ $default_actor->id }}">
             <td>
@@ -47,7 +47,6 @@
         </div>
       </div>
     </div>
-    <span id="footerAlert" class="alert float-left"></span>
   </div>
 </div>
 

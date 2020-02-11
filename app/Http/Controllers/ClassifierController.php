@@ -26,13 +26,19 @@ class ClassifierController extends Controller
      */
     public function store(Request $request)
     {
-    	$this->validate($request, [
+      $this->validate($request, [
     		'matter_id' => 'required',
     		'type_code' => 'required',
-    		'value' => 'required_without:lnk_matter_id'
+    		'value' => 'required_without_all:lnk_matter_id,image',
+        'image'  => 'image|max:1024'
     	]);
+      if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $request->merge([ 'value' => $file->getMimeType() ]);
+        $request->merge([ 'img' => $file->openFile()->fread($file->getSize()) ]);
+      }
       $request->merge([ 'creator' => Auth::user()->login ]);
-    	return Classifier::create($request->except(['_token', '_method']));
+    	return Classifier::create($request->except(['_token', '_method', 'image']))->id;
     }
 
     /**

@@ -49,26 +49,43 @@ class Task extends Model
                 DB::raw('MIN(task.due_date) as urgent_date'),
                 DB::raw('ifnull(task.assigned_to, m.responsible) as login')
             )
-            ->where('m.dead', 0)
-            ->where('task.done', 0)
+            ->where([
+              ['m.dead', 0],
+              ['task.done', 0]
+            ])
             ->groupby('login');
 
         if ($role == 'CLI') {
             $selectQuery->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(m.container_id, m.id)'))
-            ->where('cli.role', 'CLI')
-            ->where('cli.actor_id', $userid);
+            ->where([
+              ['cli.role', 'CLI'],
+              ['cli.actor_id', $userid]
+            ]);
         }
         return $selectQuery->get();
     }
 
     public function openTasks($renewals, $what_tasks, $user_dasboard)
     {
-        $tasks = $this->select('task.id', 'en.name', 'task.detail', 'task.due_date', 'event.matter_id', 'matter.uid')
+        $tasks = $this->select('task.id', 'en.name', 'task.detail', 'task.due_date', 'event.matter_id', 'matter.uid', 'tit.value as title', 'tm.value as trademark')
         ->join('event_name as en', 'task.code', 'en.code')
         ->join('event', 'task.trigger_id', 'event.id')
         ->join('matter', 'event.matter_id', 'matter.id')
-        ->where('task.done', 0)
-        ->where('matter.dead', 0);
+        ->leftJoin('classifier as tit', function ($j) {
+          $j->on('tit.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
+            ->where([
+              ['tit.type_code', 'TIT'],
+              ['tit.display_order', 1]
+            ]);
+        })
+        ->leftJoin('classifier as tm', function ($j) {
+          $j->on('tm.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
+            ->where('tm.type_code', 'TM');
+        })
+        ->where([
+          ['task.done', 0],
+          ['matter.dead', 0]
+        ]);
 
         if($what_tasks == 1) {
             $tasks->where('assigned_to', Auth::user()->login);
@@ -77,8 +94,10 @@ class Task extends Model
         // A client is defined for querying the tasks
         if($what_tasks > 1) {
             $tasks->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
-            ->where('cli.role', 'CLI')
-            ->where('cli.actor_id', $what_tasks);
+            ->where([
+              ['cli.role', 'CLI'],
+              ['cli.actor_id', $what_tasks]
+            ]);
         }
 
         if ($renewals) {
@@ -89,8 +108,10 @@ class Task extends Model
 
         if (Auth::user()->default_role == 'CLI') {
             $tasks->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
-            ->where('cli.role', 'CLI')
-            ->where('cli.actor_id', Auth::user()->id);
+            ->where([
+              ['cli.role', 'CLI'],
+              ['cli.actor_id', Auth::user()->id]
+            ]);
         }
 
         if ($user_dasboard) {

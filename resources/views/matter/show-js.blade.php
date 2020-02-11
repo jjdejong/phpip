@@ -130,7 +130,7 @@
             footerAlert.innerHTML = data.message;
             footerAlert.classList.add('alert-danger');
           } else {
-            reloadPart("/matter/{{ $matter->id }}", 'titlePanel');
+            reloadPart(window.location.href, 'titlePanel');
           }
         });
     }

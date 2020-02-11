@@ -22,28 +22,51 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       @endcannot
     </div>
     <div class="card-body p-1">
-      <ul class="list-unstyled">
+      <dl class="row mb-0">
         @if ($matter->container_id)
-        <li>Container:<a href="/matter/{{ $matter->container_id }}" title="See container">
+        <dt class="col-4">Container:</dt>
+        <dd class="col-8 mb-1">
+          <a href="/matter/{{ $matter->container_id }}" title="See container">
             {{ $matter->container->uid }}
-          </a></li>
+          </a>
+        </dd>
         @endif
         @if ($matter->parent_id)
-        <li>Parent:<a href="/matter/{{ $matter->parent_id }}" title="See parent">
+        <dt class="col-4">Parent:</dt>
+        <dd class="col-8 mb-1">
+          <a href="/matter/{{ $matter->parent_id }}" title="See parent">
             {{ $matter->parent->uid }}
-          </a></li>
+          </a>
+        </dd>
         @endif
-      </ul>
+        @if ($matter->expire_date)
+        <dt class="col-4">Expiry:</dt>
+        <dd class="col-8">{{ Carbon\Carbon::parse($matter->expire_date)->isoFormat('L') }}</dd>
+        @endif
+      </dl>
+      <div class="alert alert-info text-center py-1 mb-0">
+        <b>Responsible:</b>
+        {{$matter->responsible}}
+      </div>
     </div>
     <div class="card-footer p-1">
-      <span><strong>Responsible:</strong> {{$matter->responsible}}</span>
-      @if ($matter->expire_date)
-      <span class="float-right"><strong>Expiry:</strong> {{ $matter->expire_date }}</span>
-      @endif
+      @cannot('client')
+      <div class="btn-group btn-block">
+        <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=child" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Create child {{ $matter->category->category }}">
+          &oplus; New Child
+        </a>
+        <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=clone" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Clone {{ $matter->category->category }}">
+          &boxbox; Clone
+        </a>
+        <a class="btn btn-info btn-sm {{ $matter->countryInfo->goesnational ? '' : 'disabled' }}" href="/matter/{{ $matter->id }}/createN" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Enter {{ $matter->category->category }} in national phase">
+          &#9872; Nat. Phase
+        </a>
+      </div>
+      @endcannot
     </div>
   </div>
 
-  <div class="card col-7 border-secondary p-1">
+  <div class="card col border-secondary p-1">
     <dl id="titlePanel">
       @foreach ( $titles as $type => $title_group )
         <dt class="mt-2">
@@ -61,20 +84,14 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <div id="addTitleCollapse" class="collapse">
         <form id="addTitleForm" autocomplete="off">
           <div class="form-row">
-            <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}" />
+            <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
             <div class="col-2">
-              <select name="type_code" class="custom-select">
-                <option value=""></option>
-                @foreach ( $titleTypes as $tType )
-                <option value="{{ $tType->code }}">
-                  {{ $tType->type }}
-                </option>
-                @endforeach
-              </select>
+              <input type="hidden" name="type_code">
+              <input type="text" class="form-control form-control-sm" data-ac="/classifier-type/autocomplete/1" data-actarget="type_code" data-aclength="0" placeholder="Type" autocomplete="off">
             </div>
             <div class="col-10">
               <div class="input-group">
-                <input type="text" class="form-control form-control-sm" name="value" placeholder="Value" autocomplete="off" />
+                <input type="text" class="form-control form-control-sm" name="value" placeholder="Value" autocomplete="off">
                 <div class="input-group-append">
                   <button type="button" class="btn btn-primary btn-sm" id="addTitleSubmit">&check;</button>
                 </div>
@@ -85,22 +102,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       </div>
     </dl>
   </div>
-
-  <div class="card border-secondary bg-secondary col-2 p-0">
-    <div class="card-body">
-      @cannot('client')
-      <a class="btn btn-info btn-block btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=clone" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Clone {{ $matter->category->category }}">
-        &boxbox; Clone Matter
-      </a>
-      <a class="btn btn-info btn-block btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=child" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Create child {{ $matter->category->category }}">
-        &oplus; New Child
-      </a>
-      <a class="btn btn-info btn-block btn-sm {{ $matter->countryInfo->goesnational ? '' : 'disabled' }}" href="/matter/{{ $matter->id }}/createN" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Enter {{ $matter->category->category }} in national phase">
-        &#9872; Enter Nat. Phase
-      </a>
-      @endcannot
+  @if ( in_array('Image', $classifiers->keys()->all()) )
+    <div class="card col-3 border-dark bg-dark p-1">
+      <img src="/classifier/{{ $classifiers['Image'][0]->id }}/img" class="card-img-top" style="max-height: 150px; object-fit: contain;">
     </div>
-  </div>
+  @endif
 </div>
 
 <div class="row card-deck">
@@ -152,7 +158,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               &nbsp;- {{ $actor->company }}
               @endif
               @if ( $actor->show_date && $actor->date )
-              ({{ $actor->date }})
+              ({{ Carbon\Carbon::parse($actor->date)->isoFormat('L') }})
               @endif
               @if ( $actor->show_rate && $actor->rate != '100' )
               &nbsp;- {{ $actor->rate }}
@@ -166,8 +172,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     </div>
   </div>
   <div id="multiPanel" class="card col-9 p-0" style="background: transparent;">
-    <div class="row card-deck mb-1">
-      <div class="card col-6 p-0 border-primary reveal-hidden" style="min-height: 138px;">
+    <div class="card-deck mb-1">
+      <div class="card border-primary reveal-hidden" style="min-height: 138px;">
         <div class="card-header bg-primary p-1">
           <a class="row text-light text-decoration-none" href="/matter/{{ $matter->id }}/events" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All events">
             <span class="col-5">Status</span>
@@ -180,17 +186,17 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             </span>
           </a>
         </div>
-        <div class="card-body p-1" id="status-panel" style="overflow: auto;">
+        <div class="card-body p-1" id="statusPanel" style="overflow: auto;">
           @foreach ( $matter->events->where('info.status_event', 1) as $event )
           <div class="row">
             <span class="col-5">{{ $event->info->name }}</span>
             @if ( $event->alt_matter_id )
-            <span class="col-3">{{ $event->link->event_date ?? $event->event_date }}</span>
+            <span class="col-3">{{ Carbon\Carbon::parse($event->link->event_date ?? $event->event_date)->isoFormat('L') }}</span>
             <span class="col">
               <a href="/matter/{{ $event->alt_matter_id }}" title="{{ $event->altMatter->uid }}" target="_blank">{{ $event->altMatter->country }} {{ $event->link->detail ?? $event->detail }}</a>
             </span>
             @else
-            <span class="col-3">{{ $event->event_date }}</span>
+            <span class="col-3">{{ Carbon\Carbon::parse($event->event_date)->isoFormat('L') }}</span>
             <span class="col">
               @if ( $event->publicUrl() )
               <a href="{{ $event->publicUrl() }}" target="_blank">{{ $event->detail }}</a>
@@ -204,22 +210,17 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
       </div>
       <div class="card col-6 p-0 border-primary reveal-hidden">
-        <div class="card-header p-1 bg-primary">
-          <a class="row text-warning text-decoration-none" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All tasks">
-            <span class="col-9">Open Tasks</span>
-            <span class="col-3">
-              Due
-              <span class="hidden-action float-right">
+        <div class="card-header text-warning p-1 bg-primary">
+          Open Tasks Due
+          <a class="text-warning text-decoration-none hidden-action float-right stretched-link" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All tasks"><span class="">
                 &equiv;
-              </span>
-            </span>
           </a>
         </div>
         <div class="card-body p-1" id="opentask-panel" style="overflow: auto;">
           @foreach ( $matter->tasksPending as $task )
           <div class="row">
             <span class="col-9">{{ $task->info->name }}: {{ $task->detail }}</span>
-            <span class="col-3">{{ $task->due_date }}</span>
+            <span class="col-3">{{ Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}</span>
           </div>
           @endforeach
         </div>
@@ -227,22 +228,17 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     </div>
     <div class="row card-deck mb-1">
       <div class="card col-2 p-0 border-primary reveal-hidden" style="min-height: 138px;">
-        <div class="card-header p-1 bg-primary">
-          <a class="row text-warning text-decoration-none" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All renewals">
-            <span class="col-6">Renewals</span>
-            <span class="col-6">
-              Due
-              <span class="hidden-action float-right">
-                &equiv;
-              </span>
-            </span>
-          </a>
+        <div class="card-header text-warning p-1 bg-primary">
+          Renewals Due
+          <a class="text-warning text-decoration-none hidden-action float-right stretched-link" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All renewals">
+              &equiv;
+            </a>
         </div>
         <div class="card-body p-1" id="renewal-panel" style="overflow: auto;">
           @foreach ( $matter->renewalsPending->take(3) as $task )
           <div class="row">
             <span class="col-4">{{ $task->detail }}</span>
-            <span class="col-8">{{ $task->due_date }}</span>
+            <span class="col-8">{{ Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}</span>
           </div>
           @endforeach
         </div>
@@ -260,35 +256,37 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
         <div class="card-body p-1" id="classifierPanel" style="overflow: auto;">
           @foreach ( $classifiers as $type => $classifier_group )
-          <dl class="row mb-1">
-            <dt class="col-3">{{ $type }}</dt>
-            <dd class="col-9 mb-1">
-              @foreach ( $classifier_group as $classifier )
-              @if ( $classifier->url )
-              <a href="{{ $classifier->url }}" target="_blank">{{ $classifier->value }}</a>
-              @elseif ( $classifier->lnk_matter_id )
-              <a href="/matter/{{ $classifier->lnk_matter_id }}">{{ $classifier->linkedMatter->uid }}</a>
-              @else
-              {{ $classifier->value }}
-              @endif
-              @endforeach
-              @if ( $type == 'Link' )
-              @foreach ( $matter->linkedBy as $linkedBy )
-              <a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
-              @endforeach
-              @endif
-            </dd>
-          </dl>
+            @if ( $type != 'Image' )
+            <div class="card">
+              <div class="card-body p-1">
+                <b>{{ $type }}</b>
+                @foreach ( $classifier_group as $classifier )
+                  @if ( $classifier->url )
+                    <a href="{{ $classifier->url }}" class="badge badge-primary align-middle font-weight-light" target="_blank">{{ $classifier->value }}</a>
+                  @elseif ( $classifier->lnk_matter_id )
+                    <a href="/matter/{{ $classifier->lnk_matter_id }}" class="badge badge-primary align-middle font-weight-light">{{ $classifier->linkedMatter->uid }}</a>
+                  @else
+                    <div class="badge badge-secondary align-middle font-weight-light">{{ $classifier->value }}</div>
+                  @endif
+                @endforeach
+                @if ( $type == 'Link' )
+                  @foreach ( $matter->linkedBy as $linkedBy )
+                    <a href="/matter/{{ $linkedBy->id }}" class="badge badge-primary align-middle font-weight-light">{{ $linkedBy->uid }}</a>
+                  @endforeach
+                @endif
+              </div>
+            </div>
+            @endif
           @endforeach
           @if ( !in_array('Link', $classifiers->keys()->all()) && !$matter->linkedBy->isEmpty() )
-          <dl class="row mb-1">
-            <dt class="col-2">Link</dt>
-            <dd class="col-10 mb-1">
-              @foreach ( $matter->linkedBy as $linkedBy )
-              <a href="/matter/{{ $linkedBy->id }}">{{ $linkedBy->uid }}</a>
-              @endforeach
-            </dd>
-          </dl>
+          <div class="card">
+            <div class="card-body p-1">
+              <b>Link</b>
+                @foreach ( $matter->linkedBy as $linkedBy )
+                  <a href="/matter/{{ $linkedBy->id }}" class="badge badge-primary align-middle font-weight-light">{{ $linkedBy->uid }}</a>
+                @endforeach
+            </div>
+          </div>
           @endif
         </div>
       </div>
@@ -321,8 +319,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
       </div>
     </div>
-    <div class="row card-deck">
-      <div class="card col-12 p-0 border-secondary" style="min-height: 100px;">
+    <div class="card-deck">
+      <div class="card border-secondary" style="min-height: 100px;">
         <div class="card-header p-1 bg-secondary text-light">
           Notes
         </div>
@@ -364,12 +362,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
        <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
      </div>
      <div class="form-group">
-       <div class="form-check">
-         <input class="form-check-input" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
+       <div class="form-check my-1">
+         <input class="form-check-input mt-0" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
          <label class="form-check-label" for="actorShared">Add to container and share</label>
        </div>
-       <div class="form-check">
-         <input class="form-check-input" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
+       <div class="form-check my-1">
+         <input class="form-check-input mt-0" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
          <label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
        </div>
      </div>

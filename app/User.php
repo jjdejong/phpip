@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -23,6 +24,21 @@ class User extends Authenticatable
     // Password mutator for hashing the cleartext password as it is stored
     public function setPasswordAttribute($value) {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function roleInfo()
+    {
+        return $this->belongsTo('App\Role', 'default_role');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo('App\Actor', 'company_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo('App\Actor', 'parent_id');
     }
 
     public function matters() {

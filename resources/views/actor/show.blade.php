@@ -30,8 +30,8 @@
           <td><input type="text" class="noformat form-control" name="login" value="{{ $actorInfo->login }}"></td>
         </tr>
         <tr>
-          <td><label for="default_role" title="{{ $actorComments['default_role'] }}">Default role</label></td>
-          <td><input type="text" class="noformat form-control" name="default_role" data-ac="/role/autocomplete" value="{{ empty($actorInfo->droleInfo) ? '' : $actorInfo->droleInfo->name }}" autocomplete="off"></td>
+          <td><label for="default_role" title="{{ $actorComments['default_role'] }}" title="Login needs to be null for changing the role">Default role</label></td>
+          <td><input type="text" class="noformat form-control" name="default_role" data-ac="/role/autocomplete" value="{{ empty($actorInfo->droleInfo) ? '' : $actorInfo->droleInfo->name }}" {{ $actorInfo->login ? 'disabled' : 'autocomplete=off' }}></td>
         </tr>
         <tr>
           <td><label for="function" title="{{ $actorComments['function'] }}">Function</label></td>
@@ -116,6 +116,7 @@
         <tr>
           <td><label for="site_id" title="{{ $actorComments['site_id'] }}">Work site</label></td>
           <td><input type="text" class="noformat form-control" name="site_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->site) ? '' : $actorInfo->site->name }}" autocomplete="off"></td>
+        </tr>
         <tr>
           <td><label for="notes" title="{{ $actorComments['notes'] }}">Notes</label></td>
           <td><textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea></td>

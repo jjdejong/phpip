@@ -167,5 +167,4 @@
     </table>
   </fieldset>
   <button type="button" class="btn btn-danger" id="createRuleSubmit" data-redirect="/rule">Create rule</button><br>
-  <span id="zoneAlert" class="alert float-left"></span>
 </form>

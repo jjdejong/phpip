@@ -39,8 +39,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('matter/{matter}/renewals', 'MatterController@renewals');
     Route::get('matter/{matter}/roleActors/{role}', 'MatterController@actors');
     Route::get('matter/{matter}/description/{lang}', 'MatterController@description');
-    Route::get('matter/{from_matter}/createN', function (Matter $from_matter) {
-        return view('matter.createN', compact('from_matter'));
+    Route::get('matter/{parent_matter}/createN', function (Matter $parent_matter) {
+        return view('matter.createN', compact('parent_matter'));
     });
     Route::post('matter/storeN', 'MatterController@storeN');
     Route::post('matter/clear-tasks', 'HomeController@clearTasks');
@@ -76,7 +76,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('matter/new-caseref', function (Request $request) {
         $term = $request->term;
         $newref = App\Matter::where('caseref', 'like', "$term%")->max('caseref');
-        $newref++;
+        if ($newref) {
+          $newref++;
+        } else {
+          $newref = strtoupper($term);
+        }
         return [['key' => $newref, 'value' => $newref ]];
     });
 
@@ -122,6 +126,13 @@ Route::group(['middleware' => 'auth'], function () {
                         ->where('name', 'like', "$term%")->get();
     });
 
+    Route::get('dbrole/autocomplete', function (Request $request) {
+        $term = $request->input('term');
+        return App\Role::select('name as value', 'code as key')
+                        ->where('name', 'like', "$term%")
+                        ->whereIn('code', ['CLI', 'DBA', 'DBRW', 'DBRO'])->get();
+    });
+
     Route::get('country/autocomplete', function (Request $request) {
         $term = $request->input('term');
         $list = App\Country::select('name as value', 'iso as key')
@@ -132,7 +143,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('category/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\Category::select('category as value', 'code as key')
+        return App\Category::select('category as value', 'code as key', 'ref_prefix as prefix')
                         ->where('category', 'like', "$term%")->get();
     });
 
@@ -140,6 +151,11 @@ Route::group(['middleware' => 'auth'], function () {
         $term = $request->input('term');
         return App\Type::select('type as value', 'code as key')
                         ->where('type', 'like', "$term%")->get();
+    });
+
+    Route::get('classifier/{classifier}/img', function ( App\Classifier $classifier) {
+        return response($classifier->img)
+            ->header('Content-Type', $classifier->value);
     });
 
     Route::resource('matter', 'MatterController');
@@ -151,6 +167,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('type', 'MatterTypeController');
     Route::resource('default_actor', 'DefaultActorController');
     Route::resource('actor', 'ActorController');
+    Route::resource('user', 'UserController');
     Route::get('actor/{actor}/usedin','ActorPivotController@usedIn');
     Route::resource('eventname', 'EventNameController');
     Route::resource('rule', 'RuleController');

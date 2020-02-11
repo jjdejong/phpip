@@ -33,7 +33,7 @@
     }
   }
 
-  filterButtons.onchange = e => {
+  filterButtons.onclick = e => {
     switch (e.target.id) {
       case 'showStatus':
         for (td of document.getElementsByClassName('tab1')) {
@@ -92,6 +92,7 @@
     if (e.target.value.length === 0) {
       url.searchParams.delete(e.target.name);
     } else {
+      url.searchParams.delete('page');
       url.searchParams.set(e.target.name, e.target.value);
     }
     refreshMatterList();

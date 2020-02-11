@@ -33,12 +33,12 @@
           {{ config('app.name', 'phpIP') }}
         </a>
         @auth
-        <form class="form-inline" method="POST" action="/matter/search">
+        <form method="POST" action="/matter/search">
           @csrf
           <div class="input-group">
             <input type="search" class="form-control" id="matter-search" name="matter_search" placeholder="Search" autocomplete="off">
             <div class="input-group-append">
-              <select class="custom-select btn btn-info" id="matter-option" name="search_field">
+              <select class="custom-select" id="matter-option" name="search_field">
                 <option value="Ref" selected>Case reference</option>
                 <option value="Responsible">Responsible</option>
               </select>
@@ -86,6 +86,7 @@
               </a>
               <ul class="dropdown-menu" role="menu">
                 <a class="dropdown-item" href="{{ url('/actor/') }}">Actors</a>
+                <a class="dropdown-item" href="{{ url('/user/') }}">DB Users</a>
                 <a class="dropdown-item" href="{{ url('/rule/') }}">Rules</a>
                 <a class="dropdown-item" href="{{ url('/eventname/') }}">Event names</a>
                 <a class="dropdown-item" href="{{ url('/category/') }}">Categories</a>
@@ -142,7 +143,7 @@
   </div>
   <script>
     var contentSrc = "", // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
-      acList;
+      cTypeCode = ''; // Used for toggling image file input in matter.classifiers
 
     // Ajax fill an element from a url returning HTML
     var fetchInto = async (url, element) => {
@@ -189,7 +190,7 @@
     app.addEventListener('click', (e) => {
       switch (e.target.id) {
         case 'createMatterSubmit':
-          submitModalForm('/matter', createMatterForm, true);
+          submitModalForm('/matter', createMatterForm);
           break;
 
         case 'deleteMatter':
@@ -212,7 +213,7 @@
           break;
 
         case 'addTaskSubmit':
-          submitModalForm('/task', addTaskForm);
+          submitModalForm('/task', addTaskForm, 'reloadModal');
           break;
 
         case 'deleteEvent':
@@ -224,12 +225,12 @@
 
           // Specific processing of the event list modal
         case 'addEventSubmit':
-          submitModalForm('/event', addEventForm);
+          submitModalForm('/event', addEventForm, 'reloadModal');
           break;
 
           // Classifier list modal
         case 'addClassifierSubmit':
-          submitModalForm('/classifier', addClassifierForm);
+          submitModalForm('/classifier', addClassifierForm, 'reloadModal');
           break;
 
           // Generic processing of deletions
@@ -240,38 +241,40 @@
             .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
           break;
 
-          // Nationalize modal
         case 'nationalizeSubmit':
-          submitModalForm('/matter/storeN', natMatterForm, true);
+          submitModalForm('/matter/storeN', natMatterForm);
           break;
 
-          // Actor create and show modals
         case 'createActorSubmit':
-          submitModal2Form('/actor', createActorForm);
+          submitModalForm('/actor', createActorForm);
+          break;
+
+        case 'createUserSubmit':
+          submitModalForm('/user', createUserForm);
           break;
 
         case 'createDActorSubmit':
-          submitModal2Form('/default_actor', createDActorForm);
+          submitModalForm('/default_actor', createDActorForm);
           break;
 
         case 'createEventNameSubmit':
-          submitModal2Form('/eventname', createEventForm);
+          submitModalForm('/eventname', createEventForm);
           break;
 
         case 'createCategorySubmit':
-          submitModal2Form('/category', createCategoryForm);
+          submitModalForm('/category', createCategoryForm);
           break;
 
         case 'createRoleSubmit':
-          submitModal2Form('/role', createRoleForm);
+          submitModalForm('/role', createRoleForm);
           break;
 
         case 'createTypeSubmit':
-          submitModal2Form('/type', createTypeForm);
+          submitModalForm('/type', createTypeForm);
           break;
 
         case 'createRuleSubmit':
-          submitModal2Form('/rule', createRuleForm);
+          submitModalForm('/rule', createRuleForm);
           break;
 
         case 'createFeeSubmit':
@@ -279,7 +282,7 @@
           break;
 
         case 'createClassifierTypeSubmit':
-          submitModal2Form('/classifier_type', createClassifierTypeForm);
+          submitModalForm('/classifier_type', createClassifierTypeForm);
           break;
 
         case 'deleteActor':
@@ -302,7 +305,8 @@
               });
           }
           break;
-    }
+      }
+
       /* Various functions used here and there */
 
       // Nationalize modal
@@ -325,9 +329,9 @@
 
     });
 
-    // Generic in-place edition of input fields
     app.addEventListener("change", e => {
-      if (e.target && e.target.matches(".noformat")) {
+      // Generic in-place edition of input fields
+      if (e.target.matches(".noformat")) {
         let params = new URLSearchParams();
         if (e.target.type === 'checkbox') {
           if (e.target.checked) {
@@ -349,15 +353,22 @@
           fetchREST(resource, 'PUT', params)
             .then(data => {
               if (data.errors) {
-                footerAlert.innerHTML = Object.values(data.errors)[0];
-                footerAlert.classList.add('alert-danger');
+                if (ajaxModal.matches('.show')) {
+                  footerAlert.innerHTML = Object.values(data.errors)[0];
+                  footerAlert.classList.add('alert-danger');
+                } else {
+                  e.target.classList.remove('border-info', 'is-valid');
+                  e.target.classList.add('border-danger');
+                  e.target.value = Object.values(data.errors)[0];
+                }
               } else {
                 if (!window.ajaxPanel && contentSrc.length !== 0 && !e.target.closest('.tab-content')) {
                   // Reload modal with updated content
                   fetchInto(contentSrc, ajaxModal.querySelector(".modal-body"));
                 } else {
                   // Don't reload but set border back to normal
-                  e.target.classList.remove('border', 'border-info');
+                  e.target.classList.remove('border-info', 'border-danger');
+                  e.target.classList.add('is-valid');
                 }
                 footerAlert.classList.remove("alert-danger");
                 footerAlert.innerHTML = "";
@@ -365,6 +376,21 @@
             })
             .catch(error => console.log(error));
         }
+      }
+      // matter.classifiers addClassifierForm - replace input fields with file upload field when selecting an image type
+      if (e.target.dataset.actarget === 'type_code' && e.target.value === 'Image') {
+        for (elt of addClassifierForm.getElementsByClassName('hideForFile')) {
+          elt.classList.add('d-none');
+        }
+        forFile.classList.remove('d-none');
+        cTypeCode = 'IMG'
+      }
+      if (e.target.dataset.actarget === 'type_code' && e.target.value !== 'Image' && cTypeCode === 'IMG') {
+        for (elt of addClassifierForm.getElementsByClassName('hideForFile')) {
+          elt.classList.remove('d-none');
+        }
+        forFile.classList.add('d-none');
+        cTypeCode = ''
       }
     });
 
@@ -384,19 +410,28 @@
       if (e.target.matches(".noformat, textarea, [contenteditable]")) {
         e.target.classList.add("border", "border-info");
       }
+    });
 
-      // ui-front class required for showing selection list with jQuery autocomplete in modals
-      if ( e.target.closest('.modal-content') ) {
+    app.addEventListener("focusin", e => {
+      // Process autocomplete fields
+      if ( e.target.hasAttribute('data-ac') ) {
+        var aclength = 1;
+        if ( e.target.hasAttribute('data-aclength') ) {
+          aclength = e.target.dataset.aclength;
+        }
         if (e.target.closest('tr')) {
           e.target.closest('tr').classList.add('ui-front');
         }
-      }
-
-      // Process autocomplete fields
-      if ( e.target.hasAttribute('data-ac') ) {
         $(e.target).autocomplete({
           autoFocus: true,
+          minLength: aclength,
           source: e.target.dataset.ac,
+          create: function(event, ui) {
+            // Fires search immediately (but selection does not trigger blur or change)
+            // if ( aclength == 0 ) {
+            //   $(this).autocomplete("search", "");
+            // }
+          },
           select: (event, ui) => {
             if (e.target.id == 'addCountry') {
               let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
@@ -407,9 +442,16 @@
               // Wait for the new country entry to be added to the DOM before resetting the input field
               setTimeout(() => { addCountry.value = ""; }, 0);
             } else if ( e.target.hasAttribute('data-actarget') ) {
-                // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
-                e.target.value = ui.item.value;
-                e.target.form[e.target.dataset.actarget].value = ui.item.key;
+              // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
+              e.target.value = ui.item.value;
+              e.target.form[e.target.dataset.actarget].value = ui.item.key;
+              if (window.createMatterForm && e.target.dataset.actarget == 'category_code') {
+                // We're in a matter creation form - fill caseref with corresponding new value
+                fetchREST('/matter/new-caseref?term=' + ui.item.prefix, 'GET')
+                .then(data => {
+                  createMatterForm.caseref.value = data[0].value;
+                });
+              }
             } else {
               // Used for content editable fields where the same field is used for sending the id to the server
               e.target.value = ui.item.key;
@@ -420,46 +462,30 @@
             if (!ui.item) {
               e.target.value = "";
             }
+            $(e.target).autocomplete('destroy');
           }
         });
       }
     });
 
-    var submitModalForm = (target, Form) => {
+    var submitModalForm = (target, Form, after) => {
       formData = new FormData(Form);
       params = new URLSearchParams(formData);
-      fetchREST(target, 'POST', params)
+      fetchREST(target, 'POST', formData)
         .then(data => {
           if (data.errors) {
-            processSubmitErrors(data.errors, Form);
             footerAlert.innerHTML = data.message;
             footerAlert.classList.add('alert-danger');
-          } else if (data.redirect) {
-            // Redirect to the created model (link returned by the controller store() function)
-            location.href = data.redirect;
-          } else {
-            fetchInto(contentSrc, ajaxModal.querySelector('.modal-body'));
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
-
-    var submitModal2Form = (target, Form) => {
-      formData = new FormData(Form);
-      params = new URLSearchParams(formData);
-      fetchREST(target, 'POST', params)
-        .then(data => {
-          if (data.errors) {
             processSubmitErrors(data.errors, Form);
-            zoneAlert.innerHTML = data.message;
-            zoneAlert.classList.add('alert-danger');
           } else if (data.redirect) {
             // Redirect to the created model (link returned by the controller store() function)
             location.href = data.redirect;
           } else {
-            location.reload();
+            if (after === 'reloadModal') {
+              fetchInto(contentSrc, ajaxModal.querySelector('.modal-body'));
+            } else { // reloadPage
+              location.reload();
+            }
           }
         })
         .catch(error => {
@@ -473,8 +499,12 @@
         if (!inputElt) {
           inputElt = Form.elements[key];
         }
-        inputElt.placeholder = key + ' is required';
-        inputElt.className += ' is-invalid';
+        if (inputElt.type === 'file') {
+          footerAlert.append(' ' + value[0]);
+        } else {
+          inputElt.placeholder = key + ' is required';
+        }
+        inputElt.classList.add('is-invalid');
       });
     }
 
