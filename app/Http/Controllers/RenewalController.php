@@ -158,10 +158,8 @@ class RenewalController extends Controller
         // For logs
         $newjob = RenewalsLogs::max('job_id');
         $newjob++;
-        $data_log = [];
         for ($grace = 0; $grace < count($notify_type); $grace++)
         {
-            $from_step =  ($notify_type[$grace] == 'first') ? 0 : 2 ;
             $from_grace =  ($notify_type[$grace] == 'last') ? 0 : null ;
             $to_grace =  ($notify_type[$grace] == 'last') ? 1 : null ;
             $resql = Renewal::whereIn('id',$ids)->orderBy( 'client_dn', "ASC")->where('grace_period',$grace)->get();
@@ -223,7 +221,7 @@ class RenewalController extends Controller
                     $total_ht = $total_ht + floatval($renewal['total_ht']);
                     $client_precedent = $client;
                     $i++;
-                    $log_line = ['task_id' => $ren['id'],'job_id' => $newjob, 'from_step' => $from_step, 'to_step' => 2, 'creator' => Auth::user()->login];
+                    $log_line = ['task_id' => $ren['id'],'job_id' => $newjob, 'from_step' => $ren['step'], 'to_step' => 2, 'creator' => Auth::user()->login];
                     if (! is_null($from_grace))
                       $log_line[] = ['$to_grace' => $from_grace];
                     if (! is_null($to_grace))
@@ -293,6 +291,23 @@ class RenewalController extends Controller
         {
 
             Task::whereIn('id',$request->task_ids)->update(['step' => 4, 'invoice_step' => 1]);
+            // For logs
+            $newjob = RenewalsLogs::max('job_id');
+            $newjob++;
+            $data = [];
+            foreach($request->task_ids as $ren_id) {
+              $log_line = ['task_id' => $ren_id,
+              'job_id' => $newjob,
+              'from_step' => 2,
+              'to_step' => 4,
+              'from_invoice' => 0,
+              'to_invoice' => 1,
+              'creator' => Auth::user()->login
+              ];
+              $data[] = $log_line;
+            }
+            RenewalsLogs::insert($data);
+
             return response()->json(['success' => 'Marked as to pay']);
         }
         else
@@ -519,6 +534,10 @@ class RenewalController extends Controller
 
         $done_date = now();
         $updated = 0;
+        // For logs
+        $newjob = RenewalsLogs::max('job_id');
+        $newjob++;
+
         foreach($resql as $ren) {
             $task = Task::find($ren->id);
             $task->done_date = $done_date;
@@ -526,7 +545,17 @@ class RenewalController extends Controller
             $task->step = 6;
             $returncode = $task->save();
             if ($returncode) $updated = $updated + 1;
+            $log_line = ['task_id' => $ren['id'],
+            'job_id' => $newjob,
+            'from_step' => 2,
+            'to_step' => 4,
+            'from_invoice' => 0,
+            'to_invoice' => 1,
+            'creator' => Auth::user()->login
+            ];
+            $data_log[] = $log_line;
         }
+        RenewalsLogs::insert($data_log);
         return response()->json(['success' => strval($updated).' renewals cleared']);
     }
 
@@ -547,13 +576,26 @@ class RenewalController extends Controller
         }
         $resql = $query->get();
 
+        // For logs
+        $newjob = RenewalsLogs::max('job_id');
+        $newjob++;
+        $data_log = [];
+
         $updated = 0;
         foreach($resql as $ren) {
             $task = Task::find($ren->id);
             $task->step = 8;
             $returncode = $task->save();
             if ($returncode) $updated = $updated + 1;
+            $log_line = ['task_id' => $ren['id'],
+            'job_id' => $newjob,
+            'from_step' => $task->step,
+            'to_step' => 8,
+            'creator' => Auth::user()->login
+            ];
+            $data_log[] = $log_line;
         }
+        RenewalsLogs::insert($data_log);
         return response()->json(['success' => strval($updated).' receipts registered']);
     }
 
@@ -575,13 +617,32 @@ class RenewalController extends Controller
         }
         $resql = $query->get();
 
+        // For logs
+        $newjob = RenewalsLogs::max('job_id');
+        $newjob++;
+        $data_log = [];
+
         $updated = 0;
         foreach($resql as $ren) {
             $task = Task::find($ren->id);
+            $log_line = ['task_id' => $ren['id'],
+              'job_id' => $newjob,
+              'from_step' => $task->step,
+              'to_step' => 10,
+              'from_done' => $task->done,
+              'to_done' => 1,
+              'creator' => Auth::user()->login
+            ];
             $task->step = 10;
+            $task->done = 1;
+            $task->done_date = now();
             $returncode = $task->save();
-            if ($returncode) $updated = $updated + 1;
+            if ($returncode) {
+              $updated = $updated + 1;
+              $data_log[] = $log_line;
+            }
         }
+        RenewalsLogs::insert($data_log);
         return response()->json(['success' => strval($updated).' closed']);
     }
 
@@ -601,16 +662,32 @@ class RenewalController extends Controller
             return response()->json(['error' => "No renewal selected."]);
         }
         $resql = $query->get();
+        // For logs
+        $newjob = RenewalsLogs::max('job_id');
+        $newjob++;
+        $data_log = [];
 
         $updated = 0;
         foreach($resql as $ren) {
             $task = Task::find($ren->id);
+            $log_line = ['task_id' => $ren['id'],
+              'job_id' => $newjob,
+              'from_step' => $task->step,
+              'to_step' => 12,
+              'from_done' => $task->done,
+              'to_done' => 1,
+              'creator' => Auth::user()->login
+            ];
             $task->step = 12;
             $task->done = 1;
             $task->done_date = now();
             $returncode = $task->save();
-            if ($returncode) $updated = $updated + 1;
+            if ($returncode) {
+              $updated = $updated + 1;
+              $data_log[] = $log_line;
+            }
         }
+        RenewalsLogs::insert($data_log);
         return response()->json(['success' => strval($updated).' abandons registered']);
     }
 
@@ -631,13 +708,27 @@ class RenewalController extends Controller
         }
         $resql = $query->get();
 
+        // For logs
+        $newjob = RenewalsLogs::max('job_id');
+        $newjob++;
+
         $updated = 0;
         foreach($resql as $ren) {
             $task = Task::find($ren->id);
             $task->step = 14;
             $returncode = $task->save();
             if ($returncode) $updated = $updated + 1;
+            // For logs
+            $data_log = [];
+            $log_line = ['task_id' => $ren['id'],
+            'job_id' => $newjob,
+            'from_step' => $task->step,
+            'to_step' => 14,
+            'creator' => Auth::user()->login
+            ];
+            $data_log[] = $log_line;
         }
+        RenewalsLogs::insert($data_log);
         return response()->json(['success' => strval($updated).' communications registered']);
     }
 
@@ -658,6 +749,10 @@ class RenewalController extends Controller
         $data = json_decode($request->getContent());
         $tids = $data->task_ids;
         $procedure = '';
+        // For logs
+        $newjob = RenewalsLogs::max('job_id');
+        $newjob++;
+        $data_log = [];
 
         $clear = boolval($data->clear);
         $done_date = now();
@@ -726,6 +821,15 @@ class RenewalController extends Controller
         if ($clear) {
             $updated = 0;
             foreach($tids as $id) {
+                $log_line = ['task_id' => $ren['id'],
+                  'job_id' => $newjob,
+                  'from_step' => $task->step,
+                  'to_step' => 6,
+                  'from_done' => $task->done,
+                  'to_done' => 1,
+                  'creator' => Auth::user()->login
+                ];
+                $data_log[] = $log_line;
                 $task = Task::find($id);
                 $task->done_date = $done_date;
                 $task->done = 1;
@@ -733,6 +837,7 @@ class RenewalController extends Controller
                 $returncode = $task->save();
                 if ($returncode) $updated ++;
             }
+            RenewalsLogs::insert($data_log);
         }
         $headers = array(
         'Content-Type: application/octet-stream',
