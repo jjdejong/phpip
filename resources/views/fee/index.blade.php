@@ -57,9 +57,9 @@
             <div class="col-1"></div>
           </div>
         </div>
-        <div class="card-body pt-2" id="ruleList">
+        <div class="card-body pt-2" id="tableList">
         @foreach ($fees as $fee)
-          <div class="row font-weight-bold" data-id="{{ $fee->id }}" data-source="/fee/">
+          <div class="row font-weight-bold" data-resource="/fee/{{ $fee->id }}">
             <div class="row col-3">
               <div class="col-3">{{ $fee->for_country }}</div>
               <div class="col-3">{{ $fee->for_category }}</div>
