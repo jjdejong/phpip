@@ -399,7 +399,7 @@
     });
 
 
-    // Process modified input fields and prepare for autocompletion
+    // Process modified input fields
     app.addEventListener("input", e => {
       // Mark the field
       if (e.target.matches(".noformat, textarea, [contenteditable]")) {

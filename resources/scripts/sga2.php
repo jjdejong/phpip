@@ -1,7 +1,7 @@
 #!/usr/bin/php
 
 <?php
-$opts = [ 'ssl' => array('verify_peer'=>false, 'verify_peer_name'=>false) ];
+$opts = [ 'ssl' => array('verify_peer' => false, 'verify_peer_name' => false) ];
 $params = [ 'encoding' => 'UTF-8', 'soap_version' => SOAP_1_2, 'stream_context' => stream_context_create($opts) ];
 $client = new SoapClient('https://client.anaqua.com/WebServices/WebService_12.04/', $params);
 $sga2 = parse_ini_file('sga2.ini');
@@ -21,32 +21,32 @@ if (!$result) {
 $myRenewal = $result->fetch_assoc();
 */
 
-$clientcase=NULL;		// reference to a group of patent (String START)
-$refcli=NULL;			// single patent reference (String START)
-$uid=NULL;				// your internal reference (String STRICT)
-$refsga2=NULL;			// reference SGA2 (String START)
-$country=NULL;			// country code (String STRICT)
-$div=NULL;				// division (String STRICT)
-$orig=NULL;				// origin of the patent e.g. WO for a PCT, EP for European... (String STRICT)
-$title=NULL;			// title of the patent (String ANY)
-$nature=NULL;			// patent, design... (String STRICT)
-$mandate=NULL;			// mandate type NONE|OFF|ON|WAIT (String STRICT)
-$apd_start=NULL;		// applcation date (Date)
-$apd_end=NULL;			// applcation date (Date)
-$ap=NULL;				// applcation number (String START)
-$pd_start=NULL;			// publication date (Date)
-$pd_end=NULL;			// publication date (Date)
-$pn=NULL;				// publication number / patent number (String START)
-$entity=NULL;			// may be SMALL or LARGE (String STRICT)
+$clientcase = NULL;		// reference to a group of patent (String START)
+$refcli = NULL;			// single patent reference (String START)
+$uid = NULL;				// your internal reference (String STRICT)
+$refsga2 = NULL;			// reference SGA2 (String START)
+$country = NULL;			// country code (String STRICT)
+$div = NULL;				// division (String STRICT)
+$orig = NULL;				// origin of the patent e.g. WO for a PCT, EP for European... (String STRICT)
+$title = NULL;			// title of the patent (String ANY)
+$nature = NULL;			// patent, design... (String STRICT)
+$mandate = NULL;			// mandate type NONE|OFF|ON|WAIT (String STRICT)
+$apd_start = NULL;		// applcation date (Date)
+$apd_end = NULL;			// applcation date (Date)
+$ap = NULL;				// applcation number (String START)
+$pd_start = NULL;			// publication date (Date)
+$pd_end = NULL;			// publication date (Date)
+$pn = NULL;				// publication number / patent number (String START)
+$entity = NULL;			// may be SMALL or LARGE (String STRICT)
 $updtime_start = NULL; //date('Y-m-d', time() - (30*86400)); // -30 days or $myRenewal['lastupdate'] or YYYY-MM-DD;
 $updtime_end = NULL; //date('Y-m-d');
-$duedate_start=NULL;	// duedate (Date)
-$duedate_end=NULL;		// duedate (Date)
-$receipt_start=NULL;	// receipt date (Date)
-$receipt_end=NULL;		// receipt date (Date)
-$limit_offset=NULL;		// starting position
-$limit_count=NULL;		// maximum number of records
-$sort_order=NULL;		// Tag_name-{a|d}
+$duedate_start = NULL;	// duedate (Date)
+$duedate_end = NULL;		// duedate (Date)
+$receipt_start = NULL;	// receipt date (Date)
+$receipt_end = NULL;		// receipt date (Date)
+$limit_offset = NULL;		// starting position
+$limit_count = NULL;		// maximum number of records
+$sort_order = NULL;		// Tag_name-{a|d}
 
 $result = $client->PgetCalendar($sga2['aqs_user'], $sga2['aqs_pwd'], $clientcase, $refcli, $uid, $refsga2, $country, $div, $orig, $title, $nature, $mandate, $apd_start, $apd_end, $ap, $pd_start, $pd_end, $pn, $entity, $updtime_start, $updtime_end, $duedate_start, $duedate_end, $receipt_start, $receipt_end, $limit_offset, $limit_count, $sort_order);
 
@@ -66,46 +66,46 @@ foreach ($xml->PATENT as $AQSpatent) {
 
 	if ($AQSpatent->UID != '') {
 		// Check case with SGA2's UID
-		$q = "SELECT caseref, country, ifnull(origin,'') as origin, concat(ifnull(type_code,''), ifnull(idx,'')) as 'div', actor_ref
+		$q = "SELECT caseref, country, ifnull(origin, '') as origin, concat(ifnull(type_code, ''), ifnull(idx, '')) as 'div', actor_ref
 		FROM matter, matter_actor_lnk
-		WHERE matter.id=matter_actor_lnk.matter_id
-		AND matter_actor_lnk.role='ANN'
-		AND matter.id='$AQSpatent->UID'";
+		WHERE matter.id = matter_actor_lnk.matter_id
+		AND matter_actor_lnk.role = 'ANN'
+		AND matter.id = '$AQSpatent->UID'";
 		$result = $db->query($q);
 		if (!$result) {
 			echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 		}
 		$myRenewal = $result->fetch_assoc();
 		if (strpos($AQSpatent->REFCLI, $myRenewal['caseref']) === FALSE) {
-			echo "\r\nWARNING: REFCLI=$AQSpatent->REFCLI ($AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV) does not match UID=$AQSpatent->UID";
+			echo "\r\nWARNING: REFCLI = $AQSpatent->REFCLI ($AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV) does not match UID = $AQSpatent->UID";
 			$unrecognized++;
 			//This case is OK but the reference needs to be checked
 		}
 		if ($myRenewal['country'] != $AQSpatent->COUNTRY) {
-			echo "\r\nCOUNTRY=$AQSpatent->COUNTRY ($AQSpatent->REFCLI) does not match UID=$AQSpatent->UID";
+			echo "\r\nCOUNTRY = $AQSpatent->COUNTRY ($AQSpatent->REFCLI) does not match UID = $AQSpatent->UID";
 			$unrecognized++;
 			continue; // This case is wrong, go to next
 		}
 		/*if ($myRenewal['origin'] != $AQSpatent->ORIG) {
-			echo "\r\nORIG=$AQSpatent->ORIG ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG) does not match UID=$AQSpatent->UID";
+			echo "\r\nORIG = $AQSpatent->ORIG ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG) does not match UID = $AQSpatent->UID";
 			$unrecognized++;
 			continue;
 		}*/
 		/*if ($myRenewal['div'] != $AQSpatent->DIV) {
-			echo "\r\nDIV=$AQSpatent->DIV ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->DIV) does not match UID=$AQSpatent->UID";
+			echo "\r\nDIV = $AQSpatent->DIV ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->DIV) does not match UID = $AQSpatent->UID";
 			$unrecognized++;
 			continue;
 		}*/
 	} else { // No UID, try to find a unique ID with country, caseref, origin, type and annuity count
 		$q = "SELECT matter.id, actor_ref
 		FROM matter, matter_actor_lnk
-		WHERE matter.id=matter_actor_lnk.matter_id
-		AND matter_actor_lnk.role='ANN'
-		AND country='$AQSpatent->COUNTRY'
-		AND caseref='$AQSpatent->REFCLI'
-		AND ifnull(origin,'')='$AQSpatent->ORIG'
+		WHERE matter.id = matter_actor_lnk.matter_id
+		AND matter_actor_lnk.role = 'ANN'
+		AND country = '$AQSpatent->COUNTRY'
+		AND caseref = '$AQSpatent->REFCLI'
+		AND ifnull(origin,'') = '$AQSpatent->ORIG'
 		AND if(type_code IS NULL, 1, 2) + ifnull(idx, 0) = CAST('$AQSpatent->DIV' AS UNSIGNED)";
-		// AND concat(ifnull(type_code,''), ifnull(idx,''))='$AQSpatent->DIV'";
+		// AND concat(ifnull(type_code,''), ifnull(idx,'')) = '$AQSpatent->DIV'";
 		$result = $db->query($q);
 		if (!$result) {
 			echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
@@ -113,7 +113,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 
 		$myRenewal = $result->fetch_assoc();
 		if ($myRenewal2 = $result->fetch_assoc()) {
-			echo "\r\nSGA2 case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) has multiple matches - ignored";
+			echo "\r\AQS case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) has multiple matches - ignored";
 			$ambiguous++;
 			continue;
 		}
@@ -130,8 +130,8 @@ foreach ($xml->PATENT as $AQSpatent) {
 
 	if ($myRenewal['actor_ref'] != $AQSpatent->REFSGA2.$AQSpatent->COUNTRY.'-'.$AQSpatent->ORIG.'-'.$AQSpatent->DIV) { // Case found and SGA² ref needs updating
 		$q = "UPDATE matter_actor_lnk SET actor_ref = '$AQSpatent->REFSGA2$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV', updated_at = Now(), updater = 'AQS'
-		WHERE matter_ID='$AQSpatent->UID'
-		AND role='ANN'";
+		WHERE matter_ID = '$AQSpatent->UID'
+		AND role = 'ANN'";
 		$result = $db->query($q);
 		if (!$result) {
 			echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
@@ -145,10 +145,10 @@ foreach ($xml->PATENT as $AQSpatent) {
 
 		// Identify annuity to update with SGA2 info
 		$q = "SELECT task.id, cost, task.notes, task.done_date, task.due_date FROM task, event
-		WHERE task.trigger_id=event.id
-		AND task.code='REN'
-		AND event.matter_id='$AQSpatent->UID'
-		AND CAST(task.detail AS UNSIGNED)='$renewal->YEAR'";
+		WHERE task.trigger_id = event.id
+		AND task.code = 'REN'
+		AND event.matter_id = '$AQSpatent->UID'
+		AND CAST(task.detail AS UNSIGNED) = '$renewal->YEAR'";
 		$result = $db->query($q);
 		if (!$result) {
 			echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
@@ -159,23 +159,23 @@ foreach ($xml->PATENT as $AQSpatent) {
 			$set = [];
 
 			if ($renewal->DUEDATE != $myRenewal['due_date']) {
-				$set[] = "due_date='$renewal->DUEDATE'";
+				$set[] = "due_date = '$renewal->DUEDATE'";
 			}
 			if ($renewal->ESTIMATED_COST && $renewal->ESTIMATED_COST != $myRenewal['cost'] && !$renewal->INVOICED_COST) {
-				$set[] = "cost='$renewal->ESTIMATED_COST'";
-				$set[] = "currency='$renewal->CURRENCY'";
-				$set[] = "notes='Estimated'";
+				$set[] = "cost = '$renewal->ESTIMATED_COST'";
+				$set[] = "currency = '$renewal->CURRENCY'";
+				$set[] = "notes = 'Estimated'";
 			}
 			if ($renewal->INVOICED_COST && $renewal->INVOICED_COST != $myRenewal['cost']) {
-				$set[] = "cost='$renewal->INVOICED_COST'";
-				$set[] = "currency='$renewal->CURRENCY'";
-				$set[] = "notes='Invoiced by SGA2'";
+				$set[] = "cost = '$renewal->INVOICED_COST'";
+				$set[] = "currency = '$renewal->CURRENCY'";
+				$set[] = "notes = 'Invoiced by SGA2'";
 			}
 			if ($renewal->DATE_PAID && $renewal->DATE_PAID != $myRenewal['done_date']) {
-				$set[] = "done_date='$renewal->DATE_PAID'";
+				$set[] = "done_date = '$renewal->DATE_PAID'";
 			}
 			if ($renewal->CANCELLED && $myRenewal['notes'] != 'Cancelled') { // Payment cancelled or unnecessary
-				$set[] = "notes='Cancelled'";
+				$set[] = "notes = 'Cancelled'";
 			}
 
 			if ($set) {
@@ -192,12 +192,12 @@ foreach ($xml->PATENT as $AQSpatent) {
 			// First find the trigger event depending on the country
 			if (in_array($AQSpatent->COUNTRY, ["US","JP","KR","TW"])) {
 				$q = "SELECT id from event
-				WHERE matter_id='$AQSpatent->UID'
-				AND code='GRT'";
+				WHERE matter_id = '$AQSpatent->UID'
+				AND code = 'GRT'";
 			} else {
 				$q = "SELECT id from event
-				WHERE matter_id='$AQSpatent->UID'
-				AND code='FIL'";
+				WHERE matter_id = '$AQSpatent->UID'
+				AND code = 'FIL'";
 			}
 			$result = $db->query($q);
 			if (!$result) {

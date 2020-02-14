@@ -9,11 +9,6 @@ class UpdateTables8 extends Migration
     /**
      * Run the migrations.
      *
-     * IMPORTANT this migration will generate unique key constraint violation errors if the uid values in the matter table are not unique.
-     * If you get such errors, the matter will be identified in the error message and you then need to fix it and run the migration again.
-     * Fix by adding a type and/or index to the matter.
-     * Run the migration as many times as necessary until successful.
-     *
      * @return void
      */
     public function up()
