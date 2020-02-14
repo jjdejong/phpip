@@ -40,12 +40,13 @@
 
     $('#actorName').autocomplete({
       minLength: 2,
-      source: "/actor/autocomplete",
+      source: "/actor/autocomplete/1",
       select: function(event, ui) {
         if (ui.item.key === 'create') { // Creates actor on the fly
           fetchREST('/actor', 'POST', new URLSearchParams('name=' + this.value.toUpperCase() + '&default_role=' + addActorForm.role.value))
           .then( response => {
             addActorForm.actor_id.value = response.id;
+            actorName.classList.add('is-valid');
             actorName.value = response.name;
           });
         } else {

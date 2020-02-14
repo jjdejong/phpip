@@ -45,7 +45,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|unique:actor|max:100',
             'login' => 'required|unique:users',
-            'password' => 'required|confirmed|min:8',
+            'password' => 'required|confirmed|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[@$!%*#?&]/',
             'email' => 'required|email',
             'default_role' => 'required'
         ]);
@@ -86,7 +86,7 @@ class UserController extends Controller
     public function update(Request $request, User $user) {
         $request->validate([
             'login' => 'sometimes|required|unique:users',
-            'password' => 'sometimes|required|min:8',
+            'password' => 'sometimes|required|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[@$!%*#?&]/',
             'email' => 'sometimes|required|email',
             'default_role' => 'sometimes|required'
         ]);

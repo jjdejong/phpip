@@ -359,6 +359,16 @@
                   e.target.classList.add('border-danger');
                   e.target.value = Object.values(data.errors)[0];
                 }
+              } else if (data.message) {
+                if (ajaxModal.matches('.show')) {
+                  footerAlert.innerHTML = data.message;
+                  footerAlert.classList.add('alert-danger');
+                } else {
+                  e.target.classList.remove('border-info', 'is-valid');
+                  e.target.classList.add('border-danger');
+                  e.target.value = 'Invalid';
+                  console.log(data.message);
+                }
               } else {
                 if (!window.ajaxPanel && contentSrc.length !== 0 && !e.target.closest('.tab-content')) {
                   // Reload modal with updated content
@@ -453,14 +463,17 @@
             } else {
               // Used for content editable fields where the same field is used for sending the id to the server
               e.target.value = ui.item.key;
+              $(e.target).autocomplete('destroy');
               e.target.blur();
             }
           },
-          change: (event, ui) => {
+          change: function(event, ui) {
+            //$(e.target).autocomplete('destroy');
+          },
+          close: (event, ui) => {
             if (!ui.item) {
               e.target.value = "";
             }
-            $(e.target).autocomplete('destroy');
           }
         });
       }
