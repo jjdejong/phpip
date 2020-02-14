@@ -69,7 +69,7 @@ class RuleController extends Controller
           'taskInfo:code,name',
           'condition_eventInfo:code,name',
           'abort_onInfo:code,name',
-          'responsibleInfo:id,name'
+          'responsibleInfo:login,name'
         ]);
 
         $ruleComments = $rule->getTableComments('task_rules');
