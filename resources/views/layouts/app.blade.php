@@ -41,6 +41,9 @@
               <select class="custom-select" id="matter-option" name="search_field">
                 <option value="Ref" selected>Case reference</option>
                 <option value="Responsible">Responsible</option>
+                <option value="Title">Title</option>
+                <option value="Client">Client</option>
+                <option value="Applicant">Applicant</option>
               </select>
               <button class="btn btn-info" type="submit">Go</button>
             </div>

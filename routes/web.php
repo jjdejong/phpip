@@ -51,11 +51,8 @@ Route::group(['middleware' => 'auth'], function () {
             if (count($matters) == 1) {
                 return redirect('matter/' . $matters[0]->id);
             }
-            return redirect('/matter?Ref='.$matter_search);
         }
-        elseif ($option == "Responsible") {
-            return redirect('/matter?responsible='.$matter_search);
-        }
+        return redirect("/matter?$option=$matter_search");
     });
 
     Route::get('matter/new-caseref', function (Request $request) {

@@ -304,6 +304,9 @@ class Matter extends Model
                         case 'Cat':
                             $query->where('category_code', 'LIKE', "$value%");
                             break;
+                        case 'country':
+                            $query->where('matter.country', 'LIKE', "$value%");
+                            break;
                         case 'Status':
                             $query->where('event_name.name', 'LIKE', "$value%");
                             break;
