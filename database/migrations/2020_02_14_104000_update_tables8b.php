@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 
-class UpdateTables8 extends Migration
+class UpdateTables8b extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ class UpdateTables8 extends Migration
 BEGIN
 	DECLARE vactorid, vshared INT DEFAULT NULL;
 	DECLARE vrole CHAR(5) DEFAULT NULL;
-	INSERT INTO event (code, matter_id, event_date, created_at, creator, updated_at) VALUES ('CRE', NEW.id, Now(), NEW.creator, Now());
+	INSERT INTO event (code, matter_id, event_date, created_at, creator, updated_at) VALUES ('CRE', NEW.id, Now(), Now(), NEW.creator, Now());
 	SELECT actor_id, role, shared INTO vactorid, vrole, vshared FROM default_actor
 		WHERE for_client IS NULL
 		AND (for_country = NEW.country OR (for_country IS null AND NOT EXISTS (SELECT 1 FROM default_actor da WHERE da.for_country = NEW.country AND for_category = NEW.category_code)))
