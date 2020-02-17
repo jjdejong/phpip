@@ -300,6 +300,7 @@ class MatterController extends Controller
             'ID',
             'container_ID',
             'parent_ID',
+            'Type',
             'Responsible',
             'Delegate',
             'Dead',
