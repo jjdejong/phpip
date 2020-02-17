@@ -10,116 +10,118 @@
     </button>
     @endcannot
   </div>
-  <div class="tab-content" data-resource="/actor/{{ $actorInfo->id }}">
+  <div class="tab-content p-1" data-resource="/actor/{{ $actorInfo->id }}">
     <fieldset class="tab-pane fade show active" id="actorMain">
       <table class="table table-striped table-sm">
         <tr>
-          <td><label for="name" class="required-field" title="{{ $actorComments['name'] }}">Name</label> </td>
+          <th><label title="{{ $actorComments['name'] }}">Name</label> </th>
           <td><input class="noformat form-control" name="name" value="{{ $actorInfo->name }}"></td>
         </tr>
         <tr>
-          <td><label for="first_name" title="{{ $actorComments['first_name'] }}">First name</label></td>
-          <td><input class="noformat form-control" name="first_name" value="{{ $actorInfo->first_name }}"></td>
+          <th><label title="{{ $actorComments['first_name'] }}">First name</label></th>
+          <td><input class="noformat form-control" name="first_name" value="{{ $actorInfo->first_name }}" placeholder="-"></td>
         </tr>
         <tr>
-          <td><label for="display_name" title="{{ $actorComments['display_name'] }}">Display name</label></td>
-          <td><input type="text" class="noformat form-control" name="display_name" value="{{ $actorInfo->display_name }}"></td>
+          <th><label title="{{ $actorComments['display_name'] }}">Display name</label></th>
+          <td><input type="text" class="noformat form-control" name="display_name" value="{{ $actorInfo->display_name }}" placeholder="-"></td>
         </tr>
         <tr>
-          <td><label for="login" title="{{ $actorComments['login'] }}">Login</label></td>
-          <td><input type="text" class="noformat form-control" name="login" value="{{ $actorInfo->login }}"></td>
+          <th>Address</th>
+          <td><textarea class="noformat form-control" name="address">{{ $actorInfo->address }}</textarea></td>
         </tr>
         <tr>
-          <td><label for="default_role" title="{{ $actorComments['default_role'] }}" title="Login needs to be null for changing the role">Default role</label></td>
-          <td><input type="text" class="noformat form-control" name="default_role" data-ac="/role/autocomplete" value="{{ empty($actorInfo->droleInfo) ? '' : $actorInfo->droleInfo->name }}" {{ $actorInfo->login ? 'disabled' : 'autocomplete=off' }}></td>
+          <th>Country</th>
+          <td><input type='text' class="noformat form-control" name="country" data-ac="/country/autocomplete" value="{{ empty($actorInfo->countryInfo) ? '' : $actorInfo->countryInfo->name }}" placeholder="-" autocomplete="off"></td>
         </tr>
         <tr>
-          <td><label for="function" title="{{ $actorComments['function'] }}">Function</label></td>
-          <td><input type="text" class="noformat form-control" name="function" value="{{ $actorInfo->function }}"></td>
+          <th>Nationality</th>
+          <td><input type="text" class="noformat form-control" name="nationality" data-ac="/country/autocomplete" value="{{ empty($actorInfo->nationalityInfo) ? '' : $actorInfo->nationalityInfo->name }}" placeholder="-" autocomplete="off"></td>
         </tr>
         <tr>
-          <td><label for="company_id" title="{{ $actorComments['company_id'] }}">Employer</label></td>
-          <td><input type="text" class="noformat form-control" name="company_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->company) ? '' : $actorInfo->company->name }}" autocomplete="off"></td>
+          <th><label title="{{ $actorComments['function'] }}">Function</label></th>
+          <td><input type="text" class="noformat form-control" name="function" value="{{ $actorInfo->function }}" placeholder="-"></td>
         </tr>
         <tr>
-          <td><label for="phy_person" title="{{ $actorComments['phy_person'] }}">Physical Person</label></td>
-          <td><input type="checkbox" class="form-control noformat" name="phy_person" {{ $actorInfo->phy_person ? 'checked' : '' }}></td>
+          <th><label title="{{ $actorComments['company_id'] }}">Employer</label></th>
+          <td><input type="text" class="noformat form-control" name="company_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->company) ? '' : $actorInfo->company->name }}" placeholder="-" autocomplete="off"></td>
         </tr>
         <tr>
-          <td><label for="nationality">Nationality</label></td>
-          <td><input type="text" class="noformat form-control" name="nationality" data-ac="/country/autocomplete" value="{{ empty($actorInfo->nationalityInfo) ? '' : $actorInfo->nationalityInfo->name }}" autocomplete="off"></td>
+          <th><label title="{{ $actorComments['phy_person'] }}">Physical Person</label></td>
+          <td><input type="checkbox" class="noformat" name="phy_person" {{ $actorInfo->phy_person ? 'checked' : '' }}></th>
         </tr>
         <tr>
-          <td><label for="small_entity" title="{{ $actorComments['small_entity'] }}">Small Entity</label></td>
-          <td><input type="checkbox" class="form-control noformat" name="small_entity" {{ $actorInfo->small_entity ? 'checked' : '' }}></td>
+          <th><label title="{{ $actorComments['small_entity'] }}">Small Entity</label></th>
+          <td><input type="checkbox" class="noformat" name="small_entity" {{ $actorInfo->small_entity ? 'checked' : '' }}></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <label class="font-weight-bolder" title="{{ $actorComments['notes'] }}">Notes</label>
+            <textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea>
+          </td>
         </tr>
       </table>
     </fieldset>
     <fieldset class="tab-pane fade" id="actorContact">
-      <table class="table table-striped table-sm">
+      <table class="table table-striped">
         <tr>
-          <td><label for="address">Address</label></td>
-          <td><textarea class="noformat form-control" name="address">{{ $actorInfo->address }}</textarea></td>
+          <th>Address mailing</th>
+          <td><textarea class="noformat form-control" name="address_mailing">{{ $actorInfo->address_mailing }}</textarea></td>
         </tr>
         <tr>
-          <td><label for="country">Country</label></td>
-          <td><input type='text' class="noformat form-control" name="country" data-ac="/country/autocomplete" value="{{ empty($actorInfo->countryInfo) ? '' : $actorInfo->countryInfo->name }}" autocomplete="off"></td>
+          <th>Country mailing</th>
+          <td><input type='text' class="noformat form-control" name="country_mailing" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_mailingInfo ) ? '' : $actorInfo->country_mailingInfo->name }}" placeholder="-" autocomplete="off"></td>
         </tr>
         <tr>
-          <td><label for="address_mailing">Address mailing</label></td>
-          <td><textarea class="noformat form-control" name="address_mailing">{{ $actorInfo->address_mailing }}</textarea> </td>
-        </tr>
-        <tr>
-          <td><label for="country_mailing">Country mailing</label></td>
-          <td><input type='text' class="noformat form-control" name="country_mailing" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_mailingInfo ) ? '' : $actorInfo->country_mailingInfo->name }}" autocomplete="off"></td>
-        </tr>
-        <tr>
-          <td><label for="address_billing">Address billing</label></td>
+          <th>Address billing</th>
           <td><textarea class="noformat form-control" name="address_billing">{{ $actorInfo->address_billing }}</textarea></td>
         </tr>
         <tr>
-          <td><label for="country_billing">Country billing</label></td>
-          <td><input class="noformat form-control" name="country_billing" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_billingInfo ) ? '' : $actorInfo->country_billingInfo->name }}" autocomplete="off"></td>
+          <th>Country billing</th>
+          <td><input class="noformat form-control" name="country_billing" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_billingInfo ) ? '' : $actorInfo->country_billingInfo->name }}" placeholder="-" autocomplete="off"></td>
         </tr>
         <tr>
-          <td><label for="email">Email</label></td>
-          <td><input type='text' class="noformat form-control" name="email" value="{{ $actorInfo->email }}"></td>
+          <th>Email</th>
+          <td><input type='email' class="noformat form-control" name="email" value="{{ $actorInfo->email }}" placeholder="-"></td>
         </tr>
         <tr>
-          <td><label for="phone">Phone</label></td>
-          <td><input type='text' class="noformat form-control" name="phone" value="{{ $actorInfo->phone }}"></td>
+          <th>Phone</th>
+          <td><input type='text' class="noformat form-control" name="phone" value="{{ $actorInfo->phone }}" placeholder="-"></td>
         </tr>
       </table>
     </fieldset>
     <fieldset class="tab-pane fade" id="actorOther">
-      <table class="table table-striped table-sm">
+      <table class="table table-striped">
         <tr>
-          <td><label for="VAT_number" title="{{ $actorComments['VAT_number'] }}">VAT no.</label></td>
-          <td><input type='text' class="noformat form-control" name="VAT_number" value="{{ $actorInfo->VAT_number }}"></td>
+          <th><label title="{{ $actorComments['login'] }}">Login</label></th>
+          <td><input type="text" class="noformat form-control" name="login" value="{{ $actorInfo->login }}" placeholder="-"></td>
         </tr>
         <tr>
-          <td><label for="warn" title="{{ $actorComments['warn'] }}">Warn</label></td>
-          <td><input type="checkbox" class="form-control noformat" name="warn" {{ $actorInfo->warn ? 'checked' : '' }}></td>
+          <th><label title="{{ $actorComments['default_role'] }}" title="Login needs to be null for changing the role">Default role</label></th>
+          <td><input type="text" class="noformat form-control" name="default_role" data-ac="/role/autocomplete" value="{{ empty($actorInfo->droleInfo) ? '' : $actorInfo->droleInfo->name }}" {{ $actorInfo->login ? 'disabled' : 'autocomplete=off' }} placeholder="-"></td>
         </tr>
         <tr>
-          <td><label for="registration_no" title="{{ $actorComments['registration_no'] }}">Registration no.</label></td>
-          <td><input type='text' class="noformat form-control" name="registration_no" value="{{ $actorInfo->registration_no }}"></td>
+          <th><label title="{{ $actorComments['warn'] }}">Warn</label></th>
+          <td><input type="checkbox" class="noformat" name="warn" {{ $actorInfo->warn ? 'checked' : '' }}></td>
         </tr>
         <tr>
-          <td><label for="registration_no" title="{{ $actorComments['legal_form'] }}">Legal form</label></td>
-          <td><input type='text' class="noformat form-control" name="legal_form" value="{{ $actorInfo->legal_form }}"></td>
+          <th><label title="{{ $actorComments['legal_form'] }}">Legal form</label></th>
+          <td><input type='text' class="noformat form-control" name="legal_form" value="{{ $actorInfo->legal_form }}" placeholder="-"></td>
         </tr>
         <tr>
-          <td><label for="parent_id" title="{{ $actorComments['parent_id'] }}">Parent company</label></td>
-          <td><input type="text" class="noformat form-control" name="parent_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->parent) ? '' : $actorInfo->parent->name }}" autocomplete="off"></td>
+          <th><label title="{{ $actorComments['registration_no'] }}">Registration no.</label></th>
+          <td><input type='text' class="noformat form-control" name="registration_no" value="{{ $actorInfo->registration_no }}" placeholder="-"></td>
         </tr>
         <tr>
-          <td><label for="site_id" title="{{ $actorComments['site_id'] }}">Work site</label></td>
-          <td><input type="text" class="noformat form-control" name="site_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->site) ? '' : $actorInfo->site->name }}" autocomplete="off"></td>
+          <th><label title="{{ $actorComments['VAT_number'] }}">VAT no.</label></th>
+          <td><input type='text' class="noformat form-control" name="VAT_number" value="{{ $actorInfo->VAT_number }}" placeholder="-"></td>
         </tr>
         <tr>
-          <td><label for="notes" title="{{ $actorComments['notes'] }}">Notes</label></td>
-          <td><textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea></td>
+          <th><label title="{{ $actorComments['parent_id'] }}">Parent company</label></th>
+          <td><input type="text" class="noformat form-control" name="parent_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->parent) ? '' : $actorInfo->parent->name }}" placeholder="-" autocomplete="off"></td>
+        </tr>
+        <tr>
+          <th><label title="{{ $actorComments['site_id'] }}">Work site</label></th>
+          <td><input type="text" class="noformat form-control" name="site_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->site) ? '' : $actorInfo->site->name }}" placeholder="-" autocomplete="off"></td>
         </tr>
       </table>
     </fieldset>
