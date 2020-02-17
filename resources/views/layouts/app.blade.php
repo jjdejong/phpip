@@ -467,14 +467,15 @@
               e.target.blur();
             }
           },
-          change: function(event, ui) {
-            //$(e.target).autocomplete('destroy');
-          },
-          close: (event, ui) => {
-            if (!ui.item) {
-              e.target.value = "";
-            }
-          }
+          // change: function(event, ui) {
+          //   //$(e.target).autocomplete('destroy');
+          // },
+          // close: (event, ui) => {
+          //   console.log(event);
+          //   if (!ui.item) {
+          //     e.target.value = "";
+          //   }
+          // }
         });
       }
     });

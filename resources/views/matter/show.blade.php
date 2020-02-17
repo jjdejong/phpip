@@ -210,10 +210,10 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
       </div>
       <div class="card col-6 p-0 border-primary reveal-hidden">
-        <div class="card-header text-warning p-1 bg-primary">
+        <div class="card-header {{ $matter->tasksPending->count() ? 'text-warning' : 'text-light' }} p-1 bg-primary">
           Open Tasks Due
           <a class="text-warning text-decoration-none hidden-action float-right stretched-link" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All tasks"><span class="">
-                &equiv;
+            &equiv;
           </a>
         </div>
         <div class="card-body p-1" id="opentask-panel" style="overflow: auto;">
@@ -228,11 +228,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     </div>
     <div class="row card-deck mb-1">
       <div class="card col-2 p-0 border-primary reveal-hidden" style="min-height: 138px;">
-        <div class="card-header text-warning p-1 bg-primary">
+        <div class="card-header {{ $matter->renewalsPending->count() ? 'text-warning' : 'text-light' }} p-1 bg-primary">
           Renewals Due
           <a class="text-warning text-decoration-none hidden-action float-right stretched-link" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All renewals">
-              &equiv;
-            </a>
+            &equiv;
+          </a>
         </div>
         <div class="card-body p-1" id="renewal-panel" style="overflow: auto;">
           @foreach ( $matter->renewalsPending->take(3) as $task )
@@ -259,19 +259,19 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             @if ( $type != 'Image' )
             <div class="card">
               <div class="card-body p-1">
-                <b>{{ $type }}</b>
+                <span class="font-weight-bolder align-middle">{{ $type }}</span>
                 @foreach ( $classifier_group as $classifier )
                   @if ( $classifier->url )
-                    <a href="{{ $classifier->url }}" class="badge badge-primary align-middle font-weight-light" target="_blank">{{ $classifier->value }}</a>
+                    <a href="{{ $classifier->url }}" class="badge badge-primary align-middle" target="_blank">{{ $classifier->value }}</a>
                   @elseif ( $classifier->lnk_matter_id )
-                    <a href="/matter/{{ $classifier->lnk_matter_id }}" class="badge badge-primary align-middle font-weight-light">{{ $classifier->linkedMatter->uid }}</a>
+                    <a href="/matter/{{ $classifier->lnk_matter_id }}" class="badge badge-primary align-middle">{{ $classifier->linkedMatter->uid }}</a>
                   @else
-                    <div class="badge badge-secondary align-middle font-weight-light">{{ $classifier->value }}</div>
+                    <div class="badge badge-secondary align-middle">{{ $classifier->value }}</div>
                   @endif
                 @endforeach
                 @if ( $type == 'Link' )
                   @foreach ( $matter->linkedBy as $linkedBy )
-                    <a href="/matter/{{ $linkedBy->id }}" class="badge badge-primary align-middle font-weight-light">{{ $linkedBy->uid }}</a>
+                    <a href="/matter/{{ $linkedBy->id }}" class="badge badge-primary align-middle">{{ $linkedBy->uid }}</a>
                   @endforeach
                 @endif
               </div>
@@ -281,9 +281,9 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           @if ( !in_array('Link', $classifiers->keys()->all()) && !$matter->linkedBy->isEmpty() )
           <div class="card">
             <div class="card-body p-1">
-              <b>Link</b>
+              <span class="font-weight-bolder align-middle">Link</span>
                 @foreach ( $matter->linkedBy as $linkedBy )
-                  <a href="/matter/{{ $linkedBy->id }}" class="badge badge-primary align-middle font-weight-light">{{ $linkedBy->uid }}</a>
+                  <a href="/matter/{{ $linkedBy->id }}" class="badge badge-primary align-middle">{{ $linkedBy->uid }}</a>
                 @endforeach
             </div>
           </div>
@@ -296,16 +296,16 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           <span class="float-right">&#9432;</span>
         </div>
         <div class="card-body p-1" id="relationsPanel" style="overflow: auto;">
-          @isset ( $matter->family )
+          @if ( $matter->family->count() )
           <dl class="mb-1">
             <dt>Fam</dt>
             <dd class="mb-1">
               @foreach ( $matter->family as $member )
-              <a class="badge badge-primary font-weight-light" href="/matter/{{ $member->id }}">{{ $member->suffix }}</a>
+              <a class="badge badge-primary" href="/matter/{{ $member->id }}">{{ $member->suffix }}</a>
               @endforeach
             </dd>
           </dl>
-          @endisset
+          @endif
           @foreach ( $matter->priorityTo->groupBy('caseref') as $caseref => $family )
           <dl class="mb-1">
             <dt>{{ $caseref }}</dt>
@@ -329,7 +329,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
         <div class="card-footer p-1">
           Summaries:
-          <a class="font-weight-light badge badge-primary"
+          <a class="badge badge-primary align-middle"
               href="/matter/{{ $matter->id }}/description/en"
               data-toggle="modal"
               data-target="#ajaxModal"
@@ -337,7 +337,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               title="Copy a summary in English">
               &boxbox; EN
           </a>
-          <a class="font-weight-light badge badge-primary"
+          <a class="badge badge-primary align-middle"
               href="/matter/{{ $matter->id }}/description/fr"
               data-toggle="modal"
               data-target="#ajaxModal"

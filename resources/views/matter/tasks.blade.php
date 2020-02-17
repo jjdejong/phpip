@@ -17,23 +17,32 @@
   @foreach ( $events as $event )
   <tbody>
     <tr class="reveal-hidden">
-      <td colspan="8">
-        <span style="position: relative; margin-right: 10px;">{{ $event->info->name . ": " . Carbon\Carbon::parse($event->event_date)->isoFormat('L') }}</span>
-        @cannot('client')
-        <a href="#" id="addTaskToEvent" class="hidden-action" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
-          &CirclePlus;
-        </a>
-        <a href="#" class="hidden-action text-danger ml-2" id="deleteEvent" data-event_id="{{ $event->id }}" title="Delete event">
-          &CircleTimes;
-        </a>
-        @endcannot
+      <td colspan="6">
+        <ul class="list-inline mb-0 mt-1">
+          <li class="list-inline-item">{{ $event->info->name }}</li>
+          <li class="list-inline-item">{{ Carbon\Carbon::parse($event->event_date)->isoFormat('L') }}</li>
+          @cannot('client')
+          <li class="list-inline-item">
+            <a href="#" id="addTaskToEvent" class="hidden-action" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
+              &CirclePlus;
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a href="#" class="hidden-action text-danger" id="deleteEvent" data-event_id="{{ $event->id }}" title="Delete event">
+              &CircleTimes;
+            </a>
+          </li>
+          @endcannot
+        </ul>
       </td>
     </tr>
     @foreach ($event->tasks as $task)
     <tr class="reveal-hidden {{ $task->done ? 'text-success' : 'text-danger' }}" data-resource="/task/{{ $task->id }}">
       <td nowrap>
-        <span class="ml-2">{{ $task->info->name }}</span>
-        <input type="text" class="noformat" name="detail" value="{{ $task->detail }}">
+        <ul class="list-inline my-0 ml-1">
+          <li class="list-inline-item">{{ $task->info->name }}</li>
+          <li class="list-inline-item"><input type="text" class="noformat" name="detail" placeholder="-" value="{{ $task->detail }}"></li>
+        </ul>
       </td>
       <td><input type="date" class="form-control noformat" name="due_date" value="{{ $task->due_date }}"></td>
       <td><input type="checkbox" class="form-control noformat" name="done" {{ $task->done ? 'checked' : '' }}></td>
