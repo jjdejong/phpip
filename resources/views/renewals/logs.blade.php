@@ -1,0 +1,58 @@
+@extends('layouts.app')
+
+@section('content')
+<legend class="text-light">
+  Renewals logs
+</legend>
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <table class="table table-striped table-hover table-sm">
+        <thead>
+          <tr id="filter" class="bg-primary text-light">
+            <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="Matter" placeholder="Matter" value="{{ old('Matter') }}"></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="Client" placeholder="Client" value="{{ old('Client') }}"></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/logs" value="{{ old('Job') }}" name="Job" placeholder="Job" /></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="User" placeholder="User" value="{{ old('User') }}"></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="Date" placeholder="Date" value="{{ old('Date') }}"></th>
+            <th>Qt</th>
+            <th>Steps</th>
+            <th>Grace</th>
+            <th>Invoicing</th>
+          </tr>
+        </thead>
+        <tbody id="tableList">
+          @foreach ($logs as $log)
+          <tr data-id="{{ $log->id }}" class="reveal-hidden">
+            <td>
+                <a href="/matter/{{ $log->task->matter->id }}">
+                  {{ $log->task->matter->uid }}
+                </a>
+            </td>
+            <td>{{ $log->task->matter->client[0]['display_name'] }}</td>
+            <td>{{ $log->job_id }}</td>
+            <td>{{ $log->creatorInfo->firstname }} {{ $log->creatorInfo->name }}</td>
+            <td>{{ $log->created_at }}</td>
+            <td>{{ $log->task->detail }}</td>
+            <td>{{ is_null($log->from_step) ? '' : $log->from_step ." -> ". $log->to_step }}</td>
+            <td>{{ is_null($log->from_grace) ? '' : $log->from_grace ." -> ". $log->$to_grace }}</td>
+            <td>{{ is_null($log->from_invoice) ? '' : $log->from_invoice ." -> ". $log->to_invoice }}</td>
+          </tr>
+          @endforeach
+          <tr>
+            <td colspan="5">
+              {{ $logs->links() }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+@endsection
+
+@section('script')
+
+@include('tables.table-js')
+
+@stop
