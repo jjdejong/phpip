@@ -3,11 +3,11 @@
     <tr>
       <th>
         Event
-        @cannot('client')
+        @canany(['admin', 'readwrite'])
         <a data-toggle="collapse" class="badge badge-pill badge-info font-weight-normal ml-2" href="#addEventRow" id="addEvent" title="Add event">
           &plus;
         </a>
-        @endcannot
+        @endcanany
       </th>
       <th>Date</th>
       <th>Number</th>

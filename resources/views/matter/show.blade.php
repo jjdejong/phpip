@@ -14,12 +14,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     <div class="card-header bg-primary text-light reveal-hidden lead p-1"  {!! $matter->dead ? 'style="text-decoration: line-through;"' : '' !!}>
       <a class="bg-primary text-white" href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
       ({{ $matter->category->category }})
-      @cannot('client')
+      @canany(['admin', 'readwrite'])
       <a class="bg-primary text-white float-right hidden-action"
          data-toggle="modal" data-target="#ajaxModal" href="/matter/{{ $matter->id }}/edit" title="Advanced matter edition">
         &#9998;
       </a>
-      @endcannot
+      @endcanany
     </div>
     <div class="card-body p-1">
       <dl class="row mb-0">
@@ -50,7 +50,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       </div>
     </div>
     <div class="card-footer p-1">
-      @cannot('client')
+      @canany(['admin', 'readwrite'])
       <div class="btn-group btn-block">
         <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=child" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Create child {{ $matter->category->category }}">
           &oplus; New Child
@@ -62,7 +62,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           &#9872; Nat. Phase
         </a>
       </div>
-      @endcannot
+      @endcanany
     </div>
   </div>
 
@@ -113,18 +113,18 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
   <div id="actorPanel" class="card col-3 border-secondary p-0" style="max-height: 600px">
     <div class="card-header reveal-hidden text-white bg-secondary p-1">
       Actors
-      @cannot('client')
+      @canany(['admin', 'readwrite'])
       <a class="badge badge-pill badge-light hidden-action float-right" rel="popover" data-placement="right" href="#" title="Add Actor">
         &plus;
       </a>
-      @endcannot
+      @endcanany
     </div>
     <div class="card-body bg-light p-1" style="overflow: auto;">
       @foreach ( $actors as $role_name => $role_group )
       <div class="card reveal-hidden border-secondary mb-1">
         <div class="card-header bg-primary text-light p-1">
           {{ $role_name }}
-          @cannot('client')
+          @canany(['admin', 'readwrite'])
           <a class="hidden-action float-right text-light font-weight-bold ml-2" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group->first()->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
             &#9998;
           </a>
@@ -135,7 +135,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
              href="#">
             &oplus;
           </a>
-          @endcannot
+          @endcanany
         </div>
         <div class="card-body p-1" style="max-height: 80px; overflow: auto;">
           <ul class="list-unstyled mb-0">

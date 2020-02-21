@@ -17,9 +17,13 @@ class MatterPolicy
      * @param  \App\Matter  $matter
      * @return mixed
      */
-    public function view(User $user)
+    public function view(User $user, Matter $matter)
     {
-        return $user->default_role !== 'CLI';
+        if ($user->default_role === 'CLI') {
+          return $user->id === $matter->client->first()->actor_id;
+        } else {
+          return true;
+        };
     }
 
     /**

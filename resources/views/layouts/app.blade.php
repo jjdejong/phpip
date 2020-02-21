@@ -16,13 +16,13 @@
   <!-- Styles -->
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
   @yield('style')
-  @can('client')
+  @canany(['client', 'readonly'])
     <style>
       input.noformat {
         pointer-events: none;
       }
     </style>
-  @endcan
+  @endcanany
 </head>
 
 <body>
@@ -76,9 +76,9 @@
                 <a class="dropdown-item" href="{{ url('/matter/') }}">All</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=PAT') }}">Patents</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=TM') }}">Trademarks</a>
-                @cannot('client')
+                @canany(['admin', 'readwrite'])
                 <a class="dropdown-item" href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" title="Create Matter">New</a>
-                @endcannot
+                @endcanany
               </ul>
             </li>
             @cannot('client')
@@ -88,6 +88,7 @@
               </a>
               <ul class="dropdown-menu" role="menu">
                 <a class="dropdown-item" href="{{ url('/actor/') }}">Actors</a>
+                @can('admin')
                 <a class="dropdown-item" href="{{ url('/user/') }}">DB Users</a>
                 <a class="dropdown-item" href="{{ url('/rule/') }}">Rules</a>
                 <a class="dropdown-item" href="{{ url('/eventname/') }}">Event names</a>
@@ -96,6 +97,7 @@
                 <a class="dropdown-item" href="{{ url('/default_actor/') }}">Default actors</a>
                 <a class="dropdown-item" href="{{ url('/type/') }}">Matter types</a>
                 <a class="dropdown-item" href="{{ url('/classifier_type/') }}">Classifier types</a>
+                @endcan
               </ul>
             </li>
             @endcannot
@@ -328,8 +330,12 @@
     });
 
     app.addEventListener("change", e => {
-      // Generic in-place edition of input fields
       if (e.target.matches(".noformat")) {
+        // Generic in-place edition of input fields
+        if (e.target.hasAttribute('data-ac')) {
+          // Destroy autocomplete widget
+          $(e.target).autocomplete('destroy');
+        }
         let params = new URLSearchParams();
         if (e.target.type === 'checkbox') {
           if (e.target.checked) {
@@ -421,8 +427,8 @@
     });
 
     app.addEventListener("focusin", e => {
-      // Process autocomplete fields
       if ( e.target.hasAttribute('data-ac') ) {
+        // Process autocomplete fields
         var aclength = 1;
         if ( e.target.hasAttribute('data-aclength') ) {
           aclength = e.target.dataset.aclength;
@@ -434,12 +440,12 @@
           autoFocus: true,
           minLength: aclength,
           source: e.target.dataset.ac,
-          create: function(event, ui) {
-            // Fires search immediately (but selection does not trigger blur or change)
-            // if ( aclength == 0 ) {
-            //   $(this).autocomplete("search", "");
-            // }
-          },
+          // create: function(event, ui) {
+          //   // Fires search immediately (but selection does not trigger blur or change)
+          //   if ( aclength == 0 ) {
+          //     $(this).autocomplete("search", "");
+          //   }
+          // },
           select: (event, ui) => {
             if (e.target.id == 'addCountry') {
               let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
@@ -463,15 +469,10 @@
             } else {
               // Used for content editable fields where the same field is used for sending the id to the server
               e.target.value = ui.item.key;
-              $(e.target).autocomplete('destroy');
               e.target.blur();
             }
           },
           // change: function(event, ui) {
-          //   //$(e.target).autocomplete('destroy');
-          // },
-          // close: (event, ui) => {
-          //   console.log(event);
           //   if (!ui.item) {
           //     e.target.value = "";
           //   }

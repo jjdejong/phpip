@@ -21,7 +21,7 @@
         <ul class="list-inline mb-0 mt-1">
           <li class="list-inline-item">{{ $event->info->name }}</li>
           <li class="list-inline-item">{{ Carbon\Carbon::parse($event->event_date)->isoFormat('L') }}</li>
-          @cannot('client')
+          @canany(['admin', 'readwrite'])
           <li class="list-inline-item">
             <a href="#" id="addTaskToEvent" class="hidden-action" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
               &CirclePlus;
@@ -32,7 +32,7 @@
               &CircleTimes;
             </a>
           </li>
-          @endcannot
+          @endcanany
         </ul>
       </td>
     </tr>
@@ -54,9 +54,9 @@
       <td><input type="text" class="form-control noformat" name="assigned_to" data-ac="/user/autocomplete" value="{{ $task->assigned_to }}"></td>
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"></td>
       <td>
-        @cannot('client')
+        @canany(['admin', 'readwrite'])
         <a href="#" class="hidden-action text-danger" id="deleteTask" title="Delete task">&CircleTimes;</a>
-        @endcannot
+        @endcanany
       </td>
     </tr>
     @endforeach

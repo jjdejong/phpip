@@ -7,9 +7,9 @@
     <div class="card border-info">
       <div class="card-header text-white bg-info p-1">
         <span class="lead">Categories</span>
-        @cannot('client')
+        @canany(['admin', 'readwrite'])
         <a href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" class="btn btn-primary float-right" title="Create Matter">Create matter</a>
-        @endcannot
+        @endcanany
       </div>
       <div class="card-body pt-0">
         <table  class="table table-striped table-sm">
@@ -17,9 +17,9 @@
             <th></th>
             <th>Count</th>
             <td>
-              @cannot('client')
+              @canany(['admin', 'readwrite'])
               <span class="float-right text-secondary">New</span>
-              @endcannot
+              @endcanany
             </td>
           </tr>
           @foreach ($categories as $group)
@@ -31,11 +31,11 @@
               {{ $group->total }}
             </td>
             <td class="py-0">
-              @cannot('client')
-              <a class="badge badge-primary hidden-action float-right" href="/matter/create?operation=new&category={{$group->category_code}}" data-target="#ajaxModal" title="Create new {{ $group->category }}" data-toggle="modal" data-size="modal-sm">
+              @canany(['admin', 'readwrite'])
+              <a class="badge badge-primary hidden-action float-right" href="/matter/create?operation=new&category={{$group->category_code}}" data-target="#ajaxModal" title="Create {{ $group->category }}" data-toggle="modal" data-size="modal-sm">
                 &plus;
               </a>
-              @endcannot
+              @endcanany
             </td>
           </tr>
           @endforeach
@@ -45,9 +45,9 @@
     <div class="card border-info mt-1">
       <div class="card-header text-white bg-info p-1">
         <span class="lead">Users tasks</span>
-        @cannot('client')
+        @canany(['admin', 'readwrite'])
         <button class="btn btn-transparent text-info float-right" disabled>I</button> {{--  This invisible button is only for improving the layout! --}}
-        @endcannot
+        @endcanany
       </div>
       <div class="card-body pt-1">
         <table class="table table-striped table-sm">
@@ -110,10 +110,12 @@
           </div>
           <div class="col-4">
             <div class="input-group">
+              @canany(['admin', 'readwrite'])
               <div class="input-group-prepend">
                 <button class="btn btn-light" type="button" id="clearOpenTasks">Clear selected on</button>
               </div>
               <input type="text" class="form-control mr-2" name="datetaskcleardate" id="taskcleardate" value="{{ now()->format('Y-m-d') }}">
+              @endcanany
             </div>
           </div>
           @endcannot
@@ -130,9 +132,11 @@
           <div class="col-2">
             Due date
           </div>
+          @canany(['admin', 'readwrite'])
           <div class="col-1">
             Clear
           </div>
+          @endcanany
         </div>
       </div>
       <div class="card-body p-1" id="tasklist">
@@ -145,7 +149,7 @@
           <div class="lead col-8">
             Open renewals
           </div>
-          @cannot('client')
+          @canany(['admin', 'readwrite'])
           <div class="col">
             <div class="input-group">
               <div class="input-group-prepend">
@@ -154,7 +158,7 @@
               <input type="text" class="form-control mr-2" name="renewalcleardate" id="renewalcleardate" value="{{ now()->format('Y-m-d') }}">
             </div>
           </div>
-          @endcannot
+          @endcanany
         </div>
         <div class="row mt-1">
           <div class="col">
@@ -168,9 +172,11 @@
           <div class="col-2">
             Due date
           </div>
+          @canany(['admin', 'readwrite'])
           <div class="col-1">
             Clear
           </div>
+          @endcanany
         </div>
       </div>
 

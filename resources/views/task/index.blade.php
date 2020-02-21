@@ -23,12 +23,14 @@
       <td class="col text-truncate py-0">
         {{ $task->title ?? $task->trademark }}
       </td>
-      <td class="col-2 py-0 {{ $warn }}">
+      <td class="col-2 py-0 px-2 {{ $warn }}">
         {{ Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}
       </td>
+      @canany(['admin', 'readwrite'])
       <td class="col-1 py-0 px-4">
         <input id="{{ $task->id }}" class="clear-open-task" type="checkbox">
       </td>
+      @endcanany
   </tr>
   @endforeach
 </table>

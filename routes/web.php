@@ -140,7 +140,7 @@ Route::group(['middleware' => 'auth'], function () {
             ->header('Content-Type', $classifier->value);
     });
 
-    Route::resource('matter', 'MatterController');
+    Route::resource('matter', 'MatterController')->middleware('can:view,matter');
     Route::apiResource('task', 'TaskController');
     Route::apiResource('event', 'EventController');
     Route::resource('category', 'CategoryController');

@@ -55,7 +55,8 @@ class ActorController extends Controller
      */
     public function store(Request $request) {
         $request->validate([
-            'name' => 'required|max:100'
+            'name' => 'required|max:100',
+            'email' => 'email'
         ]);
         $request->merge([ 'creator' => Auth::user()->login ]);
         return Actor::create($request->except(['_token', '_method']));
@@ -91,6 +92,9 @@ class ActorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Actor $actor) {
+        $request->validate([
+            'email' => 'email'
+        ]);
         $request->merge([ 'updater' => Auth::user()->login ]);
         $actor->update($request->except(['_token', '_method']));
         return response()->json(['success' => '1']);
