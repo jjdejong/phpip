@@ -13,7 +13,7 @@ use App\MatterActors;
 use App\RenewalsLog;
 use App\Mail\sendCall;
 use Locale;
-use Log;
+//use Log;
 use IntlDateFormatter;
 
 class RenewalController extends Controller
@@ -890,16 +890,36 @@ class RenewalController extends Controller
               if ($value != '') {
                   switch($key) {
                       case 'Matter':
-                          $logs = $logs->where('task.matter.caseref', 'LIKE', "$value%");
+                          $logs = $logs->whereHas('task', function ($query) use ($value) {
+                                  $query->whereHas('matter', function ($q2) use ($value) {
+                                  $q2->where('uid', 'LIKE', "$value%");
+                                }
+                              );
+                            });
+                          break;
+                      case 'Client':
+                          $logs = $logs->whereHas('task', function ($query) use ($value) {
+                                  $query->whereHas('matter', function ($q2) use ($value) {
+                                  $q2->whereHas('client', function($q3) use ($value) {
+                                    $q3->where('display_name', 'LIKE', "$value%");
+                                  });
+                                }
+                              );
+                            });
                           break;
                       case 'Job':
                           $logs = $logs->where('job_id', "$value");
                           break;
                       case 'User':
-                          $logs = $logs->where('creator', 'LIKE', "$value%");
+                          $logs = $logs->whereHas('creatorInfo', function ($query) use ($value){
+                            $query->where('name', 'LIKE', "$value%");
+                          });
                           break;
-                      case 'Date':
-                          $logs = $logs->where('created_at', 'LIKE', "$value%");
+                      case 'Fromdate':
+                          $logs = $logs->where('created_at', '>=', "$value");
+                          break;
+                      case 'Untildate':
+                          $logs = $logs->where('created_at', '<=', "$value");
                           break;
                   }
               }

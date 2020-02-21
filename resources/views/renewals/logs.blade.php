@@ -14,7 +14,8 @@
             <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="Client" placeholder="Client" value="{{ old('Client') }}"></th>
             <th><input class="filter-input form-control form-control-sm" data-source="/logs" value="{{ old('Job') }}" name="Job" placeholder="Job" /></th>
             <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="User" placeholder="User" value="{{ old('User') }}"></th>
-            <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="Date" placeholder="Date" value="{{ old('Date') }}"></th>
+            <th><input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">
+                    <input type="date" class="form-control form-control-sm" name="Untildate" id="Untildate" title="Until selected date" value="{{ Request::get('Untildate') }}">
             <th>Qt</th>
             <th>Steps</th>
             <th>Grace</th>
@@ -31,7 +32,7 @@
             </td>
             <td>{{ $log->task->matter->client[0]['display_name'] }}</td>
             <td>{{ $log->job_id }}</td>
-            <td>{{ $log->creatorInfo->firstname }} {{ $log->creatorInfo->name }}</td>
+            <td>{{ $log->creatorInfo->name }}</td>
             <td>{{ $log->created_at }}</td>
             <td>{{ $log->task->detail }}</td>
             <td>{{ is_null($log->from_step) ? '' : $log->from_step ." -> ". $log->to_step }}</td>
