@@ -32,7 +32,7 @@ class AuthServiceProvider extends ServiceProvider
           return $user->default_role === 'DBA';
         });
         Gate::define('readonly', function ($user) {
-          return $user->default_role === 'DBRO';
+          return $user->default_role === 'DBRO' || !$user->default_role;
         });
         Gate::define('readwrite', function ($user) {
           return $user->default_role === 'DBRW';
