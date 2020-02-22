@@ -302,6 +302,7 @@ class RenewalController extends Controller
             $newjob = RenewalsLog::max('job_id');
             $newjob++;
             $data = [];
+            $date_now = now();
             foreach($request->task_ids as $ren_id) {
               $log_line = ['task_id' => $ren_id,
               'job_id' => $newjob,
@@ -309,7 +310,8 @@ class RenewalController extends Controller
               'to_step' => 4,
               'from_invoice' => 0,
               'to_invoice' => 1,
-              'creator' => Auth::user()->login
+              'creator' => Auth::user()->login,
+              'created_at' => $date_now
               ];
               $data[] = $log_line;
             }
@@ -544,6 +546,7 @@ class RenewalController extends Controller
         // For logs
         $newjob = RenewalsLog::max('job_id');
         $newjob++;
+        $date_now = now();
 
         foreach($resql as $ren) {
             $task = Task::find($ren->id);
@@ -558,7 +561,8 @@ class RenewalController extends Controller
             'to_step' => 4,
             'from_invoice' => 0,
             'to_invoice' => 1,
-            'creator' => Auth::user()->login
+            'creator' => Auth::user()->login,
+            'created_at' => $date_now
             ];
             $data_log[] = $log_line;
         }
@@ -589,6 +593,7 @@ class RenewalController extends Controller
         $data_log = [];
 
         $updated = 0;
+        $date_now = now();
         foreach($resql as $ren) {
             $task = Task::find($ren->id);
             $task->step = 8;
@@ -598,7 +603,8 @@ class RenewalController extends Controller
             'job_id' => $newjob,
             'from_step' => $task->step,
             'to_step' => 8,
-            'creator' => Auth::user()->login
+            'creator' => Auth::user()->login,
+            'created_at' => $date_now
             ];
             $data_log[] = $log_line;
         }
@@ -630,6 +636,7 @@ class RenewalController extends Controller
         $data_log = [];
 
         $updated = 0;
+        $date_now = now();
         foreach($resql as $ren) {
             $task = Task::find($ren->id);
             $log_line = ['task_id' => $ren['id'],
@@ -638,7 +645,8 @@ class RenewalController extends Controller
               'to_step' => 10,
               'from_done' => $task->done,
               'to_done' => 1,
-              'creator' => Auth::user()->login
+              'creator' => Auth::user()->login,
+              'created_at' => $date_now
             ];
             $task->step = 10;
             $task->done = 1;
@@ -675,6 +683,7 @@ class RenewalController extends Controller
         $data_log = [];
 
         $updated = 0;
+        $date_now = now();
         foreach($resql as $ren) {
             $task = Task::find($ren->id);
             $log_line = ['task_id' => $ren['id'],
@@ -683,7 +692,8 @@ class RenewalController extends Controller
               'to_step' => 12,
               'from_done' => $task->done,
               'to_done' => 1,
-              'creator' => Auth::user()->login
+              'creator' => Auth::user()->login,
+              'created_at' => $date_now
             ];
             $task->step = 12;
             $task->done = 1;
@@ -720,6 +730,7 @@ class RenewalController extends Controller
         $newjob++;
 
         $updated = 0;
+        $date_now = now();
         foreach($resql as $ren) {
             $task = Task::find($ren->id);
             $task->step = 14;
@@ -731,7 +742,8 @@ class RenewalController extends Controller
             'job_id' => $newjob,
             'from_step' => $task->step,
             'to_step' => 14,
-            'creator' => Auth::user()->login
+            'creator' => Auth::user()->login,
+            'created_at' => $date_now
             ];
             $data_log[] = $log_line;
         }
@@ -827,6 +839,7 @@ class RenewalController extends Controller
         fclose($fd);
         if ($clear) {
             $updated = 0;
+            $date_now = now();
             foreach($tids as $id) {
                 $log_line = ['task_id' => $ren['id'],
                   'job_id' => $newjob,
@@ -834,7 +847,8 @@ class RenewalController extends Controller
                   'to_step' => 6,
                   'from_done' => $task->done,
                   'to_done' => 1,
-                  'creator' => Auth::user()->login
+                  'creator' => Auth::user()->login,
+                  'created_at' => $date_now
                 ];
                 $data_log[] = $log_line;
                 $task = Task::find($id);
