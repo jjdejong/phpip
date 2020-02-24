@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 
-class UpdateTables8b extends Migration
+class UpdateTables8c extends Migration
 {
     /**
      * Run the migrations.
@@ -32,7 +32,7 @@ END");
         DB::unprepared("CREATE TRIGGER `matter_after_update` AFTER UPDATE ON `matter` FOR EACH ROW
 BEGIN
 	IF NEW.responsible != OLD.responsible THEN
-		UPDATE task JOIN event ON (task.trigger_id = event.id AND event.matter_id = NEW.id) SET task.assigned_to = NEW.responsible, updated_at = Now(), updater = NEW.updater
+		UPDATE task JOIN event ON (task.trigger_id = event.id AND event.matter_id = NEW.id) SET task.assigned_to = NEW.responsible, task.updated_at = Now(), task.updater = NEW.updater
 		WHERE task.done = 0 AND task.assigned_to = OLD.responsible;
 	END IF;
 END");
