@@ -68,9 +68,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
         $term = $request->input('term');
+        $category = $request->category;
         $results = App\EventName::select('name as value', 'code as key')
-                ->where('name', 'like', "$term%")
-                ->where('is_task', $is_task);
+                ->where([
+                  ['name', 'like', "$term%"],
+                  ['is_task', $is_task]
+                ])
+                ->whereRaw('ifnull(category, ?) = ?', [$category, $category]);
         return $results->take(10)->get();
     });
 

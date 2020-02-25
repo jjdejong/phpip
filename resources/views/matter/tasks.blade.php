@@ -71,7 +71,7 @@
         <input type="hidden" name="trigger_id">
         <div class="input-group">
           <input type="hidden" name="code">
-          <input type="text" class="form-control form-control-sm" placeholder="Task" data-ac="/event-name/autocomplete/1" data-actarget="code">
+          <input type="text" class="form-control form-control-sm" placeholder="Task" data-ac="/event-name/autocomplete/1?category={{ $matter->category_code }}" data-actarget="code">
           <input type="text" class="form-control form-control-sm" name="detail" placeholder="Detail">
           <input type="date" class="form-control form-control-sm" name="due_date">
           <input type="hidden" name="assigned_to">

@@ -20,7 +20,7 @@
           <input type="hidden" name="matter_id" value="{{ $matter->id }}">
           <div class="input-group">
             <input type="hidden" name="code" value="">
-            <input type="text" class="form-control form-control-sm" name="eventName" placeholder="Event" data-ac="/event-name/autocomplete/0" data-actarget="code">
+            <input type="text" class="form-control form-control-sm" name="eventName" placeholder="Event" data-ac="/event-name/autocomplete/0?category={{ $matter->category_code }}" data-actarget="code">
             <input type="date" class="form-control form-control-sm" name="event_date">
             <input type="text" class="form-control form-control-sm" name="detail" placeholder="Detail">
             <input type="text" class="form-control form-control-sm" name="notes" placeholder="Notes">
