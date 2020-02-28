@@ -21,7 +21,7 @@ $matter_category = array(
   array('code' => 'PRO','ref_prefix' => 'PAT','category' => 'Provisional Application','display_with' => 'PAT'),
   array('code' => 'SO','ref_prefix' => 'PAT','category' => 'Soleau Envelop','display_with' => 'PAT'),
   array('code' => 'SR','ref_prefix' => 'SR-','category' => 'Search','display_with' => 'LTG'),
-  array('code' => 'TM','ref_prefix' => 'TM-','category' => 'Trade Mark','display_with' => 'TM'),
+  array('code' => 'TM','ref_prefix' => 'TM-','category' => 'Trademark','display_with' => 'TM'),
   array('code' => 'TMOP','ref_prefix' => 'TOP','category' => 'Opposition (TM)','display_with' => 'TM'),
   array('code' => 'TS','ref_prefix' => 'TS-','category' => 'Trade Secret','display_with' => 'PAT'),
   array('code' => 'UC','ref_prefix' => 'PAT','category' => 'Utility Certificate','display_with' => 'PAT'),

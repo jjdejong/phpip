@@ -98,6 +98,9 @@ class RuleController extends Controller
     public function update(Request $request, Rule $rule)
     {
         $this->validate($request, [
+            'task' => 'sometimes|required',
+            'trigger_event' => 'sometimes|required',
+            'for_category' => 'sometimes|required',
             'cost' => 'nullable|numeric',
             'years' => 'nullable|numeric',
             'months' => 'nullable|numeric',

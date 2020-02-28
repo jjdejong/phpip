@@ -74,19 +74,28 @@ trig: BEGIN
 
   DECLARE cur_rule CURSOR FOR
     SELECT task_rules.id, task, clear_task, delete_task, detail, days, months, years, recurring, end_of_month, use_parent, use_priority, cost, fee, currency, task_rules.responsible, event_name.`unique`
-    FROM task_rules, event_name, matter
-    WHERE NEW.matter_id=matter.id
-    AND event_name.code=task
-    AND NEW.code=trigger_event
-    AND (for_category, ifnull(for_country, matter.country), ifnull(for_origin, matter.origin), ifnull(for_type, matter.type_code))<=>(matter.category_code, matter.country, matter.origin, matter.type_code)
-	AND (uqtrigger=0
-		OR (uqtrigger=1 AND NOT EXISTS (SELECT 1 FROM task_rules tr
-		WHERE (tr.task, tr.for_category, tr.for_country)=(task_rules.task, matter.category_code, matter.country) AND tr.trigger_event!=task_rules.trigger_event)))
-    AND NOT EXISTS (SELECT 1 FROM event WHERE matter_id=NEW.matter_id AND code=abort_on)
-    AND (condition_event IS null OR EXISTS (SELECT 1 FROM event WHERE matter_id=NEW.matter_id AND code=condition_event))
-    AND (NEW.event_date < use_before OR use_before IS null)
-    AND (NEW.event_date > use_after OR use_after IS null)
-    AND active=1;
+    FROM task_rules
+    JOIN event_name ON event_name.code = task
+    JOIN matter ON matter.id = NEW.matter_id
+    WHERE active = 1
+    AND for_category = matter.category_code
+    AND NEW.code = trigger_event
+    AND (Now() < use_before OR use_before IS null)
+    AND (Now() > use_after OR use_after IS null)
+    AND IF (for_country IS NOT NULL,
+      for_country = matter.country,
+      concat(task, trigger_event) NOT IN (SELECT concat(task, trigger_event) FROM task_rules tr WHERE (tr.for_country, tr.for_category, tr.active) = (matter.country, matter.category_code, 1))
+    )
+    AND IF (for_origin IS NOT NULL,
+      for_origin = matter.origin,
+      concat(task, trigger_event) NOT IN (SELECT concat(task, trigger_event) FROM task_rules tr WHERE (tr.for_origin, tr.for_category, tr.active) = (matter.origin, matter.category_code, 1))
+    )
+    AND IF (for_type IS NOT NULL,
+      for_type = matter.type_code,
+      concat(task, trigger_event) NOT IN (SELECT concat(task, trigger_event) FROM task_rules tr WHERE (tr.for_type, tr.for_category, tr.active) = (matter.type_code, matter.category_code, 1))
+    )
+    AND NOT EXISTS (SELECT 1 FROM event WHERE matter_id = NEW.matter_id AND code = abort_on)
+    AND IF (condition_event IS NULL, true, EXISTS (SELECT 1 FROM event WHERE matter_id = NEW.matter_id AND code = condition_event));
 
   DECLARE cur_linked CURSOR FOR
 	 SELECT matter_id FROM event WHERE alt_matter_id=NEW.matter_id;

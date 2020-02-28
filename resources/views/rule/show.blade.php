@@ -12,11 +12,11 @@
       <table class="table">
         <tr>
           <th><label class="required-field" title="{{ $ruleComments['task'] }}">Task</label></th>
-          <td><input type="text" class="form-control noformat" name="task" data-ac="/event-name/autocomplete/1" placeholder="{{ $ruleInfo->taskInfo->name }}"></td>
+          <td><input type="text" class="form-control noformat" name="task" data-ac="/event-name/autocomplete/1?category={{ $ruleInfo->for_category }}" placeholder="{{ $ruleInfo->taskInfo->name }}"></td>
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['trigger_event'] }}">Triggered by</label></th>
-          <td><input type="text" class="form-control noformat" name="trigger_event" data-ac="/event-name/autocomplete/0" placeholder="{{ $ruleInfo->trigger->name }}"></td>
+          <td><input type="text" class="form-control noformat" name="trigger_event" data-ac="/event-name/autocomplete/0?category={{ $ruleInfo->for_category }}" placeholder="{{ $ruleInfo->trigger->name }}"></td>
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['detail'] }}">Detail</label></th>
@@ -24,19 +24,19 @@
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['for_category'] }}">Category</label></th>
-          <td><input type="text" class="form-control noformat" name="for_category" data-ac="/category/autocomplete" value="{{ empty($ruleInfo->category) ? '' : $ruleInfo->category->category }}"></td>
+          <td><input type="text" class="form-control noformat" name="for_category" data-ac="/category/autocomplete" value="{{ $ruleInfo->category->category }}"></td>
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['for_country'] }}">Country</label></th>
-          <td><input type="text" class="form-control noformat" name="for_country" data-ac="/country/autocomplete" value="{{ empty($ruleInfo->country) ? '' : $ruleInfo->country->name }}"></td>
+          <td><input type="text" class="form-control noformat" name="for_country" data-ac="/country/autocomplete" value="{{ $ruleInfo->country->name ?? '' }}"></td>
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['for_origin'] }}">Origin</label></th>
-          <td><input type="text" class="form-control noformat" name="for_origin" data-ac="/country/autocomplete" value="{{ empty($ruleInfo->origin) ? '' : $ruleInfo->origin->name }}"></td>
+          <td><input type="text" class="form-control noformat" name="for_origin" data-ac="/country/autocomplete" value="{{ $ruleInfo->origin->name ?? '' }}"></td>
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['for_type'] }}">Type</label></th>
-          <td><input type="text" class="form-control noformat" name="for_type" data-ac="/type/autocomplete" value="{{ empty($ruleInfo->type) ? '' : $ruleInfo->type->type }}"></td>
+          <td><input type="text" class="form-control noformat" name="for_type" data-ac="/type/autocomplete" value="{{ $ruleInfo->type->type ?? '' }}"></td>
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['clear_task'] }}">Clears task</label></th>
@@ -62,7 +62,7 @@
       <table class="table">
         <tr>
           <th colspan="2"><label title="{{ $ruleComments['trigger_event'] }}">Triggered by</label></th>
-          <td colspan="2"><input type="text" class="form-control noformat" name="trigger_event" data-ac="/event-name/autocomplete/0" placeholder="{{ $ruleInfo->trigger->name }}"></td>
+          <td colspan="2"><input type="text" class="form-control noformat" name="trigger_event" data-ac="/event-name/autocomplete/0?category={{ $ruleInfo->for_category }}" placeholder="{{ $ruleInfo->trigger->name }}"></td>
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['days'] }}">Days</label></th>
@@ -84,23 +84,23 @@
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['condition_event'] }}">Apply if</label></th>
-          <td colspan="3"><input type="text" class="form-control noformat" name="condition_event" data-ac="/event-name/autocomplete/0" value="{{ empty($ruleInfo->condition_eventInfo) ? '' : $ruleInfo->condition_eventInfo->name }}"></td>
+          <td colspan="3"><input type="text" class="form-control noformat" name="condition_event" data-ac="/event-name/autocomplete/0?category={{ $ruleInfo->for_category }}" value="{{ $ruleInfo->condition_eventInfo->name ?? '' }}"></td>
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['abort_on'] }}">Abort if</label></th>
-          <td colspan="3"><input type="text" class="form-control noformat" name="abort_on" data-ac="/event-name/autocomplete/0" value="{{ empty($ruleInfo->abort_onInfo) ? '' : $ruleInfo->abort_onInfo->name }}"></td>
+          <td colspan="3"><input type="text" class="form-control noformat" name="abort_on" data-ac="/event-name/autocomplete/0?category={{ $ruleInfo->for_category }}" value="{{ $ruleInfo->abort_onInfo->name ?? '' }}"></td>
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['responsible'] }}">Responsible</label></th>
-          <td colspan="3"><input type="text" class="form-control noformat" name="responsible" data-ac="/user/autocomplete" value="{{ empty($ruleInfo->responsibleInfo) ? '' : $ruleInfo->responsibleInfo->name }}"></td>
+          <td colspan="3"><input type="text" class="form-control noformat" name="responsible" data-ac="/user/autocomplete" value="{{ $ruleInfo->responsibleInfo->name ?? '' }}"></td>
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['use_before'] }}">Use before</label></th>
-          <td colspan="3"><input type="date" class="form-control noformat" name="use_before" value="{{ $ruleInfo->use_before != '' ?  $ruleInfo->use_before: '...' }}"></td>
+          <td colspan="3"><input type="date" class="form-control noformat" name="use_before"></td>
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['use_after'] }}">Use after</label></th>
-          <td colspan="3"><input type="date" class="form-control noformat" name="use_after" value="{{ $ruleInfo->use_after != "" ?  $ruleInfo->use_after: "..." }}"></td>
+          <td colspan="3"><input type="date" class="form-control noformat" name="use_after"></td>
         </tr>
       </table>
     </fieldset>
