@@ -57,6 +57,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('renewal/abandon', 'RenewalController@abandon');
     Route::post('renewal/lapsing', 'RenewalController@lapsing');
     Route::get('logs', 'RenewalController@logs');
+    Route::get('document/mailto/{member}', 'DocumentController@mailto');
 
     Route::post('matter/search', function (Request $request) {
         $matter_search = $request->input('matter_search');

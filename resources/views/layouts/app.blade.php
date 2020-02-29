@@ -187,6 +187,17 @@
     });
 
     // Process click events
+
+    app.addEventListener('click', (e) => {
+      if(e.target.matches('.sendDocument')) {
+        fetchREST(e.target.closest('[data-resource]').dataset.resource, 'GET')
+          .then((data) => {
+            if (data.message) {
+              window.open(data.message);
+            }
+          });
+      }
+    });
     app.addEventListener('click', (e) => {
       switch (e.target.id) {
         case 'createMatterSubmit':
@@ -283,6 +294,10 @@
 
         case 'createClassifierTypeSubmit':
           submitModalForm('/classifier_type', createClassifierTypeForm);
+          break;
+
+        case 'sendDocument':
+          submitModalForm('/document', sendDocumentForm);
           break;
 
         case 'deleteActor':
