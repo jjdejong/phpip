@@ -69,7 +69,7 @@ class RuleController extends Controller
           'taskInfo:code,name',
           'condition_eventInfo:code,name',
           'abort_onInfo:code,name',
-          'responsibleInfo:id,name'
+          'responsibleInfo:login,name'
         ]);
 
         $ruleComments = $rule->getTableComments('task_rules');
@@ -98,6 +98,9 @@ class RuleController extends Controller
     public function update(Request $request, Rule $rule)
     {
         $this->validate($request, [
+            'task' => 'sometimes|required',
+            'trigger_event' => 'sometimes|required',
+            'for_category' => 'sometimes|required',
             'cost' => 'nullable|numeric',
             'years' => 'nullable|numeric',
             'months' => 'nullable|numeric',

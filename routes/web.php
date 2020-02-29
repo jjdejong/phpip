@@ -68,11 +68,8 @@ Route::group(['middleware' => 'auth'], function () {
             if (count($matters) == 1) {
                 return redirect('matter/' . $matters[0]->id);
             }
-            return redirect('/matter?Ref='.$matter_search);
         }
-        elseif ($option == "Responsible") {
-            return redirect('/matter?responsible='.$matter_search);
-        }
+        return redirect("/matter?$option=$matter_search");
     });
 
     Route::get('matter/new-caseref', function (Request $request) {
@@ -88,9 +85,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
         $term = $request->input('term');
+        $category = $request->category;
         $results = App\EventName::select('name as value', 'code as key')
-                ->where('name', 'like', "$term%")
-                ->where('is_task', $is_task);
+                ->where([
+                  ['name', 'like', "$term%"],
+                  ['is_task', $is_task]
+                ])
+                ->whereRaw('ifnull(category, ?) = ?', [$category, $category]);
         return $results->take(10)->get();
     });
 
@@ -111,12 +112,12 @@ Route::group(['middleware' => 'auth'], function () {
                         ->take(10)->get();
     });
 
-    Route::get('actor/autocomplete', function (Request $request) {
+    Route::get('actor/autocomplete/{create_option?}', function (Request $request, $create_option = null) {
         $term = $request->input('term');
         $list = App\Actor::select('name as value', 'id as key')
                         ->where('name', 'like', "$term%")
                         ->take(10)->get();
-        if ( $list->count() < 5 ) {
+        if ( $list->count() < 5 && $create_option ) {
           $list->push(['label' => 'Unknown. Create?', 'key' => 'create']);
         }
         return $list;

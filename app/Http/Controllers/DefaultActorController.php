@@ -103,16 +103,11 @@ class DefaultActorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, DefaultActor $default_actor)
-    { 
-        if($request->has('actor_id') && is_null($request->actor_id)) {
-            return response(json_encode(['message' => "The given data was invalid",
-                                                                'errors' =>['actor_id' => ['The actor is required']]]), 422);
-        }
-        if($request->has('role') && is_null($request->role)) {
-            return response(json_encode(['message' => "The given data was invalid",
-                                                                'errors' =>['role' => ['The role is required']]]), 422);
-        }
-        $request->merge([ 'updater' => Auth::user()->login ]);
+    {
+        $request->validate([
+            'actor_id' => 'sometimes|required',
+            'role' => 'sometimes|required'
+        ]);
         $default_actor->update($request->except(['_token', '_method']));
         return response()->json(['success' => 'Entry updated']);
     }

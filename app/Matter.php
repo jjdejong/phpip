@@ -180,8 +180,8 @@ class Matter extends Model
             DB::raw("GROUP_CONCAT(DISTINCT COALESCE(app.display_name, app.name) SEPARATOR '; ') AS Applicant"),
             DB::raw("COALESCE(agt.display_name, agt.name) AS Agent"),
             'agtlnk.actor_ref AS AgtRef',
-            'classifier.value AS Title',
-            'classifier2.value AS Title2',
+            'tit1.value AS Title',
+            'tit2.value AS Title2',
             DB::raw("CONCAT_WS(' ', inv.name, inv.first_name) as Inventor1"),
             'fil.event_date AS Filed',
             'fil.detail AS FilNo',
@@ -270,10 +270,10 @@ class Matter extends Model
                 $join->on('status.matter_id', 'e2.matter_id')->whereColumn('status.event_date', '<', 'e2.event_date');
             }
         )
-        ->leftJoin(DB::raw('classifier
-            JOIN classifier_type ON classifier.type_code = classifier_type.code AND classifier_type.main_display = 1 AND classifier_type.display_order = 1'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'classifier.matter_id')
-        ->leftJoin(DB::raw('classifier classifier2
-            JOIN classifier_type ct2 ON classifier2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'classifier2.matter_id')
+        ->leftJoin(DB::raw('classifier tit1
+            JOIN classifier_type ct1 ON tit1.type_code = ct1.code AND ct1.main_display = 1 AND ct1.display_order = 1'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit1.matter_id')
+        ->leftJoin(DB::raw('classifier tit2
+            JOIN classifier_type ct2 ON tit2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit2.matter_id')
         ->where('e2.matter_id', null);
 
         $authUserRole = Auth::user()->default_role;
@@ -304,6 +304,9 @@ class Matter extends Model
                         case 'Cat':
                             $query->where('category_code', 'LIKE', "$value%");
                             break;
+                        case 'country':
+                            $query->where('matter.country', 'LIKE', "$value%");
+                            break;
                         case 'Status':
                             $query->where('event_name.name', 'LIKE', "$value%");
                             break;
@@ -326,7 +329,7 @@ class Matter extends Model
                             $query->where('agtlnk.actor_ref', 'LIKE', "$value%");
                             break;
                         case 'Title':
-                            $query->where('classifier.value', 'LIKE', "%$value%");
+                            $query->where(DB::Raw('concat(tit1.value, tit2.value)'), 'LIKE', "%$value%");
                             break;
                         case 'Inventor1':
                             $query->where('inv.name', 'LIKE', "$value%");
@@ -420,8 +423,8 @@ class Matter extends Model
                 DB::raw ( "COALESCE(app.display_name, app.name) AS Applicant" ),
                 //DB::raw ( "COALESCE(agt.display_name, agt.name) AS Agent" ),
                 //'agtlnk.actor_ref AS AgtRef',
-                'classifier.value AS Title',
-                'classifier2.value AS Title2',
+                'tit1.value AS Title',
+                'tit2.value AS Title2',
                 DB::raw ( "CONCAT_WS(' ', inv.name, inv.first_name) as Inventor1" ),
                 'fil.event_date AS Filed',
                 'fil.detail AS FilNo',
@@ -493,10 +496,10 @@ class Matter extends Model
                 $join->on('status.matter_id', 'e2.matter_id')->whereColumn('status.event_date', '<', 'e2.event_date');
             }
         )
-        ->leftJoin(DB::raw('classifier
-            JOIN classifier_type ON classifier.type_code = classifier_type.code AND classifier_type.main_display = 1 AND classifier_type.display_order = 1'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'classifier.matter_id')
-        ->leftJoin(DB::raw('classifier classifier2
-            JOIN classifier_type ct2 ON classifier2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'classifier2.matter_id')
+        ->leftJoin(DB::raw('classifier tit1
+            JOIN classifier_type ct1 ON tit1.type_code = ct1.code AND ct1.main_display = 1 AND ct1.display_order = 1'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit1.matter_id')
+        ->leftJoin(DB::raw('classifier tit2
+            JOIN classifier_type ct2 ON tit2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit2.matter_id')
         ->where('matter.id','=',$id);
         $info = $query->first();
         $description = array();

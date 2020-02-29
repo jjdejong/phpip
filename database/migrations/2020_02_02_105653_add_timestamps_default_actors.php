@@ -29,10 +29,10 @@ class AddTimestampsDefaultActors extends Migration
     {
         Schema::table('default_actor', function (Blueprint $table) {
             if ( Schema::hasColumn('default_actor', 'updated_at')) {
-                $table->dropColumn('updated_at');s();
+                $table->dropColumn('updated_at');
             }
             if ( Schema::hasColumn('default_actor', 'created_at')) {
-                $table->dropColumn('created_at');s();
+                $table->dropColumn('created_at');
             }
         });
     }

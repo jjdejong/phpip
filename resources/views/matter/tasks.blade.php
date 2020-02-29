@@ -17,23 +17,32 @@
   @foreach ( $events as $event )
   <tbody>
     <tr class="reveal-hidden">
-      <td colspan="8">
-        <span style="position: relative; margin-right: 10px;">{{ $event->info->name . ": " . Carbon\Carbon::parse($event->event_date)->isoFormat('L') }}</span>
-        @cannot('client')
-        <a href="#" id="addTaskToEvent" class="hidden-action" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
-          &CirclePlus;
-        </a>
-        <a href="#" class="hidden-action text-danger ml-2" id="deleteEvent" data-event_id="{{ $event->id }}" title="Delete event">
-          &CircleTimes;
-        </a>
-        @endcannot
+      <td colspan="6">
+        <ul class="list-inline mb-0 mt-1">
+          <li class="list-inline-item">{{ $event->info->name }}</li>
+          <li class="list-inline-item">{{ Carbon\Carbon::parse($event->event_date)->isoFormat('L') }}</li>
+          @canany(['admin', 'readwrite'])
+          <li class="list-inline-item">
+            <a href="#" id="addTaskToEvent" class="hidden-action" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
+              &CirclePlus;
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a href="#" class="hidden-action text-danger" id="deleteEvent" data-event_id="{{ $event->id }}" title="Delete event">
+              &CircleTimes;
+            </a>
+          </li>
+          @endcanany
+        </ul>
       </td>
     </tr>
     @foreach ($event->tasks as $task)
     <tr class="reveal-hidden {{ $task->done ? 'text-success' : 'text-danger' }}" data-resource="/task/{{ $task->id }}">
       <td nowrap>
-        <span class="ml-2">{{ $task->info->name }}</span>
-        <input type="text" class="noformat" name="detail" value="{{ $task->detail }}">
+        <ul class="list-inline my-0 ml-1">
+          <li class="list-inline-item">{{ $task->info->name }}</li>
+          <li class="list-inline-item"><input type="text" class="noformat" name="detail" placeholder="-" value="{{ $task->detail }}"></li>
+        </ul>
       </td>
       <td><input type="date" class="form-control noformat" name="due_date" value="{{ $task->due_date }}"></td>
       <td><input type="checkbox" class="form-control noformat" name="done" {{ $task->done ? 'checked' : '' }}></td>
@@ -45,9 +54,9 @@
       <td><input type="text" class="form-control noformat" name="assigned_to" data-ac="/user/autocomplete" value="{{ $task->assigned_to }}"></td>
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"></td>
       <td>
-        @cannot('client')
+        @canany(['admin', 'readwrite'])
         <a href="#" class="hidden-action text-danger" id="deleteTask" title="Delete task">&CircleTimes;</a>
-        @endcannot
+        @endcanany
       </td>
     </tr>
     @endforeach
@@ -62,7 +71,7 @@
         <input type="hidden" name="trigger_id">
         <div class="input-group">
           <input type="hidden" name="code">
-          <input type="text" class="form-control form-control-sm" placeholder="Task" data-ac="/event-name/autocomplete/1" data-actarget="code">
+          <input type="text" class="form-control form-control-sm" placeholder="Task" data-ac="/event-name/autocomplete/1?category={{ $matter->category_code }}" data-actarget="code">
           <input type="text" class="form-control form-control-sm" name="detail" placeholder="Detail">
           <input type="date" class="form-control form-control-sm" name="due_date">
           <input type="hidden" name="assigned_to">

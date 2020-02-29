@@ -36,6 +36,7 @@ class MatterController extends Controller
 
     public function show(Matter $matter)
     {
+        $this->authorize('view', $matter);
         $matter->load(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers']);
         return view('matter.show', compact('matter'));
     }
@@ -311,6 +312,7 @@ class MatterController extends Controller
             'ID',
             'container_ID',
             'parent_ID',
+            'Type',
             'Responsible',
             'Delegate',
             'Dead',
