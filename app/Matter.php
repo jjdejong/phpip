@@ -329,7 +329,7 @@ class Matter extends Model
                             $query->where('agtlnk.actor_ref', 'LIKE', "$value%");
                             break;
                         case 'Title':
-                            $query->where(DB::Raw('concat(tit1.value, tit2.value)'), 'LIKE', "%$value%");
+                            $query->where(DB::Raw('concat_ws(" ", tit1.value, tit2.value)'), 'LIKE', "%$value%");
                             break;
                         case 'Inventor1':
                             $query->where('inv.name', 'LIKE', "$value%");
