@@ -345,6 +345,23 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               title="Copy a summary in French">
               &boxbox; FR
           </a>
+          Email:
+          <a class="badge badge-primary align-middle"
+              href="/document/select/{{ $matter->id }}?Language=fra"
+              data-toggle="modal"
+              data-target="#ajaxModal"
+              data-size="modal-lg"
+              title="Prepare an email">
+              &#9993; FR
+          </a>
+          <a class="badge badge-primary align-middle"
+              href="/document/select/{{ $matter->id }}?Language=eng"
+              data-toggle="modal"
+              data-target="#ajaxModal"
+              data-size="modal-lg"
+              title="Prepare an email">
+              &#9993; EN
+          </a>
         </div>
       </div>
     </div>

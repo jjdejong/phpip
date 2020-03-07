@@ -57,7 +57,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('renewal/abandon', 'RenewalController@abandon');
     Route::post('renewal/lapsing', 'RenewalController@lapsing');
     Route::get('logs', 'RenewalController@logs');
-    Route::get('document/mailto/{member}', 'DocumentController@mailto');
+
+    Route::post('document/mailto/{member}', 'DocumentController@mailto');
+    Route::get('document/select/{matter}', 'DocumentController@index');
 
     Route::post('matter/search', function (Request $request) {
         $matter_search = $request->input('matter_search');
@@ -159,6 +161,24 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('classifier/{classifier}/img', function ( App\Classifier $classifier) {
         return response($classifier->img)
             ->header('Content-Type', $classifier->value);
+    });
+
+    Route::get('template-category/autocomplete', function (Request $request) {
+        $term = $request->input('term');
+        return App\TemplateCategory::select('category as value', 'id as key')
+                        ->where('category', 'like', "$term%")->get();
+    });
+
+    Route::get('template-style/autocomplete', function (Request $request) {
+        $term = $request->input('term');
+        return App\TemplateStyle::select('style as value', 'id as key')
+                        ->where('style', 'like', "$term%")->get();
+    });
+
+    Route::get('language/autocomplete', function (Request $request) {
+        $term = $request->input('term');
+        return App\Language::select('language as value', 'id as key')
+                        ->where('language', 'like', "$term%")->get();
     });
 
     Route::resource('matter', 'MatterController');

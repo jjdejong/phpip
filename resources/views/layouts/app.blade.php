@@ -195,15 +195,17 @@
 
     app.addEventListener('click', (e) => {
       if(e.target.matches('.sendDocument')) {
-        fetchREST(e.target.closest('[data-resource]').dataset.resource, 'GET')
+        formData = new FormData(sendDocumentForm);
+        fetchREST(e.target.closest('[data-resource]').dataset.resource, 'POST',formData)
           .then((data) => {
             if (data.message) {
-              window.open(data.message);
+              alert(data.message);
+            }
+            else {
+               document.location.href=data.mailto;
             }
           });
       }
-    });
-    app.addEventListener('click', (e) => {
       switch (e.target.id) {
         case 'createMatterSubmit':
           submitModalForm('/matter', createMatterForm);
@@ -294,7 +296,7 @@
           break;
 
         case 'createFeeSubmit':
-          submitModal2Form('/fee', createFeeForm);
+          submitModalForm('/fee', createFeeForm);
           break;
 
         case 'createClassifierTypeSubmit':
@@ -436,8 +438,6 @@
       footerAlert.innerHTML = "";
       footerAlert.classList.remove('alert-danger');
     });
-
-
     // Process modified input fields
     app.addEventListener("input", e => {
       // Mark the field
