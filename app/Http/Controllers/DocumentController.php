@@ -44,6 +44,7 @@ class DocumentController extends Controller
     $tableComments = $table->getTableComments('template_members');
     $filters =  $request->except(['page']);
     $members = new TemplateMember;
+    $oldfilters = [];
     if (!empty($filters)) {
         foreach ($filters as $key => $value) {
             if ($value != '') {
@@ -52,28 +53,32 @@ class DocumentController extends Controller
                         $members = $members->whereHas('category', function ($query) use ($value){
                           $query->where('category', 'LIKE', "$value%");
                         });
+                        $oldfilters["Category"] = $value;
                         break;
                     case 'Language':
                         $members = $members->whereHas('language', function ($query) use ($value){
                           $query->where('language', 'LIKE', "$value%");
                         });
+                        $oldfilters["Language"] = $value;
                         break;
                     case 'Name':
                         $members = $members->whereHas('class', function ($query) use ($value){
                           $query->where('name', 'LIKE', "$value%");
                         });
+                        $oldfilters["Name"] = $value;
                         break;
                     case 'Style':
                         $members = $members->whereHas('style', function ($query) use ($value){
                           $query->where('style', 'LIKE', "$value%");
                         });
+                        $oldfilters["Style"] = $value;
                         break;
                 }
             }
         }
     }
     $members = $members->get();
-    return view('documents.select',compact('matter','members', 'contacts', 'tableComments'));
+    return view('documents.select',compact('matter','members', 'contacts', 'tableComments','oldfilters'));
   }
 
   /*

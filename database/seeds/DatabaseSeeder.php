@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MatterTypeTableSeeder::class);
         $this->call(TaskRulesTableSeeder::class);
         $this->call(LanguagesTableSeeder::class);
-        $this->call(StylesTableSeeder::class);
+        $this->call(TemplateStylesTableSeeder::class);
+        $this->call(TemplateCategoriesTableSeeder::class);
     }
 }

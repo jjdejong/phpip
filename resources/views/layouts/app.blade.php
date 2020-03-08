@@ -191,6 +191,19 @@
       fetchInto(e.target.href, actorUsedIn);
     });
 
+    // Manage filters input fields in Email template selection box
+
+    ajaxModal.addEventListener('input', (e) => {
+        if(e.target.matches('.filter')) {
+          var url = new URL(window.location.origin + e.target.closest('[data-resource]').dataset.resource);
+          if (e.target.value.length === 0) {
+            url.searchParams.delete(e.target.name);
+          } else {
+            url.searchParams.set(e.target.name, e.target.value);
+          }
+            reloadPart(url, 'tableList');
+        }
+      });
     // Process click events
 
     app.addEventListener('click', (e) => {
@@ -348,7 +361,6 @@
         let panel = document.getElementById(e.target.dataset.panel);
         fetchInto(e.target.href, panel);
       }
-
     });
 
     app.addEventListener("change", e => {

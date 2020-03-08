@@ -1,18 +1,3 @@
-
-<script type="text/javascript">
-
-// Manage filters input fields in Emil template selection box
-filterTemplate.addEventListener('input', debounce( e => {
-  if (e.target.value.length === 0) {
-    url.searchParams.delete(e.target.name);
-  } else {
-    url.searchParams.set(e.target.name, e.target.value);
-  }
-    window.history.pushState('', 'phpIP', url);
-    reloadPart(window.location.pathname, 'tableList');
-}, 500));
-</script>
-
 <form id="sendDocumentForm">
   <input type='hidden' value="{{ $matter->id }}" name="matter_id">
   <fieldset>
@@ -44,26 +29,27 @@ filterTemplate.addEventListener('input', debounce( e => {
     @endforeach
   </table>
   </fieldset>
-  <table id="tableList">
+  <table data-resource="/document/select/{{ $matter->id }}">
       <thead  class="thead-light">
-        <tr id="filterTemplate">
+        <tr>
           <th class="col-2">
-            <input class="form-control" name="Language" value="{{ old('Language')}}" placeholder="Language">
+            <input class="form-control filter" name="Language" value="{{ array_key_exists('Language', $oldfilters) ? $oldfilters['Language'] : "" }}" placeholder="Language">
           </th>
           <th class="col-2">
-            <input class="form-control" title="{{ $tableComments['category_id'] }}" name="Category" value="{{ old('Category')}}" placeholder="Category">
+            <input class="form-control filter" title="{{ $tableComments['category_id'] }}" name="Category" value="{{ array_key_exists('Category', $oldfilters) ? $oldfilters['Category'] : "" }}" placeholder="Category">
           </th>
           <th class="col-4">
-            <input class="form-control" name="Name" value="{{ old('Name')}}" placeholder="Name">
+            <input class="form-control filter" name="Name" value="{{ array_key_exists('Name', $oldfilters) ? $oldfilters['Name'] : "" }}" placeholder="Name">
           </th>
           <th class="col-2">
-            <input class="form-control" title="{{ $tableComments['style_id'] }}" name="Style" value="{{ old('Style')}}" placeholder="Style">
+            <input class="form-control filter" title="{{ $tableComments['style_id'] }}" name="Style" value="{{ array_key_exists('Style', $oldfilters) ? $oldfilters['Style'] : "" }}" placeholder="Style">
           </th>
           <th class="col-1">
               Action
           </th>
         </tr>
       </thead>
+      <tbody id="tableList" >
       @foreach ($members as $member)
         <tr class="reveal-hidden" data-resource="/document/mailto/{{ $member->id }}">
           <td class = "col-2">
@@ -85,5 +71,6 @@ filterTemplate.addEventListener('input', debounce( e => {
           </td>
         </tr>
       @endforeach
+    </tbody>
   </table>
 </form>
