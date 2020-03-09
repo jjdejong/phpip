@@ -21,11 +21,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // Password mutator for hashing the cleartext password as it is stored
-    public function setPasswordAttribute($value) {
-        $this->attributes['password'] = Hash::make($value);
-    }
-
     public function roleInfo()
     {
         return $this->belongsTo('App\Role', 'default_role');

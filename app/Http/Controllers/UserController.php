@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Response;
 
 class UserController extends Controller
@@ -91,8 +92,11 @@ class UserController extends Controller
             'default_role' => 'sometimes|required'
         ]);
         $request->merge([ 'updater' => Auth::user()->login ]);
+        if ($request->filled('password')) {
+          $request->merge([ 'password' => Hash::make($request->password) ]);
+        }
         $user->update($request->except(['_token', '_method']));
-        return response()->json(['success' => '1']);
+        return $user;
     }
 
     /**
