@@ -21,19 +21,13 @@
 		<tr>
 			<th><label title="{{ $tableComments['country'] }}">Country</label></th>
 			<td><input type="text" class="form-control noformat" name="country" data-ac="/country/autocomplete" value="{{ empty($eventname->countryInfo) ? '' : $eventname->countryInfo->name }}"></td>
-			<td><input type="checkbox" class="noformat" name="unique" {{ $eventname->unique ? 'checked' : '' }}></td>
-			<th><label for="unique" title="{{ $tableComments['unique'] }}">Is Unique</label></th>
+			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<th><label title="{{ $tableComments['default_responsible'] }}">Default Responsible</label></th>
 			<td><input type="text" class="form-control noformat" data-ac="/user/autocomplete" name="default_responsible" value="{{ empty($eventname->default_responsibleInfo) ? "" : $eventname->default_responsibleInfo->name }}"></td>
 			<td><input type="checkbox" class="noformat" name="use_matter_resp" {{ $eventname->use_matter_resp ? 'checked' : '' }}></td>
 			<th><label title="{{ $tableComments['use_matter_resp'] }}">Use Matter Responsible</label></th>
-		</tr>
-		<tr>
-			<td colspan="2"></td>
-			<td><input type="checkbox" class="noformat" name="uqtrigger" {{ $eventname->uqtrigger ? 'checked' : '' }}></td>
-			<th><label title="{{ $tableComments['uqtrigger'] }}">Unique Trigger</label></th>
 		</tr>
 		<tr>
 			<th>Notes</th>
