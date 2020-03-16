@@ -662,9 +662,9 @@ END proc");
 		)
 proc: BEGIN
 	DECLARE FirstRenewal, RYear INT;
-  DECLARE BaseDate, StartDate, DueDate DATE;
+  DECLARE BaseDate, StartDate, DueDate, ExpiryDate DATE;
 
-  SELECT ebase.event_date, estart.event_date, country.renewal_first INTO BaseDate, StartDate, FirstRenewal
+  SELECT ebase.event_date, estart.event_date, country.renewal_first, matter.expire_date INTO BaseDate, StartDate, FirstRenewal, ExpiryDate
 	  FROM country
 	  JOIN matter ON country.iso = matter.country
 	  JOIN event estart ON estart.matter_id = matter.id AND estart.id = P_trigger_id
@@ -681,6 +681,9 @@ proc: BEGIN
   SET RYear = FirstRenewal;
   renloop: WHILE RYear <= 20 DO
 		SET DueDate = BaseDate + INTERVAL RYear - 1 YEAR;
+		IF DueDate > ExpiryDate THEN
+			LEAVE proc;
+		END IF;
 	  IF DueDate < StartDate THEN
 			SET DueDate = StartDate;
 		END IF;
