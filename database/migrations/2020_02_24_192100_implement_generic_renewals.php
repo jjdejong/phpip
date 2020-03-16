@@ -173,7 +173,7 @@ class ImplementGenericRenewals extends Migration {
 trig: BEGIN
 	DECLARE DueDate, BaseDate, m_expiry DATE DEFAULT NULL;
 	DECLARE tr_id, tr_days, tr_months, tr_years, m_pta, lnk_matter_id, CliAnnAgt INT DEFAULT NULL;
-	DECLARE tr_task, m_type_code, tr_currency, m_country CHAR(5) DEFAULT NULL;
+	DECLARE tr_task, m_type_code, tr_currency, m_country, m_origin CHAR(5) DEFAULT NULL;
 	DECLARE tr_detail, tr_responsible VARCHAR(160) DEFAULT NULL;
 	DECLARE Done, tr_clear_task, tr_delete_task, tr_end_of_month, tr_recurring, tr_use_parent, tr_use_priority, m_dead BOOLEAN DEFAULT 0;
 	DECLARE tr_cost, tr_fee DECIMAL(6,2) DEFAULT null;
@@ -208,7 +208,7 @@ trig: BEGIN
 
 	DECLARE CONTINUE HANDLER FOR NOT FOUND SET Done = 1;
 
-	SELECT type_code, dead, expire_date, term_adjust, country INTO m_type_code, m_dead, m_expiry, m_pta, m_country FROM matter WHERE matter.id = NEW.matter_id;
+	SELECT type_code, dead, expire_date, term_adjust, country, origin INTO m_type_code, m_dead, m_expiry, m_pta, m_country, m_origin FROM matter WHERE matter.id = NEW.matter_id;
 	SELECT id INTO CliAnnAgt FROM actor WHERE display_name = 'CLIENT';
 
 	-- Do not change anything in dead cases
@@ -272,8 +272,11 @@ trig: BEGIN
 			END IF;
 
 			-- Don't create tasks having a deadline in the past, except for expiry and renewal
-      -- Create renewal up to 7 months in the past
-			IF (DueDate < Now() AND tr_task NOT IN ('EXP', 'REN')) OR (DueDate < (Now() - INTERVAL 7 MONTH) AND tr_task = 'REN') THEN
+			-- Create renewals up to 6 months in the past in general, create renewals up to 19 months in the past for PCT national phases (captures direct PCT filing situations)
+			IF (DueDate < Now() AND tr_task NOT IN ('EXP', 'REN'))
+			OR (DueDate < (Now() - INTERVAL 6 MONTH) AND tr_task = 'REN' AND m_origin != 'WO')
+			OR (DueDate < (Now() - INTERVAL 19 MONTH) AND tr_task = 'REN' AND m_origin = 'WO')
+			THEN
 				ITERATE create_tasks;
 			END IF;
 
@@ -500,7 +503,7 @@ END proc");
 proc: BEGIN
 	DECLARE e_event_date, DueDate, BaseDate, m_expiry DATE DEFAULT NULL;
 	DECLARE e_matter_id, tr_id, tr_days, tr_months, tr_years, m_pta, lnk_matter_id, CliAnnAgt INT DEFAULT NULL;
-	DECLARE e_code, tr_task, m_country, m_type_code, tr_currency CHAR(5) DEFAULT NULL;
+	DECLARE e_code, tr_task, m_country, m_type_code, tr_currency, m_origin CHAR(5) DEFAULT NULL;
 	DECLARE tr_detail, tr_responsible VARCHAR(160) DEFAULT NULL;
 	DECLARE Done, tr_clear_task, tr_delete_task, tr_end_of_month, tr_recurring, tr_use_parent, tr_use_priority, m_dead BOOLEAN DEFAULT 0;
 	DECLARE tr_cost, tr_fee DECIMAL(6,2) DEFAULT null;
@@ -538,7 +541,7 @@ proc: BEGIN
 	-- Delete the tasks attached to the event by an existing rule
 	DELETE FROM task WHERE rule_used IS NOT NULL AND trigger_id = P_trigger_id;
 
-  SELECT e.matter_id, e.event_date, e.code, m.country, m.type_code, m.dead, m.expire_date, m.term_adjust INTO e_matter_id, e_event_date, e_code, m_country, m_type_code, m_dead, m_expiry, m_pta
+  SELECT e.matter_id, e.event_date, e.code, m.country, m.type_code, m.dead, m.expire_date, m.term_adjust, m.origin INTO e_matter_id, e_event_date, e_code, m_country, m_type_code, m_dead, m_expiry, m_pta, m_origin
 	FROM event e
 	JOIN matter m ON m.id = e.matter_id
 	WHERE e.id = P_trigger_id;
@@ -607,8 +610,11 @@ proc: BEGIN
 			END IF;
 
 			-- Don't create tasks having a deadline in the past, except for expiry and renewal
-      -- Create renewal up to 7 months in the past
-			IF (DueDate < Now() AND tr_task NOT IN ('EXP', 'REN')) OR (DueDate < (Now() - INTERVAL 7 MONTH) AND tr_task = 'REN') THEN
+      -- Create renewals up to 6 months in the past in general, create renewals up to 19 months in the past for PCT national phases (captures direct PCT filing situations)
+			IF (DueDate < Now() AND tr_task NOT IN ('EXP', 'REN'))
+			OR (DueDate < (Now() - INTERVAL 6 MONTH) AND tr_task = 'REN' AND m_origin != 'WO')
+			OR (DueDate < (Now() - INTERVAL 19 MONTH) AND tr_task = 'REN' AND m_origin = 'WO')
+			THEN
 	      ITERATE create_tasks;
 	    END IF;
 
@@ -662,9 +668,10 @@ END proc");
 		)
 proc: BEGIN
 	DECLARE FirstRenewal, RYear INT;
-  DECLARE BaseDate, StartDate, DueDate, ExpiryDate DATE;
+  DECLARE StartDate, DueDate, ExpiryDate DATE DEFAULT NULL;
+	DECLARE Origin CHAR(2) DEFAULT NULL;
 
-  SELECT ebase.event_date, estart.event_date, country.renewal_first, matter.expire_date INTO BaseDate, StartDate, FirstRenewal, ExpiryDate
+  SELECT estart.event_date, country.renewal_first, matter.expire_date, matter.origin INTO StartDate, FirstRenewal, ExpiryDate, Origin
 	  FROM country
 	  JOIN matter ON country.iso = matter.country
 	  JOIN event estart ON estart.matter_id = matter.id AND estart.id = P_trigger_id
@@ -672,22 +679,22 @@ proc: BEGIN
 	  WHERE country.renewal_start = estart.code
 	  AND country.renewal_base = ebase.code;
 
-  IF BaseDate IS NULL THEN
+	-- Leave if the country has no parameters (country dealt with specifically in task_rules)
+  IF StartDate IS NULL THEN
 		LEAVE proc;
 	END IF;
 
-  SET BaseDate = LEAST(BaseDate, P_base_date);
-
-  SET RYear = FirstRenewal;
+	SET RYear = FirstRenewal;
   renloop: WHILE RYear <= 20 DO
-		SET DueDate = BaseDate + INTERVAL RYear - 1 YEAR;
+		SET DueDate = P_base_date + INTERVAL RYear - 1 YEAR;
 		IF DueDate > ExpiryDate THEN
 			LEAVE proc;
 		END IF;
 	  IF DueDate < StartDate THEN
 			SET DueDate = StartDate;
 		END IF;
-	  IF DueDate < Now() - INTERVAL 7 MONTH THEN
+		-- Ignore renewals in the past beyond the 6-months grace period unless PCT national phase
+	  IF (DueDate < Now() - INTERVAL 6 MONTH AND Origin != 'WO') OR (DueDate < (Now() - INTERVAL 19 MONTH) AND Origin = 'WO') THEN
 			SET RYear = RYear + 1;
 			ITERATE renloop;
 		END IF;
