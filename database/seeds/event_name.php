@@ -61,5 +61,5 @@ $event_name = [
   ['code' => 'TRF','name' => 'Transferred','category' => NULL,'country' => NULL,'is_task' => '0','status_event' => '1','default_responsible' => NULL,'use_matter_resp' => '0','unique' => '1','killer' => '1','notes' => 'Case no longer followed'],
   ['code' => 'VAL','name' => 'Validate','category' => 'PAT','country' => 'EP','is_task' => '1','status_event' => '0','default_responsible' => NULL,'use_matter_resp' => '0','unique' => '1','killer' => '0','notes' => 'Validate granted EP in designated countries'],
   ['code' => 'WAT','name' => 'Watch','category' => NULL,'country' => NULL,'is_task' => '1','status_event' => '0','default_responsible' => NULL,'use_matter_resp' => '1','unique' => '0','killer' => '0','notes' => NULL],
-  ['code' => 'WIT','name' => 'Withdrawal','category' => 'PAT','country' => NULL,'is_task' => '0','status_event' => '1','default_responsible' => NULL,'use_matter_resp' => '0','unique' => '0','killer' => '1','notes' => NULL],
-],;
+  ['code' => 'WIT','name' => 'Withdrawal','category' => 'PAT','country' => NULL,'is_task' => '0','status_event' => '1','default_responsible' => NULL,'use_matter_resp' => '0','unique' => '0','killer' => '1','notes' => NULL]
+];
