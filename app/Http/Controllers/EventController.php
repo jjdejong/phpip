@@ -19,7 +19,7 @@ class EventController extends Controller {
             'code' => 'required',
             'eventName' => 'required',
             'matter_id' => 'required|numeric',
-            'event_date' => 'required_without:alt_matter_id|date'
+            'event_date' => 'required_without:alt_matter_id'
         ]);
         $request->merge([ 'creator' => Auth::user()->login ]);
         return Event::create($request->except(['_token', '_method', 'eventName']));
