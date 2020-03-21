@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class RenewalListView extends Migration
+class CreateRenewalListView extends Migration
 {
     /**
      * Run the migrations.
