@@ -36,6 +36,9 @@ The available actions are:
 ## Invoiced ##
 This step displays the list of already invoiced tasks. There is no more action to do.
 
+# Logs #
+Each action is registered. Logs can be viewed in logs/ page. Lines can be filtered by job, client, date, casenumber or user.
+
 # Settings #
 ## General ##
 Some settings are included in the file `config/renewal.php`. The syntax is the one of an array in PHP. The array is subdivided in several sections
