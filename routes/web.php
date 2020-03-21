@@ -59,7 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('logs', 'RenewalController@logs');
 
     Route::post('document/mailto/{member}', 'DocumentController@mailto');
-    Route::get('document/select/{matter}', 'DocumentController@index');
+    Route::get('document/select/{matter}', 'DocumentController@select');
 
     Route::post('matter/search', function (Request $request) {
         $matter_search = $request->input('matter_search');
@@ -169,6 +169,12 @@ Route::group(['middleware' => 'auth'], function () {
                         ->where('category', 'like', "$term%")->get();
     });
 
+    Route::get('template-class/autocomplete', function (Request $request) {
+        $term = $request->input('term');
+        return App\TemplateClass::select('name as value', 'id as key')
+                        ->where('name', 'like', "$term%")->get();
+    });
+
     Route::get('template-style/autocomplete', function (Request $request) {
         $term = $request->input('term');
         return App\TemplateStyle::select('style as value', 'id as key')
@@ -198,6 +204,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('classifier', 'ClassifierController');
     Route::resource('renewal', 'RenewalController');
     Route::resource('fee', 'FeeController');
+    Route::resource('template-member', 'TemplateMemberController');
+    Route::resource('document', 'DocumentController')->parameters(['document' => 'class']);
 
     // Testing - not used
     /* Route::get('matter/{matter}/actors', function (App\Matter $matter) {

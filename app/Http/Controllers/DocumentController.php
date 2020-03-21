@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\TemplateMember;
 use App\Actor;
 use App\Matter;
 use App\MatterActors;
+use App\TemplateClass;
 use Log;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Illuminate\Support\Facades\Blade;
@@ -31,7 +33,100 @@ use Illuminate\Support\Facades\Blade;
 
 class DocumentController extends Controller
 {
-  public function index(Matter $matter, Request $request) {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        $Description  = $request->input('Description');
+        $Category  = $request->input('Category');
+        $Name = $request->input('Name');
+        $template_classes = TemplateClass::query() ;
+        if (!is_null($Category)) {
+            $template_classes = $template_classes->whereHas('category_id', function ($query) use ($Category) {
+                $query->where('category', 'LIKE', "$Category%");
+            });
+        }
+        if (!is_null($Name)) {
+            $template_classes = $template_classes->where('name', 'like', $Name.'%');
+        }
+
+        $template_classes = $template_classes->orderby('name')->simplePaginate( config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')) );
+        $template_classes->appends($request->input())->links();
+        return view('documents.index', compact('template_classes'));
+    }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $table = new Actor ;
+        $tableComments = $table->getTableComments('template_classes');
+        return view('documents.create', compact('tableComments'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|max:55',
+        ]);
+        $request->merge([ 'creator' => Auth::user()->login ]);
+        return TemplateClass::create($request->except(['_token', '_method']));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  TemplateClass $class
+     * @return \Illuminate\Http\Response
+     */
+    public function show(TemplateClass $class)
+    {
+        $table = new Actor;
+        $tableComments = $table->getTableComments('template_classes');
+        $class->with(['category','role']);
+        return view('documents.show', compact('class', 'tableComments'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string $code
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, TemplateClass $class)
+    {
+        $request->merge([ 'updater' => Auth::user()->login ]);
+        $class->update($request->except(['_token', '_method']));
+        return response()->json(['success' => 'Template class updated']);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int  Role $role
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(TemplateClass $class)
+    {
+        $class->delete();
+        return response()->json(['success' => 'Template class deleted']);
+    }
+
+  public function select(Matter $matter, Request $request) {
     $template_id = $request->input('template_id');
     //limit to actors with email
     $contacts = MatterActors::where([['matter_id',$matter->id],['role_code','CNT']])->whereNotNull('email');
