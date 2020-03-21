@@ -17,6 +17,7 @@ class CreateLanguages extends Migration
             $table->increments('id');
             $table->string('code',3);
             $table->string('language',20);
+            $table->string('creator',20);
             $table->string('updater',20);
             $table->timestamps();
         });
