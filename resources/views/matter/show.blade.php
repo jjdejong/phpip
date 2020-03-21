@@ -8,7 +8,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 @extends('layouts.app')
 
 @section('content')
-
 <div class="row card-deck mb-1">
   <div id="refsPanel" class="card border-primary col-3 p-0">
     <div class="card-header bg-primary text-light reveal-hidden lead p-1"  {!! $matter->dead ? 'style="text-decoration: line-through;"' : '' !!}>

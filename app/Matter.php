@@ -27,7 +27,9 @@ class Matter extends Model
         return $this->hasMany('App\Matter', 'caseref', 'caseref')
                         ->where('id', '!=', $this->id)
                         ->orderBy('origin')
-                        ->orderBy('country');
+                        ->orderBy('country')
+                        ->orderBy('type_code')
+                        ->orderBy('idx');
     }
 
     public function container()
@@ -44,7 +46,9 @@ class Matter extends Model
     {
         return $this->hasMany('App\Matter', 'parent_id')
                         ->orderBy('origin')
-                        ->orderBy('country');
+                        ->orderBy('country')
+                        ->orderBy('type_code')
+                        ->orderBy('idx');
     }
 
     public function priorityTo()
@@ -53,7 +57,9 @@ class Matter extends Model
                         ->where('caseref', '!=', $this->caseref)
                         ->orderBy('caseref')
                         ->orderBy('origin')
-                        ->orderBy('country');
+                        ->orderBy('country')
+                        ->orderBy('type_code')
+                        ->orderBy('idx');
     }
 
     public function actors()
@@ -124,17 +130,20 @@ class Matter extends Model
                         ->orderBy('due_date');
     }
 
+    // Returns all classifiers outside the "main display", including those inherited from the container (MatterClassifiers is a model referring to db view matter_classifiers)
     public function classifiers()
     {
         return $this->hasMany('App\MatterClassifiers')
                         ->where('main_display', 0);
     }
 
+    // Returns the classifiers native to the matter (only applies to a container, normally)
     public function classifiersNative()
     {
         return $this->hasMany('App\Classifier');
     }
 
+    // Returns all classifiers of the "main display", including those inherited from the container (MatterClassifiers is a model referring to db view matter_classifiers)
     public function titles()
     {
         return $this->hasMany('App\MatterClassifiers')
@@ -329,7 +338,7 @@ class Matter extends Model
                             $query->where('agtlnk.actor_ref', 'LIKE', "$value%");
                             break;
                         case 'Title':
-                            $query->where(DB::Raw('concat(tit1.value, tit2.value)'), 'LIKE', "%$value%");
+                            $query->where(DB::Raw('concat_ws(" ", tit1.value, tit2.value)'), 'LIKE', "%$value%");
                             break;
                         case 'Inventor1':
                             $query->where('inv.name', 'LIKE', "$value%");

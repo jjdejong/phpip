@@ -56,33 +56,13 @@
           <input type='hidden' name='country'>
           <input type="text" class="form-control form-control-sm" data-ac="/country/autocomplete" data-actarget="country" autocomplete="off">
         </td>
-        <td><label title="{{ $tableComments['unique'] }}">Is unique</label></td>
-        <td>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="unique" value="1">
-            <label class="form-check-label">Yes</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="unique" value="0" checked>
-            <label class="form-check-label">No</label>
-          </div>
-        </td>
+        <td colspan="2"></td>
       <tr>
         <td><label for="category" title="{{ $tableComments['category'] }}">Category</label></td><td>
           <input type='hidden' name='category'>
           <input type="text" class="form-control form-control-sm" data-ac="/category/autocomplete" data-actarget="category" autocomplete="off">
         </td>
-        <td><label title="{{ $tableComments['uqtrigger'] }}">Unique trigger</label></td>
-        <td>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="uqtrigger" value="1">
-            <label class="form-check-label">Yes</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="uqtrigger" value="0" checked>
-            <label class="form-check-label">No</label>
-          </div>
-        </td>
+        <td colspan="2"></td>
       </tr>
       <tr>
         <td><label for="notes" title="{{ $tableComments['notes'] }}">Notes</label></td>
