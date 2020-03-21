@@ -23,6 +23,8 @@ class CreateTemplateMembers extends Migration
             $table->string('path',255);
             $table->string('subject',160);
             $table->text('body');
+            $table->string('creator',20);
+            $table->string('updater',20);
             $table->timestamps();
         });
     }

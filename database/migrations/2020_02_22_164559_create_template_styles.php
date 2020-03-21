@@ -17,6 +17,8 @@ class CreateTemplateStyles extends Migration
             $table->increments('id');
             $table->string('style',45);
             $table->string('notes',160);
+            $table->string('creator',20);
+            $table->string('updater',20);
             $table->timestamps();
         });
     }

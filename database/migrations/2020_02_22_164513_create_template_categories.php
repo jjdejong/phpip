@@ -16,6 +16,8 @@ class CreateTemplateCategories extends Migration
         Schema::create('template_categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('category',15);
+            $table->string('creator',20);
+            $table->string('updater',20);
             $table->timestamps();
         });
     }
