@@ -56,7 +56,7 @@
             {{ $member->language->language }}
           </td>
           <td class = "col-2">
-            {{ $member->category->category }}
+            {{ $member->class->category->category }}
           </td>
 
           <td class = "col-4">
