@@ -191,19 +191,6 @@
       fetchInto(e.target.href, actorUsedIn);
     });
 
-    // Manage filters input fields in Email template selection box
-
-    ajaxModal.addEventListener('input', (e) => {
-        if(e.target.matches('.filter')) {
-          var url = new URL(window.location.origin + e.target.closest('[data-resource]').dataset.resource);
-          if (e.target.value.length === 0) {
-            url.searchParams.delete(e.target.name);
-          } else {
-            url.searchParams.set(e.target.name, e.target.value);
-          }
-            reloadPart(url, 'tableList');
-        }
-      });
     // Process click events
 
     app.addEventListener('click', (e) => {
@@ -312,6 +299,14 @@
           submitModalForm('/fee', createFeeForm);
           break;
 
+        case 'createClassSubmit':
+          submitModalForm('/document', createClassForm);
+          break;
+
+        case 'createMemberSubmit':
+          submitModalForm('/template-member', createMemberForm);
+          break;
+
         case 'createClassifierTypeSubmit':
           submitModalForm('/classifier_type', createClassifierTypeForm);
           break;
@@ -328,6 +323,8 @@
         case 'deleteDActor':
         case 'deleteClassifierType':
         case 'deleteCategory':
+        case 'deleteClass':
+        case 'deleteMember':
           if (confirm("Deleting  "+   e.target.dataset.message + ". Continue anyway?")) {
             fetchREST(e.target.dataset.url, 'DELETE')
               .then((data) => {
@@ -455,6 +452,17 @@
       // Mark the field
       if (e.target.matches(".noformat, textarea, [contenteditable]")) {
         e.target.classList.add("border", "border-info");
+      }
+      else if(e.target.matches('.filter')) {
+
+          // Manage filters input fields in Email template selection box
+        var url = new URL(window.location.origin + e.target.closest('[data-resource]').dataset.resource);
+        if (e.target.value.length === 0) {
+          url.searchParams.delete(e.target.name);
+        } else {
+          url.searchParams.set(e.target.name, e.target.value);
+        }
+          reloadPart(url, 'tableList');
       }
     });
 
