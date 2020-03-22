@@ -346,20 +346,20 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           </a>
           Email:
           <a class="badge badge-primary align-middle"
-              href="/document/select/{{ $matter->id }}?Language=fra"
-              data-toggle="modal"
-              data-target="#ajaxModal"
-              data-size="modal-lg"
-              title="Prepare an email">
-              &#9993; FR
-          </a>
-          <a class="badge badge-primary align-middle"
               href="/document/select/{{ $matter->id }}?Language=eng"
               data-toggle="modal"
               data-target="#ajaxModal"
               data-size="modal-lg"
               title="Prepare an email">
               &#9993; EN
+          </a>
+          <a class="badge badge-primary align-middle"
+              href="/document/select/{{ $matter->id }}?Language=fra"
+              data-toggle="modal"
+              data-target="#ajaxModal"
+              data-size="modal-lg"
+              title="Prepare an email">
+              &#9993; FR
           </a>
         </div>
       </div>
