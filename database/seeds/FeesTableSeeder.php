@@ -12,6 +12,6 @@ class FeesTableSeeder extends Seeder
     public function run()
     {
         require 'fees.php';
-        App\Fees::insert($fees);
+        App\Fee::insert($fees);
     }
 }
