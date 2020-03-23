@@ -17,10 +17,11 @@
   @foreach ( $events as $event )
   <tbody>
     <tr class="reveal-hidden">
-      <td colspan="6">
+      <td colspan="7">
         <ul class="list-inline mb-0 mt-1">
           <li class="list-inline-item">{{ $event->info->name }}</li>
-          <li class="list-inline-item">{{ Carbon\Carbon::parse($event->event_date)->isoFormat('L') }}</li>
+          <li class="list-inline-item">{{ $event->detail }}</li>
+          <li class="list-inline-item">{{ $event->event_date->isoFormat('L') }}</li>
           @canany(['admin', 'readwrite'])
           <li class="list-inline-item">
             <a href="#" id="addTaskToEvent" class="hidden-action" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
@@ -39,18 +40,16 @@
     @foreach ($event->tasks as $task)
     <tr class="reveal-hidden {{ $task->done ? 'text-success' : 'text-danger' }}" data-resource="/task/{{ $task->id }}">
       <td nowrap>
-        <ul class="list-inline my-0 ml-1">
-          <li class="list-inline-item">{{ $task->info->name }}</li>
-          <li class="list-inline-item"><input type="text" class="noformat" name="detail" placeholder="-" value="{{ $task->detail }}"></li>
-        </ul>
+        <table class="table table-borderless mb-0 ml-2">
+          <tr>
+            <td>{{ $task->info->name }}</td>
+            <td><input type="text" class="form-control noformat" name="detail" placeholder="-" value="{{ $task->detail }}"></td>
+          </tr>
+        </table>
       </td>
-      <td><input type="date" class="form-control noformat" name="due_date" value="{{ $task->due_date }}"></td>
+      <td><input type="text" class="form-control noformat" name="due_date" value="{{ $task->due_date->isoFormat('L') }}"></td>
       <td><input type="checkbox" class="form-control noformat" name="done" {{ $task->done ? 'checked' : '' }}></td>
-      <td><input type="date" class="form-control noformat" name="done_date" value="{{ $task->done_date }}"></td>
-      {{-- <td><input type="text" class="form-control noformat" size="6" name="cost" value="{{ $task->cost }}"></td>
-      <td><input type="text" class="form-control noformat" size="6" name="fee" value="{{ $task->fee }}"></td>
-      <td><input type="text" class="form-control noformat" size="3" name="currency" value="{{ $task->currency }}"></td>
-      <td><input type="text" class="form-control noformat" size="6" name="time_spent" value="{{ $task->time_spent }}"></td> --}}
+      <td><input type="text" class="form-control noformat" name="done_date" value="{{ empty($task->done_date) ? '' : $task->done_date->isoFormat('L') }}"></td>
       <td><input type="text" class="form-control noformat" name="assigned_to" data-ac="/user/autocomplete" value="{{ $task->assigned_to }}"></td>
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"></td>
       <td>
@@ -73,7 +72,7 @@
           <input type="hidden" name="code">
           <input type="text" class="form-control form-control-sm" placeholder="Task" data-ac="/event-name/autocomplete/1?category={{ $matter->category_code }}" data-actarget="code">
           <input type="text" class="form-control form-control-sm" name="detail" placeholder="Detail">
-          <input type="date" class="form-control form-control-sm" name="due_date">
+          <input type="text" class="form-control form-control-sm" placeholder="Due date (xx/xx/yyyy)" name="due_date">
           <input type="hidden" name="assigned_to">
           <input type="text" class="form-control form-control-sm" placeholder="Assigned to" data-ac="/user/autocomplete" data-actarget="assigned_to">
           <input type="text" class="form-control form-control-sm" name="notes" placeholder="Notes">

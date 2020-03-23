@@ -190,12 +190,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           <div class="row">
             <span class="col-5">{{ $event->info->name }}</span>
             @if ( $event->alt_matter_id )
-            <span class="col-3">{{ Carbon\Carbon::parse($event->link->event_date ?? $event->event_date)->isoFormat('L') }}</span>
+            <span class="col-3">{{ ($event->link->event_date ?? $event->event_date)->isoFormat('L') }}</span>
             <span class="col">
               <a href="/matter/{{ $event->alt_matter_id }}" title="{{ $event->altMatter->uid }}" target="_blank">{{ $event->altMatter->country }} {{ $event->link->detail ?? $event->detail }}</a>
             </span>
             @else
-            <span class="col-3">{{ Carbon\Carbon::parse($event->event_date)->isoFormat('L') }}</span>
+            <span class="col-3">{{ $event->event_date->isoFormat('L') }}</span>
             <span class="col">
               @if ( $event->publicUrl() )
               <a href="{{ $event->publicUrl() }}" target="_blank">{{ $event->detail }}</a>
@@ -219,7 +219,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           @foreach ( $matter->tasksPending as $task )
           <div class="row">
             <span class="col-9">{{ $task->info->name }}: {{ $task->detail }}</span>
-            <span class="col-3">{{ Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}</span>
+            <span class="col-3">{{ $task->due_date->isoFormat('L') }}</span>
           </div>
           @endforeach
         </div>
@@ -237,7 +237,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           @foreach ( $matter->renewalsPending->take(3) as $task )
           <div class="row">
             <span class="col-4">{{ $task->detail }}</span>
-            <span class="col-8">{{ Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}</span>
+            <span class="col-8">{{ $task->due_date->isoFormat('L') }}</span>
           </div>
           @endforeach
         </div>

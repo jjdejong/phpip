@@ -44,7 +44,6 @@ class EventController extends Controller {
      */
     public function update(Request $request, Event $event) {
         $this->validate($request, [
-            'event_date' => 'date',
             'alt_matter_id' => 'nullable|numeric'
         ]);
         $request->merge([ 'updater' => Auth::user()->login ]);
