@@ -43,10 +43,8 @@
     @foreach ($event->tasks as $task)
     <tr class="reveal-hidden {{ $task->done ? 'text-success' : 'text-danger' }}" data-resource="/task/{{ $task->id }}">
       <td nowrap>
-        <ul class="list-inline my-0 ml-1">
-          <li class="list-inline-item">{{ $task->info->name }}</li>
-          <li class="list-inline-item"><input type="text" class="noformat" name="detail" placeholder="-" value="{{ $task->detail }}"></li>
-        </ul>
+        <span class="ml-2">{{ $task->info->name }}</span>
+        <span data-name="detail" contenteditable>{{ $task->detail ?? '--' }}</span>
       </td>
       <td><input type="text" class="form-control noformat" name="due_date" value="{{ $task->due_date->isoFormat('L') }}"></td>
       <td><input type="checkbox" class="form-control noformat" name="done" {{ $task->done ? 'checked' : '' }}></td>
