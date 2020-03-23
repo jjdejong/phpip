@@ -5,10 +5,14 @@
       <th>Due date</th>
       <th>OK</th>
       <th>Date</th>
-      {{-- <th>Cost</th>
+      @if($events->first()->tasks->firstWhere('code', 'REN'))
+      @cannot('client')
+      <th>Cost</th>
       <th>Fee</th>
       <th>Cur.</th>
-      <th>Time</th> --}}
+      <th>Time</th>
+      @endcannot
+      @endif
       <th>By</th>
       <th>Notes</th>
       <th style="width: 24px;">&nbsp;</th>
@@ -50,6 +54,14 @@
       <td><input type="text" class="form-control noformat" name="due_date" value="{{ $task->due_date->isoFormat('L') }}"></td>
       <td><input type="checkbox" class="form-control noformat" name="done" {{ $task->done ? 'checked' : '' }}></td>
       <td><input type="text" class="form-control noformat" name="done_date" value="{{ empty($task->done_date) ? '' : $task->done_date->isoFormat('L') }}"></td>
+      @if($events->first()->tasks->firstWhere('code', 'REN'))
+      @cannot('client')
+      <td><input type="text" class="form-control noformat" name="cost" value="{{ $task->cost }}"></td>
+      <td><input type="text" class="form-control noformat" name="fee" value="{{ $task->fee }}"></td>
+      <td><input type="text" class="form-control noformat" name="currency" value="{{ $task->currency }}"></td>
+      <td><input type="text" class="form-control noformat" name="time_spent" value="{{ $task->time_spent }}"></td>
+      @endcannot
+      @endif
       <td><input type="text" class="form-control noformat" name="assigned_to" data-ac="/user/autocomplete" value="{{ $task->assigned_to }}"></td>
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"></td>
       <td>
