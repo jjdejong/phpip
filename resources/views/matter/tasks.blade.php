@@ -24,7 +24,6 @@
       <td colspan="7">
         <ul class="list-inline mb-0 mt-1">
           <li class="list-inline-item">{{ $event->info->name }}</li>
-          <li class="list-inline-item">{{ $event->detail }}</li>
           <li class="list-inline-item">{{ $event->event_date->isoFormat('L') }}</li>
           @canany(['admin', 'readwrite'])
           <li class="list-inline-item">
@@ -44,12 +43,10 @@
     @foreach ($event->tasks as $task)
     <tr class="reveal-hidden {{ $task->done ? 'text-success' : 'text-danger' }}" data-resource="/task/{{ $task->id }}">
       <td nowrap>
-        <table class="table table-borderless mb-0 ml-2">
-          <tr>
-            <td>{{ $task->info->name }}</td>
-            <td><input type="text" class="form-control noformat" name="detail" placeholder="-" value="{{ $task->detail }}"></td>
-          </tr>
-        </table>
+        <ul class="list-inline my-0 ml-1">
+          <li class="list-inline-item">{{ $task->info->name }}</li>
+          <li class="list-inline-item"><input type="text" class="noformat" name="detail" placeholder="-" value="{{ $task->detail }}"></li>
+        </ul>
       </td>
       <td><input type="text" class="form-control noformat" name="due_date" value="{{ $task->due_date->isoFormat('L') }}"></td>
       <td><input type="checkbox" class="form-control noformat" name="done" {{ $task->done ? 'checked' : '' }}></td>

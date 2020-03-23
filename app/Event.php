@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class Event extends Model
 {
@@ -14,12 +13,6 @@ class Event extends Model
     protected $dates = [
       'event_date'
     ];
-
-    public function setEventDateAttribute($value)
-    {
-        $locale = Carbon::getLocale();
-        $this->attributes['event_date'] = Carbon::createFromLocaleIsoFormat('L', $locale, $value);
-    }
 
     public function info() {
         return $this->hasOne('App\EventName', 'code', 'code');

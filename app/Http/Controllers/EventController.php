@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Event;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class EventController extends Controller {
 
@@ -21,7 +22,10 @@ class EventController extends Controller {
             'matter_id' => 'required|numeric',
             'event_date' => 'required_without:alt_matter_id'
         ]);
-        $request->merge([ 'creator' => Auth::user()->login ]);
+        $request->merge([
+          'event_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->event_date),
+          'creator' => Auth::user()->login
+        ]);
         return Event::create($request->except(['_token', '_method', 'eventName']));
     }
 
@@ -46,6 +50,9 @@ class EventController extends Controller {
         $this->validate($request, [
             'alt_matter_id' => 'nullable|numeric'
         ]);
+        if ($request->has('event_date')) {
+          $request->merge([ 'event_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->event_date) ]);
+        }
         $request->merge([ 'updater' => Auth::user()->login ]);
         $event->update($request->except(['_token', '_method']));
         return response()->json(['success' => 'Event updated']);
