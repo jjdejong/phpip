@@ -512,30 +512,32 @@ class Matter extends Model
         ->where('matter.id','=',$id);
         $info = $query->first();
         $description = array();
-        $filed_date = date_create($info['Filed']);
-        $granted_date = date_create($info['Granted']);
-        $published_date = date_create($info['Published']);
+        $filed_date = Carbon::parse($info['Filed']);
+        $granted_date = Carbon::parse($info['Granted']);
+        $published_date = Carbon::parse($info['Published']);
         $title = $info['Title'] ?? $info['Title2'];
         if($lang == "fr") {
             $description[] = "N/réf : " . $info['Ref'] ;
             if($info['ClRef']) {$description[] = "V/réf : " . $info['ClRef'] ;}
             if ($info['Cat'] == 'PAT') {
                 if ($info['Granted']) {
-                    $description[] = "Brevet " . $info['GrtNo'] . " déposé en " . $info['country_name_FR'] . " le " . $filed_date->format("d/m/Y") . " et délivré le " . $granted_date->format("d/m/Y");
+                    $description[] = "Brevet " . $info['GrtNo'] . " déposé en " . $info['country_name_FR']
+                    . " le " . $filed_date->locale('fr_FR')->isoFormat('LL') . " et délivré le "
+                    . $granted_date->locale('fr_FR')->isoFormat('LL');
                 }
                 else {
-                    $line = "Demande de brevet n°" . $info['FilNo'] . " déposée en " . $info['country_name_FR'] . " le ". $filed_date->format("d/m/Y");
-                    if($info['Published']) {$line .= " et publiée le " . $published_date->format("d/m/Y") ." sous le n° ". $info['PubNo'];}
+                    $line = "Demande de brevet n°" . $info['FilNo'] . " déposée en " . $info['country_name_FR'] . " le ".$filed_date->locale('fr_FR')->isoFormat('LL');
+                    if($info['Published']) {$line .= " et publiée le " . $published_date->locale('fr_FR')->isoFormat('LL')." sous le n° ". $info['PubNo'];}
                     $description[] = $line;
                 }
                 $description[] = "Pour : " . $title ;
                 $description[] = "Au nom de : ". $info['Applicant'] ;
             }
             if ($info['Cat'] == 'TM') {
-                $line = "Marque n° " . $info['FilNo'] . " déposée en " . $info['country_name_FR'] . " le " . $filed_date->format("d/m/Y") ;
-                if($info['Published']) {$line .= ", publiée le " . $published_date->format("d/m/Y") ." sous le n° ". $info['PubNo'];}
+                $line = "Marque n° " . $info['FilNo'] . " déposée en " . $info['country_name_FR'] . " le " . Carbon::parse($filed_date)->locale('fr_FR')->isoFormat('LL') ;
+                if($info['Published']) {$line .= ", publiée le " . $published_date->locale('fr_FR')->isoFormat('LL') ." sous le n° ". $info['PubNo'];}
                 if ($info['Granted']) {
-                    $line .=  " et enregistrée le " . $granted_date->format("d/m/Y");
+                    $line .=  " et enregistrée le " . $granted_date->locale('fr_FR')->isoFormat('LL');
                 }
                 $description[] = $line;
                 $description[] = "Pour : " . $title ;
@@ -547,20 +549,22 @@ class Matter extends Model
             if($info['ClRef']) {$description[] = "Your ref: " . $info['ClRef'] ;}
             if ($info['Cat'] == 'PAT') {
                 if ($info['Granted']) {
-                    $description[] = "Patent " . $info['FilNo'] . " filed in " . $info['country_name'] . " at " . $info['Filed'] . $info['GrtNo'] . " and granted at " . $info['Granted'];
+                    $description[] = "Patent filed under  no " . $info['FilNo'] . " in " . $info['country_name']
+                     ." at " .  $filed_date->locale('en_GB')->isoFormat('LL') . " and granted under no ". $info['GrtNo']
+                     ." at " .  $granted_date->locale('en_GB')->isoFormat('LL');
                 }
                 else {
-                    $description[] = "Patent application n°" . $info['FilNo'] . " filed in " . $info['country_name'] . " at ". $info['Filed'];
-                    if($info['Published']) {$description[]= " and published at " . $info['Published'] ." with no ". $info['PubNo'];}
+                    $description[] = "Patent application n°" . $info['FilNo'] . " filed in " . $info['country_name'] . " at ". $filed_date->locale('en_GB')->isoFormat('LL');
+                    if($info['Published']) {$description[]= " and published at " . $published_date->locale('en_GB')->isoFormat('LL') ." with no ". $info['PubNo'];}
                 }
                 $description[] = "For: " . $title ;
                 $description[] = "In name of: ". $info['Applicant'] ;
             }
             if ($info['Cat'] == 'TM') {
-                $line = "Trademark no " . $info['FilNo'] . " filed in " . $info['country_name_FR'] . " at " . $info['Filed'] ;
-                if($info['Published']) {$line .= ", published at " .  $info['Published'] ." with no ". $info['PubNo'];}
+                $line = "Trademark no " . $info['FilNo'] . " filed in " . $info['country_name'] . " at " . $filed_date->locale('en_GB')->isoFormat('LL') ;
+                if($info['Published']) {$line .= ", published at " .   $published_date->locale('en_GB')->isoFormat('LL') ." with no ". $info['PubNo'];}
                 if ($info['Granted']) {
-                    $line .=  " and registered at " . $info['Granted'];
+                    $line .=  " and registered at " . $granted_date->locale('en_GB')->isoFormat('LL');
                 }
                 $description[] = $line;
                 $description[] = "For: " . $title ;
