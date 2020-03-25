@@ -36,7 +36,7 @@
             <input class="form-control filter" name="Language" value="{{ array_key_exists('Language', $oldfilters) ? $oldfilters['Language'] : "" }}" placeholder="Language">
           </th>
           <th class="col-2">
-            <input class="form-control filter" title="{{ $tableComments['category_id'] }}" name="Category" value="{{ array_key_exists('Category', $oldfilters) ? $oldfilters['Category'] : "" }}" placeholder="Category">
+            <input class="form-control filter" name="Category" value="{{ array_key_exists('Category', $oldfilters) ? $oldfilters['Category'] : "" }}" placeholder="Category">
           </th>
           <th class="col-4">
             <input class="form-control filter" name="Name" value="{{ array_key_exists('Name', $oldfilters) ? $oldfilters['Name'] : "" }}" placeholder="Name">
