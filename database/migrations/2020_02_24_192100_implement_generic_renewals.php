@@ -55,7 +55,7 @@ class ImplementGenericRenewals extends Migration {
 		DB::table('country')->where('iso', 'AR')->update(['renewal_first' => 1, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]); // OK
 		DB::table('country')->where('iso', 'AT')->update(['renewal_first' => 6, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
 		DB::table('country')->where('iso', 'AU')->update(['renewal_first' => 5, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'BE')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
+		DB::table('country')->where('iso', 'BE')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
 		DB::table('country')->where('iso', 'BG')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
 		DB::table('country')->where('iso', 'BH')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
 		DB::table('country')->where('iso', 'BO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
