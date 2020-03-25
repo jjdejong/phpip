@@ -209,9 +209,12 @@ class DocumentController extends Controller
         }
         $data['matter']  = Matter::where(['id'=>$request->matter_id])->first();
         $data['description'] = implode("\n",Matter::getDescription($request->matter_id, $member->language->code));
-        Log::debug($data['description']);
-        $mailto .= $sep . "body=" . rawurlencode(render($blade, compact('data')));
-        Log::debug($mailto);
+        if ($member->format == 'HTML') {
+            $mailto .= $sep . "html-body=" . rawurlencode(render($blade, compact('data')));
+        }
+        else {
+          $mailto .= $sep . "body=" . rawurlencode(render($blade, compact('data')));
+        }
         return json_encode(['mailto' => $mailto]);
       }
       else {
