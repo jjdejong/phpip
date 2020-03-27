@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Blade;
   {
       $obLevel = ob_get_level();
       ob_start();
+      $__data['__env'] = app(\Illuminate\View\Factory::class);
       extract($__data, EXTR_SKIP);
       try {
         Log::debug($__php);
