@@ -34,12 +34,15 @@ class UpdateCountry extends Migration
         DB::table('country')->where('iso', 'SM')->update(['renewal_first' => 4]);
         DB::table('country')->where('iso', 'SE')->update(['renewal_first' => 3]);
 
-        App\Country::create(array(
-          array('numcode' => '895','iso' => 'RS','iso3' => 'SRB','name_DE' => 'Serbia','name' => 'Serbia','name_FR' => 'Serbie',
-            'ep' => '1','wo' => '1','renewal_first' => '3','renewal_base'=> 'FIL','renewal_start'=>'FIL','checked_on'=>Now() 	 ),
-          array('numcode' => '896','iso' => 'ME','iso3' => 'MNE','name_DE' => 'Montenegro','name' => 'Montenegro','name_FR' => 'Monténégro',
-            'ep' => '1','wo' => '0','renewal_first' => '2','renewal_base'=> 'FIL','renewal_start'=>'FIL','checked_on'=>Now()  ),
-          )
+        DB::table('country')->updateOrInsert(
+          ['iso' => 'RS'],
+          ['numcode' => '895', 'iso3' => 'SRB', 'name_DE' => 'Serbia', 'name' => 'Serbia', 'name_FR' => 'Serbie',
+          'ep' => '0', 'wo' => '0', 'renewal_first' => '3', 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]
+        );
+        DB::table('country')->updateOrInsert(
+          ['iso' => 'ME'],
+          ['numcode' => '896', 'iso3' => 'MNE', 'name_DE' => 'Montenegro','name' => 'Montenegro','name_FR' => 'Monténégro',
+          'ep' => '0', 'wo' => '0', 'renewal_first' => '2', 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]
         );
     }
 
