@@ -12,6 +12,7 @@ use App\Actor;
 use App\MatterActors;
 use App\RenewalsLog;
 use App\Mail\sendCall;
+use App\Country;
 use Locale;
 //use Log;
 use IntlDateFormatter;
@@ -175,18 +176,18 @@ class RenewalController extends Controller
             if ($num != 0)
             {
                 $i=0;
-                $date_now = now();
+                $date_now = Carbon::now();
                 while ($i < $num)
                 {
                     $ren = $resql[$i]->toArray();
                     $client = $ren['client_dn'];
                     $email = $ren['email'];
-                    $due_date = strtotime($ren['due_date']);
+                    $due_date = Carbon::parse($ren['due_date']);
                     if ($grace)
                     {
                     //  Add six months as grace grace_period
                     // TODO Get the grace period from a rule according to country
-                        $due_date = strtotime("+6 months", $due_date);
+                        $due_date = $due_date->addMonths(6);
                     }
 
                     if ($premier_passage)
@@ -205,12 +206,12 @@ class RenewalController extends Controller
                     $desc= $ren['caseref'].$ren['suffix']." : Annuité du titre n°".$ren['number'];
                     if ($ren['event_name']=='FIL') {$desc.=" déposé le ";}
                     if ($ren['event_name']=='GRT' or $ren['event_name']=='PR') {$desc.=" délivré le ";}
-                    $desc.= $fmt->format(strtotime($ren['event_date']));
+                    $desc.= Carbon::parse($ren['event_date'])->isoFormat('LL');
                     if ($ren['title'] != '') {$desc.="<BR>Sujet : ".$ren['title'];}
-                    $renewal['due_date'] = $fmt->format($due_date);
+                    $renewal['due_date'] = $due_date->isoFormat('LL');
                     $renewal['country'] = $ren['country_FR'];
                     $renewal['desc'] = $desc;
-                // Détermine le taux de tva // TODO
+                    // Détermine le taux de tva // TODO
                     $renewal['annuity'] = $ren['detail'];
                     $tx_tva = 0.2;
                     $renewal['tx_tva'] =  $tx_tva * 100;
@@ -245,13 +246,13 @@ class RenewalController extends Controller
                         // TODO  Parameter the delays. No date earlier as today.
                         if ($notify_type =='last')
                         {
-                            $validity_date = $fmt->format($earlier - config('renewal.validity.before_last') * 3600 *24);
-                            $instruction_date = $validity_date;
+                            $validity_date = $earlier->subDays(config('renewal.validity.before_last'))->isoFormat('LL');
                         }
                         else
                         {
-                            $validity_date = $fmt->format($earlier - config('renewal.validity.before') * 3600 *24);
-                            $instruction_date = $fmt->format($earlier  - config('renewal.validity.instruct_before') * 3600 *24);
+                            $validity_date = $earlier->subDays(config('renewal.validity.before'))->isoFormat('LL');
+                            // $earlier is modified with the previous instruction, thus substracting only the difference
+                            $instruction_date = $earlier->subDays(config('renewal.validity.instruct_before') - config('renewal.validity.before'))->isoFormat('LL');
                         }
                         $contacts = new MatterActors();
                         $contacts = $contacts->select('email','name','first_name')->where('matter_id',$ren['matter_id'])->where('role_code','CNT')->get();
