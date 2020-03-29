@@ -32,11 +32,6 @@ class ImplementGenericRenewals extends Migration {
 		}
 
 		Schema::table('task_rules', function (Blueprint $table) {
-			$sm = Schema::getConnection()->getDoctrineSchemaManager();
-			$indexes = $sm->listTableIndexes('task_rules');
-			if (array_key_exists('fk_category', $indexes)) {
-				$table->renameIndex('fk_category', 'for_category');
-			}
 			if (!Schema::hasColumn('task_rules', 'uid')) {
 				$table->string('uid', 32)->unique()->virtualAs("md5(concat(task, trigger_event, clear_task, delete_task, for_category, ifnull(for_country, 'c'), ifnull(for_origin, 'o'), ifnull(for_type, 't'), days, months, years, recurring, ifnull(abort_on, 'a'), ifnull(condition_event, 'c'), use_parent, use_priority, ifnull(detail, 'd')))");
 			}
@@ -723,7 +718,6 @@ END proc");
 		});
 
 		Schema::table('task_rules', function (Blueprint $table) {
-			$table->renameIndex('for_category', 'fk_category');
 			$table->dropColumn('uid');
 		});
 
