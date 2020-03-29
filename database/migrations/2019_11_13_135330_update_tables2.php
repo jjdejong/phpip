@@ -20,6 +20,7 @@ class UpdateTables2 extends Migration
       });
       Schema::table('actor', function (Blueprint $table) {
         $table->dropColumn('password_salt');
+        $table->dropColumn('last_login');
       });
     }
 
@@ -36,6 +37,7 @@ class UpdateTables2 extends Migration
       });
       Schema::table('actor', function (Blueprint $table) {
         $table->string('password_salt', 32)->after('password')->nullable();
+        $table->dateTime('last_login')->after('password_salt')->nullable();
       });
     }
 }
