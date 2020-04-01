@@ -131,7 +131,9 @@ class MatterController extends Controller
             $parent_matter = Matter::with('priority', 'classifiersNative', 'actorPivot')->find($request->parent_id);
             // Copy priority claims from original matter
             $new_matter->priority()->createMany($parent_matter->priority->toArray());
-            // Copy actors from original matter (cannot use Eloquent relationships because they do not handle unique key constraints)
+            // Copy actors from original matter
+            // Cannot use Eloquent relationships because they do not handle unique key constraints
+            // - the issue arises for actors that are inserted upon matter creation by a trigger based on the default_actors table
             $actors = $parent_matter->actorPivot;
             $new_matter_id = $new_matter->id;
             $actors->each(function ($item) use ($new_matter_id) {
