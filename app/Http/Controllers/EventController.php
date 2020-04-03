@@ -22,10 +22,10 @@ class EventController extends Controller {
             'matter_id' => 'required|numeric',
             'event_date' => 'required_without:alt_matter_id'
         ]);
-        $request->merge([
-          'event_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->event_date),
-          'creator' => Auth::user()->login
-        ]);
+        if ($request->filled('event_date')) {
+          $request->merge([ 'event_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->event_date) ]);
+        }
+        $request->merge([ 'creator' => Auth::user()->login ]);
         return Event::create($request->except(['_token', '_method', 'eventName']));
     }
 
@@ -50,7 +50,7 @@ class EventController extends Controller {
         $this->validate($request, [
             'alt_matter_id' => 'nullable|numeric'
         ]);
-        if ($request->has('event_date')) {
+        if ($request->filled('event_date')) {
           $request->merge([ 'event_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->event_date) ]);
         }
         $request->merge([ 'updater' => Auth::user()->login ]);
