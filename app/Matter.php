@@ -90,6 +90,12 @@ class Matter extends Model
                         ->where('code', 'FIL');
     }
 
+    public function parentFiling()
+    {
+        return $this->hasMany('App\Event')
+                        ->where('code', 'PFIL');
+    }
+
     public function publication()
     {
         return $this->hasOne('App\Event')
@@ -102,11 +108,11 @@ class Matter extends Model
                         ->where('code', 'GRT');
     }
 
-    public function status()
+    /*public function status()
     {
         return $this->hasOne('App\Event')
                         ->latest('event_date');
-    }
+    }*/
 
     public function priority()
     {

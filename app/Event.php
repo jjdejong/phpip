@@ -13,6 +13,9 @@ class Event extends Model
     protected $dates = [
       'event_date'
     ];
+    protected $casts = [
+      'event_date' => 'date:Y-m-d'
+    ];
 
     public function info() {
         return $this->hasOne('App\EventName', 'code', 'code');
