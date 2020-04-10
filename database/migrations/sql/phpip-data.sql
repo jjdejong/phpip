@@ -562,7 +562,8 @@ INSERT INTO `migrations` VALUES (1,'2014_10_12_100000_create_password_resets_tab
 (41,'2020_01_21_173000_update_tables7',9),
 (42,'2020_01_28_122217_update_db_roles',10),
 (43,'2020_02_02_105653_add_timestamps_default_actors',11),
-(44,'2020_02_12_144400_update_procedure_update_expired',12);
+(44,'2020_02_12_144400_update_procedure_update_expired',12),
+(45,'2020_02_24_110300_update_tables8c',13);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -839,4 +840,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-10 15:22:49
+-- Dump completed on 2020-04-10 15:33:59
