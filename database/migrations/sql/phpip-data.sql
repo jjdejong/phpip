@@ -560,7 +560,8 @@ INSERT INTO `migrations` VALUES (1,'2014_10_12_100000_create_password_resets_tab
 (39,'2019_11_26_192706_create_user_view',7),
 (40,'2020_01_06_181200_update_tables6',8),
 (41,'2020_01_21_173000_update_tables7',9),
-(42,'2020_01_28_122217_update_db_roles',10);
+(42,'2020_01_28_122217_update_db_roles',10),
+(43,'2020_02_02_105653_add_timestamps_default_actors',11);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -837,4 +838,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-10 14:34:45
+-- Dump completed on 2020-04-10 15:20:01
