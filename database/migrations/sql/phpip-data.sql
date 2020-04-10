@@ -18,7 +18,7 @@
 LOCK TABLES `actor` WRITE;
 /*!40000 ALTER TABLE `actor` DISABLE KEYS */;
 INSERT INTO `actor` VALUES (1,'Client handled',NULL,'CLIENT',NULL,NULL,'ANN',NULL,NULL,NULL,NULL,0,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,'DO NOT DELETE - Special actor used for removing renewal tasks that are handled by the client',NULL,'phpip',NULL,NULL,NULL,NULL),
-(2,'phpIP User',NULL,NULL,'phpipuser','$2y$10$auLQHQ3EIsg90hqnQsA1huhks3meaxwfWWEvJtD8R38jzwNN6y3zO',NULL,NULL,NULL,NULL,NULL,1,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,'root@localhost',NULL,NULL,NULL,0,NULL,NULL,'phpip',NULL,NULL,NULL,NULL);
+(2,'phpIP User',NULL,NULL,'phpipuser','$2y$10$auLQHQ3EIsg90hqnQsA1huhks3meaxwfWWEvJtD8R38jzwNN6y3zO','DBA',NULL,NULL,NULL,NULL,1,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,'root@localhost',NULL,NULL,NULL,0,NULL,NULL,'phpip',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `actor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -34,6 +34,9 @@ INSERT INTO `actor_role` VALUES ('AGT','Primary Agent',20,0,1,0,0,0,NULL,'phpip'
 ('APP','Applicant',3,1,1,0,0,0,'Assignee in the US, i.e. the owner upon filing','phpip',NULL,NULL,NULL),
 ('CLI','Client',1,1,1,0,1,0,'The client we take instructions from and who we invoice. DO NOT CHANGE OR DELETE: this is also a database user role','phpip',NULL,NULL,NULL),
 ('CNT','Contact',30,1,1,1,0,0,'Client\'s contact person','phpip',NULL,NULL,NULL),
+('DBA','DB Administrator',127,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL),
+('DBRO','DB Read-Only',127,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL),
+('DBRW','DB Read/Write',127,0,0,0,0,0,NULL,NULL,NULL,NULL,NULL),
 ('DEL','Delegate',31,1,0,0,0,0,'Another user allowed to manage the case','phpip',NULL,NULL,NULL),
 ('FAGT','Former Agent',23,0,1,0,0,0,NULL,'phpip',NULL,NULL,NULL),
 ('FOWN','Former Owner',5,0,0,0,0,1,'To keep track of ownership history','phpip',NULL,NULL,NULL),
@@ -556,7 +559,8 @@ INSERT INTO `migrations` VALUES (1,'2014_10_12_100000_create_password_resets_tab
 (38,'2019_11_25_123348_update_tables5',6),
 (39,'2019_11_26_192706_create_user_view',7),
 (40,'2020_01_06_181200_update_tables6',8),
-(41,'2020_01_21_173000_update_tables7',9);
+(41,'2020_01_21_173000_update_tables7',9),
+(42,'2020_01_28_122217_update_db_roles',10);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -833,4 +837,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-10 14:29:51
+-- Dump completed on 2020-04-10 14:34:45
