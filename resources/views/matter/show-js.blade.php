@@ -28,15 +28,15 @@
       } else {
         actorNotShared.checked = true;
       }
+      actorName.focus();
     } else {
       // Reset form to defaults
       addActorForm['role'].value = "";
       roleName.setAttribute('placeholder', 'Role');
       addActorForm['shared'].value = "1";
       actorShared.checked = true;
+      roleName.focus();
     }
-
-    actorName.focus();
 
     $('#actorName').autocomplete({
       minLength: 2,

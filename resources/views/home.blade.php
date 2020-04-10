@@ -66,9 +66,9 @@
                 {{ $group->no_of_tasks }}
             </td>
               @if ($group->urgent_date < now())
-            <td class="text-danger">
+            <td class="table-danger">
             @elseif ($group->urgent_date < now()->addWeeks(2))
-            <td style="color: purple;">
+            <td class="table-warning">
               @else
             <td>
               @endif
@@ -114,7 +114,7 @@
               <div class="input-group-prepend">
                 <button class="btn btn-light" type="button" id="clearOpenTasks">Clear selected on</button>
               </div>
-              <input type="text" class="form-control mr-2" name="datetaskcleardate" id="taskcleardate" value="{{ now()->format('Y-m-d') }}">
+              <input type="text" class="form-control mr-2" name="datetaskcleardate" id="taskcleardate" value="{{ now()->isoFormat('L') }}">
               @endcanany
             </div>
           </div>
@@ -155,7 +155,7 @@
               <div class="input-group-prepend">
                 <button class="btn btn-light" type="button" id="clearRenewals">Clear selected on</button>
               </div>
-              <input type="text" class="form-control mr-2" name="renewalcleardate" id="renewalcleardate" value="{{ now()->format('Y-m-d') }}">
+              <input type="text" class="form-control mr-2" name="renewalcleardate" id="renewalcleardate" value="{{ now()->isoFormat('L') }}">
             </div>
           </div>
           @endcanany

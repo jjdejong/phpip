@@ -150,6 +150,7 @@
   </div>
   <script>
     var contentSrc = "", // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
+      ceInitialContent = '', // Used for detecting changes of content-editable elements
       cTypeCode = ''; // Used for toggling image file input in matter.classifiers
 
     // Ajax fill an element from a url returning HTML
@@ -379,15 +380,7 @@
         }
         params.append(e.target.name, e.target.value);
         let resource = e.target.closest('[data-resource]').dataset.resource;
-        if (e.target.matches('.titleItem')) { // Handle titles in matter.show
-          if (e.target.value.trim().length === 0) {
-            fetchREST(resource, 'DELETE').then(data => reloadPart(window.location.pathname, 'titlePanel'));
-          } else {
-            fetchREST(resource, 'PUT', params)
-            .then(e.target.classList.remove('border', 'border-info'));
-          }
-        } else { // Handle generic input fields
-          fetchREST(resource, 'PUT', params)
+        fetchREST(resource, 'PUT', params)
             .then(data => {
               if (data.errors) {
                 if (ajaxModal.matches('.show')) {
@@ -422,7 +415,6 @@
               }
             })
             .catch(error => console.log(error));
-        }
       }
       // matter.classifiers addClassifierForm - replace input fields with file upload field when selecting an image type
       if (e.target.dataset.actarget === 'type_code' && e.target.value === 'Image') {
@@ -468,7 +460,23 @@
       }
     });
 
+    app.addEventListener("focusout", e => {
+      if (e.target.matches("[contenteditable]") && e.target.innerText !== ceInitialContent) {
+        let params = new URLSearchParams();
+        params.append(e.target.dataset.name, e.target.innerText);
+        let resource = e.target.closest('[data-resource]').dataset.resource;
+        fetchREST(resource, 'PUT', params)
+        .then(data => {
+          e.target.classList.remove('border-info');
+        })
+      }
+    });
+
     app.addEventListener("focusin", e => {
+      if (e.target.matches("[contenteditable]")) {
+        ceInitialContent = e.target.innerText;
+      }
+
       if ( e.target.hasAttribute('data-ac') ) {
         // Process autocomplete fields
         var aclength = 1;

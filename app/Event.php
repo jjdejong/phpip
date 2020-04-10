@@ -10,15 +10,12 @@ class Event extends Model
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $touches = ['matter'];
-    /*protected $dates = [
+    protected $dates = [
       'event_date'
-    ];*/
-
-    // use \Venturecraft\Revisionable\RevisionableTrait;
-    // protected $revisionEnabled = true;
-    // protected $revisionCreationsEnabled = true;
-    // protected $revisionCleanup = true; //Remove old revisions (works only when used with $historyLimit)
-    // protected $historyLimit = 500; //Maintain a maximum of 500 changes at any point of time, while cleaning up old revisions.
+    ];
+    protected $casts = [
+      'event_date' => 'date:Y-m-d'
+    ];
 
     public function info() {
         return $this->hasOne('App\EventName', 'code', 'code');

@@ -142,7 +142,9 @@ class MatterController extends Controller
             $parent_matter = Matter::with('priority', 'classifiersNative', 'actorPivot')->find($request->parent_id);
             // Copy priority claims from original matter
             $new_matter->priority()->createMany($parent_matter->priority->toArray());
-            // Copy actors from original matter (cannot use Eloquent relationships because they do not handle unique key constraints)
+            // Copy actors from original matter
+            // Cannot use Eloquent relationships because they do not handle unique key constraints
+            // - the issue arises for actors that are inserted upon matter creation by a trigger based on the default_actors table
             $actors = $parent_matter->actorPivot;
             $new_matter_id = $new_matter->id;
             $actors->each(function ($item) use ($new_matter_id) {
@@ -200,12 +202,13 @@ class MatterController extends Controller
 
             // Copy shared events from original matter
             $new_matter->priority()->createMany($parent_matter->priority->toArray());
-            $new_matter->filing()->create($parent_matter->filing->toArray());
+            $new_matter->parentFiling()->createMany($parent_matter->parentFiling->toArray());
+            $new_matter->filing()->save($parent_matter->filing->replicate());
             if ($parent_matter->publication()->exists()) {
-              $new_matter->publication()->create($parent_matter->publication->toArray());
+              $new_matter->publication()->save($parent_matter->publication->replicate());
             }
             if ($parent_matter->grant()->exists()) {
-              $new_matter->grant()->create($parent_matter->grant->toArray());
+              $new_matter->grant()->save($parent_matter->grant->replicate());
             }
 
             // Insert "entered" event
