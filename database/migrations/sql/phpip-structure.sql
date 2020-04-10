@@ -935,7 +935,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1160,6 +1160,31 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Temporary view structure for view `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!50001 DROP VIEW IF EXISTS `users`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `users` AS SELECT 
+ 1 AS `id`,
+ 1 AS `name`,
+ 1 AS `login`,
+ 1 AS `password`,
+ 1 AS `default_role`,
+ 1 AS `company_id`,
+ 1 AS `email`,
+ 1 AS `phone`,
+ 1 AS `notes`,
+ 1 AS `creator`,
+ 1 AS `created_at`,
+ 1 AS `updated_at`,
+ 1 AS `updater`,
+ 1 AS `remember_token`*/;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Dumping events for database 'phpip_tracker'
@@ -1580,6 +1605,24 @@ DELIMITER ;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `users`
+--
+
+/*!50001 DROP VIEW IF EXISTS `users`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`phpip`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `users` AS select `actor`.`id` AS `id`,`actor`.`name` AS `name`,`actor`.`login` AS `login`,`actor`.`password` AS `password`,`actor`.`default_role` AS `default_role`,`actor`.`company_id` AS `company_id`,`actor`.`email` AS `email`,`actor`.`phone` AS `phone`,`actor`.`notes` AS `notes`,`actor`.`creator` AS `creator`,`actor`.`created_at` AS `created_at`,`actor`.`updated_at` AS `updated_at`,`actor`.`updater` AS `updater`,`actor`.`remember_token` AS `remember_token` from `actor` where (`actor`.`login` is not null) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1590,4 +1633,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-10 14:20:56
+-- Dump completed on 2020-04-10 14:24:14
