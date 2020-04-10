@@ -69,6 +69,7 @@ INSERT INTO `classifier_type` VALUES ('ABS','Abstract',0,NULL,127,NULL,'phpip',N
 ('BU','Business Unit',0,NULL,127,NULL,'phpip',NULL,NULL,NULL),
 ('DESC','Description',1,NULL,1,NULL,'phpip',NULL,NULL,NULL),
 ('EVAL','Evaluation',0,NULL,127,NULL,'phpip',NULL,NULL,NULL),
+('IMG','Image',0,NULL,127,NULL,NULL,NULL,NULL,NULL),
 ('IPC','IPC',0,NULL,127,NULL,'phpip',NULL,NULL,NULL),
 ('KW','Keyword',0,NULL,127,NULL,'phpip',NULL,NULL,NULL),
 ('LNK','Link',0,NULL,1,NULL,'phpip',NULL,NULL,NULL),
@@ -554,7 +555,8 @@ INSERT INTO `migrations` VALUES (1,'2014_10_12_100000_create_password_resets_tab
 (37,'2019_11_18_002207_update_tables4',5),
 (38,'2019_11_25_123348_update_tables5',6),
 (39,'2019_11_26_192706_create_user_view',7),
-(40,'2020_01_06_181200_update_tables6',8);
+(40,'2020_01_06_181200_update_tables6',8),
+(41,'2020_01_21_173000_update_tables7',9);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -831,4 +833,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-10 14:26:28
+-- Dump completed on 2020-04-10 14:29:51
