@@ -25,8 +25,6 @@ CREATE TABLE `actor` (
   `display_name` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'The name displayed in the interface, if not null',
   `login` char(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Database user login if not null.',
   `password` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `password_salt` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `last_login` datetime DEFAULT NULL,
   `default_role` char(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Link to actor_role table. A same actor can have different roles - this is the default role of the actor. CAUTION: for database users, this sets the user ACLs.',
   `function` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `parent_id` int(10) unsigned DEFAULT NULL COMMENT 'Parent company of this company (another actor), where applicable. Useful for linking several companies owned by a same corporation',
@@ -892,6 +890,7 @@ CREATE TABLE `matter` (
   `type_code` char(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `idx` tinyint(1) DEFAULT NULL COMMENT 'Increment this to differentiate multiple patents filed in the same country in the same family',
   `suffix` varchar(16) COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (concat_ws('',concat_ws('-',concat_ws('/',`country`,`origin`),`type_code`),`idx`)) VIRTUAL,
+  `uid` varchar(45) COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (concat(`caseref`,`suffix`)) VIRTUAL,
   `parent_id` int(10) unsigned DEFAULT NULL COMMENT 'Link to parent patent. Used to create a hierarchy',
   `container_id` int(10) unsigned DEFAULT NULL COMMENT 'Identifies the container matter from which this matter gathers its shared data. If null, this matter is a container',
   `responsible` char(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Database user responsible for the patent',
@@ -904,7 +903,6 @@ CREATE TABLE `matter` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UID` (`category_code`,`caseref`,`suffix`),
   KEY `sort` (`caseref`,`container_id`,`origin`,`country`,`type_code`,`idx`),
   KEY `category` (`category_code`),
   KEY `country` (`country`),
@@ -913,6 +911,7 @@ CREATE TABLE `matter` (
   KEY `parent` (`parent_id`),
   KEY `container` (`container_id`),
   KEY `responsible` (`responsible`),
+  KEY `uid` (`uid`),
   CONSTRAINT `matter_category_code_foreign` FOREIGN KEY (`category_code`) REFERENCES `matter_category` (`code`) ON UPDATE CASCADE,
   CONSTRAINT `matter_container_id_foreign` FOREIGN KEY (`container_id`) REFERENCES `matter` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `matter_country_foreign` FOREIGN KEY (`country`) REFERENCES `country` (`iso`) ON UPDATE CASCADE,
@@ -1268,7 +1267,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2000,4 +1999,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-10 12:36:29
+-- Dump completed on 2020-04-10 13:15:27
