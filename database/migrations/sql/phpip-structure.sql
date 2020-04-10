@@ -1,3 +1,7 @@
+-- MySQL dump 10.13  Distrib 8.0.18, for macos10.14 (x86_64)
+--
+-- Host: ds718.local    Database: phpip_tracker
+-- ------------------------------------------------------
 -- Server version	5.7.29
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -988,7 +992,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1085,20 +1089,20 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW
-  BEGIN
-  	IF NEW.done_date IS NOT NULL AND OLD.done_date IS NULL AND OLD.done = 0 THEN
-  		SET NEW.done = 1;
-  	END IF;
-  	IF NEW.done_date IS NULL AND OLD.done_date IS NOT NULL AND OLD.done = 1 THEN
-  		SET NEW.done = 0;
-  	END IF;
-  	IF NEW.done = 1 AND OLD.done = 0 AND OLD.done_date IS NULL THEN
-  		SET NEW.done_date = Least(OLD.due_date, Now());
-  	END IF;
-  	IF NEW.done = 0 AND OLD.done = 1 AND OLD.done_date IS NOT NULL THEN
-  		SET NEW.done_date = NULL;
-  	END IF;
-  END */;;
+BEGIN
+  IF NEW.done_date IS NOT NULL AND OLD.done_date IS NULL AND OLD.done = 0 THEN
+    SET NEW.done = 1;
+  END IF;
+  IF NEW.done_date IS NULL AND OLD.done_date IS NOT NULL AND OLD.done = 1 THEN
+    SET NEW.done = 0;
+  END IF;
+  IF NEW.done = 1 AND OLD.done = 0 AND NEW.done_date IS NULL THEN
+    SET NEW.done_date = Least(OLD.due_date, Now());
+  END IF;
+  IF NEW.done = 0 AND OLD.done = 1 AND OLD.done_date IS NOT NULL THEN
+    SET NEW.done_date = NULL;
+  END IF;
+END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1682,4 +1686,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-10 14:08:30
+-- Dump completed on 2020-04-10 14:16:01

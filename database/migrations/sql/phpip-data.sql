@@ -17,8 +17,8 @@
 
 LOCK TABLES `actor` WRITE;
 /*!40000 ALTER TABLE `actor` DISABLE KEYS */;
-INSERT INTO `actor` VALUES (1,'Client handled',NULL,'CLIENT',NULL,NULL,NULL,NULL,'ANN',NULL,NULL,NULL,NULL,0,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,'DO NOT DELETE - Special actor used for removing renewal tasks that are handled by the client',NULL,'phpip',NULL,NULL,NULL,NULL),
-(2,'phpIP User',NULL,NULL,'phpipuser','$2y$10$auLQHQ3EIsg90hqnQsA1huhks3meaxwfWWEvJtD8R38jzwNN6y3zO',NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,'root@localhost',NULL,NULL,NULL,0,NULL,NULL,'phpip',NULL,NULL,NULL,NULL);
+INSERT INTO `actor` VALUES (1,'Client handled',NULL,'CLIENT',NULL,NULL,'ANN',NULL,NULL,NULL,NULL,0,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,'DO NOT DELETE - Special actor used for removing renewal tasks that are handled by the client',NULL,'phpip',NULL,NULL,NULL,NULL),
+(2,'phpIP User',NULL,NULL,'phpipuser','$2y$10$auLQHQ3EIsg90hqnQsA1huhks3meaxwfWWEvJtD8R38jzwNN6y3zO',NULL,NULL,NULL,NULL,NULL,1,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,'root@localhost',NULL,NULL,NULL,0,NULL,NULL,'phpip',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `actor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -548,7 +548,10 @@ INSERT INTO `migrations` VALUES (1,'2014_10_12_100000_create_password_resets_tab
 (31,'2019_03_07_171752_create_procedure_recalculate_tasks',1),
 (32,'2019_03_07_171910_create_procedure_recreate_tasks',1),
 (33,'2019_08_19_000000_create_failed_jobs_table',1),
-(34,'2019_08_13_145446_update_tables',2);
+(34,'2019_08_13_145446_update_tables',2),
+(35,'2019_11_13_135330_update_tables2',3),
+(36,'2019_11_17_025422_update_tables3',4),
+(37,'2019_11_18_002207_update_tables4',5);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -825,4 +828,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed
+-- Dump completed on 2020-04-10 14:16:04
