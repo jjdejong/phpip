@@ -679,6 +679,7 @@ CREATE TABLE `matter` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uid_uq` (`uid`),
   KEY `sort` (`caseref`,`container_id`,`origin`,`country`,`type_code`,`idx`),
   KEY `category` (`category_code`),
   KEY `country` (`country`),
@@ -687,7 +688,6 @@ CREATE TABLE `matter` (
   KEY `parent` (`parent_id`),
   KEY `container` (`container_id`),
   KEY `responsible` (`responsible`),
-  KEY `uid` (`uid`),
   CONSTRAINT `matter_category_code_foreign` FOREIGN KEY (`category_code`) REFERENCES `matter_category` (`code`) ON UPDATE CASCADE,
   CONSTRAINT `matter_container_id_foreign` FOREIGN KEY (`container_id`) REFERENCES `matter` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `matter_country_foreign` FOREIGN KEY (`country`) REFERENCES `country` (`iso`) ON UPDATE CASCADE,
@@ -830,6 +830,33 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `matter_actor_lnk_AFTER_UPDATE` AFTER UPDATE ON `matter_actor_lnk` FOR EACH ROW
+BEGIN
+  DECLARE vcli_ann_agt INT DEFAULT NULL;
+
+  -- Delete renewal tasks when the special actor 'CLIENT' is set as the annuity agent
+  IF NEW.role = 'ANN' THEN
+  	SELECT id INTO vcli_ann_agt FROM actor WHERE display_name = 'CLIENT';
+  	IF NEW.actor_id = vcli_ann_agt THEN
+  	  DELETE task FROM event INNER JOIN task ON task.trigger_id = event.id
+  	  WHERE task.code = 'REN' AND event.matter_id = NEW.matter_id;
+  	END IF;
+  END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Temporary view structure for view `matter_actors`
@@ -935,7 +962,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1633,4 +1660,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-10 14:24:14
+-- Dump completed on 2020-04-10 14:26:24
