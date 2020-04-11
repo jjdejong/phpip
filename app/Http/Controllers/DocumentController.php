@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Blade;
       $__data['__env'] = app(\Illuminate\View\Factory::class);
       extract($__data, EXTR_SKIP);
       try {
-        Log::debug($__php);
           eval('?' . '>' . $__php);
       } catch (Exception $e) {
           while (ob_get_level() > $obLevel) ob_end_clean();
@@ -210,13 +209,13 @@ class DocumentController extends Controller
           $mailto .= $sep."subject=".rawurlencode($member->subject);
           $sep = "&";
         }
-        $data['matter']  = Matter::where(['id'=>$request->matter_id])->first();
-        $data['description'] = implode("\n",Matter::getDescription($request->matter_id, $member->language->code));
+        $matter  = Matter::where(['id'=>$request->matter_id])->first();
+        $description = implode("\n",Matter::getDescription($request->matter_id, $member->language->code));
         if ($member->format == 'HTML') {
-            $mailto .= $sep . "html-body=" . rawurlencode(render($blade, compact('data')));
+            $mailto .= $sep . "html-body=" . rawurlencode(render($blade, compact('description', 'matter')));
         }
         else {
-          $mailto .= $sep . "body=" . rawurlencode(render($blade, compact('data')));
+          $mailto .= $sep . "body=" . rawurlencode(render($blade, compact('description', 'matter')));
         }
         return json_encode(['mailto' => $mailto]);
       }
