@@ -32,8 +32,7 @@ class TaskController extends Controller
     {
         $request->validate([
             'trigger_id' => 'required|numeric',
-            'due_date' => 'required|date',
-            'done_date' => 'nullable|date',
+            'due_date' => 'required',
             'cost' => 'nullable|numeric',
             'fee' => 'nullable|numeric'
         ]);
@@ -62,8 +61,7 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         $this->validate($request, [
-            'due_date' => 'date',
-            'done_date' => 'nullable|date',
+            'due_date' => 'sometimes',
             'cost' => 'nullable|numeric',
             'fee' => 'nullable|numeric'
         ]);

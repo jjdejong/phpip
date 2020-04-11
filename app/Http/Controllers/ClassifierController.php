@@ -61,9 +61,13 @@ class ClassifierController extends Controller
      */
     public function update(Request $request, Classifier $classifier)
     {
-    	$request->merge([ 'updater' => Auth::user()->login ]);
-      $classifier->update($request->except(['_token', '_method']));
-      return response()->json(['success' => 'Classifier updated']);
+      if ($classifier->type->main_display && !$request->filled('value')) {
+        $classifier->delete();
+      } else {
+        $request->merge([ 'updater' => Auth::user()->login ]);
+        $classifier->update($request->except(['_token', '_method']));
+      }
+      return $classifier;
     }
 
     /**

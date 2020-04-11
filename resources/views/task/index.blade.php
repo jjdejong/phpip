@@ -24,7 +24,7 @@
         {{ $task->title ?? $task->trademark }}
       </td>
       <td class="col-2 py-0 px-2 {{ $warn }}">
-        {{ Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}
+        {{ $task->due_date->isoFormat('L') }}
       </td>
       @canany(['admin', 'readwrite'])
       <td class="col-1 py-0 px-4">

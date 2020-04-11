@@ -12,6 +12,7 @@ class Country extends Model {
     protected $keyType = 'string';
     public $timestamps = false;
     protected $hidden = ['name_DE', 'name_FR', 'iso3', 'numcode'];
+    protected $guarded = [];
 
     public function getGoesnationalAttribute() { // Defines "goesnational" as an attribute
         return in_array($this->iso, ['EP', 'WO', 'EM', 'OA']);
