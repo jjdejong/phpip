@@ -6,7 +6,7 @@ use App\Matter;
 use App\Event;
 use App\ActorPivot;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 // use App\Http\Controllers\Controller;
@@ -31,6 +31,29 @@ class MatterController extends Controller
         $matters->appends($request->input())->links(); // Keep URL parameters in the paginator links
 
         return view('matter.index', compact('matters'));
+    }
+
+    public function list(Request $request)
+    {
+        $matters = Matter::select('id', 'uid', 'container_id')
+            ->with(
+                'status:id,matter_id,code,event_date',
+                'status.info:code,name',
+                'client:id,matter_id,actor_id,display_name,actor_ref',
+                'agent:id,matter_id,actor_id,display_name,actor_ref',
+                'titles:id,matter_id,type_code,value,display_order',
+                'inventors:id,matter_id,actor_id,name',
+                'filing:id,matter_id,detail,event_date',
+                'publication:id,matter_id,detail,event_date',
+                'grant:id,matter_id,detail,event_date'
+            )
+            ->whereHas('client', function (Builder $q) {
+                $q->where('name', 'LIKE', 'kal%');
+            })
+            ->whereHas('inventors', function (Builder $q) {
+                $q->where('name', 'LIKE', 'brun%');
+            });
+        return $matters->get();
     }
 
     public function show(Matter $matter)
