@@ -18,7 +18,6 @@ class CreateTemplateMembers extends Migration
             $table->unsignedInteger('class_id');
             $table->unsignedInteger('language_id');
             $table->unsignedInteger('style_id')->nullable();
-            $table->unsignedInteger('category_id')->nullable();
             $table->string('format',4);
             $table->string('path',255);
             $table->string('subject',160);

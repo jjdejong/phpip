@@ -146,8 +146,10 @@ class DocumentController extends Controller
             if ($value != '') {
                 switch($key) {
                     case 'Category':
-                        $members = $members->whereHas('category', function ($query) use ($value){
-                          $query->where('category', 'LIKE', "$value%");
+                        $members = $members->whereHas('class', function ($query) use ($value){
+                          $query->whereHas('category',  function ($q2) use ($value){
+                            $q2->where('category', 'LIKE', "$value%");
+                          });
                         });
                         $oldfilters["Category"] = $value;
                         break;
