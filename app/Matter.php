@@ -15,17 +15,10 @@ class Matter extends Model
         'expire_date'
     ];*/
 
-    // use \Venturecraft\Revisionable\RevisionableTrait;
-    // protected $revisionEnabled = true;
-    // protected $revisionCreationsEnabled = true;
-    // protected $revisionCleanup = true; //Remove old revisions (works only when used with $historyLimit)
-    // protected $historyLimit = 500; //Maintain a maximum of 500 changes at any point of time, while cleaning up old revisions.
-
     public function family()
     {
-        // Gets other family members (where clause is ignored by eager loading)
+        // Gets family members
         return $this->hasMany('App\Matter', 'caseref', 'caseref')
-            ->where('id', '!=', $this->id)
             ->orderBy('origin')
             ->orderBy('country')
             ->orderBy('type_code')
@@ -314,7 +307,7 @@ class Matter extends Model
             }
             foreach ($multi_filter as $key => $value) {
                 if ($value != '') {
-                    switch($key) {
+                    switch ($key) {
                         case 'Ref':
                             $query->where('uid', 'LIKE', "$value%");
                             break;
@@ -374,7 +367,7 @@ class Matter extends Model
                             break;
                         case 'Ctnr':
                             if ($value) {
-                              $query->whereNull('container_id');
+                                $query->whereNull('container_id');
                             }
                             break;
                         default:
@@ -529,8 +522,7 @@ class Matter extends Model
             if ($info['Cat'] == 'PAT') {
                 if ($info['Granted']) {
                     $description[] = "Brevet " . $info['GrtNo'] . " déposé en " . $info['country_name_FR'] . " le " . $filed_date->format("d/m/Y") . " et délivré le " . $granted_date->format("d/m/Y");
-                }
-                else {
+                } else {
                     $line = "Demande de brevet n°" . $info['FilNo'] . " déposée en " . $info['country_name_FR'] . " le ". $filed_date->format("d/m/Y");
                     if ($info['Published']) {
                         $line .= " et publiée le " . $published_date->format("d/m/Y") ." sous le n° ". $info['PubNo'];
@@ -553,9 +545,11 @@ class Matter extends Model
                 $description[] = "Au nom de : ". $info['Applicant'] ;
             }
         }
-        if($lang == "en") {
+        if ($lang == "en") {
             $description[] = "Our ref: " . $info['Ref'] ;
-            if($info['ClRef']) {$description[] = "Your ref: " . $info['ClRef'] ;}
+            if ($info['ClRef']) {
+                $description[] = "Your ref: " . $info['ClRef'];
+            }
             if ($info['Cat'] == 'PAT') {
                 if ($info['Granted']) {
                     $description[] = "Patent " . $info['FilNo'] . " filed in " . $info['country_name'] . " at " . $info['Filed'] . $info['GrtNo'] . " and granted at " . $info['Granted'];
