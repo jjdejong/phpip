@@ -74,21 +74,6 @@ class Matter extends Model
         return $this->hasOne('App\MatterActors')->where('role_code', 'CLI');
     }
 
-    public function applicant()
-    {
-        return $this->hasOne('App\MatterActors')->where('role_code', 'APP');
-    }
-
-    public function agent()
-    {
-        return $this->hasOne('App\MatterActors')->where('role_code', 'AGT');
-    }
-
-    public function inventors()
-    {
-        return $this->hasMany('App\MatterActors')->where('role_code', 'INV');
-    }
-
     public function actorPivot()
     {
         return $this->hasMany('App\ActorPivot');
@@ -124,11 +109,11 @@ class Matter extends Model
             ->where('code', 'GRT');
     }
 
-    public function status()
+    /*public function status()
     {
         return $this->hasOne('App\Event')
             ->latest('event_date');
-    }
+    }*/
 
     public function priority()
     {

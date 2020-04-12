@@ -141,12 +141,10 @@ Route::group(['middleware' => 'auth'], function () {
             ->where('type', 'like', "$term%")->get();
     });
 
-    Route::get('classifier/{classifier}/img', function ( App\Classifier $classifier) {
+    Route::get('classifier/{classifier}/img', function (App\Classifier $classifier) {
         return response($classifier->img)
             ->header('Content-Type', $classifier->value);
     });
-
-    Route::get('matter/list', 'MatterController@list');
 
     Route::resource('matter', 'MatterController');
     Route::apiResource('task', 'TaskController');
@@ -165,9 +163,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('classifier', 'ClassifierController');
 
     // Testing - not used
-    
-    
-    
     /* Route::get('matter/{matter}/actors', function (App\Matter $matter) {
       //$actors = $matter->with('container.actors.actor:id,name,display_name,company_id', 'actors.actor:id,name,display_name,company_id')->get();
       return $matter->actors;
