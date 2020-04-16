@@ -141,7 +141,8 @@ class RenewalController extends Controller
     function _call($ids, $notify_type, $fee_factor, $reminder)
     {
         // TODO Manage languages of the calls
-        // TODO Manage small entities
+        // TODO Check first that each client has email
+        // TODO Use Carbon instead of Intl
         $fmt = new IntlDateFormatter(
             config('app.locale'),
             IntlDateFormatter::FULL,IntlDateFormatter::FULL,
@@ -962,11 +963,11 @@ class RenewalController extends Controller
             // standard prices
             {
                 if ($ren['sme_status'] === 1) {
-                    $prices[$ren['id']]['fee'] = $ren['fee_reduced'] ;
+                    $prices[$ren['id']]['fee'] = $ren['fee_reduced']  * (1.0 - $ren['discount']);
                     $prices[$ren['id']]['cost'] = $ren['cost_reduced'] ;
                 }
                 else {
-                    $prices[$ren['id']]['fee'] = $ren['fee'] ;
+                    $prices[$ren['id']]['fee'] = $ren['fee']  * (1.0 - $ren['discount']) ;
                     $prices[$ren['id']]['cost'] = $ren['cost'] ;
                 }
             }
@@ -974,11 +975,11 @@ class RenewalController extends Controller
             // standard prices with urgency
             {
                 if ($ren['sme_status'] === 1) {
-                    $prices[$ren['id']]['fee'] = $ren['fee_reduced'] * $fee_factor ;
+                    $prices[$ren['id']]['fee'] = $ren['fee_reduced'] * $fee_factor * (1.0 - $ren['discount']) ;
                     $prices[$ren['id']]['cost'] = $ren['cost_reduced'] ;
                 }
                 else {
-                    $prices[$ren['id']]['fee'] = $ren['fee']  * $fee_factor;
+                    $prices[$ren['id']]['fee'] = $ren['fee']  * $fee_factor  * (1.0 - $ren['discount']);
                     $prices[$ren['id']]['cost'] = $ren['cost'] ;
                 }
             }
@@ -986,11 +987,11 @@ class RenewalController extends Controller
             //  prices in grace period
             {
                 if ($ren['sme_status'] === 1) {
-                    $prices[$ren['id']]['fee'] = $ren['fee_sup_reduced'] ;
+                    $prices[$ren['id']]['fee'] = $ren['fee_sup_reduced']  * (1.0 - $ren['discount']) ;
                     $prices[$ren['id']]['cost'] = $ren['cost_sup_reduced'] ;
                 }
                 else {
-                    $prices[$ren['id']]['fee'] = $ren['fee_sup'] ;
+                    $prices[$ren['id']]['fee'] = $ren['fee_sup']  * (1.0 - $ren['discount']) ;
                     $prices[$ren['id']]['cost'] = $ren['cost_sup'] ;
                 }
             }
