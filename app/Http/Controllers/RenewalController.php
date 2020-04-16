@@ -543,7 +543,7 @@ class RenewalController extends Controller
         }
         $resql = $query->get();
 
-        $done_date = now();
+        $done_date = now()->isoFormat('L');
         $updated = 0;
         // For logs
         $newjob = RenewalsLog::max('job_id');
@@ -639,6 +639,7 @@ class RenewalController extends Controller
 
         $updated = 0;
         $date_now = now();
+        $done_date = now()->isoFormat('L');
         foreach($resql as $ren) {
             $task = Task::find($ren->id);
             $log_line = ['task_id' => $ren['id'],
@@ -652,7 +653,7 @@ class RenewalController extends Controller
             ];
             $task->step = 10;
             $task->done = 1;
-            $task->done_date = now();
+            $task->done_date = $done_date;
             $returncode = $task->save();
             if ($returncode) {
               $updated = $updated + 1;
@@ -686,6 +687,7 @@ class RenewalController extends Controller
 
         $updated = 0;
         $date_now = now();
+        $done_date = now()->isoFormat('L');
         foreach($resql as $ren) {
             $task = Task::find($ren->id);
             $log_line = ['task_id' => $ren['id'],
@@ -699,7 +701,7 @@ class RenewalController extends Controller
             ];
             $task->step = 12;
             $task->done = 1;
-            $task->done_date = now();
+            $task->done_date = $done_date;
             $returncode = $task->save();
             if ($returncode) {
               $updated = $updated + 1;
@@ -776,7 +778,7 @@ class RenewalController extends Controller
         $data_log = [];
 
         $clear = boolval($data->clear);
-        $done_date = now();
+        $done_date = now()->isoFormat('L');
         $xml = config('renewal.xml.header');
         $xml = str_replace('NAME',Auth::user()->name,$xml);
         $xml = str_replace('TRANSACTION','ANNUITY '.$fmt->format(time()),$xml);
