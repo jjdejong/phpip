@@ -16,6 +16,9 @@
       <th>By</th>
       <th>Notes</th>
       <th style="width: 24px;">&nbsp;</th>
+      @cannot('client')
+      <th>Email</th>
+      @endcannot
     </tr>
   </thead>
   @foreach ( $events as $event )
@@ -64,6 +67,16 @@
         <a href="#" class="hidden-action text-danger" id="deleteTask" title="Delete task">&CircleTimes;</a>
         @endcanany
       </td>
+      @cannot('client')
+      <td>
+        @if (App\Rule::where('id',$task->rule_used)->first())
+          @if (count(App\Rule::where('id',$task->rule_used)->first()->templates) != 0)
+            <button class="chooseTemplate" data-url="/document/select/{{ $matter->id }}?Rule={{ $task->rule_used }}" >&#9993;</button>
+          </td>
+          @endif
+        @endif
+      </td>
+      @endcannot
     </tr>
     @endforeach
   </tbody>
@@ -92,3 +105,6 @@
     </td>
   </tr>
 </template>
+
+<div id="templateSelect">
+</div>

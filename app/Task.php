@@ -45,6 +45,10 @@ class Task extends Model
         return $this->hasOneThrough('App\Matter', 'App\Event', 'id', 'id', 'trigger_id', 'matter_id');
     }
 
+    public function rule() {
+        return $this->hasMany('App\Rule', 'id','rule_used');
+    }
+
     public static function getUsersOpenTaskCount()
     {
         $userid = Auth::user()->id;

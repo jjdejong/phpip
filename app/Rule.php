@@ -47,6 +47,10 @@ class Rule extends Model
 		return $this->belongsTo('App\Actor', 'responsible','login');
 	}
 
+  public function templates() {
+      return $this->belongsToMany('App\TemplateClass','rule_class_lnk','task_rule_id','template_class_id');
+  }
+
         public function getTableComments($table_name = null) {
                 if (! isset ( $table_name )) {
                         return false;

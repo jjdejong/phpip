@@ -13,6 +13,9 @@
       <th>Number</th>
       <th>Notes</th>
       <th>Refers to</th>
+      @cannot('client')
+      <th>Email</th>
+      @endcannot
     </tr>
     <tr id="addEventRow" class="collapse">
       <td colspan="5">
@@ -43,7 +46,16 @@
       <td><input type="text" class="form-control noformat" size="16" name="detail" value="{{ $event->detail }}"></td>
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $event->notes }}"></td>
       <td><input type="text" class="form-control noformat" size="10" name="alt_matter_id" data-ac="/matter/autocomplete" value="{{ $event->altMatter ? $event->altMatter->uid : '' }}"></td>
+      @cannot('client')
+      <td>
+            @if (count(App\EventName::where('code',$event->code)->first()->templates) != 0)
+            <button class="chooseTemplate" data-url="/document/select/{{ $matter->id }}?EventName={{ $event->code }}" >&#9993;</button>
+            @endif
+      </td>
+      @endcannot
     </tr>
     @endforeach
   </tbody>
 </table>
+<div id="templateSelect">
+</div>

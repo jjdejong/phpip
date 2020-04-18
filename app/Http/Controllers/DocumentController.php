@@ -140,6 +140,7 @@ class DocumentController extends Controller
     $filters =  $request->except(['page']);
     $members = new TemplateMember;
     $oldfilters = [];
+    $view = 'documents.select';
     if (!empty($filters)) {
         foreach ($filters as $key => $value) {
             if ($value != '') {
@@ -170,12 +171,32 @@ class DocumentController extends Controller
                         });
                         $oldfilters["Style"] = $value;
                         break;
+                    case 'Rule':
+                        $members = $members->whereHas('class', function ($query) use ($value){
+                          $query->whereHas('rules',  function ($q2) use ($value){
+                            $q2->where('task_rule_id', '=', "$value");
+                          });
+                        });
+                        $oldfilters["Rule"] = $value;
+                        // specific view for within tasks window
+                        $view = 'documents.select2';
+                        break;
+                    case 'EventName':
+                        $members = $members->whereHas('class', function ($query) use ($value){
+                          $query->whereHas('eventNames',  function ($q2) use ($value){
+                            $q2->where('event_name_code', '=', "$value");
+                          });
+                        });
+                        $oldfilters["EventName"] = $value;
+                        // specific view for within event window
+                        $view = 'documents.select2';
+                        break;
                 }
             }
         }
     }
     $members = $members->get();
-    return view('documents.select',compact('matter','members', 'contacts', 'tableComments','oldfilters'));
+    return view($view,compact('matter','members', 'contacts', 'tableComments','oldfilters'));
   }
 
   /*

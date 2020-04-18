@@ -33,4 +33,7 @@ class EventName extends Model
         return $this->belongsTo('App\User', 'default_responsible', 'login');
     }
 
+    public function templates() {
+        return $this->belongsToMany('App\TemplateClass','event_class_lnk','event_name_code','template_class_id');
+    }
 }

@@ -206,9 +206,27 @@
             }
             else {
                document.location.href=data.mailto;
+                e.target.closest('tr').remove();
             }
           });
       }
+
+      if(e.target.matches('.chooseTemplate')) {
+        var select = document.createElement('tr');
+        var currentTr = e.target.closest('tr');
+        var parent = currentTr.parentNode;
+        var next_sib = currentTr.nextSibling;
+        if (next_sib)
+        {
+          parent.insertBefore(select, next_sib);
+        }
+        else
+        {
+          parent.appendChild(select);
+        }
+        fetchInto(e.target.dataset.url, select);
+      }
+
       switch (e.target.id) {
         case 'createMatterSubmit':
           submitModalForm('/matter', createMatterForm);
