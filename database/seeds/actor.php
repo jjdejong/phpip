@@ -35,7 +35,6 @@ $actor = array(
   'display_name' => NULL,
   'login' => 'phpipuser',
   'password' => '$2y$10$auLQHQ3EIsg90hqnQsA1huhks3meaxwfWWEvJtD8R38jzwNN6y3zO',
-  'last_login' => NULL,
   'default_role' => 'DBA',
   'function' => NULL,
   'parent_id' => NULL,
