@@ -4,9 +4,8 @@
 $opts = [ 'ssl' => array('verify_peer' => false, 'verify_peer_name' => false) ];
 $params = [ 'encoding' => 'UTF-8', 'soap_version' => SOAP_1_2, 'stream_context' => stream_context_create($opts) ];
 $client = new SoapClient('https://client.anaqua.com/WebServices/WebService_12.04/', $params);
-$sga2 = parse_ini_file('sga2.ini');
-//print_r($sga2); break;
-$db = new mysqli($sga2['mysql_host'], $sga2['mysql_user'], $sga2['mysql_pwd'], $sga2['mysql_db'], NULL, $sga2['mysql_socket']); // Connect to database
+$aqs = parse_ini_file('aqs.ini');
+$db = new mysqli($aqs['mysql_host'], $aqs['mysql_user'], $aqs['mysql_pwd'], $aqs['mysql_db'], NULL, $aqs['mysql_socket']); // Connect to database
 if ($db->connect_errno) {
     echo "Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
     exit;
@@ -24,7 +23,7 @@ $myRenewal = $result->fetch_assoc();
 $clientcase = NULL;		// reference to a group of patent (String START)
 $refcli = NULL;			// single patent reference (String START)
 $uid = NULL;				// your internal reference (String STRICT)
-$refsga2 = NULL;			// reference SGA2 (String START)
+$refaqs = NULL;			// reference AQS (String START)
 $country = NULL;			// country code (String STRICT)
 $div = NULL;				// division (String STRICT)
 $orig = NULL;				// origin of the patent e.g. WO for a PCT, EP for European... (String STRICT)
@@ -48,7 +47,7 @@ $limit_offset = NULL;		// starting position
 $limit_count = NULL;		// maximum number of records
 $sort_order = NULL;		// Tag_name-{a|d}
 
-$result = $client->PgetCalendar($sga2['aqs_user'], $sga2['aqs_pwd'], $clientcase, $refcli, $uid, $refsga2, $country, $div, $orig, $title, $nature, $mandate, $apd_start, $apd_end, $ap, $pd_start, $pd_end, $pn, $entity, $updtime_start, $updtime_end, $duedate_start, $duedate_end, $receipt_start, $receipt_end, $limit_offset, $limit_count, $sort_order);
+$result = $client->PgetCalendar($aqs['aqs_user'], $aqs['aqs_pwd'], $clientcase, $refcli, $uid, $refaqs, $country, $div, $orig, $title, $nature, $mandate, $apd_start, $apd_end, $ap, $pd_start, $pd_end, $pn, $entity, $updtime_start, $updtime_end, $duedate_start, $duedate_end, $receipt_start, $receipt_end, $limit_offset, $limit_count, $sort_order);
 
 $xml = new SimpleXMLElement($result);
 //print_r($xml); exit;
@@ -65,7 +64,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 	$patsprocessed++;
 
 	if ($AQSpatent->UID != '') {
-		// Check case with SGA2's UID
+		// Check case with AQS's UID
 		$q = "SELECT caseref, country, ifnull(origin, '') as origin, concat(ifnull(type_code, ''), ifnull(idx, '')) as 'div', actor_ref
 		FROM matter, matter_actor_lnk
 		WHERE matter.id = matter_actor_lnk.matter_id
@@ -119,7 +118,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 		}
 		$AQSpatent->UID = $myRenewal['id'];
 		/*if ($AQSpatent->UID != '') {
-			echo "\r\nSGA2 case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) had no UID, identified it as $AQSpatent->UID";
+			echo "\r\nAQS case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) had no UID, identified it as $AQSpatent->UID";
 		}*/
 	}
 	if ($AQSpatent->UID == '') { // No matching id found
@@ -143,7 +142,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 		if ( $renewal->DATE_PAID == '1970-01-01' )
 			continue; // Skip irrelevant date
 
-		// Identify annuity to update with SGA2 info
+		// Identify annuity to update with AQS info
 		$q = "SELECT task.id, cost, task.notes, task.done_date, task.due_date FROM task, event
 		WHERE task.trigger_id = event.id
 		AND task.code = 'REN'
@@ -169,7 +168,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 			if ($renewal->INVOICED_COST && $renewal->INVOICED_COST != $myRenewal['cost']) {
 				$set[] = "cost = '$renewal->INVOICED_COST'";
 				$set[] = "currency = '$renewal->CURRENCY'";
-				$set[] = "notes = 'Invoiced by SGA2'";
+				$set[] = "notes = 'Invoiced by AQS'";
 			}
 			if ($renewal->DATE_PAID && $renewal->DATE_PAID != $myRenewal['done_date']) {
 				$set[] = "done_date = '$renewal->DATE_PAID'";
@@ -187,7 +186,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 				echo "\r\nUpdated " . implode(',', $set) . " for annuity $renewal->YEAR in $AQSpatent->UID ($AQSpatent->REFCLI-$AQSpatent->COUNTRY)";
 				$updated++;
 			}
-		} else { // The annuity is not present, create it (same data as for update above), with due date from SGA2 (!= real due date)
+		} else { // The annuity is not present, create it (same data as for update above), with due date from AQS (!= real due date)
 			$somethingupdated = '';
 			// First find the trigger event depending on the country
 			if (in_array($AQSpatent->COUNTRY, ["US","JP","KR","TW"])) {

@@ -7,11 +7,7 @@ use App\Event;
 use App\ActorPivot;
 use App\Actor;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-
-// use App\Http\Controllers\Controller;
-// use Illuminate\Database\Query\Builder;
 
 class MatterController extends Controller
 {
@@ -120,59 +116,60 @@ class MatterController extends Controller
         $new_matter = Matter::create($request->except(['_token', '_method', 'operation', 'parent_id', 'priority']));
 
         switch ($request->operation) {
-          case 'child':
-            $parent_matter = Matter::with('priority')->find($request->parent_id);
-            // Copy priority claims from original matter
-            $new_matter->priority()->createMany($parent_matter->priority->toArray());
-            $new_matter->container_id = $parent_matter->container_id ?? $request->parent_id;
-            if ($request->priority) {
-                $event = new Event(
-                    ['code' => 'PRI', 'alt_matter_id' => $request->parent_id]
-                );
-            } else {
-                $new_matter->parent_id = $request->parent_id;
-                $event = new Event(
-                    ['code' => 'PFIL', 'alt_matter_id' => $request->parent_id]
-                );
-            }
-            $new_matter->events()->save($event);
-            $new_matter->save();
-            break;
-          case 'clone':
-            $parent_matter = Matter::with('priority', 'classifiersNative', 'actorPivot')->find($request->parent_id);
-            // Copy priority claims from original matter
-            $new_matter->priority()->createMany($parent_matter->priority->toArray());
-            // Copy actors from original matter
-            // Cannot use Eloquent relationships because they do not handle unique key constraints
-            // - the issue arises for actors that are inserted upon matter creation by a trigger based on the default_actors table
-            $actors = $parent_matter->actorPivot;
-            $new_matter_id = $new_matter->id;
-            $actors->each(function ($item) use ($new_matter_id) {
-                $item->matter_id = $new_matter_id;
-                $item->id = null;
-            });
-            ActorPivot::insertOrIgnore($actors->toArray());
-            if ($parent_matter->container_id) {
-                // Copy shared actors and classifiers from original matter's container
-                $actors = $parent_matter->container->actorPivot->where('shared', 1);
+            case 'child':
+                $parent_matter = Matter::with('priority')->find($request->parent_id);
+                // Copy priority claims from original matter
+                $new_matter->priority()->createMany($parent_matter->priority->toArray());
+                $new_matter->container_id = $parent_matter->container_id ?? $request->parent_id;
+                if ($request->priority) {
+                    $event = new Event(
+                        ['code' => 'PRI', 'alt_matter_id' => $request->parent_id]
+                    );
+                } else {
+                    $new_matter->parent_id = $request->parent_id;
+                    $event = new Event(
+                        ['code' => 'PFIL', 'alt_matter_id' => $request->parent_id]
+                    );
+                }
+                $new_matter->events()->save($event);
+                $new_matter->save();
+                break;
+            case 'clone':
+                $parent_matter = Matter::with('priority', 'classifiersNative', 'actorPivot')->find($request->parent_id);
+                // Copy priority claims from original matter
+                $new_matter->priority()->createMany($parent_matter->priority->toArray());
+                // Copy actors from original matter
+                // Cannot use Eloquent relationships because they do not handle unique key constraints
+                // - the issue arises for actors that are inserted upon matter creation by a trigger based on the default_actors table
+                $actors = $parent_matter->actorPivot;
+                $new_matter_id = $new_matter->id;
                 $actors->each(function ($item) use ($new_matter_id) {
                     $item->matter_id = $new_matter_id;
                     $item->id = null;
                 });
                 ActorPivot::insertOrIgnore($actors->toArray());
-                $new_matter->classifiersNative()->createMany($parent_matter->container->classifiersNative->toArray());
-            } else {
-                // Copy classifiers from original matter
-                $new_matter->classifiersNative()->createMany($parent_matter->classifiersNative->toArray());
-            }
-            break;
-          case 'new':
-            $received_event = new Event([
-              'code' => 'REC',
-              'event_date' => now()
-            ]);
-            $new_matter->events()->save($received_event);
-            break;
+                if ($parent_matter->container_id) {
+                    // Copy shared actors and classifiers from original matter's container
+                    $actors = $parent_matter->container->actorPivot->where('shared', 1);
+                    $actors->each(function ($item) use ($new_matter_id) {
+                        $item->matter_id = $new_matter_id;
+                        $item->id = null;
+                    });
+                    ActorPivot::insertOrIgnore($actors->toArray());
+                    $new_matter->classifiersNative()
+                        ->createMany($parent_matter->container->classifiersNative->toArray());
+                } else {
+                    // Copy classifiers from original matter
+                    $new_matter->classifiersNative()->createMany($parent_matter->classifiersNative->toArray());
+                }
+                break;
+            case 'new':
+                $received_event = new Event([
+                    'code' => 'REC',
+                    'event_date' => now()
+                ]);
+                $new_matter->events()->save($received_event);
+                break;
         }
         return response()->json(['redirect' => route('matter.show', [$new_matter])]);
     }
@@ -205,10 +202,10 @@ class MatterController extends Controller
             $new_matter->parentFiling()->createMany($parent_matter->parentFiling->toArray());
             $new_matter->filing()->save($parent_matter->filing->replicate());
             if ($parent_matter->publication()->exists()) {
-              $new_matter->publication()->save($parent_matter->publication->replicate());
+                $new_matter->publication()->save($parent_matter->publication->replicate());
             }
             if ($parent_matter->grant()->exists()) {
-              $new_matter->grant()->save($parent_matter->grant->replicate());
+                $new_matter->grant()->save($parent_matter->grant->replicate());
             }
 
             // Insert "entered" event
@@ -346,7 +343,8 @@ class MatterController extends Controller
     }
 
     public function tasks(Matter $matter)
-    { // All events and their tasks, excepting renewals
+    {
+        // All events and their tasks, excepting renewals
         $events = Event::with(['tasks' => function ($query) {
             $query->where('code', '!=', 'REN');
         }, 'info:code,name', 'tasks.info:code,name'])->where('matter_id', $matter->id)
@@ -355,7 +353,8 @@ class MatterController extends Controller
     }
 
     public function renewals(Matter $matter)
-    { // The renewal trigger event and its renewals
+    {
+        // The renewal trigger event and its renewals
         $events = Event::with(['tasks' => function ($query) {
             $query->where('code', 'REN');
         }])->whereHas('tasks', function ($query) {

@@ -5,7 +5,6 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class Matter extends Model
 {
@@ -16,20 +15,14 @@ class Matter extends Model
         'expire_date'
     ];*/
 
-    // use \Venturecraft\Revisionable\RevisionableTrait;
-    // protected $revisionEnabled = true;
-    // protected $revisionCreationsEnabled = true;
-    // protected $revisionCleanup = true; //Remove old revisions (works only when used with $historyLimit)
-    // protected $historyLimit = 500; //Maintain a maximum of 500 changes at any point of time, while cleaning up old revisions.
-
     public function family()
-    { // Gets other family members (where clause is ignored by eager loading)
+    {
+        // Gets family members
         return $this->hasMany('App\Matter', 'caseref', 'caseref')
-                        ->where('id', '!=', $this->id)
-                        ->orderBy('origin')
-                        ->orderBy('country')
-                        ->orderBy('type_code')
-                        ->orderBy('idx');
+            ->orderBy('origin')
+            ->orderBy('country')
+            ->orderBy('type_code')
+            ->orderBy('idx');
     }
 
     public function container()
@@ -45,21 +38,22 @@ class Matter extends Model
     public function children()
     {
         return $this->hasMany('App\Matter', 'parent_id')
-                        ->orderBy('origin')
-                        ->orderBy('country')
-                        ->orderBy('type_code')
-                        ->orderBy('idx');
+            ->orderBy('origin')
+            ->orderBy('country')
+            ->orderBy('type_code')
+            ->orderBy('idx');
     }
 
     public function priorityTo()
-    { // Gets external matters claiming priority on this one (where clause is ignored by eager loading)
+    {
+        // Gets external matters claiming priority on this one (where clause is ignored by eager loading)
         return $this->belongsToMany('App\Matter', 'event', 'alt_matter_id')
-                        ->where('caseref', '!=', $this->caseref)
-                        ->orderBy('caseref')
-                        ->orderBy('origin')
-                        ->orderBy('country')
-                        ->orderBy('type_code')
-                        ->orderBy('idx');
+            ->where('caseref', '!=', $this->caseref)
+            ->orderBy('caseref')
+            ->orderBy('origin')
+            ->orderBy('country')
+            ->orderBy('type_code')
+            ->orderBy('idx');
     }
 
     public function actors()
@@ -70,7 +64,7 @@ class Matter extends Model
 
     public function client()
     {
-        return $this->hasMany('App\MatterActors')->where('role_code', 'CLI');
+        return $this->hasOne('App\MatterActors')->where('role_code', 'CLI');
     }
 
     public function actorPivot()
@@ -81,66 +75,67 @@ class Matter extends Model
     public function events()
     {
         return $this->hasMany('App\Event')
-                        ->orderBy('event_date');
+            ->orderBy('event_date');
     }
 
     public function filing()
     {
         return $this->hasOne('App\Event')
-                        ->where('code', 'FIL');
+            ->where('code', 'FIL');
     }
 
     public function parentFiling()
     {
         return $this->hasMany('App\Event')
-                        ->where('code', 'PFIL');
+            ->where('code', 'PFIL');
     }
 
     public function publication()
     {
         return $this->hasOne('App\Event')
-                        ->where('code', 'PUB');
+            ->where('code', 'PUB');
     }
 
     public function grant()
     {
         return $this->hasOne('App\Event')
-                        ->where('code', 'GRT');
+            ->where('code', 'GRT');
     }
 
     /*public function status()
     {
         return $this->hasOne('App\Event')
-                        ->latest('event_date');
+            ->latest('event_date');
     }*/
 
     public function priority()
     {
         return $this->hasMany('App\Event')
-                        ->where('code', 'PRI');
+            ->where('code', 'PRI');
     }
 
     public function tasksPending()
-    { // Excludes renewals
+    {
+        // Excludes renewals
         return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
-                        ->where('task.code', '!=', 'REN')
-                        ->where('done', 0)
-                        ->orderBy('due_date');
+            ->where('task.code', '!=', 'REN')
+            ->where('done', 0)
+            ->orderBy('due_date');
     }
 
     public function renewalsPending()
     {
         return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
-                        ->where('task.code', 'REN')
-                        ->where('done', 0)
-                        ->orderBy('due_date');
+            ->where('task.code', 'REN')
+            ->where('done', 0)
+            ->orderBy('due_date');
     }
 
     // Returns all classifiers outside the "main display", including those inherited from the container (MatterClassifiers is a model referring to db view matter_classifiers)
     public function classifiers()
     {
         return $this->hasMany('App\MatterClassifiers')
-                        ->where('main_display', 0);
+            ->where('main_display', 0);
     }
 
     // Returns the classifiers native to the matter (only applies to a container, normally)
@@ -153,7 +148,7 @@ class Matter extends Model
     public function titles()
     {
         return $this->hasMany('App\MatterClassifiers')
-                        ->where('main_display', 1);
+            ->where('main_display', 1);
     }
 
     public function linkedBy()
@@ -307,12 +302,12 @@ class Matter extends Model
             // When no filters are set, sorting is done by descending matter id's to see the most recent matters first.
             // As soon as a filter is set, sorting is done by default by caseref instead of by id, ascending.
             if ($sortkey == 'id') {
-              $sortkey = 'caseref';
-              $sortdir = 'asc';
+                $sortkey = 'caseref';
+                $sortdir = 'asc';
             }
             foreach ($multi_filter as $key => $value) {
                 if ($value != '') {
-                    switch($key) {
+                    switch ($key) {
                         case 'Ref':
                             $query->where('uid', 'LIKE', "$value%");
                             break;
@@ -372,7 +367,7 @@ class Matter extends Model
                             break;
                         case 'Ctnr':
                             if ($value) {
-                              $query->whereNull('container_id');
+                                $query->whereNull('container_id');
                             }
                             break;
                         default:
@@ -384,8 +379,8 @@ class Matter extends Model
         }
 
         // Do not display dead families unless desired
-        if ( !$include_dead ) {
-          $query->whereRaw('(select count(1) from matter m where m.caseref = matter.caseref and m.dead = 0) > 0');
+        if (!$include_dead) {
+            $query->whereRaw('(select count(1) from matter m where m.caseref = matter.caseref and m.dead = 0) > 0');
         }
 
         // Sorting by caseref is special - set additional conditions here
@@ -413,8 +408,8 @@ class Matter extends Model
         $authUserRole = Auth::user()->default_role;
         $authUserId = Auth::user()->id;
         $query = Matter::leftJoin('matter_category as mc', 'mc.code', 'matter.category_code')
-                ->groupBy('category_code', 'category')
-                ->select('mc.category', 'category_code', DB::raw('count(*) as total'));
+            ->groupBy('category_code', 'category')
+            ->select('mc.category', 'category_code', DB::raw('count(*) as total'));
         if ($authUserRole == 'CLI') {
             $query->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw("ifnull(matter.container_id, matter.id)"))
             ->where([[ 'cli.role', 'CLI'],['cli.actor_id', $authUserId]]);
@@ -426,61 +421,61 @@ class Matter extends Model
         return $query->get();
     }
 
-    public static function getDescription($id, $lang='en') {
-        $query = Matter::select('uid AS Ref',
-                'matter.country AS country',
-                'matter.category_code AS Cat',
-                'matter.origin',
-                'event_name.name AS Status',
-                'status.event_date AS Status_date',
-                DB::raw ( "COALESCE(cli.display_name, clic.display_name, cli.name, clic.name) AS Client" ),
-                DB::raw ( "COALESCE(clilnk.actor_ref, lclic.actor_ref) AS ClRef" ),
-                DB::raw ( "COALESCE(app.display_name, app.name) AS Applicant" ),
-                //DB::raw ( "COALESCE(agt.display_name, agt.name) AS Agent" ),
-                //'agtlnk.actor_ref AS AgtRef',
-                'tit1.value AS Title',
-                'tit2.value AS Title2',
-                DB::raw ( "CONCAT_WS(' ', inv.name, inv.first_name) as Inventor1" ),
-                'fil.event_date AS Filed',
-                'fil.detail AS FilNo',
-                'pub.event_date AS Published',
-                'pub.detail AS PubNo',
-                'grt.event_date AS Granted',
-                'grt.detail AS GrtNo',
-                //'matter.id',
-                //'matter.container_id',
-                //'matter.parent_id',
-                //'matter.responsible',
-                //'del.login AS delegate',
-                //'matter.dead',
-                'country.name AS country_name',
-                'country.name_FR AS country_name_FR',
-                'country.name_DE AS country_name_DE',
-                DB::raw ( "IF(isnull(matter.container_id),1,0) AS Ctnr" ))
+    public static function getDescription($id, $lang = 'en')
+    {
+        $query = Matter::select(
+            'uid AS Ref',
+            'matter.country AS country',
+            'matter.category_code AS Cat',
+            'matter.origin',
+            'event_name.name AS Status',
+            'status.event_date AS Status_date',
+            DB::raw("COALESCE(cli.display_name, clic.display_name, cli.name, clic.name) AS Client"),
+            DB::raw("COALESCE(clilnk.actor_ref, lclic.actor_ref) AS ClRef"),
+            DB::raw("COALESCE(app.display_name, app.name) AS Applicant"),
+            //DB::raw("COALESCE(agt.display_name, agt.name) AS Agent"),
+            //'agtlnk.actor_ref AS AgtRef',
+            'tit1.value AS Title',
+            'tit2.value AS Title2',
+            DB::raw("CONCAT_WS(' ', inv.name, inv.first_name) as Inventor1"),
+            'fil.event_date AS Filed',
+            'fil.detail AS FilNo',
+            'pub.event_date AS Published',
+            'pub.detail AS PubNo',
+            'grt.event_date AS Granted',
+            'grt.detail AS GrtNo',
+            //'matter.id',
+            //'matter.container_id',
+            //'matter.parent_id',
+            //'matter.responsible',
+            //'del.login AS delegate',
+            //'matter.dead',
+            'country.name AS country_name',
+            'country.name_FR AS country_name_FR',
+            'country.name_DE AS country_name_DE',
+            DB::raw("IF(isnull(matter.container_id),1,0) AS Ctnr")
+        )
         ->join('matter_category', 'matter.category_code', 'matter_category.code')
         ->join('country', 'matter.country', 'country.iso')
-        ->leftJoin(DB::raw('matter_actor_lnk clilnk
+        ->leftJoin(DB::raw('matter_actor_lnk clilnk 
             JOIN actor cli ON cli.id = clilnk.actor_id'), function ($join) {
-                $join->on('matter.id', 'clilnk.matter_id')->where('clilnk.role', 'CLI');
-            }
-        )
+            $join->on('matter.id', 'clilnk.matter_id')->where('clilnk.role', 'CLI');
+        })
         ->leftJoin(DB::raw('matter_actor_lnk lclic
             JOIN actor clic ON clic.id = lclic.actor_id'), function ($join) {
                 $join->on('matter.container_id', 'lclic.matter_id')->where([
                     ['lclic.role', 'CLI'],
                     ['lclic.shared', 1]
                 ]);
-            }
-        );
+        });
 
-        $query->leftJoin(DB::raw('matter_actor_lnk invlnk
-                JOIN actor inv ON inv.id = invlnk.actor_id'), function ($join) {
-                    $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'invlnk.matter_id')->where([
-                        ['invlnk.role', 'INV'],
-                        ['invlnk.display_order', 1]
-                    ]);
-                }
-            );
+        $query->leftJoin(DB::raw('matter_actor_lnk invlnk 
+            JOIN actor inv ON inv.id = invlnk.actor_id'), function ($join) {
+                $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'invlnk.matter_id')->where([
+                    ['invlnk.role', 'INV'],
+                    ['invlnk.display_order', 1]
+                ]);
+        });
 
         $query->leftJoin(DB::raw('matter_actor_lnk applnk
             JOIN actor app ON app.id = applnk.actor_id'), function ($join) {
@@ -488,13 +483,11 @@ class Matter extends Model
                     ['applnk.role', 'APP'],
                     ['applnk.display_order', 1]
                 ]);
-            }
-        )
+        })
         ->leftJoin(DB::raw('matter_actor_lnk dellnk
             JOIN actor del ON del.id = dellnk.actor_id'), function ($join) {
                 $join->on(DB::raw('ifnull(matter.container_id,matter.id)'), 'dellnk.matter_id')->where('dellnk.role', 'DEL');
-            }
-        )
+        })
         ->leftJoin('event AS fil', function ($join) {
             $join->on('matter.id', 'fil.matter_id')->where('fil.code', 'FIL');
         })
@@ -509,22 +502,23 @@ class Matter extends Model
         ->leftJoin(DB::raw('event e2
             JOIN event_name en2 ON e2.code=en2.code AND en2.status_event = 1'), function ($join) {
                 $join->on('status.matter_id', 'e2.matter_id')->whereColumn('status.event_date', '<', 'e2.event_date');
-            }
-        )
+        })
         ->leftJoin(DB::raw('classifier tit1
             JOIN classifier_type ct1 ON tit1.type_code = ct1.code AND ct1.main_display = 1 AND ct1.display_order = 1'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit1.matter_id')
         ->leftJoin(DB::raw('classifier tit2
             JOIN classifier_type ct2 ON tit2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit2.matter_id')
-        ->where('matter.id','=',$id);
+        ->where('matter.id', '=', $id);
         $info = $query->first();
         $description = array();
         $filed_date = Carbon::parse($info['Filed']);
         $granted_date = Carbon::parse($info['Granted']);
         $published_date = Carbon::parse($info['Published']);
         $title = $info['Title'] ?? $info['Title2'];
-        if($lang == "fr") {
-            $description[] = "N/réf : " . $info['Ref'] ;
-            if($info['ClRef']) {$description[] = "V/réf : " . $info['ClRef'] ;}
+        if ($lang == "fr") {
+            $description[] = "N/réf : " . $info['Ref'];
+            if ($info['ClRef']) {
+                $description[] = "V/réf : " . $info['ClRef'];
+            }
             if ($info['Cat'] == 'PAT') {
                 if ($info['Granted']) {
                     $description[] = "Brevet " . $info['GrtNo'] . " déposé en " . $info['country_name_FR']
@@ -533,15 +527,19 @@ class Matter extends Model
                 }
                 else {
                     $line = "Demande de brevet n°" . $info['FilNo'] . " déposée en " . $info['country_name_FR'] . " le ".$filed_date->locale('fr_FR')->isoFormat('LL');
-                    if($info['Published']) {$line .= " et publiée le " . $published_date->locale('fr_FR')->isoFormat('LL')." sous le n° ". $info['PubNo'];}
+                    if ($info['Published']) {
+                        $line .= " et publiée le " . $published_date->locale('fr_FR')->isoFormat('LL')." sous le n° ". $info['PubNo'];
+                    }
                     $description[] = $line;
                 }
                 $description[] = "Pour : " . $title ;
                 $description[] = "Au nom de : ". $info['Applicant'] ;
             }
             if ($info['Cat'] == 'TM') {
-                $line = "Marque n° " . $info['FilNo'] . " déposée en " . $info['country_name_FR'] . " le " . Carbon::parse($filed_date)->locale('fr_FR')->isoFormat('LL') ;
-                if($info['Published']) {$line .= ", publiée le " . $published_date->locale('fr_FR')->isoFormat('LL') ." sous le n° ". $info['PubNo'];}
+                $line = "Marque n° " . $info['FilNo'] . " déposée en " . $info['country_name_FR'] . " le " . $filed_date->locale('fr_FR')->isoFormat('LL') ;
+                if ($info['Published']) {
+                    $line .= ", publiée le " . $published_date->locale('fr_FR')->isoFormat('LL') ." sous le n° ". $info['PubNo'];
+                }
                 if ($info['Granted']) {
                     $line .=  " et enregistrée le " . $granted_date->locale('fr_FR')->isoFormat('LL');
                 }
@@ -550,33 +548,36 @@ class Matter extends Model
                 $description[] = "Au nom de : ". $info['Applicant'] ;
             }
         }
-        if($lang == "en") {
+        if ($lang == "en") {
             $description[] = "Our ref: " . $info['Ref'] ;
-            if($info['ClRef']) {$description[] = "Your ref: " . $info['ClRef'] ;}
+            if ($info['ClRef']) {
+                $description[] = "Your ref: " . $info['ClRef'];
+            }
             if ($info['Cat'] == 'PAT') {
                 if ($info['Granted']) {
-                    $description[] = "Patent filed under  no " . $info['FilNo'] . " in " . $info['country_name']
-                     ." at " .  $filed_date->locale('en_GB')->isoFormat('LL') . " and granted under no ". $info['GrtNo']
-                     ." at " .  $granted_date->locale('en_GB')->isoFormat('LL');
-                }
-                else {
-                    $description[] = "Patent application n°" . $info['FilNo'] . " filed in " . $info['country_name'] . " at ". $filed_date->locale('en_GB')->isoFormat('LL');
-                    if($info['Published']) {$description[]= " and published at " . $published_date->locale('en_GB')->isoFormat('LL') ." with no ". $info['PubNo'];}
+                    $description[] = "Patent " . $info['FilNo'] . " filed in " . $info['country_name'] . " at " . $info['Filed'] . $info['GrtNo'] . " and granted at " . $info['Granted'];
+                } else {
+                    $description[] = "Patent application n°" . $info['FilNo'] . " filed in " . $info['country_name'] . " at ". $info['Filed'];
+                    if ($info['Published']) {
+                        $description[]= " and published at " . $info['Published'] ." with no ". $info['PubNo'];
+                    }
                 }
                 $description[] = "For: " . $title ;
                 $description[] = "In name of: ". $info['Applicant'] ;
             }
             if ($info['Cat'] == 'TM') {
-                $line = "Trademark no " . $info['FilNo'] . " filed in " . $info['country_name'] . " at " . $filed_date->locale('en_GB')->isoFormat('LL') ;
-                if($info['Published']) {$line .= ", published at " .   $published_date->locale('en_GB')->isoFormat('LL') ." with no ". $info['PubNo'];}
+                $line = "Trademark no " . $info['FilNo'] . " filed in " . $info['country_name_FR'] . " at " . $info['Filed'];
+                if ($info['Published']) {
+                    $line .= ", published at " .  $info['Published'] ." with no ". $info['PubNo'];
+                }
                 if ($info['Granted']) {
-                    $line .=  " and registered at " . $granted_date->locale('en_GB')->isoFormat('LL');
+                    $line .=  " and registered at " . $info['Granted'] ;
                 }
                 $description[] = $line;
                 $description[] = "For: " . $title ;
                 $description[] = "In name of: ". $info['Applicant'] ;
             }
         }
-    return $description;
+        return $description;
     }
 }

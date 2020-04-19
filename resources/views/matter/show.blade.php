@@ -300,7 +300,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <dt>Fam</dt>
             <dd class="mb-1">
               @foreach ( $matter->family as $member )
-              <a class="badge badge-primary" href="/matter/{{ $member->id }}">{{ $member->suffix }}</a>
+              <a class="badge badge-{{ $member->suffix == $matter->suffix ? 'secondary' : 'primary' }}" href="/matter/{{ $member->id }}">{{ $member->suffix }}</a>
               @endforeach
             </dd>
           </dl>
