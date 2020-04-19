@@ -6,7 +6,6 @@ $actor = array(
   'display_name' => 'CLIENT',
   'login' => NULL,
   'password' => NULL,
-  'last_login' => NULL,
   'default_role' => 'ANN',
   'function' => NULL,
   'parent_id' => NULL,
