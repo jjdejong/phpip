@@ -206,7 +206,7 @@
             }
             else {
                document.location.href=data.mailto;
-                e.target.closest('tr').remove();
+               e.target.closest('tr').remove();
             }
           });
       }

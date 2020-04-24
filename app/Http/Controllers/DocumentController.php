@@ -9,6 +9,8 @@ use App\Actor;
 use App\Matter;
 use App\MatterActors;
 use App\TemplateClass;
+use App\Event;
+use App\Task;
 use Log;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Illuminate\Support\Facades\Blade;
@@ -141,6 +143,8 @@ class DocumentController extends Controller
     $members = new TemplateMember;
     $oldfilters = [];
     $view = 'documents.select';
+    $event = null;
+    $task = null;
     if (!empty($filters)) {
         foreach ($filters as $key => $value) {
             if ($value != '') {
@@ -191,12 +195,18 @@ class DocumentController extends Controller
                         // specific view for within event window
                         $view = 'documents.select2';
                         break;
+                    case 'Event':
+                        $event = Event::where('id','=', "$value")->first();
+                        break;
+                    case 'Task':
+                        $task = Task::where('id','=', "$value")->first();
+                        break;
                 }
             }
         }
     }
     $members = $members->get();
-    return view($view,compact('matter','members', 'contacts', 'tableComments','oldfilters'));
+    return view($view,compact('matter','members', 'contacts', 'tableComments','oldfilters','event','task'));
   }
 
   /*
@@ -223,7 +233,9 @@ class DocumentController extends Controller
       if (count($sendto_ids) != 0) {
         $mailto = "mailto:" . implode(',', Actor::whereIn('id', $sendto_ids)->pluck('email')->all());
         $sep = "?";
-        $matter  = Matter::where(['id'=>$request->matter_id])->first();
+        $matter = Matter::where(['id'=>$request->matter_id])->first();
+        $event = Event::where(['id'=>$request->event_id])->first();
+        $task = Task::where(['id'=>$request->task_id])->first();
         $description = implode("\n",Matter::getDescription($request->matter_id, $member->language->code));
         if (count($cc_ids) != 0) {
             $mailto .= $sep . "cc=" . implode(',', Actor::whereIn('id', $cc_ids)->pluck('email')->all());
@@ -234,10 +246,10 @@ class DocumentController extends Controller
           $sep = "&";
         }
         if ($member->format == 'HTML') {
-            $mailto .= $sep . "html-body=" . rawurlencode(render($blade, compact('description', 'matter')));
+            $mailto .= $sep . "html-body=" . rawurlencode(render($blade, compact('description', 'matter','event','task')));
         }
         else {
-          $mailto .= $sep . "body=" . rawurlencode(render($blade, compact('description', 'matter')));
+          $mailto .= $sep . "body=" . rawurlencode(render($blade, compact('description', 'matter','event','task')));
         }
         return json_encode(['mailto' => $mailto]);
       }

@@ -1,6 +1,12 @@
 <td colspan="8">
 <form id="sendDocumentForm">
   <input type='hidden' value="{{ $matter->id }}" name="matter_id">
+  @if (isset($event))
+  <input type='hidden' value="{{ $event->id }}" name="event_id">
+  @endif
+  @if (isset($task))
+  <input type='hidden' value="{{ $task->id }}" name="task_id">
+  @endif
     <div class='container'>
     <div class='row font-weight-bold'>
       <div class="col-3 bg-light">

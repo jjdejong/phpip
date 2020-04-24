@@ -71,7 +71,7 @@
       <td>
         @if (App\Rule::where('id',$task->rule_used)->first())
           @if (count(App\Rule::where('id',$task->rule_used)->first()->templates) != 0)
-            <button class="chooseTemplate" data-url="/document/select/{{ $matter->id }}?Rule={{ $task->rule_used }}" >&#9993;</button>
+            <button class="chooseTemplate" data-url="/document/select/{{ $matter->id }}?Rule={{ $task->rule_used }}}&Task={{ $task->id }}" >&#9993;</button>
           </td>
           @endif
         @endif

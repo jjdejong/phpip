@@ -49,7 +49,7 @@
       @cannot('client')
       <td>
             @if (count(App\EventName::where('code',$event->code)->first()->templates) != 0)
-            <button class="chooseTemplate" data-url="/document/select/{{ $matter->id }}?EventName={{ $event->code }}" >&#9993;</button>
+            <button class="chooseTemplate" data-url="/document/select/{{ $matter->id }}?EventName={{ $event->code }}&Event={{ $event->id }}" >&#9993;</button>
             @endif
       </td>
       @endcannot
