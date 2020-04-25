@@ -1,6 +1,7 @@
 <?php
 
-return ["general" => [
+return [
+    "general" => [
             "paginate" => 30,
             ],
     "validity" => [
@@ -9,6 +10,9 @@ return ["general" => [
             "before" => 8,
             "before_last" => 2,
             ],
+    "invoice" => [
+      "backend" => "dolibarr"
+    ],
     "api" => [
         'dolibarr_url' => 'http://localhost/dolibarr/htdocs/api/index.php',
         'DOLAPIKEY' => 'your Dolibarr key',

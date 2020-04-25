@@ -345,139 +345,141 @@ class RenewalController extends Controller
         {
                 return response()->json(['error' => "No renewal selected."]);
         }
-        $resql = $query->orderBy( 'client_dn', "ASC")->get();
-        $client_precedent="ZZZZZZZZZZZZZZZZZZZZZZZZ";
-        $premier_passage=true;
-        // get from config/renewal.php
-        $apikey =  config('renewal.api.DOLAPIKEY');
-        if ($apikey == null) {
-            return response()->json(['error' => "Api is not configured"]);
-        }
-        if ($resql)
-        {
-            $num=$resql->count();
-            if ($num == 0)
-            {
-                return response()->json(['error' => "No renewal selected."]);
-            }
-            else
-            {
-                $i=0;
-                while ($i < $num)
-                {
-                    $ren = $resql[$i];
-                    $client = $ren['client_dn'];
-                    if ($premier_passage)
-                    {
-                        // retrouve la correspondance de société
-                        $result = $this->_client($client, $apikey);
-                        if (isset($result["error"]) && $result["error"]["code"] >= "404") {
-                            return response()->json(['error' => $client." not found in Dolibarr.\n"]);
-                        }
-                        $premier_passage=false;
-                        $soc_res = $result[0];
-                        $earlier = strtotime($ren['due_date']);
-                    }
-                    else
-                    {
-                        $earlier = min($earlier, strtotime($ren['due_date']));
-                    }
-                    $desc = $ren['caseref'].$ren['suffix']." : Annuité pour l'année ".$ren['detail']." du titre n°".$ren['number'];
-                    if ($ren['event_name']=='FIL') {$desc.=" déposé le ";}
-                    if ($ren['event_name']=='GRT' or $ren['event_name']=='PR') {$desc.=" délivré le ";}
-                    $desc.= $fmt->format(strtotime($ren['event_date']));
-                    $desc.=' en '.$ren['country_FR'];
-                    if ($ren['title'] != '') {$desc.="\nSujet : ".$ren['title'];}
-                    $desc.="\nÉchéance le ".$fmt->format(strtotime($ren['due_date']));
-                // Détermine le taux de tva
-                    if ($soc_res['tva_intra'] == "" || substr($soc_res['tva_intra'],2) == "FR")
-                    {
-                        $tx_tva = 0.2;
-                    }
-                    else
-                    {
-                        $tx_tva = 0.0;
-                    }
-                    if ($ren['grace_period'] == 1)
-                    {
-                        $fee = $ren['fee'];
-                        if( strtotime($ren['done_date']) < $ren['due_date']) {
-                            // late payment
-                            $prices = $this->prices([$ren['id']],1);
-                        }
-                        else
-                        {
-                            $prices = $this->prices([$ren['id']],2);
-                        }
-                    }
-                    else
-                    {
-                            $prices = $this->prices([$ren['id']],0);
-                    }
-                    $fee = $prices[$ren['id']]['fee'];
-                    $cost = $prices[$ren['id']]['cost'];
-                    if ($cost != 0)
-                    {
-                        $desc.="\nHonoraires pour la surveillance et le paiement";
-                    }
-                    else
-                    {
-                        $desc.="\nHonoraires et taxe";
-                    }
-                    $newlignes[] = [
-                    "desc"=>$desc,
-                    "product_type"=> 1,
-                    "tva_tx"=>($tx_tva * 100),
-                    "remise_percent"=>0,
-                    "qty"=>1,
-                    "subprice"=>$fee,
-                    "total_tva"=>$fee * $tx_tva,
-                    "total_ttc"=>$fee  * (1.0 +  $tx_tva)
-                    ];
-                    if ($cost != 0)
-                    {
-                        // Ajout d'une deuxième ligne
-                        $newlignes[] = [
-                        "product_type" => 1,
-                        "desc"=>"Taxe",
-                        "tva_tx"=>0.0,
-                        "remise_percent"=>0,
-                        "qty"=>1,
-                        "subprice"=>$cost,
-                        "total_tva"=>0,
-                        "total_ttc"=>$cost
-                        ];
-                    }
-                    $client_precedent = $client;
-                    $i++;
-                    if ($i < $num)
-                    {
-                        $client = $resql[$i]['client_dn'];
-                    }
-                    if ($client != $client_precedent || $i == $num)
-                    {
-                        // Create propale
-                        $newprop = [
-                            "socid"	=> $soc_res['id'],
-                            "date" => time(),
-                            "cond_reglement_id" => 1,
-                            "mode_reglement_id" => 2,
-                            "lines" => $newlignes,
-                            "fk_account" => config('renewal.api.fk_account')
-                            ];
-                        $rc = $this->create_invoice($newprop,$apikey ); // invoice creation
-                        if ($rc[0] != 0) {
-                            return response()->json(['error' => $rc[1] ]);
-                        }
-                        $newlignes = [] ;
-                        $premier_passage = true;
-                    }
+        if (config('renewal.invoice.backend') == "dolibarr") {
+          $resql = $query->orderBy( 'client_dn', "ASC")->get();
+          $client_precedent="ZZZZZZZZZZZZZZZZZZZZZZZZ";
+          $premier_passage=true;
+          // get from config/renewal.php
+          $apikey =  config('renewal.api.DOLAPIKEY');
+          if ($apikey == null) {
+              return response()->json(['error' => "Api is not configured"]);
+          }
+          if ($resql)
+          {
+              $num=$resql->count();
+              if ($num == 0)
+              {
+                  return response()->json(['error' => "No renewal selected."]);
+              }
+              else
+              {
+                  $i=0;
+                  while ($i < $num)
+                  {
+                      $ren = $resql[$i];
+                      $client = $ren['client_dn'];
+                      if ($premier_passage)
+                      {
+                          // retrouve la correspondance de société
+                          $result = $this->_client($client, $apikey);
+                          if (isset($result["error"]) && $result["error"]["code"] >= "404") {
+                              return response()->json(['error' => $client." not found in Dolibarr.\n"]);
+                          }
+                          $premier_passage=false;
+                          $soc_res = $result[0];
+                          $earlier = strtotime($ren['due_date']);
+                      }
+                      else
+                      {
+                          $earlier = min($earlier, strtotime($ren['due_date']));
+                      }
+                      $desc = $ren['caseref'].$ren['suffix']." : Annuité pour l'année ".$ren['detail']." du titre n°".$ren['number'];
+                      if ($ren['event_name']=='FIL') {$desc.=" déposé le ";}
+                      if ($ren['event_name']=='GRT' or $ren['event_name']=='PR') {$desc.=" délivré le ";}
+                      $desc.= $fmt->format(strtotime($ren['event_date']));
+                      $desc.=' en '.$ren['country_FR'];
+                      if ($ren['title'] != '') {$desc.="\nSujet : ".$ren['title'];}
+                      $desc.="\nÉchéance le ".$fmt->format(strtotime($ren['due_date']));
+                  // Détermine le taux de tva
+                      if ($soc_res['tva_intra'] == "" || substr($soc_res['tva_intra'],2) == "FR")
+                      {
+                          $tx_tva = 0.2;
+                      }
+                      else
+                      {
+                          $tx_tva = 0.0;
+                      }
+                      if ($ren['grace_period'] == 1)
+                      {
+                          $fee = $ren['fee'];
+                          if( strtotime($ren['done_date']) < $ren['due_date']) {
+                              // late payment
+                              $prices = $this->prices([$ren['id']],1);
+                          }
+                          else
+                          {
+                              $prices = $this->prices([$ren['id']],2);
+                          }
+                      }
+                      else
+                      {
+                              $prices = $this->prices([$ren['id']],0);
+                      }
+                      $fee = $prices[$ren['id']]['fee'];
+                      $cost = $prices[$ren['id']]['cost'];
+                      if ($cost != 0)
+                      {
+                          $desc.="\nHonoraires pour la surveillance et le paiement";
+                      }
+                      else
+                      {
+                          $desc.="\nHonoraires et taxe";
+                      }
+                      $newlignes[] = [
+                      "desc"=>$desc,
+                      "product_type"=> 1,
+                      "tva_tx"=>($tx_tva * 100),
+                      "remise_percent"=>0,
+                      "qty"=>1,
+                      "subprice"=>$fee,
+                      "total_tva"=>$fee * $tx_tva,
+                      "total_ttc"=>$fee  * (1.0 +  $tx_tva)
+                      ];
+                      if ($cost != 0)
+                      {
+                          // Ajout d'une deuxième ligne
+                          $newlignes[] = [
+                          "product_type" => 1,
+                          "desc"=>"Taxe",
+                          "tva_tx"=>0.0,
+                          "remise_percent"=>0,
+                          "qty"=>1,
+                          "subprice"=>$cost,
+                          "total_tva"=>0,
+                          "total_ttc"=>$cost
+                          ];
+                      }
+                      $client_precedent = $client;
+                      $i++;
+                      if ($i < $num)
+                      {
+                          $client = $resql[$i]['client_dn'];
+                      }
+                      if ($client != $client_precedent || $i == $num)
+                      {
+                          // Create propale
+                          $newprop = [
+                              "socid"	=> $soc_res['id'],
+                              "date" => time(),
+                              "cond_reglement_id" => 1,
+                              "mode_reglement_id" => 2,
+                              "lines" => $newlignes,
+                              "fk_account" => config('renewal.api.fk_account')
+                              ];
+                          $rc = $this->create_invoice($newprop,$apikey ); // invoice creation
+                          if ($rc[0] != 0) {
+                              return response()->json(['error' => $rc[1] ]);
+                          }
+                          $newlignes = [] ;
+                          $premier_passage = true;
+                      }
+                  }
                 }
-                // Move the renewal task to step  : invoiced
-                Task::whereIn('id',$request->task_ids)->update(['invoice_step' => 2]);
-                return response()->json(['success' => 'Invoices created for '.$num.' renewals']);
             }
         }
+        // Move the renewal task to step  : invoiced
+        Task::whereIn('id',$request->task_ids)->update(['invoice_step' => 2]);
+        return response()->json(['success' => 'Invoices created for '.$num.' renewals']);
     }
 
     function _client($client, $apikey) {
