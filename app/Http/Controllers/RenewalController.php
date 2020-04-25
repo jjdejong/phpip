@@ -142,14 +142,6 @@ class RenewalController extends Controller
     {
         // TODO Manage languages of the calls
         // TODO Check first that each client has email
-        // TODO Use Carbon instead of Intl
-        $fmt = new IntlDateFormatter(
-            config('app.locale'),
-            IntlDateFormatter::FULL,IntlDateFormatter::FULL,
-            config('app.timezone'),
-            IntlDateFormatter::GREGORIAN,
-            'd MMMM yyyy'
-        );
 
         if (! isset( $ids))
         {
@@ -329,14 +321,6 @@ class RenewalController extends Controller
 
     public function invoice(Request $request)
     {
-
-        $fmt = new IntlDateFormatter(
-            config('app.locale'),
-            IntlDateFormatter::FULL,IntlDateFormatter::FULL,
-            config('app.timezone'),
-            IntlDateFormatter::GREGORIAN,
-            'd MMMM yyyy'
-        );
         if (isset( $request->task_ids))
         {
             $query = Renewal::whereIn('id',$request->task_ids);
@@ -386,10 +370,10 @@ class RenewalController extends Controller
                       $desc = $ren['caseref'].$ren['suffix']." : Annuité pour l'année ".$ren['detail']." du titre n°".$ren['number'];
                       if ($ren['event_name']=='FIL') {$desc.=" déposé le ";}
                       if ($ren['event_name']=='GRT' or $ren['event_name']=='PR') {$desc.=" délivré le ";}
-                      $desc.= $fmt->format(strtotime($ren['event_date']));
+                      $desc.= $ren['event_date']->isoFormat('LL');
                       $desc.=' en '.$ren['country_FR'];
                       if ($ren['title'] != '') {$desc.="\nSujet : ".$ren['title'];}
-                      $desc.="\nÉchéance le ".$fmt->format(strtotime($ren['due_date']));
+                      $desc.="\nÉchéance le ".$ren['due_date']->isoFormat('LL');
                   // Détermine le taux de tva
                       if ($soc_res['tva_intra'] == "" || substr($soc_res['tva_intra'],2) == "FR")
                       {
@@ -763,6 +747,7 @@ class RenewalController extends Controller
      */
     public function renewalOrder(Request $request)
     {
+        // TODO Use Carbon for formatting dates
         $fmt = new IntlDateFormatter(
             config('app.locale'),
             IntlDateFormatter::FULL,IntlDateFormatter::FULL,
