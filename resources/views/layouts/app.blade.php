@@ -175,6 +175,11 @@
         method: method,
         body: body
       });
+      if ( res.status == 500) {
+        res.text().then(function (text) {
+                alert("Unexpected result:" + text)
+              });
+      }
       return res.json();
     }
 

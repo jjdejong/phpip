@@ -242,16 +242,27 @@ class DocumentController extends Controller
             $sep = "&";
         }
         if ($member->subject != "") {
-          $mailto .= $sep."subject=".rawurlencode(render($subject,compact('description', 'matter')));
-          $sep = "&";
+          $content = render($subject,compact('description', 'matter'));
+          if (is_array($content)) {
+            if (array_key_exists('error', $content))
+              return $content;
+          } else {
+            $mailto .= $sep."subject=".rawurlencode($content);
+            $sep = "&";
+          }
         }
-        if ($member->format == 'HTML') {
-            $mailto .= $sep . "html-body=" . rawurlencode(render($blade, compact('description', 'matter','event','task')));
+        $content = render($blade,compact('description', 'matter','event','task'));
+        if (is_array($content)) {
+          if (array_key_exists('error', $content))
+            return $content;
+        } else {
+          if ($member->format == 'HTML') {
+              $mailto .= $sep . "html-body=" . rawurlencode($content);
+          } else {
+            $mailto .= $sep . "body=" . rawurlencode($content);
+          }
+          return json_encode(['mailto' => $mailto]);
         }
-        else {
-          $mailto .= $sep . "body=" . rawurlencode(render($blade, compact('description', 'matter','event','task')));
-        }
-        return json_encode(['mailto' => $mailto]);
       }
       else {
         return json_encode(['message' =>"You need to select at least one contact."]);
