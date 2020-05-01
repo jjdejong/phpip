@@ -1,8 +1,9 @@
-<div class="card" style="height: 480px;">
+<div class="card reload-part" style="height: 480px;">
   <div class="nav nav-pills" role="tablist">
     <a class="nav-item nav-link active" data-toggle="tab" href="#ruleMain" role="tab">Main</a>
     <a class="nav-item nav-link" data-toggle="tab" href="#ruleConditions" role="tab">Conditions</a>
     <a class="nav-item nav-link" data-toggle="tab" href="#ruleCost" role="tab">Cost</a>
+    <a class="nav-item nav-link" data-toggle="tab" href="#ruleTemplate" role="tab">Templates</a>
     <button id="deleteRule" title="Delete rule" class="nav-item nav-link btn btn-outline-danger" data-url='/rule/{{ $ruleInfo->id }}' data-message="the rule {{ $ruleInfo->taskInfo->name  }}" >
       Delete
     </button>
@@ -118,6 +119,36 @@
           <th><label title="{{ $ruleComments['currency'] }}">Currency</label></th>
           <td><input type="text" maxlength="3" class="form-control noformat" name="currency" value="{{ $ruleInfo->currency }}"></td>
         </tr>
+      </table>
+    </fieldset>
+    <fieldset class="tab-pane fade show active" id="ruleTemplate">
+      <table class="table">
+      <tr>
+        <td colspan="4">
+          <form id="addTemplateForm" class="form-inline">
+            <input type="hidden" name="task_rule_id" value="{{ $ruleInfo->id }}">
+            <div class="input-group">
+              <input type="hidden" name="template_class_id" value="">
+              <input type="text" class="form-control form-control-sm" name="className" placeholder="Class" data-ac="/template-class/autocomplete" data-actarget="template_class_id">
+              <div class="input-group-append">
+                <button type="button" class="btn btn-primary btn-sm" id="addRuleTemplateSubmit">&check;</button>
+                <button type="reset" class="btn btn-outline-primary btn-sm">&times;</button>
+              </div>
+            </div>
+          </form>
+        </td>
+      </tr>
+  		@foreach ($links as $link)
+  		<tr class="reveal-hidden" data-resource="/rule-class/{{ $link->id }}">
+  			<td	title="{{ $link->class->description }}" colspan="3">
+  				{{ $link->class->name}}
+  			</td>
+  			<td>
+          <a href="#" class="hidden-action text-danger" id="deleteTemplate" title="Delete template link">&CircleTimes;</a>
+        </td>
+
+  		</tr>
+  		@endforeach
       </table>
     </fieldset>
   </div>
