@@ -1,10 +1,10 @@
 <div class="card reload-part" style="height: 480px;">
   <div class="nav nav-pills" role="tablist">
-    <a class="nav-item nav-link active" data-toggle="tab" href="#ruleMain" role="tab">Main</a>
-    <a class="nav-item nav-link" data-toggle="tab" href="#ruleConditions" role="tab">Conditions</a>
-    <a class="nav-item nav-link" data-toggle="tab" href="#ruleCost" role="tab">Cost</a>
-    <a class="nav-item nav-link" data-toggle="tab" href="#ruleTemplate" role="tab">Templates</a>
-    <button id="deleteRule" title="Delete rule" class="nav-item nav-link btn btn-outline-danger" data-url='/rule/{{ $ruleInfo->id }}' data-message="the rule {{ $ruleInfo->taskInfo->name  }}" >
+    <a class="nav-item nav-link active p-2" data-toggle="tab" href="#ruleMain" role="tab">Main</a>
+    <a class="nav-item nav-link p-2" data-toggle="tab" href="#ruleConditions" role="tab">Conditions</a>
+    <a class="nav-item nav-link p-2" data-toggle="tab" href="#ruleCost" role="tab">Cost</a>
+    <a class="nav-item nav-link p-2" data-toggle="tab" href="#ruleTemplate" role="tab">Templates</a>
+    <button id="deleteRule" title="Delete rule" class="nav-item nav-link p-2 btn btn-outline-danger" data-url='/rule/{{ $ruleInfo->id }}' data-message="the rule {{ $ruleInfo->taskInfo->name  }}" >
       Delete
     </button>
   </div>
