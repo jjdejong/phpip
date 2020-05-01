@@ -208,6 +208,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('fee', 'FeeController');
     Route::resource('template-member', 'TemplateMemberController');
     Route::resource('document', 'DocumentController')->parameters(['document' => 'class']);
+    Route::resource('event-class', 'EventClassController');
+    Route::resource('rule-class', 'RuleClassController');
 
     // Testing - not used
     /* Route::get('matter/{matter}/actors', function (App\Matter $matter) {

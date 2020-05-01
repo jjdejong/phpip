@@ -1,4 +1,4 @@
-<div data-resource="/eventname/{{ $eventname->code }}">
+<div data-resource="/eventname/{{ $eventname->code }}" class="reload-part">
 	<table class="table table-hover table-sm">
 		<tr>
 			<th width="20%">Code</th>
@@ -33,6 +33,40 @@
 			<th>Notes</th>
 			<td colspan="3"><textarea class="form-control form-control-sm noformat" name="notes">{{ $eventname->notes }}</textarea>
 		</tr>
+		<tr>
+			<th colspan="3">Linked templates</th>
+			<td>
+				<a data-toggle="collapse" class="badge badge-pill badge-info font-weight-normal ml-2" href="#addEventRow" id="addEventTempalte" title="Add template">
+					&plus;
+				</a>
+			</td>
+		</tr>
+    <tr id="addEventRow" class="collapse">
+      <td colspan="4">
+        <form id="addTemplateForm" class="form-inline">
+          <input type="hidden" name="event_name_code" value="{{ $eventname->code }}">
+          <div class="input-group">
+            <input type="hidden" name="template_class_id" value="">
+            <input type="text" class="form-control form-control-sm" name="className" placeholder="Class" data-ac="/template-class/autocomplete" data-actarget="template_class_id">
+            <div class="input-group-append">
+              <button type="button" class="btn btn-primary btn-sm" id="addEventTemplateSubmit">&check;</button>
+              <button type="reset" class="btn btn-outline-primary btn-sm">&times;</button>
+            </div>
+          </div>
+        </form>
+      </td>
+    </tr>
+		@foreach ($links as $link)
+		<tr class="reveal-hidden" data-resource="/event-class/{{ $link->id }}">
+			<td	title="{{ $link->class->description }}" colspan="3">
+				{{ $link->class->name}}
+			</td>
+			<td>
+        <a href="#" class="hidden-action text-danger" id="deleteTemplate" title="Delete template link">&CircleTimes;</a>
+      </td>
+
+		</tr>
+		@endforeach
 	</table>
 	<button type="button" class="btn btn-danger" title="Delete event name" id="deleteEName" data-message="event name {{ $eventname->name  }}" data-url='/eventname/{{ $eventname->code }}'>
 		Delete

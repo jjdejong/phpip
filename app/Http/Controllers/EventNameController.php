@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\EventName;
 use App\Actor;
+use App\EventClassLnk;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Response;
@@ -73,7 +74,8 @@ class EventNameController extends Controller
         $table = new Actor;
         $tableComments = $table->getTableComments('event_name');
         $eventname->load(['countryInfo:iso,name', 'categoryInfo:code,category', 'default_responsibleInfo:id,name']);
-        return view('eventname.show', compact('eventname', 'tableComments'));
+        $links = EventClassLnk::where('event_name_code','=', $eventname->code)->get();
+        return view('eventname.show', compact('eventname', 'tableComments', 'links'));
     }
 
     /**

@@ -285,6 +285,11 @@
             .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
           break;
 
+        case 'deleteTemplate':
+          fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
+            .then(() => fetchInto(contentSrc, app.querySelector('.reload-part')));
+          break;
+
         case 'nationalizeSubmit':
           submitModalForm('/matter/storeN', natMatterForm);
           break;
@@ -339,6 +344,14 @@
 
         case 'sendDocument':
           submitModalForm('/document', sendDocumentForm);
+          break;
+
+        case 'addEventTemplateSubmit':
+          submitModalForm('/event-class', addTemplateForm,'reloadPartial');
+          break;
+
+        case 'addRuleTemplateSubmit':
+          submitModalForm('/rule-class', addTemplateForm,'reloadPartial');
           break;
 
         case 'deleteActor':
@@ -569,7 +582,9 @@
           } else {
             if (after === 'reloadModal') {
               fetchInto(contentSrc, ajaxModal.querySelector('.modal-body'));
-            } else { // reloadPage
+            } else if (after === 'reloadPartial') {
+                fetchInto(contentSrc, app.querySelector('.reload-part'));
+              } else { // reloadPage
               location.reload();
             }
           }
