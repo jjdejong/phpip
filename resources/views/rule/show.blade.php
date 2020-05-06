@@ -121,7 +121,7 @@
         </tr>
       </table>
     </fieldset>
-    <fieldset class="tab-pane fade show active" id="ruleTemplate">
+    <fieldset class="tab-pane fade" id="ruleTemplate">
       <table class="table">
       <tr>
         <td colspan="4">
