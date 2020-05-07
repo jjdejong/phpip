@@ -64,6 +64,7 @@ class Matter extends Model
 
     public function client()
     {
+        // Used in Policies - do not change without checking MatterPolicy
         return $this->hasOne('App\MatterActors')->where('role_code', 'CLI');
     }
 
