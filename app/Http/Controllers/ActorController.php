@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Actor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Response;
 
 class ActorController extends Controller
 {
@@ -14,21 +13,22 @@ class ActorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $actor = new Actor;
         if ($request->filled('Name')) {
             $actor = $actor->where('name', 'like', $request->Name . '%');
         }
         switch ($request->selector) {
-          case 'phy_p':
-            $actor = $actor->where('phy_person', 1);
-            break;
-          case 'leg_p':
-            $actor = $actor->where('phy_person', 0);
-            break;
-          case 'warn':
-            $actor = $actor->where('warn', 1);
-            break;
+            case 'phy_p':
+                $actor = $actor->where('phy_person', 1);
+                break;
+            case 'leg_p':
+                $actor = $actor->where('phy_person', 0);
+                break;
+            case 'warn':
+                $actor = $actor->where('warn', 1);
+                break;
         }
         $actorslist = $actor->with('company')->orderby('name')->paginate(21);
         $actorslist->appends($request->input())->links();
@@ -40,7 +40,8 @@ class ActorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         $table = new Actor;
         //TODO getTableComments is the same as in Rule.php. To render common
         $actorComments = $table->getTableComments('actor');
@@ -53,7 +54,8 @@ class ActorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $request->validate([
             'name' => 'required|max:100',
             'email' => 'email|nullable'
@@ -68,7 +70,8 @@ class ActorController extends Controller
      * @param  \App\Actor  $actor
      * @return \Illuminate\Http\Response
      */
-    public function show(Actor $actor) {
+    public function show(Actor $actor)
+    {
         $actorInfo = $actor->load(['company:id,name', 'parent:id,name', 'site:id,name', 'droleInfo', 'countryInfo:iso,name', 'country_mailingInfo:iso,name', 'country_billingInfo:iso,name', 'nationalityInfo:iso,name']);
         $actorComments = $actor->getTableComments('actor');
         return view('actor.show', compact('actorInfo', 'actorComments'));
@@ -80,7 +83,8 @@ class ActorController extends Controller
      * @param  \App\Actor  $actor
      * @return \Illuminate\Http\Response
      */
-    public function edit(Actor $actor) {
+    public function edit(Actor $actor)
+    {
         //
     }
 
@@ -91,13 +95,14 @@ class ActorController extends Controller
      * @param  \App\Actor  $actor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Actor $actor) {
+    public function update(Request $request, Actor $actor)
+    {
         $request->validate([
             'email' => 'email|nullable'
         ]);
         $request->merge([ 'updater' => Auth::user()->login ]);
         $actor->update($request->except(['_token', '_method']));
-        return response()->json(['success' => '1']);
+        return $actor;
     }
 
     /**
@@ -106,9 +111,9 @@ class ActorController extends Controller
      * @param  \App\Actor  $actor
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Actor $actor) {
+    public function destroy(Actor $actor)
+    {
         $actor->delete();
-        return response()->json(['success' => 'Actor deleted']);
+        return $actor;
     }
-
 }

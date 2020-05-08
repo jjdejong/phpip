@@ -6,7 +6,6 @@ use App\Category;
 use App\Actor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Response;
 
 class CategoryController extends Controller
 {
@@ -86,7 +85,7 @@ class CategoryController extends Controller
     {
         $request->merge([ 'updater' => Auth::user()->login ]);
         $category->update($request->except(['_token', '_method']));
-        return response()->json(['success' => 'Category updated']);
+        return $category;
     }
 
     /**
@@ -98,6 +97,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        return response()->json(['success' => 'Category deleted']);
+        return $category;
     }
 }

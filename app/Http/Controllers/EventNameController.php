@@ -6,7 +6,6 @@ use App\EventName;
 use App\Actor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Response;
 
 class EventNameController extends Controller
 {
@@ -87,7 +86,7 @@ class EventNameController extends Controller
     {
         $request->merge([ 'updater' => Auth::user()->login ]);
         $eventname->update($request->except(['_token', '_method']));
-        return response()->json(['success' => 'Event name updated']);
+        return $eventname;
     }
 
     /**
@@ -99,6 +98,6 @@ class EventNameController extends Controller
     public function destroy(EventName  $eventname)
     {
         $eventname->delete();
-        return response()->json(['success' => 'Event name deleted']);
+        return $eventname;
     }
 }

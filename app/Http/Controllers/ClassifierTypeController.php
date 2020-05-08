@@ -6,7 +6,6 @@ use App\ClassifierType;
 use App\Actor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Response;
 
 class ClassifierTypeController extends Controller
 {
@@ -85,7 +84,7 @@ class ClassifierTypeController extends Controller
     {
         $request->merge([ 'updater' => Auth::user()->login ]);
         $classifierType->update($request->except(['_token', '_method']));
-        return response()->json(['success' => 'ClassifierType updated']);
+        return $classifierType;
     }
 
     /**
@@ -97,6 +96,6 @@ class ClassifierTypeController extends Controller
     public function destroy(ClassifierType $classifierType)
     {
         $classifierType->delete();
-        return response()->json(['success' => 'ClassifierType deleted']);
+        return $classifierType;
     }
 }

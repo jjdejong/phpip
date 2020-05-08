@@ -6,7 +6,6 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Response;
 
 class UserController extends Controller
 {
@@ -15,7 +14,8 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $user = new User;
         if ($request->filled('Name')) {
             $user = $user->where('name', 'like', $request->Name . '%');
@@ -30,7 +30,8 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         $table = new \App\Actor;
         $userComments = $table->getTableComments('actor');
         return view('user.create', compact('userComments'));
@@ -42,7 +43,8 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $request->validate([
             'name' => 'required|unique:actor|max:100',
             'login' => 'required|unique:users',
@@ -60,7 +62,8 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user) {
+    public function show(User $user)
+    {
         $userInfo = $user->load(['company:id,name', 'roleInfo']);
         $table = new \App\Actor;
         $userComments = $table->getTableComments('actor');
@@ -73,7 +76,8 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user) {
+    public function edit(User $user)
+    {
         //
     }
 
@@ -84,7 +88,8 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user) {
+    public function update(Request $request, User $user)
+    {
         $request->validate([
             'login' => 'sometimes|required|unique:users',
             'password' => 'sometimes|required|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[^a-zA-Z0-9]/',
@@ -93,7 +98,7 @@ class UserController extends Controller
         ]);
         $request->merge([ 'updater' => Auth::user()->login ]);
         if ($request->filled('password')) {
-          $request->merge([ 'password' => Hash::make($request->password) ]);
+            $request->merge([ 'password' => Hash::make($request->password) ]);
         }
         $user->update($request->except(['_token', '_method']));
         return $user;
@@ -105,9 +110,9 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user) {
+    public function destroy(User $user)
+    {
         $user->delete();
-        return response()->json(['success' => 'User deleted']);
+        return $user;
     }
-
 }

@@ -6,7 +6,6 @@ use App\Role;
 use App\Actor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Response;
 
 class RoleController extends Controller
 {
@@ -86,7 +85,7 @@ class RoleController extends Controller
     {
         $request->merge([ 'updater' => Auth::user()->login ]);
         $role->update($request->except(['_token', '_method']));
-        return response()->json(['success' => 'Role updated']);
+        return $role;
     }
 
     /**
@@ -98,6 +97,6 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         $role->delete();
-        return response()->json(['success' => 'Role deleted']);
+        return $role;
     }
 }

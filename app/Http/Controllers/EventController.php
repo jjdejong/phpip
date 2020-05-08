@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-class EventController extends Controller {
+class EventController extends Controller
+{
 
     /**
      * Store a newly created resource in storage.
@@ -15,7 +16,8 @@ class EventController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $this->validate($request, [
             'code' => 'required',
             'eventName' => 'required',
@@ -23,7 +25,7 @@ class EventController extends Controller {
             'event_date' => 'required_without:alt_matter_id'
         ]);
         if ($request->filled('event_date')) {
-          $request->merge([ 'event_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->event_date) ]);
+            $request->merge(['event_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->event_date)]);
         }
         $request->merge([ 'creator' => Auth::user()->login ]);
         return Event::create($request->except(['_token', '_method', 'eventName']));
@@ -35,7 +37,8 @@ class EventController extends Controller {
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event) {
+    public function show(Event $event)
+    {
         //
     }
 
@@ -46,16 +49,17 @@ class EventController extends Controller {
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event) {
+    public function update(Request $request, Event $event)
+    {
         $this->validate($request, [
             'alt_matter_id' => 'nullable|numeric'
         ]);
         if ($request->filled('event_date')) {
-          $request->merge([ 'event_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->event_date) ]);
+            $request->merge(['event_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->event_date)]);
         }
         $request->merge([ 'updater' => Auth::user()->login ]);
         $event->update($request->except(['_token', '_method']));
-        return response()->json(['success' => 'Event updated']);
+        return $event;
     }
 
     /**
@@ -64,9 +68,9 @@ class EventController extends Controller {
      * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Event $event) {
+    public function destroy(Event $event)
+    {
         $event->delete();
-        return response()->json(['success' => 'Event deleted']);
+        return $event;
     }
-
 }
