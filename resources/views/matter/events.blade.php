@@ -19,12 +19,12 @@
         <form id="addEventForm" class="form-inline">
           <input type="hidden" name="matter_id" value="{{ $matter->id }}">
           <div class="input-group">
-            <input type="hidden" name="code" value="">
+            <input type="hidden" name="code">
             <input type="text" class="form-control form-control-sm" name="eventName" placeholder="Event" data-ac="/event-name/autocomplete/0?category={{ $matter->category_code }}" data-actarget="code">
             <input type="text" class="form-control form-control-sm" name="event_date" placeholder="Date (xx/xx/yyyy)">
             <input type="text" class="form-control form-control-sm" name="detail" placeholder="Detail">
             <input type="text" class="form-control form-control-sm" name="notes" placeholder="Notes">
-            <input type="hidden" name="alt_matter_id" value="">
+            <input type="hidden" name="alt_matter_id">
             <input type="text" class="form-control form-control-sm"  placeholder="Refers to" data-ac="/matter/autocomplete" data-actarget="alt_matter_id">
             <div class="input-group-append">
               <button type="button" class="btn btn-primary btn-sm" id="addEventSubmit">&check;</button>

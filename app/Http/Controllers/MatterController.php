@@ -58,7 +58,7 @@ class MatterController extends Controller
             $parent_matter = new Matter; // Create empty matter object to avoid undefined errors in view
             if ($category_code != '') {
                 $ref_prefix = \App\Category::find($category_code)['ref_prefix'];
-                $category=[
+                $category = [
                     'code' => $category_code,
                     'next_caseref' =>  Matter::where('caseref', 'like', $ref_prefix . '%')->max('caseref'),
                     'name' => \App\Category::find($category_code)['category']
@@ -278,7 +278,7 @@ class MatterController extends Controller
         $export = $matter->filter($request->input('sortkey', 'caseref'), $request->input('sortdir', 'asc'), $filters, $request->display_with, false)->toArray();
 
         $captions = [
-            'Omnipat',
+            'Our Ref',
             'Country',
             'Cat',
             'Origin',
