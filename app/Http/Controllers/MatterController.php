@@ -243,7 +243,7 @@ class MatterController extends Controller
         ]);
         $request->merge([ 'updater' => Auth::user()->login ]);
         $matter->update($request->except(['_token', '_method']));
-        return response()->json(['success' => 'Matter updated']);
+        return $matter;
     }
 
     /**
@@ -255,7 +255,7 @@ class MatterController extends Controller
     public function destroy(Matter $matter)
     {
         $matter->delete();
-        return response()->json(['success' => 'Matter deleted']);
+        return $matter;
     }
 
     /**
