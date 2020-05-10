@@ -38,6 +38,7 @@ class DocumentController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -106,7 +107,7 @@ class DocumentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string $code
+     * @param  \App\TemplateClass $class
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, TemplateClass $class)
@@ -127,6 +128,14 @@ class DocumentController extends Controller
         $class->delete();
         return response()->json(['success' => 'Template class deleted']);
     }
+
+        /**
+         * Return view to select a template.
+         *
+         * @param  \Illuminate\Http\Request  $request
+         * @param  \App\Matter $matter
+         * @return \Illuminate\Http\Response
+         */
 
   public function select(Matter $matter, Request $request) {
     $template_id = $request->input('template_id');
@@ -211,7 +220,10 @@ class DocumentController extends Controller
 
   /*
     Prepare a mailto: href with template and data from the matter
-
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @param  \App\TemplateMember $member
+    * @return \Illuminate\Http\Response
   */
     public function mailto(TemplateMember $member, Request $request) {
       // Todo Add field for maually add an address
