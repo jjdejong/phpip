@@ -19,7 +19,7 @@ class CreateTemplateMembers extends Migration
             $table->unsignedInteger('language_id');
             $table->unsignedInteger('style_id')->nullable();
             $table->string('format',4);
-            $table->string('path',255);
+            $table->string('summary',255);
             $table->string('subject',160);
             $table->text('body');
             $table->string('creator',20);

@@ -18,12 +18,16 @@
       </td>
     </tr>
     <tr>
+      <th><label title="{{ $tableComments['summary'] }}">Name</label></th>
+      <td colspan="3"><input type="text" class="form-control noformat" name="summary" value="{{ $templateMember->summary }}"></td>
+    </tr>
+    <tr>
       <th><label title="{{ $tableComments['subject'] }}">Subject</label></th>
       <td colspan="3"><input type="text" class="form-control noformat" name="subject" value="{{ $templateMember->subject }}"></td>
     </tr>
     <tr>
       <th><label title="{{ $tableComments['body'] }}">Body</label></th>
-      <td colspan="3"><textarea class="form-control noformat" name="body" value="{{ $templateMember->body }}" rows="10">{{ $templateMember->body }}</textarea></td>
+      <td colspan="3"><textarea class="form-control noformat" name="body" value="{{ $templateMember->body }}" rows="20">{{ $templateMember->body }}</textarea></td>
     </tr>
   </table>
   <button type="button" class="btn btn-danger" title="Delete template" id="deleteMember" data-message="the template {{ $templateMember->class->name  }}" data-url='/template-member/{{ $templateMember->id }}'>

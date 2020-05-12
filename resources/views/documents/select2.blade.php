@@ -64,14 +64,14 @@
           </div>
 
           <div class = "col-lg-4">
-            {{ $member->class->name }}
+            {{ $member->summary }}
           </div>
 
           <div class = "co-lgl-3">
             {{ $member->style->style }}
           </div>
           <div class = "col-lg-1">
-            <a class="sendDocument btn btn-secondary btn-sm">Prepare</a>
+            <a class="sendDocument btn btn-info px-1 py-0">Prepare</a>
           </div>
         </div>
       @endforeach

@@ -60,14 +60,14 @@
           </td>
 
           <td class = "col-4">
-            {{ $member->class->name }}
+            {{ $member->summary }}
           </td>
 
           <td class = "col-2">
             {{ $member->style->style }}
           </td>
           <td class = "col-1">
-            <a class="sendDocument btn btn-secondary btn-sm">Prepare</a>
+            <a class="sendDocument btn btn-info py-1">Prepare</a>
           </td>
         </tr>
       @endforeach

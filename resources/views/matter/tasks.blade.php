@@ -42,6 +42,11 @@
           @endcanany
         </ul>
       </td>
+      <td>
+            @if (count(App\EventName::where('code',$event->code)->first()->templates) != 0)
+            <button class="chooseTemplate button btn-info" data-url="/document/select/{{ $matter->id }}?EventName={{ $event->code }}&Event={{ $event->id }}" >&#9993;</button>
+            @endif
+      </td>
     </tr>
     @foreach ($event->tasks as $task)
     <tr class="reveal-hidden {{ $task->done ? 'text-success' : 'text-danger' }}" data-resource="/task/{{ $task->id }}">
@@ -71,7 +76,7 @@
       <td>
         @if (App\Rule::where('id',$task->rule_used)->first())
           @if (count(App\Rule::where('id',$task->rule_used)->first()->templates) != 0)
-            <button class="chooseTemplate button btn-info" data-url="/document/select/{{ $matter->id }}?Code={{ $task->code }}}&Task={{ $task->id }}" >&#9993;</button>
+            <button class="chooseTemplate button btn-info" data-url="/document/select/{{ $matter->id }}?EventName={{ $task->code }}&Task={{ $task->id }}" >&#9993;</button>
           </td>
           @endif
         @endif

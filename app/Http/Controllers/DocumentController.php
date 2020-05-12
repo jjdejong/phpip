@@ -184,16 +184,6 @@ class DocumentController extends Controller
                         });
                         $oldfilters["Style"] = $value;
                         break;
-                    case 'Rule':
-                        $members = $members->whereHas('class', function ($query) use ($value){
-                          $query->whereHas('rules',  function ($q2) use ($value){
-                            $q2->where('task_rule_id', '=', "$value");
-                          });
-                        });
-                        $oldfilters["Rule"] = $value;
-                        // specific view for within tasks window
-                        $view = 'documents.select2';
-                        break;
                     case 'EventName':
                         $members = $members->whereHas('class', function ($query) use ($value){
                           $query->whereHas('eventNames',  function ($q2) use ($value){
