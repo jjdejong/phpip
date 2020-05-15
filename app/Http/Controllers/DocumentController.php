@@ -44,14 +44,8 @@ class DocumentController extends Controller
     public function index(Request $request)
     {
         $Description  = $request->input('Description');
-        $Category  = $request->input('Category');
         $Name = $request->input('Name');
         $template_classes = TemplateClass::query() ;
-        if (!is_null($Category)) {
-            $template_classes = $template_classes->whereHas('category_id', function ($query) use ($Category) {
-                $query->where('category', 'LIKE', "$Category%");
-            });
-        }
         if (!is_null($Name)) {
             $template_classes = $template_classes->where('name', 'like', $Name.'%');
         }
@@ -99,7 +93,7 @@ class DocumentController extends Controller
     {
         $table = new Actor;
         $tableComments = $table->getTableComments('template_classes');
-        $class->with(['category','role']);
+        $class->with(['role']);
         return view('documents.show', compact('class', 'tableComments'));
     }
 
@@ -159,10 +153,8 @@ class DocumentController extends Controller
             if ($value != '') {
                 switch($key) {
                     case 'Category':
-                        $members = $members->whereHas('class', function ($query) use ($value){
-                          $query->whereHas('category',  function ($q2) use ($value){
-                            $q2->where('category', 'LIKE', "$value%");
-                          });
+                        $members = $members->whereHas('category', function ($query) use ($value){
+                          $query->where('category', 'LIKE', "$value%");
                         });
                         $oldfilters["Category"] = $value;
                         break;

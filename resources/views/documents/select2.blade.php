@@ -39,14 +39,14 @@
   </div>
   <div class='container' data-resource="/document/select/{{ $matter->id }}">
       <div class="row bg-light font-weight-bold">
+          <div class="col-lg-4">
+            Name
+          </div>
           <div class="col-lg-2">
             Language
           </div>
           <div class="col-lg-2">
             Category
-          </div>
-          <div class="col-lg-4">
-            Name
           </div>
           <div class="col-lg-3">
             Style
@@ -56,15 +56,14 @@
       </div>
       @foreach ($members as $member)
         <div class="row reveal-hidden" data-resource="/document/mailto/{{ $member->id }}">
+          <div class = "col-lg-4">
+            {{ $member->summary }}
+          </div>
           <div class = "col-lg-2">
             {{ $member->language->language }}
           </div>
           <div class = "col-lg-2">
-            {{ $member->class->category->category }}
-          </div>
-
-          <div class = "col-lg-4">
-            {{ $member->summary }}
+            {{ $member->category->category }}
           </div>
 
           <div class = "co-lgl-3">

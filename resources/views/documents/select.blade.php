@@ -32,14 +32,14 @@
   <table data-resource="/document/select/{{ $matter->id }}">
       <thead  class="thead-light">
         <tr>
+          <th class="col-4">
+            <input class="form-control filter" name="Name" value="{{ array_key_exists('Name', $oldfilters) ? $oldfilters['Name'] : "" }}" placeholder="Name">
+          </th>
           <th class="col-2">
             <input class="form-control filter" name="Language" value="{{ array_key_exists('Language', $oldfilters) ? $oldfilters['Language'] : "" }}" placeholder="Language">
           </th>
           <th class="col-2">
             <input class="form-control filter" name="Category" value="{{ array_key_exists('Category', $oldfilters) ? $oldfilters['Category'] : "" }}" placeholder="Category">
-          </th>
-          <th class="col-4">
-            <input class="form-control filter" name="Name" value="{{ array_key_exists('Name', $oldfilters) ? $oldfilters['Name'] : "" }}" placeholder="Name">
           </th>
           <th class="col-2">
             <input class="form-control filter" title="{{ $tableComments['style_id'] }}" name="Style" value="{{ array_key_exists('Style', $oldfilters) ? $oldfilters['Style'] : "" }}" placeholder="Style">
@@ -52,17 +52,15 @@
       <tbody id="tableList" >
       @foreach ($members as $member)
         <tr class="reveal-hidden" data-resource="/document/mailto/{{ $member->id }}">
+          <td class = "col-4">
+            {{ $member->summary }}
+          </td>
           <td class = "col-2">
             {{ $member->language->language }}
           </td>
           <td class = "col-2">
-            {{ $member->class->category->category }}
+            {{ $member->category->category }}
           </td>
-
-          <td class = "col-4">
-            {{ $member->summary }}
-          </td>
-
           <td class = "col-2">
             {{ $member->style->style }}
           </td>

@@ -19,7 +19,6 @@ class CreateTemplateClasses extends Migration
     			$table->increments('id');
     			$table->string('name',55);
           $table->string('description',255)->nullable();
-          $table->unsignedInteger('category_id')->nullable()->comment('Help to classify documents');
           $table->string('default_role',5)->nullable()->default(null)->comment('Role of actor who is the receiver of the document');
           $table->string('creator',20);
           $table->string('updater',20);

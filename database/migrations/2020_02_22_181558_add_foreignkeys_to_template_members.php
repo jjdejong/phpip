@@ -17,6 +17,7 @@ class AddForeignkeysToTemplateMembers extends Migration
           $table->foreign('class_id')->references('id')->on('template_classes')->onUpdate('CASCADE');
           $table->foreign('language_id')->references('id')->on('languages')->onUpdate('CASCADE');
           $table->foreign('style_id')->references('id')->on('template_styles')->onUpdate('CASCADE')->onDelete('SET NULL');
+          $table->foreign('category_id')->references('id')->on('template_categories')->onUpdate('CASCADE')->onDelete('SET NULL');
         });
     }
 
@@ -31,6 +32,7 @@ class AddForeignkeysToTemplateMembers extends Migration
       			$table->dropForeign(['class_id']);
       			$table->dropForeign(['language_id']);
       			$table->dropForeign(['style_id']);
+      			$table->dropForeign(['category_id']);
         });
     }
 }

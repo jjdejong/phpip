@@ -17,7 +17,8 @@ class CreateTemplateMembers extends Migration
             $table->increments('id');
             $table->unsignedInteger('class_id');
             $table->unsignedInteger('language_id');
-            $table->unsignedInteger('style_id')->nullable();
+            $table->unsignedInteger('style_id')->nullable())->comment('Help to distinguish documents in a same class');
+            $table->unsignedInteger('category_id')->nullable()->comment('Help to classify documents');;
             $table->string('format',4);
             $table->string('summary',255);
             $table->string('subject',160);

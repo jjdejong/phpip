@@ -19,4 +19,9 @@ class TemplateMember extends Model
     public function class() {
       return $this->belongsTo('App\TemplateClass');
     }
+
+    public function category() {
+      return $this->belongsTo('App\TemplateCategory');
+    }
+
 }
