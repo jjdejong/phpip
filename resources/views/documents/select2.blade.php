@@ -60,7 +60,7 @@
             {{ $member->summary }}
           </div>
           <div class = "col-lg-2">
-            {{ $member->language->language }}
+            {{ $member->language }}
           </div>
           <div class = "col-lg-2">
             {{ $member->category->category }}

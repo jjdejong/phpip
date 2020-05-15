@@ -26,10 +26,10 @@
                 {{ $member->class->name }}
               </a>
             </td>
-            <td>{{ $member->language->code }}</td>
+            <td>{{ $member->language }}</td>
             <td>{{ empty($member->style) ? '' : $member->style->style }}</td>
             <td>{{ $member->format }}</td>
-            <td>{{ empty($member->class->category) ? '' : $member->class->category->category }}</td>
+            <td>{{ empty($member->category) ? '' : $member->category->category }}</td>
           </tr>
           @endforeach
           <tr>

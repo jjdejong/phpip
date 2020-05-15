@@ -16,6 +16,10 @@ class TemplateMemberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public $languages = array('fr' => 'Français',
+                              'en' => 'English',
+                              'de' => 'Deutsch');
+
     public function index(Request $request)
     {
       $Style  = $request->input('Style');
@@ -32,9 +36,7 @@ class TemplateMemberController extends Controller
           });
       }
       if (!is_null($Language)) {
-          $template_members = $template_members->whereHas('language', function ($query) use ($Language) {
-              $query->where('language', 'LIKE', "$Language%");
-          });
+          $template_members = $template_members->where('language', 'LIKE', "$Language%");
       }
       if (!is_null($Name)) {
           $template_members = $template_members->whereHas('class', function ($query) use ($Name) {
@@ -95,7 +97,8 @@ class TemplateMemberController extends Controller
         $table = new Actor;
         $tableComments = $table->getTableComments('template_members');
         $templateMember->with(['class','style','language']);
-        return view('template-members.show', compact('templateMember', 'tableComments'));
+        $languages = $this->languages;
+        return view('template-members.show', compact('templateMember', 'languages', 'tableComments'));
     }
 
     /**
