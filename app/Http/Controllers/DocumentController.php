@@ -170,6 +170,10 @@ class DocumentController extends Controller
                         });
                         $oldfilters["Name"] = $value;
                         break;
+                    case 'Summary':
+                        $members = $members->where('summary', 'LIKE', "$value%");
+                        $oldfilters["Name"] = $value;
+                        break;
                     case 'Style':
                         $members = $members->whereHas('style', function ($query) use ($value){
                           $query->where('style', 'LIKE', "$value%");
