@@ -28,7 +28,7 @@
   </tr>
   <tr>
       <th><label title="{{ $tableComments['subject'] }}">Subject</label></th>
-      <td colspan="7"><textarea class="form-control noformat" name="subject" rows="3"></textarea>{{ $templateMember->subject }}</td>
+      <td colspan="7"><textarea class="form-control noformat" name="subject" rows="3">{{ $templateMember->subject }}</textarea></td>
     </tr>
     <tr>
       <th><label title="{{ $tableComments['body'] }}">Body</label></th>
