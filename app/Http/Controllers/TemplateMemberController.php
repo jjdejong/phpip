@@ -52,7 +52,7 @@ class TemplateMemberController extends Controller
           });
       }
 
-      $template_members = $template_members->simplePaginate( config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')) );
+      $template_members = $template_members->orderBy('summary')->simplePaginate( config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')) );
       $template_members->appends($request->input())->links();
       return view('template-members.index', compact('template_members'));
     }
