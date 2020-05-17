@@ -3,14 +3,14 @@
     <legend>New template</legend>
     <table class="table table-sm">
       <tr>
-        <td><label for="name" title="{{ $tableComments['class_id'] }} "><b>Name</b></label></td>
+        <td><label for="name" title="{{ $tableComments['class_id'] }} "><b>Class</b></label></td>
         <td >
           <input type='hidden' name='class_id'>
           <input type="text" class="form-control form-control-sm" data-ac="/template-class/autocomplete"  data-actarget="class_id">
         </td>
         <td><label for="description" title="{{ $tableComments['language'] }}"><b>Language</b></label></td>
         <td >
-          <select name="language" class="noformat">
+          <select name="language">
             @foreach ($languages as $code => $lang_name)
               <option value='{{ $code }}'  {{ $code == 'en'  ? 'selected' : ""}}>{{ $lang_name}}
             @endforeach
@@ -25,19 +25,28 @@
         </td>
         <td><label title="{{ $tableComments['format'] }}">Format</label></td>
         <td>
-          <select name="format" class="noformat">
+          <select name="format">
             <option value="TEXT" >Text</option>
             <option value="HTML" >HTML</option>
           </select>
         </td>
       </tr>
       <tr>
+        <th><label title="{{ $tableComments['format'] }}">Summary</label></th>
+        <td><input type="text" class="form-control" name="summary"></td>
+        <td><label for="category" title="{{ $tableComments['category_id'] }}">Category</label></td>
+        <td>
+          <input type='hidden' name='category_id'>
+          <input type="text" class="form-control form-control-sm" data-ac="/template-category/autocomplete" data-actarget="category_id" autocomplete="off">
+        </td>
+      </tr>
+      <tr>
         <th><label title="{{ $tableComments['subject'] }}">Subject</label></th>
-        <td colspan="3"><input type="text" class="form-control noformat" name="subject"></td>
+        <td colspan="3"><textarea class="form-control" name="subject"></textarea></td>
       </tr>
       <tr>
         <th><label title="{{ $tableComments['body'] }}">Body</label></th>
-        <td colspan="3"><textarea class="form-control noformat" name="body" rows="10"></textarea></td>
+        <td colspan="3"><textarea class="form-control" name="body" rows="20"></textarea></td>
       </tr>
     </table>
   </fieldset>

@@ -80,7 +80,7 @@ class TemplateMemberController extends Controller
     {
         $request->validate([
             'class_id' => 'required',
-            'language_id' => 'required'
+            'language' => 'required'
         ]);
         $request->merge([ 'creator' => Auth::user()->login ]);
         $a = TemplateMember::create($request->except(['_token', '_method']));
