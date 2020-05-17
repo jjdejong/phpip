@@ -11,8 +11,8 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="bg-primary text-light">
-            <th><input class="filter-input form-control form-control-sm" data-source="/template-member" name="Name" placeholder="Class name" value="{{ old('Name') }}"></th>
             <th><input class="filter-input form-control form-control-sm" data-source="/template-member" name="Summary" placeholder="Summary" value="{{ old('Summary') }}"></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/template-member" name="Name" placeholder="Class" value="{{ old('Name') }}"></th>
             <th><input class="filter-input form-control form-control-sm" data-source="/template-member" name="Language" placeholder="Language" value="{{ old('Language') }}"></th>
             <th><input class="filter-input form-control form-control-sm" data-source="/template-member" name="Style" placeholder="Style" value="{{ old('Style') }}"></th>
             <th><input class="filter-input form-control form-control-sm" data-source="/template-member" name="Format" placeholder="Format" value="{{ old('Format') }}"></th>
@@ -24,10 +24,10 @@
           <tr data-id="{{ $member->id }}" class="reveal-hidden">
             <td>
               <a href="/template-member/{{ $member->id }}" data-panel="ajaxPanel" title="Class data">
-                {{ $member->class->name }}
+                {{ $member->summary }}
               </a>
             </td>
-            <td>{{ $member->summary }}</td>
+            <td>{{ $member->class->name }}</td>
             <td>{{ $member->language }}</td>
             <td>{{ empty($member->style) ? '' : $member->style->style }}</td>
             <td>{{ $member->format }}</td>
