@@ -25,12 +25,12 @@
       <th><label title="{{ $tableComments['category_id'] }}">Category</label></th>
       <td colspan="3"><input type="text" class="form-control noformat" name="category_id" data-ac="/template-category/autocomplete" value="{{ is_null($templateMember->category) ? "" : $templateMember->category->category }}"></td>
     <tr>
-      <th><label title="{{ $tableComments['summary'] }}">Name</label></th>
+      <th><label title="{{ $tableComments['summary'] }}">Summary</label></th>
       <td colspan="3"><input type="text" class="form-control noformat" name="summary" value="{{ $templateMember->summary }}"></td>
     </tr>
     <tr>
       <th><label title="{{ $tableComments['subject'] }}">Subject</label></th>
-      <td colspan="3"><input type="text" class="form-control noformat" name="subject" value="{{ $templateMember->subject }}"></td>
+      <td colspan="3"><textarea class="form-control noformat" name="subject" rows="3"></textarea>{{ $templateMember->subject }}</td>
     </tr>
     <tr>
       <th><label title="{{ $tableComments['body'] }}">Body</label></th>
