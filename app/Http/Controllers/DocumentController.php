@@ -234,7 +234,7 @@ class DocumentController extends Controller
         $matter = Matter::where(['id'=>$request->matter_id])->first();
         $event = Event::where(['id'=>$request->event_id])->first();
         $task = Task::where(['id'=>$request->task_id])->first();
-        $description = implode("\n",Matter::getDescription($request->matter_id, $member->language->code));
+        $description = implode("\n",Matter::getDescription($request->matter_id, $member->language));
         if (count($cc_ids) != 0) {
             $mailto .= $sep . "cc=" . implode(',', Actor::whereIn('id', $cc_ids)->pluck('email')->all());
             $sep = "&";
