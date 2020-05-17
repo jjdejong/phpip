@@ -8,10 +8,13 @@
           <input type='hidden' name='class_id'>
           <input type="text" class="form-control form-control-sm" data-ac="/template-class/autocomplete"  data-actarget="class_id">
         </td>
-        <td><label for="description" title="{{ $tableComments['language_id'] }}"><b>Language</b></label></td>
+        <td><label for="description" title="{{ $tableComments['language'] }}"><b>Language</b></label></td>
         <td >
-          <input type='hidden' name='language_id'>
-          <input type="text" class="form-control form-control-sm" data-ac="/language/autocomplete"  data-actarget="language_id">
+          <select name="language" class="noformat">
+            @foreach ($languages as $code => $lang_name)
+              <option value='{{ $code }}'  {{ $code == 'en'  ? 'selected' : ""}}>{{ $lang_name}}
+            @endforeach
+          </select>
         </td>
       </tr>
       <tr>

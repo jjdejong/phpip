@@ -66,7 +66,8 @@ class TemplateMemberController extends Controller
     {
         $table = new Actor ;
         $tableComments = $table->getTableComments('template_members');
-        return view('template-members.create', compact('tableComments'));
+        $languages = $this->languages;
+        return view('template-members.create', compact('tableComments','languages'));
     }
 
     /**
