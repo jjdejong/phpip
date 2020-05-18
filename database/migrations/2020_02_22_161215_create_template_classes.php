@@ -18,7 +18,7 @@ class CreateTemplateClasses extends Migration
     			$table->engine = 'InnoDB';
     			$table->increments('id');
     			$table->string('name',55);
-          $table->string('description',255)->nullable();
+          $table->string('notes',255)->nullable();
           $table->string('default_role',5)->nullable()->default(null)->comment('Role of actor who is the receiver of the document');
           $table->string('creator',20);
           $table->string('updater',20);

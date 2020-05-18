@@ -12,8 +12,7 @@
         <thead>
           <tr id="filter" class="bg-primary text-light">
             <th><input class="filter-input form-control form-control-sm" data-source="/document" name="Name" placeholder="Name" value="{{ old('Name') }}"></th>
-            <th><input class="filter-input form-control form-control-sm" data-source="/document" name="Description" placeholder="Description" value="{{ old('Description') }}"></th>
-            <th><input class="filter-input form-control form-control-sm" data-source="/document" value="{{ old('Category') }}" name="Category" placeholder="Category" /></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/document" name="Notes" placeholder="Notes" value="{{ old('Notes') }}"></th>
           </tr>
         </thead>
         <tbody id="tableList">
@@ -24,8 +23,7 @@
                 {{ $class->name }}
               </a>
             </td>
-            <td>{{ $class->description }}</td>
-            <td>{{ empty($class->category) ? '' : $class->category->category }}</td>
+            <td>{{ $class->notes }}</td>
           </tr>
           @endforeach
           <tr>

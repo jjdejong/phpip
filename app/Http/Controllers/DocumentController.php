@@ -43,11 +43,14 @@ class DocumentController extends Controller
      */
     public function index(Request $request)
     {
-        $Description  = $request->input('Description');
+        $Notes  = $request->input('Notes');
         $Name = $request->input('Name');
         $template_classes = TemplateClass::query() ;
         if (!is_null($Name)) {
             $template_classes = $template_classes->where('name', 'like', $Name.'%');
+        }
+        if (!is_null($Notes)) {
+            $template_classes = $template_classes->where('notes', 'like', $Notes.'%');
         }
 
         $template_classes = $template_classes->orderby('name')->simplePaginate( config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')) );

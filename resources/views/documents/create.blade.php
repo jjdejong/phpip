@@ -7,8 +7,8 @@
         <td >
           <input type="text" class="form-control form-control-sm" name="name">
         </td>
-        <td><label for="description" title="{{ $tableComments['description'] }}">Description</label></td>
-        <td><input id="description" class="form-control form-control-sm" name="description"></td>
+        <td><label for="notes" title="{{ $tableComments['notes'] }}">Notes</label></td>
+        <td><input id="notes" class="form-control form-control-sm" name="notes"></td>
       </tr>
       <tr>
         <td><label for="category_new" title="{{ $tableComments['category_id'] }}">Category</label></td>
