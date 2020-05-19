@@ -103,6 +103,13 @@ class Matter extends Model
             ->where('code', 'GRT');
     }
 
+
+    public function entered()
+    {
+        return $this->hasOne('App\Event')
+            ->where('code', 'ENT');
+    }
+
     /*public function status()
     {
         return $this->hasOne('App\Event')
@@ -458,7 +465,7 @@ class Matter extends Model
         )
         ->join('matter_category', 'matter.category_code', 'matter_category.code')
         ->join('country', 'matter.country', 'country.iso')
-        ->leftJoin(DB::raw('matter_actor_lnk clilnk 
+        ->leftJoin(DB::raw('matter_actor_lnk clilnk
             JOIN actor cli ON cli.id = clilnk.actor_id'), function ($join) {
             $join->on('matter.id', 'clilnk.matter_id')->where('clilnk.role', 'CLI');
         })
@@ -470,7 +477,7 @@ class Matter extends Model
                 ]);
         });
 
-        $query->leftJoin(DB::raw('matter_actor_lnk invlnk 
+        $query->leftJoin(DB::raw('matter_actor_lnk invlnk
             JOIN actor inv ON inv.id = invlnk.actor_id'), function ($join) {
                 $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'invlnk.matter_id')->where([
                     ['invlnk.role', 'INV'],
