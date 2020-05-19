@@ -29,11 +29,7 @@ class TemplateMemberController extends Controller
       $Category = $request->input('Category');
       $template_members = TemplateMember::query() ;
       if (!is_null($Category)) {
-          $template_members = $template_members->whereHas('class', function ($query) use ($Category) {
-              $query->whereHas('category', function ($q2) use ($Category) {
-              $q2->where('category', 'LIKE', "$Category%");
-            });
-          });
+          $template_members = $template_members->where('category', 'LIKE', "$Category%");
       }
       if (!is_null($Language)) {
           $template_members = $template_members->where('language', 'LIKE', "$Language%");
@@ -47,9 +43,7 @@ class TemplateMemberController extends Controller
             $template_members = $template_members->where('format', 'like', $Format.'%');
       }
       if (!is_null($Style)) {
-          $template_members = $template_members->whereHas('style', function ($query) use ($Style) {
-              $query->where('style', 'LIKE', "$Style%");
-          });
+          $template_members = $template_members->where('style', 'LIKE', "$Style%");
       }
 
       $template_members = $template_members->orderBy('summary')->simplePaginate( config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')) );

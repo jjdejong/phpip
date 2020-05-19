@@ -18,10 +18,9 @@
         </td>
       </tr>
       <tr>
-        <td><label for="style" title="{{ $tableComments['style_id'] }}">Style</label></td>
+        <td><label for="style" title="{{ $tableComments['style'] }}">Style</label></td>
         <td>
-          <input type='hidden' name='style_id'>
-          <input type="text" class="form-control form-control-sm" data-ac="/template-style/autocomplete" data-actarget="style_id" autocomplete="off">
+          <input type="text" class="form-control form-control-sm"  name='style' data-ac="/template-style/autocomplete" data-actarget="style" autocomplete="off">
         </td>
         <td><label title="{{ $tableComments['format'] }}">Format</label></td>
         <td>
@@ -34,10 +33,9 @@
       <tr>
         <th><label title="{{ $tableComments['format'] }}">Summary</label></th>
         <td><input type="text" class="form-control" name="summary"></td>
-        <td><label for="category" title="{{ $tableComments['category_id'] }}">Category</label></td>
+        <td><label for="category" title="{{ $tableComments['category'] }}">Category</label></td>
         <td>
-          <input type='hidden' name='category_id'>
-          <input type="text" class="form-control form-control-sm" data-ac="/template-category/autocomplete" data-actarget="category_id" autocomplete="off">
+          <input type="text"  name='category' class="form-control form-control-sm" data-ac="/template-category/autocomplete" data-actarget="category" autocomplete="off">
         </td>
       </tr>
       <tr>

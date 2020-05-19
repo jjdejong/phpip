@@ -29,9 +29,9 @@
             </td>
             <td>{{ $member->class->name }}</td>
             <td>{{ $member->language }}</td>
-            <td>{{ empty($member->style) ? '' : $member->style->style }}</td>
+            <td>{{ $member->style }}</td>
             <td>{{ $member->format }}</td>
-            <td>{{ empty($member->category) ? '' : $member->category->category }}</td>
+            <td>{{ $member->category }}</td>
           </tr>
           @endforeach
           <tr>

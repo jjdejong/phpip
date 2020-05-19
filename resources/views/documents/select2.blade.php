@@ -40,7 +40,7 @@
   <div class='container' data-resource="/document/select/{{ $matter->id }}">
       <div class="row bg-light font-weight-bold">
           <div class="col-lg-4">
-            Name
+            Summary
           </div>
           <div class="col-lg-2">
             Language
@@ -63,11 +63,11 @@
             {{ $member->language }}
           </div>
           <div class = "col-lg-2">
-            {{ $member->category->category }}
+            {{ $member->category }}
           </div>
 
           <div class = "co-lgl-3">
-            {{ $member->style->style }}
+            {{ $member->style }}
           </div>
           <div class = "col-lg-1">
             <a class="sendDocument btn btn-info px-1 py-0">Prepare</a>

@@ -33,7 +33,7 @@
       <thead  class="thead-light">
         <tr>
           <th class="col-4">
-            <input class="form-control filter" name="Name" value="{{ array_key_exists('Name', $oldfilters) ? $oldfilters['Name'] : "" }}" placeholder="Name">
+            <input class="form-control filter" name="Summary" value="{{ array_key_exists('Summary', $oldfilters) ? $oldfilters['Summary'] : "" }}" placeholder="Summary">
           </th>
           <th class="col-2">
             <input class="form-control filter" name="Language" value="{{ array_key_exists('Language', $oldfilters) ? $oldfilters['Language'] : "" }}" placeholder="Language">
@@ -42,7 +42,7 @@
             <input class="form-control filter" name="Category" value="{{ array_key_exists('Category', $oldfilters) ? $oldfilters['Category'] : "" }}" placeholder="Category">
           </th>
           <th class="col-2">
-            <input class="form-control filter" title="{{ $tableComments['style_id'] }}" name="Style" value="{{ array_key_exists('Style', $oldfilters) ? $oldfilters['Style'] : "" }}" placeholder="Style">
+            <input class="form-control filter" title="{{ $tableComments['style'] }}" name="Style" value="{{ array_key_exists('Style', $oldfilters) ? $oldfilters['Style'] : "" }}" placeholder="Style">
           </th>
           <th class="col-1">
               Action
@@ -59,10 +59,10 @@
             {{ $member->language }}
           </td>
           <td class = "col-2">
-            {{ $member->category->category }}
+            {{ $member->category }}
           </td>
           <td class = "col-2">
-            {{ $member->style->style }}
+            {{ $member->style }}
           </td>
           <td class = "col-1">
             <a class="sendDocument btn btn-info py-1">Prepare</a>

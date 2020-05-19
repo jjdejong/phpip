@@ -156,15 +156,11 @@ class DocumentController extends Controller
             if ($value != '') {
                 switch($key) {
                     case 'Category':
-                        $members = $members->whereHas('category', function ($query) use ($value){
-                          $query->where('category', 'LIKE', "$value%");
-                        });
+                        $members = $members->where('category', 'LIKE', "$value%");
                         $oldfilters["Category"] = $value;
                         break;
                     case 'Language':
-                        $members = $members->whereHas('language', function ($query) use ($value){
-                          $query->where('language', 'LIKE', "$value%");
-                        });
+                        $members = $members->where('language', 'LIKE', "$value%");
                         $oldfilters["Language"] = $value;
                         break;
                     case 'Name':
@@ -178,9 +174,7 @@ class DocumentController extends Controller
                         $oldfilters["Name"] = $value;
                         break;
                     case 'Style':
-                        $members = $members->whereHas('style', function ($query) use ($value){
-                          $query->where('style', 'LIKE', "$value%");
-                        });
+                        $members = $members->where('style', 'LIKE', "$value%");
                         $oldfilters["Style"] = $value;
                         break;
                     case 'EventName':

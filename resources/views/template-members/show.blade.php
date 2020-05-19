@@ -10,10 +10,10 @@
             <option value='{{ $code }}'  {{ $templateMember->language == $code ? 'selected' : ""}}>{{ $lang_name}}
           @endforeach
         </select>
-      <th><label title="{{ $tableComments['style_id'] }}">Style</label></th>
-      <td><input type="text" class="form-control noformat" name="style_id" data-ac="/template-style/autocomplete" value="{{ is_null($templateMember->style) ? "" : $templateMember->style->style }}"></td>
-        <th><label title="{{ $tableComments['category_id'] }}">Category</label></th>
-        <td ><input type="text" class="form-control noformat" name="category_id" data-ac="/template-category/autocomplete" value="{{ is_null($templateMember->category) ? "" : $templateMember->category->category }}"></td>
+      <th><label title="{{ $tableComments['style'] }}">Style</label></th>
+      <td><input type="text" class="form-control noformat" name="style" data-ac="/template-style/autocomplete" value="{{ $templateMember->style }}"></td>
+        <th><label title="{{ $tableComments['category'] }}">Category</label></th>
+        <td ><input type="text" class="form-control noformat" name="category" data-ac="/template-category/autocomplete" value="{{ $templateMember->category }}"></td>
   </tr>
   <tr>
       <th><label title="{{ $tableComments['summary'] }}">Summary</label></th>

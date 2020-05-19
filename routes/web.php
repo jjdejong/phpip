@@ -167,26 +167,20 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('template-category/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\TemplateCategory::select('category as value', 'id as key')
-                        ->where('category', 'like', "$term%")->get();
+        return App\TemplateMember::select('category as value', 'category as key')
+                        ->where('category', 'like', "$term%")->distinct()->get();
     });
 
     Route::get('template-class/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\TemplateClass::select('name as value', 'id as key')
+        return App\TemplateClass::select('name as value','id as key')
                         ->where('name', 'like', "$term%")->get();
     });
 
     Route::get('template-style/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\TemplateStyle::select('style as value', 'id as key')
-                        ->where('style', 'like', "$term%")->get();
-    });
-
-    Route::get('language/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-        return App\Language::select('language as value', 'id as key')
-                        ->where('language', 'like', "$term%")->get();
+        return App\TemplateMember::select('style as value','style as key')
+                        ->where('style', 'like', "$term%")->distinct()->get();
     });
 
     Route::resource('matter', 'MatterController');
