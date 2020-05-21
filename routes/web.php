@@ -173,7 +173,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('template-class/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\TemplateClass::select('name as value','id as key')
+        return App\TemplateClass::select('name as value', 'id as key')
                         ->where('name', 'like', "$term%")->get();
     });
 
