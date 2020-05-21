@@ -39,7 +39,7 @@ class CreateRenewalsLogsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('renewals_log');
+		Schema::dropIfExists('renewals_logs');
 	}
 
 }
