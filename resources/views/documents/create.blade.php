@@ -11,11 +11,6 @@
         <td><input id="notes" class="form-control form-control-sm" name="notes"></td>
       </tr>
       <tr>
-        <td><label for="category_new" title="{{ $tableComments['category_id'] }}">Category</label></td>
-        <td>
-          <input type='hidden' name='category_id'>
-          <input type="text" class="form-control form-control-sm" data-ac="/template-category/autocomplete" data-actarget="category_id" autocomplete="off">
-        </td>
         <td><label title="{{ $tableComments['default_role'] }}">Deafult role</label></td>
         <td>
           <input type='hidden' name='default_role'>

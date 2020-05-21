@@ -74,12 +74,10 @@
       </td>
       @cannot('client')
       <td>
-        @if (App\Rule::where('id',$task->rule_used)->first())
-          @if (count(App\Rule::where('id',$task->rule_used)->first()->templates) != 0)
+          @if (count(App\EventName::where('code',$task->code)->first()->templates) != 0)
             <button class="chooseTemplate button btn-info" data-url="/document/select/{{ $matter->id }}?EventName={{ $task->code }}&Task={{ $task->id }}" >&#9993;</button>
           </td>
           @endif
-        @endif
       </td>
       @endcannot
     </tr>

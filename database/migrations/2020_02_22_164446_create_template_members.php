@@ -17,8 +17,8 @@ class CreateTemplateMembers extends Migration
             $table->increments('id');
             $table->unsignedInteger('class_id')->comment('The class which allow to link the template to an event or a task');
             $table->string('language',2)->comment('Code of the language for the document');
-            $table->unsignedInteger('style_id')->nullable()->comment('Help to distinguish documents in a same class');
-            $table->string('category',30)->nullable()->comment('Help to classify documents');;
+            $table->string('style',30)->nullable()->comment('Help to distinguish documents in a same class. Free text');
+            $table->string('category',30)->nullable()->comment('Help to classify documents. Free text');
             $table->string('format',4);
             $table->string('summary',255)->comment('The label of the document as displayed in lists');
             $table->string('subject',160)->comment('It can content fields to merge at creation time');
