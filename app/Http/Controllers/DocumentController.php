@@ -139,7 +139,7 @@ class DocumentController extends Controller
     //limit to actors with email
     $contacts = MatterActors::where([['matter_id',$matter->id],['role_code','CNT']])->whereNotNull('email');
     if($contacts->count() === 0) {
-      $contacts =  MatterActors::where([['matter_id',$matter->id]])->whereNotNull('email')->distinct();
+      $contacts =  MatterActors::where([['matter_id',$matter->id]])->whereNotNull('email');
     }
     $contacts = $contacts->get();
     $table = new Actor;
@@ -192,6 +192,7 @@ class DocumentController extends Controller
                         break;
                     case 'Task':
                         $task = Task::where('id','=', "$value")->first();
+                        $event = $task->trigger();
                         break;
                 }
             }
@@ -237,7 +238,7 @@ class DocumentController extends Controller
             $sep = "&";
         }
         if ($member->subject != "") {
-          $content = render($subject,compact('description', 'matter'));
+          $content = render($subject,compact('description', 'matter','event','task'));
           if (is_array($content)) {
             if (array_key_exists('error', $content))
               return $content;
