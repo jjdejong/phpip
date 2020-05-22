@@ -139,7 +139,7 @@ class DocumentController extends Controller
     //limit to actors with email
     $contacts = MatterActors::where([['matter_id',$matter->id],['role_code','CNT']])->whereNotNull('email');
     if($contacts->count() === 0) {
-      $contacts =  MatterActors::where([['matter_id',$matter->id],['role_code','CLI']])->whereNotNull('email');
+      $contacts =  MatterActors::where([['matter_id',$matter->id]])->whereNotNull('email')->distinct();
     }
     $contacts = $contacts->get();
     $table = new Actor;
