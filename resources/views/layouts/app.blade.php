@@ -217,19 +217,25 @@
       }
 
       if(e.target.matches('.chooseTemplate')) {
-        var select = document.createElement('tr');
-        var currentTr = e.target.closest('tr');
-        var parent = currentTr.parentNode;
-        var next_sib = currentTr.nextSibling;
-        if (next_sib)
-        {
-          parent.insertBefore(select, next_sib);
+        var form_tr = document.getElementById('selectTrForm');
+        if (form_tr == null) {
+          var select = document.createElement('tr');
+          select.setAttribute('id', 'selectTrForm');
+          var currentTr = e.target.closest('tr');
+          var parent = currentTr.parentNode;
+          var next_sib = currentTr.nextSibling;
+          if (next_sib)
+          {
+            parent.insertBefore(select, next_sib);
+          }
+          else
+          {
+            parent.appendChild(select);
+          }
+          fetchInto(e.target.dataset.url, select);}
+        else {
+          form_tr.remove();
         }
-        else
-        {
-          parent.appendChild(select);
-        }
-        fetchInto(e.target.dataset.url, select);
       }
 
       switch (e.target.id) {
