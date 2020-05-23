@@ -12,6 +12,7 @@ use App\TemplateClass;
 use App\Event;
 use App\Task;
 use Log;
+use DB;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Illuminate\Support\Facades\Blade;
 
@@ -197,6 +198,17 @@ class DocumentController extends Controller
                 }
             }
         }
+    }
+    if ($view == 'documents.select') {
+      //  We exclude members linked to any of event or task
+          $members = $members->whereHas('class', function ($query) {
+            $query->whereNotExists(function($query)
+                {
+                    $query->select(DB::raw(1))
+                          ->from('event_class_lnk')
+                          ->whereRaw('template_classes.id = event_class_lnk.template_class_id');
+                });
+          });
     }
     $members = $members->get();
     return view($view,compact('matter','members', 'contacts', 'tableComments','oldfilters','event','task'));
