@@ -111,7 +111,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('role/autocomplete', function (Request $request) {
         $term = $request->input('term');
         return App\Role::select('name as value', 'code as key', 'shareable')
-            ->where('name', 'like', "$term%")->get();
+            ->where('name', 'like', "$term%")
+            ->orWhere('code', 'like', "$term%")->get();
     });
 
     Route::get('dbrole/autocomplete', function (Request $request) {
@@ -132,13 +133,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('category/autocomplete', function (Request $request) {
         $term = $request->input('term');
         return App\Category::select('category as value', 'code as key', 'ref_prefix as prefix')
-            ->where('category', 'like', "$term%")->get();
+            ->where('category', 'like', "$term%")
+            ->orWhere('code', 'like', "$term%")->get();
     });
 
     Route::get('type/autocomplete', function (Request $request) {
         $term = $request->input('term');
         return App\Type::select('type as value', 'code as key')
-            ->where('type', 'like', "$term%")->get();
+            ->where('type', 'like', "$term%")
+            ->orWhere('code', 'like', "$term%")->get();
     });
 
     Route::get('classifier/{classifier}/img', function (App\Classifier $classifier) {

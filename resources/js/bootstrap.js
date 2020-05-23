@@ -12,14 +12,14 @@ try {
   window.$ = window.jQuery = require('jquery');
   require('bootstrap');
   require('jquery-ui/ui/widgets/autocomplete')
-  // Registering the CSRF Token as a common header with Ajax so that all
+  // Registering the CSRF Token as a common header with jQuery Ajax so that all
   // outgoing HTTP requests automatically have it attached.
-  let token = document.head.querySelector('meta[name="csrf-token"]');
+  /*let token = document.head.querySelector('meta[name="csrf-token"]');
   $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': token.content
     }
-  });
+  });*/
 } catch (e) {}
 
 // Adapt jquery-ui to use Bootstrap
