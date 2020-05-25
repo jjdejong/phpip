@@ -30,17 +30,18 @@
     }
 
     clearRenewals.onclick = (e) => {
-      var tids = new Array();
-      renewallist.querySelectorAll('input:checked').forEach( (current) => {
-        tids.push(current.id);
-      });
-      if (tids.length === 0) {
-        alert("No tasks selected for clearing!");
+      let params = new URLSearchParams();
+      let list = renewallist.querySelectorAll('input:checked');
+      if (list.length === 0) {
+        alert("No renewals selected for clearing!");
         return;
       }
-      $.post('/matter/clear-tasks',
-        { task_ids: tids, done_date: renewalcleardate.value },
-        function (response) {
+      list.forEach((current) => {
+        params.append('task_ids[]', current.id);
+      });
+      params.append('done_date', renewalcleardate.value);
+      fetchREST('/matter/clear-tasks', 'POST', params)
+      .then((response) => {
           if (response.errors === '') {
             refreshTasks(lastTasksFlag);
           } else {
@@ -51,17 +52,18 @@
     }
 
     clearOpenTasks.onclick = (e) => {
-      var tids = new Array();
-      tasklist.querySelectorAll('input:checked').forEach( (current) => {
-        tids.push(current.id);
-      });
-      if (tids.length === 0) {
+      let params = new URLSearchParams();
+      let list = tasklist.querySelectorAll('input:checked');
+      if (list.length === 0) {
         alert("No tasks selected for clearing!");
         return;
       }
-      $.post('/matter/clear-tasks',
-        { task_ids: tids, done_date: taskcleardate.value },
-        function (response) {
+      list.forEach((current) => {
+        params.append('task_ids[]', current.id);
+      });
+      params.append('done_date', taskcleardate.value);
+      fetchREST('/matter/clear-tasks', 'POST', params)
+      .then((response) => {
           if (response.errors === '') {
             refreshTasks(lastTasksFlag);
           } else {
