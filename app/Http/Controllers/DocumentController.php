@@ -193,7 +193,7 @@ class DocumentController extends Controller
                         break;
                     case 'Task':
                         $task = Task::where('id','=', "$value")->first();
-                        $event = $task->trigger();
+                        $event = $task->trigger;
                         break;
                 }
             }
