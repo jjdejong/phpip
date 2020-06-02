@@ -329,6 +329,7 @@ class RenewalController extends Controller
         {
                 return response()->json(['error' => "No renewal selected."]);
         }
+        $num=0;
         if (config('renewal.invoice.backend') == "dolibarr") {
           $resql = $query->orderBy( 'client_dn', "ASC")->get();
           $client_precedent="ZZZZZZZZZZZZZZZZZZZZZZZZ";
