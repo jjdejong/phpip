@@ -90,10 +90,13 @@ class RenewalController extends Controller
         return view('renewals.index', compact('renewals','step', 'invoice_step', 'tab','prices'));
     }
 
-    public function firstcall(Request $request)
+    public function firstcall(Request $request, int $send)
     {
         $notify_type[0] = 'first';
-        $rep = $this->_call($request->task_ids, $notify_type, 1.0, false);
+        $rep = count($request->task_ids);
+        if ($send == 1){
+          $rep = $this->_call($request->task_ids, $notify_type, 1.0, false);
+        }
         if (is_numeric($rep))
         {
             // Move the renewal task to step 2 : reminder
