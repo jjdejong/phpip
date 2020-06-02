@@ -313,7 +313,7 @@
                 <button class="btn btn-outline-primary" type="button" id="receiptRenewals">Register receipt</button>
             </div>
             <div class="input-group tab-pane {{ ($tab === '#p5' ) ? 'active' : ''}}" id="p5">
-                <button class="btn btn-outline-primary" type="button" id="sendReceiptsRenewals">Send receipts</button>
+                <button class="btn btn-outline-primary" type="button" id="sendReceiptsRenewals">Receipts sent</button>
             </div>
             <div class="input-group tab-pane {{ ($tab === '#p6' ) ? 'active' : ''}}" id="p6">
                 <button class="btn btn-outline-primary" type="button" id="lapsingRenewals">Lapse</button>
@@ -326,7 +326,7 @@
                 Invoiced renewals
             </div>
             <div class="input-group tab-pane {{ ($tab === '#p9' ) ? 'active' : ''}}" id="p9">
-                    <button class="btn btn-outline-primary" type="button" id="sendLapsedRenewals">Send lapse communication</button>
+                    <button class="btn btn-outline-primary" type="button" id="sendLapsedRenewals">Lapse communication sent</button>
             </div>
             <div class="input-group tab-pane {{ ($tab === '#p10' ) ? 'active' : ''}}" id="p10">
             Closed renewals
