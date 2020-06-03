@@ -728,6 +728,41 @@ CREATE TABLE `failed_jobs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `fees`
+--
+
+DROP TABLE IF EXISTS `fees`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `fees` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `for_category` char(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'PAT' COMMENT 'Category to which this rule applies.',
+  `for_country` char(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Country where rule is applicable. If NULL, applies to all countries',
+  `for_origin` char(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `qt` int(11) NOT NULL DEFAULT '0' COMMENT 'For which renewal',
+  `use_before` date DEFAULT NULL COMMENT 'will be used only if the due date is before this date',
+  `use_after` date DEFAULT NULL COMMENT 'will be used only if the due date is after this date',
+  `cost` decimal(6,2) DEFAULT NULL,
+  `fee` decimal(6,2) DEFAULT NULL,
+  `cost_reduced` decimal(6,2) DEFAULT NULL,
+  `fee_reduced` decimal(6,2) DEFAULT NULL,
+  `cost_sup` decimal(6,2) DEFAULT NULL,
+  `fee_sup` decimal(6,2) DEFAULT NULL,
+  `cost_sup_reduced` decimal(6,2) DEFAULT NULL,
+  `fee_sup_reduced` decimal(6,2) DEFAULT NULL,
+  `currency` char(3) COLLATE utf8mb4_unicode_ci DEFAULT 'EUR',
+  `creator` char(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `updater` char(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_category` (`for_category`),
+  KEY `for_country` (`for_country`),
+  KEY `for_origin` (`for_origin`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `matter`
 --
 
@@ -1056,6 +1091,81 @@ CREATE TABLE `password_resets` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Temporary view structure for view `renewal_list`
+--
+
+DROP TABLE IF EXISTS `renewal_list`;
+/*!50001 DROP VIEW IF EXISTS `renewal_list`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `renewal_list` AS SELECT 
+ 1 AS `id`,
+ 1 AS `detail`,
+ 1 AS `due_date`,
+ 1 AS `done`,
+ 1 AS `done_date`,
+ 1 AS `matter_id`,
+ 1 AS `cost`,
+ 1 AS `fee`,
+ 1 AS `cost_reduced`,
+ 1 AS `fee_reduced`,
+ 1 AS `cost_sup`,
+ 1 AS `fee_sup`,
+ 1 AS `fee_sup_reduced`,
+ 1 AS `cost_sup_reduced`,
+ 1 AS `trigger_id`,
+ 1 AS `category`,
+ 1 AS `caseref`,
+ 1 AS `suffix`,
+ 1 AS `country`,
+ 1 AS `country_FR`,
+ 1 AS `origin`,
+ 1 AS `type_code`,
+ 1 AS `idx`,
+ 1 AS `sme_status`,
+ 1 AS `event_name`,
+ 1 AS `event_date`,
+ 1 AS `number`,
+ 1 AS `applicant_dn`,
+ 1 AS `client_dn`,
+ 1 AS `client_id`,
+ 1 AS `email`,
+ 1 AS `responsible`,
+ 1 AS `title`,
+ 1 AS `pub_num`,
+ 1 AS `step`,
+ 1 AS `grace_period`,
+ 1 AS `invoice_step`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `renewals_logs`
+--
+
+DROP TABLE IF EXISTS `renewals_logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `renewals_logs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `task_id` int(10) unsigned NOT NULL,
+  `job_id` int(10) unsigned NOT NULL,
+  `from_step` tinyint(4) DEFAULT NULL COMMENT 'Step before the job',
+  `to_step` tinyint(4) DEFAULT NULL COMMENT 'Step after the job',
+  `from_grace` tinyint(4) DEFAULT NULL COMMENT 'Grace state before the job',
+  `to_grace` tinyint(4) DEFAULT NULL COMMENT 'Grace state after the job',
+  `from_invoice` tinyint(4) DEFAULT NULL COMMENT 'Invoice state before the job',
+  `to_invoice` tinyint(4) DEFAULT NULL COMMENT 'Invoice state after the job',
+  `from_done` tinyint(4) DEFAULT NULL COMMENT 'Done state before the job',
+  `to_done` tinyint(4) DEFAULT NULL COMMENT 'Done state after the job',
+  `creator` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `renewals_logs_task_id_index` (`task_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `task`
 --
 
@@ -1077,6 +1187,9 @@ CREATE TABLE `task` (
   `cost` decimal(6,2) DEFAULT NULL COMMENT 'The estimated or invoiced fee amount',
   `fee` decimal(6,2) DEFAULT NULL,
   `currency` char(3) COLLATE utf8mb4_unicode_ci DEFAULT 'EUR',
+  `step` tinyint(4) NOT NULL DEFAULT '0',
+  `invoice_step` tinyint(4) NOT NULL DEFAULT '0',
+  `grace_period` tinyint(4) NOT NULL DEFAULT '0',
   `creator` char(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `updater` char(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1865,6 +1978,24 @@ DELIMITER ;
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
+-- Final view structure for view `renewal_list`
+--
+
+/*!50001 DROP VIEW IF EXISTS `renewal_list`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`phpip`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `renewal_list` AS select `task`.`id` AS `id`,`task`.`detail` AS `detail`,`task`.`due_date` AS `due_date`,`task`.`done` AS `done`,`task`.`done_date` AS `done_date`,`event`.`matter_id` AS `matter_id`,`fees`.`cost` AS `cost`,`fees`.`fee` AS `fee`,`fees`.`cost_reduced` AS `cost_reduced`,`fees`.`fee_reduced` AS `fee_reduced`,`fees`.`cost_sup` AS `cost_sup`,`fees`.`fee_sup` AS `fee_sup`,`fees`.`fee_sup_reduced` AS `fee_sup_reduced`,`fees`.`cost_sup_reduced` AS `cost_sup_reduced`,`task`.`trigger_id` AS `trigger_id`,`matter`.`category_code` AS `category`,`matter`.`caseref` AS `caseref`,`matter`.`suffix` AS `suffix`,`matter`.`country` AS `country`,`mcountry`.`name_FR` AS `country_FR`,`matter`.`origin` AS `origin`,`matter`.`type_code` AS `type_code`,`matter`.`idx` AS `idx`,(select 1 from `classifier` `sme` where ((`matter`.`id` = `sme`.`matter_id`) and (`sme`.`type_code` = 'SME'))) AS `sme_status`,`event`.`code` AS `event_name`,`event`.`event_date` AS `event_date`,`event`.`detail` AS `number`,group_concat(`pa_app`.`display_name` separator ',') AS `applicant_dn`,`pa_cli`.`display_name` AS `client_dn`,`pmal_cli`.`actor_id` AS `client_id`,`pa_cli`.`email` AS `email`,ifnull(`task`.`assigned_to`,`matter`.`responsible`) AS `responsible`,`cla`.`value` AS `title`,`ev`.`detail` AS `pub_num`,`task`.`step` AS `step`,`task`.`grace_period` AS `grace_period`,`task`.`invoice_step` AS `invoice_step` from ((((((((((`matter` left join `matter_actor_lnk` `pmal_app` on(((ifnull(`matter`.`container_id`,`matter`.`id`) = `pmal_app`.`matter_id`) and (`pmal_app`.`role` = 'APP')))) left join `actor` `pa_app` on((`pa_app`.`id` = `pmal_app`.`actor_id`))) left join `matter_actor_lnk` `pmal_cli` on(((ifnull(`matter`.`container_id`,`matter`.`id`) = `pmal_cli`.`matter_id`) and (`pmal_cli`.`role` = 'CLI')))) left join `country` `mcountry` on((`mcountry`.`iso` = `matter`.`country`))) left join `actor` `pa_cli` on((`pa_cli`.`id` = `pmal_cli`.`actor_id`))) join `event` on((`matter`.`id` = `event`.`matter_id`))) left join `event` `ev` on(((`matter`.`id` = `ev`.`matter_id`) and (`ev`.`code` = 'PUB')))) join `task` on((`task`.`trigger_id` = `event`.`id`))) left join `classifier` `cla` on(((ifnull(`matter`.`container_id`,`matter`.`id`) = `cla`.`matter_id`) and (`cla`.`type_code` = 'TITOF')))) left join `fees` on(((`fees`.`for_country` = `matter`.`country`) and (`fees`.`for_category` = `matter`.`category_code`) and (`fees`.`qt` = `task`.`detail`)))) where ((`task`.`code` = 'REN') and (`matter`.`dead` = 0)) group by `task`.`id` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
 -- Final view structure for view `task_list`
 --
 
@@ -1909,4 +2040,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-03 19:56:28
+-- Dump completed on 2020-06-03 20:00:16
