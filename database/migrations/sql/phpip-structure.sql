@@ -643,6 +643,27 @@ DELIMITER ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
+-- Table structure for table `event_class_lnk`
+--
+
+DROP TABLE IF EXISTS `event_class_lnk`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `event_class_lnk` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `event_name_code` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `template_class_id` int(10) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `event_class_lnk_template_class_id_foreign` (`template_class_id`),
+  KEY `event_class_lnk_event_name_code_foreign` (`event_name_code`),
+  CONSTRAINT `event_class_lnk_event_name_code_foreign` FOREIGN KEY (`event_name_code`) REFERENCES `event_name` (`code`) ON UPDATE CASCADE,
+  CONSTRAINT `event_class_lnk_template_class_id_foreign` FOREIGN KEY (`template_class_id`) REFERENCES `template_classes` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Temporary view structure for view `event_lnk_list`
 --
 
@@ -1379,6 +1400,55 @@ DELIMITER ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
+-- Table structure for table `template_classes`
+--
+
+DROP TABLE IF EXISTS `template_classes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `template_classes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(55) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `default_role` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Role of actor who is the receiver of the document',
+  `creator` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `updater` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `template_classes_default_role_foreign` (`default_role`),
+  CONSTRAINT `template_classes_default_role_foreign` FOREIGN KEY (`default_role`) REFERENCES `actor_role` (`code`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `template_members`
+--
+
+DROP TABLE IF EXISTS `template_members`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `template_members` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `class_id` int(10) unsigned NOT NULL COMMENT 'The class which allow to link the template to an event or a task',
+  `language` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Code of the language for the document',
+  `style` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Help to distinguish documents in a same class. Free text',
+  `category` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Help to classify documents. Free text',
+  `format` varchar(4) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `summary` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'The label of the document as displayed in lists',
+  `subject` varchar(160) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'It can content fields to merge at creation time',
+  `body` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'It can content fields to merge at creation time, and HTML tags when this format is chosen',
+  `creator` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `updater` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `template_members_class_id_foreign` (`class_id`),
+  CONSTRAINT `template_members_class_id_foreign` FOREIGN KEY (`class_id`) REFERENCES `template_classes` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Temporary view structure for view `users`
 --
 
@@ -2040,4 +2110,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-03 20:00:16
+-- Dump completed on 2020-06-03 20:04:24

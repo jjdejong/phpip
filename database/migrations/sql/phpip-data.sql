@@ -378,6 +378,15 @@ LOCK TABLES `event` WRITE;
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `event_class_lnk`
+--
+
+LOCK TABLES `event_class_lnk` WRITE;
+/*!40000 ALTER TABLE `event_class_lnk` DISABLE KEYS */;
+/*!40000 ALTER TABLE `event_class_lnk` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `event_name`
 --
 
@@ -655,7 +664,13 @@ INSERT INTO `migrations` VALUES (1,'2014_10_12_100000_create_password_resets_tab
 (50,'2019_12_06_000000_create_fees_table',3),
 (51,'2019_12_06_002_alter_task_table',3),
 (52,'2019_12_06_003_create_renewal_list_view',3),
-(53,'2020_01_30_001_create_renewals_logs_table',3);
+(53,'2020_01_30_001_create_renewals_logs_table',3),
+(54,'2020_02_22_161215_create_template_classes',4),
+(55,'2020_02_22_164446_create_template_members',4),
+(56,'2020_02_22_173742_create_event_class_lnk',4),
+(57,'2020_02_22_181558_add_foreignkeys_to_template_members',4),
+(58,'2020_02_22_183512_add_foreignkeys_to_template_classes',4),
+(59,'2020_04_12_183512_add_foreignkeys_to_event_class_lnk',4);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -931,6 +946,24 @@ INSERT INTO `task_rules` (`id`, `active`, `task`, `trigger_event`, `clear_task`,
 (1329,1,'PROD','REC',0,0,'TM',NULL,NULL,NULL,'Libellé P/S',0,1,0,0,0,NULL,NULL,0,0,NULL,NULL,NULL,NULL,'EUR',NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `task_rules` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping data for table `template_classes`
+--
+
+LOCK TABLES `template_classes` WRITE;
+/*!40000 ALTER TABLE `template_classes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `template_classes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `template_members`
+--
+
+LOCK TABLES `template_members` WRITE;
+/*!40000 ALTER TABLE `template_members` DISABLE KEYS */;
+/*!40000 ALTER TABLE `template_members` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -941,4 +974,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-03 20:00:20
+-- Dump completed on 2020-06-03 20:04:28
