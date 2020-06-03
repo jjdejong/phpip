@@ -17,8 +17,8 @@
 
 LOCK TABLES `actor` WRITE;
 /*!40000 ALTER TABLE `actor` DISABLE KEYS */;
-INSERT INTO `actor` VALUES (1,'Client handled',NULL,'CLIENT',NULL,NULL,'ANN',NULL,NULL,NULL,NULL,0,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,'DO NOT DELETE - Special actor used for removing renewal tasks that are handled by the client',NULL,NULL,NULL,NULL,NULL,NULL),
-(2,'phpIP User',NULL,NULL,'phpipuser','$2y$10$auLQHQ3EIsg90hqnQsA1huhks3meaxwfWWEvJtD8R38jzwNN6y3zO','DBA',NULL,NULL,NULL,NULL,1,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,'root@localhost',NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `actor` VALUES (1,'Client handled',NULL,'CLIENT',NULL,NULL,'ANN',NULL,NULL,NULL,NULL,0,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0.00,'DO NOT DELETE - Special actor used for removing renewal tasks that are handled by the client',NULL,NULL,NULL,NULL,NULL,NULL),
+(2,'phpIP User',NULL,NULL,'phpipuser','$2y$10$auLQHQ3EIsg90hqnQsA1huhks3meaxwfWWEvJtD8R38jzwNN6y3zO','DBA',NULL,NULL,NULL,NULL,1,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,'root@localhost',NULL,NULL,NULL,0,0,0.00,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `actor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -670,7 +670,8 @@ INSERT INTO `migrations` VALUES (1,'2014_10_12_100000_create_password_resets_tab
 (56,'2020_02_22_173742_create_event_class_lnk',4),
 (57,'2020_02_22_181558_add_foreignkeys_to_template_members',4),
 (58,'2020_02_22_183512_add_foreignkeys_to_template_classes',4),
-(59,'2020_04_12_183512_add_foreignkeys_to_event_class_lnk',4);
+(59,'2020_04_12_183512_add_foreignkeys_to_event_class_lnk',4),
+(60,'2020_04_15_110300_update_tables10',5);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -974,4 +975,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-03 20:04:28
+-- Dump completed on 2020-06-03 20:07:15
