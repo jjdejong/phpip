@@ -124,7 +124,7 @@
         </div>
       </div>
     </nav>
-    <main class="container">
+    <main class="container-fluid px-4">
       @yield('content')
       <div id="ajaxModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
