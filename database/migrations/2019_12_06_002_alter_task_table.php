@@ -18,7 +18,7 @@ class AlterTaskTable extends Migration
         
         $t = 'task';
         if ( !Schema::hasColumn($t, 'step')) {
-            $table->tinyinteger('step')->after('creator')->default(0);
+            $table->tinyinteger('step')->after('currency')->default(0);
         }
         if ( !Schema::hasColumn($t, 'grace_period')) {
             $table->tinyinteger('grace_period')->after('step')->default(0);
