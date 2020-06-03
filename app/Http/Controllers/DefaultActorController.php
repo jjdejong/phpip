@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DefaultActor;
 use App\Actor;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Response;
 
 class DefaultActorController extends Controller
 {
@@ -91,7 +89,7 @@ class DefaultActorController extends Controller
     {
         $table = new Actor;
         $tableComments = $table->getTableComments('default_actor');
-        $default_actor->with(['roleInfo:code,name','actor:id,name','client:id,name','category:code,category','country:iso,name'])->get();
+        $default_actor->with(['roleInfo:code,name', 'actor:id,name', 'client:id,name', 'category:code,category', 'country:iso,name'])->get();
         return view('default_actor.show', compact('default_actor', 'tableComments'));
     }
 
@@ -109,7 +107,7 @@ class DefaultActorController extends Controller
             'role' => 'sometimes|required'
         ]);
         $default_actor->update($request->except(['_token', '_method']));
-        return response()->json(['success' => 'Entry updated']);
+        return $default_actor;
     }
 
     /**
@@ -121,6 +119,6 @@ class DefaultActorController extends Controller
     public function destroy(DefaultActor $default_actor)
     {
         $default_actor->delete();
-        return response()->json(['success' => 'Entry deleted']);
+        return $default_actor;
     }
 }

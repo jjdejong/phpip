@@ -113,7 +113,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     <div class="card-header reveal-hidden text-white bg-secondary p-1">
       Actors
       @canany(['admin', 'readwrite'])
-      <a class="badge badge-pill badge-light hidden-action float-right" rel="popover" data-placement="right" href="#" title="Add Actor">
+      <a class="badge badge-pill badge-light hidden-action float-right" data-toggle="popover" href="javascript:void(0)" title="Add Actor">
         &plus;
       </a>
       @endcanany
@@ -124,15 +124,15 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         <div class="card-header bg-primary text-light p-1">
           {{ $role_name }}
           @canany(['admin', 'readwrite'])
-          <a class="hidden-action float-right text-light font-weight-bold ml-2" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group->first()->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
-            &#9998;
-          </a>
-          <a class="hidden-action float-right text-light font-weight-bold" data-placement="right" rel="popover" title="Add {{ $role_name }}"
+          <a class="hidden-action float-right text-light font-weight-bold ml-3" data-toggle="popover" title="Add {{ $role_name }}"
              data-role_name="{{ $role_name }}"
              data-role_code="{{ $role_group->first()->role_code }}"
              data-shareable="{{ $role_group->first()->shareable }}"
-             href="#">
+             href="javascript:void(0)">
             &oplus;
+          </a>
+          <a class="hidden-action float-right text-light font-weight-bold" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group->first()->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
+            &#9998;
           </a>
           @endcanany
         </div>

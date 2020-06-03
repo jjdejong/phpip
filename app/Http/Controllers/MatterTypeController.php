@@ -6,7 +6,6 @@ use App\MatterType;
 use App\Actor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Response;
 
 class MatterTypeController extends Controller
 {
@@ -84,7 +83,7 @@ class MatterTypeController extends Controller
     {
         $request->merge([ 'updater' => Auth::user()->login ]);
         $type->update($request->except(['_token', '_method']));
-        return response()->json(['success' => 'Matter Type updated']);
+        return $type;
     }
 
     /**
@@ -96,6 +95,6 @@ class MatterTypeController extends Controller
     public function destroy(MatterType $type)
     {
         $type->delete();
-        return response()->json(['success' => 'Matter Type deleted']);
+        return $type;
     }
 }

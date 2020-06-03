@@ -10,16 +10,16 @@ class MatterPolicy
 {
     use HandlesAuthorization;
 
-      /**
-      * Determine whether the user can view any matters.
-      *
-      * @param  \App\User  $user
-      * @return mixed
-      */
-     public function viewAny(User $user)
-     {
-         return true;
-     }
+    /**
+    * Determine whether the user can view any matters.
+    *
+    * @param  \App\User  $user
+    * @return mixed
+    */
+    public function viewAny(User $user)
+    {
+        return true;
+    }
 
     /**
      * Determine whether the user can view the matter.
@@ -31,13 +31,13 @@ class MatterPolicy
     public function view(User $user, Matter $matter)
     {
         if ($user->default_role === 'CLI') {
-          if ($matter->client->count()) {
-            return $user->id === $matter->client->first()->actor_id;
-          } else {
-            return false;
-          }
+            if ($matter->client->count()) {
+                return $user->id === $matter->client->actor_id;
+            } else {
+                return false;
+            }
         } else {
-          return true;
+            return true;
         };
     }
 
@@ -61,7 +61,7 @@ class MatterPolicy
      */
     public function update(User $user, Matter $matter)
     {
-    	return true;
+        return true;
     }
 
     /**
@@ -73,6 +73,6 @@ class MatterPolicy
      */
     public function delete(User $user, Matter $matter)
     {
-    	return true;
+        return true;
     }
 }

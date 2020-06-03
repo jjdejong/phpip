@@ -151,16 +151,16 @@ class ImplementGenericRenewals extends Migration {
 		]);
 
 		// tr_task rules for the exceptions
-		DB::statement("INSERT IGNORE INTO task_rules (task, trigger_event, for_category, for_country, detail, months, years, creator, created_at, updated_at)
-			VALUES ('REN', 'GRT', 'PAT', 'US', '3.5', 6, 3, 'script', Now(), Now()),
-			('REN', 'GRT', 'PAT', 'US', '7.5', 6, 7, 'script', Now(), Now()),
-			('REN', 'GRT', 'PAT', 'US', '11.5', 6, 11, 'script', Now(), Now()),
-			('REN', 'GRT', 'PAT', 'CL', '1-10', 0, 0, 'script', Now(), Now()),
-			('REN', 'FIL', 'PAT', 'CL', '11-20', 0, 10, 'script', Now(), Now()),
-			('REN', 'FIL', 'PAT', 'IL', '7', 0, 6, 'script', Now(), Now()),
-			('REN', 'FIL', 'PAT', 'IL', '11', 0, 10, 'script', Now(), Now()),
-			('REN', 'FIL', 'PAT', 'IL', '15', 0, 14, 'script', Now(), Now()),
-			('REN', 'FIL', 'PAT', 'IL', '19', 0, 18, 'script', Now(), Now())"
+		DB::statement("INSERT IGNORE INTO task_rules (id, task, trigger_event, for_category, for_country, detail, months, years, creator, created_at, updated_at)
+			VALUES (300, 'REN', 'GRT', 'PAT', 'US', '3.5', 6, 3, 'script', Now(), Now()),
+			(301, 'REN', 'GRT', 'PAT', 'US', '7.5', 6, 7, 'script', Now(), Now()),
+			(302, 'REN', 'GRT', 'PAT', 'US', '11.5', 6, 11, 'script', Now(), Now()),
+			(303, 'REN', 'GRT', 'PAT', 'CL', '1-10', 0, 0, 'script', Now(), Now()),
+			(304, 'REN', 'FIL', 'PAT', 'CL', '11-20', 0, 10, 'script', Now(), Now()),
+			(305, 'REN', 'FIL', 'PAT', 'IL', '7', 0, 6, 'script', Now(), Now()),
+			(306, 'REN', 'FIL', 'PAT', 'IL', '11', 0, 10, 'script', Now(), Now()),
+			(307, 'REN', 'FIL', 'PAT', 'IL', '15', 0, 14, 'script', Now(), Now()),
+			(308, 'REN', 'FIL', 'PAT', 'IL', '19', 0, 18, 'script', Now(), Now())"
 		);
 
 		DB::unprepared("DROP TRIGGER IF EXISTS `event_after_insert`");

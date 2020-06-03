@@ -6,7 +6,8 @@
   var popoverTemplate = '<div class="popover border-info" role="tooltip"><div class="arrow"></div><h3 class="popover-header bg-info text-white"></h3><div class="popover-body"></div></div>';
 
   $('body').popover({
-    selector: '[rel="popover"]',
+    selector: '[data-toggle="popover"]',
+    boundary: 'viewport',
     template: popoverTemplate,
     content: actorPopoverTemplate.content.firstElementChild,
     html: true,
@@ -14,7 +15,7 @@
   });
 
   // Process actor addition popovers
-  $('body').on("shown.bs.popover", '[rel="popover"]', function(e) {
+  $('body').on("shown.bs.popover", function(e) {
     // First destroy existing popover when a new popover is opened
     $('.popover').siblings('.popover').first().popover('dispose');
 

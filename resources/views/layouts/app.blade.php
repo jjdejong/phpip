@@ -564,11 +564,11 @@
               e.target.blur();
             }
           },
-          // change: function(event, ui) {
-          //   if (!ui.item) {
-          //     e.target.value = "";
-          //   }
-          // }
+          change: function(event, ui) {
+            if (!ui.item) {
+              e.target.value = "";
+            }
+          }
         });
       }
     });

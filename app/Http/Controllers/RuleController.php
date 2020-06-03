@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Rule;
 use App\RuleClassLnk;
 use Illuminate\Support\Facades\Auth;
-use Response;
 
 class RuleController extends Controller
 {
@@ -114,7 +113,7 @@ class RuleController extends Controller
         ]);
         $request->merge([ 'updater' => Auth::user()->login ]);
         $rule->update($request->except(['_token', '_method']));
-        return response()->json(['success' => 'Rule updated']);
+        return $rule;
     }
 
     public function store(Request $request)
@@ -145,6 +144,6 @@ class RuleController extends Controller
     public function destroy(Rule $rule)
     {
         $rule->delete();
-        return response()->json(['success' => 'Rule deleted']);
+        return $rule;
     }
 }

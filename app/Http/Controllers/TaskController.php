@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Task;
-//use App\Event;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -16,7 +15,7 @@ class TaskController extends Controller
         $isrenewals = $request->isrenewals;
         $nrecords = 100;
         if ($isrenewals) {
-          $nrecords = 200;
+            $nrecords = 200;
         }
         $tasks = $task->openTasks($isrenewals, $request->what_tasks, $request->user_dashboard)->take($nrecords)->get();
         return view('task.index', compact('tasks', 'isrenewals'));
@@ -72,7 +71,7 @@ class TaskController extends Controller
         }
 
         $task->update($request->except(['_token', '_method']));
-        return response()->json(['success' => 'Task updated']);
+        return $task;
     }
 
     /**
@@ -84,6 +83,6 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         $task->delete();
-        return response()->json(['success' => 'Task deleted']);
+        return $task;
     }
 }
