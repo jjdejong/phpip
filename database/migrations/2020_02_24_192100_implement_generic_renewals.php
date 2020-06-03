@@ -725,5 +725,7 @@ END proc");
 		{
 			$table->boolean('uqtrigger')->default(0)->comment('Can only be triggered by one event');
 		});
+		
+		DB::unprepared('DROP PROCEDURE IF EXISTS `insert_recurring_renewals`');
 	}
 }
