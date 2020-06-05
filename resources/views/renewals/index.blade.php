@@ -414,7 +414,7 @@
         @foreach ($renewals as $task)
         <div class="row overlay" data-resource="/task/{{ $task->id }}">
           <div class="col-2">
-              {{ $task->client_dn }}
+              {{ $task->client_name }}
           </div>
           <div class="col-3">
               {{ $task->title }}
