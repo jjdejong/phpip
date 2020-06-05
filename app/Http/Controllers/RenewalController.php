@@ -33,7 +33,7 @@ class RenewalController extends Controller
         $tab = $request->input ( 'tab' );
 
         // Get list of active renewals
-        $renewals = Renewal::orderby('due_date');
+        $renewals = Renewal::list()->orderby('due_date');
         if ($MyRenewals) {
             $renewals->where('assigned_to', Auth::user()->login);
         }
@@ -59,10 +59,10 @@ class RenewalController extends Controller
                             $renewals->where('due_date', '<=', "$value");
                             break;
                         case 'Name':
-                            $renewals->where('applicant_dn', 'LIKE', "$value%");
+                            $renewals->where('client_name', 'LIKE', "$value%");
                             break;
                         case 'Country':
-                            $renewals->where('country', 'LIKE', "$value%");
+                            $renewals->where('matter.country', 'LIKE', "$value%");
                             break;
                         case 'grace':
                             $renewals->where('grace_period',  "$value");
@@ -948,7 +948,7 @@ class RenewalController extends Controller
 
     public function prices($ids, $level)
     {
-        $renewals = Renewal::whereIn('id',$ids)->get();
+        $renewals = Renewal::list()->whereIn('task.id',$ids)->get();
         $prices=[];
         $fee_factor = config('renewal.validity.fee_factor');
         foreach($renewals as $ren) {
