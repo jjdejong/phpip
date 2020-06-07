@@ -16,12 +16,14 @@ use App\Country;
 use Locale;
 //use Log;
 use IntlDateFormatter;
+use Log;
 
 class RenewalController extends Controller
 {
     public function index(Request $request)
     {
      // Filters
+     $start =  microtime(true);
         $MyRenewals = $request->input ( 'my_renewals' );
         $filters = $request->except([
             'my_renewals',
@@ -34,6 +36,7 @@ class RenewalController extends Controller
 
         // Get list of active renewals
         $renewals = Renewal::list()->orderby('due_date');
+        Log::debug("T1: ".strval( microtime(true)-$start));
         if ($MyRenewals) {
             $renewals->where('assigned_to', Auth::user()->login);
         }
@@ -85,8 +88,11 @@ class RenewalController extends Controller
         if (! ($with_step || $with_invoice)) {
             $renewals = $renewals->where('done',0);
         }
-        $prices = $this->prices($renewals->pluck('id'),0);
+        Log::debug("T2: ".strval( microtime(true)-$start));
+        $prices = $this->prices($renewals, 0);
+        Log::debug("T3: ".strval( microtime(true)-$start));
         $renewals = $renewals->simplePaginate( config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')) );
+        Log::debug("T4: ".strval( microtime(true)-$start));
         return view('renewals.index', compact('renewals','step', 'invoice_step', 'tab','prices'));
     }
 
@@ -160,8 +166,8 @@ class RenewalController extends Controller
         {
             $from_grace =  ($notify_type[$grace] == 'last') ? 0 : null ;
             $to_grace =  ($notify_type[$grace] == 'last') ? 1 : null ;
-            $resql = Renewal::whereIn('id',$ids)->orderBy( 'client_dn', "ASC")->where('grace_period',$grace)->get();
-            $prices = $this->prices($ids, $grace == 0 ? 0 : 2 );
+            $resql = Renewal::whereIn('id',$ids)->orderBy( 'client_name', "ASC")->where('grace_period',$grace);
+            $prices = $this->prices($resql, $grace == 0 ? 0 : 2 );
             $num=$resql->count();
             $sum = $sum + $num;
             if ($grace == 1 && $sum === 0)
@@ -176,7 +182,7 @@ class RenewalController extends Controller
                 while ($i < $num)
                 {
                     $ren = $resql[$i]->toArray();
-                    $client = $ren['client_dn'];
+                    $client = $ren['client_name'];
                     $email = $ren['email'];
                     $due_date = Carbon::parse($ren['due_date']);
                     if ($grace)
@@ -234,7 +240,7 @@ class RenewalController extends Controller
                     $renewals[] = $renewal;
                     if ($i < $num)
                     {
-                        $client = $resql[$i]['client_dn'];
+                        $client = $resql[$i]['client_name'];
                     }
                     if ($client != $client_precedent || $i == $num)
                     {
@@ -259,7 +265,7 @@ class RenewalController extends Controller
                             $contact = new \App\Actor();
                             $contact = $contact->where('id',$ren['client_id'])->first();
                             if  ($contact->email == '') {
-                                return "No email address for ".$ren['client_dn'];
+                                return "No email address for ".$ren['client_name'];
                             }
                             array_push($email_list,['email' => $contact->email, 'name' =>$contact->first_name.' '.$contact->name]);
                         }
@@ -334,7 +340,10 @@ class RenewalController extends Controller
         }
         $num=0;
         if (config('renewal.invoice.backend') == "dolibarr") {
-          $resql = $query->orderBy( 'client_dn', "ASC")->get();
+          $prices0 = $this->prices($query, 0);
+          $prices1 = $this->prices($query, 1);
+          $prices2 = $this->prices($query, 2);
+          $resql = $query->orderBy( 'client_name', "ASC")->get();
           $client_precedent="ZZZZZZZZZZZZZZZZZZZZZZZZ";
           $premier_passage=true;
           // get from config/renewal.php
@@ -355,7 +364,7 @@ class RenewalController extends Controller
                   while ($i < $num)
                   {
                       $ren = $resql[$i];
-                      $client = $ren['client_dn'];
+                      $client = $ren['client_name'];
                       if ($premier_passage)
                       {
                           // retrouve la correspondance de société
@@ -392,16 +401,16 @@ class RenewalController extends Controller
                           $fee = $ren['fee'];
                           if( strtotime($ren['done_date']) < $ren['due_date']) {
                               // late payment
-                              $prices = $this->prices([$ren['id']],1);
+                              $prices = $this->prices1([$ren['id']],1);
                           }
                           else
                           {
-                              $prices = $this->prices([$ren['id']],2);
+                              $prices = $this->prices2([$ren['id']],2);
                           }
                       }
                       else
                       {
-                              $prices = $this->prices([$ren['id']],0);
+                              $prices = $this->prices0([$ren['id']],0);
                       }
                       $fee = $prices[$ren['id']]['fee'];
                       $cost = $prices[$ren['id']]['cost'];
@@ -441,7 +450,7 @@ class RenewalController extends Controller
                       $i++;
                       if ($i < $num)
                       {
-                          $client = $resql[$i]['client_dn'];
+                          $client = $resql[$i]['client_name'];
                       }
                       if ($client != $client_precedent || $i == $num)
                       {
@@ -780,13 +789,15 @@ class RenewalController extends Controller
             $country = $task->country;
             if ($task->country == 'EP')
             {
+                // Use fee code from EPO
                 $fee_code = "0" .strval(intval($task->detail) + 30);
             }
             else
             {
                 $fee_code = $task->detail;
             }
-            $total += floatval($task->cost);
+            $prices = $this->prices($task, $task->grace_period == 0 ? 0 : 2 );
+            $total += floatval($prices[$id]['cost']);
             if ($country == 'EP' || $country == 'FR' )
             {
                 if ($task->origin == 'EP')
@@ -810,9 +821,9 @@ class RenewalController extends Controller
 			<owner>'.$task->applicant_dn.'</owner>
 			<fee>
 				<type-of-fee>'.$fee_code.'</type-of-fee>
-				<fee-sub-amount>'.$task->cost.'</fee-sub-amount>
+				<fee-sub-amount>'.$prices[$id]['cost'].'</fee-sub-amount>
 				<fee-factor>1</fee-factor>
-				<fee-total-amount>'.$task->cost.'</fee-total-amount>
+				<fee-total-amount>'.$prices[$id]['cost'].'</fee-total-amount>
 				<fee-date-due>'.$task->due_date.'</fee-date-due>
 			</fee>
 		</fees>';
@@ -946,9 +957,10 @@ class RenewalController extends Controller
     * @return array $prices
     */
 
-    public function prices($ids, $level)
+    public function prices($renewals, $level)
     {
-        $renewals = Renewal::list()->whereIn('task.id',$ids)->get();
+        //$renewals = Renewal::list()->whereIn('task.id',$ids)->get();
+        $renewals = $renewals->get();
         $prices=[];
         $fee_factor = config('renewal.validity.fee_factor');
         foreach($renewals as $ren) {
