@@ -4,7 +4,7 @@
 
 $ini = parse_ini_file('email-tasks.ini');
  // Connect to database
-$db = new mysqli($ini['mysql_host'], $ini['mysql_user'], $ini['mysql_pwd'], $ini['mysql_db'], NULL, $ini['mysql_socket']);
+$db = new mysqli($ini['mysql_host'], $ini['mysql_user'], $ini['mysql_pwd'], $ini['mysql_db'], null, $ini['mysql_socket']);
 if ($db->connect_errno) {
     echo "Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
     exit;
@@ -39,11 +39,11 @@ AND due_date < now() + INTERVAL 30 day
 ORDER BY due_date";
 $result = $db->query($query_tasks);
 if (!$result) {
-	echo "Invald query: (" . $db->errno . ") " . $db->error;
+    echo "Invald query: (" . $db->errno . ") " . $db->error;
 }
 
-while ( $row = $result->fetch_assoc() ) {
-	$msg .= "
+while ($row = $result->fetch_assoc()) {
+    $msg .= "
       <tr>
         <td><a href=\"$ini[phpip_url]/$row[matter_id]\">$row[Ref]</a></td>
       	<td>$row[category]</td>
