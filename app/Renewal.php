@@ -36,15 +36,15 @@ class Renewal extends Model
             'matter.origin AS origin',
             'matter.type_code AS type_code',
             'matter.idx AS idx',
-            DB::raw("(select 1 from `classifier` where `matter`.`id` = `classifier`.`matter_id` and `classifier`.`type_code` = 'SME') AS `sme_status`"),
+            DB::raw("MIN(pa_app.small_entity) = 1 AS sme_status"),
             'event.code AS event_name',
             'event.event_date AS event_date',
             'event.detail AS number',
-            DB::raw("group_concat(`pa_app`.`name` separator ',') AS `applicant_name`"),
+            DB::raw("GROUP_CONCAT(DISTINCT pa_app.name SEPARATOR ', ') AS applicant_name"),
             'pa_cli.name AS client_name',
             'pmal_cli.actor_id AS client_id',
             'pa_cli.email AS email',
-            DB::raw("ifnull('task.assigned_to','matter.responsible') AS `responsible`"),
+            DB::raw("IFNULL(task.assigned_to, matter.responsible) AS responsible"),
             'cla.value AS title',
             'ev.detail AS pub_num',
             'task.step AS step',
@@ -55,24 +55,24 @@ class Renewal extends Model
             DB::raw('matter_actor_lnk pmal_app
             JOIN actor pa_app ON pa_app.id = pmal_app.actor_id'),
             function ($join) {
-                $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'pmal_app.matter_id')->where('pmal_app.role', 'APP');
+                $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'pmal_app.matter_id')->where('pmal_app.role', 'APP');
             }
         )
         ->leftJoin(
             DB::raw('matter_actor_lnk pmal_cli
             JOIN actor pa_cli ON pa_cli.id = pmal_cli.actor_id'),
             function ($join) {
-                $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'pmal_cli.matter_id')->where('pmal_cli.role', 'CLI');
+                $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'pmal_cli.matter_id')->where('pmal_cli.role', 'CLI');
             }
         )
         ->leftJoin('country as mcountry', 'mcountry.iso', 'matter.country')
         ->join('event', 'matter.id', 'event.matter_id')
-        ->leftJoin('event as ev', function ($join) {
+        ->leftJoin('event AS ev', function ($join) {
             $join->on('matter.id', 'ev.matter_id');
             $join->on('ev.code', '=', DB::raw("'PUB'"));
         })
         ->join('task', 'task.trigger_id', 'event.id')
-        ->leftJoin('classifier  AS cla', function ($join) {
+        ->leftJoin('classifier AS cla', function ($join) {
             $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'cla.matter_id');
             $join->on('cla.type_code', '=', DB::raw("'TITOF'"));
         })
