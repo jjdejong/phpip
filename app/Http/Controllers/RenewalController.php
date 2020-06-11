@@ -31,7 +31,7 @@ class RenewalController extends Controller
         $tab = $request->input('tab');
 
         // Get list of active renewals
-        $renewals = Renewal::list()->orderby('due_date');
+        $renewals = Renewal::list();
         Log::debug("T1: " . strval(microtime(true)-$start));
         if ($MyRenewals) {
             $renewals->where('assigned_to', Auth::user()->login);
@@ -200,7 +200,7 @@ class RenewalController extends Controller
                     $renewal['country'] = $ren['country_FR'];
                     $renewal['desc'] = $desc;
                     // Détermine le taux de tva // TODO
-                    $renewal['annuity'] = $ren['detail'];
+                    $renewal['annuity'] = intval($ren['detail']);
                     $tx_tva = 0.2;
                     $renewal['tx_tva'] = $tx_tva * 100;
                     $renewal['cost'] =  number_format($prices[$ren['id']]['cost'], 2, ',', ' ');

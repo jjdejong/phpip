@@ -87,10 +87,11 @@ class Renewal extends Model
         ->leftJoin('fees', function ($join) {
             $join->on('fees.for_country', 'matter.country');
             $join->on('fees.for_category', 'matter.category_code');
-            $join->on('fees.qt', 'task.detail');
+            $join->on(DB::raw('CAST(task.detail AS UNSIGNED)'), 'fees.qt');
         })
         ->where('task.code', 'REN')
         ->where('matter.dead', 0)
+        ->groupBy('task.due_date')
         ->groupBy('task.id');
         
         return $query;
