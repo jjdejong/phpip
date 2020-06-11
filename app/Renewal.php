@@ -42,10 +42,12 @@ class Renewal extends Model
             'event.detail AS number',
             DB::raw("GROUP_CONCAT(DISTINCT pa_app.name SEPARATOR ', ') AS applicant_name"),
             'pa_cli.name AS client_name',
+            'pa_cli.ren_discount AS discount',
             'pmal_cli.actor_id AS client_id',
             'pa_cli.email AS email',
             DB::raw("IFNULL(task.assigned_to, matter.responsible) AS responsible"),
-            'cla.value AS title',
+            'tit.value AS short_title',
+            'titof.value AS title',
             'ev.detail AS pub_num',
             'task.step AS step',
             'task.grace_period AS grace_period',
@@ -78,10 +80,17 @@ class Renewal extends Model
         )
         ->join('task', 'task.trigger_id', 'event.id')
         ->leftJoin(
-            'classifier AS cla',
+            'classifier AS tit',
             function ($join) {
-                $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'cla.matter_id')
-                ->where('cla.type_code', 'TITOF');
+                $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit.matter_id')
+                ->where('tit.type_code', 'TIT');
+            }
+        )
+        ->leftJoin(
+            'classifier AS titof',
+            function ($join) {
+                $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'titof.matter_id')
+                ->where('titof.type_code', 'TITOF');
             }
         )
         ->leftJoin('fees', function ($join) {

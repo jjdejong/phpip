@@ -79,10 +79,12 @@
             actionRenewals(b.target, msgAction, '/renewal/call/0')
     });
 
+    @if (config('renewal.invoice.backend') == 'dolibarr')
     invoiceRenewals.addEventListener("click", function (b) {
             msgAction = "invoicing";
             actionRenewals(b.target, msgAction, '/renewal/invoice')
     });
+    @endif
 
     instructedRenewals.addEventListener("click", function (b) {
             msgAction = "for payment";
@@ -270,58 +272,58 @@
                     <button id="clearFilters" type="button" class="btn btn-primary">&larrpl; Clear filters</button>
                 </div>
           </div>
-          <div class="col-12">
+          <div class="col-12 mt-1">
             <div class="nav nav-pills" id="tabsGroup">
-                <a class="nav-item nav-link {{ ($tab === '#p1' || empty($tab) ) ? 'active' : '' }}" href="#p1" data-toggle="tab" step="0">First call</a>
-                <a class="nav-item nav-link {{ ($tab === '#p2' ) ? 'active' : '' }}" href="#p2" data-toggle="tab" step="2">Reminder</a>
-                <a class="nav-item nav-link {{ ($tab === '#p3' ) ? 'active' : '' }}" href="#p3" data-toggle="tab" step="4">Payment</a>
-                <a class="nav-item nav-link {{ ($tab === '#p4' ) ? 'active' : '' }}" href="#p4" data-toggle="tab" step="6">Receipts</a>
-                <a class="nav-item nav-link {{ ($tab === '#p5' ) ? 'active' : '' }}" href="#p5" data-toggle="tab" step="8">Receipts received</a>
-                <a class="nav-item nav-link {{ ($tab === '#p6' ) ? 'active' : '' }}" href="#p6" data-toggle="tab" step="12">Abandoned</a>
-                <a class="nav-item nav-link {{ ($tab === '#p9' ) ? 'active' : '' }}" href="#p9" data-toggle="tab" step="14">Lapsed</a>
-                <a class="nav-item nav-link {{ ($tab === '#p10' ) ? 'active' : '' }}" href="#p10" data-toggle="tab" step="10">Closed</a>
-                <a class="nav-item nav-link {{ ($tab === '#p7' ) ? 'active' : '' }}" href="#p7" data-toggle="tab" invoice_step="1">Invoicing</a>
-                <a class="nav-item nav-link {{ ($tab === '#p8' ) ? 'active' : '' }}" href="#p8" data-toggle="tab" invoice_step="2">Invoiced</a>
+                <a class="nav-item nav-link {{ ($tab === 'p1' || empty($tab) ) ? 'active' : '' }}" href="p1" data-toggle="tab" step="0">First call</a>
+                <a class="nav-item nav-link {{ ($tab === 'p2' ) ? 'active' : '' }}" href="p2" data-toggle="tab" step="2">Reminder</a>
+                <a class="nav-item nav-link {{ ($tab === 'p3' ) ? 'active' : '' }}" href="p3" data-toggle="tab" step="4">Payment</a>
+                <a class="nav-item nav-link {{ ($tab === 'p4' ) ? 'active' : '' }}" href="p4" data-toggle="tab" step="6">Receipts</a>
+                <a class="nav-item nav-link {{ ($tab === 'p5' ) ? 'active' : '' }}" href="p5" data-toggle="tab" step="8">Receipts received</a>
+                <a class="nav-item nav-link {{ ($tab === 'p6' ) ? 'active' : '' }}" href="p6" data-toggle="tab" step="12">Abandoned</a>
+                <a class="nav-item nav-link {{ ($tab === 'p9' ) ? 'active' : '' }}" href="p9" data-toggle="tab" step="14">Lapsed</a>
+                <a class="nav-item nav-link {{ ($tab === 'p10' ) ? 'active' : '' }}" href="p10" data-toggle="tab" step="10">Closed</a>
+                <a class="nav-item nav-link {{ ($tab === 'p7' ) ? 'active' : '' }}" href="p7" data-toggle="tab" invoice_step="1">Invoicing</a>
+                <a class="nav-item nav-link {{ ($tab === 'p8' ) ? 'active' : '' }}" href="p8" data-toggle="tab" invoice_step="2">Invoiced</a>
             </div>
           </div>
-          <div class="tab-content">
-            <div class="input-group tab-pane {{ ($tab === '#p1' || empty($tab) ) ? 'active' : '' }}" id="p1">
+          <div class="tab-content mt-1">
+            <div class="input-group tab-pane {{ ($tab === 'p1' || empty($tab) ) ? 'active' : '' }}" id="p1">
                 <button class="btn btn-outline-primary" type="button" id="callRenewals">Send call email</button>
                 <button class="btn btn-outline-primary" type="button" id="renewalsSent">Call sent manually</button>
             </div>
-            <div class="input-group tab-pane {{ ($tab === '#p2') ? 'active' : '' }}" id="p2">
+            <div class="input-group tab-pane {{ ($tab === 'p2') ? 'active' : '' }}" id="p2">
                 <button class="btn btn-outline-primary" type="button" id="reminderRenewals">Send reminder email</button>
                 <button class="btn btn-outline-primary" type="button" id="lastReminderRenewals" title="Send reminder and enter grace period">Send last reminder email</button>
-                <button class="btn btn-outline-primary" type="button" id="instructedRenewals" title="Instructions received to pay">Payment order received</button>
+                <button class="btn btn-outline-success" type="button" id="instructedRenewals" title="Instructions received to pay">Payment order received</button>
                 <button class="btn btn-outline-primary" type="button" id="abandonRenewals" title="Abandon instructions received">Abandon</button>
                 <button class="btn btn-outline-primary" type="button" id="lapsedRenewals" title="Office lapse communication received">Lapsed</button>
             </div>
-            <div class="input-group tab-pane {{ ($tab === '#p3' ) ? 'active' : ''}}" id="p3">
+            <div class="input-group tab-pane {{ ($tab === 'p3' ) ? 'active' : ''}}" id="p3">
                 <button class="btn btn-outline-primary" type="button" id="xmlRenewals" title="Generate xml files for EP or FR">Download XML order to pay</button>
-                <button class="btn btn-outline-primary" type="button" id='doneRenewals'>Clear as paid manually</button>
+                <button class="btn btn-outline-success" type="button" id='doneRenewals'>Paid</button>
             </div>
-            <div class="input-group tab-pane {{ ($tab === '#p4' ) ? 'active' : ''}}" id="p4">
+            <div class="input-group tab-pane {{ ($tab === 'p4' ) ? 'active' : ''}}" id="p4">
                 <button class="btn btn-outline-primary" type="button" id="receiptRenewals">Official receipts received</button>
             </div>
-            <div class="input-group tab-pane {{ ($tab === '#p5' ) ? 'active' : ''}}" id="p5">
+            <div class="input-group tab-pane {{ ($tab === 'p5' ) ? 'active' : ''}}" id="p5">
                 <button class="btn btn-outline-primary" type="button" id="sendReceiptsRenewals">Receipts sent</button>
             </div>
-            <div class="input-group tab-pane {{ ($tab === '#p6' ) ? 'active' : ''}}" id="p6">
+            <div class="input-group tab-pane {{ ($tab === 'p6' ) ? 'active' : ''}}" id="p6">
                 <button class="btn btn-outline-primary" type="button" id="lapsingRenewals">Lapse</button>
             </div>
-            <div class="input-group tab-pane {{ ($tab === '#p7' ) ? 'active' : ''}}" id="p7">
+            <div class="input-group tab-pane {{ ($tab === 'p7' ) ? 'active' : ''}}" id="p7">
                 @if (config('renewal.invoice.backend') == 'dolibarr')
                 <button class="btn btn-outline-primary" type="button" id="invoiceRenewals">Generate invoice</button>
                 @endif
-                <button class="btn btn-outline-primary" type="button" id="renewalsInvoiced">Invoiced</button>
+                <button class="btn btn-outline-success" type="button" id="renewalsInvoiced">Invoiced</button>
             </div>
-            <div class="input-group tab-pane {{ ($tab === '#p8' ) ? 'active' : ''}}" id="p8">
+            <div class="input-group tab-pane {{ ($tab === 'p8' ) ? 'active' : ''}}" id="p8">
                 Invoiced renewals
             </div>
-            <div class="input-group tab-pane {{ ($tab === '#p9' ) ? 'active' : ''}}" id="p9">
+            <div class="input-group tab-pane {{ ($tab === 'p9' ) ? 'active' : ''}}" id="p9">
                 <button class="btn btn-outline-primary" type="button" id="sendLapsedRenewals">Lapse communication sent</button>
             </div>
-            <div class="input-group tab-pane {{ ($tab === '#p10' ) ? 'active' : ''}}" id="p10">
+            <div class="input-group tab-pane {{ ($tab === 'p10' ) ? 'active' : ''}}" id="p10">
                 Closed renewals
             </div>
           </div>
@@ -341,7 +343,7 @@
           <div class="col-3">
             <div class="row">
                 <div class="col-2">
-                    Country
+                    Ctry
                 </div>
                 <div class="col-2">
                     Qt
@@ -410,7 +412,7 @@
               {{ $task->client_name }}
           </div>
           <div class="col-3">
-              {{ $task->title }}
+              {{ $task->short_title }}
           </div>
           <div class="col-1">
             <a href="/matter/{{ $task->matter_id }}">

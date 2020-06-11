@@ -12,7 +12,6 @@ use App\MatterActors;
 use App\RenewalsLog;
 use App\Mail\sendCall;
 use IntlDateFormatter;
-//use Log;
 
 class RenewalController extends Controller
 {
@@ -92,6 +91,7 @@ class RenewalController extends Controller
         $prices = $this->prices($renewals, 0);
         //Log::debug("T3: " . strval(microtime(true)-$start));
         $renewals = $renewals->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
+        $renewals->appends($request->input())->links(); // Keep URL parameters in the paginator links
         //Log::debug("T4: " . strval(microtime(true)-$start));
         return view('renewals.index', compact('renewals', 'step', 'invoice_step', 'tab', 'prices'));
     }
@@ -138,7 +138,7 @@ class RenewalController extends Controller
         }
     }
 
-    public function _call($ids, $notify_type, $fee_factor, $reminder)
+    function _call($ids, $notify_type, $fee_factor, $reminder)
     {
         // TODO Manage languages of the calls
         // TODO Check first that each client has email
@@ -155,9 +155,9 @@ class RenewalController extends Controller
         for ($grace = 0; $grace < count($notify_type); $grace++) {
             $from_grace =  ($notify_type[$grace] == 'last') ? 0 : null ;
             $to_grace =  ($notify_type[$grace] == 'last') ? 1 : null ;
-            $resql = Renewal::whereIn('id', $ids)->orderBy('client_name', "ASC")->where('grace_period', $grace);
+            $resql = Renewal::list()->whereIn('task.id', $ids)->orderBy('client_name', "ASC")->where('grace_period', $grace);
             $prices = $this->prices($resql, $grace == 0 ? 0 : 2);
-            $num=$resql->count();
+            $num = $resql->count();
             $sum = $sum + $num;
             if ($grace == 1 && $sum === 0) {
                 return "No renewal selected.";
@@ -310,7 +310,7 @@ class RenewalController extends Controller
     public function invoice(Request $request)
     {
         if (isset($request->task_ids)) {
-            $query = Renewal::whereIn('id', $request->task_ids);
+            $query = Renewal::list()->whereIn('task.id', $request->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -439,7 +439,7 @@ class RenewalController extends Controller
         return response()->json(['success' => 'Invoices created for ' . $num . ' renewals']);
     }
 
-    public function _client($client, $apikey)
+    function _client($client, $apikey)
     {
         // serach for client correspondance in Dolibarr
         $curl = curl_init();
@@ -491,7 +491,7 @@ class RenewalController extends Controller
     {
         $data = json_decode($request->getContent());
         if (isset($data->task_ids)) {
-            $query = Renewal::whereIn('id', $data->task_ids);
+            $query = Renewal::list()->whereIn('id', $data->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -537,7 +537,7 @@ class RenewalController extends Controller
     {
         $data = json_decode($request->getContent());
         if (isset($data->task_ids)) {
-            $query = Renewal::whereIn('id', $data->task_ids);
+            $query = Renewal::list()->whereIn('task.id', $data->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -580,7 +580,7 @@ class RenewalController extends Controller
     {
         $data = json_decode($request->getContent());
         if (isset($data->task_ids)) {
-            $query = Renewal::whereIn('id', $data->task_ids);
+            $query = Renewal::list()->whereIn('task.id', $data->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -627,7 +627,7 @@ class RenewalController extends Controller
     {
         $data = json_decode($request->getContent());
         if (isset($data->task_ids)) {
-            $query = Renewal::whereIn('id', $data->task_ids);
+            $query = Renewal::list()->whereIn('task.id', $data->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -673,7 +673,7 @@ class RenewalController extends Controller
     {
         $data = json_decode($request->getContent());
         if (isset($data->task_ids)) {
-            $query = Renewal::whereIn('id', $data->task_ids);
+            $query = Renewal::list()->whereIn('task.id', $data->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -738,44 +738,50 @@ class RenewalController extends Controller
         $xml = str_replace('NAME', Auth::user()->name, $xml);
         $xml = str_replace('TRANSACTION', 'ANNUITY ' . $fmt->format(time()), $xml);
         $total = 0;
-        foreach ($tids as $id) {
-            $task = Renewal::find($id);
-            $procedure = $task->country;
-            $country = $task->country;
-            if ($task->country == 'EP') {
+        $renewals = Renewal::list()->whereIn('task.id', $tids)->get();
+        foreach ($renewals as $renewal) {
+            $procedure = $renewal->country;
+            $country = $renewal->country;
+            if ($country == 'EP') {
                 // Use fee code from EPO
-                $fee_code = "0" . strval(intval($task->detail) + 30);
+                $fee_code = "0" . strval(intval($renewal->detail) + 30);
             } else {
-                $fee_code = $task->detail;
+                $fee_code = $renewal->detail;
             }
-            $prices = $this->prices($task, $task->grace_period == 0 ? 0 : 2);
-            $total += floatval($prices[$id]['cost']);
+            if ($renewal->grace_period) {
+                $cost = $renewal->sme_status ? $renewal->cost_sup_reduced : $renewal->cost_sup;
+            } else {
+                $cost = $renewal->sme_status ? $renewal->cost_reduced : $renewal->cost;
+            }
+            $total += $cost;
             if ($country == 'EP' || $country == 'FR') {
-                if ($task->origin == 'EP') {
-                    $number = substr_compare($task->pub_num, 'EP', 0, 2) ?  $task->pub_num : substr($task->pub_num, 2, strlen($task->pub_num)) ;
+                if ($renewal->origin == 'EP') {
+                    $number = preg_replace("/[^0-9]/", "", $renewal->pub_num);
                     $country = 'EP';
                 } else {
-                    $number = substr_compare($task->number, $country, 0, 2) ? $task->number : substr($task->number, 2, strlen($task->number)) ;
+                    $number = $number = preg_replace("/[^0-9]/", "", $renewal->number);
                 }
             }
-            $xml = $xml . '<fees procedure="' . $procedure . '">
-			<document-id>
-				<country>' . $country . '</country>
-				<doc-number>' . $number . '</doc-number>
-				<date>' . $fmt->format(strtotime($task->event_date)) . '</date>
-				<kind>application</kind>
-			</document-id>
-			<file-reference-id>' . $task->caseref . $task->suffix . '</file-reference-id>
-			<owner>' . $task->applicant_dn . '</owner>
-			<fee>
-				<type-of-fee>' . $fee_code . '</type-of-fee>
-				<fee-sub-amount>' . $prices[$id]['cost'] . '</fee-sub-amount>
-				<fee-factor>1</fee-factor>
-				<fee-total-amount>' . $prices[$id]['cost'] . '</fee-total-amount>
-				<fee-date-due>' . $task->due_date . '</fee-date-due>
-			</fee>
-		</fees>';
+            $xml .= '
+        <fees procedure="' . $procedure . '">
+            <document-id>
+                <country>' . $country . '</country>
+                <doc-number>' . $number . '</doc-number>
+                <date>' . $fmt->format(strtotime($renewal->event_date)) . '</date>
+                <kind>application</kind>
+            </document-id>
+            <file-reference-id>' . $renewal->caseref . $renewal->suffix . '</file-reference-id>
+            <owner>' . $renewal->applicant_name . '</owner>
+            <fee>
+                <type-of-fee>' . $fee_code . '</type-of-fee>
+                <fee-sub-amount>' . $renewal->cost . '</fee-sub-amount>
+                <fee-factor>1</fee-factor>
+                <fee-total-amount>' . $renewal->cost . '</fee-total-amount>
+                <fee-date-due>' . $renewal->due_date . '</fee-date-due>
+            </fee>
+        </fees>';
         }
+
         $footer = config('renewal.xml.footer');
         if ($procedure == 'EP') {
             $footer = str_replace('DEPOSIT', config('renewal.xml.EP_deposit'), $footer);
@@ -792,19 +798,19 @@ class RenewalController extends Controller
         if ($clear) {
             $updated = 0;
             $date_now = now();
-            foreach ($tids as $id) {
+            foreach ($renewals as $renewal) {
                 $log_line = [
-                    'task_id' => $id,
+                    'task_id' => $renewal->id,
                     'job_id' => $newjob,
-                    'from_step' => $task->step,
+                    'from_step' => $renewal->step,
                     'to_step' => 6,
-                    'from_done' => $task->done,
+                    'from_done' => $renewal->done,
                     'to_done' => 1,
                     'creator' => Auth::user()->login,
                     'created_at' => $date_now
                 ];
                 $data_log[] = $log_line;
-                $task = Task::find($id);
+                $task = Task::find($renewal->id);
                 $task->done_date = $done_date;
                 $task->done = 1;
                 $task->step = 6;
@@ -905,25 +911,26 @@ class RenewalController extends Controller
 
     public function prices($renewals, $level)
     {
-        //$renewals = Renewal::list()->whereIn('task.id',$ids)->get();
         $renewals = $renewals->get();
         $prices=[];
         $fee_factor = config('renewal.validity.fee_factor');
         foreach ($renewals as $ren) {
-            if ($level == 0) {
-                // standard prices
-                $prices[$ren['id']]['fee'] = ($ren['sme_status'] ? $ren['fee_reduced'] : $ren['fee']) * (1.0 - $ren['discount']);
-                $prices[$ren['id']]['cost'] = ($ren['sme_status'] ? $ren['cost_reduced'] : $ren['cost']);
-            }
-            if ($level == 1) {
-                // standard prices
-                $prices[$ren['id']]['fee'] = ($ren['sme_status'] ? $ren['fee_reduced'] : $ren['fee']) * $fee_factor * (1.0 - $ren['discount']);
-                $prices[$ren['id']]['cost'] = ($ren['sme_status'] ? $ren['cost_reduced'] : $ren['cost']);
-            }
-            if ($level == 2) {
-                // prices in grace period
-                $prices[$ren['id']]['fee'] = ($ren['sme_status'] ? $ren['fee_sup_reduced'] : $ren['fee_sup']) * (1.0 - $ren['discount']);
-                $prices[$ren['id']]['cost'] = ($ren['sme_status'] ? $ren['cost_sup_reduced'] : $ren['cost_sup']);
+            switch ($level) {
+                case 0:
+                    // standard prices
+                    $prices[$ren['id']]['fee'] = ($ren['sme_status'] ? $ren['fee_reduced'] : $ren['fee']) * (1.0 - $ren['discount']);
+                    $prices[$ren['id']]['cost'] = ($ren['sme_status'] ? $ren['cost_reduced'] : $ren['cost']);
+                    break;
+                case 1:
+                    // standard prices
+                    $prices[$ren['id']]['fee'] = ($ren['sme_status'] ? $ren['fee_reduced'] : $ren['fee']) * $fee_factor * (1.0 - $ren['discount']);
+                    $prices[$ren['id']]['cost'] = ($ren['sme_status'] ? $ren['cost_reduced'] : $ren['cost']);
+                    break;
+                case 2:
+                    // prices in grace period
+                    $prices[$ren['id']]['fee'] = ($ren['sme_status'] ? $ren['fee_sup_reduced'] : $ren['fee_sup']) * (1.0 - $ren['discount']);
+                    $prices[$ren['id']]['cost'] = ($ren['sme_status'] ? $ren['cost_sup_reduced'] : $ren['cost_sup']);
+                    break;
             }
         }
         return $prices;

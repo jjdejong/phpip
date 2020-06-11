@@ -518,7 +518,7 @@ END"
         DB::unprepared("DROP TRIGGER IF EXISTS `arole_modify_log`");
         // For classifier
         DB::unprepared("DROP TRIGGER IF EXISTS `classifier_BEFORE_INSERT`");
-        DB::unprepared( "DROP TRIGGER IF EXISTS `classifier_updater_log`");
+        DB::unprepared("DROP TRIGGER IF EXISTS `classifier_updater_log`");
         // For classifier_type
         DB::unprepared("DROP TRIGGER IF EXISTS `ctype_creator_log`");
         DB::unprepared("DROP TRIGGER IF EXISTS `ctype_updater_log`");
