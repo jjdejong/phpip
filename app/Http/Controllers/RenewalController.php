@@ -12,7 +12,7 @@ use App\MatterActors;
 use App\RenewalsLog;
 use App\Mail\sendCall;
 use IntlDateFormatter;
-use Log;
+//use Log;
 
 class RenewalController extends Controller
 {
@@ -32,7 +32,7 @@ class RenewalController extends Controller
 
         // Get list of active renewals
         $renewals = Renewal::list();
-        Log::debug("T1: " . strval(microtime(true)-$start));
+        //Log::debug("T1: " . strval(microtime(true)-$start));
         if ($MyRenewals) {
             $renewals->where('assigned_to', Auth::user()->login);
         }
@@ -88,11 +88,11 @@ class RenewalController extends Controller
         if (! ($with_step || $with_invoice)) {
             $renewals->where('done', 0);
         }
-        Log::debug("T2: " . strval(microtime(true)-$start));
+        //Log::debug("T2: " . strval(microtime(true)-$start));
         $prices = $this->prices($renewals, 0);
-        Log::debug("T3: " . strval(microtime(true)-$start));
+        //Log::debug("T3: " . strval(microtime(true)-$start));
         $renewals = $renewals->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
-        Log::debug("T4: " . strval(microtime(true)-$start));
+        //Log::debug("T4: " . strval(microtime(true)-$start));
         return view('renewals.index', compact('renewals', 'step', 'invoice_step', 'tab', 'prices'));
     }
 
