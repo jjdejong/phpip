@@ -15,8 +15,7 @@
     if (e.target.name !== "selectAll") {
         if (e.target.value.length === 0 || (e.target.name == "grace_period" && ! e.target.checked)) {
             url.searchParams.delete(e.target.name);
-        }
-        else {
+        } else {
             url.searchParams.set(e.target.name, e.target.value);
         }
         refreshList();
@@ -27,9 +26,7 @@
     if (e.target.checked) {
         // Check all checkboxes
         newValue = true;
-    }
-    else
-    {
+    } else {
         // Uncheck all checkboxes
         newValue = false;
     }
@@ -44,13 +41,13 @@
         url.searchParams.delete('step');
         url.searchParams.delete('invoice_step');
         url.searchParams.delete('tab');
-        if(e.target.hasAttribute('step')) {
+        if (e.target.hasAttribute('step')) {
             url.searchParams.set('step', e.target.getAttribute('step'));
         }
-        if(e.target.hasAttribute('invoice_step')) {
+        if (e.target.hasAttribute('invoice_step')) {
             url.searchParams.set('invoice_step', e.target.getAttribute('invoice_step'));
         }
-        if(e.target.hasAttribute('href')) {
+        if (e.target.hasAttribute('href')) {
             url.searchParams.set('tab', e.target.getAttribute('href'));
         }
         window.history.pushState('', 'phpIP', url);
@@ -59,7 +56,7 @@
 
     clearFilters.onclick = () => {
         var mySearchParams = url.searchParams;
-        for ( key of mySearchParams.keys()) {
+        for (key of mySearchParams.keys()) {
             if ( (key != 'step') && (key != 'invoice_step') && (key != 'tab')) {
                 mySearchParams.delete(key);
             }
@@ -67,69 +64,69 @@
         refreshList();
     };
 
-    doneRenewals.addEventListener("click",function (b) {
+    doneRenewals.addEventListener("click", function (b) {
             msgAction = "resetting";
-            actionRenewals(b.target,msgAction, '/renewal/done');
+            actionRenewals(b.target, msgAction, '/renewal/done');
     });
 
-    callRenewals.addEventListener("click",function (b) {
+    callRenewals.addEventListener("click", function (b) {
             msgAction = "call";
-            actionRenewals(b.target,msgAction,'/renewal/call/1')
+            actionRenewals(b.target, msgAction, '/renewal/call/1')
     });
 
-    renewalsSent.addEventListener("click",function (b) {
+    renewalsSent.addEventListener("click", function (b) {
             msgAction = "call";
-            actionRenewals(b.target,msgAction,'/renewal/call/0')
+            actionRenewals(b.target, msgAction, '/renewal/call/0')
     });
 
-    invoiceRenewals.addEventListener("click",function (b) {
+    invoiceRenewals.addEventListener("click", function (b) {
             msgAction = "invoicing";
-            actionRenewals(b.target,msgAction,'/renewal/invoice')
+            actionRenewals(b.target, msgAction, '/renewal/invoice')
     });
 
-    instructedRenewals.addEventListener("click",function (b) {
+    instructedRenewals.addEventListener("click", function (b) {
             msgAction = "for payment";
-            actionRenewals(b.target,msgAction,'/renewal/topay')
+            actionRenewals(b.target, msgAction, '/renewal/topay')
     });
 
-    lastReminderRenewals.addEventListener("click",function (b) {
+    lastReminderRenewals.addEventListener("click", function (b) {
             msgAction = "last call";
-            actionRenewals(b.target,msgAction,'/renewal/lastcall')
+            actionRenewals(b.target, msgAction, '/renewal/lastcall')
     });
 
-    reminderRenewals.addEventListener("click",function (b) {
+    reminderRenewals.addEventListener("click", function (b) {
             msgAction = "reminder";
-            actionRenewals(b.target,msgAction,'/renewal/reminder')
+            actionRenewals(b.target, msgAction, '/renewal/reminder')
     });
 
-    receiptRenewals.addEventListener("click",function (b) {
+    receiptRenewals.addEventListener("click", function (b) {
             msgAction = "registering receipt";
-            actionRenewals(b.target,msgAction,'/renewal/receipt')
+            actionRenewals(b.target, msgAction, '/renewal/receipt')
     });
 
-    sendReceiptsRenewals.addEventListener("click",function (b) {
+    sendReceiptsRenewals.addEventListener("click", function (b) {
             msgAction = "closing renewals";
-            actionRenewals(b.target,msgAction,'/renewal/closing')
+            actionRenewals(b.target, msgAction, '/renewal/closing')
     });
 
-    abandonRenewals.addEventListener("click",function (b) {
+    abandonRenewals.addEventListener("click", function (b) {
             msgAction = "abandon renewals";
-            actionRenewals(b.target,msgAction,'/renewal/abandon')
+            actionRenewals(b.target, msgAction, '/renewal/abandon')
     });
 
-    lapsedRenewals.addEventListener("click",function (b) {
+    lapsedRenewals.addEventListener("click", function (b) {
             msgAction = "lapsed renewals";
-            actionRenewals(b.target,msgAction,'/renewal/lapsing')
+            actionRenewals(b.target, msgAction, '/renewal/lapsing')
     });
 
-    lapsingRenewals.addEventListener("click",function (b) {
+    lapsingRenewals.addEventListener("click", function (b) {
             msgAction = "lapsed renewals";
-            actionRenewals(b.target,msgAction,'/renewal/lapsing')
+            actionRenewals(b.target, msgAction, '/renewal/lapsing')
     });
 
-    sendLapsedRenewals.addEventListener("click",function (b) {
+    sendLapsedRenewals.addEventListener("click", function (b) {
             msgAction = "lapse communications sent";
-            actionRenewals(b.target,msgAction,'/renewal/closing')
+            actionRenewals(b.target, msgAction, '/renewal/closing')
     });
 
     async function actionRenewals(button, msgAction, action_url) {
@@ -147,9 +144,7 @@
             }
             var begin = document.getElementById('Fromdate').value;
             var string = JSON.stringify({'begin':begin, 'end':end});
-        }
-        else
-        {
+        } else {
             var string = JSON.stringify({task_ids: tids});
         }
         context_url = new URL(window.location.href);
@@ -164,21 +159,17 @@
         return new Promise(function (resolve, reject)  {
             var xhr = new XMLHttpRequest();
             xhr.open('POST', url, true);
-            xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'));
             xhr.onload = function () {
                 if (this.status === 200) {
                     resolve(JSON.parse(this.responseText).success);
-                }
-                else if (this.status === 419) {
+                } else if (this.status === 419) {
                     reject("Token expired. Refresh the page.");
-                }
-                else if (this.status === 501)
+                } else if (this.status === 501)
                 {
                     reject(JSON.parse(this.responseText).error);
-                }
-                else
-                {
+                } else {
                     reject("Something went wrong.\n");
                 }
             }
@@ -186,7 +177,7 @@
         });
     }
 
-    xmlRenewals.addEventListener("click",function () {
+    xmlRenewals.addEventListener("click", function () {
         var tids = getSelected();
         if (tids.length === 0) {
             alert("No renewals selected for order!");
@@ -244,7 +235,7 @@
             }
         };
         var string = JSON.stringify({task_ids: tids, clear: false});
-        xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'));
         xhr.send(string);
     });
@@ -295,22 +286,22 @@
           </div>
           <div class="tab-content">
             <div class="input-group tab-pane {{ ($tab === '#p1' || empty($tab) ) ? 'active' : '' }}" id="p1">
-                <button class="btn btn-outline-primary" type="button" id="callRenewals">Send</button>
-                <button class="btn btn-outline-primary" type="button" id="renewalsSent">Clear as sent</button>
+                <button class="btn btn-outline-primary" type="button" id="callRenewals">Send call email</button>
+                <button class="btn btn-outline-primary" type="button" id="renewalsSent">Call sent manually</button>
             </div>
             <div class="input-group tab-pane {{ ($tab === '#p2') ? 'active' : '' }}" id="p2">
-                <button class="btn btn-outline-primary" type="button" id="reminderRenewals">Send reminder</button>
-                <button class="btn btn-outline-primary" type="button" id="lastReminderRenewals" title="Send the reminder and enter in grace period">Send last reminder</button>
-                <button class="btn btn-outline-primary" type="button" id="instructedRenewals" title="Instructions received to pay">Register order</button>
-                <button class="btn btn-outline-primary" type="button" id="abandonRenewals" title="Instructions received to abandon">Abandon</button>
-                <button class="btn btn-outline-primary" type="button" id="lapsedRenewals" title="The office said that the title is lapsed">Lapsed</button>
+                <button class="btn btn-outline-primary" type="button" id="reminderRenewals">Send reminder email</button>
+                <button class="btn btn-outline-primary" type="button" id="lastReminderRenewals" title="Send reminder and enter grace period">Send last reminder email</button>
+                <button class="btn btn-outline-primary" type="button" id="instructedRenewals" title="Instructions received to pay">Payment order received</button>
+                <button class="btn btn-outline-primary" type="button" id="abandonRenewals" title="Abandon instructions received">Abandon</button>
+                <button class="btn btn-outline-primary" type="button" id="lapsedRenewals" title="Office lapse communication received">Lapsed</button>
             </div>
             <div class="input-group tab-pane {{ ($tab === '#p3' ) ? 'active' : ''}}" id="p3">
-                <button class="btn btn-outline-primary" type="button" id="xmlRenewals" title="Generate xml files for EP or FR">Prepare order to pay</button>
-                <button class="btn btn-outline-primary" type="button" id='doneRenewals'>Clear as paid</button>
+                <button class="btn btn-outline-primary" type="button" id="xmlRenewals" title="Generate xml files for EP or FR">Download XML order to pay</button>
+                <button class="btn btn-outline-primary" type="button" id='doneRenewals'>Clear as paid manually</button>
             </div>
             <div class="input-group tab-pane {{ ($tab === '#p4' ) ? 'active' : ''}}" id="p4">
-                <button class="btn btn-outline-primary" type="button" id="receiptRenewals">Register receipt</button>
+                <button class="btn btn-outline-primary" type="button" id="receiptRenewals">Official receipts received</button>
             </div>
             <div class="input-group tab-pane {{ ($tab === '#p5' ) ? 'active' : ''}}" id="p5">
                 <button class="btn btn-outline-primary" type="button" id="sendReceiptsRenewals">Receipts sent</button>
@@ -319,17 +310,19 @@
                 <button class="btn btn-outline-primary" type="button" id="lapsingRenewals">Lapse</button>
             </div>
             <div class="input-group tab-pane {{ ($tab === '#p7' ) ? 'active' : ''}}" id="p7">
-                <button class="btn btn-outline-primary" type="button" id="invoiceRenewals">Invoice</button>
-                <button class="btn btn-outline-primary" type="button" id="renewalsInvoiced">Clear as invoiced</button>
+                @if (config('renewal.invoice.backend') == 'dolibarr')
+                <button class="btn btn-outline-primary" type="button" id="invoiceRenewals">Generate invoice</button>
+                @endif
+                <button class="btn btn-outline-primary" type="button" id="renewalsInvoiced">Invoiced</button>
             </div>
             <div class="input-group tab-pane {{ ($tab === '#p8' ) ? 'active' : ''}}" id="p8">
                 Invoiced renewals
             </div>
             <div class="input-group tab-pane {{ ($tab === '#p9' ) ? 'active' : ''}}" id="p9">
-                    <button class="btn btn-outline-primary" type="button" id="sendLapsedRenewals">Lapse communication sent</button>
+                <button class="btn btn-outline-primary" type="button" id="sendLapsedRenewals">Lapse communication sent</button>
             </div>
             <div class="input-group tab-pane {{ ($tab === '#p10' ) ? 'active' : ''}}" id="p10">
-            Closed renewals
+                Closed renewals
             </div>
           </div>
         </div>
