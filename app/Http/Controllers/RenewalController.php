@@ -759,8 +759,10 @@ class RenewalController extends Controller
                     $number = preg_replace("/[^0-9]/", "", $renewal->pub_num);
                     $country = 'EP';
                 } else {
-                    $number = $number = preg_replace("/[^0-9]/", "", $renewal->number);
+                    $number = preg_replace("/[^0-9]/", "", $renewal->number);
                 }
+            } else {
+                $number = $renewal->number;
             }
             $xml .= '
         <fees procedure="' . $procedure . '">
