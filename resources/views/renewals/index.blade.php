@@ -274,16 +274,16 @@
           </div>
           <div class="col-12 mt-1">
             <div class="nav nav-pills" id="tabsGroup">
-                <a class="nav-item nav-link {{ ($tab === 'p1' || empty($tab) ) ? 'active' : '' }}" href="p1" data-toggle="tab" step="0">First call</a>
-                <a class="nav-item nav-link {{ ($tab === 'p2' ) ? 'active' : '' }}" href="p2" data-toggle="tab" step="2">Reminder</a>
-                <a class="nav-item nav-link {{ ($tab === 'p3' ) ? 'active' : '' }}" href="p3" data-toggle="tab" step="4">Payment</a>
-                <a class="nav-item nav-link {{ ($tab === 'p4' ) ? 'active' : '' }}" href="p4" data-toggle="tab" step="6">Receipts</a>
-                <a class="nav-item nav-link {{ ($tab === 'p5' ) ? 'active' : '' }}" href="p5" data-toggle="tab" step="8">Receipts received</a>
-                <a class="nav-item nav-link {{ ($tab === 'p6' ) ? 'active' : '' }}" href="p6" data-toggle="tab" step="12">Abandoned</a>
-                <a class="nav-item nav-link {{ ($tab === 'p9' ) ? 'active' : '' }}" href="p9" data-toggle="tab" step="14">Lapsed</a>
-                <a class="nav-item nav-link {{ ($tab === 'p10' ) ? 'active' : '' }}" href="p10" data-toggle="tab" step="10">Closed</a>
-                <a class="nav-item nav-link {{ ($tab === 'p7' ) ? 'active' : '' }}" href="p7" data-toggle="tab" invoice_step="1">Invoicing</a>
-                <a class="nav-item nav-link {{ ($tab === 'p8' ) ? 'active' : '' }}" href="p8" data-toggle="tab" invoice_step="2">Invoiced</a>
+                <a class="nav-item nav-link {{ ($tab === 'p1' || empty($tab) ) ? 'active' : '' }}" href="#p1" data-toggle="tab" step="0">First call</a>
+                <a class="nav-item nav-link {{ ($tab === 'p2' ) ? 'active' : '' }}" href="#p2" data-toggle="tab" step="2">Reminder</a>
+                <a class="nav-item nav-link {{ ($tab === 'p3' ) ? 'active' : '' }}" href="#p3" data-toggle="tab" step="4">Payment</a>
+                <a class="nav-item nav-link {{ ($tab === 'p4' ) ? 'active' : '' }}" href="#p4" data-toggle="tab" step="6">Receipts</a>
+                <a class="nav-item nav-link {{ ($tab === 'p5' ) ? 'active' : '' }}" href="#p5" data-toggle="tab" step="8">Receipts received</a>
+                <a class="nav-item nav-link {{ ($tab === 'p6' ) ? 'active' : '' }}" href="#p6" data-toggle="tab" step="12">Abandoned</a>
+                <a class="nav-item nav-link {{ ($tab === 'p9' ) ? 'active' : '' }}" href="#p9" data-toggle="tab" step="14">Lapsed</a>
+                <a class="nav-item nav-link {{ ($tab === 'p10' ) ? 'active' : '' }}" href="#p10" data-toggle="tab" step="10">Closed</a>
+                <a class="nav-item nav-link {{ ($tab === 'p7' ) ? 'active' : '' }}" href="#p7" data-toggle="tab" invoice_step="1">Invoicing</a>
+                <a class="nav-item nav-link {{ ($tab === 'p8' ) ? 'active' : '' }}" href="#p8" data-toggle="tab" invoice_step="2">Invoiced</a>
             </div>
           </div>
           <div class="tab-content mt-1">

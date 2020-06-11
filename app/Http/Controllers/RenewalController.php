@@ -30,7 +30,7 @@ class RenewalController extends Controller
         $tab = $request->input('tab');
 
         // Get list of active renewals
-        $renewals = Renewal::list();
+        $renewals = Task::renewals();
         //Log::debug("T1: " . strval(microtime(true)-$start));
         if ($MyRenewals) {
             $renewals->where('assigned_to', Auth::user()->login);
@@ -42,7 +42,7 @@ class RenewalController extends Controller
                 if ($value != '') {
                     switch ($key) {
                         case 'Title':
-                            $renewals->where('cla.value', 'LIKE', "%$value%");
+                            $renewals->where('tit.value', 'LIKE', "%$value%");
                             break;
                         case 'Case':
                             $renewals->where('caseref', 'LIKE', "$value%");
@@ -155,7 +155,7 @@ class RenewalController extends Controller
         for ($grace = 0; $grace < count($notify_type); $grace++) {
             $from_grace =  ($notify_type[$grace] == 'last') ? 0 : null ;
             $to_grace =  ($notify_type[$grace] == 'last') ? 1 : null ;
-            $resql = Renewal::list()->whereIn('task.id', $ids)->orderBy('client_name', "ASC")->where('grace_period', $grace);
+            $resql = Task::renewals()->whereIn('task.id', $ids)->orderBy('client_name', "ASC")->where('grace_period', $grace);
             $prices = $this->prices($resql, $grace == 0 ? 0 : 2);
             $num = $resql->count();
             $sum = $sum + $num;
@@ -310,7 +310,7 @@ class RenewalController extends Controller
     public function invoice(Request $request)
     {
         if (isset($request->task_ids)) {
-            $query = Renewal::list()->whereIn('task.id', $request->task_ids);
+            $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -491,7 +491,7 @@ class RenewalController extends Controller
     {
         $data = json_decode($request->getContent());
         if (isset($data->task_ids)) {
-            $query = Renewal::list()->whereIn('id', $data->task_ids);
+            $query = Task::renewals()->whereIn('id', $data->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -537,7 +537,7 @@ class RenewalController extends Controller
     {
         $data = json_decode($request->getContent());
         if (isset($data->task_ids)) {
-            $query = Renewal::list()->whereIn('task.id', $data->task_ids);
+            $query = Task::renewals()->whereIn('task.id', $data->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -580,7 +580,7 @@ class RenewalController extends Controller
     {
         $data = json_decode($request->getContent());
         if (isset($data->task_ids)) {
-            $query = Renewal::list()->whereIn('task.id', $data->task_ids);
+            $query = Task::renewals()->whereIn('task.id', $data->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -627,7 +627,7 @@ class RenewalController extends Controller
     {
         $data = json_decode($request->getContent());
         if (isset($data->task_ids)) {
-            $query = Renewal::list()->whereIn('task.id', $data->task_ids);
+            $query = Task::renewals()->whereIn('task.id', $data->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -673,7 +673,7 @@ class RenewalController extends Controller
     {
         $data = json_decode($request->getContent());
         if (isset($data->task_ids)) {
-            $query = Renewal::list()->whereIn('task.id', $data->task_ids);
+            $query = Task::renewals()->whereIn('task.id', $data->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -738,7 +738,7 @@ class RenewalController extends Controller
         $xml = str_replace('NAME', Auth::user()->name, $xml);
         $xml = str_replace('TRANSACTION', 'ANNUITY ' . $fmt->format(time()), $xml);
         $total = 0;
-        $renewals = Renewal::list()->whereIn('task.id', $tids)->get();
+        $renewals = Task::renewals()->whereIn('task.id', $tids)->get();
         foreach ($renewals as $renewal) {
             $procedure = $renewal->country;
             $country = $renewal->country;
