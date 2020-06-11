@@ -55,27 +55,35 @@ class Renewal extends Model
             DB::raw('matter_actor_lnk pmal_app
             JOIN actor pa_app ON pa_app.id = pmal_app.actor_id'),
             function ($join) {
-                $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'pmal_app.matter_id')->where('pmal_app.role', 'APP');
+                $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'pmal_app.matter_id')
+                ->where('pmal_app.role', 'APP');
             }
         )
         ->leftJoin(
             DB::raw('matter_actor_lnk pmal_cli
             JOIN actor pa_cli ON pa_cli.id = pmal_cli.actor_id'),
             function ($join) {
-                $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'pmal_cli.matter_id')->where('pmal_cli.role', 'CLI');
+                $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'pmal_cli.matter_id')
+                ->where('pmal_cli.role', 'CLI');
             }
         )
         ->leftJoin('country as mcountry', 'mcountry.iso', 'matter.country')
         ->join('event', 'matter.id', 'event.matter_id')
-        ->leftJoin('event AS ev', function ($join) {
-            $join->on('matter.id', 'ev.matter_id');
-            $join->on('ev.code', '=', DB::raw("'PUB'"));
-        })
+        ->leftJoin(
+            'event AS ev',
+            function ($join) {
+                $join->on('matter.id', 'ev.matter_id')
+                ->where('ev.code', 'PUB');
+            }
+        )
         ->join('task', 'task.trigger_id', 'event.id')
-        ->leftJoin('classifier AS cla', function ($join) {
-            $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'cla.matter_id');
-            $join->on('cla.type_code', '=', DB::raw("'TITOF'"));
-        })
+        ->leftJoin(
+            'classifier AS cla',
+            function ($join) {
+                $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'cla.matter_id')
+                ->where('cla.type_code', 'TITOF');
+            }
+        )
         ->leftJoin('fees', function ($join) {
             $join->on('fees.for_country', 'matter.country');
             $join->on('fees.for_category', 'matter.category_code');
@@ -84,18 +92,7 @@ class Renewal extends Model
         ->where('task.code', 'REN')
         ->where('matter.dead', 0)
         ->groupBy('task.id');
-        /*from ((((((((((`matter` left join `matter_actor_lnk` `pmal_app` on(ifnull(`matter`.`container_id`,`matter`.`id`) = `pmal_app`.`matter_id` and `pmal_app`.`role` = 'APP'))
-        left join `actor` `pa_app` on(`pa_app`.`id` = `pmal_app`.`actor_id`))
-        left join `matter_actor_lnk` `pmal_cli` on(ifnull(`matter`.`container_id`,`matter`.`id`) = `pmal_cli`.`matter_id` and `pmal_cli`.`role` = 'CLI'))
-        left join `country` `mcountry` on(`mcountry`.`iso` = `matter`.`country`))
-        left join `actor` `pa_cli` on(`pa_cli`.`id` = `pmal_cli`.`actor_id`))
-        join `event` on(`matter`.`id` = `event`.`matter_id`))
-        left join `event` `ev` on(`matter`.`id` = `ev`.`matter_id` and `ev`.`code` = 'PUB'))
-        join `task` on(`task`.`trigger_id` = `event`.`id`))
-        left join `classifier` `cla` on(ifnull(`matter`.`container_id`,`matter`.`id`) = `cla`.`matter_id` and `cla`.`type_code` = 'TITOF'))
-        left join `fees` on(`fees`.`for_country` = `matter`.`country` and `fees`.`for_category` = `matter`.`category_code` and `fees`.`qt` = `task`.`detail`))
-        where `task`.`code` = 'REN' and `matter`.`dead` = 0
-        group by `task`.`id`)*/
+        
         return $query;
     }
 }

@@ -43,7 +43,7 @@ class RenewalController extends Controller
                 if ($value != '') {
                     switch ($key) {
                         case 'Title':
-                            $renewals->where('title', 'LIKE', "$value%");
+                            $renewals->where('cla.value', 'LIKE', "%$value%");
                             break;
                         case 'Case':
                             $renewals->where('caseref', 'LIKE', "$value%");
@@ -58,7 +58,7 @@ class RenewalController extends Controller
                             $renewals->where('due_date', '<=', "$value");
                             break;
                         case 'Name':
-                            $renewals->where('client_name', 'LIKE', "$value%");
+                            $renewals->where('pa_cli.name', 'LIKE', "$value%");
                             break;
                         case 'Country':
                             $renewals->where('matter.country', 'LIKE', "$value%");
