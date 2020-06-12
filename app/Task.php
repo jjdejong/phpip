@@ -156,6 +156,7 @@ class Task extends Model
             'matter.category_code AS category',
             'matter.caseref AS caseref',
             'matter.suffix AS suffix',
+            'matter.uid AS uid',
             'matter.country AS country',
             'mcountry.name_FR AS country_FR',
             'matter.origin AS origin',

@@ -155,8 +155,8 @@ class RenewalController extends Controller
         for ($grace = 0; $grace < count($notify_type); $grace++) {
             $from_grace =  ($notify_type[$grace] == 'last') ? 0 : null ;
             $to_grace =  ($notify_type[$grace] == 'last') ? 1 : null ;
-            $resql = Task::renewals()->whereIn('task.id', $ids)->orderBy('client_name', "ASC")->where('grace_period', $grace);
-            $prices = $this->prices($resql, $grace == 0 ? 0 : 2);
+            $resql = Task::renewals()->whereIn('task.id', $ids)->orderBy('pa_cli.name')->where('grace_period', $grace)->get();
+            //$prices = $this->prices($resql, $grace == 0 ? 0 : 2);
             $num = $resql->count();
             $sum = $sum + $num;
             if ($grace == 1 && $sum === 0) {
@@ -165,11 +165,11 @@ class RenewalController extends Controller
             if ($num != 0) {
                 $i = 0;
                 $date_now = Carbon::now();
-                while ($i < $num) {
-                    $ren = $resql[$i]->toArray();
-                    $client = $ren['client_name'];
-                    $email = $ren['email'];
-                    $due_date = Carbon::parse($ren['due_date']);
+                foreach ($resql as $ren) {
+                    //$ren = $resql[$i]->toArray();
+                    $client = $ren->client_name;
+                    $email = $ren->email;
+                    $due_date = Carbon::parse($ren->due_date);
                     if ($grace) {
                     //  Add six months as grace grace_period
                     // TODO Get the grace period from a rule according to country
@@ -185,37 +185,44 @@ class RenewalController extends Controller
                         $earlier = min($earlier, $due_date);
                     }
                     $renewal = [];
-                    $desc = $ren['caseref'] . $ren['suffix'] . " : Annuité du titre n°" . $ren['number'];
-                    if ($ren['event_name'] == 'FIL') {
-                        $desc.=" déposé le ";
+                    $desc = $ren->uid . " : Annuité du titre n°" . $ren->number;
+                    if ($ren->event_name == 'FIL') {
+                        $desc .= " déposé le ";
                     }
-                    if ($ren['event_name'] == 'GRT' or $ren['event_name'] == 'PR') {
+                    if ($ren->event_name == 'GRT' || $ren->event_name == 'PR') {
                         $desc .= " délivré le ";
                     }
-                    $desc .= Carbon::parse($ren['event_date'])->isoFormat('LL');
-                    if ($ren['title'] != '') {
-                        $desc.="<BR>Sujet : ".$ren['title'];
+                    $desc .= Carbon::parse($ren->event_date)->isoFormat('LL');
+                    if ($ren->title != '') {
+                        $desc .= "<BR>Sujet : " . $ren->title;
                     }
                     $renewal['due_date'] = $due_date->isoFormat('LL');
-                    $renewal['country'] = $ren['country_FR'];
+                    $renewal['country'] = $ren->country_FR;
                     $renewal['desc'] = $desc;
                     // Détermine le taux de tva // TODO
-                    $renewal['annuity'] = intval($ren['detail']);
+                    $renewal['annuity'] = intval($ren->detail);
                     $tx_tva = 0.2;
                     $renewal['tx_tva'] = $tx_tva * 100;
-                    $renewal['cost'] =  number_format($prices[$ren['id']]['cost'], 2, ',', ' ');
-                    $renewal['fee'] =  number_format($prices[$ren['id']]['fee'] * $fee_factor, 2, ',', ' ');
-                    $renewal['tva'] =  $prices[$ren['id']]['fee'] * $fee_factor *  $tx_tva;
-                    $renewal['total_ht'] = number_format($prices[$ren['id']]['fee'] * $fee_factor + $prices[$ren['id']]['cost'], 2, ',',' ');
-                    $renewal['total'] = number_format($prices[$ren['id']]['fee'] * $fee_factor * (1 + $tx_tva) + $prices[$ren['id']]['cost'], 2, ',',' ');
+                    if ($ren->grace_period) {
+                        $cost = $ren->sme_status ? $ren->cost_sup_reduced : $ren->cost_sup;
+                        $fee = ($ren->sme_status ? $ren->fee_sup_reduced : $ren->fee_sup) * (1.0 - $ren->discount) * $fee_factor;
+                    } else {
+                        $cost = $ren->sme_status ? $ren->cost_reduced : $ren->cost;
+                        $fee = ($ren->sme_status ? $ren->fee_reduced : $ren->fee) * (1.0 - $ren->discount) * $fee_factor;
+                    }
+                    $renewal['cost'] =  number_format($cost, 2, ',', ' ');
+                    $renewal['fee'] =  number_format($fee, 2, ',', ' ');
+                    $renewal['tva'] =  $fee *  $tx_tva;
+                    $renewal['total_ht'] = number_format($fee + $cost, 2, ',', ' ');
+                    $renewal['total'] = number_format($fee * (1 + $tx_tva) + $cost, 2, ',', ' ');
                     $total = $total + floatval($renewal['total']);
                     $total_ht = $total_ht + floatval($renewal['total_ht']);
                     $previousClient = $client;
                     $i++;
                     $log_line = [
-                        'task_id' => $ren['id'],
+                        'task_id' => $ren->id,
                         'job_id' => $newjob,
-                        'from_step' => $ren['step'],
+                        'from_step' => $ren->step,
                         'to_step' => 2,
                         'creator' => Auth::user()->login,
                         'created_at' => $date_now];
@@ -228,7 +235,7 @@ class RenewalController extends Controller
                     $data[] = $log_line;
                     $renewals[] = $renewal;
                     if ($i < $num) {
-                        $client = $resql[$i]['client_name'];
+                        $client = $ren->client_name;
                     }
                     if ($client != $previousClient || $i == $num) {
                         // Send mail
@@ -314,12 +321,12 @@ class RenewalController extends Controller
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
-        $num=0;
+        $num = 0;
         if (config('renewal.invoice.backend') == "dolibarr") {
             // $prices0 = $this->prices($query, 0);
             // $prices1 = $this->prices($query, 1);
             // $prices2 = $this->prices($query, 2);
-            $resql = $query->orderBy('client_name', "ASC")->get();
+            $resql = $query->orderBy('pa_cli.name', "ASC")->get();
             $previousClient = "ZZZZZZZZZZZZZZZZZZZZZZZZ";
             $firstPass = true;
             // get from config/renewal.php
@@ -333,9 +340,9 @@ class RenewalController extends Controller
                     return response()->json(['error' => "No renewal selected."]);
                 } else {
                     $i = 0;
-                    while ($i < $num) {
-                        $ren = $resql[$i];
-                        $client = $ren['client_name'];
+                    foreach ($resql as $ren) {
+                        //$ren = $resql[$i];
+                        $client = $ren->client_name;
                         if ($firstPass) {
                             // retrouve la correspondance de société
                             $result = $this->_client($client, $apikey);
@@ -348,42 +355,45 @@ class RenewalController extends Controller
                         } else {
                             $earlier = min($earlier, strtotime($ren['due_date']));
                         }
-                        $desc = $ren['caseref'] . $ren['suffix'] . " : Annuité pour l'année " . $ren['detail'] . " du titre n°" . $ren['number'];
-                        if ($ren['event_name'] == 'FIL') {
-                            $desc.=" déposé le ";
+                        $desc = $ren->uid . " : Annuité pour l'année " . $ren->detail . " du titre n°" . $ren->number;
+                        if ($ren->event_name == 'FIL') {
+                            $desc .= " déposé le ";
                         }
-                        if ($ren['event_name'] == 'GRT' or $ren['event_name'] == 'PR') {
-                            $desc.=" délivré le ";
+                        if ($ren->event_name == 'GRT' || $ren->event_name == 'PR') {
+                            $desc .= " délivré le ";
                         }
-                        $desc .= $ren['event_date']->isoFormat('LL');
-                        $desc .= ' en ' . $ren['country_FR'];
-                        if ($ren['title'] != '') {
-                            $desc .= "\nSujet : " . $ren['title'];
+                        $desc .= $ren->event_date->isoFormat('LL');
+                        $desc .= ' en ' . $ren->country_FR;
+                        if ($ren->title != '') {
+                            $desc .= "\nSujet : " . $ren->title;
                         }
-                        $desc.="\nÉchéance le ".$ren['due_date']->isoFormat('LL');
+                        $desc .= "\nÉchéance le " . $ren->due_date->isoFormat('LL');
                     // Détermine le taux de tva
                         if ($soc_res['tva_intra'] == "" || substr($soc_res['tva_intra'], 2) == "FR") {
                             $tx_tva = 0.2;
                         } else {
                             $tx_tva = 0.0;
                         }
-                        if ($ren['grace_period'] == 1) {
-                            $fee = $ren['fee'];
-                            if (strtotime($ren['done_date']) < $ren['due_date']) {
+                        if ($ren->grace_period) {
+                            $fee = $ren->fee;
+                            if (strtotime($ren->done_date) < $ren->due_date) {
                                 // late payment
-                                $prices = $this->prices1([$ren['id']], 1);
+                                //$prices = $this->prices1([$ren['id']], 1);
+                                $cost = $ren->sme_status ? $ren->cost_reduced : $ren->cost;
+                                $fee = ($ren->sme_status ? $ren->fee_reduced : $ren->fee) * (1.0 - $ren->discount) * config('renewal.validity.fee_factor');
                             } else {
-                                $prices = $this->prices2([$ren['id']], 2);
+                                //$prices = $this->prices2([$ren['id']], 2);
+                                $cost = $ren->sme_status ? $ren->cost_sup_reduced : $ren->cost_sup;
+                                $fee = ($ren->sme_status ? $ren->fee_sup_reduced : $ren->fee_sup) * (1.0 - $ren->discount);
                             }
                         } else {
-                            $prices = $this->prices0([$ren['id']], 0);
+                            $cost = $ren->sme_status ? $ren->cost_reduced : $ren->cost;
+                            $fee = ($ren->sme_status ? $ren->fee_reduced : $ren->fee) * (1.0 - $ren->discount);
                         }
-                        $fee = $prices[$ren['id']]['fee'];
-                        $cost = $prices[$ren['id']]['cost'];
                         if ($cost != 0) {
-                            $desc.="\nHonoraires pour la surveillance et le paiement";
+                            $desc .= "\nHonoraires pour la surveillance et le paiement";
                         } else {
-                            $desc.="\nHonoraires et taxe";
+                            $desc .= "\nHonoraires et taxe";
                         }
                         $newlignes[] = [
                             "desc" => $desc,
@@ -411,7 +421,7 @@ class RenewalController extends Controller
                         $previousClient = $client;
                         $i++;
                         if ($i < $num) {
-                            $client = $resql[$i]['client_name'];
+                            $client = $ren->client_name;
                         }
                         if ($client != $previousClient || $i == $num) {
                             // Create propale
@@ -514,7 +524,7 @@ class RenewalController extends Controller
                 $updated++;
             }
             $log_line = [
-                'task_id' => $ren['id'],
+                'task_id' => $ren->id,
                 'job_id' => $newjob,
                 'from_step' => 2,
                 'to_step' => 4,
@@ -558,7 +568,7 @@ class RenewalController extends Controller
                 $updated++;
             }
             $log_line = [
-                'task_id' => $ren['id'],
+                'task_id' => $ren->id,
                 'job_id' => $newjob,
                 'from_step' => $task->step,
                 'to_step' => 8,
@@ -597,7 +607,7 @@ class RenewalController extends Controller
         foreach ($resql as $ren) {
             $task = Task::find($ren->id);
             $log_line = [
-                'task_id' => $ren['id'],
+                'task_id' => $ren->id,
                 'job_id' => $newjob,
                 'from_step' => $task->step,
                 'to_step' => 10,
@@ -643,7 +653,7 @@ class RenewalController extends Controller
         foreach ($resql as $ren) {
             $task = Task::find($ren->id);
             $log_line = [
-                'task_id' => $ren['id'],
+                'task_id' => $ren->id,
                 'job_id' => $newjob,
                 'from_step' => $task->step,
                 'to_step' => 12,
@@ -695,7 +705,7 @@ class RenewalController extends Controller
             // For logs
             $data_log = [];
             $log_line = [
-                'task_id' => $ren['id'],
+                'task_id' => $ren->id,
                 'job_id' => $newjob,
                 'from_step' => $task->step,
                 'to_step' => 14,
@@ -772,7 +782,7 @@ class RenewalController extends Controller
                 <date>' . $fmt->format(strtotime($renewal->event_date)) . '</date>
                 <kind>application</kind>
             </document-id>
-            <file-reference-id>' . $renewal->caseref . $renewal->suffix . '</file-reference-id>
+            <file-reference-id>' . $renewal->uid . '</file-reference-id>
             <owner>' . $renewal->applicant_name . '</owner>
             <fee>
                 <type-of-fee>' . $fee_code . '</type-of-fee>
