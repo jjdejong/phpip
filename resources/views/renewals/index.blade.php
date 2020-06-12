@@ -416,7 +416,7 @@
           </div>
           <div class="col-1">
             <a href="/matter/{{ $task->matter_id }}">
-              {{ $task->caseref }}{{ $task->suffix }}
+              {{ $task->uid }}
             </a>
           </div>
           <div class="col-3">
@@ -431,10 +431,10 @@
                     {!! $task->grace_period ? "&#9888;" : "" !!}
                 </div>
                 <div class="col-3">
-                    {{ $prices[$task->id]['cost']  }}
+                    {{ $task->sme_status ? $task->cost_reduced : $task->cost }}
                 </div>
                 <div class="col-3">
-                    {{ $prices[$task->id]['fee']  }}
+                    {{ ($task->sme_status ? $task->fee_reduced : $task->fee) * (1.0 - $task->discount) }}
                 </div>
             </div>
           </div>

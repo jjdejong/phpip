@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use App\Task;
-use App\Renewal;
 use App\MatterActors;
 use App\RenewalsLog;
 use App\Mail\sendCall;
@@ -18,7 +17,7 @@ class RenewalController extends Controller
     public function index(Request $request)
     {
      // Filters
-        $start =  microtime(true);
+        //$start =  microtime(true);
         $MyRenewals = $request->input('my_renewals');
         $filters = $request->except([
             'my_renewals',
@@ -88,12 +87,12 @@ class RenewalController extends Controller
             $renewals->where('done', 0);
         }
         //Log::debug("T2: " . strval(microtime(true)-$start));
-        $prices = $this->prices($renewals, 0);
+        //$prices = $this->prices($renewals, 0);
         //Log::debug("T3: " . strval(microtime(true)-$start));
         $renewals = $renewals->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
         $renewals->appends($request->input())->links(); // Keep URL parameters in the paginator links
         //Log::debug("T4: " . strval(microtime(true)-$start));
-        return view('renewals.index', compact('renewals', 'step', 'invoice_step', 'tab', 'prices'));
+        return view('renewals.index', compact('renewals', 'step', 'invoice_step', 'tab'));
     }
 
     public function firstcall(Request $request, int $send)
@@ -921,7 +920,7 @@ class RenewalController extends Controller
     * @return array $prices
     */
 
-    public function prices($renewals, $level)
+    /*public function prices($renewals, $level)
     {
         $renewals = $renewals->get();
         $prices=[];
@@ -946,5 +945,5 @@ class RenewalController extends Controller
             }
         }
         return $prices;
-    }
+    }*/
 }
