@@ -30,14 +30,14 @@ class sendCall extends Mailable
     {
         $this->step = $step;
         $this->renewals = $renewals;
-        $this->validity_date = $validity_date; 
+        $this->validity_date = $validity_date;
         $this->instruction_date = $instruction_date;
         $this->total = $total;
         $this->total_ht = $total_ht;
         $this->subject = $subject;
         $this->dest = $dest;
         // Added to ask for receipt confirmation
-        $this->callbacks[]=( function($message){
+        $this->callbacks[]=(function ($message) {
             $message->getHeaders()->addTextHeader('X-Confirm-Reading-To', '<'.Auth::user()->email.'>');
             $message->getHeaders()->addTextHeader('Return-receipt-to', '<'.Auth::user()->email.'>');
         });
@@ -52,15 +52,12 @@ class sendCall extends Mailable
     {
         if ($this->step == 'first') {
             return $this->view('email.firstcall');
-        }
-        elseif ($this->step == 'last') {
+        } elseif ($this->step == 'last') {
             return $this->view('email.lastcall');
-        }
-        elseif ($this->step == 'warn') {
+        } elseif ($this->step == 'warn') {
             return $this->view('email.warncall');
         }
     }
-    
     
     public function via($notifiable)
     {

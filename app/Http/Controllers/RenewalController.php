@@ -224,7 +224,8 @@ class RenewalController extends Controller
                         'from_step' => $ren->step,
                         'to_step' => 2,
                         'creator' => Auth::user()->login,
-                        'created_at' => $date_now];
+                        'created_at' => $date_now
+                    ];
                     if (! is_null($from_grace)) {
                         $log_line[] = ['$to_grace' => $from_grace];
                     }
@@ -247,20 +248,20 @@ class RenewalController extends Controller
                             $instruction_date = $earlier->subDays(config('renewal.validity.instruct_before') - config('renewal.validity.before'))->isoFormat('LL');
                         }
                         $contacts = new MatterActors();
-                        $contacts = $contacts->select('email', 'name', 'first_name')->where('matter_id', $ren['matter_id'])->where('role_code', 'CNT')->get();
+                        $contacts = $contacts->select('email', 'name', 'first_name')->where('matter_id', $ren->matter_id)->where('role_code', 'CNT')->get();
                         $dest = "Bonjour,";
                         $email_list = [];
                         if ($contacts->count() === 0) {
                             // No contact registered, using client email
                             $contact = new \App\Actor();
-                            $contact = $contact->where('id', $ren['client_id'])->first();
+                            $contact = $contact->where('id', $ren->client_id)->first();
                             if ($contact->email == '') {
-                                return "No email address for ".$ren['client_name'];
+                                return "No email address for " . $ren->client_name;
                             }
-                            array_push($email_list, ['email' => $contact->email, 'name' =>$contact->first_name . ' ' . $contact->name]);
+                            array_push($email_list, ['email' => $contact->email, 'name' => $contact->first_name . ' ' . $contact->name]);
                         } else {
                             foreach ($contacts as $contact) {
-                                array_push($email_list, ['email' => $contact['email'], 'name' =>$contact['first_name'] . ' ' . $contact['name']]);
+                                array_push($email_list, ['email' => $contact->email, 'name' => $contact->first_name . ' ' . $contact->name]);
                             }
                         }
                         Mail::to($email_list)->bcc(Auth::user())
@@ -271,8 +272,8 @@ class RenewalController extends Controller
                                 $instruction_date,
                                 number_format($total, 2, ',', ' '),
                                 number_format($total_ht, 2, ',', ' '),
-                                $reminder ?  '[Rappel] Appel pour le renouvellement de brevets': 'Appel pour le renouvellement de brevets',
-                                $dest = $dest
+                                $reminder ? '[Rappel] Appel pour le renouvellement de brevets' : 'Appel pour le renouvellement de brevets',
+                                $dest
                             ));
                         $firstPass = true;
                         $renewals = [];
