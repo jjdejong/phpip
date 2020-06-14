@@ -214,8 +214,8 @@ class RenewalController extends Controller
                     $renewal['tva'] =  $fee *  $tx_tva;
                     $renewal['total_ht'] = number_format($fee + $cost, 2, ',', ' ');
                     $renewal['total'] = number_format($fee * (1 + $tx_tva) + $cost, 2, ',', ' ');
-                    $total = $total + floatval($renewal['total']);
-                    $total_ht = $total_ht + floatval($renewal['total_ht']);
+                    $total = $total + $fee * (1 + $tx_tva) + $cost;
+                    $total_ht = $total_ht + $fee + $cost;
                     $previousClient = $client;
                     $i++;
                     $log_line = [
