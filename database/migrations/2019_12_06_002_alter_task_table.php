@@ -25,9 +25,9 @@ class AlterTaskTable extends Migration
                 $table->tinyinteger('invoice_step')->after('step')->default(0);
             }
         });
-        
+
         DB::unprepared("DROP TRIGGER IF EXISTS `task_before_update`");
-        DB::unprepared("CREATE `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW 
+        DB::unprepared("CREATE TRIGGER `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW
 BEGIN
   IF NEW.done_date IS NOT NULL AND OLD.done_date IS NULL AND OLD.done = 0 THEN
     SET NEW.done = 1;
@@ -51,7 +51,7 @@ END");
     public function down()
     {
         DB::unprepared("DROP TRIGGER IF EXISTS `task_before_update`");
-        DB::unprepared("CREATE `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW 
+        DB::unprepared("CREATE `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW
 BEGIN
   IF NEW.done_date IS NOT NULL AND OLD.done_date IS NULL AND OLD.done = 0 THEN
     SET NEW.done = 1;
