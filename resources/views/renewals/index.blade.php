@@ -426,6 +426,7 @@
                 </div>
                 <div class="col-2">
                     {{ $task->detail }}
+                    {{ $task->sme_status }}
                 </div>
                 <div class="col-2">
                     {!! $task->grace_period ? "&#9888;" : "" !!}
