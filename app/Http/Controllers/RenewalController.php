@@ -249,7 +249,7 @@ class RenewalController extends Controller
                         }
                         $contacts = new MatterActors();
                         $contacts = $contacts->select('email', 'name', 'first_name')->where('matter_id', $ren->matter_id)->where('role_code', 'CNT')->get();
-                        $dest = "Bonjour,";
+                        $dest = "Bonjour, ";
                         $email_list = [];
                         if ($contacts->count() === 0) {
                             // No contact registered, using client email
@@ -264,7 +264,13 @@ class RenewalController extends Controller
                                 array_push($email_list, ['email' => $contact->email, 'name' => $contact->first_name . ' ' . $contact->name]);
                             }
                         }
-                        Mail::to($email_list)->bcc(Auth::user())
+                        if (config('renewal.general.mail_recipient') == 'client') {
+                            $recipient = $email_list;
+                        } else {
+                            $recipient = Auth::user();
+                            $dest .= implode(', ', array_column($email_list, 'email'));
+                        }
+                        Mail::to($recipient)->cc(Auth::user())
                             ->send(new sendCall(
                                 $notify_type[$grace],
                                 $renewals,
@@ -272,7 +278,7 @@ class RenewalController extends Controller
                                 $instruction_date,
                                 number_format($total, 2, ',', ' '),
                                 number_format($total_ht, 2, ',', ' '),
-                                $reminder ? '[Rappel] Appel pour le renouvellement de brevets' : 'Appel pour le renouvellement de brevets',
+                                ($reminder ? '[RAPPEL]' : '') . ' Appel pour le renouvellement de brevets',
                                 $dest
                             ));
                         $firstPass = true;
@@ -323,9 +329,6 @@ class RenewalController extends Controller
         }
         $num = 0;
         if (config('renewal.invoice.backend') == "dolibarr") {
-            // $prices0 = $this->prices($query, 0);
-            // $prices1 = $this->prices($query, 1);
-            // $prices2 = $this->prices($query, 2);
             $resql = $query->orderBy('pa_cli.name', "ASC")->get();
             $previousClient = "ZZZZZZZZZZZZZZZZZZZZZZZZ";
             $firstPass = true;
@@ -341,7 +344,6 @@ class RenewalController extends Controller
                 } else {
                     $i = 0;
                     foreach ($resql as $ren) {
-                        //$ren = $resql[$i];
                         $client = $ren->client_name;
                         if ($firstPass) {
                             // retrouve la correspondance de société

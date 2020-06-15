@@ -10,7 +10,6 @@
             .inner-body {
                 width: 100% !important;
             }
-
             .footer {
                 width: 100% !important;
             }
@@ -28,14 +27,14 @@
             background-color: #dddddd;
         }
     </style>
-    <p>Bonjour,</p>
+    <p>{{ $dest }}</p>
     <p>Je n'ai pas reçu vos instructions concernant le maintien ou non des titres cités ci-dessous dans le délai normal de paiement, qui est maintenant dépassé. Sans instructions, je ne procéderai à aucun renouvellement. Les renouvellements peuvent encore être payés moyennant une surtaxe incluses dans le tableau ci-dessous. Je vous remercie de me transmettre vos instructions accompagnées du règlement correspondant.</p>
 
     <!-- Email Body -->
-    <table class="inner-body" align="center" width="100%" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif;  background-color: #FFFFFF; margin: 0 auto; padding: 0; -premailer-cellpadding: 0; -premailer-cellspacing: 0; -premailer-width: 570px; border:1px solid black; border-collapse: collapse;">
+    <table class="inner-body" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif;  background-color: #FFFFFF; margin: 0 auto; -premailer-cellpadding: 0; -premailer-cellspacing: 0; -premailer-width: 570px;">
         <!-- Body content -->
         <thead>
-            <tr style="border:1px solid black; border-collapse: collapse;">
+            <tr>
                 <th>Titre</th><th>Année</th><th>Échéance</th><th>Taxe et surtaxe</th><th>Honoraires</th><th>Taux TVA</th><th>Total HT (€)</th><th>Total TTC (€)</th>
             </tr>
         </thead>
@@ -43,19 +42,19 @@
             @foreach ($renewals as $ren)
             <tr>
                 <td style="width:40%">{!! $ren['desc'] !!}</td>
-                <td align="center">{{ $ren['annuity'] }}</td>
-                <td align="center">{{ $ren['due_date'] }}</td>
-                <td align="right">{{ $ren['cost'] }}</td>
-                <td align="right">{{ $ren['fee'] }}</td>
-                <td align="right">{{ $ren['tx_tva'] }}</td>
-                <td align="right">{{ $ren['total_ht']  }}</td>
-                <td align="right">{{ $ren['total']  }}</td>
+                <td style="text-align: center;">{{ $ren['annuity'] }}</td>
+                <td style="text-align: center;">{{ $ren['due_date'] }}</td>
+                <td style="text-align: right;">{{ $ren['cost'] }}</td>
+                <td style="text-align: right;">{{ $ren['fee'] }}</td>
+                <td style="text-align: right;">{{ $ren['tx_tva'] }}</td>
+                <td style="text-align: right;">{{ $ren['total_ht']  }}</td>
+                <td style="text-align: right;">{{ $ren['total']  }}</td>
             </tr>
             @endforeach
             <tr>
-                <td align="right" colspan="6">Total (HT/TTC) :</td>
-                <td align="right">{{ $total_ht }}</td>
-                <td align="right">{{ $total }}</td>
+                <td style="text-align: right;" colspan="6">Total (HT/TTC) :</td>
+                <td style="text-align: right;">{{ $total_ht }}</td>
+                <td style="text-align: right;">{{ $total }}</td>
             </tr>
         </tbody>
             
