@@ -118,26 +118,26 @@
   <div id="filterButtons" class="card-header bg-primary p-1">
     <form class="btn-toolbar" role="toolbar">
       <div class="btn-group-toggle mr-3" data-toggle="buttons">
-        <label class="btn btn-info {{ Request::get('Ctnr') ? 'active' : '' }}">
-          <input type="checkbox" id="showContainers" name="Ctnr"> Show Containers
+        <label id="showContainers" class="btn btn-info {{ Request::get('Ctnr') ? 'active' : '' }}">
+          <input type="checkbox" name="Ctnr"> Show Containers
         </label>
       </div>
       <div class="btn-group btn-group-toggle mr-3" data-toggle="buttons" id="actorStatus">
-        <label class="btn btn-info {{ Request::get('tab') == 1 ? '' : 'active' }}">
-          <input type="radio" id="showActors" name="tab" value="0"> Actor View
+        <label id="showActors" class="btn btn-info {{ Request::get('tab') == 1 ? '' : 'active' }}">
+          <input type="radio" name="tab" value="0"> Actor View
         </label>
-        <label class="btn btn-info {{ Request::get('tab') == 1 ? 'active' : '' }}">
-          <input type="radio" id="showStatus" name="tab" value="1"> Status View
+        <label id="showStatus" class="btn btn-info {{ Request::get('tab') == 1 ? 'active' : '' }}">
+          <input type="radio" name="tab" value="1"> Status View
         </label>
       </div>
       <div class="btn-group-toggle mr-3" id="mineAll" data-toggle="buttons">
-        <label class="btn btn-info {{ Request::get('responsible') ? 'active' : '' }}">
-          <input type="checkbox" id="showResponsible" name="responsible" value="{{ Auth::user ()->login }}"> Show Mine
+        <label id="showResponsible" class="btn btn-info {{ Request::get('responsible') ? 'active' : '' }}">
+          <input type="checkbox" name="responsible" value="{{ Auth::user ()->login }}"> Show Mine
         </label>
       </div>
       <div class="btn-group-toggle mr-3" data-toggle="buttons">
-        <label class="btn btn-info {{ Request::get('include_dead') ? 'active' : '' }}">
-          <input type="checkbox" id="includeDead" name="include_dead"> Include Dead
+        <label id="includeDead" class="btn btn-info {{ Request::get('include_dead') ? 'active' : '' }}">
+          <input type="checkbox" name="include_dead"> Include Dead
         </label>
       </div>
       <input type="hidden" id="sortkey" name="sortkey" value="{{ Request::get('sortkey') }}">
