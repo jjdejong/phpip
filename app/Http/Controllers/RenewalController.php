@@ -228,10 +228,10 @@ class RenewalController extends Controller
                         'created_at' => $date_now
                     ];
                     if (! is_null($from_grace)) {
-                        $log_line[] = ['$to_grace' => $from_grace];
+                        $log_line[] = ['from_grace' => $from_grace];
                     }
                     if (! is_null($to_grace)) {
-                        $log_line[] = ['$to_grace' => $to_grace];
+                        $log_line[] = ['to_grace' => $to_grace];
                     }
                     $data[] = $log_line;
                     $renewals[] = $renewal;
