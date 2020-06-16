@@ -192,6 +192,7 @@ class RenewalController extends Controller
                         $desc .= " délivré le ";
                     }
                     $desc .= Carbon::parse($ren->event_date)->isoFormat('LL');
+                    $desc .= "<BR>Votre référence : " . $ren->client_ref;
                     if ($ren->title != '') {
                         $desc .= "<BR>Sujet : " . $ren->title;
                     }

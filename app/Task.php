@@ -170,6 +170,7 @@ class Task extends Model
             'pa_cli.name AS client_name',
             'pa_cli.ren_discount AS discount',
             'pmal_cli.actor_id AS client_id',
+            'pmal_cli.actor_ref AS client_ref',
             'pa_cli.email AS email',
             DB::raw("IFNULL(task.assigned_to, matter.responsible) AS responsible"),
             'tit.value AS short_title',
@@ -228,7 +229,7 @@ class Task extends Model
         ->where('matter.dead', 0)
         ->groupBy('task.due_date')
         ->groupBy('task.id');
-        
+
         return $query;
     }
 }

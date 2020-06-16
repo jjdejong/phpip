@@ -34,13 +34,14 @@
         <!-- Body content -->
         <thead>
             <tr>
-                <th>Titre</th><th>Année</th><th>Échéance</th><th>Taxe</th><th>Honoraires</th><th>Taux TVA</th><th>Total HT (€)</th><th>Total TTC (€)</th>
+                <th>Titre</th><th>Juridiction</th><th>Année</th><th>Échéance</th><th>Taxe</th><th>Honoraires</th><th>Taux TVA</th><th>Total HT (€)</th><th>Total TTC (€)</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($renewals as $ren)
             <tr>
                 <td style="width:40%">{!! $ren['desc'] !!}</td>
+                <td style="text-align: center;">{{ $ren['country'] }}</td>
                 <td style="text-align: center;">{{ $ren['annuity'] }}</td>
                 <td style="text-align: center;">{{ $ren['due_date'] }}</td>
                 <td style="text-align: right;">{{ $ren['cost'] }}</td>
@@ -51,7 +52,7 @@
             </tr>
             @endforeach
             <tr>
-                <td style="text-align: right;" colspan="6">Total (HT/TTC)&nbsp;:</td>
+                <td style="text-align: right;" colspan="7">Total (HT/TTC)&nbsp;:</td>
                 <td style="text-align: right;">{{ $total_ht }}</td>
                 <td style="text-align: right;">{{ $total }}</td>
             </tr>

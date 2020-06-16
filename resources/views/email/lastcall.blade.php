@@ -33,14 +33,15 @@
     <table class="inner-body" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif;  background-color: #FFFFFF; margin: 0 auto; -premailer-cellpadding: 0; -premailer-cellspacing: 0; -premailer-width: 570px;">
         <!-- Body content -->
         <thead>
-            <tr style="border:1px solid black; border-collapse: collapse;">
-                <th>Titre</th><th>Année</th><th>Échéance</th><th>Taxe</th><th>Honoraires</th><th>Taux TVA</th><th>Total HT (€)</th><th>Total TTC (€)</th>
+            <tr>
+                <th>Titre</th><th>Juridiction</th><th>Année</th><th>Échéance</th><th>Taxe</th><th>Honoraires</th><th>Taux TVA</th><th>Total HT (€)</th><th>Total TTC (€)</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($renewals as $ren)
             <tr>
                 <td style="width:40%">{!! $ren['desc'] !!}</td>
+                <td style="text-align: center;">{{ $ren['country'] }}</td>
                 <td style="text-align: center;">{{ $ren['annuity'] }}</td>
                 <td style="text-align: center;">{{ $ren['due_date'] }}</td>
                 <td style="text-align: right;">{{ $ren['cost'] }}</td>
@@ -51,11 +52,11 @@
             </tr>
             @endforeach
             <tr>
-                <td style="text-align: right;" colspan="6">Total (HT/TTC) :&nbsp;</td>
+                <td style="text-align: right;" colspan="7">Total (HT/TTC)&nbsp;:&nbsp;</td>
                 <td style="text-align: right;">{{ $total_ht }}</td>
                 <td style="text-align: right;">{{ $total }}</td>
             </tr>
-        </tbody>  
+        </tbody>
     </table>
     <p>Offre valide jusqu'au {{ $validity_date}}.</p>
     <p>Sincères salutations,</p>
