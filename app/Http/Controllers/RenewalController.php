@@ -47,7 +47,7 @@ class RenewalController extends Controller
                             $renewals->where('caseref', 'LIKE', "$value%");
                             break;
                         case 'Qt':
-                            $renewals->where('detail', 'LIKE', "$value%");
+                            $renewals->where('task.detail', 'LIKE', "$value%");
                             break;
                         case 'Fromdate':
                             $renewals->where('due_date', '>=', "$value");
