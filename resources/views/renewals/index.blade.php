@@ -55,7 +55,12 @@
     });
 
     clearFilters.onclick = () => {
-        window.location.href = '/renewal'
+        for (key of url.searchParams.keys()) {
+            if ( (key != 'step') && (key != 'invoice_step') && (key != 'tab')) {
+                url.searchParams.delete(key);
+            }
+        }
+        window.location.href = url;
     };
 
     doneRenewals.addEventListener("click", function (b) {
