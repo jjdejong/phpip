@@ -40,7 +40,7 @@ class UpdateActorLang extends Migration
           'language' => 'fr',
           'category' => 'warncall',
           'format' => 'HTML',
-          'summary' => "Annuités - rappel urgent",
+          'summary' => "Annuités - avertissement",
           'subject' => "Prochaines taxes de maintien en vigueur de vos titres",
           'body' => "<p>Nous n'avons pas reçu vos instructions concernant le maintien ou non des titres cités ci-dessous dans le délai normal de paiement, qui est maintenant dépassé. Sans instructions, nous ne ne procéderons à aucun renouvellement. Les renouvellements peuvent encore être payés moyennant une surtaxe incluse dans le tableau ci-dessous. Nous vous remercions de nous transmettre vos instructions accompagnées du règlement correspondant.</p>",
           'creator' => 'system',
