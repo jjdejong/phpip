@@ -81,9 +81,14 @@
     @if (config('renewal.invoice.backend') == 'dolibarr')
     invoiceRenewals.addEventListener("click", function (b) {
             msgAction = "invoicing";
-            actionRenewals(b.target, msgAction, '/renewal/invoice')
+            actionRenewals(b.target, msgAction, '/renewal/invoice/1')
     });
     @endif
+
+    renewalsInvoiced.addEventListener("click", function (b) {
+            msgAction = "invoiced";
+            actionRenewals(b.target, msgAction, '/renewal/invoice/0')
+    });
 
     instructedRenewals.addEventListener("click", function (b) {
             msgAction = "for payment";
@@ -451,7 +456,7 @@
           <div class="col-2 table-warning">
           @else
           <div class="col-2">
-          @endif  
+          @endif
             {{ date_format(date_create($task->due_date), 'd/m/Y') }}
           </div>
           <div class="col-1 px-3">

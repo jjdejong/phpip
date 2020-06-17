@@ -318,7 +318,7 @@ class RenewalController extends Controller
         }
     }
 
-    public function invoice(Request $request)
+    public function invoice(Request $request, int $toinvoice)
     {
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
@@ -326,7 +326,7 @@ class RenewalController extends Controller
             return response()->json(['error' => "No renewal selected."]);
         }
         $num = 0;
-        if (config('renewal.invoice.backend') == "dolibarr") {
+        if (config('renewal.invoice.backend') == "dolibarr" && $toinvoice) {
             $resql = $query->orderBy('pa_cli.name', "ASC")->get();
             $previousClient = "ZZZZZZZZZZZZZZZZZZZZZZZZ";
             $firstPass = true;
