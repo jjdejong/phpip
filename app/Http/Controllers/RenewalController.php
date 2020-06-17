@@ -188,12 +188,12 @@ class RenewalController extends Controller
                     if ($ren->event_name == 'GRT' || $ren->event_name == 'PR') {
                         $desc .= " délivré le ";
                     }
-                    $desc .= Carbon::parse($ren->event_date)->isoFormat('LL');
+                    $desc .= Carbon::parse($ren->event_date)->isoFormat('L');
                     $desc .= "<BR>Votre référence : " . $ren->client_ref;
                     if ($ren->title != '') {
                         $desc .= "<BR>Sujet : " . $ren->title;
                     }
-                    $renewal['due_date'] = $due_date->isoFormat('LL');
+                    $renewal['due_date'] = $due_date->isoFormat('L');
                     $renewal['country'] = $ren->country_FR;
                     $renewal['desc'] = $desc;
                     // Détermine le taux de tva // TODO

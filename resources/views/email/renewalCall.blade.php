@@ -30,7 +30,7 @@
     <!-- Email Body -->
     <p>{{ $dest }}</p>
     <p>{!! $template->body !!}</p>
-    <table class="inner-body" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif;  background-color: #FFFFFF; margin: 0 auto; -premailer-cellpadding: 0; -premailer-cellspacing: 0; -premailer-width: 570px;">
+    <table class="inner-body" cellpadding="0" cellspacing="0">
         <!-- Body content -->
         <thead>
             <tr>
@@ -67,6 +67,7 @@
                 <td></td>
                 <td style="text-align: right;">{{ $total }}</td>
                 @endif
+                <td></td>
             </tr>
         </tbody>
     </table>
