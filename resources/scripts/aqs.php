@@ -143,7 +143,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 			continue; // Skip irrelevant date
 
 		// Identify annuity to update with AQS info
-		$q = "SELECT task.id, cost, task.notes, task.done_date, task.due_date FROM task, event
+		$q = "SELECT task.id, task.cost, task.fee, task.currency, task.notes, task.done_date, task.due_date FROM task, event
 		WHERE task.trigger_id = event.id
 		AND task.code = 'REN'
 		AND event.matter_id = '$AQSpatent->UID'
@@ -156,40 +156,48 @@ foreach ($xml->PATENT as $AQSpatent) {
 
 		if ($myRenewal['id']) { // The annuity event is present
 			$set = [];
-
 			if ($renewal->DUEDATE != $myRenewal['due_date']) {
 				$set[] = "due_date = '$renewal->DUEDATE'";
 			}
-			if ($renewal->ESTIMATED_COST && $renewal->ESTIMATED_COST != $myRenewal['cost'] && !$renewal->INVOICED_COST) {
-				$set[] = "cost = '$renewal->ESTIMATED_COST'";
-				$set[] = "currency = '$renewal->CURRENCY'";
-				$set[] = "notes = 'Estimated'";
+      if ($renewal->CURRENCY && $myRenewal['currency'] != $renewal->CURRENCY) {
+        $set[] = "currency = '$renewal->CURRENCY'";
+      }
+      $cost = $renewal->INVOICED_COST ?? $renewal->ESTIMATED_COST;
+			if ($cost && $cost != $myRenewal['cost']) {
+				$set[] = "cost = '$cost'";
+        if (!$renewal->INVOICED_COST) {
+          $set[] = "notes = 'Estimated'";
+        } else {
+          $set[] = "notes = 'Invoiced by AQS'";
+        }
 			}
-			if ($renewal->INVOICED_COST && $renewal->INVOICED_COST != $myRenewal['cost']) {
-				$set[] = "cost = '$renewal->INVOICED_COST'";
-				$set[] = "currency = '$renewal->CURRENCY'";
-				$set[] = "notes = 'Invoiced by AQS'";
-			}
+      if ($cost > 1000) {
+        $fee = round(145 + $aqs['aqs_fee'] + (($cost - $aqs['aqs_fee'])*0.15), 2);
+      } else {
+        $fee = round(145 + $aqs['aqs_fee'] + (0.2 - ((0.05/1000)*($cost - $aqs['aqs_fee'])))*($cost - $aqs['aqs_fee']), 2);
+      }
+      if ($fee != $myRenewal['fee']) {
+        $set[] = "fee = '$fee'";
+      }
 			if ($renewal->DATE_PAID && $renewal->DATE_PAID != $myRenewal['done_date']) {
 				$set[] = "done_date = '$renewal->DATE_PAID'";
 			}
 			if ($renewal->CANCELLED && $myRenewal['notes'] != 'Cancelled') { // Payment cancelled or unnecessary
 				$set[] = "notes = 'Cancelled'";
 			}
-
 			if ($set) {
-				$q = "UPDATE task SET " . implode(',', $set) . " updated_at = Now(), updater = 'AQS' WHERE id = '$myRenewal[id]'";
+				$q = "UPDATE task SET " . implode(', ', $set) . ", updated_at = Now(), updater = 'AQS' WHERE id = '$myRenewal[id]'";
 				$result = $db->query($q);
 				if (!$result) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 				}
-				echo "\r\nUpdated " . implode(',', $set) . " for annuity $renewal->YEAR in $AQSpatent->UID ($AQSpatent->REFCLI-$AQSpatent->COUNTRY)";
+				echo "\r\nUpdated " . implode(', ', $set) . " for annuity $renewal->YEAR in $AQSpatent->UID ($AQSpatent->REFCLI-$AQSpatent->COUNTRY)";
 				$updated++;
 			}
 		} else { // The annuity is not present, create it (same data as for update above), with due date from AQS (!= real due date)
 			$somethingupdated = '';
 			// First find the trigger event depending on the country
-			if (in_array($AQSpatent->COUNTRY, ["US","JP","KR","TW"])) {
+			if (in_array($AQSpatent->COUNTRY, ["US", "JP", "KR", "TW"])) {
 				$q = "SELECT id from event
 				WHERE matter_id = '$AQSpatent->UID'
 				AND code = 'GRT'";
@@ -208,16 +216,22 @@ foreach ($xml->PATENT as $AQSpatent) {
 				continue;
 			}
 			$trigger_id = $myRenewal['id'];
-		  	if ($renewal->INVOICED_COST && $renewal->DATE_PAID) { // Cost provided - insert with costs
-				$q = "INSERT INTO task (code, detail, done_date, due_date, currency, cost, notes, trigger_id, created_at, creator, updated_at)
-				VALUES ('REN', '$renewal->YEAR', '$renewal->DATE_PAID', '$renewal->DUEDATE', '$renewal->CURRENCY', '$renewal->INVOICED_COST', 'Invoiced by AQS', '$trigger_id', Now(), 'AQS', Now())";
+      $cost = $renewal->INVOICED_COST ?? $renewal->ESTIMATED_COST;
+      if ($cost > 1000) {
+        $fee = 145 + $aqs['aqs_fee'] + (($cost - $aqs['aqs_fee'])*0.15);
+      } else {
+        $fee = 145 + $aqs['aqs_fee'] + (0.2 - ((0.05/1000)*($cost - $aqs['aqs_fee'])))*($cost - $aqs['aqs_fee']);
+      }
+		  if ($renewal->INVOICED_COST && $renewal->DATE_PAID) { // Cost provided - insert with costs
+				$q = "INSERT INTO task (code, detail, done_date, due_date, currency, cost, fee, notes, trigger_id, created_at, creator, updated_at)
+				VALUES ('REN', ''$renewal->YEAR', '$renewal->DATE_PAID', '$renewal->DUEDATE', '$renewal->CURRENCY', $cost, $fee, 'Invoiced by AQS', $trigger_id, Now(), 'AQS', Now())";
 				$result = $db->query($q);
 				if (!$result) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 				} else $somethingupdated = "invoiced cost $renewal->INVOICED_COST";
 			} elseif ($renewal->ESTIMATED_COST && !$renewal->DATE_PAID) { // Estimate provided
-				$q = "INSERT INTO task (code, detail, due_date, cost, notes, trigger_id, created_at, creator, updated_at)
-				VALUES ('REN', '$renewal->YEAR', '$renewal->DUEDATE', '$renewal->ESTIMATED_COST', 'Estimated', '$trigger_id', Now(), 'AQS', Now())";
+				$q = "INSERT INTO task (code, detail, due_date, cost, fee, notes, trigger_id, created_at, creator, updated_at)
+				VALUES ('REN', '$renewal->YEAR', '$renewal->DUEDATE', $cost, $fee, 'Estimated', '$trigger_id', Now(), 'AQS', Now())";
 				$result = $db->query($q);
 				if (!$result) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
@@ -230,8 +244,8 @@ foreach ($xml->PATENT as $AQSpatent) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 				} else $somethingupdated = "paid on $renewal->DATE_PAID but not invoiced";
 			} elseif ($renewal->INVOICED_COST && !$renewal->DATE_PAID) { // Invoiced but no payment date
-				$q = "INSERT INTO task (code, detail, due_date, currency, cost, notes, trigger_id, crated_at, creator, updated_at)
-				VALUES ('REN', '$renewal->YEAR', '$renewal->DUEDATE', '$renewal->CURRENCY', '$renewal->INVOICED_COST', 'Invoiced by AQS', '$trigger_id', Now(), 'AQS', Now())";
+				$q = "INSERT INTO task (code, detail, due_date, currency, cost, fee, notes, trigger_id, crated_at, creator, updated_at)
+				VALUES ('REN', '$renewal->YEAR', '$renewal->DUEDATE', '$renewal->CURRENCY', $cost, $fee, 'Invoiced by AQS', '$trigger_id', Now(), 'AQS', Now())";
 				$result = $db->query($q);
 				if (!$result) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
