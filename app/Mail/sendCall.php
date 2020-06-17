@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Builder;
 
 class sendCall extends Mailable
 {
@@ -38,8 +38,8 @@ class sendCall extends Mailable
         $this->dest = $dest;
         // Added to ask for receipt confirmation
         $this->callbacks[]=(function ($message) {
-            $message->getHeaders()->addTextHeader('X-Confirm-Reading-To', '<'.Auth::user()->email.'>');
-            $message->getHeaders()->addTextHeader('Return-receipt-to', '<'.Auth::user()->email.'>');
+            $message->getHeaders()->addTextHeader('X-Confirm-Reading-To', '<' . Auth::user()->email . '>');
+            $message->getHeaders()->addTextHeader('Return-receipt-to', '<' . Auth::user()->email . '>');
         });
     }
 
@@ -50,13 +50,20 @@ class sendCall extends Mailable
      */
     public function build()
     {
+        $templates = \App\TemplateMember::whereHas('class', function (Builder $q) {
+            $q->where('name', 'sys_renewals');
+        })->where('language', $this->renewals[0]->language ?? app()->getLocale());
         if ($this->step == 'first') {
-            return $this->view('email.firstcall');
-        } elseif ($this->step == 'last') {
-            return $this->view('email.lastcall');
-        } elseif ($this->step == 'warn') {
-            return $this->view('email.warncall');
+            $template = $templates->where('category', 'firstcall')->first();
         }
+        if ($this->step == 'last') {
+            $template = $templates->where('category', 'lastcall')->first();
+        }
+        if ($this->step == 'warn') {
+            $template = $templates->where('category', 'warncall')->first();
+        }
+        $this->subject .= $template->subject;
+        return $this->view('email.renewalCall', compact('template'));
     }
     
     public function via($notifiable)

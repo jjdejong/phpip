@@ -105,7 +105,7 @@ class RenewalController extends Controller
         if (is_numeric($rep)) {
             // Move the renewal task to step 2 : reminder
             Task::whereIn('id', $request->task_ids)->update(['step' => 2]);
-            return response()->json(['success' => 'Calls created for '.$rep.' renewals']);
+            return response()->json(['success' => 'Calls created for ' . $rep . ' renewals']);
         } else {
             return response()->json(['error' => $rep], 501);
         }
@@ -117,7 +117,7 @@ class RenewalController extends Controller
         $notify_type[1] = 'warn';
         $rep = $this->_call($request->task_ids, $notify_type, 1.0, true);
         if (is_numeric($rep)) {
-            return response()->json(['success' => 'Calls sent for '.$rep.' renewals']);
+            return response()->json(['success' => 'Calls sent for ' . $rep . ' renewals']);
         } else {
             return response()->json(['error' => $rep], 501);
         }
@@ -131,7 +131,7 @@ class RenewalController extends Controller
         if (is_numeric($rep)) {
             // Move the renewal task to grace_period 1
             Task::whereIn('id', $request->task_ids)->update(['grace_period' => 1]);
-            return response()->json(['success' => 'Calls sent for '.$rep.' renewals']);
+            return response()->json(['success' => 'Calls sent for ' . $rep . ' renewals']);
         } else {
             return response()->json(['error' => $rep], 501);
         }
@@ -155,7 +155,6 @@ class RenewalController extends Controller
             $from_grace =  ($notify_type[$grace] == 'last') ? 0 : null ;
             $to_grace =  ($notify_type[$grace] == 'last') ? 1 : null ;
             $resql = Task::renewals()->whereIn('task.id', $ids)->orderBy('pa_cli.name')->where('grace_period', $grace)->get();
-            //$prices = $this->prices($resql, $grace == 0 ? 0 : 2);
             $num = $resql->count();
             $sum = $sum + $num;
             if ($grace == 1 && $sum === 0) {
@@ -165,9 +164,7 @@ class RenewalController extends Controller
                 $i = 0;
                 $date_now = Carbon::now();
                 foreach ($resql as $ren) {
-                    //$ren = $resql[$i]->toArray();
                     $client = $ren->client_name;
-                    $email = $ren->email;
                     $due_date = Carbon::parse($ren->due_date);
                     if ($grace) {
                     //  Add six months as grace grace_period
@@ -250,7 +247,6 @@ class RenewalController extends Controller
                         }
                         $contacts = new MatterActors();
                         $contacts = $contacts->select('email', 'name', 'first_name')->where('matter_id', $ren->matter_id)->where('role_code', 'CNT')->get();
-                        $dest = "Bonjour, ";
                         $email_list = [];
                         if ($contacts->count() === 0) {
                             // No contact registered, using client email
@@ -267,9 +263,10 @@ class RenewalController extends Controller
                         }
                         if (config('renewal.general.mail_recipient') == 'client') {
                             $recipient = $email_list;
+                            $dest = $ren->language == 'en' ? 'Dear Sirs, ' : 'Bonjour, ';
                         } else {
                             $recipient = Auth::user();
-                            $dest .= implode(', ', array_column($email_list, 'email'));
+                            $dest = implode(', ', array_column($email_list, 'email'));
                         }
                         Mail::to($recipient)->cc(Auth::user())
                             ->send(new sendCall(
@@ -279,7 +276,7 @@ class RenewalController extends Controller
                                 $instruction_date,
                                 number_format($total, 2, ',', ' '),
                                 number_format($total_ht, 2, ',', ' '),
-                                ($reminder ? '[RAPPEL]' : '') . ' Appel pour le renouvellement de brevets',
+                                $reminder ? '[RAPPEL] ' : '',
                                 $dest
                             ));
                         $firstPass = true;
@@ -504,7 +501,7 @@ class RenewalController extends Controller
     {
         $data = json_decode($request->getContent());
         if (isset($data->task_ids)) {
-            $query = Task::renewals()->whereIn('id', $data->task_ids);
+            $query = Task::renewals()->whereIn('task.id', $data->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -915,39 +912,4 @@ class RenewalController extends Controller
         $logs = $logs->orderby('job_id')->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
         return view('renewals.logs', compact('logs'));
     }
-
-    /**
-    * Provide an array of 'id', 'fee' and 'cost' for each renewal in list
-    *
-    * @param  array  $ids
-    * @param  int  $level   // 0, 1 or 2 for standard, with urgency or within grace period
-    * @return array $prices
-    */
-
-    /*public function prices($renewals, $level)
-    {
-        $renewals = $renewals->get();
-        $prices=[];
-        $fee_factor = config('renewal.validity.fee_factor');
-        foreach ($renewals as $ren) {
-            switch ($level) {
-                case 0:
-                    // standard prices
-                    $prices[$ren['id']]['fee'] = ($ren['sme_status'] ? $ren['fee_reduced'] : $ren['fee']) * (1.0 - $ren['discount']);
-                    $prices[$ren['id']]['cost'] = ($ren['sme_status'] ? $ren['cost_reduced'] : $ren['cost']);
-                    break;
-                case 1:
-                    // standard prices
-                    $prices[$ren['id']]['fee'] = ($ren['sme_status'] ? $ren['fee_reduced'] : $ren['fee']) * $fee_factor * (1.0 - $ren['discount']);
-                    $prices[$ren['id']]['cost'] = ($ren['sme_status'] ? $ren['cost_reduced'] : $ren['cost']);
-                    break;
-                case 2:
-                    // prices in grace period
-                    $prices[$ren['id']]['fee'] = ($ren['sme_status'] ? $ren['fee_sup_reduced'] : $ren['fee_sup']) * (1.0 - $ren['discount']);
-                    $prices[$ren['id']]['cost'] = ($ren['sme_status'] ? $ren['cost_sup_reduced'] : $ren['cost_sup']);
-                    break;
-            }
-        }
-        return $prices;
-    }*/
 }

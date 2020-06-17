@@ -392,21 +392,21 @@
                         <div class="col-2">
                             <input type="text" class="form-control form-control-sm" name="Qt" value="{{ Request::get('Qt') }}">
                         </div>
-                        <div class="col-2">
-                            <input  class="text-center" name="grace_period" id="grace" type="checkbox" value = "1" title="In grace period">
+                        <div class="col-2 px-3">
+                            <input name="grace_period" id="grace" type="checkbox" value = "1" title="In grace period">
                         </div>
-                        <div class="col-2">
+                        <div class="col-6">
                         </div>
                     </div>
                 </div>
-                <div class="col-1">
+                <div class="col">
                     <input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">
                 </div>
-                <div class="col-1">
+                <div class="col">
                     <input type="date" class="form-control form-control-sm" name="Untildate" id="Untildate" title="Until selected date" value="{{ Request::get('Untildate') }}">
                 </div>
-                <div class="col-1">
-                    <input  class="text-center" name="selectAll" id="selectAll" type="checkbox" title="Select/unselect all">
+                <div class="col-1 px-3">
+                    <input name="selectAll" id="selectAll" type="checkbox" title="Select/unselect all">
                 </div>
             </div>
         </div>
@@ -447,18 +447,14 @@
           </div>
           @if ($task->due_date < date('Y-m-d'))
           <div class="col-2 table-danger">
-            {{ date_format(date_create($task->due_date), 'd/m/Y') }}
-          </div>
           @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
           <div class="col-2 table-warning">
-            {{ date_format(date_create($task->due_date), 'd/m/Y') }}
-          </div>
           @else
           <div class="col-2">
+          @endif  
             {{ date_format(date_create($task->due_date), 'd/m/Y') }}
           </div>
-          @endif
-          <div class="col-1">
+          <div class="col-1 px-3">
             <input id="{{ $task->id }}" class="clear-ren-task" type="checkbox">
           </div>
         </div>

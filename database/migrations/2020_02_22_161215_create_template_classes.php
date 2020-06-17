@@ -23,6 +23,7 @@ class CreateTemplateClasses extends Migration
           $table->string('creator',20);
           $table->string('updater',20);
     			$table->timestamps();
+          $table->unique('name');
         });
     }
 

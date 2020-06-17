@@ -4,7 +4,9 @@ return [
   "general" => [
     "paginate" => 30,
     // Set to "user" if emails should be sent to the connected user
-    "mail_recipient" => "client"
+    "mail_recipient" => "client",
+    // Set to 0 to exclude VAT values
+    "vat_column" => 1
   ],
   "validity" => [
     "instruct_before" => 30,

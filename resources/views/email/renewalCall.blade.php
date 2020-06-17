@@ -6,7 +6,7 @@
 </head>
 <body style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; background-color: #f5f8fa; color: #74787E; height: 100%; hyphens: auto; line-height: 1.4; margin: 0; -moz-hyphens: auto; -ms-word-break: break-all; width: 100% !important; -webkit-hyphens: auto; -webkit-text-size-adjust: none; word-break: break-word;">
     <style>
-        @media  only screen and (max-width: 600px) {
+        @media only screen and (max-width: 600px) {
             .inner-body {
                 width: 100% !important;
             }
@@ -14,7 +14,7 @@
                 width: 100% !important;
             }
         }
-        @media  only screen and (max-width: 500px) {
+        @media only screen and (max-width: 500px) {
             .button {
                 width: 100% !important;
             }
@@ -29,12 +29,18 @@
     </style>
     <!-- Email Body -->
     <p>{{ $dest }}</p>
-    <p>Je n'ai pas encore reçu vos instructions concernant le maintien ou non des titres cités ci-dessous. Sans instructions, je ne procéderai à aucun renouvellement. Passé la date d'échéance, les renouvellements pourront encore être payés moyennant une surtaxe. Je vous remercie de me transmettre EN RETOUR vos instructions accompagnées du règlement correspondant.</p>
+    <p>{!! $template->body !!}</p>
     <table class="inner-body" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif;  background-color: #FFFFFF; margin: 0 auto; -premailer-cellpadding: 0; -premailer-cellspacing: 0; -premailer-width: 570px;">
         <!-- Body content -->
         <thead>
             <tr>
-                <th>Titre</th><th>Juridiction</th><th>Année</th><th>Échéance</th><th>Taxe</th><th>Honoraires</th><th>Taux TVA</th><th>Total HT (€)</th><th>Total TTC (€)</th>
+                <th>Titre</th><th>Juridiction</th><th>Année</th><th>Échéance</th><th>Taxe</th><th>Honoraires</th>
+                <th>Total HT (€)</th>
+                @if (config('renewal.general.vat_column'))
+                <th>Taux TVA</th>
+                <th>Total TTC (€)</th>
+                @endif
+                <th>Décision</th>
             </tr>
         </thead>
         <tbody>
@@ -46,15 +52,21 @@
                 <td style="text-align: center;">{{ $ren['due_date'] }}</td>
                 <td style="text-align: right;">{{ $ren['cost'] }}</td>
                 <td style="text-align: right;">{{ $ren['fee'] }}</td>
-                <td style="text-align: right;">{{ $ren['tx_tva'] }}</td>
                 <td style="text-align: right;">{{ $ren['total_ht']  }}</td>
+                @if (config('renewal.general.vat_column'))
+                <td style="text-align: right;">{{ $ren['tx_tva'] }}</td>
                 <td style="text-align: right;">{{ $ren['total']  }}</td>
+                @endif
+                <td style="text-align: center;"></td>
             </tr>
             @endforeach
             <tr>
-                <td style="text-align: right;" colspan="7">Total (HT/TTC)&nbsp;:&nbsp;</td>
+                <td style="text-align: right;" colspan="6">Total&nbsp;:</td>
                 <td style="text-align: right;">{{ $total_ht }}</td>
+                @if (config('renewal.general.vat_column'))
+                <td></td>
                 <td style="text-align: right;">{{ $total }}</td>
+                @endif
             </tr>
         </tbody>
     </table>

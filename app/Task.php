@@ -172,6 +172,7 @@ class Task extends Model
             'pmal_cli.actor_id AS client_id',
             'pmal_cli.actor_ref AS client_ref',
             'pa_cli.email AS email',
+            'pa_cli.language AS language',
             DB::raw("IFNULL(task.assigned_to, matter.responsible) AS responsible"),
             'tit.value AS short_title',
             'titof.value AS title',

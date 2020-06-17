@@ -142,7 +142,7 @@ class ImplementGenericRenewals extends Migration {
 		DB::table('country')->where('iso', 'YE')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
 		DB::table('country')->where('iso', 'ZA')->update(['renewal_first' => 4, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
 
-		// tr_task rule for handling renewals from the country tanle above
+		// tr_task rule for handling renewals from the country table above
 		DB::table('task_rules')->insertOrIgnore([
 			['task' => 'REN', 'trigger_event' => 'FIL', 'for_category' => 'PAT', 'recurring' => 1, 'years' => 19, 'creator' => 'script', 'created_at' => Now(), 'updated_at' => Now(),
 			'detail' => 'Recurring', 'notes' => 'Uses the country table information by setting "recurring = 1"'],
@@ -725,7 +725,7 @@ END proc");
 		{
 			$table->boolean('uqtrigger')->default(0)->comment('Can only be triggered by one event');
 		});
-		
+
 		DB::unprepared('DROP PROCEDURE IF EXISTS `insert_recurring_renewals`');
 	}
 }
