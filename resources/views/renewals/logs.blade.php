@@ -2,7 +2,7 @@
 
 @section('content')
 <legend class="text-light">
-  Renewals logs
+  Renewal logs
 </legend>
 <div class="row">
   <div class="col">
@@ -14,8 +14,10 @@
             <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="Client" placeholder="Client" value="{{ old('Client') }}"></th>
             <th><input class="filter-input form-control form-control-sm" data-source="/logs" value="{{ old('Job') }}" name="Job" placeholder="Job" /></th>
             <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="User" placeholder="User" value="{{ old('User') }}"></th>
-            <th><input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">
-                    <input type="date" class="form-control form-control-sm" name="Untildate" id="Untildate" title="Until selected date" value="{{ Request::get('Untildate') }}">
+            <th>
+              <input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">
+              <input type="date" class="form-control form-control-sm" name="Untildate" id="Untildate" title="Until selected date" value="{{ Request::get('Untildate') }}">
+            </th>
             <th>Qt</th>
             <th>Steps</th>
             <th>Grace</th>
@@ -30,7 +32,7 @@
                   {{ $log->task->matter->uid }}
                 </a>
             </td>
-            <td>{{ $log->task->matter->client[0]['display_name'] }}</td>
+            <td>{{ $log->task->matter->client->name }}</td>
             <td>{{ $log->job_id }}</td>
             <td>{{ $log->creatorInfo->name }}</td>
             <td>{{ $log->created_at }}</td>
