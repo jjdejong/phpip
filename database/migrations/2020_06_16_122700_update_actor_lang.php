@@ -51,7 +51,7 @@ class UpdateActorLang extends Migration
           'language' => 'fr',
           'category' => 'lastcall',
           'format' => 'HTML',
-          'summary' => "Annuités - dernir rappel",
+          'summary' => "Annuités - dernier rappel",
           'subject' => "[DERNIER RAPPEL] Prochaines taxes de maintien en vigueur de vos titres",
           'body' => "<p>Nous n'avons pas encore reçu vos instructions concernant le maintien ou non des titres cités ci-dessous. Sans instructions, nous ne procéderons à aucun renouvellement. Passée la date d'échéance, les renouvellements pourront encore être payés moyennant une surtaxe. Je vous remercie de me transmettre EN RETOUR vos instructions accompagnées du règlement correspondant.</p>",
           'creator' => 'system',

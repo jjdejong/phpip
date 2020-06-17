@@ -533,11 +533,10 @@ class Matter extends Model
                     $description[] = "Brevet " . $info['GrtNo'] . " déposé en " . $info['country_name_FR']
                     . " le " . $filed_date->locale('fr_FR')->isoFormat('LL') . " et délivré le "
                     . $granted_date->locale('fr_FR')->isoFormat('LL');
-                }
-                else {
-                    $line = "Demande de brevet n°" . $info['FilNo'] . " déposée en " . $info['country_name_FR'] . " le ".$filed_date->locale('fr_FR')->isoFormat('LL');
+                } else {
+                    $line = "Demande de brevet n°" . $info['FilNo'] . " déposée en " . $info['country_name_FR'] . " le " . $filed_date->locale('fr_FR')->isoFormat('LL');
                     if ($info['Published']) {
-                        $line .= " et publiée le " . $published_date->locale('fr_FR')->isoFormat('LL')." sous le n° ". $info['PubNo'];
+                        $line .= " et publiée le " . $published_date->locale('fr_FR')->isoFormat('LL') . " sous le n° " . $info['PubNo'];
                     }
                     $description[] = $line;
                 }
@@ -547,14 +546,14 @@ class Matter extends Model
             if ($info['Cat'] == 'TM') {
                 $line = "Marque n° " . $info['FilNo'] . " déposée en " . $info['country_name_FR'] . " le " . $filed_date->locale('fr_FR')->isoFormat('LL') ;
                 if ($info['Published']) {
-                    $line .= ", publiée le " . $published_date->locale('fr_FR')->isoFormat('LL') ." sous le n° ". $info['PubNo'];
+                    $line .= ", publiée le " . $published_date->locale('fr_FR')->isoFormat('LL') . " sous le n° " . $info['PubNo'];
                 }
                 if ($info['Granted']) {
                     $line .=  " et enregistrée le " . $granted_date->locale('fr_FR')->isoFormat('LL');
                 }
                 $description[] = $line;
                 $description[] = "Pour : " . $title ;
-                $description[] = "Au nom de : ". $info['Applicant'] ;
+                $description[] = "Au nom de : " . $info['Applicant'] ;
             }
         }
         if ($lang == "en") {

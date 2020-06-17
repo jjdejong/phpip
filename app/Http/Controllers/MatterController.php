@@ -391,17 +391,16 @@ class MatterController extends Controller
         $dname = urldecode($dname);
         $actorpivot1 = new ActorPivot();
         $actorpivot2 = new ActorPivot();
-        $actorpivot3 = new ActorPivot();
         $actor_model = new Actor();
         $matter = new Matter();
 
-        $actor_list = $actor_model->select(['id'])->where('display_name','like',$dname.'%')->get()->toArray();
+        $actor_list = $actor_model->select(['id'])->where('display_name', 'like', $dname . '%')->get()->toArray();
         $ma1 = $actorpivot1->select(['matter_id'])->whereIn('actor_id', $actor_list)->get()->toArray();
-        $ma2 = $actorpivot2->select(['matter_id'])->whereIn('actor_id', $actor_list)->where('shared',1)->get()->toArray();
-        $matter_list1 = $matter->select('id')->whereIn('parent_id',$ma2)->get()->toArray();
-        $matter_list2 = $matter->select('id')->whereIn('container_id',$ma2)->get()->toArray();
+        $ma2 = $actorpivot2->select(['matter_id'])->whereIn('actor_id', $actor_list)->where('shared', 1)->get()->toArray();
+        $matter_list1 = $matter->select('id')->whereIn('parent_id', $ma2)->get()->toArray();
+        $matter_list2 = $matter->select('id')->whereIn('container_id', $ma2)->get()->toArray();
         
-        $matter_actor = $matter->select(['id','caseref','suffix'])->whereIn('id',array_merge($ma1, $matter_list1, $matter_list2))->get();
+        $matter_actor = $matter->select(['id','caseref','suffix'])->whereIn('id', array_merge($ma1, $matter_list1, $matter_list2))->get();
         return $matter_actor;
     }
 }
