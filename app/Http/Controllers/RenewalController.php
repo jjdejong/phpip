@@ -233,10 +233,10 @@ class RenewalController extends Controller
                     $data[] = $log_line;
                     $renewals[] = $renewal;
                     if ($i < $num) {
-                        $client = $ren->client_name;
+                        $client = $resql[$i]->client_name;
                     }
                     if ($client != $previousClient || $i == $num) {
-                        // Send mail
+                        // Send mail because the current renewal is the last for the client or of the list
                         // TODO  Parameter the delays. No date earlier as today.
                         if ($notify_type == 'last') {
                             $validity_date = $earlier->subDays(config('renewal.validity.before_last'))->isoFormat('LL');
