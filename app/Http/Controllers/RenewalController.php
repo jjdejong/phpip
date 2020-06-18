@@ -421,7 +421,7 @@ class RenewalController extends Controller
                         $previousClient = $client;
                         $i++;
                         if ($i < $num) {
-                            $client = $ren->client_name;
+                            $client = $resql[$i]->client_name;
                         }
                         if ($client != $previousClient || $i == $num) {
                             // Create propale
