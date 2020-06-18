@@ -162,7 +162,7 @@ foreach ($xml->PATENT as $AQSpatent) {
       if ($renewal->CURRENCY && $myRenewal['currency'] != $renewal->CURRENCY) {
         $set[] = "currency = '$renewal->CURRENCY'";
       }
-      $cost = $renewal->INVOICED_COST ?? $renewal->ESTIMATED_COST;
+      $cost = ($renewal->INVOICED_COST ?? $renewal->ESTIMATED_COST) - $aqs['aqs_fee'];
 			if ($cost && $cost != $myRenewal['cost']) {
 				$set[] = "cost = '$cost'";
         if (!$renewal->INVOICED_COST) {
@@ -171,10 +171,10 @@ foreach ($xml->PATENT as $AQSpatent) {
           $set[] = "notes = 'Invoiced by AQS'";
         }
 			}
-      if ($cost > 1000) {
-        $fee = round(145 + $aqs['aqs_fee'] + (($cost - $aqs['aqs_fee'])*0.15), 2);
+      if ($cost > 1000 - $aqs['aqs_fee']) {
+        $fee = round(145 + 0.15*$cost), 2);
       } else {
-        $fee = round(145 + $aqs['aqs_fee'] + (0.2 - ((0.05/1000)*($cost - $aqs['aqs_fee'])))*($cost - $aqs['aqs_fee']), 2);
+        $fee = round(145 + (0.2 - ((0.05/1000)*$cost))*$cost, 2);
       }
       if ($fee != $myRenewal['fee']) {
         $set[] = "fee = '$fee'";
@@ -216,11 +216,11 @@ foreach ($xml->PATENT as $AQSpatent) {
 				continue;
 			}
 			$trigger_id = $myRenewal['id'];
-      $cost = $renewal->INVOICED_COST ?? $renewal->ESTIMATED_COST;
-      if ($cost > 1000) {
-        $fee = 145 + $aqs['aqs_fee'] + (($cost - $aqs['aqs_fee'])*0.15);
+      $cost = ($renewal->INVOICED_COST ?? $renewal->ESTIMATED_COST) - $aqs['aqs_fee'];
+      if ($cost > 1000 - $aqs['aqs_fee']) {
+        $fee = round(145 + 0.15*$cost), 2);
       } else {
-        $fee = 145 + $aqs['aqs_fee'] + (0.2 - ((0.05/1000)*($cost - $aqs['aqs_fee'])))*($cost - $aqs['aqs_fee']);
+        $fee = round(145 + (0.2 - ((0.05/1000)*$cost))*$cost, 2);
       }
 		  if ($renewal->INVOICED_COST && $renewal->DATE_PAID) { // Cost provided - insert with costs
 				$q = "INSERT INTO task (code, detail, done_date, due_date, currency, cost, fee, notes, trigger_id, created_at, creator, updated_at)

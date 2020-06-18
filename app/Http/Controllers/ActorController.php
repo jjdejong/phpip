@@ -98,7 +98,8 @@ class ActorController extends Controller
     public function update(Request $request, Actor $actor)
     {
         $request->validate([
-            'email' => 'email|nullable'
+            'email' => 'email|nullable',
+            'ren_discount' => 'numeric|min:0|max:1'
         ]);
         $request->merge([ 'updater' => Auth::user()->login ]);
         $actor->update($request->except(['_token', '_method']));

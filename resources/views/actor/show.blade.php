@@ -100,6 +100,10 @@
           <td><input type="text" class="noformat form-control" name="default_role" data-ac="/role/autocomplete" value="{{ empty($actorInfo->droleInfo) ? '' : $actorInfo->droleInfo->name }}" {{ $actorInfo->login ? 'disabled' : 'autocomplete=off' }} placeholder="-"></td>
         </tr>
         <tr>
+          <th><label title="{{ $actorComments['ren_discount'] }}">Discount for renewals</label></th>
+          <td><input type="text" class="noformat form-control" name="ren_discount" value="{{ $actorInfo->ren_discount ? $actorInfo->ren_discount : '' }}" placeholder="0.00 to 1.00"></td>
+        </tr>
+        <tr>
           <th><label title="{{ $actorComments['warn'] }}">Warn</label></th>
           <td><input type="checkbox" class="noformat" name="warn" {{ $actorInfo->warn ? 'checked' : '' }}></td>
         </tr>
