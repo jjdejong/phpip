@@ -138,12 +138,12 @@ class Task extends Model
     public static function renewals()
     {
         $query = Matter::select(
-            'task.id AS id',
-            'task.detail AS detail',
-            'task.due_date AS due_date',
-            'task.done AS done',
-            'task.done_date AS done_date',
-            'event.matter_id AS matter_id',
+            'task.id',
+            'task.detail',
+            'task.due_date',
+            'task.done',
+            'task.done_date',
+            'event.matter_id',
             DB::raw('IFNULL(fees.cost, task.cost) AS cost'),
             DB::raw('IFNULL(fees.fee, task.fee) AS fee'),
             DB::raw('IFNULL(fees.cost_reduced, IFNULL(fees.cost, task.cost)) AS cost_reduced'),
@@ -152,34 +152,38 @@ class Task extends Model
             DB::raw('IFNULL(fees.fee_sup, IFNULL(fees.fee, task.fee)) AS fee_sup'),
             DB::raw('IFNULL(fees.cost_sup_reduced, IFNULL(fees.cost, task.cost)) AS cost_sup_reduced'),
             DB::raw('IFNULL(fees.fee_sup_reduced, IFNULL(fees.fee, task.fee)) AS fee_sup_reduced'),
-            'task.trigger_id AS trigger_id',
+            'task.trigger_id',
             'matter.category_code AS category',
-            'matter.caseref AS caseref',
-            'matter.suffix AS suffix',
-            'matter.uid AS uid',
-            'matter.country AS country',
+            'matter.caseref',
+            'matter.uid',
+            'matter.country',
             'mcountry.name_FR AS country_FR',
-            'matter.origin AS origin',
-            'matter.type_code AS type_code',
-            'matter.idx AS idx',
+            'mcountry.name AS country_EN',
+            'mcountry.name_DE AS country_DE',
+            'matter.origin',
             DB::raw("MIN(pa_app.small_entity) = 1 AS sme_status"),
+            'fil.event_date AS fil_date',
+            'fil.detail AS fil_num',
+            'grt.event_date AS grt_date',
             'event.code AS event_name',
-            'event.event_date AS event_date',
+            'event.event_date',
             'event.detail AS number',
             DB::raw("GROUP_CONCAT(DISTINCT pa_app.name SEPARATOR ', ') AS applicant_name"),
             'pa_cli.name AS client_name',
+            'pa_cli.address AS client_address',
+            'pa_cli.country AS client_country',
             'pa_cli.ren_discount AS discount',
             'pmal_cli.actor_id AS client_id',
             'pmal_cli.actor_ref AS client_ref',
-            'pa_cli.email AS email',
-            'pa_cli.language AS language',
-            DB::raw("IFNULL(task.assigned_to, matter.responsible) AS responsible"),
+            'pa_cli.email',
+            'pa_cli.language',
+            'matter.responsible',
             'tit.value AS short_title',
             'titof.value AS title',
-            'ev.detail AS pub_num',
-            'task.step AS step',
-            'task.grace_period AS grace_period',
-            'task.invoice_step AS invoice_step'
+            'pub.detail AS pub_num',
+            'task.step',
+            'task.grace_period',
+            'task.invoice_step'
         )
         ->leftJoin(
             DB::raw('matter_actor_lnk pmal_app
@@ -200,10 +204,24 @@ class Task extends Model
         ->leftJoin('country as mcountry', 'mcountry.iso', 'matter.country')
         ->join('event', 'matter.id', 'event.matter_id')
         ->leftJoin(
-            'event AS ev',
+            'event AS fil',
             function ($join) {
-                $join->on('matter.id', 'ev.matter_id')
-                ->where('ev.code', 'PUB');
+                $join->on('matter.id', 'fil.matter_id')
+                ->where('fil.code', 'FIL');
+            }
+        )
+        ->leftJoin(
+            'event AS pub',
+            function ($join) {
+                $join->on('matter.id', 'pub.matter_id')
+                ->where('pub.code', 'PUB');
+            }
+        )
+        ->leftJoin(
+            'event AS grt',
+            function ($join) {
+                $join->on('matter.id', 'grt.matter_id')
+                ->where('grt.code', 'GRT');
             }
         )
         ->join('task', 'task.trigger_id', 'event.id')

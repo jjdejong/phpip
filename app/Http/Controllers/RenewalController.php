@@ -86,12 +86,8 @@ class RenewalController extends Controller
         if (! ($with_step || $with_invoice)) {
             $renewals->where('done', 0);
         }
-        //Log::debug("T2: " . strval(microtime(true)-$start));
-        //$prices = $this->prices($renewals, 0);
-        //Log::debug("T3: " . strval(microtime(true)-$start));
         $renewals = $renewals->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
         $renewals->appends($request->input())->links(); // Keep URL parameters in the paginator links
-        //Log::debug("T4: " . strval(microtime(true)-$start));
         return view('renewals.index', compact('renewals', 'step', 'invoice_step', 'tab'));
     }
 
@@ -137,7 +133,7 @@ class RenewalController extends Controller
         }
     }
 
-    function _call($ids, $notify_type, $fee_factor, $reminder)
+    private function _call($ids, $notify_type, $fee_factor, $reminder)
     {
         // TODO Manage languages of the calls
         // TODO Check first that each client has email
@@ -395,7 +391,7 @@ class RenewalController extends Controller
                         } else {
                             $desc .= "\nHonoraires et taxe";
                         }
-                        $newlignes[] = [
+                        $newlines[] = [
                             "desc" => $desc,
                             "product_type" => 1,
                             "tva_tx" => ($tx_tva * 100),
@@ -407,7 +403,7 @@ class RenewalController extends Controller
                         ];
                         if ($cost != 0) {
                             // Ajout d'une deuxième ligne
-                            $newlignes[] = [
+                            $newlines[] = [
                                 "product_type" => 1,
                                 "desc" => "Taxe",
                                 "tva_tx" => 0.0,
@@ -430,26 +426,52 @@ class RenewalController extends Controller
                                 "date" => time(),
                                 "cond_reglement_id" => 1,
                                 "mode_reglement_id" => 2,
-                                "lines" => $newlignes,
+                                "lines" => $newlines,
                                 "fk_account" => config('renewal.api.fk_account')
                             ];
                             $rc = $this->create_invoice($newprop, $apikey); // invoice creation
                             if ($rc[0] != 0) {
                                 return response()->json(['error' => $rc[1] ]);
                             }
-                            $newlignes = [] ;
+                            $newlines = [] ;
                             $firstPass = true;
                         }
                     }
                 }
             }
         }
-        // Move the renewal task to step  : invoiced
+        // Move the renewal task to step: invoiced
         Task::whereIn('id', $request->task_ids)->update(['invoice_step' => 2]);
         return response()->json(['success' => 'Invoices created for ' . $num . ' renewals']);
     }
 
-    function _client($client, $apikey)
+    public function export(Request $request)
+    {
+        // if (isset($request->task_ids)) {
+        //     $export = Task::renewals()->whereIn('task.id', $request->task_ids)
+        //     ->orderBy('pmal_cli.actor_id')->get()->toArray();
+        // } else {
+            $export = Task::renewals()->where('invoice_step', 1)
+            ->orderBy('pmal_cli.actor_id')->get()->toArray();
+        // }
+        $captions = config('renewal.invoice.captions');
+        $export_csv = fopen('php://memory', 'w');
+        fputcsv($export_csv, $captions, ';');
+        foreach ($export as $row) {
+            fputcsv($export_csv, array_map("utf8_decode", $row), ';');
+        }
+        rewind($export_csv);
+        $filename = Now()->isoFormat('YMMDDHHmmss') . '_invoicing.csv';
+        return response()->stream(
+            function () use ($export_csv) {
+                fpassthru($export_csv);
+            },
+            200,
+            [ 'Content-Type' => 'application/csv', 'Content-disposition' => 'attachment; filename=' . $filename ]
+        );
+    }
+
+    private function _client($client, $apikey)
     {
         // serach for client correspondance in Dolibarr
         $curl = curl_init();
@@ -481,7 +503,7 @@ class RenewalController extends Controller
         $result = curl_exec($curl);
         $status = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
         curl_close($curl);
-        $result =json_decode($result, true);
+        $result = json_decode($result, true);
 
         if (isset($result["error"])) {
             // "Error creating the invoice.\n";

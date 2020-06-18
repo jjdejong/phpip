@@ -285,8 +285,7 @@ class MatterController extends Controller
             'tab'
         ]);
 
-        $matter = new Matter();
-        $export = $matter->filter($request->input('sortkey', 'caseref'), $request->input('sortdir', 'asc'), $filters, $request->display_with, false)->toArray();
+        $export = Matter::filter($request->input('sortkey', 'caseref'), $request->input('sortdir', 'asc'), $filters, $request->display_with, false)->toArray();
 
         $captions = [
             'Our Ref',

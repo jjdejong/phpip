@@ -57,6 +57,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('renewal/closing', 'RenewalController@closing');
     Route::post('renewal/abandon', 'RenewalController@abandon');
     Route::post('renewal/lapsing', 'RenewalController@lapsing');
+    Route::get('renewal/export', 'RenewalController@export');
     Route::get('logs', 'RenewalController@logs');
 
     Route::post('document/mailto/{member}', 'DocumentController@mailto');

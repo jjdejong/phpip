@@ -22,7 +22,7 @@
     }
   }, 500));
 
-  selectAll.addEventListener('change', e => {
+  selectAll.onchange = e => {
     if (e.target.checked) {
         // Check all checkboxes
         newValue = true;
@@ -30,11 +30,11 @@
         // Uncheck all checkboxes
         newValue = false;
     }
-    var boxes=document.getElementsByClassName('clear-ren-task');
-    for (i = 0; i < boxes.length; i++) {
-        boxes[i].checked = newValue;
+    var boxes = document.getElementsByClassName('clear-ren-task');
+    for (box of boxes) {
+        box.checked = newValue;
     }
-  });
+  };
 
     // Load list according to corresponding tab
     tabsGroup.addEventListener("click", function (e) {
@@ -84,6 +84,18 @@
             actionRenewals(b.target, msgAction, '/renewal/invoice/1')
     });
     @endif
+
+    renewalsExport.onclick = e => {
+        // var tids = getSelected();
+        // if (tids.length === 0) {
+        //     alert("No renewals selected");
+        //     return;
+        // } 
+        // var task_ids = encodeURIComponent(JSON.stringify(tids));
+        let exportUrl = '/renewal/export';
+        e.preventDefault(); //stop the browser from following
+        window.location.href = exportUrl;
+    };
 
     renewalsInvoiced.addEventListener("click", function (b) {
             msgAction = "invoiced";
@@ -138,7 +150,6 @@
     async function actionRenewals(button, msgAction, action_url) {
         // Active spinner
         button.insertAdjacentHTML('afterbegin', '<i class="spinner-border spinner-border-sm" role="status" />');
-        //
         var tids = getSelected();
         if (tids.length === 0) {
             var end = document.getElementById('Untildate').value;
@@ -156,7 +167,7 @@
         context_url = new URL(window.location.href);
         await submitUpdate(string, action_url).catch(err => alert(err));
         window.history.pushState('', 'phpIP', context_url);
-        reloadPart(context_url,'renewalList');
+        reloadPart(context_url, 'renewalList');
         // withdraw spinner
         button.removeChild(document.getElementsByClassName('spinner-border')[0]);
     }
@@ -189,6 +200,11 @@
             alert("No renewals selected for order!");
             return;
         }
+        /*let exportUrl = '/renewal/order';
+        var string = JSON.stringify({task_ids: tids, clear: false});
+        e.preventDefault(); //stop the browser from following
+        window.location.href = exportUrl;*/
+
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/renewal/order', true);
         xhr.responseType = 'arraybuffer';
@@ -249,10 +265,10 @@
     function getSelected() {
         var tids = new Array();
         var boxes = document.getElementsByClassName('clear-ren-task');
-        for (i = 0; i < boxes.length; i++) {
-            if (boxes[i].checked) {
-                tids.push(boxes[i].getAttribute('id'));
-                }
+        for (box of boxes) {
+            if (box.checked) {
+                tids.push(box.getAttribute('id'));
+            }
         }
         return tids;
     };
@@ -276,7 +292,7 @@
                     <button id="clearFilters" type="button" class="btn btn-primary">&larrpl; Clear filters</button>
                 </div>
           </div>
-          <div class="col-12 mt-1">
+          <nav class="col-12 mt-1">
             <div class="nav nav-pills nav-fill" id="tabsGroup">
                 <a class="nav-item nav-link {{ ($tab === '#p1' || empty($tab) ) ? 'active' : '' }}" href="#p1" data-toggle="tab" step="0">First call</a>
                 <a class="nav-item nav-link {{ ($tab === '#p2' ) ? 'active' : '' }}" href="#p2" data-toggle="tab" step="2">Reminder</a>
@@ -289,7 +305,7 @@
                 <a class="nav-item nav-link {{ ($tab === '#p7' ) ? 'active' : '' }}" href="#p7" data-toggle="tab" invoice_step="1">Invoicing</a>
                 <a class="nav-item nav-link {{ ($tab === '#p8' ) ? 'active' : '' }}" href="#p8" data-toggle="tab" invoice_step="2">Invoiced</a>
             </div>
-          </div>
+          </nav>
           <div class="tab-content mt-1">
             <div class="tab-pane {{ ($tab === '#p1' || empty($tab) ) ? 'active' : '' }}" id="p1">
                 <div class="btn-group">
@@ -326,6 +342,7 @@
                     @if (config('renewal.invoice.backend') == 'dolibarr')
                     <button class="btn btn-outline-primary" type="button" id="invoiceRenewals">Generate invoice</button>
                     @endif
+                    <button class="btn btn-outline-primary" type="button" id="renewalsExport">Export all</button>
                     <button class="btn btn-outline-success" type="button" id="renewalsInvoiced">Invoiced</button>
                 </div>
             </div>
