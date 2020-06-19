@@ -17,7 +17,6 @@ class RenewalController extends Controller
     public function index(Request $request)
     {
      // Filters
-        //$start =  microtime(true);
         $MyRenewals = $request->input('my_renewals');
         $filters = $request->except([
             'my_renewals',
@@ -30,7 +29,6 @@ class RenewalController extends Controller
 
         // Get list of active renewals
         $renewals = Task::renewals();
-        //Log::debug("T1: " . strval(microtime(true)-$start));
         if ($MyRenewals) {
             $renewals->where('assigned_to', Auth::user()->login);
         }
@@ -168,7 +166,7 @@ class RenewalController extends Controller
                         $due_date = $due_date->addMonths(6);
                     }
                     if ($firstPass) {
-                        $firstPass=false;
+                        $firstPass = false;
                         $earlier = $due_date;
                         $renewals = [];
                         $total = 0;

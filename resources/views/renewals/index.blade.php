@@ -41,6 +41,7 @@
         url.searchParams.delete('step');
         url.searchParams.delete('invoice_step');
         url.searchParams.delete('tab');
+        url.searchParams.delete('page');
         if (e.target.hasAttribute('step')) {
             url.searchParams.set('step', e.target.getAttribute('step'));
         }
@@ -315,17 +316,17 @@
             </div>
             <div class="tab-pane {{ ($tab === '#p2') ? 'active' : '' }}" id="p2">
                 <div class="btn-group">
-                    <button class="btn btn-outline-primary" type="button" id="reminderRenewals">Send reminder email</button>
-                    <button class="btn btn-outline-primary" type="button" id="lastReminderRenewals" title="Send reminder and enter grace period">Send last reminder email</button>
-                    <button class="btn btn-outline-success" type="button" id="instructedRenewals" title="Instructions received to pay">Payment order received</button>
+                    <button class="btn btn-outline-info" type="button" id="reminderRenewals">Send reminder email</button>
+                    <button class="btn btn-outline-info" type="button" id="lastReminderRenewals" title="Send reminder and enter grace period">Send last reminder email</button>
+                    <button class="btn btn-outline-primary" type="button" id="instructedRenewals" title="Instructions received to pay">Payment order received</button>
                     <button class="btn btn-outline-primary" type="button" id="abandonRenewals" title="Abandon instructions received">Abandon</button>
                     <button class="btn btn-outline-primary" type="button" id="lapsedRenewals" title="Office lapse communication received">Lapsed</button>
                 </div>
             </div>
             <div class="tab-pane {{ ($tab === '#p3' ) ? 'active' : ''}}" id="p3">
                 <div class="btn-group">
-                    <button class="btn btn-outline-primary" type="button" id="xmlRenewals" title="Generate xml files for EP or FR">Download XML order to pay</button>
-                    <button class="btn btn-outline-success" type="button" id='doneRenewals'>Paid</button>
+                    <button class="btn btn-outline-info" type="button" id="xmlRenewals" title="Generate xml files for EP or FR">Download XML order to pay</button>
+                    <button class="btn btn-outline-primary" type="button" id='doneRenewals'>Paid</button>
                 </div>
             </div>
             <div class="tab-pane {{ ($tab === '#p4' ) ? 'active' : ''}}" id="p4">
@@ -342,8 +343,8 @@
                     @if (config('renewal.invoice.backend') == 'dolibarr')
                     <button class="btn btn-outline-primary" type="button" id="invoiceRenewals">Generate invoice</button>
                     @endif
-                    <button class="btn btn-outline-primary" type="button" id="renewalsExport">Export all</button>
-                    <button class="btn btn-outline-success" type="button" id="renewalsInvoiced">Invoiced</button>
+                    <button class="btn btn-outline-info" type="button" id="renewalsExport">Export all</button>
+                    <button class="btn btn-outline-primary" type="button" id="renewalsInvoiced">Invoiced</button>
                 </div>
             </div>
             <div class="tab-pane {{ ($tab === '#p8' ) ? 'active' : ''}}" id="p8">
