@@ -375,11 +375,9 @@ class RenewalController extends Controller
                             $fee = $ren->fee;
                             if (strtotime($ren->done_date) < $ren->due_date) {
                                 // late payment
-                                //$prices = $this->prices1([$ren['id']], 1);
                                 $cost = $ren->sme_status ? $ren->cost_reduced : $ren->cost;
                                 $fee = ($ren->sme_status ? $ren->fee_reduced : $ren->fee) * (1.0 - $ren->discount) * config('renewal.validity.fee_factor');
                             } else {
-                                //$prices = $this->prices2([$ren['id']], 2);
                                 $cost = $ren->sme_status ? $ren->cost_sup_reduced : $ren->cost_sup;
                                 $fee = ($ren->sme_status ? $ren->fee_sup_reduced : $ren->fee_sup) * (1.0 - $ren->discount);
                             }
@@ -453,12 +451,31 @@ class RenewalController extends Controller
         //     ->orderBy('pmal_cli.actor_id')->get()->toArray();
         // } else {
             $export = Task::renewals()->where('invoice_step', 1)
-            ->orderBy('pmal_cli.actor_id')->get()->toArray();
+            ->orderBy('pmal_cli.actor_id')->get();
         // }
+        $export->map(function ($ren) {
+            if ($ren->grace_period) {
+                $fee = $ren->fee;
+                if (strtotime($ren->done_date) < $ren->due_date) {
+                    // late payment
+                    $cost = $ren->sme_status ? $ren->cost_reduced : $ren->cost;
+                    $fee = ($ren->sme_status ? $ren->fee_reduced : $ren->fee) * (1.0 - $ren->discount) * config('renewal.validity.fee_factor');
+                } else {
+                    $cost = $ren->sme_status ? $ren->cost_sup_reduced : $ren->cost_sup;
+                    $fee = ($ren->sme_status ? $ren->fee_sup_reduced : $ren->fee_sup) * (1.0 - $ren->discount);
+                }
+            } else {
+                $cost = $ren->sme_status ? $ren->cost_reduced : $ren->cost;
+                $fee = ($ren->sme_status ? $ren->fee_reduced : $ren->fee) * (1.0 - $ren->discount);
+            }
+            $ren->cost_calc = $cost;
+            $ren->fee_calc = $fee;
+        });
         $captions = config('renewal.invoice.captions');
+        array_push($captions, 'cost_calc', 'fee_calc');
         $export_csv = fopen('php://memory', 'w');
         fputcsv($export_csv, $captions, ';');
-        foreach ($export as $row) {
+        foreach ($export->toArray() as $row) {
             fputcsv($export_csv, array_map("utf8_decode", $row), ';');
         }
         rewind($export_csv);
