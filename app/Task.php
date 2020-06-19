@@ -183,7 +183,8 @@ class Task extends Model
             'pub.detail AS pub_num',
             'task.step',
             'task.grace_period',
-            'task.invoice_step'
+            'task.invoice_step',
+            'matter.expire_date'
         )
         ->leftJoin(
             DB::raw('matter_actor_lnk pmal_app

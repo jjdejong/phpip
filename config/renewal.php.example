@@ -64,7 +64,8 @@ return [
       'pub_num',
       'task.step',
       'task.grace_period',
-      'task.invoice_step'
+      'task.invoice_step',
+      'expire_date'
     ],
   ],
   "api" => [
