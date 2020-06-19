@@ -84,6 +84,9 @@ class RenewalController extends Controller
         if (! ($with_step || $with_invoice)) {
             $renewals->where('done', 0);
         }
+        if ($step == 10 || $invoice_step == 2) {
+            $renewals->orderBy('due_date', 'DESC');
+        }
         $renewals = $renewals->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
         $renewals->appends($request->input())->links(); // Keep URL parameters in the paginator links
         return view('renewals.index', compact('renewals', 'step', 'invoice_step', 'tab'));
