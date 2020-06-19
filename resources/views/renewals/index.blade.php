@@ -467,14 +467,14 @@
                 </div>
             </div>
           </div>
-          @if ($task->due_date < date('Y-m-d'))
+          @if ($task->due_date < now() && !$task->done)
           <div class="col-2 table-danger">
-          @elseif ($task->due_date < date('Y-m-d', strtotime("+1 week")))
+          @elseif ($task->due_date < now()->addWeeks(1) && !$task->done)
           <div class="col-2 table-warning">
           @else
           <div class="col-2">
           @endif
-            {{ date_format(date_create($task->due_date), 'd/m/Y') }}
+            {{ Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}
           </div>
           <div class="col-1 px-3">
             <input id="{{ $task->id }}" class="clear-ren-task" type="checkbox">
