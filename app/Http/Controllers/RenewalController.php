@@ -368,6 +368,9 @@ class RenewalController extends Controller
                         if ($ren->title != '') {
                             $desc .= "\nSujet : " . $ren->title;
                         }
+                        if ($ren->client_ref != '') {
+                            $desc .= " ( " . $ren->client_ref .")";
+                        }
                         $desc .= "\nÉchéance le " . Carbon::parse($ren->due_date)->isoFormat('LL');
                     // Détermine le taux de tva
                         if ($soc_res['tva_intra'] == "" || substr($soc_res['tva_intra'], 2) == "FR") {
