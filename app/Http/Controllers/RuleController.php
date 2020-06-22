@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Rule;
-use App\RuleClassLnk;
 use Illuminate\Support\Facades\Auth;
 
 class RuleController extends Controller
@@ -74,8 +73,7 @@ class RuleController extends Controller
 
         $ruleComments = $rule->getTableComments('task_rules');
 
-        $links = RuleClassLnk::where('task_rule_id', $rule->id)->get();
-        return view('rule.show', compact('ruleInfo', 'ruleComments', 'links'));
+        return view('rule.show', compact('ruleInfo', 'ruleComments'));
     }
 
     /**
