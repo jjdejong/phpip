@@ -74,12 +74,12 @@ return [
     'fk_account' => 2
   ],
   "xml" => [
-    'header' => '<?xml version="1.0" encoding="UTF-8"?>
+    'body' => '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE batch-payment SYSTEM "batch-payment-v2-00.dtd" >
 <batch-payment dtd-version="" date-produced="" ro="">
   <header>
   	<sender>
-  		<name>NAME</name>
+  		<name>' . env('COMPANY_NAME', 'NAME') . '</name>
   		<registered-number></registered-number>
   	</sender>
   	<mode-of-payment payment-type="deposit">
@@ -90,15 +90,14 @@ return [
   	<send-date></send-date>
   	<payment-reference-id>TRANSACTION</payment-reference-id>
   </header>
-  <detail>',
-    'footer' => '
+  <detail>
   </detail>
   <trailer>
-  	<batch-pay-total-amount currency="">TOTAL</batch-pay-total-amount>
+  	<batch-pay-total-amount currency="EUR">TOTAL</batch-pay-total-amount>
   	<total-records>COUNT</total-records>
   </trailer>
 </batch-payment>',
-    'EP_deposit' => 'Your account',
-    'FR_deposit' => 'Your account',
+    'EP_deposit' => 'Your EP account',
+    'FR_deposit' => 'Your FR account',
   ],
 ];

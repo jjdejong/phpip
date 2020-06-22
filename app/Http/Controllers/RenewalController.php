@@ -784,9 +784,12 @@ class RenewalController extends Controller
 
         $clear = boolval($data->clear);
         $done_date = now()->isoFormat('L');
-        $xml = config('renewal.xml.header');
-        $xml = str_replace('NAME', Auth::user()->name, $xml);
-        $xml = str_replace('TRANSACTION', 'ANNUITY ' . $fmt->format(time()), $xml);
+        $xml = new \SimpleXMLElement(config('renewal.xml.body'));
+        if ($xml->header->sender->name == 'NAME') {
+            $xml->header->sender->name = Auth::user()->name;
+        }
+        //$xml = str_replace('TRANSACTION', 'ANNUITY ' . $fmt->format(time()), $xml);
+        $xml->header->{"payment-reference-id"} = 'ANNUITY ' . $fmt->format(time());
         $total = 0;
         $renewals = Task::renewals()->whereIn('task.id', $tids)->get();
         foreach ($renewals as $renewal) {
@@ -814,7 +817,22 @@ class RenewalController extends Controller
             } else {
                 $number = $renewal->number;
             }
-            $xml .= '
+            $xml->detail->addChild('fees');
+            $xml->detail->fees->attributes('procedure', $procedure);
+            $xml->detail->fees->addChild('document-id');
+            $xml->detail->fees->{"document-id"}->addChild('country', $country);
+            $xml->detail->fees->{"document-id"}->addChild('doc-number', $number);
+            $xml->detail->fees->{"document-id"}->addChild('date', $fmt->format(strtotime($renewal->event_date)));
+            $xml->detail->fees->{"document-id"}->addChild('kind', 'application');
+            $xml->detail->fees->addChild('file-reference-id', $renewal->uid);
+            $xml->detail->fees->addChild('owner', $renewal->applicant_name);
+            $xml->detail->fees->addChild('fee');
+            $xml->detail->fees->fee->addChild('type-of-fee', $fee_code);
+            $xml->detail->fees->fee->addChild('fee-sub-amount', $renewal->cost);
+            $xml->detail->fees->fee->addChild('fee-factor', '1');
+            $xml->detail->fees->fee->addChild('fee-total-amount', $renewal->cost);
+            $xml->detail->fees->fee->addChild('fee-date-due', $fmt->format(strtotime($renewal->event_date)));
+            /*$xml .= '
         <fees procedure="' . $procedure . '">
             <document-id>
                 <country>' . $country . '</country>
@@ -831,22 +849,31 @@ class RenewalController extends Controller
                 <fee-total-amount>' . $renewal->cost . '</fee-total-amount>
                 <fee-date-due>' . $renewal->due_date . '</fee-date-due>
             </fee>
-        </fees>';
+        </fees>';*/
         }
 
-        $footer = config('renewal.xml.footer');
+        //$header = config('renewal.xml.header');
         if ($procedure == 'EP') {
-            $footer = str_replace('DEPOSIT', config('renewal.xml.EP_deposit'), $footer);
+            //$header = str_replace('DEPOSIT', config('renewal.xml.EP_deposit'), $header);
+            $xml->header->{"mode-of-payment"}->{"deposit-account"}->{"account-no"} = config('renewal.xml.EP_deposit');
         }
         if ($procedure == 'FR') {
-            $footer = str_replace('DEPOSIT', config('renewal.xml.FR_deposit'), $footer);
+            //$header = str_replace('DEPOSIT', config('renewal.xml.FR_deposit'), $header);
+            $xml->header->{"mode-of-payment"}->{"deposit-account"}->{"account-no"} = config('renewal.xml.FR_deposit');
         }
-        $footer = str_replace('TOTAL', $total, $footer);
-        $footer = str_replace('COUNT', count($tids), $footer);
-        $xml .= $footer;
-        $fd = fopen(storage_path() . '/order.xml', 'w');
-        fwrite($fd, $xml);
-        fclose($fd);
+        //$footer = str_replace('TOTAL', $total, config('renewal.xml.footer'));
+        $xml->trailer->{"batch-pay-total-amount"} = $total;
+        //$footer = str_replace('COUNT', count($tids), $footer);
+        $xml->trailer->{"total-records"} = count($tids);
+        //$xml .= $footer;
+        // This indents the produced xml
+        $dom = new \DOMDocument('1.0');
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;
+        $dom->loadXML($xml->asXML());
+        $fd = fopen('php://memory', 'w');
+        fputs($fd, $dom->saveXML());
+        rewind($fd);
         if ($clear) {
             $updated = 0;
             $date_now = now();
@@ -873,10 +900,14 @@ class RenewalController extends Controller
             }
             RenewalsLog::insert($data_log);
         }
-        $headers = [
-            'Content-Type: application/octet-stream'
-        ];
-        return response()->download(storage_path(). '/order.xml', 'order.xml', $headers)->deleteFileAfterSend();
+        $filename = Now()->isoFormat('YMMDDHHmmss') . '_payment_order.xml';
+        return response()->stream(
+            function () use ($fd) {
+                fpassthru($fd);
+            },
+            200,
+            [ 'Content-Type' => 'application/octet-stream', 'Content-disposition' => 'attachment; filename=' . $filename ]
+        );
     }
 
     /**
