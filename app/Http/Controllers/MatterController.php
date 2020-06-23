@@ -117,7 +117,7 @@ class MatterController extends Controller
 
         switch ($request->operation) {
             case 'child':
-                $parent_matter = Matter::with('priority')->find($request->parent_id);
+                $parent_matter = Matter::with('priority', 'filing')->find($request->parent_id);
                 // Copy priority claims from original matter
                 $new_matter->priority()->createMany($parent_matter->priority->toArray());
                 $new_matter->container_id = $parent_matter->container_id ?? $request->parent_id;
@@ -126,9 +126,10 @@ class MatterController extends Controller
                         ['code' => 'PRI', 'alt_matter_id' => $request->parent_id]
                     );
                 } else {
+                    $new_matter->filing()->save($parent_matter->filing->replicate());
                     $new_matter->parent_id = $request->parent_id;
                     $event = new Event(
-                        ['code' => 'PFIL', 'alt_matter_id' => $request->parent_id]
+                        ['code' => 'ENT', 'event_date' => now(), 'detail' => 'Child filing date']
                     );
                 }
                 $new_matter->events()->save($event);
