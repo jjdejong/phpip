@@ -177,8 +177,10 @@
       });
       if ( res.status == 500) {
         res.text().then(function (text) {
-                alert("Unexpected result:" + text)
-              });
+          reject("Unexpected result:" + text)
+        });
+      } else if (res.status === 419) {
+        reject("Token expired. Refresh the page");
       }
       return res.json();
     }
