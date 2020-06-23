@@ -821,7 +821,7 @@ class RenewalController extends Controller
             $docid->addChild('date', $fmt->format(strtotime($renewal->event_date)));
             $docid->addChild('kind', 'application');
             $fees->addChild('file-reference-id', $renewal->uid);
-            $fees->addChild('owner', $renewal->applicant_name);
+            $fees->addChild('owner', $procedure == 'FR' ? $renewal->uid : $renewal->applicant_name);
             $fee = $fees->addChild('fee');
             $fee->addChild('type-of-fee', $fee_code);
             $fee->addChild('fee-sub-amount', $renewal->cost);

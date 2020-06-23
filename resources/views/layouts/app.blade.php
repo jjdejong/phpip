@@ -177,12 +177,13 @@
       });
       if ( res.status == 500) {
         res.text().then(function (text) {
-          reject("Unexpected result:" + text)
+          alert("Unexpected result:" + text)
         });
       } else if (res.status === 419) {
-        reject("Token expired. Refresh the page");
+        alert("Token expired. Refresh the page");
+      } else {
+        return res.json();
       }
-      return res.json();
     }
 
     // Ajax fill the opened modal
