@@ -814,12 +814,12 @@ class RenewalController extends Controller
                 $number = $renewal->fil_num;
             }
             $fees = $xml->detail->addChild('fees');
-            $fees->attributes('procedure', $procedure);
-            $fees->addChild('document-id');
-            $fees->{"document-id"}->addChild('country', $country);
-            $fees->{"document-id"}->addChild('doc-number', $number);
-            $fees->{"document-id"}->addChild('date', $fmt->format(strtotime($renewal->event_date)));
-            $fees->{"document-id"}->addChild('kind', 'application');
+            $fees->addAttribute('procedure', $procedure);
+            $docid = $fees->addChild('document-id');
+            $docid->addChild('country', $country);
+            $docid->addChild('doc-number', $number);
+            $docid->addChild('date', $fmt->format(strtotime($renewal->event_date)));
+            $docid->addChild('kind', 'application');
             $fees->addChild('file-reference-id', $renewal->uid);
             $fees->addChild('owner', $renewal->applicant_name);
             $fee = $fees->addChild('fee');
