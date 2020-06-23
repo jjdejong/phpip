@@ -807,31 +807,27 @@ class RenewalController extends Controller
                 $cost = $renewal->sme_status ? $renewal->cost_reduced : $renewal->cost;
             }
             $total += $cost;
-            if ($country == 'EP' || $country == 'FR') {
-                if ($renewal->origin == 'EP') {
+            if ($renewal->origin == 'EP') {
                     $number = preg_replace("/[^0-9]/", "", $renewal->pub_num);
                     $country = 'EP';
-                } else {
-                    $number = preg_replace("/[^0-9]/", "", $renewal->number);
-                }
             } else {
-                $number = $renewal->number;
+                $number = $renewal->fil_num;
             }
-            $xml->detail->addChild('fees');
-            $xml->detail->fees->attributes('procedure', $procedure);
-            $xml->detail->fees->addChild('document-id');
-            $xml->detail->fees->{"document-id"}->addChild('country', $country);
-            $xml->detail->fees->{"document-id"}->addChild('doc-number', $number);
-            $xml->detail->fees->{"document-id"}->addChild('date', $fmt->format(strtotime($renewal->event_date)));
-            $xml->detail->fees->{"document-id"}->addChild('kind', 'application');
-            $xml->detail->fees->addChild('file-reference-id', $renewal->uid);
-            $xml->detail->fees->addChild('owner', $renewal->applicant_name);
-            $xml->detail->fees->addChild('fee');
-            $xml->detail->fees->fee->addChild('type-of-fee', $fee_code);
-            $xml->detail->fees->fee->addChild('fee-sub-amount', $renewal->cost);
-            $xml->detail->fees->fee->addChild('fee-factor', '1');
-            $xml->detail->fees->fee->addChild('fee-total-amount', $renewal->cost);
-            $xml->detail->fees->fee->addChild('fee-date-due', $fmt->format(strtotime($renewal->event_date)));
+            $fees = $xml->detail->addChild('fees');
+            $fees->attributes('procedure', $procedure);
+            $fees->addChild('document-id');
+            $fees->{"document-id"}->addChild('country', $country);
+            $fees->{"document-id"}->addChild('doc-number', $number);
+            $fees->{"document-id"}->addChild('date', $fmt->format(strtotime($renewal->event_date)));
+            $fees->{"document-id"}->addChild('kind', 'application');
+            $fees->addChild('file-reference-id', $renewal->uid);
+            $fees->addChild('owner', $renewal->applicant_name);
+            $fee = $fees->addChild('fee');
+            $fee->addChild('type-of-fee', $fee_code);
+            $fee->addChild('fee-sub-amount', $renewal->cost);
+            $fee->addChild('fee-factor', '1');
+            $fee->addChild('fee-total-amount', $renewal->cost);
+            $fee->addChild('fee-date-due', $fmt->format(strtotime($renewal->event_date)));
             /*$xml .= '
         <fees procedure="' . $procedure . '">
             <document-id>
@@ -847,7 +843,7 @@ class RenewalController extends Controller
                 <fee-sub-amount>' . $renewal->cost . '</fee-sub-amount>
                 <fee-factor>1</fee-factor>
                 <fee-total-amount>' . $renewal->cost . '</fee-total-amount>
-                <fee-date-due>' . $renewal->due_date . '</fee-date-due>
+                <fee-date-due>' . $fmt->format(strtotime($renewal->event_date)) . '</fee-date-due>
             </fee>
         </fees>';*/
         }
