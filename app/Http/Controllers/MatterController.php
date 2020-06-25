@@ -122,17 +122,12 @@ class MatterController extends Controller
                 $new_matter->priority()->createMany($parent_matter->priority->toArray());
                 $new_matter->container_id = $parent_matter->container_id ?? $request->parent_id;
                 if ($request->priority) {
-                    $event = new Event(
-                        ['code' => 'PRI', 'alt_matter_id' => $request->parent_id]
-                    );
+                    $new_matter->events()->create(['code' => 'PRI', 'alt_matter_id' => $request->parent_id]);
                 } else {
                     $new_matter->filing()->save($parent_matter->filing->replicate());
                     $new_matter->parent_id = $request->parent_id;
-                    $event = new Event(
-                        ['code' => 'ENT', 'event_date' => now(), 'detail' => 'Child filing date']
-                    );
+                    $new_matter->events()->create(['code' => 'ENT', 'event_date' => now(), 'detail' => 'Child filing date']);
                 }
-                $new_matter->events()->save($event);
                 $new_matter->save();
                 break;
             case 'clone':
@@ -165,11 +160,7 @@ class MatterController extends Controller
                 }
                 break;
             case 'new':
-                $received_event = new Event([
-                    'code' => 'REC',
-                    'event_date' => now()
-                ]);
-                $new_matter->events()->save($received_event);
+                $new_matter->events()->create(['code' => 'REC', 'event_date' => now()]);
                 break;
         }
         return response()->json(['redirect' => route('matter.show', [$new_matter])]);
@@ -200,7 +191,7 @@ class MatterController extends Controller
 
             // Copy shared events from original matter
             $new_matter->priority()->createMany($parent_matter->priority->toArray());
-            $new_matter->parentFiling()->createMany($parent_matter->parentFiling->toArray());
+            //$new_matter->parentFiling()->createMany($parent_matter->parentFiling->toArray());
             $new_matter->filing()->save($parent_matter->filing->replicate());
             if ($parent_matter->publication()->exists()) {
                 $new_matter->publication()->save($parent_matter->publication->replicate());
@@ -210,7 +201,9 @@ class MatterController extends Controller
             }
 
             // Insert "entered" event
-            $new_matter->events()->create(["code" => 'ENT', "event_date" => date('Y-m-d')]);
+            $new_matter->events()->create(["code" => 'ENT', "event_date" => now()]);
+            // Insert "Parent filed" event tracing the filing number of the parent PCT or EP
+            $new_matter->events()->create(['code' => 'PFIL', 'alt_matter_id' => $request->parent_id]);
 
             $new_matter->parent_id = $parent_id;
             $new_matter->container_id = $parent_matter->container_id ?? $parent_id;

@@ -61,14 +61,14 @@
           <input type='hidden' name='trigger_event'>
           <input type="text" class="form-control form-control-sm" data-ac="/event-name/autocomplete/0" data-actarget="trigger_event" autocomplete="off">
         </td>
-        <td><label title="{{ $ruleComments['use_parent'] }}">Use parent</label></td>
+        <td><label title="{{ $ruleComments['end_of_month'] }}">End of month</label></td>
         <td>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="use_parent" value="1">
+            <input class="form-check-input" type="radio" name="end_of_month" value="1">
             <label class="form-check-label">Yes</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="use_parent" value="0" checked>
+            <input class="form-check-input" type="radio" name="end_of_month" value="0" checked>
             <label class="form-check-label">No</label>
           </div>
         </td>
@@ -151,20 +151,7 @@
         <td><label for="currency" title="{{ $ruleComments['currency'] }}">Currency</label></td>
         <td><input type="text" maxlength="3" class="form-control form-control-sm" name="currency"></td>
       </tr>
-      <tr>
-        <td><label title="{{ $ruleComments['end_of_month'] }}">End of month</label></td>
-        <td>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="end_of_month" value="1">
-            <label class="form-check-label">Yes</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="end_of_month" value="0" checked>
-            <label class="form-check-label">No</label>
-          </div>
-        </td>
-      </tr>
     </table>
   </fieldset>
-  <button type="button" class="btn btn-danger" id="createRuleSubmit" data-redirect="/rule">Create rule</button><br>
+  <button type="button" class="btn btn-primary btn-block" id="createRuleSubmit" data-redirect="/rule">Create rule</button><br>
 </form>
