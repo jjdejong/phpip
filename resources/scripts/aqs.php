@@ -218,9 +218,9 @@ foreach ($xml->PATENT as $AQSpatent) {
 			$trigger_id = $myRenewal['id'];
       $cost = ($renewal->INVOICED_COST ?? $renewal->ESTIMATED_COST) - $aqs['aqs_fee'];
       if ($cost > 1000 - $aqs['aqs_fee']) {
-        $fee = round($aqs['our_fee'] + $aqs['aqs_fee'] + 0.15*$cost), 2);
+        $fee = round($aqs['our_fee'] + $aqs['aqs_fee'] + 0.15*$cost, 2);
       } else {
-        $fee = round($aqs['our_fee'] + $aqs['aqs_fee'] + (0.2 - ((0.05/1000)*$cost))*$cost, 2);
+        $fee = round($aqs['our_fee'] + $aqs['aqs_fee'] + (0.2 - (0.05/1000)*$cost)*$cost, 2);
       }
 		  if ($renewal->INVOICED_COST && $renewal->DATE_PAID) { // Cost provided - insert with costs
 				$q = "INSERT INTO task (code, detail, done_date, due_date, currency, cost, fee, notes, trigger_id, created_at, creator, updated_at)
