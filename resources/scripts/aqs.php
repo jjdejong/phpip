@@ -172,9 +172,9 @@ foreach ($xml->PATENT as $AQSpatent) {
         }
 			}
       if ($cost > 1000 - $aqs['aqs_fee']) {
-        $fee = round($aqs['our_fee'] + $aqs['aqs_fee'] + 0.15*$cost), 2);
+        $fee = round($aqs['our_fee'] + $aqs['aqs_fee'] + 0.15*$cost, 2);
       } else {
-        $fee = round($aqs['our_fee'] + $aqs['aqs_fee'] + (0.2 - ((0.05/1000)*$cost))*$cost, 2);
+        $fee = round($aqs['our_fee'] + $aqs['aqs_fee'] + (0.2 - (0.05/1000)*$cost)*$cost, 2);
       }
       if ($fee != $myRenewal['fee']) {
         $set[] = "fee = '$fee'";
