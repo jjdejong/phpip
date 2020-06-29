@@ -789,7 +789,7 @@ class RenewalController extends Controller
             $xml->header->sender->name = Auth::user()->name;
         }
         //$xml = str_replace('TRANSACTION', 'ANNUITY ' . $fmt->format(time()), $xml);
-        $xml->header->{"payment-reference-id"} = 'ANNUITY ' . $fmt->format(time());
+        $xml->header->{"payment-reference-id"} = 'ANNUITY ' . date('Ymd');
         $total = 0;
         $renewals = Task::renewals()->whereIn('task.id', $tids)->get();
         foreach ($renewals as $renewal) {

@@ -12,15 +12,22 @@
   }
 
   filterFields.addEventListener('input', debounce( e => {
-    if (e.target.name !== "selectAll") {
-        if (e.target.value.length === 0 || (e.target.name == "grace_period" && ! e.target.checked)) {
+    if (e.target.value.length === 0) {
+        url.searchParams.delete(e.target.name);
+    } else {
+        url.searchParams.set(e.target.name, e.target.value);
+    }
+    refreshList();
+  }, 500));
+
+  grace.onchange = e => {
+    if (!e.target.checked) {
             url.searchParams.delete(e.target.name);
         } else {
-            url.searchParams.set(e.target.name, e.target.value);
+            url.searchParams.set(e.target.name, "1");
         }
         refreshList();
-    }
-  }, 500));
+  }
 
   selectAll.onchange = e => {
     if (e.target.checked) {
@@ -361,95 +368,72 @@
       </div>
       <div class="card-header py-1">
         <div class="row font-weight-bold">
-          <div class="col-2">
-            Client
-          </div>
-          <div class="col-3">
-            Title
-          </div>
-          <div class="col-1">
-            Matter
-          </div>
-          <div class="col-3">
-            <div class="row">
-                <div class="col-2">
-                    Ctry
-                </div>
-                <div class="col-2">
-                    Qt
-                </div>
-                <div class="col-2">
-                    Grace
-                </div>
-                <div class="col-3">
-                    Cost
-                </div>
-                <div class="col-3">
-                    Fee
-                </div>
-            </div>
-          </div>
-          <div class="col-2">
-            Due date (from/to)
-          </div>
-          <div class="col-1">
-            Select
-          </div>
-        </div>
-        <div class="row">
             <div class="input-group"  id="filterFields">
                 <div class="col-2">
-                    <input type="text" class="form-control form-control-sm" name="Name" value="{{ Request::get('Name') }}">
+                    <input type="text" class="form-control form-control-sm" name="Name" value="{{ Request::get('Name') }}" placeholder="Client">
                 </div>
                 <div class="col-3">
-                    <input type="text" class="form-control form-control-sm" name="Title" value="{{ Request::get('Title') }}">
+                    <input type="text" class="form-control form-control-sm" name="Title" value="{{ Request::get('Title') }}" placeholder="Title">
                 </div>
                 <div class="col-1">
-                    <input type="text" class="form-control form-control-sm" name="Case" value="{{ Request::get('Case') }}">
+                    <input type="text" class="form-control form-control-sm" name="Case" value="{{ Request::get('Case') }}" placeholder="Matter">
                 </div>
                 <div class="col-3">
                     <div class="row">
                         <div class="col-2">
-                            <input type="text" class="form-control form-control-sm" name="Country" value="{{ Request::get('Country') }}">
+                            <input type="text" class="form-control form-control-sm" name="Country" value="{{ Request::get('Country') }}" placeholder="Ctry">
                         </div>
                         <div class="col-2">
-                            <input type="text" class="form-control form-control-sm" name="Qt" value="{{ Request::get('Qt') }}">
+                            <input type="text" class="form-control form-control-sm" name="Qt" value="{{ Request::get('Qt') }}" placeholder="Qt">
                         </div>
-                        <div class="col-2 px-3">
-                            <input name="grace_period" id="grace" type="checkbox" value = "1" title="In grace period">
+                        <div class="col-2">
+                            <div class="btn-group-toggle" data-toggle="buttons" title="In grace period">
+                                <label class="btn btn-outline-primary btn-sm">
+                                    <input id="grace" name="grace_period" type="checkbox">Grace
+                                </label>
+                            </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-3 py-2">
+                            Cost
+                        </div>
+                        <div class="col-3 py-2">
+                            Fee
                         </div>
                     </div>
                 </div>
                 <div class="col">
-                    <input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">
+                    <div class="input-group">
+                        <input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">                
+                        <input type="date" class="form-control form-control-sm" name="Untildate" id="Untildate" title="Until selected date" value="{{ Request::get('Untildate') }}">
+                    </div>
                 </div>
-                <div class="col">
-                    <input type="date" class="form-control form-control-sm" name="Untildate" id="Untildate" title="Until selected date" value="{{ Request::get('Untildate') }}">
-                </div>
-                <div class="col-1 px-3">
-                    <input name="selectAll" id="selectAll" type="checkbox" title="Select/unselect all">
+                <div class="col-1 px-2">
+                    <div class="btn-group-toggle" data-toggle="buttons" title="Select/unselect all">
+                        <label class="btn btn-outline-primary btn-sm">
+                            <input name="selectAll" id="selectAll" type="checkbox">&check;
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
       </div>
       <div class="card-body pt-2" id="renewalList">
+      <table class="table table-striped table-sm">
         @if (count($renewals) !== 0 )
         @foreach ($renewals as $task)
-        <div class="row overlay" data-resource="/task/{{ $task->id }}">
-          <div class="col-2">
+        <tr class="row overlay" data-resource="/task/{{ $task->id }}">
+          <td class="col-2">
               {{ $task->client_name }}
-          </div>
-          <div class="col-3">
+          </td>
+          <td class="col-3">
               {{ $task->short_title }}
-          </div>
-          <div class="col-1">
+          </td>
+          <td class="col-1">
             <a href="/matter/{{ $task->matter_id }}">
               {{ $task->uid }}
             </a>
-          </div>
-          <div class="col-3">
+        </td>
+          <td class="col-3">
             <div class="row">
                 <div class="col-2">
                     {{ $task->country }}
@@ -467,22 +451,25 @@
                     {{ ($task->sme_status ? $task->fee_reduced : $task->fee) * (1.0 - $task->discount) }}
                 </div>
             </div>
-          </div>
-          @if ($task->due_date < now() && !$task->done)
-          <div class="col-2 table-danger">
-          @elseif ($task->due_date < now()->addWeeks(1) && !$task->done)
-          <div class="col-2 table-warning">
-          @else
-          <div class="col-2">
-          @endif
+          </td>
+          <td class="col-2 text-center">
             {{ Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}
-          </div>
-          <div class="col-1 px-3">
+            @if ($task->due_date < now() && !$task->done)
+            <div class="badge badge-danger" title="Overdue">&nbsp;!&nbsp;</div>
+            @elseif ($task->due_date < now()->addWeeks(1) && !$task->done)
+            <div class="badge badge-warning" title="Urgent">&nbsp;!&nbsp;</div>
+            @elseif ($task->due_date < now()->addWeeks(1) && $task->done)
+            <div class="badge badge-success" title="Done">&check;</div>
+            @endif
+          </td>
+          <td class="col-1 px-3">
             <input id="{{ $task->id }}" class="clear-ren-task" type="checkbox">
-          </div>
-        </div>
+          </td>
+        </tr>
         @endforeach
-        {{ $renewals->links() }}
+        <tr>
+            <td>{{ $renewals->links() }}</td>
+        </tr>
         @else
         <div class="row text-danger">
           The list is empty
@@ -490,6 +477,7 @@
         @endif
       </div>
     </div>
+  </table>
   </div>
 </div>
 
