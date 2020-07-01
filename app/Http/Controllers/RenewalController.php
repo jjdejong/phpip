@@ -159,12 +159,8 @@ class RenewalController extends Controller
             ->orderBy('pa_cli.name')->get();
             $num = $resql->count();
             $sum = $sum + $num;
-            if ($grace == 1 && $sum === 0) {
-                return "No renewal selected.";
-            }
             if ($num != 0) {
                 $i = 0;
-                $date_now = Carbon::now();
                 foreach ($resql as $ren) {
                     $client = $ren->client_name;
                     $due_date = Carbon::parse($ren->due_date);
@@ -224,13 +220,13 @@ class RenewalController extends Controller
                         'from_step' => $ren->step,
                         'to_step' => 2,
                         'creator' => Auth::user()->login,
-                        'created_at' => $date_now
+                        'created_at' => now()
                     ];
                     if (! is_null($from_grace)) {
-                        $log_line[] = ['from_grace' => $from_grace];
+                        $log_line = array_merge($log_line, ['from_grace' => $from_grace]);
                     }
                     if (! is_null($to_grace)) {
-                        $log_line[] = ['to_grace' => $to_grace];
+                        $log_line = array_merge($log_line, ['to_grace' => $to_grace]);
                     }
                     $data[] = $log_line;
                     $renewals[] = $renewal;

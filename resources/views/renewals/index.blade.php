@@ -167,7 +167,7 @@
         if (tids.length === 0) {
             var end = document.getElementById('Untildate').value;
             if(!end) {
-                alert("No renewals selected nor limit date given for " + msgAction);
+                alert("No renewals selected for " + msgAction);
                 // withdraw spinner and restore button
                 button.removeChild(document.getElementsByClassName('spinner-border')[0]);
                 return;
@@ -210,7 +210,7 @@
     xmlRenewals.addEventListener("click", function () {
         var tids = getSelected();
         if (tids.length === 0) {
-            alert("No renewals selected for order!");
+            alert("No renewals selected for order");
             return;
         }
         /*let exportUrl = '/renewal/order';
