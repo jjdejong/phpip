@@ -69,6 +69,9 @@ class TaskController extends Controller
         if ($request->has('due_date')) {
             $request->merge(['rule_used' => null]);
         }
+        if ($request->has('done_date') || $request->done) {
+            $request->merge(['step' => 10]);
+        }
 
         $task->update($request->except(['_token', '_method']));
         return $task;
