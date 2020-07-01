@@ -29,6 +29,9 @@ class RenewalController extends Controller
 
         // Get list of active renewals
         $renewals = Task::renewals();
+        if ($step == 0) {
+            $renewals->where('matter.dead', 0);
+        }
         if ($MyRenewals) {
             $renewals->where('assigned_to', Auth::user()->login);
         }
@@ -151,7 +154,9 @@ class RenewalController extends Controller
         for ($grace = 0; $grace < count($notify_type); $grace++) {
             $from_grace =  ($notify_type[$grace] == 'last') ? 0 : null ;
             $to_grace =  ($notify_type[$grace] == 'last') ? 1 : null ;
-            $resql = Task::renewals()->whereIn('task.id', $ids)->orderBy('pa_cli.name')->where('grace_period', $grace)->get();
+            $resql = Task::renewals()->whereIn('task.id', $ids)
+            ->where('grace_period', $grace)->get()
+            ->orderBy('pa_cli.name');
             $num = $resql->count();
             $sum = $sum + $num;
             if ($grace == 1 && $sum === 0) {
@@ -681,16 +686,14 @@ class RenewalController extends Controller
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
-        $resql = $query->get();
+        $renewals = $query->get();
         // For logs
         $newjob = RenewalsLog::max('job_id');
         $newjob++;
         $data_log = [];
 
         $updated = 0;
-        $date_now = now();
-        $done_date = now()->isoFormat('L');
-        foreach ($resql as $ren) {
+        foreach ($renewals as $ren) {
             $task = Task::find($ren->id);
             $log_line = [
                 'task_id' => $ren->id,
@@ -700,12 +703,12 @@ class RenewalController extends Controller
                 'from_done' => $task->done,
                 'to_done' => 1,
                 'creator' => Auth::user()->login,
-                'created_at' => $date_now
+                'created_at' => now()
             ];
             $task->step = 12;
-            $task->done = 1;
-            $task->done_date = $done_date;
             $returncode = $task->save();
+            // Insert "Abandoned" event
+            $task->matter->events()->create(['code' => 'ABA', 'event_date' => now()]);
             if ($returncode) {
                 $updated++;
                 $data_log[] = $log_line;
@@ -739,6 +742,8 @@ class RenewalController extends Controller
             $task = Task::find($ren->id);
             $task->step = 14;
             $returncode = $task->save();
+            // Insert "Lapsed" event
+            $task->matter->events()->create(['code' => 'LAP', 'event_date' => now()]);
             if ($returncode) {
                 $updated++;
             }

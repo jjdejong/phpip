@@ -246,7 +246,6 @@ class Task extends Model
             $join->on(DB::raw('CAST(task.detail AS UNSIGNED)'), 'fees.qt');
         })
         ->where('task.code', 'REN')
-        ->where('matter.dead', 0)
         ->groupBy('task.due_date')
         ->groupBy('task.id');
 
