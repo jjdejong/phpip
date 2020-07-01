@@ -454,12 +454,12 @@
           </td>
           <td class="col-2 text-center">
             {{ Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}
-            @if ($task->due_date < now() && !$task->done)
-            <div class="badge badge-danger" title="Overdue">&nbsp;!&nbsp;</div>
-            @elseif ($task->due_date < now()->addWeeks(1) && !$task->done)
-            <div class="badge badge-warning" title="Urgent">&nbsp;!&nbsp;</div>
-            @elseif ($task->due_date < now()->addWeeks(1) && $task->done)
+            @if ($task->done)
             <div class="badge badge-success" title="Done">&check;</div>
+            @elseif ($task->due_date < now())
+            <div class="badge badge-danger" title="Overdue">&nbsp;!&nbsp;</div>
+            @elseif ($task->due_date < now()->addWeeks(1))
+            <div class="badge badge-warning" title="Urgent">&nbsp;!&nbsp;</div>
             @endif
           </td>
           <td class="col-1 px-3">
