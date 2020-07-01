@@ -110,6 +110,11 @@
             actionRenewals(b.target, msgAction, '/renewal/invoice/0')
     });
 
+    invoicesPaid.onclick = (b) => {
+            msgAction = "paid";
+            actionRenewals(b.target, msgAction, '/renewal/paid')
+    }
+
     instructedRenewals.addEventListener("click", function (b) {
             msgAction = "for payment";
             actionRenewals(b.target, msgAction, '/renewal/topay')
@@ -312,6 +317,7 @@
                 <a class="nav-item nav-link {{ ($tab === '#p10' ) ? 'active' : '' }}" href="#p10" data-toggle="tab" step="10">Closed</a>
                 <a class="nav-item nav-link {{ ($tab === '#p7' ) ? 'active' : '' }}" href="#p7" data-toggle="tab" invoice_step="1">Invoicing</a>
                 <a class="nav-item nav-link {{ ($tab === '#p8' ) ? 'active' : '' }}" href="#p8" data-toggle="tab" invoice_step="2">Invoiced</a>
+                <a class="nav-item nav-link {{ ($tab === '#p11' ) ? 'active' : '' }}" href="#p11" data-toggle="tab" invoice_step="3">Invoices paid</a>
             </div>
           </nav>
           <div class="tab-content mt-1">
@@ -355,13 +361,16 @@
                 </div>
             </div>
             <div class="tab-pane {{ ($tab === '#p8' ) ? 'active' : ''}}" id="p8">
-                <h4>Invoiced renewals</h4>
+                <button class="btn btn-outline-primary" type="button" id="invoicesPaid">Paid</button>
             </div>
             <div class="tab-pane {{ ($tab === '#p9' ) ? 'active' : ''}}" id="p9">
                 <button class="btn btn-outline-primary" type="button" id="sendLapsedRenewals">Lapse communication sent</button>
             </div>
             <div class="tab-pane {{ ($tab === '#p10' ) ? 'active' : ''}}" id="p10">
                 <h4>Closed renewals</h4>
+            </div>
+            <div class="tab-pane {{ ($tab === '#p11' ) ? 'active' : ''}}" id="p11">
+                <h4>Paid invoices</h4>
             </div>
           </div>
         </div>

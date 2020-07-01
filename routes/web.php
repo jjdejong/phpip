@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('renewal/reminder', 'RenewalController@remindercall');
     Route::post('renewal/invoice/{toinvoice}', 'RenewalController@invoice');
     Route::post('renewal/topay', 'RenewalController@topay');
+    Route::post('renewal/paid', 'RenewalController@paid');
     Route::post('renewal/done', 'RenewalController@done');
     Route::post('renewal/lastcall', 'RenewalController@lastcall');
     Route::post('renewal/receipt', 'RenewalController@receipt');

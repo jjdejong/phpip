@@ -155,8 +155,8 @@ class RenewalController extends Controller
             $from_grace =  ($notify_type[$grace] == 'last') ? 0 : null ;
             $to_grace =  ($notify_type[$grace] == 'last') ? 1 : null ;
             $resql = Task::renewals()->whereIn('task.id', $ids)
-            ->where('grace_period', $grace)->get()
-            ->orderBy('pa_cli.name');
+            ->where('grace_period', $grace)
+            ->orderBy('pa_cli.name')->get();
             $num = $resql->count();
             $sum = $sum + $num;
             if ($grace == 1 && $sum === 0) {
@@ -449,6 +449,16 @@ class RenewalController extends Controller
         return response()->json(['success' => 'Invoices created for ' . $num . ' renewals']);
     }
 
+    public function paid(Request $request)
+    {
+        if (!isset($request->task_ids)) {
+            return response()->json(['error' => "No renewal selected."]);
+        }
+        // Move the renewal task to step: paid
+        $num = Task::whereIn('id', $request->task_ids)->update(['invoice_step' => 3]);
+        return response()->json(['success' => $num . ' invoices paid']);
+    }
+
     public function export(Request $request)
     {
         // if (isset($request->task_ids)) {
@@ -544,9 +554,8 @@ class RenewalController extends Controller
      */
     public function done(Request $request)
     {
-        $data = json_decode($request->getContent());
-        if (isset($data->task_ids)) {
-            $query = Task::renewals()->whereIn('task.id', $data->task_ids);
+        if (isset($request->task_ids)) {
+            $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -590,9 +599,8 @@ class RenewalController extends Controller
      */
     public function receipt(Request $request)
     {
-        $data = json_decode($request->getContent());
-        if (isset($data->task_ids)) {
-            $query = Task::renewals()->whereIn('task.id', $data->task_ids);
+        if (isset($request->task_ids)) {
+            $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -633,9 +641,8 @@ class RenewalController extends Controller
      */
     public function closing(Request $request)
     {
-        $data = json_decode($request->getContent());
-        if (isset($data->task_ids)) {
-            $query = Task::renewals()->whereIn('task.id', $data->task_ids);
+        if (isset($request->task_ids)) {
+            $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -680,9 +687,8 @@ class RenewalController extends Controller
      */
     public function abandon(Request $request)
     {
-        $data = json_decode($request->getContent());
-        if (isset($data->task_ids)) {
-            $query = Task::renewals()->whereIn('task.id', $data->task_ids);
+        if (isset($request->task_ids)) {
+            $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -724,9 +730,8 @@ class RenewalController extends Controller
      */
     public function lapsing(Request $request)
     {
-        $data = json_decode($request->getContent());
-        if (isset($data->task_ids)) {
-            $query = Task::renewals()->whereIn('task.id', $data->task_ids);
+        if (isset($request->task_ids)) {
+            $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
             return response()->json(['error' => "No renewal selected."]);
         }
@@ -779,15 +784,14 @@ class RenewalController extends Controller
             'yyyyMMdd'
         );
 
-        $data = json_decode($request->getContent());
-        $tids = $data->task_ids;
+        $tids = $request->task_ids;
         $procedure = '';
         // For logs
         $newjob = RenewalsLog::max('job_id');
         $newjob++;
         $data_log = [];
 
-        $clear = boolval($data->clear);
+        $clear = boolval($request->clear);
         $done_date = now()->isoFormat('L');
         $xml = new \SimpleXMLElement(config('renewal.xml.body'));
         if ($xml->header->sender->name == 'NAME') {
