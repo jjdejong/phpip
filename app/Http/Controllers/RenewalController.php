@@ -567,7 +567,6 @@ class RenewalController extends Controller
         foreach ($resql as $ren) {
             $task = Task::find($ren->id);
             $task->done_date = $done_date;
-            $task->done = 1;
             $task->step = 6;
             $returncode = $task->save();
             if ($returncode) {
@@ -648,10 +647,8 @@ class RenewalController extends Controller
         $newjob = RenewalsLog::max('job_id');
         $newjob++;
         $data_log = [];
-
         $updated = 0;
         $date_now = now();
-        $done_date = now()->isoFormat('L');
         foreach ($resql as $ren) {
             $task = Task::find($ren->id);
             $log_line = [
@@ -664,9 +661,11 @@ class RenewalController extends Controller
                 'creator' => Auth::user()->login,
                 'created_at' => $date_now
             ];
-            $task->step = 10;
-            $task->done = 1;
-            $task->done_date = $done_date;
+            if ($task->done) {
+                $task->step = -1;
+            } else {
+                $task->step = 10;
+            }
             $returncode = $task->save();
             if ($returncode) {
                 $updated++;
@@ -892,7 +891,6 @@ class RenewalController extends Controller
                 $data_log[] = $log_line;
                 $task = Task::find($renewal->id);
                 $task->done_date = $done_date;
-                $task->done = 1;
                 $task->step = 6;
                 $returncode = $task->save();
                 if ($returncode) {

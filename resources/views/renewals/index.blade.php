@@ -386,7 +386,9 @@
                 </div>
             </div>
             <div class="tab-pane {{ ($tab === '#p10' ) ? 'active' : ''}}" id="p10">
-                <button class="btn btn-secondary" type="button" disabled>Closed renewals</button>
+                <div class="text-right">
+                    <button class="btn btn-secondary" type="button" disabled>Closed renewals</button>
+                </div>
             </div>
             <div class="tab-pane lead {{ ($tab === '#p11' ) ? 'active' : ''}}" id="p11">
                 <div class="text-right">
