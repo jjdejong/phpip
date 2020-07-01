@@ -6,7 +6,9 @@ return [
     // Set to "user" if emails should be sent to the connected user
     "mail_recipient" => "client",
     // Set to 0 to exclude VAT values
-    "vat_column" => 1
+    "vat_column" => 1,
+    // Use or hide receipt management tabs. Set to 0 to hide
+    "receipt_tabs" => 1
   ],
   "validity" => [
     "instruct_before" => 30,
