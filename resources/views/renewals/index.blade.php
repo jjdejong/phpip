@@ -4,44 +4,45 @@
 
 <script type="text/javascript">
 
-  var url = new URL(window.location.href)
+    var url = new URL(window.location.href);
 
-  function refreshList() {
-    window.history.pushState('', 'phpIP', url);
-    reloadPart(url, 'renewalList');
-  }
-
-  filterFields.addEventListener('input', debounce( e => {
-    if (e.target.value.length === 0) {
-        url.searchParams.delete(e.target.name);
-    } else {
-        url.searchParams.set(e.target.name, e.target.value);
+    function refreshList() {
+        window.history.pushState('', 'phpIP', url);
+        reloadPart(url, 'renewalList');
     }
-    refreshList();
-  }, 500));
 
-  grace.onchange = e => {
-    if (!e.target.checked) {
+    filterFields.addEventListener('input', debounce( e => {
+        if (e.target.value.length === 0) {
             url.searchParams.delete(e.target.name);
+        } else {
+            url.searchParams.set(e.target.name, e.target.value);
+        }
+        url.searchParams.delete('page');
+        refreshList();
+    }, 500));
+
+    grace.onchange = e => {
+        if (!e.target.checked) {
+                url.searchParams.delete(e.target.name);
         } else {
             url.searchParams.set(e.target.name, "1");
         }
         refreshList();
-  }
+    }
 
-  selectAll.onchange = e => {
-    if (e.target.checked) {
-        // Check all checkboxes
-        newValue = true;
-    } else {
-        // Uncheck all checkboxes
-        newValue = false;
-    }
-    var boxes = document.getElementsByClassName('clear-ren-task');
-    for (box of boxes) {
-        box.checked = newValue;
-    }
-  };
+    selectAll.onchange = e => {
+        if (e.target.checked) {
+            // Check all checkboxes
+            newValue = true;
+        } else {
+            // Uncheck all checkboxes
+            newValue = false;
+        }
+        var boxes = document.getElementsByClassName('clear-ren-task');
+        for (box of boxes) {
+            box.checked = newValue;
+        }
+    };
 
     // Load list according to corresponding tab
     tabsGroup.addEventListener("click", function (e) {
@@ -49,11 +50,11 @@
         url.searchParams.delete('invoice_step');
         url.searchParams.delete('tab');
         url.searchParams.delete('page');
-        if (e.target.hasAttribute('step')) {
-            url.searchParams.set('step', e.target.getAttribute('step'));
+        if (e.target.hasAttribute('data-step')) {
+            url.searchParams.set('step', e.target.dataset.step);
         }
-        if (e.target.hasAttribute('invoice_step')) {
-            url.searchParams.set('invoice_step', e.target.getAttribute('invoice_step'));
+        if (e.target.hasAttribute('data-invoice_step')) {
+            url.searchParams.set('invoice_step', e.target.dataset.invoice_step);
         }
         if (e.target.hasAttribute('href')) {
             url.searchParams.set('tab', e.target.getAttribute('href'));
@@ -64,7 +65,8 @@
 
     clearFilters.onclick = () => {
         for (key of url.searchParams.keys()) {
-            if ( (key != 'step') && (key != 'invoice_step') && (key != 'tab')) {
+            console.log(key);
+            if ((key != 'step') && (key != 'invoice_step') && (key != 'tab')) {
                 url.searchParams.delete(key);
             }
         }
@@ -303,19 +305,19 @@
           </div>
           <nav class="col-12 mt-1">
             <div class="nav nav-pills justify-content-center" id="tabsGroup">
-                <a class="nav-item nav-link {{ ($tab === '#p1' || empty($tab) ) ? 'active' : '' }}" href="#p1" data-toggle="tab" step="0">First call</a>
-                <a class="nav-item nav-link {{ ($tab === '#p2' ) ? 'active' : '' }}" href="#p2" data-toggle="tab" step="2">Reminder</a>
-                <a class="nav-item nav-link {{ ($tab === '#p3' ) ? 'active' : '' }}" href="#p3" data-toggle="tab" step="4">Payment</a>
+                <a class="nav-item nav-link {{ ($tab === '#p1' || empty($tab) ) ? 'active' : '' }}" href="#p1" data-toggle="tab" data-step="0">First call</a>
+                <a class="nav-item nav-link {{ ($tab === '#p2' ) ? 'active' : '' }}" href="#p2" data-toggle="tab" data-step="2">Reminder</a>
+                <a class="nav-item nav-link {{ ($tab === '#p3' ) ? 'active' : '' }}" href="#p3" data-toggle="tab" data-step="4">Payment</a>
                 @if (config('renewal.general.receipt_tabs'))
-                <a class="nav-item nav-link {{ ($tab === '#p4' ) ? 'active' : '' }}" href="#p4" data-toggle="tab" step="6">Receipts</a>
-                <a class="nav-item nav-link {{ ($tab === '#p5' ) ? 'active' : '' }}" href="#p5" data-toggle="tab" step="8">Receipts received</a>
+                <a class="nav-item nav-link {{ ($tab === '#p4' ) ? 'active' : '' }}" href="#p4" data-toggle="tab" data-step="6">Receipts</a>
+                <a class="nav-item nav-link {{ ($tab === '#p5' ) ? 'active' : '' }}" href="#p5" data-toggle="tab" data-step="8">Receipts received</a>
                 @endif
-                <a class="nav-item nav-link {{ ($tab === '#p6' ) ? 'active' : '' }}" href="#p6" data-toggle="tab" step="12">Abandoned</a>
-                <a class="nav-item nav-link {{ ($tab === '#p9' ) ? 'active' : '' }}" href="#p9" data-toggle="tab" step="14">Lapsed</a>
-                <a class="nav-item nav-link {{ ($tab === '#p10' ) ? 'active' : '' }}" href="#p10" data-toggle="tab" step="10">Closed</a>
-                <a class="nav-item nav-link {{ ($tab === '#p7' ) ? 'active' : '' }}" href="#p7" data-toggle="tab" invoice_step="1">Invoicing</a>
-                <a class="nav-item nav-link {{ ($tab === '#p8' ) ? 'active' : '' }}" href="#p8" data-toggle="tab" invoice_step="2">Invoiced</a>
-                <a class="nav-item nav-link {{ ($tab === '#p11' ) ? 'active' : '' }}" href="#p11" data-toggle="tab" invoice_step="3">Invoices paid</a>
+                <a class="nav-item nav-link {{ ($tab === '#p6' ) ? 'active' : '' }}" href="#p6" data-toggle="tab" data-step="12">Abandoned</a>
+                <a class="nav-item nav-link {{ ($tab === '#p9' ) ? 'active' : '' }}" href="#p9" data-toggle="tab" data-step="14">Lapsed</a>
+                <a class="nav-item nav-link {{ ($tab === '#p10' ) ? 'active' : '' }}" href="#p10" data-toggle="tab" data-step="10">Closed</a>
+                <a class="nav-item nav-link {{ ($tab === '#p7' ) ? 'active' : '' }}" href="#p7" data-toggle="tab" data-invoice_step="1">Invoicing</a>
+                <a class="nav-item nav-link {{ ($tab === '#p8' ) ? 'active' : '' }}" href="#p8" data-toggle="tab" data-invoice_step="2">Invoiced</a>
+                <a class="nav-item nav-link {{ ($tab === '#p11' ) ? 'active' : '' }}" href="#p11" data-toggle="tab" data-invoice_step="3">Invoices paid</a>
                 <button id="clearFilters" type="button" class="btn btn-info">&larrpl; Clear filters</button>
             </div>
           </nav>
