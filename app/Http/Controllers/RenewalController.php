@@ -84,10 +84,12 @@ class RenewalController extends Controller
                 }
             }
         }
+        // Only display pending renewals at the beginning of the pipeline (CHECK: $with_invoice may not be necessary)
         if (! ($with_step || $with_invoice)) {
             $renewals->where('done', 0);
         }
-        if ($step == 10 || $invoice_step == 2) {
+        // Order by most recent renewals first in the "Closed" and "Invoice paid" steps
+        if ($step == 10 || $invoice_step == 3) {
             $renewals->orderBy('due_date', 'DESC');
         }
         $renewals = $renewals->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
