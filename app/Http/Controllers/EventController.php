@@ -52,7 +52,8 @@ class EventController extends Controller
     public function update(Request $request, Event $event)
     {
         $this->validate($request, [
-            'alt_matter_id' => 'nullable|numeric'
+            'alt_matter_id' => 'nullable|numeric',
+            'event_date' => 'sometimes|required_without:alt_matter_id'
         ]);
         if ($request->filled('event_date')) {
             $request->merge(['event_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->event_date)]);
