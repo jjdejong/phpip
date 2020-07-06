@@ -13,11 +13,8 @@ class TaskController extends Controller
     {
         $task = new Task;
         $isrenewals = $request->isrenewals;
-        $nrecords = 100;
-        if ($isrenewals) {
-            $nrecords = 200;
-        }
-        $tasks = $task->openTasks($isrenewals, $request->what_tasks, $request->user_dashboard)->take($nrecords)->get();
+        $tasks = $task->openTasks($isrenewals, $request->what_tasks, $request->user_dashboard)->simplePaginate(18);
+        $tasks->appends($request->input())->links(); // Keep URL parameters in the paginator links
         return view('task.index', compact('tasks', 'isrenewals'));
     }
 

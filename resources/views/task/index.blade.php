@@ -34,3 +34,6 @@
   </tr>
   @endforeach
 </table>
+<div class="float-right">
+  {{ $tasks->links() }}
+</div>

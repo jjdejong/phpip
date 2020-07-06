@@ -140,7 +140,7 @@
         </div>
       </div>
       <div class="card-body p-1" id="tasklist">
-        @include('task.index', ['isrenewals' => '0'])
+        {{-- Placeholder --}}
       </div>
     </div>
     <div class="card border-primary mt-1">
@@ -181,8 +181,7 @@
       </div>
 
       <div class="card-body p-1" id="renewallist">
-        @php $tasks = $renewals @endphp
-        @include('task.index', ['isrenewals' => '1'])
+        {{-- Placeholder --}}
       </div>
     </div>
   </div>
