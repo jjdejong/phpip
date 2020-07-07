@@ -456,7 +456,7 @@
                     The list is empty
                 </div>
                 @else
-                <table class="table table-striped table-sm">
+                <table class="table table-striped table-sm mb-1">
                     @foreach ($renewals as $task)
                     <tr class="row overlay" data-resource="/task/{{ $task->id }}">
                         <td class="col-2">
@@ -505,7 +505,7 @@
                     </tr>
                     @endforeach
                 </table>
-                <div class="float-right">{{ $renewals->links() }}</div>
+                {{ $renewals->links() }}
                 @endif
             </div>
         </div>

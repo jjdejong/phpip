@@ -152,7 +152,7 @@
     </form>
   </div>
   <div class="card-body p-0">
-    <table class="table table-striped table-hover table-sm">
+    <table class="table table-striped table-hover table-sm mb-1">
       <thead>
         <tr id="sortHeaders" class="bg-light">
           <th><a href="#" class="sortable" data-sortkey="caseref" data-sortdir="desc">Reference</a></th>
@@ -259,12 +259,7 @@
           <td class="tab1 {{ $hideTab1 }}">{{ $matter->GrtNo }}</td>
         </tr>
         @endforeach
-    <tr>
-      <td colspan="9">
-        {{ $matters->links() }}
-      </td>
-    </tr>
       </tbody>
     </table>
-
+    {{ $matters->links() }}
 @stop
