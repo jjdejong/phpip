@@ -20,13 +20,11 @@ class RenewalController extends Controller
         $MyRenewals = $request->input('my_renewals');
         $filters = $request->except([
             'my_renewals',
-            'page',
-            'tab'
+            'page'
         ]);
         $step = $request->input('step');
         $invoice_step = $request->input('invoice_step');
-        $tab = $request->input('tab');
-
+        
         // Get list of active renewals
         $renewals = Task::renewals();
         if ($step == 0) {
@@ -94,7 +92,7 @@ class RenewalController extends Controller
         }
         $renewals = $renewals->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
         $renewals->appends($request->input())->links(); // Keep URL parameters in the paginator links
-        return view('renewals.index', compact('renewals', 'step', 'invoice_step', 'tab'));
+        return view('renewals.index', compact('renewals', 'step', 'invoice_step'));
     }
 
     public function firstcall(Request $request, int $send)
@@ -942,9 +940,6 @@ class RenewalController extends Controller
     */
     public function logs(Request $request)
     {
-        $filters = $request->except([
-            'tab'
-        ]);
         // Get list of logs
         $logs = new RenewalsLog();
         if (!empty($filters)) {
