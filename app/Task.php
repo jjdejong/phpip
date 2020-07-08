@@ -18,7 +18,6 @@ class Task extends Model
         'done_date'
     ];
 
-
     public function setDueDateAttribute($value)
     {
         $locale = Carbon::getLocale();
@@ -41,12 +40,13 @@ class Task extends Model
         return $this->belongsTo('App\Event', 'trigger_id');
     }
 
-    public function matter() {
+    public function matter()
+    {
         return $this->hasOneThrough('App\Matter', 'App\Event', 'id', 'id', 'trigger_id', 'matter_id');
     }
 
     public function rule() {
-        return $this->hasMany('App\Rule', 'id','rule_used');
+        return $this->hasMany('App\Rule', 'id', 'rule_used');
     }
 
     public static function getUsersOpenTaskCount()
@@ -168,7 +168,7 @@ class Task extends Model
             'event.code AS event_name',
             'event.event_date',
             'event.detail AS number',
-            DB::raw("GROUP_CONCAT(DISTINCT pa_app.name SEPARATOR ', ') AS applicant_name"),
+            DB::raw("COALESCE(GROUP_CONCAT(DISTINCT pa_own.name SEPARATOR ', '), GROUP_CONCAT(DISTINCT pa_app.name SEPARATOR ', ')) AS applicant_name"),
             'pa_cli.name AS client_name',
             'pa_cli.address AS client_address',
             'pa_cli.country AS client_country',
@@ -192,6 +192,14 @@ class Task extends Model
             function ($join) {
                 $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'pmal_app.matter_id')
                 ->where('pmal_app.role', 'APP');
+            }
+        )
+        ->leftJoin(
+            DB::raw('matter_actor_lnk pmal_own
+            JOIN actor pa_own ON pa_own.id = pmal_own.actor_id'),
+            function ($join) {
+                $join->on('matter.id', 'pmal_own.matter_id')
+                ->where('pmal_own.role', 'OWN');
             }
         )
         ->leftJoin(
