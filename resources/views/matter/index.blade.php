@@ -16,6 +16,7 @@
   var url = new URL(window.location.href);
 
   function refreshMatterList() {
+    url.searchParams.delete('page');
     window.history.pushState('', 'phpIP', url);
     reloadPart(url, 'matterList');
   }
@@ -67,7 +68,7 @@
         if (url.searchParams.has('responsible')) {
           url.searchParams.delete('responsible');
         } else {
-          url.searchParams.set('responsible', e.target.value);
+          url.searchParams.set('responsible', e.target.dataset.responsible);
         }
         refreshMatterList();
         break;
@@ -94,7 +95,6 @@
     } else {
       url.searchParams.set(e.target.name, e.target.value);
     }
-    url.searchParams.delete('page');
     refreshMatterList();
   }, 500));
 
@@ -259,9 +259,11 @@
           <td class="tab1 {{ $hideTab1 }}">{{ $matter->GrtNo }}</td>
         </tr>
         @endforeach
+        <tr>
+          <td colspan="9">{{ $matters->links() }}</td>
+        </tr>
       </tbody>
     </table>
-    {{ $matters->links() }}
   </div>
 </div>
 @stop
