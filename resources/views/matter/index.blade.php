@@ -92,9 +92,9 @@
     if (e.target.value.length === 0) {
       url.searchParams.delete(e.target.name);
     } else {
-      url.searchParams.delete('page');
       url.searchParams.set(e.target.name, e.target.value);
     }
+    url.searchParams.delete('page');
     refreshMatterList();
   }, 500));
 
@@ -262,4 +262,6 @@
       </tbody>
     </table>
     {{ $matters->links() }}
+  </div>
+</div>
 @stop

@@ -24,9 +24,9 @@ class MatterController extends Controller
             'include_dead'
         ]);
 
-        $matters = Matter::filter($request->input('sortkey', 'id'), $request->input('sortdir', 'desc'), $filters, $request->display_with, $request->include_dead, true);
+        $matters = Matter::filter($request->input('sortkey', 'id'), $request->input('sortdir', 'desc'), $filters, $request->display_with, $request->include_dead)
+        ->simplePaginate(25);
         $matters->appends($request->input())->links(); // Keep URL parameters in the paginator links
-
         return view('matter.index', compact('matters'));
     }
 
@@ -276,10 +276,12 @@ class MatterController extends Controller
             'value',
             'sortkey',
             'sortdir',
-            'tab'
+            'tab',
+            'include_dead'
         ]);
 
-        $export = Matter::filter($request->input('sortkey', 'caseref'), $request->input('sortdir', 'asc'), $filters, $request->display_with, false)->toArray();
+        $export = Matter::filter($request->input('sortkey', 'caseref'), $request->input('sortdir', 'asc'), $filters, $request->display_with, $request->include_dead)
+        ->get()->toArray();
 
         $captions = [
             'Our Ref',
@@ -318,7 +320,7 @@ class MatterController extends Controller
             fputcsv($export_csv, array_map("utf8_decode", $row), ';');
         }
         rewind($export_csv);
-        $filename = 'phpIP-export.csv';
+        $filename = Now()->isoFormat('YMMDDHHmmss') . '_matters.csv';
 
         return response()->stream(
             function () use ($export_csv) {

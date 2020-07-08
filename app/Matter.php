@@ -185,7 +185,7 @@ class Matter extends Model
         return $this->belongsTo('App\Type');
     }
 
-    public static function filter($sortkey = 'id', $sortdir = 'desc', $multi_filter = [], $display_with = false, $include_dead = false, $paginated = false)
+    public static function filter($sortkey = 'id', $sortdir = 'desc', $multi_filter = [], $display_with = false, $include_dead = false)
     {
         $query = Matter::select(
             'matter.uid AS Ref',
@@ -224,30 +224,8 @@ class Matter extends Model
             function ($join) {
                 $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'clilnk.matter_id')->where('clilnk.role', 'CLI');
             }
-        );
-
-        if (array_key_exists('Inventor1', $multi_filter)) {
-            $query->leftJoin(
-                DB::raw('matter_actor_lnk invlnk
-                JOIN actor inv ON inv.id = invlnk.actor_id'),
-                function ($join) {
-                    $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'invlnk.matter_id')->where('invlnk.role', 'INV');
-                }
-            );
-        } else {
-            $query->leftJoin(
-                DB::raw('matter_actor_lnk invlnk
-                JOIN actor inv ON inv.id = invlnk.actor_id'),
-                function ($join) {
-                    $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'invlnk.matter_id')->where([
-                        ['invlnk.role', 'INV'],
-                        ['invlnk.display_order', 1]
-                    ]);
-                }
-            );
-        }
-
-        $query->leftJoin(
+        )
+        ->leftJoin(
             DB::raw('matter_actor_lnk agtlnk
             JOIN actor agt ON agt.id = agtlnk.actor_id'),
             function ($join) {
@@ -294,6 +272,28 @@ class Matter extends Model
         ->leftJoin(DB::raw('classifier tit2
             JOIN classifier_type ct2 ON tit2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit2.matter_id')
         ->where('e2.matter_id', null);
+
+
+        if (array_key_exists('Inventor1', $multi_filter)) {
+            $query->leftJoin(
+                DB::raw('matter_actor_lnk invlnk
+                JOIN actor inv ON inv.id = invlnk.actor_id'),
+                function ($join) {
+                    $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'invlnk.matter_id')->where('invlnk.role', 'INV');
+                }
+            );
+        } else {
+            $query->leftJoin(
+                DB::raw('matter_actor_lnk invlnk
+                JOIN actor inv ON inv.id = invlnk.actor_id'),
+                function ($join) {
+                    $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'invlnk.matter_id')->where([
+                        ['invlnk.role', 'INV'],
+                        ['invlnk.display_order', 1]
+                    ]);
+                }
+            );
+        }
 
         $authUserRole = Auth::user()->default_role;
         $authUserId = Auth::user()->id;
@@ -403,13 +403,7 @@ class Matter extends Model
             ->orderBy($sortkey, $sortdir);
         }
 
-        if ($paginated) {
-            $matters = $query->simplePaginate(25);
-        } else {
-            $matters = $query->get();
-        }
-
-        return $matters;
+        return $query;
     }
 
     public static function getCategoryMatterCount($user = null)
