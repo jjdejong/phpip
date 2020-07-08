@@ -131,8 +131,8 @@
         </label>
       </div>
       <div class="btn-group-toggle mr-3" id="mineAll" data-toggle="buttons">
-        <label id="showResponsible" class="btn btn-info {{ Request::get('responsible') ? 'active' : '' }}">
-          <input type="checkbox" name="responsible" value="{{ Auth::user ()->login }}"> Show Mine
+        <label id="showResponsible" class="btn btn-info {{ Request::has('responsible') ? 'active' : '' }}" data-responsible="{{ Auth::user()->login }}">
+          <input type="checkbox" name="responsible"> Show Mine
         </label>
       </div>
       <div class="btn-group-toggle mr-3" data-toggle="buttons">
