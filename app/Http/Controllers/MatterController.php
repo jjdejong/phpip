@@ -23,10 +23,10 @@ class MatterController extends Controller
             'tab',
             'include_dead'
         ]);
-
+        
         $matters = Matter::filter($request->input('sortkey', 'id'), $request->input('sortdir', 'desc'), $filters, $request->display_with, $request->include_dead)
         ->simplePaginate(25);
-        $matters->appends($request->input())->links(); // Keep URL parameters in the paginator links
+        $matters->withQueryString()->links(); // Keep URL parameters in the paginator links
         return view('matter.index', compact('matters'));
     }
 
