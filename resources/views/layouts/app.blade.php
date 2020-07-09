@@ -110,6 +110,8 @@
                 <a class="dropdown-item" href="{{ url('/default_actor') }}">Default actors</a>
                 <a class="dropdown-item" href="{{ url('/type') }}">Matter types</a>
                 <a class="dropdown-item" href="{{ url('/classifier_type') }}">Classifier types</a>
+                <a class="dropdown-item" href="{{ url('/document') }}">Email template classes</a>
+                <a class="dropdown-item" href="{{ url('/template-member') }}">Email template members</a>
                 @endcan
               </ul>
             </li>
