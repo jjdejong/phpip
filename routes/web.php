@@ -69,7 +69,7 @@ Route::group(['middleware' => 'auth'], function () {
         $option = $request->input('search_field');
         if ($option == "Ref") {
             $filter = array('Ref'  => $matter_search);
-            $matters = Matter::filter('caseref', 'asc', $filter, false, true);
+            $matters = Matter::filter('caseref', 'asc', $filter, false, true)->get();
             if (count($matters) == 1) {
                 return redirect('matter/' . $matters[0]->id);
             }
