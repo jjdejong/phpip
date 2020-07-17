@@ -124,7 +124,8 @@ class MatterController extends Controller
                 if ($request->priority) {
                     $new_matter->events()->create(['code' => 'PRI', 'alt_matter_id' => $request->parent_id]);
                 } else {
-                    $new_matter->filing()->save($parent_matter->filing->replicate());
+                    // Copy Filing event from original matter
+                    $new_matter->filing()->save($parent_matter->filing->replicate(['detail']));
                     $new_matter->parent_id = $request->parent_id;
                     $new_matter->events()->create(['code' => 'ENT', 'event_date' => now(), 'detail' => 'Child filing date']);
                 }

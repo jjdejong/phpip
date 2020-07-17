@@ -506,6 +506,7 @@ select 'PFIL', matter.id, matter.parent_id
 from matter join matter parent on parent.id = matter.parent_id
 where matter.origin in ('EP', 'WO')
 and parent.country = matter.origin");
+      DB::table('event_name')->where('code', 'ENT')->update(['status_event' => 1, 'notes' => 'Actual filing date of a child matter']);
 
       /* Doesnt run
       $matters = App\Matter::has('parentFiling')->has('filing')->with('parentFiling', 'filing', 'entered');
