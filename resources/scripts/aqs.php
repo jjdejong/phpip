@@ -143,9 +143,9 @@ foreach ($xml->PATENT as $AQSpatent) {
 			continue; // Skip irrelevant date
 
 		// Identify annuity to update with AQS info
-		$q = "SELECT task.id, task.cost, task.fee, task.currency, task.notes, task.done_date, task.due_date FROM task, event
-		WHERE task.trigger_id = event.id
-		AND task.code = 'REN'
+		$q = "SELECT task.id, task.cost, task.fee, task.currency, task.notes, task.done_date, task.due_date, task.invoice_step
+    FROM task JOIN event ON task.trigger_id = event.id
+		WHERE task.code = 'REN'
 		AND event.matter_id = '$AQSpatent->UID'
 		AND CAST(task.detail AS UNSIGNED) = '$renewal->YEAR'";
 		$result = $db->query($q);
@@ -181,7 +181,10 @@ foreach ($xml->PATENT as $AQSpatent) {
       }
 			if ($renewal->DATE_PAID && $renewal->DATE_PAID != $myRenewal['done_date']) {
 				$set[] = "done_date = '$renewal->DATE_PAID'";
-        $set[] = "step = 10";
+        $set[] = "step = -1";
+        if (!$myRenewal['invoice_step']) {
+          $set[] = "invoice_step = 1";
+        }
 			}
 			if ($renewal->CANCELLED && $myRenewal['notes'] != 'Cancelled') { // Payment cancelled or unnecessary
 				$set[] = "notes = 'Cancelled'";
@@ -224,8 +227,8 @@ foreach ($xml->PATENT as $AQSpatent) {
         $fee = round($aqs['our_fee'] + $aqs['aqs_fee'] + (0.2 - (0.05/1000)*$cost)*$cost, 2);
       }
 		  if ($renewal->INVOICED_COST && $renewal->DATE_PAID) { // Cost provided - insert with costs
-				$q = "INSERT INTO task (code, detail, done_date, due_date, currency, cost, fee, notes, trigger_id, step, created_at, creator, updated_at)
-				VALUES ('REN', ''$renewal->YEAR', '$renewal->DATE_PAID', '$renewal->DUEDATE', '$renewal->CURRENCY', $cost, $fee, 'Invoiced by AQS', $trigger_id, 10, Now(), 'AQS', Now())";
+				$q = "INSERT INTO task (code, detail, done_date, due_date, currency, cost, fee, notes, trigger_id, step, invoice_step, created_at, creator, updated_at)
+				VALUES ('REN', '$renewal->YEAR', '$renewal->DATE_PAID', '$renewal->DUEDATE', '$renewal->CURRENCY', $cost, $fee, 'Invoiced by AQS', $trigger_id, -1, 1, Now(), 'AQS', Now())";
 				$result = $db->query($q);
 				if (!$result) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
@@ -238,8 +241,8 @@ foreach ($xml->PATENT as $AQSpatent) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
 				} else $somethingupdated = "estimated cost $renewal->ESTIMATED_COST";
 			} elseif (!$renewal->INVOICED_COST && $renewal->DATE_PAID) { // No costs provided but paid
-				$q = "INSERT INTO task (code, detail, done_date, due_date, trigger_id, step, created_at, creator, updated_at)
-				VALUES ('REN', '$renewal->YEAR', '$renewal->DATE_PAID', '$renewal->DUEDATE', '$trigger_id', 10, Now(), 'AQS', Now())";
+				$q = "INSERT INTO task (code, detail, done_date, due_date, trigger_id, step, invoice_step, created_at, creator, updated_at)
+				VALUES ('REN', '$renewal->YEAR', '$renewal->DATE_PAID', '$renewal->DUEDATE', '$trigger_id', -1, 1, Now(), 'AQS', Now())";
 				$result = $db->query($q);
 				if (!$result) {
 					echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;

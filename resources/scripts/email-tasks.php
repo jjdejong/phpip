@@ -29,8 +29,13 @@ $msg = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
         <th>Resp.</th>
       </tr>';
 
-$query_tasks = "SELECT matter_id, CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', concat(caseref, country), origin), type_code), idx) AS Ref,
-category, concat_ws(' - ', name, detail) AS task, due_date, responsible
+$query_tasks = "SELECT
+matter_id,
+CONCAT_WS('', CONCAT_WS('-', CONCAT_WS('/', concat(caseref, country), origin), type_code), idx) AS Ref,
+category,
+concat_ws(' - ', name, detail) AS task,
+due_date,
+responsible
 FROM task_list
 WHERE dead = 0
 AND done = 0
