@@ -22,8 +22,8 @@ class RenewalController extends Controller
             'my_renewals',
             'page'
         ]);
-        $step = $request->input('step');
-        $invoice_step = $request->input('invoice_step');
+        $step = $request->step;
+        $invoice_step = $request->invoice_step;
         
         // Get list of active renewals
         $renewals = Task::renewals();
