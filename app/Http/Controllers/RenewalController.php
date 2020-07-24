@@ -251,7 +251,11 @@ class RenewalController extends Controller
                             $contact = new \App\Actor();
                             $contact = $contact->where('id', $ren->client_id)->first();
                             if ($contact->email == '') {
-                                return "No email address for " . $ren->client_name;
+                                if (config('renewal.general.mail_recipient') == 'client') {
+                                    return "No email address for " . $ren->client_name;
+                                } else {
+                                    $contact->email = "<< $contact->name does not have email address in database >>";
+                                }
                             }
                             array_push($email_list, ['email' => $contact->email, 'name' => $contact->first_name . ' ' . $contact->name]);
                         } else {

@@ -307,7 +307,7 @@
         <button id="clearFilters" type="button" class="btn btn-info float-right">&larrpl; Clear filters</button>
     </div>
     <div class="card-header py-1">
-        <nav class="col-12 mt-1">
+        <nav class="mt-1">
             <div class="nav nav-pills justify-content-center" id="tabsGroup">
                 <a class="nav-item nav-link {{ !$step && !$invoice_step ? 'active' : '' }}" href="#p1" data-toggle="tab" data-step="0">First call</a>
                 <a class="nav-item nav-link {{ $step == 2 ? 'active' : '' }}" href="#p2" data-toggle="tab" data-step="2">Reminder</a>
@@ -328,19 +328,19 @@
             <div class="tab-pane {{ !$step && !$invoice_step ? 'active' : '' }}" id="p1">
                 <div class="text-right">
                     <div class="btn-group">
-                        <button class="btn btn-outline-primary" type="button" id="callRenewals">Send call email</button>
-                        <button class="btn btn-outline-primary" type="button" id="renewalsSent">Call sent manually</button>
+                        <button class="btn btn-info" type="button" id="callRenewals">Send call email</button>
+                        <button class="btn btn-info" type="button" id="renewalsSent">Call sent manually</button>
                     </div>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 2 ? 'active' : '' }}" id="p2">
-                <div class="text-right">
+                <div class="container text-right">
                     <div class="btn-group">
                         <button class="btn btn-outline-info" type="button" id="reminderRenewals">Send reminder email</button>
                         <button class="btn btn-outline-info" type="button" id="lastReminderRenewals" title="Send reminder and enter grace period">Send last reminder email</button>
-                        <button class="btn btn-outline-primary" type="button" id="instructedRenewals" title="Instructions received to pay">Payment order received</button>
-                        <button class="btn btn-outline-primary" type="button" id="abandonRenewals" title="Abandon instructions received">Abandon</button>
-                        <button class="btn btn-outline-primary" type="button" id="lapsedRenewals" title="Office lapse communication received">Lapsed</button>
+                        <button class="btn btn-info" type="button" id="instructedRenewals" title="Instructions received to pay">Payment order received</button>
+                        <button class="btn btn-info" type="button" id="abandonRenewals" title="Abandon instructions received">Abandon</button>
+                        <button class="btn btn-info" type="button" id="lapsedRenewals" title="Office lapse communication received">Lapsed</button>
                     </div>
                 </div>
             </div>
@@ -348,46 +348,46 @@
                 <div class="text-right">
                     <div class="btn-group">
                         <button class="btn btn-outline-info" type="button" id="xmlRenewals" title="Generate xml files for EP or FR">Download XML order to pay</button>
-                        <button class="btn btn-outline-primary" type="button" id='doneRenewals'>Paid</button>
+                        <button class="btn btn-info" type="button" id='doneRenewals'>Paid</button>
                     </div>
                 </div>
             </div>
             @if (config('renewal.general.receipt_tabs'))
             <div class="tab-pane {{ $step == 6 ? 'active' : ''}}" id="p4">
                 <div class="text-right">
-                    <button class="btn btn-outline-primary" type="button" id="receiptRenewals">Official receipts received</button>
+                    <button class="btn btn-info" type="button" id="receiptRenewals">Official receipts received</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 8 ? 'active' : ''}}" id="p5">
                 <div class="text-right">
-                    <button class="btn btn-outline-primary" type="button" id="sendReceiptsRenewals">Receipts sent</button>
+                    <button class="btn btn-info" type="button" id="sendReceiptsRenewals">Receipts sent</button>
                 </div>
             </div>
             @endif
             <div class="tab-pane {{ $step == 12 ? 'active' : ''}}" id="p6">
                 <div class="text-right">
-                    <button class="btn btn-outline-primary" type="button" id="lapsingRenewals">Lapse</button>
+                    <button class="btn btn-info" type="button" id="lapsingRenewals">Lapse</button>
                 </div>
             </div>
             <div class="tab-pane {{ $invoice_step == 1 ? 'active' : ''}}" id="p7">
                 <div class="text-right">
                     <div class="btn-group">
                         @if (config('renewal.invoice.backend') == 'dolibarr')
-                        <button class="btn btn-outline-primary" type="button" id="invoiceRenewals">Generate invoice</button>
+                        <button class="btn btn-info" type="button" id="invoiceRenewals">Generate invoice</button>
                         @endif
                         <button class="btn btn-outline-info" type="button" id="renewalsExport">Export all</button>
-                        <button class="btn btn-outline-primary" type="button" id="renewalsInvoiced">Invoiced</button>
+                        <button class="btn btn-info" type="button" id="renewalsInvoiced">Invoiced</button>
                     </div>
                 </div>
             </div>
             <div class="tab-pane {{ $invoice_step == 2 ? 'active' : ''}}" id="p8">
                 <div class="text-right">
-                    <button class="btn btn-outline-primary" type="button" id="invoicesPaid">Paid</button>
+                    <button class="btn btn-info" type="button" id="invoicesPaid">Paid</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 14 ? 'active' : ''}}" id="p9">
                 <div class="text-right">
-                    <button class="btn btn-outline-primary" type="button" id="sendLapsedRenewals">Lapse communication sent</button>
+                    <button class="btn btn-info" type="button" id="sendLapsedRenewals">Lapse communication sent</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 10 ? 'active' : ''}}" id="p10">
