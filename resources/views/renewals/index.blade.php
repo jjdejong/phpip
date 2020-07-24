@@ -326,7 +326,7 @@
         </nav>
         <div class="tab-content mt-1">
             <div class="tab-pane {{ !$step && !$invoice_step ? 'active' : '' }}" id="p1">
-                <div class="text-right">
+                <div class="container text-right">
                     <div class="btn-group">
                         <button class="btn btn-info" type="button" id="callRenewals">Send call email</button>
                         <button class="btn btn-info" type="button" id="renewalsSent">Call sent manually</button>
@@ -345,7 +345,7 @@
                 </div>
             </div>
             <div class="tab-pane {{ $step == 4 ? 'active' : ''}}" id="p3">
-                <div class="text-right">
+                <div class="container text-right">
                     <div class="btn-group">
                         <button class="btn btn-outline-info" type="button" id="xmlRenewals" title="Generate xml files for EP or FR">Download XML order to pay</button>
                         <button class="btn btn-info" type="button" id='doneRenewals'>Paid</button>
@@ -354,23 +354,23 @@
             </div>
             @if (config('renewal.general.receipt_tabs'))
             <div class="tab-pane {{ $step == 6 ? 'active' : ''}}" id="p4">
-                <div class="text-right">
+                <div class="container text-right">
                     <button class="btn btn-info" type="button" id="receiptRenewals">Official receipts received</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 8 ? 'active' : ''}}" id="p5">
-                <div class="text-right">
+                <div class="container text-right">
                     <button class="btn btn-info" type="button" id="sendReceiptsRenewals">Receipts sent</button>
                 </div>
             </div>
             @endif
             <div class="tab-pane {{ $step == 12 ? 'active' : ''}}" id="p6">
-                <div class="text-right">
+                <div class="container text-right">
                     <button class="btn btn-info" type="button" id="lapsingRenewals">Lapse</button>
                 </div>
             </div>
             <div class="tab-pane {{ $invoice_step == 1 ? 'active' : ''}}" id="p7">
-                <div class="text-right">
+                <div class="container text-right">
                     <div class="btn-group">
                         @if (config('renewal.invoice.backend') == 'dolibarr')
                         <button class="btn btn-info" type="button" id="invoiceRenewals">Generate invoice</button>
@@ -381,22 +381,22 @@
                 </div>
             </div>
             <div class="tab-pane {{ $invoice_step == 2 ? 'active' : ''}}" id="p8">
-                <div class="text-right">
+                <div class="container text-right">
                     <button class="btn btn-info" type="button" id="invoicesPaid">Paid</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 14 ? 'active' : ''}}" id="p9">
-                <div class="text-right">
+                <div class="container text-right">
                     <button class="btn btn-info" type="button" id="sendLapsedRenewals">Lapse communication sent</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 10 ? 'active' : ''}}" id="p10">
-                <div class="text-right">
+                <div class="container text-right">
                     <button class="btn btn-secondary" type="button" disabled>Closed renewals</button>
                 </div>
             </div>
             <div class="tab-pane lead {{ $invoice_step == 3 ? 'active' : ''}}" id="p11">
-                <div class="text-right">
+                <div class="container text-right">
                     <button class="btn btn-secondary" type="button" disabled>Paid invoices</button>
                 </div>
             </div>
