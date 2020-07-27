@@ -76,7 +76,7 @@ class Task extends Model
         return $selectQuery->get();
     }
 
-    public function openTasks($renewals, $what_tasks, $user_dasboard)
+    public function openTasks($renewals, $what_tasks, $user_dashboard)
     {
         $tasks = $this->select('task.id', 'en.name', 'task.detail', 'task.due_date', 'event.matter_id', 'matter.uid', 'tit.value as title', 'tm.value as trademark')
         ->join('event_name as en', 'task.code', 'en.code')
@@ -125,10 +125,10 @@ class Task extends Model
             ]);
         }
 
-        if ($user_dasboard) {
-            $tasks->where(function ($q) use ($user_dasboard) {
-                $q->where('matter.responsible', $user_dasboard)
-                ->orWhere('task.assigned_to', $user_dasboard);
+        if ($user_dashboard) {
+            $tasks->where(function ($q) use ($user_dashboard) {
+                $q->where('matter.responsible', $user_dashboard)
+                ->orWhere('task.assigned_to', $user_dashboard);
             });
         }
 

@@ -345,7 +345,8 @@ class MatterController extends Controller
             $query->where('code', '!=', 'REN');
         }, 'info:code,name', 'tasks.info:code,name'])->where('matter_id', $matter->id)
         ->orderBy('event_date')->get();
-        return view('matter.tasks', compact('events', 'matter'));
+        $is_renewals = 0;
+        return view('matter.tasks', compact('events', 'matter', 'is_renewals'));
     }
 
     public function renewals(Matter $matter)
@@ -356,7 +357,8 @@ class MatterController extends Controller
         }])->whereHas('tasks', function ($query) {
             $query->where('code', 'REN');
         })->where('matter_id', $matter->id)->get();
-        return view('matter.tasks', compact('events', 'matter'));
+        $is_renewals = 1;
+        return view('matter.tasks', compact('events', 'matter', 'is_renewals'));
     }
 
     public function actors(Matter $matter, $role)
