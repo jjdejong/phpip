@@ -345,10 +345,10 @@ class Matter extends Model
                             $query->where('status.event_date', 'LIKE', "$value%");
                             break;
                         case 'Client':
-                            $query->where('cli.name', 'LIKE', "$value%");
+                            $query->where(DB::raw('IFNULL(cli.name, clic.name)'), 'LIKE', "$value%");
                             break;
                         case 'ClRef':
-                            $query->where('clilnk.actor_ref', 'LIKE', "$value%");
+                            $query->where(DB::raw('IFNULL(clilnk.actor_ref, cliclnk.actor_ref)'), 'LIKE', "$value%");
                             break;
                         case 'Applicant':
                             $query->where('app.name', 'LIKE', "$value%");
