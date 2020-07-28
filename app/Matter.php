@@ -69,6 +69,11 @@ class Matter extends Model
         return $this->hasOne('App\MatterActors')->where('role_code', 'CLI');
     }
 
+    public function applicants()
+    {
+        return MatterActors::select(DB::raw("GROUP_CONCAT(name SEPARATOR ', ')"))->where('matter_id', $this->id)->where('role_code', 'APP');
+    }
+
     public function actorPivot()
     {
         return $this->hasMany('App\ActorPivot');
@@ -194,8 +199,8 @@ class Matter extends Model
             'matter.origin',
             DB::raw("GROUP_CONCAT(DISTINCT event_name.name SEPARATOR '; ') AS Status"),
             DB::raw("MIN(status.event_date) AS Status_date"),
-            DB::raw("GROUP_CONCAT(DISTINCT COALESCE(cli.display_name, cli.name) SEPARATOR '; ') AS Client"),
-            DB::raw("GROUP_CONCAT(DISTINCT clilnk.actor_ref SEPARATOR '; ') AS ClRef"),
+            DB::raw("GROUP_CONCAT(DISTINCT COALESCE(cli.display_name, clic.display_name, cli.name, clic.name) SEPARATOR '; ') AS Client"),
+            DB::raw("GROUP_CONCAT(DISTINCT COALESCE(clilnk.actor_ref, cliclnk.actor_ref) SEPARATOR '; ') AS ClRef"),
             DB::raw("GROUP_CONCAT(DISTINCT COALESCE(app.display_name, app.name) SEPARATOR '; ') AS Applicant"),
             DB::raw("COALESCE(agt.display_name, agt.name) AS Agent"),
             'agtlnk.actor_ref AS AgtRef',
@@ -222,9 +227,16 @@ class Matter extends Model
             DB::raw('matter_actor_lnk clilnk
             JOIN actor cli ON cli.id = clilnk.actor_id'),
             function ($join) {
-                $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'clilnk.matter_id')->where('clilnk.role', 'CLI');
+                $join->on('matter.id', 'clilnk.matter_id')->where('clilnk.role', 'CLI');
             }
         )
+        ->leftJoin(DB::raw('matter_actor_lnk cliclnk
+            JOIN actor clic ON clic.id = cliclnk.actor_id'), function ($join) {
+                $join->on('matter.container_id', 'cliclnk.matter_id')->where([
+                    ['cliclnk.role', 'CLI'],
+                    ['cliclnk.shared', 1]
+                ]);
+        })
         ->leftJoin(
             DB::raw('matter_actor_lnk agtlnk
             JOIN actor agt ON agt.id = agtlnk.actor_id'),
@@ -434,7 +446,7 @@ class Matter extends Model
             'event_name.name AS Status',
             'status.event_date AS Status_date',
             DB::raw("COALESCE(cli.display_name, clic.display_name, cli.name, clic.name) AS Client"),
-            DB::raw("COALESCE(clilnk.actor_ref, lclic.actor_ref) AS ClRef"),
+            DB::raw("COALESCE(clilnk.actor_ref, cliclnk.actor_ref) AS ClRef"),
             DB::raw("COALESCE(app.display_name, app.name) AS Applicant"),
             //DB::raw("COALESCE(agt.display_name, agt.name) AS Agent"),
             //'agtlnk.actor_ref AS AgtRef',
@@ -462,25 +474,23 @@ class Matter extends Model
         ->join('country', 'matter.country', 'country.iso')
         ->leftJoin(DB::raw('matter_actor_lnk clilnk
             JOIN actor cli ON cli.id = clilnk.actor_id'), function ($join) {
-            $join->on('matter.id', 'clilnk.matter_id')->where('clilnk.role', 'CLI');
+                $join->on('matter.id', 'clilnk.matter_id')->where('clilnk.role', 'CLI');
         })
-        ->leftJoin(DB::raw('matter_actor_lnk lclic
-            JOIN actor clic ON clic.id = lclic.actor_id'), function ($join) {
-                $join->on('matter.container_id', 'lclic.matter_id')->where([
-                    ['lclic.role', 'CLI'],
-                    ['lclic.shared', 1]
+        ->leftJoin(DB::raw('matter_actor_lnk cliclnk
+            JOIN actor clic ON clic.id = cliclnk.actor_id'), function ($join) {
+                $join->on('matter.container_id', 'cliclnk.matter_id')->where([
+                    ['cliclnk.role', 'CLI'],
+                    ['cliclnk.shared', 1]
                 ]);
-        });
-
-        $query->leftJoin(DB::raw('matter_actor_lnk invlnk
+        })
+        ->leftJoin(DB::raw('matter_actor_lnk invlnk
             JOIN actor inv ON inv.id = invlnk.actor_id'), function ($join) {
                 $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'invlnk.matter_id')->where([
                     ['invlnk.role', 'INV'],
                     ['invlnk.display_order', 1]
                 ]);
-        });
-
-        $query->leftJoin(DB::raw('matter_actor_lnk applnk
+        })
+        ->leftJoin(DB::raw('matter_actor_lnk applnk
             JOIN actor app ON app.id = applnk.actor_id'), function ($join) {
                 $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'applnk.matter_id')->where([
                     ['applnk.role', 'APP'],
@@ -510,7 +520,7 @@ class Matter extends Model
             JOIN classifier_type ct1 ON tit1.type_code = ct1.code AND ct1.main_display = 1 AND ct1.display_order = 1'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit1.matter_id')
         ->leftJoin(DB::raw('classifier tit2
             JOIN classifier_type ct2 ON tit2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit2.matter_id')
-        ->where('matter.id', '=', $id);
+        ->where('matter.id', $id);
         $info = $query->first();
         $description = array();
         $filed_date = Carbon::parse($info['Filed']);
