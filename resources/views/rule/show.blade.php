@@ -79,9 +79,8 @@
         <tr>
           <th><label title="{{ $ruleComments['use_priority'] }}">Use priority</label></th>
           <td><input class="noformat" type="checkbox" name="use_priority" {{ $ruleInfo->use_priority ? 'checked' : '' }}></td>
-          <td colspan="2"></td>
-          {{-- <th><label title="{{ $ruleComments['use_parent'] }}">Use parent</label></th>
-          <td><input class="noformat" type="checkbox" name="use_parent" {{ $ruleInfo->use_parent ? 'checked' : '' }}></td> --}}
+          <th><label title="{{ $ruleComments['recurring'] }}">Recurring</label></th>
+          <td><input class="noformat" type="checkbox" name="recurring" {{ $ruleInfo->recurring ? 'checked' : '' }}></td>
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['condition_event'] }}">Apply if</label></th>
