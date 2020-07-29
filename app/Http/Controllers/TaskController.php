@@ -66,10 +66,10 @@ class TaskController extends Controller
         if ($request->has('due_date')) {
             $request->merge(['rule_used' => null]);
         }
-        if ($request->has('done_date') || $request->done) {
-            $request->merge(['step' => 10]);
+        // Remove renewal from renewal management pipeline
+        if (($request->has('done_date') || $request->done) && $task->code == 'REN') {
+            $request->merge(['step' => -1]);
         }
-
         $task->update($request->except(['_token', '_method']));
         return $task;
     }
