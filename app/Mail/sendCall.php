@@ -52,16 +52,18 @@ class sendCall extends Mailable
     {
         $templates = \App\TemplateMember::whereHas('class', function (Builder $q) {
             $q->where('name', 'sys_renewals');
-        })->where('language', $this->renewals[0]->language ?? app()->getLocale());
+        })->where('language', $this->renewals[0]['language'] ?? app()->getLocale());
         if ($this->step == 'first') {
-            $template = $templates->where('category', 'firstcall')->first();
+            $template = $templates->where('category', 'firstcall');
         }
         if ($this->step == 'last') {
-            $template = $templates->where('category', 'lastcall')->first();
+            $template = $templates->where('category', 'lastcall');
         }
         if ($this->step == 'warn') {
-            $template = $templates->where('category', 'warncall')->first();
+            $template = $templates->where('category', 'warncall');
         }
+        // Fails with code 404 if no template found
+        $template = $template->firstOrFail();
         $this->subject .= $template->subject;
         return $this->view('email.renewalCall', compact('template'));
     }

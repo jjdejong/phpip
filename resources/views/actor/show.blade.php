@@ -38,6 +38,10 @@
           <td><input type="text" class="noformat form-control" name="nationality" data-ac="/country/autocomplete" value="{{ empty($actorInfo->nationalityInfo) ? '' : $actorInfo->nationalityInfo->name }}" placeholder="-" autocomplete="off"></td>
         </tr>
         <tr>
+          <th>Language</th>
+          <td><input type="text" class="noformat form-control" name="language" placeholder="fr/en/de" value="{{ $actorInfo->language }}" autocomplete="off"></td>
+        </tr>
+        <tr>
           <th><label title="{{ $actorComments['function'] }}">Function</label></th>
           <td><input type="text" class="noformat form-control" name="function" value="{{ $actorInfo->function }}" placeholder="-"></td>
         </tr>

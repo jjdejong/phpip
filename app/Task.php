@@ -169,14 +169,14 @@ class Task extends Model
             'event.event_date',
             'event.detail AS number',
             DB::raw("COALESCE(GROUP_CONCAT(DISTINCT pa_own.name SEPARATOR ', '), GROUP_CONCAT(DISTINCT pa_app.name SEPARATOR ', ')) AS applicant_name"),
-            'pa_cli.name AS client_name',
-            'pa_cli.address AS client_address',
-            'pa_cli.country AS client_country',
-            'pa_cli.ren_discount AS discount',
-            'pmal_cli.actor_id AS client_id',
-            'pmal_cli.actor_ref AS client_ref',
-            'pa_cli.email',
-            'pa_cli.language',
+            DB::raw('COALESCE(pa_cli.name, clic.name) AS client_name'),
+            DB::raw('COALESCE(pa_cli.address, clic.address) AS client_address'),
+            DB::raw('COALESCE(pa_cli.country, clic.country) AS client_country'),
+            DB::raw('COALESCE(pa_cli.ren_discount, clic.ren_discount) AS discount'),
+            DB::raw('COALESCE(pmal_cli.actor_id, cliclnk.actor_id) AS client_id'),
+            DB::raw('COALESCE(pmal_cli.actor_ref, cliclnk.actor_ref) AS client_ref'),
+            DB::raw('COALESCE(pa_cli.email, clic.email) AS email'),
+            DB::raw('COALESCE(pa_cli.language, clic.language) AS language'),
             'matter.responsible',
             'tit.value AS short_title',
             'titof.value AS title',
@@ -206,10 +206,16 @@ class Task extends Model
             DB::raw('matter_actor_lnk pmal_cli
             JOIN actor pa_cli ON pa_cli.id = pmal_cli.actor_id'),
             function ($join) {
-                $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'pmal_cli.matter_id')
-                ->where('pmal_cli.role', 'CLI');
+                $join->on('matter.id', 'pmal_cli.matter_id')->where('pmal_cli.role', 'CLI');
             }
         )
+        ->leftJoin(DB::raw('matter_actor_lnk cliclnk
+            JOIN actor clic ON clic.id = cliclnk.actor_id'), function ($join) {
+                $join->on('matter.container_id', 'cliclnk.matter_id')->where([
+                    ['cliclnk.role', 'CLI'],
+                    ['cliclnk.shared', 1]
+                ]);
+        })
         ->leftJoin('country as mcountry', 'mcountry.iso', 'matter.country')
         ->join('event', 'matter.id', 'event.matter_id')
         ->leftJoin(

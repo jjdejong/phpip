@@ -195,13 +195,14 @@
             xhr.onload = function () {
                 if (this.status === 200) {
                     resolve(JSON.parse(this.responseText).success);
-                } else if (this.status === 419) {
-                    reject("Token expired. Refresh the page.");
-                } else if (this.status === 501)
-                {
-                    reject(JSON.parse(this.responseText).error);
+                }
+                if (this.status === 419) {
+                    reject("Token expired. Refresh the page");
+                }
+                if (this.status === 404) {
+                    reject("No email template found - check that your templates match your client's language");
                 } else {
-                    reject("Something went wrong.\n");
+                    reject("Something went wrong");
                 }
             }
             xhr.send(string);

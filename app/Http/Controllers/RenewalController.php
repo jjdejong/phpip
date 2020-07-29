@@ -193,6 +193,7 @@ class RenewalController extends Controller
                     }
                     $renewal['due_date'] = $due_date->isoFormat('L');
                     $renewal['country'] = $ren->country_FR;
+                    $renewal['language'] = $ren->language;
                     $renewal['desc'] = $desc;
                     // Détermine le taux de tva // TODO
                     $renewal['annuity'] = intval($ren->detail);
@@ -278,7 +279,7 @@ class RenewalController extends Controller
                                 $instruction_date,
                                 number_format($total, 2, ',', ' '),
                                 number_format($total_ht, 2, ',', ' '),
-                                $reminder ? '[RAPPEL] ' : '',
+                                $reminder ? ($ren->language == 'en' ? '[REMINDER] ' : '[RAPPEL] ') : '',
                                 $dest
                             ));
                         $firstPass = true;
