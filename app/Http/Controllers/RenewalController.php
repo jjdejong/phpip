@@ -11,6 +11,7 @@ use App\MatterActors;
 use App\RenewalsLog;
 use App\Mail\sendCall;
 use IntlDateFormatter;
+use Illuminate\Support\Facades\DB;
 
 class RenewalController extends Controller
 {
@@ -55,7 +56,7 @@ class RenewalController extends Controller
                             $renewals->where('due_date', '<=', "$value");
                             break;
                         case 'Name':
-                            $renewals->where('pa_cli.name', 'LIKE', "$value%");
+                            $renewals->where(DB::raw('IFNULL(pa_cli.name, clic.name)'), 'LIKE', "$value%");
                             break;
                         case 'Country':
                             $renewals->where('matter.country', 'LIKE', "$value%");
