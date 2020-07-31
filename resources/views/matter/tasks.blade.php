@@ -11,12 +11,12 @@
       @cannot('client')
       @if($is_renewals)
       @php
-        $ncols += 4;
+        $ncols += 3;
       @endphp
       <th>Cost</th>
       <th>Fee</th>
       <th>Cur.</th>
-      <th>Time</th>
+      {{-- <th>Time</th> --}}
       @endif
       @endcannot
       <th>By</th>
@@ -72,7 +72,7 @@
       <td><input type="text" class="form-control noformat" name="cost" value="{{ $task->cost }}"></td>
       <td><input type="text" class="form-control noformat" name="fee" value="{{ $task->fee }}"></td>
       <td><input type="text" class="form-control noformat" name="currency" value="{{ $task->currency }}"></td>
-      <td><input type="text" class="form-control noformat" name="time_spent" value="{{ $task->time_spent }}"></td>
+      {{-- <td><input type="text" class="form-control noformat" name="time_spent" value="{{ $task->time_spent }}"></td> --}}
       @endif
       @endcannot
       <td><input type="text" class="form-control noformat" name="assigned_to" data-ac="/user/autocomplete" value="{{ $task->assigned_to }}"></td>
