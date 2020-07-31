@@ -211,8 +211,7 @@
           .then((data) => {
             if (data.message) {
               alert(data.message);
-            }
-            else {
+            } else {
                document.location.href=data.mailto;
                e.target.closest('tr').remove();
             }
@@ -227,16 +226,13 @@
           var currentTr = e.target.closest('tr');
           var parent = currentTr.parentNode;
           var next_sib = currentTr.nextSibling;
-          if (next_sib)
-          {
+          if (next_sib) {
             parent.insertBefore(select, next_sib);
-          }
-          else
-          {
+          } else {
             parent.appendChild(select);
           }
-          fetchInto(e.target.dataset.url, select);}
-        else {
+          fetchInto(e.target.dataset.url, select);
+        } else {
           form_tr.remove();
         }
       }
