@@ -381,6 +381,13 @@
               });
           }
           break;
+
+        case 'regenerateTasks':
+          if (confirm("Regenerating the tasks will delete all the existing automatically created tasks and renewals for this event.\nPast tasks will not be recreated - make sure they have been dealt with.\nContinue anyway?")) {
+            fetchREST('/event/' + e.target.dataset.event_id + '/recreateTasks', 'POST')
+              .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
+          }
+          break;
       }
 
       /* Various functions used here and there */

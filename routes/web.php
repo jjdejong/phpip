@@ -15,6 +15,7 @@ use App\Matter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return view('welcome');
@@ -184,8 +185,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('template-style/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\TemplateMember::select('style as value','style as key')
+        return App\TemplateMember::select('style as value', 'style as key')
                         ->where('style', 'like', "$term%")->distinct()->get();
+    });
+
+    Route::post('event/{event}/recreateTasks', function (App\Event $event) {
+        return DB::statement('CALL recreate_tasks(?, ?)', [$event->id, Auth::user()->login]);
     });
 
     Route::resource('matter', 'MatterController');

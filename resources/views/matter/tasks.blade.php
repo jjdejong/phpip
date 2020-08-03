@@ -41,11 +41,17 @@
                 &CirclePlus;
               </a>
             </li>
-            <li class="list-inline-item ml-2">
+            <li class="list-inline-item">
               <a href="#" class="text-danger" id="deleteEvent" data-event_id="{{ $event->id }}" title="Delete event (with tasks)">
                 &CircleTimes;
               </a>
             </li>
+            <li class="list-inline-item" style="font-size:1rem">
+              <a href="#" class="text-danger" id="regenerateTasks" data-event_id="{{ $event->id }}" title="Regenerate Tasks">
+                &#8623;
+              </a>
+            </li>
+          </span>
           @endcanany
         </ul>
       </td>
