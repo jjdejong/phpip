@@ -10,7 +10,6 @@ use App\Task;
 use App\MatterActors;
 use App\RenewalsLog;
 use App\Mail\sendCall;
-use IntlDateFormatter;
 use Illuminate\Support\Facades\DB;
 
 class RenewalController extends Controller
@@ -779,16 +778,6 @@ class RenewalController extends Controller
      */
     public function renewalOrder(Request $request)
     {
-        // TODO Use Carbon for formatting dates
-        $fmt = new IntlDateFormatter(
-            config('app.locale'),
-            IntlDateFormatter::FULL,
-            IntlDateFormatter::FULL,
-            config('app.timezone'),
-            IntlDateFormatter::GREGORIAN,
-            'yyyyMMdd'
-        );
-
         $tids = $request->task_ids;
         $procedure = '';
         // For logs
@@ -802,7 +791,6 @@ class RenewalController extends Controller
         if ($xml->header->sender->name == 'NAME') {
             $xml->header->sender->name = Auth::user()->name;
         }
-        //$xml = str_replace('TRANSACTION', 'ANNUITY ' . $fmt->format(time()), $xml);
         $xml->header->{"payment-reference-id"} = 'ANNUITY ' . date('Ymd');
         $total = 0;
         $renewals = Task::renewals()->whereIn('task.id', $tids)->get();
@@ -825,14 +813,14 @@ class RenewalController extends Controller
                     $number = preg_replace("/[^0-9]/", "", $renewal->pub_num);
                     $country = 'EP';
             } else {
-                $number = $renewal->fil_num;
+                $number = preg_replace("/[^0-9]/", "", $renewal->fil_num);
             }
             $fees = $xml->detail->addChild('fees');
             $fees->addAttribute('procedure', $procedure);
             $docid = $fees->addChild('document-id');
             $docid->addChild('country', $country);
             $docid->addChild('doc-number', $number);
-            $docid->addChild('date', $fmt->format(strtotime($renewal->event_date)));
+            $docid->addChild('date', Carbon::parse($renewal->event_date)->isoFormat('YMMDD'));
             $docid->addChild('kind', 'application');
             $fees->addChild('file-reference-id', $renewal->uid);
             $fees->addChild('owner', $procedure == 'FR' ? $renewal->uid : $renewal->applicant_name);
@@ -841,7 +829,7 @@ class RenewalController extends Controller
             $fee->addChild('fee-sub-amount', $renewal->cost);
             $fee->addChild('fee-factor', '1');
             $fee->addChild('fee-total-amount', $renewal->cost);
-            $fee->addChild('fee-date-due', $fmt->format(strtotime($renewal->event_date)));
+            $fee->addChild('fee-date-due', Carbon::parse($renewal->due_date)->isoFormat('YMMDD'));
             /*$xml .= '
         <fees procedure="' . $procedure . '">
             <document-id>
