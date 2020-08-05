@@ -24,8 +24,13 @@ class MatterController extends Controller
             'include_dead'
         ]);
         
-        $matters = Matter::filter($request->input('sortkey', 'id'), $request->input('sortdir', 'desc'), $filters, $request->display_with, $request->include_dead)
-        ->simplePaginate(25);
+        $matters = Matter::filter(
+            $request->input('sortkey', 'id'),
+            $request->input('sortdir', 'desc'),
+            $filters,
+            $request->display_with,
+            $request->include_dead
+        )->simplePaginate(25);
         $matters->withQueryString()->links(); // Keep URL parameters in the paginator links
         return view('matter.index', compact('matters'));
     }
@@ -44,7 +49,8 @@ class MatterController extends Controller
     **/
     public function info($id)
     {
-        return Matter::with(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers'])->find($id);
+        return Matter::with(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers'])
+            ->find($id);
     }
 
     /**
@@ -59,10 +65,12 @@ class MatterController extends Controller
         $category = [];
         $category_code = $request->input('category');
         if ($operation != 'new') {
-            $parent_matter = Matter::with('container', 'countryInfo', 'originInfo', 'category', 'type')->find($request->matter_id);
+            $parent_matter = Matter::with('container', 'countryInfo', 'originInfo', 'category', 'type')
+                ->find($request->matter_id);
             if ($operation == 'clone') {
                 // Generate the next available caseref based on the prefix
-                $parent_matter->caseref = Matter::where('caseref', 'like', $parent_matter->category->ref_prefix . '%')->max('caseref');
+                $parent_matter->caseref = Matter::where('caseref', 'like', $parent_matter->category->ref_prefix . '%')
+                    ->max('caseref');
                 ++$parent_matter->caseref;
             }
         } else {
@@ -71,7 +79,8 @@ class MatterController extends Controller
                 $ref_prefix = \App\Category::find($category_code)['ref_prefix'];
                 $category = [
                     'code' => $category_code,
-                    'next_caseref' =>  Matter::where('caseref', 'like', $ref_prefix . '%')->max('caseref'),
+                    'next_caseref' =>  Matter::where('caseref', 'like', $ref_prefix . '%')
+                        ->max('caseref'),
                     'name' => \App\Category::find($category_code)['category']
                 ];
                 ++$category['next_caseref'];
@@ -127,7 +136,11 @@ class MatterController extends Controller
                     // Copy Filing event from original matter
                     $new_matter->filing()->save($parent_matter->filing->replicate(['detail']));
                     $new_matter->parent_id = $request->parent_id;
-                    $new_matter->events()->create(['code' => 'ENT', 'event_date' => now(), 'detail' => 'Child filing date']);
+                    $new_matter->events()->create([
+                        'code' => 'ENT',
+                        'event_date' => now(),
+                        'detail' => 'Child filing date'
+                    ]);
                 }
                 $new_matter->save();
                 break;
@@ -137,7 +150,8 @@ class MatterController extends Controller
                 $new_matter->priority()->createMany($parent_matter->priority->toArray());
                 // Copy actors from original matter
                 // Cannot use Eloquent relationships because they do not handle unique key constraints
-                // - the issue arises for actors that are inserted upon matter creation by a trigger based on the default_actors table
+                // - the issue arises for actors that are inserted upon matter creation by a trigger based
+                //   on the default_actors table
                 $actors = $parent_matter->actorPivot;
                 $new_matter_id = $new_matter->id;
                 $actors->each(function ($item) use ($new_matter_id) {
@@ -180,7 +194,8 @@ class MatterController extends Controller
         ]);
 
         $parent_id = $request->parent_id;
-        $parent_matter = Matter::with('priority', 'filing', 'publication', 'grant', 'classifiersNative')->find($parent_id);
+        $parent_matter = Matter::with('priority', 'filing', 'publication', 'grant', 'classifiersNative')
+            ->find($parent_id);
 
         foreach ($request->ncountry as $country) {
             $request->merge([
@@ -222,7 +237,15 @@ class MatterController extends Controller
      */
     public function edit(Matter $matter)
     {
-        $matter->load('container', 'parent', 'countryInfo:iso,name', 'originInfo:iso,name', 'category', 'type', 'filing');
+        $matter->load(
+            'container',
+            'parent',
+            'countryInfo:iso,name',
+            'originInfo:iso,name',
+            'category',
+            'type',
+            'filing'
+        );
         if ($matter->filing) {
             $cat_edit = 0;
             $country_edit = 0;
@@ -281,8 +304,13 @@ class MatterController extends Controller
             'include_dead'
         ]);
 
-        $export = Matter::filter($request->input('sortkey', 'caseref'), $request->input('sortdir', 'asc'), $filters, $request->display_with, $request->include_dead)
-        ->get()->toArray();
+        $export = Matter::filter(
+            $request->input('sortkey', 'caseref'),
+            $request->input('sortdir', 'asc'),
+            $filters,
+            $request->display_with,
+            $request->include_dead
+        )->get()->toArray();
 
         $captions = [
             'Our Ref',
@@ -380,25 +408,33 @@ class MatterController extends Controller
     }
 
     /**
-    * list Matters for actor by display name, where actors found are registered directly inside or in the related container or parent
-    * 
+    * List Matters for actor by display name, where actors found are registered directly
+    * inside or in the related container or parent
+    * (not used?)
      * @param  string  $dname  value to search in display_name
-     * @return Json     list of matters 
+     * @return Json     list of matters
     */
-    public function filesByActor(string $dname) {
-        $dname = urldecode($dname);
-        $actorpivot1 = new ActorPivot();
-        $actorpivot2 = new ActorPivot();
-        $actor_model = new Actor();
-        $matter = new Matter();
+    // public function filesByActor(string $dname) {
+    //     $dname = urldecode($dname);
+    //     $actorpivot1 = new ActorPivot();
+    //     $actorpivot2 = new ActorPivot();
+    //     $actor_model = new Actor();
+    //     $matter = new Matter();
 
-        $actor_list = $actor_model->select(['id'])->where('display_name', 'like', $dname . '%')->get()->toArray();
-        $ma1 = $actorpivot1->select(['matter_id'])->whereIn('actor_id', $actor_list)->get()->toArray();
-        $ma2 = $actorpivot2->select(['matter_id'])->whereIn('actor_id', $actor_list)->where('shared', 1)->get()->toArray();
-        $matter_list1 = $matter->select('id')->whereIn('parent_id', $ma2)->get()->toArray();
-        $matter_list2 = $matter->select('id')->whereIn('container_id', $ma2)->get()->toArray();
+    //     $actor_list = $actor_model->select(['id'])->where('display_name', 'like', $dname . '%')
+    //         ->get()->toArray();
+    //     $ma1 = $actorpivot1->select(['matter_id'])->whereIn('actor_id', $actor_list)
+    //         ->get()->toArray();
+    //     $ma2 = $actorpivot2->select(['matter_id'])->whereIn('actor_id', $actor_list)->where('shared', 1)
+    //         ->get()->toArray();
+    //     $matter_list1 = $matter->select('id')->whereIn('parent_id', $ma2)
+    //         ->get()->toArray();
+    //     $matter_list2 = $matter->select('id')->whereIn('container_id', $ma2)
+    //         ->get()->toArray();
         
-        $matter_actor = $matter->select(['id','caseref','suffix'])->whereIn('id', array_merge($ma1, $matter_list1, $matter_list2))->get();
-        return $matter_actor;
-    }
+    //     $matter_actor = $matter->select(['id','caseref','suffix'])
+    //         ->whereIn('id', array_merge($ma1, $matter_list1, $matter_list2))
+    //         ->get();
+    //     return $matter_actor;
+    // }
 }
