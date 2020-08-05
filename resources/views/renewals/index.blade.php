@@ -187,11 +187,12 @@
     }
 
     function submitUpdate(string, url) {
-        return new Promise(function (resolve, reject)  {
+        return new Promise(function (resolve, reject) {
             var xhr = new XMLHttpRequest();
             xhr.open('POST', url, true);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'));
+            xhr.send(string);
             xhr.onload = function () {
                 if (this.status === 200) {
                     resolve(JSON.parse(this.responseText).success);
@@ -205,7 +206,6 @@
                     reject("Something went wrong");
                 }
             }
-            xhr.send(string);
         });
     }
 
@@ -215,66 +215,27 @@
             alert("No renewals selected for order");
             return;
         }
-        /*let exportUrl = '/renewal/order';
         var string = JSON.stringify({task_ids: tids, clear: false});
-        e.preventDefault(); //stop the browser from following
-        window.location.href = exportUrl;*/
-
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/renewal/order', true);
-        xhr.responseType = 'arraybuffer';
-        xhr.onload = function () {
-            if (this.status === 200) {
-                var filename = "";
-                var disposition = xhr.getResponseHeader('Content-Disposition');
-                if (disposition && disposition.indexOf('attachment') !== -1) {
-                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                    var matches = filenameRegex.exec(disposition);
-                    if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
-                }
-                var type = xhr.getResponseHeader('Content-Type');
-
-                var blob;
-                if (typeof File === 'function') {
-                    try {
-                        blob = new File([this.response], filename, { type: type });
-                    } catch (e) { /* Edge */ }
-                }
-                if (typeof blob === 'undefined') {
-                    blob = new Blob([this.response], { type: type });
-                }
-
-                if (typeof window.navigator.msSaveBlob !== 'undefined') {
-                    // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
-                    window.navigator.msSaveBlob(blob, filename);
-                } else {
-                    var URL = window.URL || window.webkitURL;
-                    var downloadUrl = URL.createObjectURL(blob);
-
-                    if (filename) {
-                        // use HTML5 a[download] attribute to specify filename
-                        var a = document.createElement("a");
-                        // safari doesn't support this yet
-                        if (typeof a.download === 'undefined') {
-                            window.location = downloadUrl;
-                        } else {
-                            a.href = downloadUrl;
-                            a.download = filename;
-                            document.body.appendChild(a);
-                            a.click();
-                        }
-                    } else {
-                        window.location = downloadUrl;
-                    }
-
-                    setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
-                }
-            }
-        };
-        var string = JSON.stringify({task_ids: tids, clear: false});
-        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'));
         xhr.send(string);
+        xhr.onload = function(e) {
+            if (this.status == 200) {
+                // Find file name
+                var filename = xhr.getResponseHeader('Content-Disposition').split("filename=")[1];
+
+                // The actual download by creating a link and clicking it programmatically
+                var f = new File([xhr.response], filename, { type: xhr.getResponseHeader('Content-Disposition') });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(f);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
     });
 
     function getSelected() {
@@ -305,6 +266,7 @@
         <span class="lead">
             Manage renewals
         </span>
+        <a href="/logs" class="btn btn-info">View logs</a>
         <button id="clearFilters" type="button" class="btn btn-info float-right">&larrpl; Clear filters</button>
     </div>
     <div class="card-header py-1">

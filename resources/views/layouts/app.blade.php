@@ -57,7 +57,6 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <!-- Left Side Of Navbar -->
           <ul class="navbar-nav mr-auto">
-
           </ul>
 
           <!-- Right Side Of Navbar -->
@@ -71,18 +70,32 @@
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                 Matters
               </a>
-
               <ul class="dropdown-menu" role="menu">
                 <a class="dropdown-item" href="{{ url('/matter/') }}">All</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=PAT') }}">Patents</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=TM') }}">Trademarks</a>
                 @canany(['admin', 'readwrite'])
                 <a class="dropdown-item" href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" title="Create Matter">New</a>
-                <a class="dropdown-item" href="{{ url('/renewal') }}">Manage renewals</a>
                 @endcanany
               </ul>
             </li>
             @cannot('client')
+            @canany(['admin', 'readwrite'])
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                Tools
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <a class="dropdown-item" href="{{ url('/renewal') }}">Manage renewals</a>
+                <a class="dropdown-item" href="{{ url('/fee') }}">Renewal fees</a>
+                @can('admin')
+                <a class="dropdown-item" href="{{ url('/rule/') }}">Rules</a>
+                <a class="dropdown-item" href="{{ url('/document/') }}">Email template classes</a>
+                <a class="dropdown-item" href="{{ url('/template-member/') }}">Email template members</a>
+                @endcan
+              </ul>
+            </li>
+            @endcanany
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                 Tables
@@ -91,15 +104,12 @@
                 <a class="dropdown-item" href="{{ url('/actor/') }}">Actors</a>
                 @can('admin')
                 <a class="dropdown-item" href="{{ url('/user/') }}">DB Users</a>
-                <a class="dropdown-item" href="{{ url('/rule/') }}">Rules</a>
                 <a class="dropdown-item" href="{{ url('/eventname/') }}">Event names</a>
                 <a class="dropdown-item" href="{{ url('/category/') }}">Categories</a>
                 <a class="dropdown-item" href="{{ url('/role/') }}">Actor roles</a>
                 <a class="dropdown-item" href="{{ url('/default_actor/') }}">Default actors</a>
                 <a class="dropdown-item" href="{{ url('/type/') }}">Matter types</a>
                 <a class="dropdown-item" href="{{ url('/classifier_type/') }}">Classifier types</a>
-                <a class="dropdown-item" href="{{ url('/document/') }}">Email template classes</a>
-                <a class="dropdown-item" href="{{ url('/template-member/') }}">Email template members</a>
                 @endcan
               </ul>
             </li>
@@ -155,19 +165,19 @@
 
     // Ajax fill an element from a url returning HTML
     var fetchInto = async (url, element) => {
-      res = await fetch(url);
-      element.innerHTML = await res.text();
+      response = await fetch(url);
+      element.innerHTML = await response.text();
     }
 
     var reloadPart = async (url, partId) => {
-      res = await fetch(url);
-      let doc = new DOMParser().parseFromString(await res.text(), "text/html");
+      response = await fetch(url);
+      let doc = new DOMParser().parseFromString(await response.text(), "text/html");
       document.getElementById(partId).innerHTML = doc.getElementById(partId).innerHTML;
     }
 
     // Perform REST operations with native JS
     var fetchREST = async (url, method, body) => {
-      res = await fetch(url, {
+      response = await fetch(url, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           "X-CSRF-TOKEN": "{{ csrf_token() }}"
@@ -175,14 +185,17 @@
         method: method,
         body: body
       });
-      if ( res.status == 500) {
-        res.text().then(function (text) {
-          alert("Unexpected result:" + text)
-        });
-      } else if (res.status === 419) {
-        alert("Token expired. Refresh the page");
-      } else {
-        return res.json();
+      switch (response.status) {
+        case 500:
+          response.text().then(function (text) {
+            alert("Unexpected result: " + text)
+          });
+          break;
+        case 419:
+          alert("Token expired. Refresh the page");
+          break;
+        default:
+          return response.json();
       }
     }
 

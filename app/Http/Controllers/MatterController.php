@@ -356,7 +356,7 @@ class MatterController extends Controller
                 fpassthru($export_csv);
             },
             200,
-            [ 'Content-Type' => 'application/csv', 'Content-disposition' => 'attachment; filename=' . $filename ]
+            [ 'Content-Type' => 'application/csv', 'Content-Disposition' => 'attachment; filename=' . $filename ]
         );
     }
 

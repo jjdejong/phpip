@@ -903,7 +903,7 @@ class RenewalController extends Controller
                 fpassthru($fd);
             },
             200,
-            [ 'Content-Type' => 'application/octet-stream', 'Content-disposition' => 'attachment; filename=' . $filename ]
+            [ 'Content-Type' => 'application/xml', 'Content-Disposition' => 'attachment; filename=' . $filename ]
         );
     }
 
