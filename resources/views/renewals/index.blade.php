@@ -99,7 +99,7 @@
         // if (tids.length === 0) {
         //     alert("No renewals selected");
         //     return;
-        // } 
+        // }
         // var task_ids = encodeURIComponent(JSON.stringify(tids));
         let exportUrl = '/renewal/export';
         e.preventDefault(); //stop the browser from following
@@ -270,6 +270,7 @@
         </span>
         <a href="/logs" class="btn btn-info">View logs</a>
         <button id="clearFilters" type="button" class="btn btn-info float-right">&larrpl; Clear filters</button>
+        <a href="https://github.com/jjdejong/phpip/wiki/Renewal-Management" target="_blank" title="Help" class="btn btn-outline-primary btn-sm float-right">?</a>
     </div>
     <div class="card-header py-1">
         <nav class="mt-1">
@@ -404,7 +405,7 @@
                 </div>
                 <div class="col">
                     <div class="input-group">
-                        <input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">                
+                        <input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">
                         <input type="date" class="form-control form-control-sm" name="Untildate" id="Untildate" title="Until selected date" value="{{ Request::get('Untildate') }}">
                     </div>
                 </div>
