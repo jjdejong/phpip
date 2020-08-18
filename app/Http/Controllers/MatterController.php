@@ -326,6 +326,7 @@ class MatterController extends Controller
             'Agent Ref',
             'Title',
             'Title2',
+            'Title3',
             'Inventor 1',
             'Filed',
             'FilNo',

@@ -45,7 +45,8 @@ class Task extends Model
         return $this->hasOneThrough('App\Matter', 'App\Event', 'id', 'id', 'trigger_id', 'matter_id');
     }
 
-    public function rule() {
+    public function rule()
+    {
         return $this->hasMany('App\Rule', 'id', 'rule_used');
     }
 
@@ -78,6 +79,7 @@ class Task extends Model
 
     public function openTasks($renewals, $what_tasks, $user_dashboard)
     {
+        // $what_tasks, by default 0, is changed to 1 to see the "assigned_to" tasks or to the id of the client to see client specific tasks
         $tasks = $this->select('task.id', 'en.name', 'task.detail', 'task.due_date', 'event.matter_id', 'matter.uid', 'tit.value as title', 'tm.value as trademark')
         ->join('event_name as en', 'task.code', 'en.code')
         ->join('event', 'task.trigger_id', 'event.id')

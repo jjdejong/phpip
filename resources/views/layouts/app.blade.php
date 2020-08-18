@@ -71,7 +71,7 @@
                 Matters
               </a>
               <ul class="dropdown-menu" role="menu">
-                <a class="dropdown-item" href="{{ url('/matter/') }}">All</a>
+                <a class="dropdown-item" href="{{ url('/matter') }}">All</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=PAT') }}">Patents</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=TM') }}">Trademarks</a>
                 @canany(['admin', 'readwrite'])
@@ -89,9 +89,9 @@
                 <a class="dropdown-item" href="{{ url('/renewal') }}">Manage renewals</a>
                 <a class="dropdown-item" href="{{ url('/fee') }}">Renewal fees</a>
                 @can('admin')
-                <a class="dropdown-item" href="{{ url('/rule/') }}">Rules</a>
-                <a class="dropdown-item" href="{{ url('/document/') }}">Email template classes</a>
-                <a class="dropdown-item" href="{{ url('/template-member/') }}">Email template members</a>
+                <a class="dropdown-item" href="{{ url('/rule') }}">Rules</a>
+                <a class="dropdown-item" href="{{ url('/document') }}">Email template classes</a>
+                <a class="dropdown-item" href="{{ url('/template-member') }}">Email template members</a>
                 @endcan
               </ul>
             </li>
@@ -101,15 +101,15 @@
                 Tables
               </a>
               <ul class="dropdown-menu" role="menu">
-                <a class="dropdown-item" href="{{ url('/actor/') }}">Actors</a>
+                <a class="dropdown-item" href="{{ url('/actor') }}">Actors</a>
                 @can('admin')
-                <a class="dropdown-item" href="{{ url('/user/') }}">DB Users</a>
-                <a class="dropdown-item" href="{{ url('/eventname/') }}">Event names</a>
-                <a class="dropdown-item" href="{{ url('/category/') }}">Categories</a>
-                <a class="dropdown-item" href="{{ url('/role/') }}">Actor roles</a>
-                <a class="dropdown-item" href="{{ url('/default_actor/') }}">Default actors</a>
-                <a class="dropdown-item" href="{{ url('/type/') }}">Matter types</a>
-                <a class="dropdown-item" href="{{ url('/classifier_type/') }}">Classifier types</a>
+                <a class="dropdown-item" href="{{ url('/user') }}">DB Users</a>
+                <a class="dropdown-item" href="{{ url('/eventname') }}">Event names</a>
+                <a class="dropdown-item" href="{{ url('/category') }}">Categories</a>
+                <a class="dropdown-item" href="{{ url('/role') }}">Actor roles</a>
+                <a class="dropdown-item" href="{{ url('/default_actor') }}">Default actors</a>
+                <a class="dropdown-item" href="{{ url('/type') }}">Matter types</a>
+                <a class="dropdown-item" href="{{ url('/classifier_type') }}">Classifier types</a>
                 @endcan
               </ul>
             </li>
