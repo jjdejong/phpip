@@ -10,7 +10,6 @@
 	"type" : "project",
     "require": {
 		"php": "^7.2.5",
-		"caouecs/laravel-lang": "~4.0",
 		"doctrine/dbal": "^2.9",
 		"fideloper/proxy": "^4.2",
 		"fruitcake/laravel-cors": "^1.0",
