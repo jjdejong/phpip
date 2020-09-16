@@ -1,8 +1,10 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
-class CountryTableSeeder extends Seeder
+class EventSampleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +13,7 @@ class CountryTableSeeder extends Seeder
      */
     public function run()
     {
-        require 'country.php';
-        App\Country::create($country);
+        require 'event-sample.php';
+        App\Event::insert($event);
     }
 }

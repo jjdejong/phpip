@@ -1,8 +1,10 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
-class FeesTableSeeder extends Seeder
+class CountryTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +13,7 @@ class FeesTableSeeder extends Seeder
      */
     public function run()
     {
-        require 'fees.php';
-        App\Fee::insert($fees);
+        require 'country.php';
+        App\Country::create($country);
     }
 }

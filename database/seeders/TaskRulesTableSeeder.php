@@ -1,8 +1,10 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
-class EventSampleSeeder extends Seeder
+class TaskRulesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +13,7 @@ class EventSampleSeeder extends Seeder
      */
     public function run()
     {
-        require 'event-sample.php';
-        App\Event::insert($event);
+        require 'task_rules.php';
+        App\Rule::insert($task_rules);
     }
 }

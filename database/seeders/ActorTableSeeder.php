@@ -1,8 +1,10 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
-class TaskSampleSeeder extends Seeder
+class ActorTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +13,7 @@ class TaskSampleSeeder extends Seeder
      */
     public function run()
     {
-        //
+        require 'actor.php';
+        App\Actor::insert($actor);
     }
 }

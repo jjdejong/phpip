@@ -1,8 +1,10 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
-class MatterTypeTableSeeder extends Seeder
+class FeesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +13,7 @@ class MatterTypeTableSeeder extends Seeder
      */
     public function run()
     {
-        require 'matter_type.php';
-        App\Type::insert($matter_type);
+        require 'fees.php';
+        App\Fee::insert($fees);
     }
 }
