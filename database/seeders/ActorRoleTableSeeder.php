@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Role;
 
 class ActorRoleTableSeeder extends Seeder
 {
@@ -14,7 +15,6 @@ class ActorRoleTableSeeder extends Seeder
     public function run()
     {
         require 'actor_role.php';
-
-        DB::table('actor_role')->insert($actor_role);        
+        Role::insertOrIgnore($actor_role);
     }
 }

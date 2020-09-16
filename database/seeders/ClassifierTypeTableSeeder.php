@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\ClassifierType;
 
 class ClassifierTypeTableSeeder extends Seeder
 {
@@ -15,6 +15,6 @@ class ClassifierTypeTableSeeder extends Seeder
     public function run()
     {
         require 'classifier_type.php';
-        DB::table('classifier_type')->insert($classifier_type);
+        ClassifierType::insertOrIgnore($classifier_type);
     }
 }

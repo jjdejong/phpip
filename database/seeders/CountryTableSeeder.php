@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Country;
 
 class CountryTableSeeder extends Seeder
 {
@@ -14,6 +15,6 @@ class CountryTableSeeder extends Seeder
     public function run()
     {
         require 'country.php';
-        App\Country::create($country);
+        Country::insertOrIgnore($country);
     }
 }

@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
+use App\Category;
 
 class MatterCategoryTableSeeder extends Seeder
 {
@@ -13,12 +15,13 @@ class MatterCategoryTableSeeder extends Seeder
      */
     public function run()
     {
-        require 'matter_category.php';
-        Schema::disableForeignKeyConstraints();
-        $table = new  App\Category();
-        foreach($matter_category as $line) {
+		require 'matter_category.php';
+		Schema::disableForeignKeyConstraints();
+		/*$table = new Category();
+		foreach($matter_category as $line) {
             $table->insert($line);
-        }
-        Schema::enableForeignKeyConstraints();
+		}*/
+		Category::insertOrIgnore($matter_category);
+		Schema::enableForeignKeyConstraints();
     }
 }

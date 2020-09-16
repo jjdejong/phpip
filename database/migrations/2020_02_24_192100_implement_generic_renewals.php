@@ -19,7 +19,7 @@ class ImplementGenericRenewals extends Migration {
 	public function up()
 	{
 		// Fix glitches from original seeder
-		DB::table('task_rules')->where('responsible', 'phpi_user')->update(['responsible' => NULL]);
+		DB::table('task_rules')->where('responsible', 'phpip_user')->update(['responsible' => NULL]);
 		DB::table('task_rules')->where([['task', 'REM'], ['trigger_event', 'DRA']])->delete();
 		DB::table('task_rules')->where([['for_country', 'IN'], ['for_origin', 'WO']])->delete();
 		DB::table('task_rules')->where([['for_country', 'IN'], ['detail', 'like', 'Veri%']])->delete();

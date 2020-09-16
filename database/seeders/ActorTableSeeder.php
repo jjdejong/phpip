@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Actor;
 
 class ActorTableSeeder extends Seeder
 {
@@ -14,6 +15,6 @@ class ActorTableSeeder extends Seeder
     public function run()
     {
         require 'actor.php';
-        App\Actor::insert($actor);
+        Actor::insertOrIgnore($actor);
     }
 }

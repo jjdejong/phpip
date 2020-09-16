@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Rule;
 
 class TaskRulesTableSeeder extends Seeder
 {
@@ -14,6 +15,6 @@ class TaskRulesTableSeeder extends Seeder
     public function run()
     {
         require 'task_rules.php';
-        App\Rule::insert($task_rules);
+        Rule::insertOrIgnore($task_rules);
     }
 }

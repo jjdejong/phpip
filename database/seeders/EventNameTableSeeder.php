@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\EventName;
 
 class EventNameTableSeeder extends Seeder
 {
@@ -14,10 +15,6 @@ class EventNameTableSeeder extends Seeder
     public function run()
     {
         require 'event_name.php';
-        
-        $table = new  App\EventName();
-        foreach($event_name as $line) {
-            $table->insert($line);
-        }
+        EventName::insertOrIgnore($event_name);
     }
 }

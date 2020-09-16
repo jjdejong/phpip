@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Fee;
 
 class FeesTableSeeder extends Seeder
 {
@@ -14,6 +15,6 @@ class FeesTableSeeder extends Seeder
     public function run()
     {
         require 'fees.php';
-        App\Fee::insert($fees);
+        Fee::insertOrIgnore($fees);
     }
 }
