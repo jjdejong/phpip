@@ -158,7 +158,7 @@ foreach ($xml->PATENT as $AQSpatent) {
         }
         $myRenewal = $result->fetch_assoc();
 
-        if ($myRenewal['id']) {
+        if (isset($myRenewal['id'])) {
             // The annuity event is present
             $set = [];
             if ($renewal->DUEDATE != $myRenewal['due_date']) {
