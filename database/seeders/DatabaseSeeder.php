@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ActorTableSeeder::class);
         $this->call(EventNameTableSeeder::class);
         $this->call(MatterTypeTableSeeder::class);
+        $this->call(FeesTableSeeder::class);
         $this->call(TaskRulesTableSeeder::class);
+        $this->call(TemplateClassesTableSeeder::class);
+        $this->call(TemplateMembersTableSeeder::class);
     }
 }

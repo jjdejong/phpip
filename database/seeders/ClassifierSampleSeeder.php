@@ -14,6 +14,6 @@ class ClassifierSampleSeeder extends Seeder
     public function run()
     {
         require 'classifier-sample.php';
-        DB::table('classifier')->insertOrIgnore($classifier);
+        \DB::table('classifier')->insertOrIgnore($classifier);
     }
 }
