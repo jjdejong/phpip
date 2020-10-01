@@ -585,7 +585,11 @@
           },
           change: function(event, ui) {
             if (!ui.item) {
+              // User has not selected anything
               e.target.value = "";
+              if (e.target.form) {
+                e.target.form[e.target.dataset.actarget].value = "";
+              }
             }
           }
         });

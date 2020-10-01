@@ -105,17 +105,6 @@ class MatterCategoryTableSeeder extends Seeder
                 ),
 
                 array(
-                    'code' => 'PRO',
-                    'ref_prefix' => 'PAT',
-                    'category' => 'Provisional Application',
-                    'display_with' => 'PAT',
-                    'creator' => 'system',
-                    'updater' => null,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ),
-
-                array(
                     'code' => 'SO',
                     'ref_prefix' => 'PAT',
                     'category' => 'Soleau Envelop',

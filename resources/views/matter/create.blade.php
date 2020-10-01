@@ -26,7 +26,7 @@
     <label for="type_code" class="col-4 col-form-label">Type</label>
     <div class="col-8">
       <input type="hidden" name="type_code" value="{{ $parent_matter->type_code ?? '' }}">
-      <input type="text" class="form-control" data-ac="/type/autocomplete" data-actarget="type_code" data-aclength="0" placeholder="{{ $parent_matter->type->type ?? '' }}" autocomplete="off">
+      <input type="text" class="form-control" data-ac="/type/autocomplete" data-actarget="type_code" data-aclength="0" value="{{ $parent_matter->type->type ?? '' }}" autocomplete="off">
     </div>
   </div>
   <div class="form-group row">
