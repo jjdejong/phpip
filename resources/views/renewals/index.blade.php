@@ -11,20 +11,22 @@
     }
 
     filterFields.addEventListener('input', debounce( e => {
-        if (e.target.value.length === 0) {
-            url.searchParams.delete(e.target.name);
-        } else {
-            url.searchParams.set(e.target.name, e.target.value);
+        if (e.target.matches('.form-control')) {
+            if (e.target.value.length === 0) {
+                url.searchParams.delete(e.target.name);
+            } else {
+                url.searchParams.set(e.target.name, e.target.value);
+            }
+            url.searchParams.delete('page');
+            refreshList();
         }
-        url.searchParams.delete('page');
-        refreshList();
     }, 500));
 
     grace.onchange = e => {
         if (!e.target.checked) {
-                url.searchParams.delete(e.target.name);
+            url.searchParams.delete('grace_period');
         } else {
-            url.searchParams.set(e.target.name, "1");
+            url.searchParams.set('grace_period', "1");
         }
         refreshList();
     }
@@ -409,7 +411,7 @@
                 <div class="col-1 px-2">
                     <div class="btn-group-toggle" data-toggle="buttons" title="Select/unselect all">
                         <label class="btn btn-outline-primary btn-sm">
-                            <input name="selectAll" id="selectAll" type="checkbox">&check;
+                            <input id="selectAll" type="checkbox">&check;
                         </label>
                     </div>
                 </div>
