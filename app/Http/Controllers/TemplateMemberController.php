@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Actor;
-use Log;
 
 class TemplateMemberController extends Controller
 {
