@@ -71,13 +71,19 @@
       <tr>
         <th>Index</th>
         <td>
-          <input type="text" class="form-control noformat" id="idx" name="idx" value="{{ $matter->idx }}">
+          <input type="text" class="form-control noformat" name="idx" value="{{ $matter->idx }}">
+        </td>
+      </tr>
+      <tr>
+        <th>Alt. ref</th>
+        <td>
+          <input type="text" class="form-control noformat" name="alt_ref" value="{{ $matter->alt_ref }}">
         </td>
       </tr>
       <tr>
         <th>Term adjust (days)</th>
         <td>
-          <input type="text" class="form-control noformat" id="term_adjust" name="term_adjust" value="{{ $matter->term_adjust }}">
+          <input type="text" class="form-control noformat" name="term_adjust" value="{{ $matter->term_adjust }}">
         </td>
       </tr>
     </tbody>

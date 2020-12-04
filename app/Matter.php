@@ -333,7 +333,10 @@ class Matter extends Model
                 if ($value != '') {
                     switch ($key) {
                         case 'Ref':
-                            $query->where('uid', 'LIKE', "$value%");
+                            $query->where(function ($q) use ($value) {
+                                $q->where('uid', 'LIKE', "$value%")
+                                    ->orWhere('alt_ref', 'LIKE', "$value%");
+                            });
                             break;
                         case 'Cat':
                             $query->where('category_code', 'LIKE', "$value%");

@@ -10,8 +10,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 @section('content')
 <div class="row card-deck mb-1">
   <div id="refsPanel" class="card border-primary col-3 p-0">
-    <div class="card-header bg-primary text-light reveal-hidden lead p-1"  {!! $matter->dead ? 'style="text-decoration: line-through;"' : '' !!}>
-      <a class="bg-primary text-white" href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
+    <div class="card-header bg-primary text-light reveal-hidden p-1">
+      <a class="bg-primary text-white lead" href="/matter?Ref={{ $matter->caseref }}" title="See family" {!! $matter->dead ? 'style="text-decoration: line-through;"' : '' !!}>{{ $matter->uid }}</a>
       ({{ $matter->category->category }})
       @canany(['admin', 'readwrite'])
       <a class="bg-primary text-white float-right hidden-action"
@@ -23,23 +23,27 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     <div class="card-body p-1">
       <dl class="row mb-0">
         @if ($matter->container_id)
-        <dt class="col-4">Container:</dt>
-        <dd class="col-8 mb-1">
+        <dt class="col-4 text-right">Container:</dt>
+        <dd class="col-8 mb-0">
           <a href="/matter/{{ $matter->container_id }}" title="See container">
             {{ $matter->container->uid }}
           </a>
         </dd>
         @endif
         @if ($matter->parent_id)
-        <dt class="col-4">Parent:</dt>
-        <dd class="col-8 mb-1">
+        <dt class="col-4 text-right">Parent:</dt>
+        <dd class="col-8 mb-0">
           <a href="/matter/{{ $matter->parent_id }}" title="See parent">
             {{ $matter->parent->uid }}
           </a>
         </dd>
         @endif
+        @if ($matter->alt_ref)
+        <dt class="col-4 text-right">Alt. ref:</dt>
+        <dd class="col-8 mb-0">{{ $matter->alt_ref }}</dd>
+        @endif
         @if ($matter->expire_date)
-        <dt class="col-4">Expiry:</dt>
+        <dt class="col-4 text-right">Expiry:</dt>
         <dd class="col-8">{{ Carbon\Carbon::parse($matter->expire_date)->isoFormat('L') }}</dd>
         @endif
       </dl>
