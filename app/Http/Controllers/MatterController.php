@@ -361,6 +361,123 @@ class MatterController extends Controller
         );
     }
 
+    /**
+     * Download document merge file
+     * *
+     */
+    public function mergeFile(Matter $matter)
+    {
+        $matter->load(['client.actor', 'contact', 'owners', 'applicants', 'actors', 'filing', 'priority.link', 'publication', 'grant', 'registration', 'events', 'titles', 'classifiers']);
+        
+        $captions = [
+            'id',
+            'File_Ref',
+            'Country',
+            'File_Category',
+            'Filing_Date',
+            'Filing_Number',
+            'Pub_Date',
+            'Pub_Number',
+            'Priority',
+            'Grant_Date',
+            'Grant_Number',
+            'Registration_Date',
+            'Registration_Number',
+            'Pub_Reg_Date',
+            'Pub_Reg_Number',
+            'Allowance_Date',
+            'Expiration_Date',
+            'Client',
+            'Client_Address',
+            'Client_Country',
+            'Contact',
+            'Billing_Adress',
+            'Client_Ref',
+            'Email',
+            'VAT',
+            'Official_Title',
+            'English_Title',
+            'Title',
+            'Trademark',
+            'Classes',
+            'Inventors',
+            'Inventors_address',
+            'Owner',
+            'Agent',
+            'Agent_Ref',
+            'Responsible',
+            'Writer',
+            'Annuity_Agent'
+        ];
+
+        $pri_dates = $matter->priority->pluck('event_date')->map(function ($d) {
+            return $d->isoFormat('L');
+        });
+        $pri_nums = $matter->priority->pluck('link')->pluck('detail');
+        $titof = $matter->titles->where('type_code', 'TITOF')->first()->value;
+        $titen = $matter->titles->where('type_code', 'TITEN')->first()->value;
+        $title = $matter->titles->where('type_code', 'TIT')->first()->value;
+        $inventors = $matter->actors->where('role_code', 'INV')->pluck('name');
+        $inv_addresses = $matter->actors->where('role_code', 'INV')->pluck('actor')->pluck('address');
+
+        $data = [
+            $matter->id,
+            $matter->uid,
+            $matter->country,
+            $matter->category_code,
+            $matter->filing->event_date ?? null,
+            $matter->filing->detail ?? null,
+            $matter->publication->event_date ?? null,
+            $matter->publication->detail ?? null,
+            $pri_dates->zip($pri_nums)->flatten()->implode(PHP_EOL),
+            $matter->grant->event_date ?? null,
+            $matter->grant->detail ?? null,
+            $matter->registration->event_date ?? null,
+            $matter->registration->detail ?? null,
+            $matter->events->where('code', 'PR')->first()->event_date ?? null,
+            $matter->events->where('code', 'PR')->first()->detail ?? null,
+            $matter->events->where('code', 'ALL')->first()->event_date ?? null,
+            $matter->expire_date,
+            $matter->client->name,
+            $matter->client->actor->address,
+            $matter->client->actor->country,
+            $matter->contact->implode('name', ', '),
+            $matter->client->actor->address_billing ?? $matter->client->actor->address,
+            $matter->client->actor_ref,
+            $matter->client->actor->email,
+            $matter->client->actor->VAT_number,
+            $titof ?? $title,
+            ($titen ?? $titof) ?? $title,
+            $title,
+            $matter->titles->where('type_code', 'TM')->first()->value ?? null,
+            $matter->classifiers->where('type_code', 'TMCL')->first()->value ?? null,
+            $inventors->implode(PHP_EOL),
+            $inventors->zip($inv_addresses)->flatten()->implode(PHP_EOL),
+            $matter->owners->isNotEmpty() ? $matter->owners->implode('name', PHP_EOL) : $matter->applicants->implode('name', PHP_EOL),
+            $matter->actors->where('role_code', 'AGT')->first()->name ?? null,
+            $matter->actors->where('role_code', 'AGT')->first()->actor_ref ?? null,
+            $matter->responsible,
+            $matter->actors->where('role_code', 'WRI')->first()->name ?? null,
+            $matter->actors->where('role_code', 'ANN')->first()->name ?? null
+        ];
+
+        //dd($data);
+
+        $export_csv = fopen('php://memory', 'w');
+        fputcsv($export_csv, $captions, ';');
+        fputcsv($export_csv, $data, ';');
+        rewind($export_csv);
+        $filename = 'mattermerge.csv';
+
+        return response()->stream(
+            function () use ($export_csv) {
+                fpassthru($export_csv);
+            },
+            200,
+            [ 'Content-Type' => 'application/csv', 'Content-Disposition' => 'attachment; filename=' . $filename ]
+        );
+    }
+
     public function events(Matter $matter)
     {
         $events = $matter->events->load('info');

@@ -365,6 +365,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               title="Prepare an email">
               &#9993; FR
           </a>
+          <a class="badge badge-info align-middle float-right" href="/matter/{{ $matter->id }}/mergeFile">&DownArrowBar; Generate Merge File</a>
         </div>
       </div>
     </div>

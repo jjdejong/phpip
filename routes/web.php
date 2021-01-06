@@ -35,6 +35,7 @@ Route::group(['middleware' => 'auth'], function () {
             ->take(15)->get();
     });
     Route::get('matter/export', 'MatterController@export');
+    Route::get('matter/{matter}/mergeFile', 'MatterController@mergeFile');
     Route::get('matter/{matter}/events', 'MatterController@events');
     Route::get('matter/{matter}/tasks', 'MatterController@tasks');
     Route::get('matter/{matter}/classifiers', 'MatterController@classifiers');

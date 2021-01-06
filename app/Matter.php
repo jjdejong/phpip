@@ -69,9 +69,24 @@ class Matter extends Model
         return $this->hasOne('App\MatterActors')->where('role_code', 'CLI');
     }
 
+    public function delegate()
+    {
+        return $this->actors()->where('role_code', 'DEL');
+    }
+
+    public function contact()
+    {
+        return $this->actors()->where('role_code', 'CNT');
+    }
+
     public function applicants()
     {
-        return MatterActors::select(DB::raw("GROUP_CONCAT(name SEPARATOR ', ')"))->where('matter_id', $this->id)->where('role_code', 'APP');
+        return $this->actors()->where('role_code', 'APP');
+    }
+
+    public function owners()
+    {
+        return $this->actors()->where('role_code', 'OWN');
     }
 
     public function actorPivot()
@@ -107,6 +122,12 @@ class Matter extends Model
     {
         return $this->hasOne('App\Event')
             ->where('code', 'GRT');
+    }
+
+    public function registration()
+    {
+        return $this->hasOne('App\Event')
+            ->where('code', 'REG');
     }
 
 
@@ -221,7 +242,7 @@ class Matter extends Model
             'matter.responsible',
             'del.login AS delegate',
             'matter.dead',
-            DB::raw("IF(isnull(matter.container_id),1,0) AS Ctnr")
+            DB::raw("IF(isnull(matter.container_id), 1, 0) AS Ctnr")
         )
         ->join('matter_category', 'matter.category_code', 'matter_category.code')
         ->leftJoin(
