@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Matter;
 use App\Event;
 use App\ActorPivot;
-use App\Actor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MatterController extends Controller
 {
@@ -367,101 +367,183 @@ class MatterController extends Controller
      */
     public function mergeFile(Matter $matter)
     {
-        $matter->load(['client.actor', 'contact', 'owners', 'applicants', 'actors', 'filing', 'priority.link', 'publication', 'grant', 'registration', 'events', 'titles', 'classifiers']);
-        
-        $captions = [
-            'id',
-            'File_Ref',
-            'Country',
-            'File_Category',
-            'Filing_Date',
-            'Filing_Number',
-            'Pub_Date',
-            'Pub_Number',
-            'Priority',
-            'Grant_Date',
-            'Grant_Number',
-            'Registration_Date',
-            'Registration_Number',
-            'Pub_Reg_Date',
-            'Pub_Reg_Number',
-            'Allowance_Date',
-            'Expiration_Date',
-            'Client',
-            'Client_Address',
-            'Client_Country',
-            'Contact',
-            'Billing_Adress',
-            'Client_Ref',
-            'Email',
-            'VAT',
-            'Official_Title',
-            'English_Title',
-            'Title',
-            'Trademark',
-            'Classes',
-            'Inventors',
-            'Inventors_address',
-            'Owner',
-            'Agent',
-            'Agent_Ref',
-            'Responsible',
-            'Writer',
-            'Annuity_Agent'
-        ];
+        $data = Matter::select(
+            'matter.id',
+            'matter.uid AS File_Ref',
+            'matter.country AS Country',
+            'matter.category_code AS File_Category',
+            DB::raw("DATE_FORMAT(fil.event_date, '%d/%m/%Y') AS Filing_Date"),
+            'fil.detail AS Filing_Number',
+            DB::raw("DATE_FORMAT(pub.event_date, '%d/%m/%Y') AS Pub_Date"),
+            'pub.detail AS Pub_Number',
+            DB::raw("GROUP_CONCAT(DISTINCT CONCAT(pri.country, pri.detail, ' - ', DATE_FORMAT(pri.event_date, '%d/%m/%Y'))
+                SEPARATOR '\n') AS Priority"),
+            DB::raw("DATE_FORMAT(grt.event_date, '%d/%m/%Y') AS Grant_Date"),
+            'grt.detail AS Grant_Number',
+            DB::raw("DATE_FORMAT(reg.event_date, '%d/%m/%Y') AS Registration_Date"),
+            'reg.detail AS Registration_Number',
+            DB::raw("DATE_FORMAT(pr.event_date, '%d/%m/%Y') AS Pub_Reg_Date"),
+            'pr.detail AS Pub_Reg_Number',
+            DB::raw("DATE_FORMAT(allow.event_date, '%d/%m/%Y') AS Allowance_Date"),
+            'matter.expire_date AS Expiration_Date',
+            DB::raw("COALESCE(cli.name, clic.name) AS Client"),
+            DB::raw("COALESCE(cli.address, clic.address) AS Client_Address"),
+            DB::raw("COALESCE(cli.country, clic.country) AS Client_Country"),
+            'cnt.name AS Contact',
+            DB::raw("IF(COALESCE(cli.address_billing, clic.address_billing) IS NULL,
+                CONCAT_WS(CHAR(10), COALESCE(cli.name, clic.name), COALESCE(cli.address, clic.address), COALESCE(cli.country, clic.country)),
+                CONCAT_WS(CHAR(10), COALESCE(cli.address_billing, clic.address_billing), COALESCE(cli.country_billing, clic.country_billing))
+            ) AS Billing_Adress"),
+            DB::raw("COALESCE(lcli.actor_ref, lclic.actor_ref) AS Client_Ref"),
+            DB::raw("COALESCE(cli.email, clic.email) AS Email"),
+            DB::raw("COALESCE(cli.VAT_number, clic.VAT_number) AS VAT"),
+            DB::raw("COALESCE(titof.value, tit.value) AS Official_Title"),
+            DB::raw("COALESCE(titen.value, titof.value, tit.value) AS English_Title"),
+            'tit.value AS Title',
+            'tm.value AS Trademark',
+            DB::raw("GROUP_CONCAT(DISTINCT class.value SEPARATOR '.') AS Classes"),
+            DB::raw("GROUP_CONCAT(DISTINCT CONCAT_WS(' ', inv.name, inv.first_name)
+                ORDER BY linv.display_order ASC
+                SEPARATOR ' - ') AS Inventors"),
+            DB::raw("GROUP_CONCAT(DISTINCT CONCAT_WS(CHAR(10), CONCAT_WS(' ', inv.name, inv.first_name), inv.address, inv.country, inv.nationality)
+                ORDER BY linv.display_order ASC
+                SEPARATOR '\n') AS Inventor_Addresses"),
+            DB::raw("IF(GROUP_CONCAT(DISTINCT ownc.name) IS NOT NULL OR GROUP_CONCAT(DISTINCT own.name) IS NOT NULL,
+                CONCAT_WS(CHAR(10), GROUP_CONCAT(DISTINCT ownc.name SEPARATOR '\n'), GROUP_CONCAT(DISTINCT own.name SEPARATOR '\n')),
+                CONCAT_WS(CHAR(10), GROUP_CONCAT(DISTINCT applc.name SEPARATOR '\n'), GROUP_CONCAT(DISTINCT appl.name SEPARATOR '\n'))
+            ) AS Owner"),
+            DB::raw("CONCAT_WS(CHAR(10), agt.name, agt.address, agt.country) AS Agent"),
+            'lagt.actor_ref AS Agent_Ref',
+            'resp.name AS Responsible',
+            'wri.name AS Writer',
+            'ann.name AS Annuity_Agent'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk linv
+            JOIN actor inv ON inv.id = linv.actor_id AND linv.role = 'INV'"),
+            DB::raw('IFNULL(matter.container_id, matter.id)'),
+            'linv.matter_id'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk lcli
+            JOIN actor cli ON cli.id = lcli.actor_id
+            AND lcli.role = 'CLI' AND lcli.display_order = 1"),
+            'matter.id',
+            'lcli.matter_id'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk lclic
+            JOIN actor clic ON clic.id = lclic.actor_id
+            AND lclic.role = 'CLI'
+            AND lclic.display_order = 1
+            AND lclic.shared = 1"),
+            'matter.container_id',
+            'lclic.matter_id'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk lappl
+            JOIN actor appl ON appl.id = lappl.actor_id
+            AND lappl.role = 'APP'"),
+            'matter.id',
+            'lappl.matter_id'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk lapplc
+            JOIN actor applc ON applc.id = lapplc.actor_id
+            AND lapplc.role = 'APP'
+            AND lapplc.shared = 1"),
+            'matter.container_id',
+            'lapplc.matter_id'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk lown
+            JOIN actor own ON own.id = lown.actor_id
+            AND lown.role = 'OWN'"),
+            'matter.id',
+            'lown.matter_id'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk lownc
+            JOIN actor ownc ON ownc.id = lownc.actor_id
+            AND lownc.role = 'OWN'
+            AND lownc.shared = 1"),
+            'matter.container_id',
+            'lownc.matter_id'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk lann
+            JOIN actor ann ON ann.id = lann.actor_id
+            AND lann.role = 'ANN'"),
+            'matter.id',
+            'lann.matter_id'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk lcnt
+            JOIN actor cnt ON cnt.id = lcnt.actor_id
+            AND lcnt.role = 'CNT'"),
+            DB::raw('IFNULL(matter.container_id, matter.id)'),
+            'lcnt.matter_id'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk lagt
+            JOIN actor agt ON agt.id = lagt.actor_id
+            AND lagt.role = 'AGT'"),
+            'matter.id',
+            'lagt.matter_id'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk lwri
+            JOIN actor wri ON wri.id = lwri.actor_id
+            AND lwri.role = 'WRI'"),
+            'matter.id',
+            'lwri.matter_id'
+        )
+        ->leftJoin('event AS fil', function ($join) {
+            $join->on('matter.id', 'fil.matter_id')->where('fil.code', 'FIL');
+        })
+        ->leftJoin('event AS pub', function ($join) {
+            $join->on('matter.id', 'pub.matter_id')->where('pub.code', 'PUB');
+        })
+        ->leftJoin('event AS grt', function ($join) {
+            $join->on('matter.id', 'grt.matter_id')->where('grt.code', 'GRT');
+        })
+        ->leftJoin('event AS reg', function ($join) {
+            $join->on('matter.id', 'reg.matter_id')->where('reg.code', 'REG');
+        })
+        ->leftJoin('event AS pr', function ($join) {
+            $join->on('matter.id', 'pr.matter_id')->where('pr.code', 'PR');
+        })
+        ->leftJoin('event_lnk_list AS pri', function ($join) {
+            $join->on('matter.id', 'pri.matter_id')->where('pri.code', 'PRI');
+        })
+        ->leftJoin('event AS allow', function ($join) {
+            $join->on('matter.id', 'allow.matter_id')->where('allow.code', 'ALL');
+        })
+        ->leftJoin('classifier AS titof', function ($join) {
+            $join->on('titof.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
+            ->where('titof.type_code', 'TITOF');
+        })
+        ->leftJoin('classifier AS titen', function ($join) {
+            $join->on('titen.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
+            ->where('titen.type_code', 'TITEN');
+        })
+        ->leftJoin('classifier AS tit', function ($join) {
+            $join->on('tit.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
+            ->where('tit.type_code', 'TIT');
+        })
+        ->leftJoin('classifier AS tm', function ($join) {
+            $join->on('tm.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
+            ->where('tm.type_code', 'TM');
+        })
+        ->leftJoin('classifier AS class', function ($join) {
+            $join->on('class.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
+            ->where('class.type_code', 'TMCL');
+        })
+        ->join('actor AS resp', 'resp.login', 'matter.responsible')
+        ->find($matter->id);
 
-        $pri_dates = $matter->priority->pluck('event_date')->map(function ($d) {
-            return $d->isoFormat('L');
-        });
-        $pri_nums = $matter->priority->pluck('link')->pluck('detail');
-        $titof = $matter->titles->where('type_code', 'TITOF')->first()->value;
-        $titen = $matter->titles->where('type_code', 'TITEN')->first()->value;
-        $title = $matter->titles->where('type_code', 'TIT')->first()->value;
-        $inventors = $matter->actors->where('role_code', 'INV')->pluck('name');
-        $inv_addresses = $matter->actors->where('role_code', 'INV')->pluck('actor')->pluck('address');
-
-        $data = [
-            $matter->id,
-            $matter->uid,
-            $matter->country,
-            $matter->category_code,
-            $matter->filing->event_date ?? null,
-            $matter->filing->detail ?? null,
-            $matter->publication->event_date ?? null,
-            $matter->publication->detail ?? null,
-            $pri_dates->zip($pri_nums)->flatten()->implode(PHP_EOL),
-            $matter->grant->event_date ?? null,
-            $matter->grant->detail ?? null,
-            $matter->registration->event_date ?? null,
-            $matter->registration->detail ?? null,
-            $matter->events->where('code', 'PR')->first()->event_date ?? null,
-            $matter->events->where('code', 'PR')->first()->detail ?? null,
-            $matter->events->where('code', 'ALL')->first()->event_date ?? null,
-            $matter->expire_date,
-            $matter->client->name,
-            $matter->client->actor->address,
-            $matter->client->actor->country,
-            $matter->contact->implode('name', ', '),
-            $matter->client->actor->address_billing ?? $matter->client->actor->address,
-            $matter->client->actor_ref,
-            $matter->client->actor->email,
-            $matter->client->actor->VAT_number,
-            $titof ?? $title,
-            ($titen ?? $titof) ?? $title,
-            $title,
-            $matter->titles->where('type_code', 'TM')->first()->value ?? null,
-            $matter->classifiers->where('type_code', 'TMCL')->first()->value ?? null,
-            $inventors->implode(PHP_EOL),
-            $inventors->zip($inv_addresses)->flatten()->implode(PHP_EOL),
-            $matter->owners->isNotEmpty() ? $matter->owners->implode('name', PHP_EOL) : $matter->applicants->implode('name', PHP_EOL),
-            $matter->actors->where('role_code', 'AGT')->first()->name ?? null,
-            $matter->actors->where('role_code', 'AGT')->first()->actor_ref ?? null,
-            $matter->responsible,
-            $matter->actors->where('role_code', 'WRI')->first()->name ?? null,
-            $matter->actors->where('role_code', 'ANN')->first()->name ?? null
-        ];
-
-        //dd($data);
+        $captions = collect($data)->keys()->toArray();
+        $data = collect($data)->values()->toArray();
 
         $export_csv = fopen('php://memory', 'w');
         fputcsv($export_csv, $captions, ';');
