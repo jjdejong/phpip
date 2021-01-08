@@ -16,7 +16,8 @@
 		"guzzlehttp/guzzle": "^7.0.1",
 		"laravel/framework": "^8.0",
 		"laravel/tinker": "^2.0",
-		"laravel/ui": "^3.0"
+		"laravel/ui": "^3.0",
+		"phpoffice/phpword": "^0.17.0"
 	},
     "require-dev": {
 		"facade/ignition": "^2.3.6",
