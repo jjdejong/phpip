@@ -177,4 +177,49 @@
       return success;
     }
   }
+
+  // File drop zone management
+
+  dropZone.ondragover = function () {
+    this.classList.remove('badge-info');
+    this.classList.add('badge-primary');
+    return false;
+  };
+  dropZone.ondragleave = function () {
+    this.classList.remove('badge-primary');
+    this.classList.add('badge-info');
+    return false;
+  };
+  dropZone.ondrop = function (event) {
+    event.preventDefault();
+    this.classList.add('badge-info');
+    this.classList.remove('badge-primary');
+    var files = event.dataTransfer.files;
+    console.log(files);
+    var formData = new FormData();
+    for (var i = 0; i < files.length; i++) {
+      formData.append('file', files[i]);
+    }
+    fetch(this.dataset.url, {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.blob())
+    .then(blob => {
+      // Simulate click on a temporary link to perform download
+      var tempLink = document.createElement('a');
+      tempLink.style.display = 'none';
+      tempLink.href = URL.createObjectURL(blob);
+      tempLink.download = 'merged-' + files[0].name;
+
+      document.body.appendChild(tempLink);
+      tempLink.click();
+      document.body.removeChild(tempLink);
+    });
+    return false;
+  };
 </script>

@@ -362,11 +362,17 @@ class MatterController extends Controller
     }
 
     /**
-     * Download document merge file
+     * Generate merged document on the fly from uploaded template
      * *
      */
-    public function mergeFile(Matter $matter)
+    public function mergeFile(Matter $matter, Request $request)
     {
+        // No dedicated "form request" class being defined, this validation will silently terminate the operation when unsuccessful
+        $this->validate($request, [
+            'file'  => 'required|file'
+        ]);
+        $file = $request->file('file');
+
         $data = Matter::select(
             'matter.id',
             'matter.uid AS File_Ref',
@@ -542,22 +548,17 @@ class MatterController extends Controller
         ->join('actor AS resp', 'resp.login', 'matter.responsible')
         ->find($matter->id);
 
-        $captions = collect($data)->keys()->toArray();
-        $data = collect($data)->values()->toArray();
+        $data_array = collect($data)->toArray();
 
-        $export_csv = fopen('php://memory', 'w');
-        fputcsv($export_csv, $captions, ';');
-        fputcsv($export_csv, $data, ';');
-        rewind($export_csv);
-        $filename = 'mattermerge.csv';
-
-        return response()->stream(
-            function () use ($export_csv) {
-                fpassthru($export_csv);
-            },
-            200,
-            [ 'Content-Type' => 'application/csv', 'Content-Disposition' => 'attachment; filename=' . $filename ]
-        );
+        $template = new \PhpOffice\PhpWord\TemplateProcessor($file->path());
+        $template->setValues($data_array);
+        header("Content-Description: File Transfer");
+        header('Content-Disposition: attachment; filename="' . $matter->caseref . '-' . $file->getClientOriginalName());
+        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        header('Content-Transfer-Encoding: binary');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Expires: 0');
+        $template->saveAs('php://output');
     }
 
     public function events(Matter $matter)

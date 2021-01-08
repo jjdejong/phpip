@@ -220,12 +220,12 @@
     app.addEventListener('click', (e) => {
       if(e.target.matches('.sendDocument')) {
         formData = new FormData(sendDocumentForm);
-        fetchREST(e.target.closest('[data-resource]').dataset.resource, 'POST',formData)
-          .then((data) => {
+        fetchREST(e.target.closest('[data-resource]').dataset.resource, 'POST', formData)
+          .then(data => {
             if (data.message) {
               alert(data.message);
             } else {
-               document.location.href=data.mailto;
+               document.location.href = data.mailto;
                e.target.closest('tr').remove();
             }
           });
@@ -258,7 +258,7 @@
         case 'deleteMatter':
           if (confirm("Deleting the matter. Continue anyway?")) {
             fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
-              .then((data) => {
+              .then(data => {
                 if (data.message) {
                   alert(data.message);
                 } else {
@@ -384,7 +384,7 @@
         case 'deleteMember':
           if (confirm("Deleting  "+   e.target.dataset.message + ". Continue anyway?")) {
             fetchREST(e.target.dataset.url, 'DELETE')
-              .then((data) => {
+              .then(data => {
                 if (data.message) {
                   alert("Couldn't delete " + e.target.dataset.message+ ". Check the dependencies. Database said: " + data.message);
                   return false;
