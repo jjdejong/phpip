@@ -44,6 +44,15 @@ class MatterTypeTableSeeder extends Seeder
             ),
 
             array(
+                'code' => 'PRO',
+                'type' => 'Provisional',
+                'creator' => 'system',
+                'updater' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ),
+            
+            array(
                 'code' => 'REI',
                 'type' => 'Reissue',
                 'creator' => 'system',
