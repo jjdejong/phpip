@@ -195,7 +195,6 @@
     this.classList.add('bg-info');
     this.classList.remove('bg-primary');
     var files = event.dataTransfer.files;
-    console.log(files);
     var formData = new FormData();
     for (var i = 0; i < files.length; i++) {
       formData.append('file', files[i]);

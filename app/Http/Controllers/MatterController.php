@@ -383,7 +383,7 @@ class MatterController extends Controller
             DB::raw("DATE_FORMAT(pub.event_date, '%d/%m/%Y') AS Pub_Date"),
             'pub.detail AS Pub_Number',
             DB::raw("GROUP_CONCAT(DISTINCT CONCAT(pri.country, pri.detail, ' - ', DATE_FORMAT(pri.event_date, '%d/%m/%Y'))
-                SEPARATOR '\n') AS Priority"),
+                SEPARATOR '<w:br/>') AS Priority"),
             DB::raw("DATE_FORMAT(grt.event_date, '%d/%m/%Y') AS Grant_Date"),
             'grt.detail AS Grant_Number',
             DB::raw("DATE_FORMAT(reg.event_date, '%d/%m/%Y') AS Registration_Date"),
@@ -393,12 +393,12 @@ class MatterController extends Controller
             DB::raw("DATE_FORMAT(allow.event_date, '%d/%m/%Y') AS Allowance_Date"),
             'matter.expire_date AS Expiration_Date',
             DB::raw("COALESCE(cli.name, clic.name) AS Client"),
-            DB::raw("COALESCE(cli.address, clic.address) AS Client_Address"),
+            DB::raw("REPLACE(COALESCE(cli.address, clic.address), '\n', '<w:br/>') AS Client_Address"),
             DB::raw("COALESCE(cli.country, clic.country) AS Client_Country"),
             'cnt.name AS Contact',
             DB::raw("IF(COALESCE(cli.address_billing, clic.address_billing) IS NULL,
-                CONCAT_WS(CHAR(10), COALESCE(cli.name, clic.name), COALESCE(cli.address, clic.address), COALESCE(cli.country, clic.country)),
-                CONCAT_WS(CHAR(10), COALESCE(cli.address_billing, clic.address_billing), COALESCE(cli.country_billing, clic.country_billing))
+                CONCAT_WS('<w:br/>', COALESCE(cli.name, clic.name), REPLACE(COALESCE(cli.address, clic.address), '\n', '<w:br/>'), COALESCE(cli.country, clic.country)),
+                CONCAT_WS('<w:br/>', REPLACE(COALESCE(cli.address_billing, clic.address_billing), '\n', '<w:br/>'), COALESCE(cli.country_billing, clic.country_billing))
             ) AS Billing_Adress"),
             DB::raw("COALESCE(lcli.actor_ref, lclic.actor_ref) AS Client_Ref"),
             DB::raw("COALESCE(cli.email, clic.email) AS Email"),
@@ -411,14 +411,14 @@ class MatterController extends Controller
             DB::raw("GROUP_CONCAT(DISTINCT CONCAT_WS(' ', inv.name, inv.first_name)
                 ORDER BY linv.display_order ASC
                 SEPARATOR ' - ') AS Inventors"),
-            DB::raw("GROUP_CONCAT(DISTINCT CONCAT_WS(CHAR(10), CONCAT_WS(' ', inv.name, inv.first_name), inv.address, inv.country, inv.nationality)
+            DB::raw("GROUP_CONCAT(DISTINCT CONCAT_WS('<w:br/>', CONCAT_WS(' ', inv.name, inv.first_name), REPLACE(inv.address, '\n', '<w:br/>'), inv.country, inv.nationality)
                 ORDER BY linv.display_order ASC
-                SEPARATOR '\n') AS Inventor_Addresses"),
+                SEPARATOR '<w:br/>') AS Inventor_Addresses"),
             DB::raw("IF(GROUP_CONCAT(DISTINCT ownc.name) IS NOT NULL OR GROUP_CONCAT(DISTINCT own.name) IS NOT NULL,
-                CONCAT_WS(CHAR(10), GROUP_CONCAT(DISTINCT ownc.name SEPARATOR '\n'), GROUP_CONCAT(DISTINCT own.name SEPARATOR '\n')),
-                CONCAT_WS(CHAR(10), GROUP_CONCAT(DISTINCT applc.name SEPARATOR '\n'), GROUP_CONCAT(DISTINCT appl.name SEPARATOR '\n'))
+                CONCAT_WS('<w:br/>', GROUP_CONCAT(DISTINCT ownc.name SEPARATOR '<w:br/>'), GROUP_CONCAT(DISTINCT own.name SEPARATOR '<w:br/>')),
+                CONCAT_WS('<w:br/>', GROUP_CONCAT(DISTINCT applc.name SEPARATOR '<w:br/>'), GROUP_CONCAT(DISTINCT appl.name SEPARATOR '<w:br/>'))
             ) AS Owner"),
-            DB::raw("CONCAT_WS(CHAR(10), agt.name, agt.address, agt.country) AS Agent"),
+            DB::raw("CONCAT_WS('<w:br/>', agt.name, REPLACE(agt.address, '\n', '<w:br/>'), agt.country) AS Agent"),
             'lagt.actor_ref AS Agent_Ref',
             'resp.name AS Responsible',
             'wri.name AS Writer',
