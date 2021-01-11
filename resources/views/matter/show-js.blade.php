@@ -181,19 +181,19 @@
   // File drop zone management
 
   dropZone.ondragover = function () {
-    this.classList.remove('badge-info');
-    this.classList.add('badge-primary');
+    this.classList.remove('bg-info');
+    this.classList.add('bg-primary');
     return false;
   };
   dropZone.ondragleave = function () {
-    this.classList.remove('badge-primary');
-    this.classList.add('badge-info');
+    this.classList.remove('bg-primary');
+    this.classList.add('bg-info');
     return false;
   };
   dropZone.ondrop = function (event) {
     event.preventDefault();
-    this.classList.add('badge-info');
-    this.classList.remove('badge-primary');
+    this.classList.add('bg-info');
+    this.classList.remove('bg-primary');
     var files = event.dataTransfer.files;
     console.log(files);
     var formData = new FormData();

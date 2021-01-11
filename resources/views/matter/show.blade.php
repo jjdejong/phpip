@@ -322,8 +322,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
       </div>
     </div>
-    <div class="card-deck">
-      <div class="card border-secondary" style="min-height: 100px;">
+    <div class="row card-deck">
+      <div class="card border-secondary col-10 p-0" style="min-height: 100px;">
         <div class="card-header p-1 bg-secondary text-light">
           Notes
         </div>
@@ -365,7 +365,14 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               title="Prepare an email">
               &#9993; FR
           </a>
-          <div id="dropZone" class="badge badge-info align-middle float-right" data-url="/matter/{{ $matter->id }}/mergeFile">Drop files to merge here</div>
+        </div>
+      </div>
+      <div class="card col-2 border-info p-1">
+        <div id="dropZone" class="card-body bg-info text-light text-center align-middle" data-url="/matter/{{ $matter->id }}/mergeFile">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-intersect" viewBox="0 0 16 16">
+            <path d="M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2V2zm5 10v2a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2v5a2 2 0 0 1-2 2H5zm6-8V2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h2V6a2 2 0 0 1 2-2h5z"/>
+          </svg>
+          <p>File merge Drop Zone</p>
         </div>
       </div>
     </div>
