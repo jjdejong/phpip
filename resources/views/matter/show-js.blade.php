@@ -194,11 +194,9 @@
     event.preventDefault();
     this.classList.add('bg-info');
     this.classList.remove('bg-primary');
-    var files = event.dataTransfer.files;
+    var file = event.dataTransfer.files[0];
     var formData = new FormData();
-    for (var i = 0; i < files.length; i++) {
-      formData.append('file', files[i]);
-    }
+    formData.append('file', file);
     fetch(this.dataset.url, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
@@ -207,17 +205,24 @@
         method: 'POST',
         body: formData
     })
-    .then(response => response.blob())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('There was an error in processing the file');
+      }
+      return response.blob();
+    })
     .then(blob => {
       // Simulate click on a temporary link to perform download
       var tempLink = document.createElement('a');
       tempLink.style.display = 'none';
       tempLink.href = URL.createObjectURL(blob);
-      tempLink.download = 'merged-' + files[0].name;
-
+      tempLink.download = "{{ $matter->uid }}-" + file.name;
       document.body.appendChild(tempLink);
       tempLink.click();
       document.body.removeChild(tempLink);
+    })
+    .catch(error => {
+      console.error(error);
     });
     return false;
   };
