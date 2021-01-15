@@ -75,7 +75,7 @@ foreach ($xml->PATENT as $AQSpatent) {
             echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
         }
         $myRenewal = $result->fetch_assoc();
-        if (strpos($AQSpatent->REFCLI, $myRenewal['caseref'] . $myRenewal['alt_ref']) === false) {
+        if (strpos($myRenewal['caseref'] . $myRenewal['alt_ref'], $AQSpatent->REFCLI) === false) {
             // This case is OK but the reference needs to be checked
             echo "\r\nWARNING: REFCLI = $AQSpatent->REFCLI ($AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV) does not match UID = $AQSpatent->UID";
             $unrecognized++;
@@ -103,8 +103,8 @@ foreach ($xml->PATENT as $AQSpatent) {
 		WHERE matter.id = matter_actor_lnk.matter_id
 		AND matter_actor_lnk.role = 'ANN'
 		AND country = '$AQSpatent->COUNTRY'
-		AND caseref = '$AQSpatent->REFCLI'
-		AND ifnull(origin,'') = '$AQSpatent->ORIG'
+		AND (caseref = '$AQSpatent->REFCLI' OR alt_ref = '$AQSpatent->REFCLI')
+		AND ifnull(origin, '') = '$AQSpatent->ORIG'
 		AND if(type_code IS NULL, 1, 2) + ifnull(idx, 0) = CAST('$AQSpatent->DIV' AS UNSIGNED)";
         // AND concat(ifnull(type_code,''), ifnull(idx,'')) = '$AQSpatent->DIV'";
         $result = $db->query($q);
@@ -114,7 +114,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 
         $myRenewal = $result->fetch_assoc();
         if ($myRenewal2 = $result->fetch_assoc()) {
-            echo "\r\nAQS case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) has multiple matches - ignored";
+            echo "\r\nWARNING: AQS case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) has multiple matches - ignored";
             $ambiguous++;
             continue;
         }
