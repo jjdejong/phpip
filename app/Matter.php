@@ -149,18 +149,25 @@ class Matter extends Model
             ->where('code', 'PRI');
     }
 
+    // All tasks, including renewals and done
+    public function tasks()
+    {
+        return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id');
+    }
+    
+    // Pending excluding renewals
     public function tasksPending()
     {
-        // Excludes renewals
-        return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
+        return $this->tasks()
             ->where('task.code', '!=', 'REN')
             ->where('done', 0)
             ->orderBy('due_date');
     }
 
+    // Pending renewals
     public function renewalsPending()
     {
-        return $this->hasManyThrough('App\Task', 'App\Event', 'matter_id', 'trigger_id', 'id')
+        return $this->tasks()
             ->where('task.code', 'REN')
             ->where('done', 0)
             ->orderBy('due_date');

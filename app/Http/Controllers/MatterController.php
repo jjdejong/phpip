@@ -8,6 +8,7 @@ use App\ActorPivot;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class MatterController extends Controller
 {
@@ -246,13 +247,12 @@ class MatterController extends Controller
             'type',
             'filing'
         );
-        if ($matter->filing) {
-            $cat_edit = 0;
-            $country_edit = 0;
-        } else {
-            $cat_edit = 1;
-            $country_edit = 1;
-        }
+        $country_edit = $matter->tasks()->whereHas('rule', function (Builder $q) {
+            $q->whereNull('for_country');
+        })->count();
+        $cat_edit = $matter->tasks()->whereHas('rule', function (Builder $q) {
+            $q->whereNull('for_category');
+        })->count();
         return view("matter.edit", compact(['matter', 'cat_edit', 'country_edit']));
     }
 

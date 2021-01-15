@@ -587,7 +587,7 @@
             if (!ui.item) {
               // User has not selected anything
               e.target.value = "";
-              if (e.target.form) {
+              if (e.target.form && e.target.hasAttribute('data-actarget')) {
                 e.target.form[e.target.dataset.actarget].value = "";
               }
             }
