@@ -65,7 +65,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 
     if ($AQSpatent->UID != '') {
         // Check case with AQS's UID
-        $q = "SELECT caseref, country, ifnull(origin, '') as origin, concat(ifnull(type_code, ''), ifnull(idx, '')) as 'div', actor_ref
+        $q = "SELECT caseref, country, ifnull(origin, '') as origin, concat(ifnull(type_code, ''), ifnull(idx, '')) as 'div', actor_ref, alt_ref
 		FROM matter, matter_actor_lnk
 		WHERE matter.id = matter_actor_lnk.matter_id
 		AND matter_actor_lnk.role = 'ANN'
@@ -75,15 +75,16 @@ foreach ($xml->PATENT as $AQSpatent) {
             echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
         }
         $myRenewal = $result->fetch_assoc();
-        if (strpos($AQSpatent->REFCLI, $myRenewal['caseref']) === false) {
+        if (strpos($AQSpatent->REFCLI, $myRenewal['caseref'] . $myRenewal['alt_ref']) === false) {
+            // This case is OK but the reference needs to be checked
             echo "\r\nWARNING: REFCLI = $AQSpatent->REFCLI ($AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV) does not match UID = $AQSpatent->UID";
             $unrecognized++;
-            //This case is OK but the reference needs to be checked
         }
         if ($myRenewal['country'] != $AQSpatent->COUNTRY) {
-            echo "\r\nCOUNTRY = $AQSpatent->COUNTRY ($AQSpatent->REFCLI) does not match UID = $AQSpatent->UID";
+            // This case is wrong, go to next
+            echo "\r\nERROR: COUNTRY = $AQSpatent->COUNTRY ($AQSpatent->REFCLI) does not match UID = $AQSpatent->UID";
             $unrecognized++;
-            continue; // This case is wrong, go to next
+            continue;
         }
         /*if ($myRenewal['origin'] != $AQSpatent->ORIG) {
             echo "\r\nORIG = $AQSpatent->ORIG ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG) does not match UID = $AQSpatent->UID";
