@@ -37,7 +37,7 @@ $pd_start = null;			// publication date (Date)
 $pd_end = null;			// publication date (Date)
 $pn = null;				// publication number / patent number (String START)
 $entity = null;			// may be SMALL or LARGE (String STRICT)
-$updtime_start = null; //date('Y-m-d', time() - (30*86400)); // -30 days or $myRenewal['lastupdate'] or YYYY-MM-DD;
+$updtime_start = null; //date('Y-m-d', time() - (30*86400)); // -30 days or $myRenewal->lastupdate or YYYY-MM-DD;
 $updtime_end = null; //date('Y-m-d');
 $duedate_start = null;	// duedate (Date)
 $duedate_end = null;		// duedate (Date)
@@ -66,36 +66,41 @@ foreach ($xml->PATENT as $AQSpatent) {
     if ($AQSpatent->UID != '') {
         // Check case with AQS's UID
         $q = "SELECT caseref, country, ifnull(origin, '') as origin, concat(ifnull(type_code, ''), ifnull(idx, '')) as 'div', actor_ref, alt_ref
-		FROM matter, matter_actor_lnk
-		WHERE matter.id = matter_actor_lnk.matter_id
-		AND matter_actor_lnk.role = 'ANN'
+		FROM matter JOIN matter_actor_lnk
+		ON matter.id = matter_actor_lnk.matter_id
+		WHERE matter_actor_lnk.role = 'ANN'
 		AND matter.id = '$AQSpatent->UID'";
         $result = $db->query($q);
         if (!$result) {
             echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
         }
-        $myRenewal = $result->fetch_assoc();
-        if (strpos($myRenewal['caseref'] . $myRenewal['alt_ref'], $AQSpatent->REFCLI) === false) {
+        if ($result->num_rows == 0) {
+            echo "\r\nWARNING: no data for UID $AQSpatent->UID";
+            continue;
+        }
+        $myRenewal = $result->fetch_object();
+        if (strpos($myRenewal->caseref . $myRenewal->alt_ref, trim($AQSpatent->REFCLI)) === false) {
             // This case is OK but the reference needs to be checked
-            echo "\r\nWARNING: REFCLI = $AQSpatent->REFCLI ($AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV) does not match UID = $AQSpatent->UID";
+            echo "\r\nWARNING: REFCLI $AQSpatent->REFCLI does not match $myRenewal->caseref or $myRenewal->alt_ref for UID $AQSpatent->UID";
             $unrecognized++;
         }
-        if ($myRenewal['country'] != $AQSpatent->COUNTRY) {
+        if ($myRenewal->country != $AQSpatent->COUNTRY) {
             // This case is wrong, go to next
-            echo "\r\nERROR: COUNTRY = $AQSpatent->COUNTRY ($AQSpatent->REFCLI) does not match UID = $AQSpatent->UID";
+            echo "\r\nERROR: COUNTRY $AQSpatent->COUNTRY does not match $myRenewal->country for UID $AQSpatent->UID";
             $unrecognized++;
             continue;
         }
-        /*if ($myRenewal['origin'] != $AQSpatent->ORIG) {
+        /*if ($myRenewal->origin != $AQSpatent->ORIG) {
             echo "\r\nORIG = $AQSpatent->ORIG ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG) does not match UID = $AQSpatent->UID";
             $unrecognized++;
             continue;
         }*/
-        /*if ($myRenewal['div'] != $AQSpatent->DIV) {
+        /*if ($myRenewal->div != $AQSpatent->DIV) {
             echo "\r\nDIV = $AQSpatent->DIV ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->DIV) does not match UID = $AQSpatent->UID";
             $unrecognized++;
             continue;
         }*/
+        $result->close();
     } else {
         // No UID, try to find a unique ID with country, caseref, origin, type and annuity count
         $q = "SELECT matter.id, actor_ref
@@ -106,36 +111,34 @@ foreach ($xml->PATENT as $AQSpatent) {
 		AND (caseref = '$AQSpatent->REFCLI' OR alt_ref = '$AQSpatent->REFCLI')
 		AND ifnull(origin, '') = '$AQSpatent->ORIG'
 		AND if(type_code IS NULL, 1, 2) + ifnull(idx, 0) = CAST('$AQSpatent->DIV' AS UNSIGNED)";
-        // AND concat(ifnull(type_code,''), ifnull(idx,'')) = '$AQSpatent->DIV'";
         $result = $db->query($q);
         if (!$result) {
             echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
         }
-
-        $myRenewal = $result->fetch_assoc();
-        if ($myRenewal2 = $result->fetch_assoc()) {
+        if ($result->num_rows == 0) {
+            echo "\r\nWARNING: no data for AQS case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV";
+            $unrecognized++;
+            continue;
+        }
+        if ($result->num_rows > 1) {
             echo "\r\nWARNING: AQS case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) has multiple matches - ignored";
             $ambiguous++;
             continue;
         }
-        $AQSpatent->UID = $myRenewal['id'] ?? '';
+        $myRenewal = $result->fetch_object();
+        $AQSpatent->UID = $myRenewal->id ?? '';
         /*if ($AQSpatent->UID != '') {
             echo "\r\nAQS case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) had no UID, identified it as $AQSpatent->UID";
         }*/
-    }
-    if ($AQSpatent->UID == '') {
-        // No matching id found
-        echo "\r\nCould not find AQS's $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ?)";
-        $unrecognized++;
-        continue; // Patent not found in phpIP, go to next
+        $result->close();
     }
 
-    if ($myRenewal['actor_ref'] != $AQSpatent->REFSGA2 . $AQSpatent->COUNTRY . '-' . $AQSpatent->ORIG . '-' . $AQSpatent->DIV) { // Case found and SGA² ref needs updating
+    if ($myRenewal->actor_ref != $AQSpatent->REFSGA2 . $AQSpatent->COUNTRY . '-' . $AQSpatent->ORIG . '-' . $AQSpatent->DIV) { // Case found and SGA² ref needs updating
         $q = "UPDATE matter_actor_lnk SET actor_ref = '$AQSpatent->REFSGA2$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV', updated_at = Now(), updater = 'AQS'
 		WHERE matter_ID = '$AQSpatent->UID'
 		AND role = 'ANN'";
-        $result = $db->query($q);
-        if (!$result) {
+        $res = $db->query($q);
+        if (!$res) {
             echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
         }
     }
@@ -149,7 +152,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 
         // Identify annuity to update with AQS info
         $q = "SELECT task.id, task.cost, task.fee, task.currency, task.notes, task.done_date, task.due_date, task.invoice_step
-    FROM task JOIN event ON task.trigger_id = event.id
+        FROM task JOIN event ON task.trigger_id = event.id
 		WHERE task.code = 'REN'
 		AND event.matter_id = '$AQSpatent->UID'
 		AND CAST(task.detail AS UNSIGNED) = '$renewal->YEAR'";
@@ -157,20 +160,20 @@ foreach ($xml->PATENT as $AQSpatent) {
         if (!$result) {
             echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
         }
-        $myRenewal = $result->fetch_assoc();
+        $myRenewal = $result->fetch_object();
 
-        if (isset($myRenewal['id'])) {
+        if (isset($myRenewal->id)) {
             // The annuity event is present
             $set = [];
-            if ($renewal->DUEDATE != $myRenewal['due_date']) {
+            if ($renewal->DUEDATE != $myRenewal->due_date) {
                 $set[] = "due_date = '$renewal->DUEDATE'";
             }
-            if ($renewal->CURRENCY && $myRenewal['currency'] != $renewal->CURRENCY) {
+            if ($renewal->CURRENCY && $myRenewal->currency != $renewal->CURRENCY) {
                 $set[] = "currency = '$renewal->CURRENCY'";
             }
             $cost = ($renewal->INVOICED_COST ?? $renewal->ESTIMATED_COST) - $aqs['aqs_fee'];
-            if ($cost && $cost != $myRenewal['cost']) {
-                $set[] = "cost = '$cost'";
+            if (round($cost, 2) != round($myRenewal->cost, 2)) {
+                $set[] = "cost = $cost";
                 if (!$renewal->INVOICED_COST) {
                     $set[] = "notes = 'Estimated'";
                 } else {
@@ -182,22 +185,22 @@ foreach ($xml->PATENT as $AQSpatent) {
             } else {
                 $fee = round($aqs['our_fee'] + $aqs['aqs_fee'] + (0.2 - (0.05 / 1000) * $cost) * $cost, 2);
             }
-            if ($fee != $myRenewal['fee']) {
-                $set[] = "fee = '$fee'";
+            if ($fee != $myRenewal->fee) {
+                $set[] = "fee = $fee";
             }
-            if ($renewal->DATE_PAID && $renewal->DATE_PAID != $myRenewal['done_date']) {
+            if ($renewal->DATE_PAID && $renewal->DATE_PAID != $myRenewal->done_date) {
                 $set[] = "done_date = '$renewal->DATE_PAID'";
                 $set[] = "step = -1";
-                if (!$myRenewal['invoice_step']) {
+                if (!$myRenewal->invoice_step) {
                     $set[] = "invoice_step = 1";
                 }
             }
-            if ($renewal->CANCELLED && $myRenewal['notes'] != 'Cancelled') {
+            if ($renewal->CANCELLED && $myRenewal->notes != 'Cancelled') {
                 // Payment cancelled or unnecessary
                 $set[] = "notes = 'Cancelled'";
             }
             if ($set) {
-                $q = "UPDATE task SET " . implode(', ', $set) . ", updated_at = Now(), updater = 'AQS' WHERE id = '$myRenewal[id]'";
+                $q = "UPDATE task SET " . implode(', ', $set) . ", updated_at = Now(), updater = 'AQS' WHERE id = '$myRenewal->id'";
                 $result = $db->query($q);
                 if (!$result) {
                     echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
@@ -222,13 +225,13 @@ foreach ($xml->PATENT as $AQSpatent) {
             if (!$result) {
                 echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
             }
-            $myRenewal = $result->fetch_assoc();
+            $myRenewal = $result->fetch_object();
             if (!$myRenewal) {
                 // No trigger event found
-                echo "\r\nCould not find trigger event for renewal $renewal->YEAR ($renewal->DUEDATE) in $AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV - Aborted";
+                echo "\r\nWARNING: Could not find trigger event for renewal $renewal->YEAR ($renewal->DUEDATE) in $AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV - Aborted";
                 continue;
             }
-            $trigger_id = $myRenewal['id'];
+            $trigger_id = $myRenewal->id;
             $cost = ($renewal->INVOICED_COST ?? $renewal->ESTIMATED_COST) - $aqs['aqs_fee'];
             if ($cost > 1000 - $aqs['aqs_fee']) {
                 $fee = round($aqs['our_fee'] + $aqs['aqs_fee'] + 0.15 * $cost, 2);
