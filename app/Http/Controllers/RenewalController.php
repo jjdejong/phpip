@@ -11,6 +11,7 @@ use App\MatterActors;
 use App\RenewalsLog;
 use App\Mail\sendCall;
 use Illuminate\Support\Facades\DB;
+use Log;
 
 class RenewalController extends Controller
 {
@@ -24,7 +25,7 @@ class RenewalController extends Controller
         ]);
         $step = $request->step;
         $invoice_step = $request->invoice_step;
-        
+
         // Get list of active renewals
         $renewals = Task::renewals();
         if ($step == 0) {
@@ -330,7 +331,7 @@ class RenewalController extends Controller
         }
         $num = 0;
         if (config('renewal.invoice.backend') == "dolibarr" && $toinvoice) {
-            $resql = $query->orderBy('pa_cli.name', "ASC")->get();
+            $resql = $query->orderBy('client_name', "ASC")->get();
             $previousClient = "ZZZZZZZZZZZZZZZZZZZZZZZZ";
             $firstPass = true;
             // get from config/renewal.php
@@ -338,6 +339,7 @@ class RenewalController extends Controller
             if ($apikey == null) {
                 return response()->json(['error' => "Api is not configured"]);
             }
+            Log::debug("Facturation dans Dolibarr");
             if ($resql) {
                 $num = $resql->count();
                 if ($num == 0) {
@@ -346,6 +348,7 @@ class RenewalController extends Controller
                     $i = 0;
                     foreach ($resql as $ren) {
                         $client = $ren->client_name;
+                        Log::debug("Ligne ".$i);
                         if ($firstPass) {
                             // retrouve la correspondance de société
                             $result = $this->_client($client, $apikey);
@@ -366,7 +369,7 @@ class RenewalController extends Controller
                             $desc .= " délivré le ";
                         }
                         $desc .= Carbon::parse($ren->event_date)->isoFormat('LL');
-                        // TODO select preposition 'en, au, aux' according to country 
+                        // TODO select preposition 'en, au, aux' according to country
                         $desc .= ' en ' . $ren->country_FR;
                         if ($ren->title != '') {
                             $desc .= "\nSujet : " . $ren->title;
@@ -410,6 +413,7 @@ class RenewalController extends Controller
                             "total_tva" => $fee * $tx_tva,
                             "total_ttc" => $fee  * (1.0 +  $tx_tva)
                         ];
+                        Log::debug("Ajout ligne ".$desc);
                         if ($cost != 0) {
                             // Ajout d'une deuxième ligne
                             $newlines[] = [
@@ -428,8 +432,8 @@ class RenewalController extends Controller
                         if ($i < $num) {
                             $client = $resql[$i]->client_name;
                         }
-                        if ($client != $previousClient || $i == $num) {
-                            // Create propale
+                        if ($client != $previousClient || $i == $num ) {
+                            // Create invoice
                             $newprop = [
                                 "socid" => $soc_res['id'],
                                 "date" => time(),
