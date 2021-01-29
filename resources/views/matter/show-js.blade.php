@@ -207,7 +207,10 @@
     })
     .then(response => {
       if (!response.ok) {
-        throw new Error('There was an error in processing the file');
+        if (response.status == 422) {
+          alert('Only DOCX files can be processed for the moment');
+        }
+        throw new Error('Response status ' + response.status);
       }
       return response.blob();
     })

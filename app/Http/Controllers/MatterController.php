@@ -369,7 +369,7 @@ class MatterController extends Controller
     {
         // No dedicated "form request" class being defined, this validation will silently terminate the operation when unsuccessful
         $this->validate($request, [
-            'file'  => 'required|file'
+            'file'  => 'required|file|mimes:docx,dotx'
         ]);
         $file = $request->file('file');
 
