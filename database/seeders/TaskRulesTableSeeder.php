@@ -4985,7 +4985,7 @@ class TaskRulesTableSeeder extends Seeder
                 'end_of_month' => 0,
                 'abort_on' => 'GRT',
                 'condition_event' => null,
-                                'use_priority' => 0,
+                'use_priority' => 0,
                 'use_before' => null,
                 'use_after' => null,
                 'cost' => null,

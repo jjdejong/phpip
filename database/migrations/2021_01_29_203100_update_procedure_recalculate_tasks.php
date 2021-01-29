@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProcedureRecalculateTasks extends Migration
+class UpdateProcedureRecalculateTasks extends Migration
 {
     /**
      * Run the migrations.
@@ -12,6 +12,8 @@ class CreateProcedureRecalculateTasks extends Migration
      */
     public function up()
     {
+        DB::unprepared('DROP PROCEDURE IF EXISTS `recalculate_tasks`');
+
         DB::unprepared("CREATE DEFINER=`phpip`@`localhost` PROCEDURE `recalculate_tasks`(
 			IN P_matter_id INT,
 			IN P_event_code CHAR(5),
@@ -89,6 +91,6 @@ END proc");
      */
     public function down()
     {
-        DB::unprepared('DROP PROCEDURE IF EXISTS `recalculate_tasks`');
+        //
     }
 }
