@@ -14,7 +14,7 @@ class UpdateProcedureRecalculateTasks extends Migration
     {
         DB::unprepared('DROP PROCEDURE IF EXISTS `recalculate_tasks`');
 
-        DB::unprepared("CREATE DEFINER=`phpip`@`localhost` PROCEDURE `recalculate_tasks`(
+        DB::unprepared("CREATE PROCEDURE `recalculate_tasks`(
 			IN P_matter_id INT,
 			IN P_event_code CHAR(5),
 			IN P_user CHAR(16)
