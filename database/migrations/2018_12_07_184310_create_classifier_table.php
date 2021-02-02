@@ -30,9 +30,9 @@ class CreateClassifierTable extends Migration
             $table->string('updater', 20)->nullable();
             $table->timestamps();
 
-            $table->unique(['matter_id','type_code','lnk_matter_id'], 'uqlnk');
-            $table->unique(['matter_id','type_code',DB::raw('value(10)')], 'uqvalue');
-            $table->unique(['matter_id','type_code','value_id'], 'uqvalue_id');
+            $table->unique(['matter_id', 'type_code', 'lnk_matter_id'], 'uqlnk');
+            $table->unique(['matter_id', 'type_code', DB::raw('value(30)')], 'uqvalue');
+            $table->unique(['matter_id', 'type_code', 'value_id'], 'uqvalue_id');
             $table->index([DB::raw('value(20)')], 'value');
         });
         Schema::table('classifier', function ($table) {
