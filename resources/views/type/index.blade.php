@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-light">
-  Categories
+<legend class="text-primary">
+  Matter Types
   <a href="type/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Type" data-resource="/type/">Create a new Matter Type</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card overflow-auto" style="max-height: 640px;">
+    <div class="card border-primary overflow-auto" style="max-height: 640px;">
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="bg-primary text-light">
-            <td><input class="filter-input form-control form-control-sm" data-source="/type" name="Code" placeholder="Code" value="{{ old('Code') }}"></td>
-            <td><input class="filter-input form-control form-control-sm" data-source="/type" name="Type" placeholder="Type" value="{{ old('Type') }}"></td>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/type" name="Code" placeholder="Code" value="{{ old('Code') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/type" name="Type" placeholder="Type" value="{{ old('Type') }}"></th>
           </tr>
         </thead>
         <tbody id="tableList">

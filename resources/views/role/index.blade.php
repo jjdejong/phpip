@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-light">
-  Actor roles
+<legend class="text-primary">
+  Actor Roles
   <a href="role/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Role" data-resource="/role/">Create a new Role</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card overflow-auto" style="max-height: 640px;">
+    <div class="card border-primary overflow-auto" style="max-height: 640px;">
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="bg-primary text-light">
-            <td><input class="filter-input form-control form-control-sm" data-source="/role" name="Code" placeholder="Code" value="{{ old('Code') }}"></td>
-            <td><input class="filter-input form-control form-control-sm" data-source="/role" name="Name" placeholder="Name" value="{{ old('Name') }}"></td>
-            <td colspan="2">Notes</th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/role" name="Code" placeholder="Code" value="{{ old('Code') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/role" name="Name" placeholder="Name" value="{{ old('Name') }}"></th>
+            <th class="align-middle text-center border-top-0" colspan="2">Notes</th>
           </tr>
         </thead>
         <tbody id="tableList">

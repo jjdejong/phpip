@@ -1,21 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-light">
-  Default actors
+<legend class="text-primary">
+  Default Actors
   <a href="default_actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Default actors" data-resource="/default_actor/">Add a new default actor</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card overflow-auto" style="max-height: 640px;">
+    <div class="card overflow-auto border-primary" style="max-height: 640px;">
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="bg-primary text-light">
-            <td><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Actor" placeholder="Actor" value="{{ old('Actor') }}"></td>
-            <td><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Role" placeholder="Role" value="{{ old('Role') }}"></td>
-            <td><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Country" placeholder="Country" value="{{ old('Country') }}"></td>
-            <td><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Category" placeholder="Category" value="{{ old('Category') }}"></td>
-            <td><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Client" placeholder="Client" value="{{ old('Client') }}"></td>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Actor" placeholder="Actor" value="{{ old('Actor') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Role" placeholder="Role" value="{{ old('Role') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Country" placeholder="Country" value="{{ old('Country') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Category" placeholder="Category" value="{{ old('Category') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Client" placeholder="Client" value="{{ old('Client') }}"></th>
           </tr>
         </thead>
         <tbody id="tableList">

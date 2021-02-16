@@ -91,7 +91,7 @@
                 @can('admin')
                 <a class="dropdown-item" href="{{ url('/rule') }}">Rules</a>
                 <a class="dropdown-item" href="{{ url('/document') }}">Email template classes</a>
-                <a class="dropdown-item" href="{{ url('/template-member') }}">Email template members</a>
+                <a class="dropdown-item" href="{{ url('/template-member') }}">Email templates</a>
                 @endcan
               </ul>
             </li>

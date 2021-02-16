@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-light">
+<legend class="text-primary">
   Categories
   <a href="category/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Category" data-resource="/category/">Create a new Category</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card overflow-auto" style="max-height: 640px;">
+    <div class="card overflow-auto border-primary" style="max-height: 640px;">
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="bg-primary text-light">
-            <td><input class="filter-input form-control form-control-sm" data-source="/category" name="Code" placeholder="Code" value="{{ old('Code') }}"></td>
-            <td><input class="filter-input form-control form-control-sm" data-source="/category" name="Category" placeholder="Category" value="{{ old('Category') }}"></td>
-            <td colspan="2">Display with</th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/category" name="Code" placeholder="Code" value="{{ old('Code') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/category" name="Category" placeholder="Category" value="{{ old('Category') }}"></th>
+            <th class="align-middle border-top-0" colspan="2">Display with</th>
           </tr>
         </thead>
         <tbody id="tableList">

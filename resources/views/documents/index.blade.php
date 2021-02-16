@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-light">
-  Documents classes
+<legend class="text-primary">
+  Document Classes
   <a href="document/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Document class" data-source="/document" data-resource="/document/create/">Create a new class of templates</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card">
+    <div class="card border-primary">
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="bg-primary text-light">
-            <th><input class="filter-input form-control form-control-sm" data-source="/document" name="Name" placeholder="Name" value="{{ old('Name') }}"></th>
-            <th><input class="filter-input form-control form-control-sm" data-source="/document" name="Notes" placeholder="Notes" value="{{ old('Notes') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/document" name="Name" placeholder="Name" value="{{ old('Name') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/document" name="Notes" placeholder="Notes" value="{{ old('Notes') }}"></th>
           </tr>
         </thead>
         <tbody id="tableList">
