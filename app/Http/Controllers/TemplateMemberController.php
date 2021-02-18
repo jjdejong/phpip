@@ -22,33 +22,37 @@ class TemplateMemberController extends Controller
 
     public function index(Request $request)
     {
-      $Style  = $request->input('Style');
-      $Language  = $request->input('Language');
-      $Name = $request->input('Name');
-      $Format = $request->input('Format');
-      $Category = $request->input('Category');
-      $template_members = TemplateMember::query() ;
-      if (!is_null($Category)) {
-          $template_members = $template_members->where('category', 'LIKE', "$Category%");
-      }
-      if (!is_null($Language)) {
-          $template_members = $template_members->where('language', 'LIKE', "$Language%");
-      }
-      if (!is_null($Name)) {
-          $template_members = $template_members->whereHas('class', function ($query) use ($Name) {
-              $query->where('name', 'LIKE', "$Name%");
-          });
-      }
-      if (!is_null($Format)) {
-            $template_members = $template_members->where('format', 'like', $Format.'%');
-      }
-      if (!is_null($Style)) {
-          $template_members = $template_members->where('style', 'LIKE', "$Style%");
-      }
+        $Summary  = $request->summary;
+        $Style  = $request->style;
+        $Language  = $request->language;
+        $Class = $request->class;
+        $Format = $request->format;
+        $Category = $request->category;
+        $template_members = TemplateMember::query() ;
+        if (!is_null($Summary)) {
+            $template_members = $template_members->where('summary', 'LIKE', "%$Summary%");
+        }
+        if (!is_null($Category)) {
+            $template_members = $template_members->where('category', 'LIKE', "$Category%");
+        }
+        if (!is_null($Language)) {
+            $template_members = $template_members->where('language', 'LIKE', "$Language%");
+        }
+        if (!is_null($Class)) {
+            $template_members = $template_members->whereHas('class', function ($query) use ($Class) {
+                $query->where('name', 'LIKE', "$Class%");
+            });
+        }
+        if (!is_null($Format)) {
+                $template_members = $template_members->where('format', 'like', $Format.'%');
+        }
+        if (!is_null($Style)) {
+            $template_members = $template_members->where('style', 'LIKE', "$Style%");
+        }
 
-      $template_members = $template_members->orderBy('summary')->simplePaginate( config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')) );
-      $template_members->appends($request->input())->links();
-      return view('template-members.index', compact('template_members'));
+        $template_members = $template_members->orderBy('summary')->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
+        $template_members->appends($request->input())->links();
+        return view('template-members.index', compact('template_members'));
     }
 
     /**
