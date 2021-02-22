@@ -53,7 +53,7 @@ class CreateViewsAndFunctions extends Migration
           left join `matter` on((`event`.`alt_matter_ID` = `matter`.`ID`)))"
         );
 
-        DB::unprepared("CREATE EVENT `kill_expired` ON SCHEDULE EVERY 1 WEEK STARTS '2017-01-31 20:23:25' ON COMPLETION PRESERVE DISABLE ON SLAVE COMMENT 'Updates the expired status of matters' DO CALL update_expired()");
+        DB::unprepared("CREATE EVENT `kill_expired` ON SCHEDULE EVERY 1 WEEK ON COMPLETION PRESERVE DISABLE ON SLAVE COMMENT 'Updates the expired status of matters' DO CALL update_expired()");
 
         DB::unprepared("CREATE
           FUNCTION `actor_list`(mid INT, arole TEXT) RETURNS text CHARSET utf8
