@@ -12,12 +12,8 @@
         </select>
       <th><label title="{{ $tableComments['style'] }}">Style</label></th>
       <td><input type="text" class="form-control noformat" name="style" data-ac="/template-style/autocomplete" value="{{ $templateMember->style }}"></td>
-        <th><label title="{{ $tableComments['category'] }}">Category</label></th>
-        <td ><input type="text" class="form-control noformat" name="category" data-ac="/template-category/autocomplete" value="{{ $templateMember->category }}"></td>
-  </tr>
-  <tr>
-      <th><label title="{{ $tableComments['summary'] }}">Summary</label></th>
-      <td colspan="5"><input type="text" class="form-control noformat" name="summary" value="{{ $templateMember->summary }}"></td>
+      <th><label title="{{ $tableComments['category'] }}">Category</label></th>
+      <td ><input type="text" class="form-control noformat" name="category" data-ac="/template-category/autocomplete" value="{{ $templateMember->category }}"></td>
       <th><label title="{{ $tableComments['format'] }}">Format</label></th>
       <td>
         <select name="format" class="noformat">
@@ -25,14 +21,18 @@
           <option value="HTML" {{ $templateMember->format == "HTML" ? 'selected' : ""}}>HTML</option>
         </select>
       </td>
-  </tr>
-  <tr>
+    </tr>
+    <tr>
+        <th><label title="{{ $tableComments['summary'] }}">Summary</label></th>
+        <td colspan="9"><input type="text" class="form-control noformat" name="summary" value="{{ $templateMember->summary }}"></td>
+    </tr>
+    <tr>
       <th><label title="{{ $tableComments['subject'] }}">Subject</label></th>
-      <td colspan="7"><textarea class="form-control noformat" name="subject" rows="3">{{ $templateMember->subject }}</textarea></td>
+      <td colspan="9"><textarea class="form-control noformat" name="subject" rows="3">{{ $templateMember->subject }}</textarea></td>
     </tr>
     <tr>
       <th><label title="{{ $tableComments['body'] }}">Body</label></th>
-      <td colspan="7"><textarea class="form-control noformat" name="body" value="{{ $templateMember->body }}" rows="20">{{ $templateMember->body }}</textarea></td>
+      <td colspan="9"><textarea class="form-control noformat" name="body" rows="20">{{ $templateMember->body }}</textarea></td>
     </tr>
   </table>
   <button type="button" class="btn btn-danger" title="Delete template" id="deleteMember" data-message="the template {{ $templateMember->class->name  }}" data-url='/template-member/{{ $templateMember->id }}'>
