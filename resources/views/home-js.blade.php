@@ -1,10 +1,3 @@
-<style type="text/css">
-    .card-body {
-        max-height: 350px;
-        min-height: 80px;
-        overflow: auto;
-    }
-</style>
 <script>
   var lastTasksFlag = 0;
 

@@ -1,5 +1,15 @@
 @extends('layouts.app')
 
+@section('style')
+<style type="text/css">
+  .card-body {
+      max-height: 350px;
+      min-height: 80px;
+      overflow: auto;
+  }
+</style>
+@endsection
+
 @section('content')
 
 <div class="row card-deck">
@@ -193,10 +203,8 @@
 </div>
 @endif
 
-@stop
+@endsection
 
 @section('script')
-
 @include('home-js')
-
-@stop
+@endsection
