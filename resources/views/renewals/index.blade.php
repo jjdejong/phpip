@@ -251,7 +251,7 @@
         return tids;
     };
 </script>
-@stop
+@endsection
 
 @section('style')
 <style>
@@ -259,7 +259,7 @@
     border-color: green;
   }
 </style>
-@stop
+@endsection
 
 @section('content')
 
@@ -477,4 +477,4 @@
         @endif
     </div>
 </div>
-@stop
+@endsection

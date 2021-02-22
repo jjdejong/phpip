@@ -407,10 +407,10 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
    </form>
 </template>
 
-@stop
+@endsection
 
 @section('script')
 
 @include('matter.show-js')
 
-@stop
+@endsection

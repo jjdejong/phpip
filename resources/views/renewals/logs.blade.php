@@ -58,4 +58,4 @@
 
 @include('tables.table-js')
 
-@stop
+@endsection

@@ -112,7 +112,7 @@
   };
 
 </script>
-@stop
+@endsection
 
 @section('style')
 <style>
@@ -121,7 +121,7 @@
     font-weight: bold;
   }
 </style>
-@stop
+@endsection
 
 @section('content')
 <div class="card border-primary mb-0">
@@ -321,4 +321,4 @@
     </table>
   </div>
 </div>
-@stop
+@endsection

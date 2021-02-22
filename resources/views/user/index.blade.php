@@ -75,4 +75,4 @@
   }, 300));
 
 </script>
-@stop
+@endsection
