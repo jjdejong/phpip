@@ -11,11 +11,11 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="bg-primary text-light">
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Actor" placeholder="Actor" value="{{ old('Actor') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Role" placeholder="Role" value="{{ old('Role') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Country" placeholder="Country" value="{{ old('Country') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Category" placeholder="Category" value="{{ old('Category') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Client" placeholder="Client" value="{{ old('Client') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Actor" placeholder="Actor"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Role" placeholder="Role"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Country" placeholder="Country"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Category" placeholder="Category"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Client" placeholder="Client"></th>
           </tr>
         </thead>
         <tbody id="tableList">

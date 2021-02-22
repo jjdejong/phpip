@@ -10,10 +10,10 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="bg-primary text-light">
-            <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="Matter" placeholder="Matter" value="{{ old('Matter') }}"></th>
-            <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="Client" placeholder="Client" value="{{ old('Client') }}"></th>
-            <th><input class="filter-input form-control form-control-sm" data-source="/logs" value="{{ old('Job') }}" name="Job" placeholder="Job" /></th>
-            <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="User" placeholder="User" value="{{ old('User') }}"></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="Matter" placeholder="Matter"></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="Client" placeholder="Client"></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="Job" placeholder="Job"></th>
+            <th><input class="filter-input form-control form-control-sm" data-source="/logs" name="User" placeholder="User"></th>
             <th>
               <input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">
               <input type="date" class="form-control form-control-sm" name="Untildate" id="Untildate" title="Until selected date" value="{{ Request::get('Untildate') }}">

@@ -11,12 +11,12 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="bg-primary text-light">
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="summary" placeholder="Summary" value="{{ old('summary') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="class" placeholder="Class" value="{{ old('class') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="language" placeholder="Language" value="{{ old('language') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="style" placeholder="Style" value="{{ old('style') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="format" placeholder="Format" value="{{ old('format') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="category" value="{{ old('Category') }}" placeholder="category" /></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="summary" placeholder="Summary"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="class" placeholder="Class"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="language" placeholder="Language"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="style" placeholder="Style"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="format" placeholder="Format"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="category" placeholder="category"></th>
           </tr>
         </thead>
         <tbody id="tableList">

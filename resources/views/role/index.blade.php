@@ -11,8 +11,8 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="bg-primary text-light">
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/role" name="Code" placeholder="Code" value="{{ old('Code') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/role" name="Name" placeholder="Name" value="{{ old('Name') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/role" name="Code" placeholder="Code"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/role" name="Name" placeholder="Name"></th>
             <th class="align-middle text-center border-top-0" colspan="2">Notes</th>
           </tr>
         </thead>

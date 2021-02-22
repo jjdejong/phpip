@@ -17,10 +17,10 @@
       <div id="filter" class="row text-center">
         <div class="col-3">
           <div class="row">
-            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/country" name="Country" placeholder="Country" value="{{ old('Country') }}"></div>
-            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/category" name="Category" placeholder="Category" value="{{ old('Category') }}"></div>
-            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/country" name="Origin" placeholder="Origin" value="{{ old('Origin') }}"></div>
-            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" name="Qt" placeholder="Yr" value="{{ old('Qt') }}"></div>
+            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/country" name="Country" placeholder="Country"></div>
+            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/category" name="Category" placeholder="Category"></div>
+            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/country" name="Origin" placeholder="Origin"></div>
+            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" name="Qt" placeholder="Yr"></div>
           </div>
         </div>
         <div class="col-4">
