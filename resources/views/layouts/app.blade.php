@@ -159,9 +159,9 @@
     </main>
   </div>
   <script>
-    var contentSrc = "", // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
-      ceInitialContent = '', // Used for detecting changes of content-editable elements
-      cTypeCode = ''; // Used for toggling image file input in matter.classifiers
+    var contentSrc, // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
+      ceInitialContent, // Used for detecting changes of content-editable elements
+      cTypeCode; // Used for toggling image file input in matter.classifiers
 
     // Ajax fill an element from a url returning HTML
     var fetchInto = async (url, element) => {
@@ -410,7 +410,7 @@
         e.target.parentNode.parentNode.remove();
       }
 
-      // Highlight the item displayed in the ajaxPanel
+      // Highlight the selected list item and load panel
       if (e.target.hasAttribute('data-panel')) {
         e.preventDefault();
         let markedRow = e.target.closest('tbody').querySelector('.table-info');
@@ -507,9 +507,7 @@
       // Mark the field
       if (e.target.matches(".noformat, textarea, [contenteditable]")) {
         e.target.classList.add("border", "border-info");
-      }
-      else if(e.target.matches('.filter')) {
-
+      } else if (e.target.matches('.filter')) {
           // Manage filters input fields in Email template selection box
         var url = new URL(window.location.origin + e.target.closest('[data-resource]').dataset.resource);
         if (e.target.value.length === 0) {

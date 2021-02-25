@@ -65,7 +65,7 @@ class TemplateMemberController extends Controller
         $table = new Actor ;
         $tableComments = $table->getTableComments('template_members');
         $languages = $this->languages;
-        return view('template-members.create', compact('tableComments','languages'));
+        return view('template-members.create', compact('tableComments', 'languages'));
     }
 
     /**
@@ -122,7 +122,7 @@ class TemplateMemberController extends Controller
     {
         $request->merge([ 'updater' => Auth::user()->login ]);
         $templateMember->update($request->except(['_token', '_method']));
-        return response()->json(['success' => 'Template member updated']);
+        return $templateMember;
     }
 
     /**

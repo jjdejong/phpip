@@ -57,7 +57,5 @@
 @endsection
 
 @section('script')
-
 @include('tables.table-js')
-
 @endsection

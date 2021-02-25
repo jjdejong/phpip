@@ -56,9 +56,9 @@
         </ul>
       </td>
       @cannot('client')
-      <td class="text-center">
+      <td class="text-center align-middle lead">
         @if (count(App\EventName::where('code', $event->code)->first()->templates) != 0)
-          <a href="#" class="chooseTemplate text-info font-weight-bold" data-url="/document/select/{{ $matter->id }}?EventName={{ $event->code }}&Event={{ $event->id }}">@</a>
+          <a href="#" class="chooseTemplate text-info" data-url="/document/select/{{ $matter->id }}?EventName={{ $event->code }}&Event={{ $event->id }}">&#9993;</a>
         @endif
       </td>
       @endcannot
