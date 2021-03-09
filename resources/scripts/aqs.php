@@ -11,53 +11,62 @@ if ($db->connect_errno) {
     exit;
 }
 
+// Get Anaqua Services ID or exit
+$q = "SELECT id FROM actor WHERE name LIKE 'Anaqua%'";
+$result = $db->query($q);
+if ($result->num_rows == 0) {
+    echo "\nERROR: no Anaqua Services in actor table";
+    exit;
+}
+$aqs_id = $result->fetch_object()->id;
+
 /* // Get last update date
 $q = "SELECT max(updated) AS lastupdate FROM task WHERE code='REN' AND notes != ''";
 $result = $db->query($q);
 if (!$result) {
-    echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
+    echo "\nInvalid query: (error " . $db->errno . ") " . $db->error;
 }
 $myRenewal = $result->fetch_assoc();
 */
 
-$clientcase = null;		// reference to a group of patent (String START)
-$refcli = null;			// single patent reference (String START)
-$uid = null;				// your internal reference (String STRICT)
-$refaqs = null;			// reference AQS (String START)
-$country = null;			// country code (String STRICT)
-$div = null;				// division (String STRICT)
-$orig = null;				// origin of the patent e.g. WO for a PCT, EP for European... (String STRICT)
-$title = null;			// title of the patent (String ANY)
-$nature = null;			// patent, design... (String STRICT)
-$mandate = null;			// mandate type NONE|OFF|ON|WAIT (String STRICT)
-$apd_start = null;		// applcation date (Date)
-$apd_end = null;			// applcation date (Date)
-$ap = null;				// applcation number (String START)
-$pd_start = null;			// publication date (Date)
-$pd_end = null;			// publication date (Date)
-$pn = null;				// publication number / patent number (String START)
-$entity = null;			// may be SMALL or LARGE (String STRICT)
-$updtime_start = null; //date('Y-m-d', time() - (30*86400)); // -30 days or $myRenewal->lastupdate or YYYY-MM-DD;
-$updtime_end = null; //date('Y-m-d');
-$duedate_start = null;	// duedate (Date)
-$duedate_end = null;		// duedate (Date)
-$receipt_start = null;	// receipt date (Date)
-$receipt_end = null;		// receipt date (Date)
-$limit_offset = null;		// starting position
-$limit_count = null;		// maximum number of records
-$sort_order = null;		// Tag_name-{a|d}
+$clientcase = null;     // reference to a group of patent (String START)
+$refcli = null;         // single patent reference (String START)
+$uid = null;            // your internal reference (String STRICT)
+$refaqs = null;         // reference AQS (String START)
+$country = null;        // country code (String STRICT)
+$div = null;            // division (String STRICT)
+$orig = null;           // origin of the patent e.g. WO for a PCT, EP for European... (String STRICT)
+$title = null;          // title of the patent (String ANY)
+$nature = null;         // patent, design... (String STRICT)
+$mandate = null;        // mandate type NONE|OFF|ON|WAIT (String STRICT)
+$apd_start = null;      // applcation date (Date)
+$apd_end = null;        // applcation date (Date)
+$ap = null;             // applcation number (String START)
+$pd_start = null;       // publication date (Date)
+$pd_end = null;         // publication date (Date)
+$pn = null;             // publication number / patent number (String START)
+$entity = null;         // may be SMALL or LARGE (String STRICT)
+$updtime_start = null;  //date('Y-m-d', time() - (30*86400)); // -30 days or $myRenewal->lastupdate or YYYY-MM-DD;
+$updtime_end = null;    //date('Y-m-d');
+$duedate_start = null;  // duedate (Date)
+$duedate_end = null;    // duedate (Date)
+$receipt_start = null;  // receipt date (Date)
+$receipt_end = null;    // receipt date (Date)
+$limit_offset = null;   // starting position
+$limit_count = null;    // maximum number of records
+$sort_order = null;     // Tag_name-{a|d}
 
 $result = $client->PgetCalendar($aqs['aqs_user'], $aqs['aqs_pwd'], $clientcase, $refcli, $uid, $refaqs, $country, $div, $orig, $title, $nature, $mandate, $apd_start, $apd_end, $ap, $pd_start, $pd_end, $pn, $entity, $updtime_start, $updtime_end, $duedate_start, $duedate_end, $receipt_start, $receipt_end, $limit_offset, $limit_count, $sort_order);
 
 $xml = new SimpleXMLElement($result);
 //print_r($xml); exit;
 
-$updated = 0;		// counts updated annuities
-$inserted = 0;		// counts inserted annuities
-$unrecognized = 0;	// counts unrecognized patents
-$patsprocessed = 0;	// total patents processed
-$annsprocessed = 0;	// total annuities processed
-$ambiguous = 0;		// counts patents that have multiple matches
+$updated = 0;       // counts updated annuities
+$inserted = 0;      // counts inserted annuities
+$unrecognized = 0;  // counts unrecognized patents
+$patsprocessed = 0; // total patents processed
+$annsprocessed = 0; // total annuities processed
+$ambiguous = 0;     // counts patents that have multiple matches
 
 
 foreach ($xml->PATENT as $AQSpatent) {
@@ -67,79 +76,79 @@ foreach ($xml->PATENT as $AQSpatent) {
         // Check case with AQS's UID
         $q = "SELECT caseref, country, ifnull(origin, '') as origin, concat(ifnull(type_code, ''), ifnull(idx, '')) as 'div', actor_ref, alt_ref
 		FROM matter JOIN matter_actor_lnk
-		ON matter.id = matter_actor_lnk.matter_id
-		WHERE matter_actor_lnk.role = 'ANN'
-		AND matter.id = '$AQSpatent->UID'";
+        ON matter.id = matter_actor_lnk.matter_id
+		WHERE matter_actor_lnk.actor_id = $aqs_id
+		AND matter.id = $AQSpatent->UID";
         $result = $db->query($q);
         if (!$result) {
-            echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
+            echo "\nInvalid query: (error " . $db->errno . ") " . $db->error;
         }
         if ($result->num_rows == 0) {
-            echo "\r\nWARNING: no data for UID $AQSpatent->UID";
+            echo "\nWARNING: no data for AQS UID $AQSpatent->UID. AQS may have been removed from case";
+            $unrecognized++;
             continue;
         }
         $myRenewal = $result->fetch_object();
         if (strpos($myRenewal->caseref . $myRenewal->alt_ref, trim($AQSpatent->REFCLI)) === false) {
             // This case is OK but the reference needs to be checked
-            echo "\r\nWARNING: REFCLI $AQSpatent->REFCLI does not match $myRenewal->caseref or $myRenewal->alt_ref for UID $AQSpatent->UID";
+            echo "\nWARNING: REFCLI $AQSpatent->REFCLI does not match $myRenewal->caseref or $myRenewal->alt_ref for UID $AQSpatent->UID";
             $unrecognized++;
         }
         if ($myRenewal->country != $AQSpatent->COUNTRY) {
             // This case is wrong, go to next
-            echo "\r\nERROR: COUNTRY $AQSpatent->COUNTRY does not match $myRenewal->country for UID $AQSpatent->UID";
+            echo "\nERROR: COUNTRY $AQSpatent->COUNTRY does not match $myRenewal->country for UID $AQSpatent->UID";
             $unrecognized++;
             continue;
         }
         /*if ($myRenewal->origin != $AQSpatent->ORIG) {
-            echo "\r\nORIG = $AQSpatent->ORIG ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG) does not match UID = $AQSpatent->UID";
+            echo "\nORIG = $AQSpatent->ORIG ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG) does not match UID = $AQSpatent->UID";
             $unrecognized++;
             continue;
         }*/
         /*if ($myRenewal->div != $AQSpatent->DIV) {
-            echo "\r\nDIV = $AQSpatent->DIV ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->DIV) does not match UID = $AQSpatent->UID";
+            echo "\nDIV = $AQSpatent->DIV ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->DIV) does not match UID = $AQSpatent->UID";
             $unrecognized++;
             continue;
         }*/
         $result->close();
     } else {
         // No UID, try to find a unique ID with country, caseref, origin, type and annuity count
-        $q = "SELECT matter.id, actor_ref
-		FROM matter, matter_actor_lnk
-		WHERE matter.id = matter_actor_lnk.matter_id
-		AND matter_actor_lnk.role = 'ANN'
+        $q = "SELECT matter.id, actor_ref FROM matter 
+        JOIN matter_actor_lnk ON matter.id = matter_actor_lnk.matter_id
+		WHERE matter_actor_lnk.actor_id = $aqs_id
 		AND country = '$AQSpatent->COUNTRY'
 		AND (caseref = '$AQSpatent->REFCLI' OR alt_ref = '$AQSpatent->REFCLI')
 		AND ifnull(origin, '') = '$AQSpatent->ORIG'
 		AND if(type_code IS NULL, 1, 2) + ifnull(idx, 0) = CAST('$AQSpatent->DIV' AS UNSIGNED)";
         $result = $db->query($q);
         if (!$result) {
-            echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
+            echo "\nInvalid query: (error " . $db->errno . ") " . $db->error;
         }
         if ($result->num_rows == 0) {
-            echo "\r\nWARNING: no data for AQS case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV";
+            echo "\nWARNING: no data for AQS case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV";
             $unrecognized++;
             continue;
         }
         if ($result->num_rows > 1) {
-            echo "\r\nWARNING: AQS case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) has multiple matches - ignored";
+            echo "\nWARNING: AQS case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) has multiple matches - ignored";
             $ambiguous++;
             continue;
         }
         $myRenewal = $result->fetch_object();
         $AQSpatent->UID = $myRenewal->id ?? '';
         /*if ($AQSpatent->UID != '') {
-            echo "\r\nAQS case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) had no UID, identified it as $AQSpatent->UID";
+            echo "\nAQS case $AQSpatent->REFSGA2-$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV ($AQSpatent->REFCLI) had no UID, identified it as $AQSpatent->UID";
         }*/
         $result->close();
     }
 
     if ($myRenewal->actor_ref != $AQSpatent->REFSGA2 . $AQSpatent->COUNTRY . '-' . $AQSpatent->ORIG . '-' . $AQSpatent->DIV) { // Case found and SGA² ref needs updating
         $q = "UPDATE matter_actor_lnk SET actor_ref = '$AQSpatent->REFSGA2$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV', updated_at = Now(), updater = 'AQS'
-		WHERE matter_ID = '$AQSpatent->UID'
-		AND role = 'ANN'";
+		WHERE matter_id = $AQSpatent->UID
+		AND actor_id = $aqs_id";
         $res = $db->query($q);
         if (!$res) {
-            echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
+            echo "\nInvalid query: (error " . $db->errno . ") " . $db->error;
         }
     }
 
@@ -154,11 +163,11 @@ foreach ($xml->PATENT as $AQSpatent) {
         $q = "SELECT task.id, task.cost, task.fee, task.currency, task.notes, task.done_date, task.due_date, task.invoice_step
         FROM task JOIN event ON task.trigger_id = event.id
 		WHERE task.code = 'REN'
-		AND event.matter_id = '$AQSpatent->UID'
-		AND CAST(task.detail AS UNSIGNED) = '$renewal->YEAR'";
+		AND event.matter_id = $AQSpatent->UID
+		AND CAST(task.detail AS UNSIGNED) = $renewal->YEAR";
         $result = $db->query($q);
         if (!$result) {
-            echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
+            echo "\nInvalid query: (error " . $db->errno . ") " . $db->error;
         }
         $myRenewal = $result->fetch_object();
 
@@ -203,9 +212,9 @@ foreach ($xml->PATENT as $AQSpatent) {
                 $q = "UPDATE task SET " . implode(', ', $set) . ", updated_at = Now(), updater = 'AQS' WHERE id = '$myRenewal->id'";
                 $result = $db->query($q);
                 if (!$result) {
-                    echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
+                    echo "\nInvalid query: (error " . $db->errno . ") " . $db->error;
                 }
-                echo "\r\nUpdated " . implode(', ', $set) . " for annuity $renewal->YEAR in $AQSpatent->UID ($AQSpatent->REFCLI-$AQSpatent->COUNTRY)";
+                echo "\nUpdated " . implode(', ', $set) . " for annuity $renewal->YEAR in $AQSpatent->UID ($AQSpatent->REFCLI-$AQSpatent->COUNTRY)";
                 $updated++;
             }
         } else {
@@ -223,12 +232,12 @@ foreach ($xml->PATENT as $AQSpatent) {
             }
             $result = $db->query($q);
             if (!$result) {
-                echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
+                echo "\nInvalid query: (error " . $db->errno . ") " . $db->error;
             }
             $myRenewal = $result->fetch_object();
             if (!$myRenewal) {
                 // No trigger event found
-                echo "\r\nWARNING: Could not find trigger event for renewal $renewal->YEAR ($renewal->DUEDATE) in $AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV - Aborted";
+                echo "\nWARNING: Could not find trigger event for renewal $renewal->YEAR ($renewal->DUEDATE) in $AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV - Aborted";
                 continue;
             }
             $trigger_id = $myRenewal->id;
@@ -243,7 +252,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 				VALUES ('REN', '$renewal->YEAR', '$renewal->DATE_PAID', '$renewal->DUEDATE', '$renewal->CURRENCY', $cost, $fee, 'Invoiced by AQS', $trigger_id, -1, 1, Now(), 'AQS', Now())";
                 $result = $db->query($q);
                 if (!$result) {
-                    echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
+                    echo "\nInvalid query: (error " . $db->errno . ") " . $db->error;
                 } else {
                     $somethingupdated = "invoiced cost $renewal->INVOICED_COST";
                 }
@@ -253,7 +262,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 				VALUES ('REN', '$renewal->YEAR', '$renewal->DUEDATE', $cost, $fee, 'Estimated', '$trigger_id', Now(), 'AQS', Now())";
                 $result = $db->query($q);
                 if (!$result) {
-                    echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
+                    echo "\nInvalid query: (error " . $db->errno . ") " . $db->error;
                 } else {
                     $somethingupdated = "estimated cost $renewal->ESTIMATED_COST";
                 }
@@ -263,7 +272,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 				VALUES ('REN', '$renewal->YEAR', '$renewal->DATE_PAID', '$renewal->DUEDATE', '$trigger_id', -1, 1, Now(), 'AQS', Now())";
                 $result = $db->query($q);
                 if (!$result) {
-                    echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
+                    echo "\nInvalid query: (error " . $db->errno . ") " . $db->error;
                 } else {
                     $somethingupdated = "paid on $renewal->DATE_PAID but not invoiced";
                 }
@@ -273,7 +282,7 @@ foreach ($xml->PATENT as $AQSpatent) {
 				VALUES ('REN', '$renewal->YEAR', '$renewal->DUEDATE', '$renewal->CURRENCY', $cost, $fee, 'Invoiced by AQS', '$trigger_id', Now(), 'AQS', Now())";
                 $result = $db->query($q);
                 if (!$result) {
-                    echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
+                    echo "\nInvalid query: (error " . $db->errno . ") " . $db->error;
                 } else {
                     $somethingupdated = "invoiced cost $renewal->INVOICED_COST (but no payment date)";
                 }
@@ -283,14 +292,14 @@ foreach ($xml->PATENT as $AQSpatent) {
 				VALUES ('REN', '$renewal->YEAR', '$renewal->DUEDATE', 'Cancelled', '$trigger_id', Now(), 'AQS', Now())";
                 $result = $db->query($q);
                 if (!$result) {
-                    echo "\r\nInvalid query: (error " . $db->errno . ") " . $db->error;
+                    echo "\nInvalid query: (error " . $db->errno . ") " . $db->error;
                 } else {
                     $somethingupdated = "cancelled";
                 }
             }
 
             if ($somethingupdated) {
-                echo "\r\nInserted annuity $renewal->YEAR with $somethingupdated in $AQSpatent->UID ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV)";
+                echo "\nInserted annuity $renewal->YEAR with $somethingupdated in $AQSpatent->UID ($AQSpatent->REFCLI$AQSpatent->COUNTRY-$AQSpatent->ORIG-$AQSpatent->DIV)";
                 $inserted++;
             }
         }
@@ -301,4 +310,4 @@ foreach ($xml->PATENT as $AQSpatent) {
     //if ($ambiguous > 0) exit; // Uncomment for debug
 }
 
-echo "\r\nAnnuities updated: $updated, inserted: $inserted, among processed: $annsprocessed\r\nPatents not recognized: $unrecognized, ambiguous: $ambiguous, total processed: $patsprocessed\r\n";
+echo "\nAnnuities updated: $updated, inserted: $inserted, among processed: $annsprocessed\nPatents not recognized: $unrecognized, ambiguous: $ambiguous, total processed: $patsprocessed\n";
