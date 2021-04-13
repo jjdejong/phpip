@@ -675,35 +675,4 @@ class MatterController extends Controller
         $description = $matter->getDescription($matter->id, $lang);
         return view('matter.summary', compact('description'));
     }
-
-    /**
-    * List Matters for actor by display name, where actors found are registered directly
-    * inside or in the related container or parent
-    * (not used?)
-     * @param  string  $dname  value to search in display_name
-     * @return Json     list of matters
-    */
-    // public function filesByActor(string $dname) {
-    //     $dname = urldecode($dname);
-    //     $actorpivot1 = new ActorPivot();
-    //     $actorpivot2 = new ActorPivot();
-    //     $actor_model = new Actor();
-    //     $matter = new Matter();
-
-    //     $actor_list = $actor_model->select(['id'])->where('display_name', 'like', $dname . '%')
-    //         ->get()->toArray();
-    //     $ma1 = $actorpivot1->select(['matter_id'])->whereIn('actor_id', $actor_list)
-    //         ->get()->toArray();
-    //     $ma2 = $actorpivot2->select(['matter_id'])->whereIn('actor_id', $actor_list)->where('shared', 1)
-    //         ->get()->toArray();
-    //     $matter_list1 = $matter->select('id')->whereIn('parent_id', $ma2)
-    //         ->get()->toArray();
-    //     $matter_list2 = $matter->select('id')->whereIn('container_id', $ma2)
-    //         ->get()->toArray();
-        
-    //     $matter_actor = $matter->select(['id','caseref','suffix'])
-    //         ->whereIn('id', array_merge($ma1, $matter_list1, $matter_list2))
-    //         ->get();
-    //     return $matter_actor;
-    // }
 }

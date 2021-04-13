@@ -200,7 +200,7 @@ class Task extends Model
             DB::raw('matter_actor_lnk pmal_own
             JOIN actor pa_own ON pa_own.id = pmal_own.actor_id'),
             function ($join) {
-                $join->on('matter.id', 'pmal_own.matter_id')
+                $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'pmal_own.matter_id')
                 ->where('pmal_own.role', 'OWN');
             }
         )

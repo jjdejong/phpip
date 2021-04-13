@@ -438,7 +438,7 @@ class RenewalController extends Controller
                                 "lines" => $newlines,
                                 "fk_account" => config('renewal.api.fk_account')
                             ];
-                            $rc = $this->create_invoice($newprop, $apikey); // invoice creation
+                            $rc = $this->createInvoice($newprop, $apikey); // invoice creation
                             if ($rc[0] != 0) {
                                 return response()->json(['error' => $rc[1] ]);
                             }
@@ -466,13 +466,8 @@ class RenewalController extends Controller
 
     public function export(Request $request)
     {
-        // if (isset($request->task_ids)) {
-        //     $export = Task::renewals()->whereIn('task.id', $request->task_ids)
-        //     ->orderBy('pmal_cli.actor_id')->get()->toArray();
-        // } else {
             $export = Task::renewals()->where('invoice_step', 1)
             ->orderBy('pmal_cli.actor_id')->get();
-        // }
         $export->map(function ($ren) {
             if ($ren->grace_period) {
                 $fee = $ren->fee;
@@ -526,7 +521,7 @@ class RenewalController extends Controller
         return json_decode($result, true);
     }
 
-    public function create_invoice($newprop, $apikey)
+    public function createInvoice($newprop, $apikey)
     {
         // Create invoice
         $curl = curl_init();
