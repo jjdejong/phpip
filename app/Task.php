@@ -163,14 +163,17 @@ class Task extends Model
             'mcountry.name AS country_EN',
             'mcountry.name_DE AS country_DE',
             'matter.origin',
-            DB::raw("MIN(pa_app.small_entity) = 1 AS sme_status"),
+            DB::raw("COALESCE(MIN(own.small_entity), MIN(ownc.small_entity), MIN(appl.small_entity), MIN(applc.small_entity)) AS sme_status"),
             'fil.event_date AS fil_date',
             'fil.detail AS fil_num',
             'grt.event_date AS grt_date',
             'event.code AS event_name',
             'event.event_date',
             'event.detail AS number',
-            DB::raw("COALESCE(GROUP_CONCAT(DISTINCT pa_own.name SEPARATOR ', '), GROUP_CONCAT(DISTINCT pa_app.name SEPARATOR ', ')) AS applicant_name"),
+            DB::raw("IF(GROUP_CONCAT(DISTINCT ownc.name) IS NOT NULL OR GROUP_CONCAT(DISTINCT own.name) IS NOT NULL,
+                CONCAT_WS('; ', GROUP_CONCAT(DISTINCT ownc.name SEPARATOR '; '), GROUP_CONCAT(DISTINCT own.name SEPARATOR '; ')),
+                CONCAT_WS('; ', GROUP_CONCAT(DISTINCT applc.name SEPARATOR '; '), GROUP_CONCAT(DISTINCT appl.name SEPARATOR '; '))
+            ) AS applicant_name"),
             DB::raw('COALESCE(pa_cli.name, clic.name) AS client_name'),
             DB::raw('COALESCE(pa_cli.address, clic.address) AS client_address'),
             DB::raw('COALESCE(pa_cli.country, clic.country) AS client_country'),
@@ -189,20 +192,34 @@ class Task extends Model
             'matter.expire_date'
         )
         ->leftJoin(
-            DB::raw('matter_actor_lnk pmal_app
-            JOIN actor pa_app ON pa_app.id = pmal_app.actor_id'),
-            function ($join) {
-                $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'pmal_app.matter_id')
-                ->where('pmal_app.role', 'APP');
-            }
+            DB::raw("matter_actor_lnk lappl
+            JOIN actor appl ON appl.id = lappl.actor_id
+            AND lappl.role = 'APP'"),
+            'matter.id',
+            'lappl.matter_id'
         )
         ->leftJoin(
-            DB::raw('matter_actor_lnk pmal_own
-            JOIN actor pa_own ON pa_own.id = pmal_own.actor_id'),
-            function ($join) {
-                $join->on(DB::raw('IFNULL(matter.container_id, matter.id)'), 'pmal_own.matter_id')
-                ->where('pmal_own.role', 'OWN');
-            }
+            DB::raw("matter_actor_lnk lapplc
+            JOIN actor applc ON applc.id = lapplc.actor_id
+            AND lapplc.role = 'APP'
+            AND lapplc.shared = 1"),
+            'matter.container_id',
+            'lapplc.matter_id'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk lown
+            JOIN actor own ON own.id = lown.actor_id
+            AND lown.role = 'OWN'"),
+            'matter.id',
+            'lown.matter_id'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk lownc
+            JOIN actor ownc ON ownc.id = lownc.actor_id
+            AND lownc.role = 'OWN'
+            AND lownc.shared = 1"),
+            'matter.container_id',
+            'lownc.matter_id'
         )
         ->leftJoin(
             DB::raw('matter_actor_lnk pmal_cli

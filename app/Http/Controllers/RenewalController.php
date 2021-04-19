@@ -506,7 +506,7 @@ class RenewalController extends Controller
 
     private function _client($client, $apikey)
     {
-        // serach for client correspondance in Dolibarr
+        // Search for client correspondence in Dolibarr
         $curl = curl_init();
         $httpheader = ['DOLAPIKEY: ' . $apikey];
         $data = ['sqlfilters' => '(t.nom like "' . $client . '%")'];
