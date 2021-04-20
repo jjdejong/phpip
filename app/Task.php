@@ -280,7 +280,8 @@ class Task extends Model
         })
         ->where('task.code', 'REN')
         ->groupBy('task.due_date')
-        ->groupBy('task.id');
+        ->groupBy('task.id')
+        ->groupBy('event.matter_id');
 
         return $query;
     }

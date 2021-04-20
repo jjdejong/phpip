@@ -466,7 +466,7 @@ class RenewalController extends Controller
 
     public function export(Request $request)
     {
-            $export = Task::renewals()->where('invoice_step', 1)
+        $export = Task::renewals()->where('invoice_step', 1)
             ->orderBy('pmal_cli.actor_id')->get();
         $export->map(function ($ren) {
             if ($ren->grace_period) {
