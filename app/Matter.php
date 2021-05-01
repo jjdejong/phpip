@@ -347,7 +347,10 @@ class Matter extends Model
 
         // When the user is a client, limit the matters to client's own matters
         if ($authUserRole == 'CLI') {
-            $query->where('cli.id', $authUserId);
+            $query->where(function ($q) use ($authUserId) {
+                $q->where('cli.id', $authUserId)
+                ->orWhere('clic.id', $authUserId);
+            });
         }
 
         if (!empty($multi_filter)) {
@@ -440,12 +443,12 @@ class Matter extends Model
 
         // Sorting by caseref is special - set additional conditions here
         if ($sortkey == 'caseref') {
-            $query->groupBy('matter.caseref', 'matter.container_id', 'matter.origin', 'matter.country', 'matter.type_code', 'matter.idx');
+            $query->groupBy('matter.caseref', 'matter.container_id', 'matter.suffix', 'fil.event_date');
             if ($sortdir == 'desc') {
                 $query->orderBy('matter.caseref', 'DESC');
             }
         } else {
-            $query->groupBy($sortkey, 'matter.caseref', 'matter.container_id', 'matter.origin', 'matter.country', 'matter.type_code', 'matter.idx')
+            $query->groupBy($sortkey, 'matter.caseref', 'matter.container_id', 'matter.suffix', 'fil.event_date')
             ->orderBy($sortkey, $sortdir);
         }
 
