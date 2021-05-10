@@ -23,6 +23,7 @@
       }
     </style>
   @endcanany
+  @livewireStyles
 </head>
 
 <body>
@@ -676,6 +677,7 @@
     });
   </script>
   @yield('script')
+  @livewireScripts
 </body>
 
 </html>
