@@ -11,6 +11,7 @@ class DashboardTasks extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
+    protected $listeners = ['actorSelected'];
     private $user_dashboard;
     private $ptasks; // Paginated tasks for rendering
     public $tasks = []; // IDs of the tasks to be cleared
@@ -22,6 +23,12 @@ class DashboardTasks extends Component
     public function mount()
     {
         $this->clear_date = Now()->isoFormat('L');
+    }
+
+    public function actorSelected($actor)
+    {
+        $this->what_tasks = $actor['id'];
+        $this->client_id = $actor['id'];
     }
     
     public function render(Request $request)

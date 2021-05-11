@@ -1,75 +1,30 @@
-<div>
+  <div>
     <div
       x-data="{
         open: @entangle('showDropdown'),
         search: @entangle('search'),
         selected: @entangle('selected'),
-        highlightedIndex: 0,
-        highlightPrevious() {
-          if (this.highlightedIndex > 0) {
-            this.highlightedIndex = this.highlightedIndex - 1;
-            this.scrollIntoView();
-          }
-        },
-        highlightNext() {
-          if (this.highlightedIndex < this.$refs.results.children.length - 1) {
-            this.highlightedIndex = this.highlightedIndex + 1;
-            this.scrollIntoView();
-          }
-        },
-        scrollIntoView() {
-          this.$refs.results.children[this.highlightedIndex].scrollIntoView({
-            block: 'nearest',
-            behavior: 'smooth'
-          });
-        },
         updateSelected(id, name) {
           this.selected = id;
           this.search = name;
           this.open = false;
-          this.highlightedIndex = 0;
         },
-    }">
-    <div
-      x-on:value-selected="updateSelected($event.detail.id, $event.detail.name)">
-      <span>
-        <div>
-          <input
-            wire:model.debounce.300ms="search"
-            x-on:keydown.arrow-down.stop.prevent="highlightNext()"
-            x-on:keydown.arrow-up.stop.prevent="highlightPrevious()"
-            x-on:keydown.enter.stop.prevent="$dispatch('value-selected', {
-              id: $refs.results.children[highlightedIndex].getAttribute('data-result-id'),
-              name: $refs.results.children[highlightedIndex].getAttribute('data-result-name')
-            })">
-        </div>
-      </span>
-  
-      <div
-        x-show="open"
-        x-on:click.away="open = false">
-          <ul x-ref="results">
-            @forelse($results as $index => $result)
-              <li
-                wire:key="{{ $index }}"
-                x-on:click.stop="$dispatch('value-selected', {
-                  id: {{ $result->id }},
-                  name: '{{ $result->name }}'
-                })"
-                :class="{
-                  'bg-primary': {{ $index }} === highlightedIndex,
-                  'text-white': {{ $index }} === highlightedIndex
-                }"
-                data-result-id="{{ $result->id }}"
-                data-result-name="{{ $result->name }}">
-                  <span>
-                    {{ $result->name }}
-                  </span>
-              </li>
-            @empty
-              <li>No results found</li>
-            @endforelse
-          </ul>
+      }">
+      <div x-on:value-selected="updateSelected($event.detail.id, $event.detail.name)">
+        <input class="form-control" type="text" wire:model="search">
+        <div x-show="open" x-on:click.away="open = false" style="position:absolute; z-index:100">
+            <div x-ref="results" class="card">
+              @foreach($results as $result)
+                <button class="dropdown-item" type="button"
+                  wire:key="{{ $result->id }}"
+                  x-on:click.stop="$dispatch('value-selected', {
+                    id: {{ $result->id }},
+                    name: '{{ $result->name }}'
+                  })">
+                  {{ $result->name }}
+                </button>
+              @endforeach
+            </div>
         </div>
       </div>
     </div>

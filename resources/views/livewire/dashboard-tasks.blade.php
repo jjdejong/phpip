@@ -17,11 +17,9 @@
               </label>
               @endif
               <label class="btn btn-info {{ $what_tasks > 1 ? 'active' : '' }}">
-                <input type="radio" wire:model="what_tasks" value="2">Client
+                <input type="radio" wire:model="what_tasks" value="{{ $client_id }}">Client
               </label>
             </div>
-            {{-- <input type="hidden" wire:model="client_id" name="client_id">
-            <input type="text" class="form-control mr-3" wire:change="$set('client_id', $event.target.value)" data-ac="/actor/autocomplete" data-actarget="client_id" placeholder="Select Client"> --}}
             @livewire('actor-autocomplete')
           </div>
         </div>
