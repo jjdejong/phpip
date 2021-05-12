@@ -30,27 +30,4 @@ class HomeController extends Controller
         $taskscount = Task::getUsersOpenTaskCount();
         return view('home', compact('categories', 'taskscount'));
     }
-
-    /**
-     * Clear selected tasks.
-     *
-     */
-    public function clearTasks(Request $request)
-    {
-        $this->validate($request, [
-            'done_date' => 'bail|required',
-        ]);
-        $tids = $request->task_ids;
-        $done_date = $request->done_date;
-        $updated = 0;
-        foreach ($tids as $id) {
-            $task = Task::find($id);
-            $task->done_date = $done_date;
-            $returncode = $task->save();
-            if ($returncode) {
-                $updated++;
-            }
-        }
-        return response()->json(['not_updated' => (count($tids) - $updated), 'errors' =>'']);
-    }
 }
