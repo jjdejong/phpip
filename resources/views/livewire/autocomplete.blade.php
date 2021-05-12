@@ -1,5 +1,5 @@
 <div style="position:relative">
-    <input wire:model="search" class="form-control" type="text" placeholder="Search..." />
+    <input wire:model="search" class="{{ $inputClass }}" type="text" placeholder="{{ $placeholder }}" />
     <div style="position:absolute; z-index:100">
         @if(count($results) > 0)
         <div class="card">

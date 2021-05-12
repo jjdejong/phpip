@@ -2,7 +2,7 @@
     <div class="card-header text-white bg-primary p-1">
       <form class="row" id="header-{{ $isrenewals }}">
         <div class="lead col-2">
-          {{ $isrenewals ? 'Open Renewals' : 'Open tasks' }}
+          {{ $isrenewals ? 'Open Renewals' : 'Open Tasks' }}
         </div>
         @cannot('client')
         <div class="col-6">
@@ -20,7 +20,7 @@
                 <input type="radio" wire:model="what_tasks" value="{{ $client_id }}">Client
               </label>
             </div>
-            @livewire('actor-autocomplete')
+            @livewire('actor-autocomplete', ['placeholder' => 'Select...'])
           </div>
         </div>
         <div class="col-4">

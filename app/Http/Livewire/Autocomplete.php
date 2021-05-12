@@ -8,6 +8,8 @@ abstract class Autocomplete extends Component
 {
     public $results;
     public $search;
+    public $placeholder;
+    public $inputClass = 'form-control';
 
     abstract public function query();
 
@@ -27,7 +29,8 @@ abstract class Autocomplete extends Component
 
     public function selectedItem($id, $name)
     {
-        $this->search = $name;
+        $this->search = '';
+        $this->placeholder = $name;
         $this->results = collect();
         $this->emitUp('autoComplete', $id);
     }
