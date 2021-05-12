@@ -11,7 +11,7 @@ class DashboardTasks extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
-    protected $listeners = ['actorSelected'];
+    protected $listeners = ['autoComplete'];
     private $user_dashboard;
     private $ptasks; // Paginated tasks for rendering
     public $tasks = []; // IDs of the tasks to be cleared
@@ -25,10 +25,11 @@ class DashboardTasks extends Component
         $this->clear_date = Now()->isoFormat('L');
     }
 
-    public function actorSelected($actor)
+    public function autoComplete($actor_id)
     {
-        $this->what_tasks = $actor['id'];
-        $this->client_id = $actor['id'];
+        $this->what_tasks = $actor_id;
+        $this->client_id = $actor_id;
+        $this->resetPage();
     }
     
     public function render(Request $request)
