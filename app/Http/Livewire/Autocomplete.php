@@ -31,6 +31,8 @@ abstract class Autocomplete extends Component
     {
         $this->search = $name;
         $this->results = collect();
+        // The top component listens to the "autoCompleted" event and uses
+        // "placeholder" to distinguish from multiple autocompletion sources
         $this->emitUp('autoCompleted', $id, $this->placeholder);
     }
 
