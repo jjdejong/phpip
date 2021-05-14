@@ -8,7 +8,7 @@ abstract class Autocomplete extends Component
 {
     public $results;
     public $search;
-    public $placeholder;
+    public $placeholder = "Find...";
     public $inputClass = 'form-control';
 
     abstract public function query();
@@ -20,7 +20,7 @@ abstract class Autocomplete extends Component
 
     public function updatedSearch()
     {
-        if (strlen($this->search) < 2) {
+        if (strlen($this->search) < $this->length) {
             $this->results = collect();
         } else {
             $this->results = $this->query()->get();
@@ -29,10 +29,9 @@ abstract class Autocomplete extends Component
 
     public function selectedItem($id, $name)
     {
-        $this->search = '';
-        $this->placeholder = $name;
+        $this->search = $name;
         $this->results = collect();
-        $this->emitUp('autoComplete', $id);
+        $this->emitUp('autoCompleted', $id, $this->placeholder);
     }
 
     public function render()
