@@ -1,6 +1,6 @@
 <div class="card border-primary">
     <div class="card-header text-white bg-primary p-1">
-      <form class="row" id="header-{{ $isrenewals }}">
+      <form class="row" id="header-{{ $isrenewals }}" autocomplete="off">
         <div class="lead col-2">
           {{ $isrenewals ? 'Open Renewals' : 'Open Tasks' }}
         </div>
@@ -20,7 +20,7 @@
                 <input type="radio" wire:model="what_tasks" value="{{ $client_id }}">Client
               </label>
             </div>
-            @livewire('actor-autocomplete', ['placeholder' => 'Select...'])
+            @livewire('actor-autocomplete')
           </div>
         </div>
         <div class="col-4">
@@ -55,7 +55,7 @@
       </div>
     </div>
     <div class="card-body p-1">
-      <form wire:submit.prevent="save" id="clearTasks-{{ $isrenewals }}">
+      <form wire:submit.prevent="save" id="clearTasks-{{ $isrenewals }}" autocomplete="off">
         <table class="table table-striped table-sm mb-1" style="width: 100%; table-layout: fixed;">
             @foreach ($ptasks as $index => $task)
             <tr class="row">
