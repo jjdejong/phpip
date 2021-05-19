@@ -1899,9 +1899,9 @@ class CountryTableSeeder extends Seeder
                 'em' => 0,
                 'oa' => 0,
                 'renewal_first' => 2,
-                'renewal_base' => 'ENT',
-                'renewal_start' => 'ENT',
-                'checked_on' => '2020-02-24',
+                'renewal_base' => 'FIL',
+                'renewal_start' => 'FIL',
+                'checked_on' => '2021-05-18',
             ),
 
             array (
@@ -2697,10 +2697,10 @@ class CountryTableSeeder extends Seeder
                 'wo' => 0,
                 'em' => 0,
                 'oa' => 0,
-                'renewal_first' => 2,
-                'renewal_base' => 'FIL',
-                'renewal_start' => 'FIL',
-                'checked_on' => '2020-02-24',
+                'renewal_first' => NULL,
+                'renewal_base' => NULL,
+                'renewal_start' => NULL,
+                'checked_on' => '2021-05-18',
             ),
 
             array (
