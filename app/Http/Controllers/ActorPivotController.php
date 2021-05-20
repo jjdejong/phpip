@@ -16,41 +16,41 @@ class ActorPivotController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-          'matter_id' => 'required|numeric',
-          'actor_id' => 'required|numeric',
-          'role' => 'required',
-          'date' => 'date'
-        ]);
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //       'matter_id' => 'required|numeric',
+    //       'actor_id' => 'required|numeric',
+    //       'role' => 'required',
+    //       'date' => 'date'
+    //     ]);
 
-      // Fix display order indexes if wrong
-        $roleGroup = ActorPivot::where('matter_id', $request->matter_id)->where('role', $request->role);
-        $max = $roleGroup->max('display_order');
-        $count = $roleGroup->count();
-        if ($count < $max) {
-            $i = 0;
-            $actors = $roleGroup->orderBy('display_order')->get();
-            foreach ($actors as $actor) {
-                $i++;
-                $actor->display_order = $i;
-                $actor->save();
-            }
-            $max = $i;
-        }
+    //   // Fix display order indexes if wrong
+    //     $roleGroup = ActorPivot::where('matter_id', $request->matter_id)->where('role', $request->role);
+    //     $max = $roleGroup->max('display_order');
+    //     $count = $roleGroup->count();
+    //     if ($count < $max) {
+    //         $i = 0;
+    //         $actors = $roleGroup->orderBy('display_order')->get();
+    //         foreach ($actors as $actor) {
+    //             $i++;
+    //             $actor->display_order = $i;
+    //             $actor->save();
+    //         }
+    //         $max = $i;
+    //     }
 
-        $addedActor = Actor::find($request->actor_id);
+    //     $addedActor = Actor::find($request->actor_id);
 
-        $request->merge([
-          'display_order' => $max + 1,
-          'creator' => Auth::user()->login,
-          'company_id' => $addedActor->company_id,
-          'date' => Now()
-        ]);
+    //     $request->merge([
+    //       'display_order' => $max + 1,
+    //       'creator' => Auth::user()->login,
+    //       'company_id' => $addedActor->company_id,
+    //       'date' => Now()
+    //     ]);
 
-        return ActorPivot::create($request->except(['_token', '_method']));
-    }
+    //     return ActorPivot::create($request->except(['_token', '_method']));
+    // }
 
     /**
      * Update the specified resource in storage.

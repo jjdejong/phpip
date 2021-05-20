@@ -1,7 +1,7 @@
 @php
 $titles = $matter->titles->groupBy('type_name');
 $classifiers = $matter->classifiers->groupBy('type_name');
-$actors = $matter->actors->groupBy('role_name');
+// $actors = $matter->actors->groupBy('role_name');
 $linkedBy = $matter->linkedBy->groupBy('type_code');
 @endphp
 
@@ -113,67 +113,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 </div>
 
 <div class="row card-deck">
-  <div id="actorPanel" class="card col-3 border-secondary p-0" style="max-height: 600px">
-    <div class="card-header reveal-hidden text-white bg-secondary p-1">
-      Actors
-      @canany(['admin', 'readwrite'])
-      <a class="badge badge-pill badge-light hidden-action float-right" data-toggle="popover" href="javascript:void(0)" title="Add Actor">
-        &plus;
-      </a>
-      @endcanany
-    </div>
-    <div class="card-body bg-light p-1" style="overflow: auto;">
-      @foreach ( $actors as $role_name => $role_group )
-      <div class="card reveal-hidden border-secondary mb-1">
-        <div class="card-header bg-primary text-light p-1">
-          {{ $role_name }}
-          @canany(['admin', 'readwrite'])
-          <a class="hidden-action float-right text-light font-weight-bold ml-3" data-toggle="popover" title="Add {{ $role_name }}"
-             data-role_name="{{ $role_name }}"
-             data-role_code="{{ $role_group->first()->role_code }}"
-             data-shareable="{{ $role_group->first()->shareable }}"
-             href="javascript:void(0)">
-            &oplus;
-          </a>
-          <a class="hidden-action float-right text-light font-weight-bold" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group->first()->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
-            &#9998;
-          </a>
-          @endcanany
-        </div>
-        <div class="card-body p-1" style="max-height: 80px; overflow: auto;">
-          <ul class="list-unstyled mb-0">
-            @foreach ( $role_group as $actor )
-            <li class="text-truncate {{ $actor->inherited ? 'font-italic' : '' }}">
-              @if ( $actor->warn )
-              <span title="Special instructions">&#9888;</span>
-              @endif
-              <a @if ($actor->warn) class="text-danger" @endif
-                href="/actor/{{ $actor->actor_id }}"
-                data-toggle="modal"
-                data-target="#ajaxModal"
-                title="Actor data">
-              {{ $actor->display_name }}
-              </a>
-              @if ( $actor->show_ref && $actor->actor_ref )
-              ({{ $actor->actor_ref }})
-              @endif
-              @if ( $actor->show_company && $actor->company )
-              &nbsp;- {{ $actor->company }}
-              @endif
-              @if ( $actor->show_date && $actor->date )
-              ({{ Carbon\Carbon::parse($actor->date)->isoFormat('L') }})
-              @endif
-              @if ( $actor->show_rate && $actor->rate != '100' )
-              &nbsp;- {{ $actor->rate }}
-              @endif
-            </li>
-            @endforeach
-          </ul>
-        </div>
-      </div>
-      @endforeach
-    </div>
-  </div>
+  @livewire('actor-panel', ['matter_id' => $matter->id, 'container_id' => $matter->container_id])
   <div id="multiPanel" class="card col-9 p-0" style="background: transparent;">
     <div class="card-deck mb-1">
       <div class="card border-primary reveal-hidden" style="min-height: 138px;">
