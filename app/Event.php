@@ -17,27 +17,33 @@ class Event extends Model
       'event_date' => 'date:Y-m-d'
     ];
 
-    public function info() {
+    public function info()
+    {
         return $this->hasOne('App\EventName', 'code', 'code');
     }
 
-    public function matter() {
+    public function matter()
+    {
         return $this->belongsTo('App\Matter');
     }
 
-    public function altMatter() {
-        return $this->belongsTo('App\Matter', 'alt_matter_id');
+    public function altMatter()
+    {
+        return $this->belongsTo('App\Matter', 'alt_matter_id')->withDefault();
     }
 
-    public function link() {
-        return $this->hasOne('App\Event', 'matter_id', 'alt_matter_id')->where('code', 'FIL');
+    public function link()
+    {
+        return $this->hasOne('App\Event', 'matter_id', 'alt_matter_id')->whereCode('FIL')->withDefault();
     }
 
-    public function retroLink() {
-        return $this->belongsTo('App\Event', 'matter_id', 'alt_matter_id');
+    public function retroLink()
+    {
+        return $this->belongsTo('App\Event', 'matter_id', 'alt_matter_id')->withDefault();
     }
 
-    public function tasks() {
+    public function tasks()
+    {
         /* \Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
           var_dump($query->sql);
           var_dump($query->bindings);
@@ -45,9 +51,10 @@ class Event extends Model
         return $this->hasMany('App\Task', 'trigger_id')->orderBy('due_date');
     }
 
-// 	Produces a link to official published information
+// Produces a link to official published information
 
-    public function publicUrl() {
+    public function publicUrl()
+    {
         if (!in_array($this->code, ['FIL', 'PUB', 'GRT'])) {
             return false;
         }
@@ -100,5 +107,4 @@ class Event extends Model
         }
         return $href;
     }
-
 }
