@@ -399,7 +399,7 @@ class MatterController extends Controller
             DB::raw("IF(COALESCE(cli.address_billing, clic.address_billing) IS NULL,
                 CONCAT_WS('\n', COALESCE(cli.name, clic.name), COALESCE(cli.address, clic.address), COALESCE(cli.country, clic.country)),
                 CONCAT_WS('\n', COALESCE(cli.address_billing, clic.address_billing), COALESCE(cli.country_billing, clic.country_billing))
-            ) AS Billing_Adress"),
+            ) AS Billing_Address"),
             DB::raw("COALESCE(lcli.actor_ref, lclic.actor_ref) AS Client_Ref"),
             DB::raw("COALESCE(cli.email, clic.email) AS Email"),
             DB::raw("COALESCE(cli.VAT_number, clic.VAT_number) AS VAT"),

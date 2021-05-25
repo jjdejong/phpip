@@ -28,12 +28,12 @@ class Matter extends Model
 
     public function container()
     {
-        return $this->belongsTo('App\Matter', 'container_id');
+        return $this->belongsTo('App\Matter', 'container_id')->withDefault();
     }
 
     public function parent()
     {
-        return $this->belongsTo('App\Matter', 'parent_id');
+        return $this->belongsTo('App\Matter', 'parent_id')->withDefault();
     }
 
     public function children()
@@ -66,27 +66,27 @@ class Matter extends Model
     public function client()
     {
         // Used in Policies - do not change without checking MatterPolicy
-        return $this->hasOne('App\MatterActors')->where('role_code', 'CLI');
+        return $this->hasOne('App\MatterActors')->whereRoleCode('CLI')->withDefault();
     }
 
     public function delegate()
     {
-        return $this->actors()->where('role_code', 'DEL');
+        return $this->actors()->whereRoleCode('DEL');
     }
 
     public function contact()
     {
-        return $this->actors()->where('role_code', 'CNT');
+        return $this->actors()->whereRoleCode('CNT');
     }
 
     public function applicants()
     {
-        return $this->actors()->where('role_code', 'APP');
+        return $this->actors()->whereRoleCode('APP');
     }
 
     public function owners()
     {
-        return $this->actors()->where('role_code', 'OWN');
+        return $this->actors()->whereRoleCode('OWN');
     }
 
     public function actorPivot()
@@ -103,38 +103,37 @@ class Matter extends Model
     public function filing()
     {
         return $this->hasOne('App\Event')
-            ->where('code', 'FIL');
+            ->whereCode('FIL')->withDefault();
     }
 
     public function parentFiling()
     {
         return $this->hasMany('App\Event')
-            ->where('code', 'PFIL');
+            ->whereCode('PFIL')->withDefault();
     }
 
     public function publication()
     {
         return $this->hasOne('App\Event')
-            ->where('code', 'PUB');
+            ->whereCode('PUB')->withDefault();
     }
 
     public function grant()
     {
         return $this->hasOne('App\Event')
-            ->where('code', 'GRT');
+            ->whereCode('GRT')->withDefault();
     }
 
     public function registration()
     {
         return $this->hasOne('App\Event')
-            ->where('code', 'REG');
+            ->whereCode('REG')->withDefault();
     }
-
 
     public function entered()
     {
         return $this->hasOne('App\Event')
-            ->where('code', 'ENT');
+            ->whereCode('ENT')->withDefault();
     }
 
     /*public function status()
@@ -146,7 +145,7 @@ class Matter extends Model
     public function priority()
     {
         return $this->hasMany('App\Event')
-            ->where('code', 'PRI');
+            ->whereCode('PRI');
     }
 
     // All tasks, including renewals and done
@@ -160,7 +159,7 @@ class Matter extends Model
     {
         return $this->tasks()
             ->where('task.code', '!=', 'REN')
-            ->where('done', 0)
+            ->whereDone(0)
             ->orderBy('due_date');
     }
 
@@ -169,7 +168,7 @@ class Matter extends Model
     {
         return $this->tasks()
             ->where('task.code', 'REN')
-            ->where('done', 0)
+            ->whereDone(0)
             ->orderBy('due_date');
     }
 
@@ -177,7 +176,7 @@ class Matter extends Model
     public function classifiers()
     {
         return $this->hasMany('App\MatterClassifiers')
-            ->where('main_display', 0);
+            ->whereMainDisplay(0);
     }
 
     // Returns the classifiers native to the matter (only applies to a container, normally)
@@ -190,7 +189,7 @@ class Matter extends Model
     public function titles()
     {
         return $this->hasMany('App\MatterClassifiers')
-            ->where('main_display', 1);
+            ->whereMainDisplay(1);
     }
 
     public function linkedBy()
@@ -205,7 +204,7 @@ class Matter extends Model
 
     public function originInfo()
     {
-        return $this->belongsTo('App\Country', 'origin');
+        return $this->belongsTo('App\Country', 'origin')->withDefault();
     }
 
     public function category()
@@ -215,7 +214,7 @@ class Matter extends Model
 
     public function type()
     {
-        return $this->belongsTo('App\Type');
+        return $this->belongsTo('App\Type')->withDefault();
     }
 
     public static function filter($sortkey = 'id', $sortdir = 'desc', $multi_filter = [], $display_with = false, $include_dead = false)
