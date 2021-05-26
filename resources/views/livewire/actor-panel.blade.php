@@ -1,4 +1,4 @@
-<div id="actorPanel" class="card col-3 border-secondary p-0" style="max-height: 600px">
+<div id="actorPanel" class="card col-3 border-secondary p-0">
     <div class="card-header reveal-hidden text-white bg-secondary p-1">
         Actors
         @canany(['admin', 'readwrite'])
@@ -8,7 +8,7 @@
         ])
         @endcanany
     </div>
-    <div class="card-body bg-light p-1" style="overflow: auto">
+    <div class="card-body bg-light p-1">
         @foreach ( $actors as $role_name => $role_group )
             @livewire('actor-card', [
                 'matter_id' => $matter_id, 

@@ -7,7 +7,7 @@
     <a @click.prevent="open = !open" class="badge badge-pill badge-light float-right" title="Add {{ $role_name }}" href="#">
         &plus;
     </a>
-    <div class="card border-info float-right" style="position: absolute; left: 150px; z-index: 1000; width: 220px"
+    <div class="card border-info shadow float-right" style="position: absolute; left: 150px; z-index: 1000; width: 220px"
         x-show="open"
         @click.away="open = false">
         <div class="card-header bg-info text-white p-1">Add {{ $role_name }}</div>

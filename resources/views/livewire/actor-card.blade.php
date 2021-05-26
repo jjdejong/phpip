@@ -1,5 +1,5 @@
 <div class="card reveal-hidden border-secondary mb-1">
-    <div class="card-header bg-primary text-light p-1">
+    <div class="card-header bg-primary text-light p-1 clearfix">
         {{ $role_name }}
         @canany(['admin', 'readwrite'])
         @livewire('add-actor', [
@@ -12,7 +12,7 @@
         </a>
         @endcanany
     </div>
-    <div class="card-body p-1" style="max-height: 80px; overflow: auto;">
+    <div class="card-body p-1" style="max-height: 5rem; overflow: auto;">
         <ul class="list-unstyled mb-0">
         @foreach ($role_group as $actor)
             <li class="text-truncate {{ $actor->inherited ? 'font-italic' : '' }}">
