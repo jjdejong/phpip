@@ -8,12 +8,12 @@
         &plus;
     </a>
     <div class="card border-info shadow float-right" style="position: absolute; left: 150px; z-index: 1000; width: 220px"
-        x-show="open"
+        x-show.transition="open"
         @click.away="open = false">
         <div class="card-header bg-info text-white p-1">Add {{ $role_name }}</div>
         <div class="card-body text-body p-1">
             @if ($role_name == 'Actor')
-            @livewire('role-autocomplete', ['placeholder' => 'Role', 'inputClass' => 'form-control form-control-sm'])
+                @livewire('role-autocomplete', ['placeholder' => 'Role', 'inputClass' => 'form-control form-control-sm'])
             @endif
             @livewire('actor-autocomplete', ['placeholder' => 'Name', 'inputClass' => 'form-control form-control-sm'])
             <input type="text" wire:model.defer="actorPivot.actor_ref" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">

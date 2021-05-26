@@ -55,8 +55,10 @@ class AddActor extends Component
             $this->actorPivot->matter_id = $this->container_id ?? $this->matter_id;
         }
 
+        $fromActorCard = 0;
         if (!$this->actorPivot->role) {
             $this->actorPivot->role = Role::whereName($this->role_name)->first()->code;
+            $fromActorCard = 1;
         }
         
         $this->validate();
@@ -79,9 +81,14 @@ class AddActor extends Component
         $this->actorPivot->company_id = $addedActor->company_id;
         $this->actorPivot->save();
         
-        $this->mount();
-        
-        $this->emitUp('actorAdded');
+        if ($fromActorCard) {
+            $this->emit('actorAdded');
+        } else {
+            $this->reset('role_name');
+            $this->emit('actorsChanged');
+        }
+
+        $this->emitTo('actor-autocomplete', 'resetAutoComplete');
     }
     
     public function render()

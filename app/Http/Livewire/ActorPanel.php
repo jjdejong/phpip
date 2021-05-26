@@ -7,7 +7,7 @@ use App\Matter;
 
 class ActorPanel extends Component
 {
-    protected $listeners = ['actorAdded'];
+    protected $listeners = ['actorsChanged'];
     public $matter_id;
     public $container_id;
     public $actors;
@@ -17,9 +17,9 @@ class ActorPanel extends Component
         $this->actors = Matter::find($this->matter_id)->actors->groupBy('role_name')->toBase();
     }
     
-    public function actorAdded()
+    public function actorsChanged()
     {
-        $this->actors = Matter::find($this->matter_id)->actors->groupBy('role_name')->toBase();
+        $this->mount();
     }
     
     public function render()

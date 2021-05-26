@@ -6,9 +6,14 @@ use Livewire\Component;
 
 abstract class Autocomplete extends Component
 {
+    protected $listeners = ['resetAutoComplete'];
+    // The search results
     public $results;
-    public $search;
+    // The entered search string
+    public $search = '';
+    // Default placeholder, to be used for diffing multiple autocompletion sources
     public $placeholder = "Find...";
+    // Default classes to apply to input field (from Bootstrap)
     public $inputClass = 'form-control';
 
     abstract public function query();
@@ -29,11 +34,18 @@ abstract class Autocomplete extends Component
 
     public function selectedItem($id, $name)
     {
+        // Set the input value ('search') to the actor name
         $this->search = $name;
+        // Empty the results list
         $this->results = collect();
         // The top component listens to the "autoCompleted" event and uses
         // "placeholder" to distinguish from multiple autocompletion sources
         $this->emitUp('autoCompleted', $id, $this->placeholder);
+    }
+
+    public function resetAutoComplete()
+    {
+        $this->reset('search');
     }
 
     public function render()
