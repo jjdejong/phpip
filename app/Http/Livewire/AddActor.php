@@ -43,6 +43,7 @@ class AddActor extends Component
             case 'Role':
                 $this->actorPivot->role = $id;
                 $this->actorPivot->shared = Role::find($id)->shareable;
+                // Update the popup header with the selected role name
                 $this->role_name = Role::find($id)->name;
                 break;
         }

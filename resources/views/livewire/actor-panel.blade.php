@@ -9,7 +9,7 @@
         @endcanany
     </div>
     <div class="card-body bg-light p-1">
-        @foreach ( $actors as $role_name => $role_group )
+        @foreach ($actors as $role_name => $role_group)
             @livewire('actor-card', [
                 'matter_id' => $matter_id, 
                 'container_id' => $container_id,
