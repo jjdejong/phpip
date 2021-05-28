@@ -40,7 +40,9 @@ class AddActor extends Component
         switch ($placeholder) {
             case 'Name':
                 $this->actorPivot->actor_id = $id;
-                $this->actorPivot->company_id = $extra;
+                if ($extra) {
+                    $this->actorPivot->company_id = $extra;
+                }
                 break;
             case 'Role':
                 $this->actorPivot->role = $id;
