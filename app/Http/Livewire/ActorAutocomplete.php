@@ -10,6 +10,6 @@ class ActorAutocomplete extends Autocomplete
     
     public function query()
     {
-        return Actor::where('name', 'like', $this->search.'%')->orderBy('name');
+        return Actor::select('name', 'id', 'company_id as extra')->where('name', 'like', $this->search.'%')->orderBy('name');
     }
 }

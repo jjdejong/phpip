@@ -11,12 +11,12 @@
         x-show.transition="open"
         @click.away="open = false">
         <div class="card-header bg-info text-white p-1">Add {{ $role_name }}</div>
-        <div class="card-body text-body p-1">
+        <form class="card-body text-body p-1" id="{{ $role_name }}" wire:submit.prevent="submit">
             @if ($role_name == 'Actor')
                 @livewire('role-autocomplete', ['placeholder' => 'Role', 'inputClass' => 'form-control form-control-sm'])
             @endif
             @livewire('actor-autocomplete', ['placeholder' => 'Name', 'inputClass' => 'form-control form-control-sm'])
-            <input type="text" wire:model.defer="actorPivot.actor_ref" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
+            <input type="text" wire:model.defer="actorPivot.actor_ref" class="form-control form-control-sm" placeholder="Reference">
             <div class="form-group">
                 <div class="form-check my-1">
                     <input class="form-check-input mt-0" type="radio" id="actorShared"
@@ -32,12 +32,12 @@
                 </div>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-info btn-sm" wire:click.prevent="submit" @click.stop="open = false">&check;</button>
+                <button type="submit" class="btn btn-info btn-sm" @click.stop="open = false">&check;</button>
                 <button type="button" class="btn btn-outline-info btn-sm" @click.stop="open = false">&times;</button>
             </div>
             @error('actorPivot.role', 'actorPivot.actor_id')
             <div class="alert alert-danger">{{ $message }}</div>
             @enderror
-        </div>
+        </form>
     </div>
 </span>

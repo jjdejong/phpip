@@ -5,8 +5,6 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use App\ActorPivot;
-use App\Role;
-use App\Actor;
 
 class AddActor extends Component
 {
@@ -15,12 +13,15 @@ class AddActor extends Component
     public $matter_id;
     public ActorPivot $actorPivot;
     public $role_name = 'Actor';
+    public $role_code;
+    public $role_shareable = 0;
 
     protected $rules = [
         'actorPivot.matter_id' => 'required|numeric',
         'actorPivot.actor_id' => 'required|numeric',
         'actorPivot.role' => 'required|string',
         'actorPivot.shared' => 'numeric',
+        'actorPivot.company_id' => 'numeric',
         'actorPivot.date' => 'date',
         'actorPivot.actor_ref' => 'string',
     ];
@@ -28,23 +29,24 @@ class AddActor extends Component
     public function mount()
     {
         $this->actorPivot = new ActorPivot;
-        $this->actorPivot->shared = 1;
+        $this->actorPivot->shared = $this->role_shareable;
         $this->actorPivot->matter_id = $this->matter_id;
-        $this->actorPivot->date = Now();
+        $this->actorPivot->role = $this->role_code;
         $this->actorPivot->creator = Auth::user()->login;
     }
     
-    public function autoCompleted($id, $placeholder)
+    public function autoCompleted($id, $name, $extra, $placeholder)
     {
         switch ($placeholder) {
             case 'Name':
                 $this->actorPivot->actor_id = $id;
+                $this->actorPivot->company_id = $extra;
                 break;
             case 'Role':
                 $this->actorPivot->role = $id;
-                $this->actorPivot->shared = Role::find($id)->shareable;
+                $this->actorPivot->shared = $extra;
                 // Update the popup header with the selected role name
-                $this->role_name = Role::find($id)->name;
+                $this->role_name = $name;
                 break;
         }
     }
@@ -55,12 +57,6 @@ class AddActor extends Component
             $this->actorPivot->matter_id = $this->container_id ?? $this->matter_id;
         }
 
-        $fromActorCard = 0;
-        if (!$this->actorPivot->role) {
-            $this->actorPivot->role = Role::whereName($this->role_name)->first()->code;
-            $fromActorCard = 1;
-        }
-        
         $this->validate();
 
         // Fix display order indexes if wrong
@@ -75,20 +71,21 @@ class AddActor extends Component
             }
         }
 
-        $addedActor = Actor::find($this->actorPivot->actor_id);
-
         $this->actorPivot->display_order = $count + 1;
-        $this->actorPivot->company_id = $addedActor->company_id;
+        $this->actorPivot->date = Now();
+
         $this->actorPivot->save();
         
-        if ($fromActorCard) {
-            $this->emit('actorAdded');
+        $this->mount();
+        if ($this->role_code) {
+            $this->emitUp('actorAdded');
         } else {
-            $this->reset('role_name');
-            $this->emit('actorsChanged');
+            $this->reset(['role_name', 'role_shareable']);
+            $this->emitUp('actorsChanged');
+            $this->emit('actorAdded');
         }
 
-        $this->emitTo('actor-autocomplete', 'resetAutoComplete');
+        //$this->emitTo('actor-autocomplete', 'resetAutoComplete');
     }
     
     public function render()

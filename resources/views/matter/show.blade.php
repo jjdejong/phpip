@@ -319,34 +319,6 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
   </div>
 </div>
 
-<template id="actorPopoverTemplate">
-  <form id="addActorForm" autocomplete="off">
-     <input type="hidden" name="role">
-     <input type="hidden" name="shared">
-     <input type="hidden" name="actor_id">
-     <div class="ui-front">
-       <input type="text" class="form-control form-control-sm" id="roleName" data-actarget="role" placeholder="Role">
-       <input type="text" class="form-control form-control-sm" id="actorName" data-actarget="actor_id" placeholder="Name">
-       <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
-     </div>
-     <div class="form-group">
-       <div class="form-check my-1">
-         <input class="form-check-input mt-0" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
-         <label class="form-check-label" for="actorShared">Add to container and share</label>
-       </div>
-       <div class="form-check my-1">
-         <input class="form-check-input mt-0" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
-         <label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
-       </div>
-     </div>
-     <div class="btn-group" role="group">
-       <button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
-       <button type="button" class="btn btn-outline-info btn-sm" id="popoverCancel">&times;</button>
-     </div>
-     <div class="alert alert-danger d-none" role="alert"></div>
-   </form>
-</template>
-
 @endsection
 
 @section('script')

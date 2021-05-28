@@ -1,5 +1,14 @@
 <?php
+/*
+    This is a generic component that should be extended by a specialized component for each autocompletion source.
+    Each specialized component defines the query() function to return a list of parameters "id", "name", and "extra"
+    where "name" is the full name as displayed, "id" is the primary key, and "extra" is an additional parameter
+    that may be used by the parent component.
 
+    This component emits the "autoCompleted" event with the "id", "name", "extra" and "placeholder" parameters of the selected item.
+    A parent component should listen to that event to deal as required with the parameters. The "placeholder" parameter
+    helps the parent component recognize what autocompletion component has emitted the event.
+ */
 namespace App\Http\Livewire;
 
 use Livewire\Component;
@@ -28,19 +37,18 @@ abstract class Autocomplete extends Component
         if (strlen($this->search) < $this->length) {
             $this->results = collect();
         } else {
-            $this->results = $this->query()->get();
+            $this->results = $this->query()->take(20)->get();
         }
     }
 
-    public function selectedItem($id, $name)
+    public function selectedItem($id, $name, $extra)
     {
-        // Set the input value ('search') to the actor name
+        // Set the input value to the full name
         $this->search = $name;
         // Empty the results list
         $this->results = collect();
-        // The top component listens to the "autoCompleted" event and uses
-        // "placeholder" to distinguish from multiple autocompletion sources
-        $this->emitUp('autoCompleted', $id, $this->placeholder);
+        // Warn parent component of autocompletion
+        $this->emitUp('autoCompleted', $id, $name, $extra, $this->placeholder);
     }
 
     public function resetAutoComplete()

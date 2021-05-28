@@ -10,6 +10,6 @@ class RoleAutocomplete extends Autocomplete
     
     public function query()
     {
-        return Role::select('code as id', 'name')->where('name', 'like', $this->search.'%')->orderBy('name');
+        return Role::select('code as id', 'name', 'shareable as extra')->where('name', 'like', $this->search.'%')->orderBy('name');
     }
 }

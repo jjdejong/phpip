@@ -1,13 +1,17 @@
 <div class="card reveal-hidden border-secondary mb-1">
     <div class="card-header bg-primary text-light p-1 clearfix">
-        {{ $role_name }}
+        {{ $role_group->first()->role_name }}
         @canany(['admin', 'readwrite'])
         @livewire('add-actor', [
-            'matter_id' => $matter_id,
+            'matter_id' => $role_group->first()->matter_id,
             'container_id' => $container_id,
-            'role_name' => $role_name,
-        ], key($role_name))
-        <a class="hidden-action float-right text-light font-weight-bold" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_name }} group" href="/matter/{{ $matter_id }}/roleActors/{{ $role_group->first()->role_code }}">
+            'role_name' => $role_group->first()->role_name,
+            'role_code' => $role_group->first()->role_code,
+            'role_shareable' => $role_group->first()->shareable,
+        ], key($role_group->first()->role_name))
+        <a class="hidden-action float-right text-light font-weight-bold" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg"
+            title="Edit actors in {{ $role_group->first()->role_name }} group"
+            href="/matter/{{ $role_group->first()->matter_id }}/roleActors/{{ $role_group->first()->role_code }}">
             &#9998;
         </a>
         @endcanany
