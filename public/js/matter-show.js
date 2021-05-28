@@ -1,5 +1,3 @@
-<script>
-
 // Actor processing
 
   // Initialize popovers with custom template
@@ -229,4 +227,3 @@
     });
     return false;
   };
-</script>
