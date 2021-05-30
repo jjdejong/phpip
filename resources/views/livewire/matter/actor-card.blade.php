@@ -2,7 +2,7 @@
     <div class="card-header bg-primary text-light p-1 clearfix">
         {{ $role_group->first()->role_name }}
         @canany(['admin', 'readwrite'])
-        @livewire('add-actor', [
+        @livewire('matter.actor-add', [
             'matter_id' => $role_group->first()->matter_id,
             'container_id' => $container_id,
             'role_name' => $role_group->first()->role_name,

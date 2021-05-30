@@ -113,7 +113,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 </div>
 
 <div class="row card-deck">
-  @livewire('actor-panel', ['matter_id' => $matter->id, 'container_id' => $matter->container_id])
+  @livewire('matter.actor-panel', ['matter_id' => $matter->id, 'container_id' => $matter->container_id])
   <div id="multiPanel" class="card col-9 p-0" style="background: transparent;">
     <div class="card-deck mb-1">
       <div class="card border-primary reveal-hidden" style="min-height: 138px;">

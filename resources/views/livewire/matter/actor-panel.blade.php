@@ -2,7 +2,7 @@
     <div class="card-header reveal-hidden text-white bg-secondary p-1">
         Actors
         @canany(['admin', 'readwrite'])
-        @livewire('add-actor', [
+        @livewire('matter.actor-add', [
             'matter_id' => $matter_id, 
             'container_id' => $container_id,
         ])
@@ -10,7 +10,7 @@
     </div>
     <div class="card-body bg-light p-1">
         @foreach ($actors as $role_name => $role_group)
-            @livewire('actor-card', [
+            @livewire('matter.actor-card', [
                 'container_id' => $container_id,
                 'role_group' => $role_group,
             ], key($role_name))

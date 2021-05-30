@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Matter;
 
 use Livewire\Component;
 use App\Matter;
@@ -18,6 +18,6 @@ class ActorCard extends Component
 
     public function render()
     {
-        return view('livewire.actor-card');
+        return view('livewire.matter.actor-card');
     }
 }
