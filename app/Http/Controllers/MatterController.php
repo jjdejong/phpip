@@ -658,11 +658,11 @@ class MatterController extends Controller
         return view('matter.tasks', compact('events', 'matter', 'is_renewals'));
     }
 
-    public function actors(Matter $matter, $role)
-    {
-        $role_group = $matter->actors->where('role_code', $role);
-        return view('matter.roleActors', compact('role_group', 'matter'));
-    }
+    // public function actors(Matter $matter, $role)
+    // {
+    //     $role_group = $matter->actors->where('role_code', $role);
+    //     return view('livewire.matter.actors-edit', compact('role_group', 'matter'));
+    // }
 
     public function classifiers(Matter $matter)
     {

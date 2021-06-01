@@ -80,11 +80,11 @@ class ActorAdd extends Component
         
         $this->mount();
         if ($this->role_code) {
-            $this->emitUp('actorAdded');
+            $this->emitUp('refreshActorCard');
         } else {
             $this->reset(['role_name', 'role_shareable']);
             $this->emitUp('actorsChanged');
-            $this->emit('actorAdded');
+            $this->emit('refreshActorCard');
         }
 
         //$this->emitTo('actor-autocomplete', 'resetAutoComplete');
