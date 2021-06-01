@@ -2,10 +2,16 @@
     <div class="card-header reveal-hidden text-white bg-secondary p-1">
         Actors
         @canany(['admin', 'readwrite'])
-        @livewire('matter.actor-add', [
-            'matter_id' => $matter_id, 
-            'container_id' => $container_id,
-        ])
+        <a wire:click.prevent="$toggle('addActive')" class="hidden-action badge badge-pill badge-light float-right" 
+            title="Add Actor" href="#">
+            &plus;
+        </a>
+        @if ($addActive)
+            @livewire('matter.actor-add', [
+                'matter_id' => $matter_id, 
+                'container_id' => $container_id,
+            ])
+        @endif
         @endcanany
     </div>
     <div class="card-body bg-light p-1">

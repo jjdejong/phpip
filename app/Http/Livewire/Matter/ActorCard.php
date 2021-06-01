@@ -10,10 +10,21 @@ class ActorCard extends Component
     protected $listeners = ['refreshActorCard'];
     public $container_id;
     public $role_group;
-        
-    public function refreshActorCard()
+    public $editActive = false;
+    public $addActive = false;
+
+    public function refreshActorCard($param = null)
     {
-        $this->role_group = Matter::find($this->role_group->first()->matter_id)->actors()->whereRoleCode($this->role_group->first()->role_code)->get();
+        switch ($param) {
+            case 'closeActorAdd':
+                $this->addActive = false;
+                break;
+            case 'closeActorEdit':
+                $this->editActive = false;
+                break;
+            default:
+                $this->role_group = Matter::find($this->role_group->first()->matter_id)->actors()->whereRoleCode($this->role_group->first()->role_code)->get();
+        }
     }
 
     public function render()

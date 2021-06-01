@@ -83,8 +83,7 @@ class ActorAdd extends Component
             $this->emitUp('refreshActorCard');
         } else {
             $this->reset(['role_name', 'role_shareable']);
-            $this->emitUp('actorsChanged');
-            $this->emit('refreshActorCard');
+            $this->emit('refreshActorCard', 'refreshActorPanel');
         }
 
         //$this->emitTo('actor-autocomplete', 'resetAutoComplete');

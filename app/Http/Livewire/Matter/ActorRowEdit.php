@@ -31,7 +31,8 @@ class ActorRowEdit extends Component
 
     public function removeActor()
     {
-        //
+        $this->actorPivot->delete();
+        $this->emitUp('refreshActorCard');
     }
 
     public function render()

@@ -7,19 +7,27 @@ use App\Matter;
 
 class ActorPanel extends Component
 {
-    protected $listeners = ['actorsChanged'];
+    protected $listeners = ['refreshActorCard'];
     public $matter_id;
     public $container_id;
     public $actors;
+    public $addActive = false;
     
     public function mount()
     {
         $this->actors = Matter::find($this->matter_id)->actors->groupBy('role_name')->toBase();
     }
     
-    public function actorsChanged()
+    public function refreshActorCard($param = null)
     {
-        $this->mount();
+        switch ($param) {
+            case 'closeActorAdd':
+                $this->addActive = false;
+                break;
+            case 'refreshActorPanel':
+                $this->mount();
+                break;
+        }
     }
     
     public function render()

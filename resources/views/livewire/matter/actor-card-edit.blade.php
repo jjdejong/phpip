@@ -1,13 +1,9 @@
-<span x-data="{open: false}" 
-  id="edit-{{ $role_group->first()->role_name }}"
-  style="position: relative">
-  <a @click.prevent="open = !open" class="hidden-action float-right text-light font-weight-bold"
-      title="Edit actors in {{ $role_group->first()->role_name }} group">
-      &#9998;
-  </a>
-  <div class="card shadow border-primary p-2" style="position: absolute; left: 100px; z-index: 1000; width: 60rem"
-    x-show.transition="open"
-    @click.away="open = false">
+<div class="card border-primary shadow" style="position: absolute; left: 100px; z-index: 1000; width: 60rem">
+  <div class="card-header bg-info lead">
+    Edit actors in {{ $role_group->first()->role_name }} group
+    <button type="button" class="close" wire:click.stop="$emitUp('refreshActorCard', 'closeActorEdit')">&times;</button>
+  </div>
+  <div class="card-body">
     <table class="table table-hover table-sm">
       <thead class="thead-light">
         <tr>
@@ -24,10 +20,10 @@
         </tr>
       </thead>
       <tbody>
-        @foreach ( $role_group as $actor_item )
-        @livewire('matter.actor-row-edit', ['actor_item' => $actor_item], key($actor_item->actor_id))
+        @foreach ($role_group as $actor_item)
+          @livewire('matter.actor-row-edit', ['actor_item' => $actor_item], key($actor_item->id))
         @endforeach
       </tbody>
     </table>
   </div>
-</span>
+</div>

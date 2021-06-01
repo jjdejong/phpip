@@ -8,5 +8,5 @@
     <td><input type="checkbox" class="form-control form-control-sm" wire:model="actorPivot.shared"></td>
     <td><input type="text" class="form-control form-control-sm form-control-plaintext" size="2" wire:model.lazy="actorPivot.display_order"></td>
     <td><input type="text" class="form-control noformat" data-ac="/role/autocomplete" name="role" placeholder="Change"></td>
-    <td><a href="#" class="hidden-action text-danger" @click.prevent="removeActor" title="Remove actor">&CircleMinus;</a></td>
+    <td><a href="#" class="hidden-action text-danger" wire:click.prevent="removeActor" title="Remove actor">&CircleMinus;</a></td>
 </tr>
