@@ -7,6 +7,7 @@ use App\Role;
 class RoleAutocomplete extends Autocomplete
 {
     public $length = 1;
+    public $source = 'role';
     
     public function query()
     {

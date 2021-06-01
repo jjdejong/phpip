@@ -35,16 +35,16 @@ class ActorAdd extends Component
         $this->actorPivot->creator = Auth::user()->login;
     }
     
-    public function autoCompleted($id, $name, $extra, $placeholder)
+    public function autoCompleted($id, $name, $extra, $source)
     {
-        switch ($placeholder) {
-            case 'Name':
+        switch ($source) {
+            case 'actor':
                 $this->actorPivot->actor_id = $id;
                 if ($extra) {
                     $this->actorPivot->company_id = $extra;
                 }
                 break;
-            case 'Role':
+            case 'role':
                 $this->actorPivot->role = $id;
                 $this->actorPivot->shared = $extra;
                 // Update the popup header with the selected role name

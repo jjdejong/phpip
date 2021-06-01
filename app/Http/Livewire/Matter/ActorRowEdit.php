@@ -7,6 +7,7 @@ use App\ActorPivot;
 
 class ActorRowEdit extends Component
 {
+    protected $listeners = ['autoCompleted'];
     public ActorPivot $actorPivot;
     public $actor_item;
 
@@ -23,8 +24,29 @@ class ActorRowEdit extends Component
         $this->actorPivot = ActorPivot::find($this->actor_item->id);
     }
 
+    public function autoCompleted($id, $name, $extra, $source)
+    {
+        switch ($source) {
+            case 'actor':
+                $this->actorPivot->actor_id = $id;
+                if ($extra) {
+                    $this->actorPivot->company_id = $extra;
+                }
+                break;
+            case 'company':
+                $this->actorPivot->company_id = $id;
+                break;
+            case 'role':
+                $this->actorPivot->role = $id;
+                break;
+        }
+
+        $this->updated();
+    }
+    
     public function updated()
     {
+        $this->validate();
         $this->actorPivot->save();
         $this->emitUp('refreshActorCard');
     }

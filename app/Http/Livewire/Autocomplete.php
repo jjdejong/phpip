@@ -5,9 +5,9 @@
     where "name" is the full name as displayed, "id" is the primary key, and "extra" is an additional parameter
     that may be used by the parent component.
 
-    This component emits the "autoCompleted" event with the "id", "name", "extra" and "placeholder" parameters of the selected item.
-    A parent component should listen to that event to deal as required with the parameters. The "placeholder" parameter
-    helps the parent component recognize what autocompletion component has emitted the event.
+    This component emits the "autoCompleted" event with the "id", "name", and "extra" parameters of the selected item,
+    and a "source" parameter. A parent component should listen to that event to deal as required with the parameters.
+    The "source" parameter helps the parent component recognize what specialized component has emitted the event.
  */
 namespace App\Http\Livewire;
 
@@ -48,7 +48,7 @@ abstract class Autocomplete extends Component
         // Empty the results list
         $this->results = collect();
         // Warn parent component of autocompletion
-        $this->emitUp('autoCompleted', $id, $name, $extra, $this->placeholder);
+        $this->emitUp('autoCompleted', $id, $name, $extra, $this->source);
     }
 
     public function resetAutoComplete()

@@ -7,6 +7,7 @@ use App\Actor;
 class ActorAutocomplete extends Autocomplete
 {
     public $length = 2;
+    public $source = 'actor';
     
     public function query()
     {

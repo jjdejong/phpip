@@ -1,8 +1,8 @@
 <div id="actorPanel" class="card col-3 border-secondary p-0">
-    <div class="card-header reveal-hidden text-white bg-secondary p-1">
+    <div class="card-header text-white bg-secondary p-1">
         Actors
         @canany(['admin', 'readwrite'])
-        <a wire:click.prevent="$toggle('addActive')" class="hidden-action badge badge-pill badge-light float-right" 
+        <a wire:click.prevent="$toggle('addActive')" class="badge badge-pill badge-light float-right" 
             title="Add Actor" href="#">
             &plus;
         </a>
