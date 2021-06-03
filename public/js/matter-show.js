@@ -198,7 +198,7 @@
     fetch(this.dataset.url, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
-          "X-CSRF-TOKEN": "{{ csrf_token() }}"
+          "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content
         },
         method: 'POST',
         body: formData
@@ -217,7 +217,7 @@
       var tempLink = document.createElement('a');
       tempLink.style.display = 'none';
       tempLink.href = URL.createObjectURL(blob);
-      tempLink.download = "{{ $matter->uid }}-" + file.name;
+      tempLink.download = document.body.querySelector('a[title="See family"]').textContent + '-' + file.name;
       document.body.appendChild(tempLink);
       tempLink.click();
       document.body.removeChild(tempLink);
