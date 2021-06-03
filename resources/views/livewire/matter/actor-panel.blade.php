@@ -17,8 +17,11 @@
     <div class="card-body bg-light p-1">
         @foreach ($actors as $role_name => $role_group)
             @livewire('matter.actor-card', [
+                'matter_id' => $matter_id,
                 'container_id' => $container_id,
                 'role_group' => $role_group,
+                'role_code' => $role_group->first()->role_code,
+                'role_name' => $role_name,
             ], key($role_name))
         @endforeach
     </div>

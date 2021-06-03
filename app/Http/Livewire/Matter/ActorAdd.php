@@ -24,6 +24,8 @@ class ActorAdd extends Component
         'actorPivot.company_id' => 'numeric',
         'actorPivot.date' => 'date',
         'actorPivot.actor_ref' => 'string',
+        'actorPivot.creator' => 'string',
+        'actorPivot.display_order' => 'numeric',
     ];
 
     public function mount()
@@ -32,7 +34,7 @@ class ActorAdd extends Component
         $this->actorPivot->shared = $this->role_shareable;
         $this->actorPivot->matter_id = $this->matter_id;
         $this->actorPivot->role = $this->role_code;
-        $this->actorPivot->creator = Auth::user()->login;
+        $this->actorPivot->date = Now();
     }
     
     public function autoCompleted($id, $name, $extra, $source)
@@ -48,7 +50,9 @@ class ActorAdd extends Component
                 $this->actorPivot->role = $id;
                 $this->actorPivot->shared = $extra;
                 // Update the popup header with the selected role name
-                $this->role_name = $name;
+                if ($name) {
+                    $this->role_name = $name;
+                }
                 break;
         }
     }
@@ -58,8 +62,6 @@ class ActorAdd extends Component
         if ($this->actorPivot->shared == 1) {
             $this->actorPivot->matter_id = $this->container_id ?? $this->matter_id;
         }
-
-        $this->validate();
 
         // Fix display order indexes if wrong
         $roleGroup = ActorPivot::where([['matter_id', $this->actorPivot->matter_id], ['role', $this->actorPivot->role]]);
@@ -74,19 +76,18 @@ class ActorAdd extends Component
         }
 
         $this->actorPivot->display_order = $count + 1;
-        $this->actorPivot->date = Now();
+        $this->actorPivot->creator = Auth::user()->login;
 
+        $this->validate();
         $this->actorPivot->save();
         
         $this->mount();
         if ($this->role_code) {
-            $this->emitUp('refreshActorCard');
+            $this->emitUp('actorChanged');
         } else {
             $this->reset(['role_name', 'role_shareable']);
-            $this->emit('refreshActorCard', 'refreshActorPanel');
+            $this->emit('actorChanged', 'refreshActorPanel');
         }
-
-        //$this->emitTo('actor-autocomplete', 'resetAutoComplete');
     }
     
     public function render()

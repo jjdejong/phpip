@@ -1,6 +1,6 @@
 <div class="card border-info shadow" style="position: absolute; left: 150px; z-index: 1000; width: 220px">
     <div class="card-header bg-info text-white p-1">Add {{ $role_name }}</div>
-    <form class="card-body text-body p-1" id="{{ $role_name }}" wire:submit.prevent="submit">
+    <form class="card-body text-body p-1" wire:submit.prevent="submit" id="{{ $role_name }}">
         @if ($role_name == 'Actor')
             @livewire('role-autocomplete', ['placeholder' => 'Role', 'inputClass' => 'form-control form-control-sm'])
         @endif
@@ -22,7 +22,7 @@
         </div>
         <div class="btn-group" role="group">
             <button type="submit" class="btn btn-info btn-sm">&check;</button>
-            <button type="button" class="btn btn-outline-info btn-sm" wire:click.stop="$emitUp('refreshActorCard', 'closeActorAdd')">&times;</button>
+            <button type="button" class="btn btn-outline-info btn-sm" wire:click.stop="$emitUp('actorChanged', 'closeActorAdd')">&times;</button>
         </div>
         @error('actorPivot.role', 'actorPivot.actor_id')
         <div class="alert alert-danger">{{ $message }}</div>

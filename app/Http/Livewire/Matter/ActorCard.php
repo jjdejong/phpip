@@ -7,13 +7,16 @@ use App\Matter;
 
 class ActorCard extends Component
 {
-    protected $listeners = ['refreshActorCard'];
+    protected $listeners = ['actorChanged'];
+    public $matter_id;
     public $container_id;
     public $role_group;
+    public $role_code;
+    public $role_name;
     public $editActive = false;
     public $addActive = false;
 
-    public function refreshActorCard($param = null)
+    public function actorChanged($param = null)
     {
         switch ($param) {
             case 'closeActorAdd':
@@ -23,7 +26,10 @@ class ActorCard extends Component
                 $this->editActive = false;
                 break;
             default:
-                $this->role_group = Matter::find($this->role_group->first()->matter_id)->actors()->whereRoleCode($this->role_group->first()->role_code)->get();
+                $this->role_group = Matter::find($this->matter_id)->actors()->whereRoleCode($this->role_code)->get();
+                if ($this->role_group->count() == 0) {
+                    $this->emitUp('actorChanged', 'refreshActorPanel');
+                }
         }
     }
 

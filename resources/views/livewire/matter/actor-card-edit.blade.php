@@ -1,22 +1,21 @@
-<div class="card border-primary shadow" style="position: absolute; left: 100px; z-index: 1000; width: 60rem">
+<div class="card border-primary shadow-lg" style="position: absolute; left: 100px; z-index: 1000; width: 60rem">
   <div class="card-header bg-info lead">
-    Edit actors in {{ $role_group->first()->role_name }} group
-    <button type="button" class="close" wire:click.stop="$emitUp('refreshActorCard', 'closeActorEdit')">&times;</button>
+    Edit actors in {{ $role_name }} group
+    <button type="button" class="close" wire:click.stop="$emitUp('actorChanged', 'closeActorEdit')">&times;</button>
   </div>
   <div class="card-body">
     <table class="table table-hover table-sm">
       <thead class="thead-light">
         <tr>
+          <th class="text-center">#</th>
+          <th class="text-center">Name</th>
+          <th class="text-center">Reference</th>
+          <th class="text-center">Company</th>
+          <th class="text-center">Date</th>
+          <th class="text-center">Rate</th>
+          <th class="text-center">Shared</th>
+          <th class="text-center">Role</th>
           <th></th>
-          <th>Name</th>
-          <th>Reference</th>
-          <th>Company</th>
-          <th>Date</th>
-          <th>Rate</th>
-          <th>Shared</th>
-          <th>N</th>
-          <th>Role</th>
-          <th style="width: 24px;">&nbsp;</th>
         </tr>
       </thead>
       <tbody>

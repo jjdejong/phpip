@@ -7,7 +7,7 @@ use App\Matter;
 
 class ActorPanel extends Component
 {
-    protected $listeners = ['refreshActorCard'];
+    protected $listeners = ['actorChanged'];
     public $matter_id;
     public $container_id;
     public $actors;
@@ -18,7 +18,7 @@ class ActorPanel extends Component
         $this->actors = Matter::find($this->matter_id)->actors->groupBy('role_name')->toBase();
     }
     
-    public function refreshActorCard($param = null)
+    public function actorChanged($param = null)
     {
         switch ($param) {
             case 'closeActorAdd':

@@ -1,26 +1,29 @@
 <div class="card reveal-hidden border-secondary mb-1">
     <div class="card-header bg-primary text-light p-1 clearfix">
-        {{ $role_group->first()->role_name }}
+        {{ $role_name }}
         @canany(['admin', 'readwrite'])
         <a wire:click.prevent="$toggle('editActive')" class="hidden-action badge badge-pill badge-light float-right" 
-            title="Edit actors in {{ $role_group->first()->role_name }} group" href="#">
+            title="Edit actors in {{ $role_name }} group" href="#">
             &#9998;
         </a>
         @if ($editActive)
-            @livewire('matter.actor-card-edit', ['role_group' => $role_group], key('edit-'.$role_group->first()->role_code))
+            @livewire('matter.actor-card-edit', [
+                'role_group' => $role_group,
+                'role_name' => $role_name,
+            ], key('edit-'.$role_code))
         @endif
         <a wire:click.prevent="$toggle('addActive')" class="hidden-action badge badge-pill badge-light float-right" 
-            title="Add {{ $role_group->first()->role_name }}" href="#">
+            title="Add {{ $role_name }}" href="#">
             &plus;
         </a>
         @if ($addActive)
             @livewire('matter.actor-add', [
-                'matter_id' => $role_group->first()->matter_id,
+                'matter_id' => $matter_id,
                 'container_id' => $container_id,
-                'role_name' => $role_group->first()->role_name,
-                'role_code' => $role_group->first()->role_code,
+                'role_name' => $role_name,
+                'role_code' => $role_code,
                 'role_shareable' => $role_group->first()->shareable,
-            ], key('add-'.$role_group->first()->role_name))
+            ], key('add-'.$role_code))
         @endif
         @endcanany
     </div>

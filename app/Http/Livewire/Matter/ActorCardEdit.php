@@ -3,21 +3,16 @@
 namespace App\Http\Livewire\Matter;
 
 use Livewire\Component;
-use App\Matter;
 
 class ActorCardEdit extends Component
 {
-    protected $listeners = ['refreshActorCard'];
+    protected $listeners = ['actorChanged'];
     public $role_group;
-    
-    public function mount()
-    {
-        $this->role_group = Matter::find($this->role_group->first()->matter_id)->actors()->whereRoleCode($this->role_group->first()->role_code)->get();
-    }
+    public $role_name;
 
-    public function refreshActorCard()
+    public function actorChanged()
     {
-        $this->mount();
+        $this->role_group = \App\Matter::find($this->role_group->first()->matter_id)->actors()->whereRoleName($this->role_name)->get();
     }
 
     public function render()
