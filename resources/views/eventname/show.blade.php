@@ -36,8 +36,8 @@
 		<tr>
 			<th colspan="3">Linked templates</th>
 			<td>
-				<a data-toggle="collapse" class="badge badge-pill badge-info font-weight-normal ml-2" href="#addEventRow" id="addEventTempalte" title="Add template">
-					&plus;
+				<a data-toggle="collapse" class="text-info font-weight-normal ml-2" href="#addEventRow" id="addEventTempalte" title="Add template">
+					<i class="bi-plus-circle-fill"></i>
 				</a>
 			</td>
 		</tr>

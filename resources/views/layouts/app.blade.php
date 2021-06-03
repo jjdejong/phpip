@@ -16,6 +16,7 @@
 
   <!-- Styles -->
   <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+  <link href="{{ asset('bootstrap-icons.css') }}" rel="stylesheet">
   @yield('style')
   @canany(['client', 'readonly'])
     <style>

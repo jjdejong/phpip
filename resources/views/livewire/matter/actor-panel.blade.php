@@ -2,9 +2,9 @@
     <div class="card-header text-white bg-secondary p-1">
         Actors
         @canany(['admin', 'readwrite'])
-        <a wire:click.prevent="$toggle('addActive')" class="badge badge-pill badge-light float-right" 
+        <a wire:click.prevent="$toggle('addActive')" class="text-light float-right"
             title="Add Actor" href="#">
-            &plus;
+            <i class="bi-person-plus-fill"></i>
         </a>
         @if ($addActive)
             @livewire('matter.actor-add', [

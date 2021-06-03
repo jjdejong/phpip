@@ -2,9 +2,9 @@
     <div class="card-header bg-primary text-light p-1 clearfix">
         {{ $role_name }}
         @canany(['admin', 'readwrite'])
-        <a wire:click.prevent="$toggle('editActive')" class="hidden-action badge badge-pill badge-light float-right" 
+        <a wire:click.prevent="$toggle('editActive')" class="hidden-action text-light float-right ml-2" 
             title="Edit actors in {{ $role_name }} group" href="#">
-            &#9998;
+            <i class="bi-pencil-square"></i>
         </a>
         @if ($editActive)
             @livewire('matter.actor-card-edit', [
@@ -12,9 +12,9 @@
                 'role_name' => $role_name,
             ], key('edit-'.$role_code))
         @endif
-        <a wire:click.prevent="$toggle('addActive')" class="hidden-action badge badge-pill badge-light float-right" 
+        <a wire:click.prevent="$toggle('addActive')" class="hidden-action text-light float-right ml-2" 
             title="Add {{ $role_name }}" href="#">
-            &plus;
+            <i class="bi-person-plus-fill"></i>
         </a>
         @if ($addActive)
             @livewire('matter.actor-add', [

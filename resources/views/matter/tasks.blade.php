@@ -38,17 +38,17 @@
           <span class="hidden-action float-right">
             <li class="list-inline-item">
               <a href="#" class="text-primary" id="addTaskToEvent" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
-                &CirclePlus;
+                <i class="bi-calendar-plus"></i>
               </a>
             </li>
             <li class="list-inline-item">
               <a href="#" class="text-danger" id="deleteEvent" data-event_id="{{ $event->id }}" title="Delete event (with tasks)">
-                &CircleTimes;
+                <i class="bi-calendar-x"></i>
               </a>
             </li>
             <li class="list-inline-item" style="font-size:1rem">
               <a href="#" class="text-danger" id="regenerateTasks" data-event_id="{{ $event->id }}" title="Regenerate Tasks">
-                &#8623;
+                <i class="bi-arrow-repeat"></i>
               </a>
             </li>
           </span>
@@ -85,7 +85,7 @@
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"></td>
       <td>
         @canany(['admin', 'readwrite'])
-        <a href="#" class="hidden-action text-danger" id="deleteTask" title="Delete task">&CircleTimes;</a>
+        <a href="#" class="hidden-action text-danger" id="deleteTask" title="Delete task"><i class="bi-calendar-x"></i></a>
         @endcanany
       </td>
       @cannot('client')

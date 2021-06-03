@@ -4,8 +4,8 @@
       <th>
         Event
         @canany(['admin', 'readwrite'])
-        <a data-toggle="collapse" class="badge badge-pill badge-info font-weight-normal ml-2" href="#addEventRow" id="addEvent" title="Add event">
-          &plus;
+        <a data-toggle="collapse" class="text-info ml-2" href="#addEventRow" id="addEvent" title="Add event">
+          <i class="bi-calendar-plus-fill"></i>
         </a>
         @endcanany
       </th>

@@ -42,8 +42,8 @@
             </td>
             <td class="py-0">
               @canany(['admin', 'readwrite'])
-              <a class="badge badge-primary hidden-action float-right" href="/matter/create?operation=new&category={{$group->category_code}}" data-target="#ajaxModal" title="Create {{ $group->category }}" data-toggle="modal" data-size="modal-sm">
-                &plus;
+              <a class="text-primary hidden-action float-right" href="/matter/create?operation=new&category={{$group->category_code}}" data-target="#ajaxModal" title="Create {{ $group->category }}" data-toggle="modal" data-size="modal-sm">
+                <i class="bi-plus-circle-fill"></i>
               </a>
               @endcanany
             </td>
