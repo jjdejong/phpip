@@ -11,6 +11,7 @@ class ActorRowEdit extends Component
     protected $listeners = ['autoCompleted'];
     public ActorPivot $actorPivot;
     public $actor_item;
+    public $container_id;
 
     protected $rules = [
         'actorPivot.actor_ref' => 'string',
@@ -24,7 +25,6 @@ class ActorRowEdit extends Component
     public function mount()
     {
         $this->actorPivot = ActorPivot::find($this->actor_item->id);
-        //dd($this->actorPivot);
     }
 
     public function autoCompleted($id, $name, $extra, $source)
@@ -44,26 +44,22 @@ class ActorRowEdit extends Component
                 break;
         }
 
-        $this->updated($name = null);
+        $this->updated($source);
     }
     
-    public function updated($name)
+    public function updated($name = null, $value = null)
     {
         $this->actorPivot->updater = Auth::user()->login;
+        if ($name == 'actorPivot.shared' &&
+            $this->container_id &&
+            $this->container_id != $this->actor_item->matter_id &&
+            $value == 1) {
+                $this->actorPivot->matter_id = $this->container_id;
+        }
         $this->validate();
         $this->actorPivot->save();
         if ($name == 'actorPivot.display_order') {
-            // Fix display order indexes if wrong
-            $roleGroup = ActorPivot::where([['matter_id', $this->actorPivot->matter_id], ['role', $this->actorPivot->role]]);
-            $max = $roleGroup->max('display_order');
-            $count = $roleGroup->count();
-            if ($count != $max) {
-                $actors = $roleGroup->orderBy('display_order')->get();
-                foreach ($actors as $index => $actor) {
-                    $actor->display_order = $index + 1;
-                    $actor->save();
-                }
-            }
+            $this->fixDisplayOrder();
         }
         $this->emitUp('actorChanged');
     }
@@ -71,18 +67,23 @@ class ActorRowEdit extends Component
     public function removeActor()
     {
         $this->actorPivot->delete();
-        // Fix display order indexes if wrong
+        $this->fixDisplayOrder();
+        $this->emitUp('actorChanged');
+    }
+
+    private function fixDisplayOrder()
+    {
         $roleGroup = ActorPivot::where([['matter_id', $this->actorPivot->matter_id], ['role', $this->actorPivot->role]]);
-        $max = $roleGroup->max('display_order');
-        $count = $roleGroup->count();
-        if ($count != $max) {
+        $first = $roleGroup->min('display_order');
+        $last = $roleGroup->max('display_order');
+        $n = $roleGroup->count();
+        if ($first + $last != 1 + $n) {
             $actors = $roleGroup->orderBy('display_order')->get();
             foreach ($actors as $index => $actor) {
                 $actor->display_order = $index + 1;
                 $actor->save();
             }
         }
-        $this->emitUp('actorChanged');
     }
 
     public function render()

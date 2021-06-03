@@ -8,6 +8,8 @@
         </a>
         @if ($editActive)
             @livewire('matter.actor-card-edit', [
+                'matter_id' => $matter_id,
+                'container_id' => $container_id,
                 'role_group' => $role_group,
                 'role_name' => $role_name,
             ], key('edit-'.$role_code))

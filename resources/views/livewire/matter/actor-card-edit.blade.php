@@ -20,7 +20,11 @@
       </thead>
       <tbody>
         @foreach ($role_group as $actor_item)
-          @livewire('matter.actor-row-edit', ['actor_item' => $actor_item], key($actor_item->id))
+          {{-- The random key value causes the child component to automatically refresh when the parent refreshes --}}
+          @livewire('matter.actor-row-edit', [
+            'actor_item' => $actor_item,
+            'container_id' => $container_id
+          ], key(Str::random()))
         @endforeach
       </tbody>
     </table>

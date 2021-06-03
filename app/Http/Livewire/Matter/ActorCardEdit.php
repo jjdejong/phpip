@@ -9,10 +9,12 @@ class ActorCardEdit extends Component
     protected $listeners = ['actorChanged'];
     public $role_group;
     public $role_name;
+    public $matter_id;
+    public $container_id;
 
     public function actorChanged()
     {
-        $this->role_group = \App\Matter::find($this->role_group->first()->matter_id)->actors()->whereRoleName($this->role_name)->get();
+        $this->role_group = \App\Matter::find($this->matter_id)->actors()->whereRoleName($this->role_name)->get();
     }
 
     public function render()
