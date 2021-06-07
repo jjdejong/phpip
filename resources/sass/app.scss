@@ -14,10 +14,10 @@
 
 // Show/hide elements upon hovering
 .hidden-action {
-    display: none;
+    visibility: hidden;
 }
 .reveal-hidden:hover .hidden-action {
-    display: inline-block;
+    visibility: visible;
 }
 
 // Clear all input field formatting for in-place edition fields

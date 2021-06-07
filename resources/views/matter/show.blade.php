@@ -16,7 +16,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       @canany(['admin', 'readwrite'])
       <a class="bg-primary text-white float-right hidden-action"
          data-toggle="modal" data-target="#ajaxModal" href="/matter/{{ $matter->id }}/edit" title="Advanced matter edition">
-        &#9998;
+        <i class="bi-pencil-square"></i>
       </a>
       @endcanany
     </div>

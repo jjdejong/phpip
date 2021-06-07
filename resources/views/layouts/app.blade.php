@@ -78,6 +78,7 @@
                 <a class="dropdown-item" href="{{ url('/matter?display_with=PAT') }}">Patents</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=TM') }}">Trademarks</a>
                 @canany(['admin', 'readwrite'])
+                <li><hr class="dropdown-divider"></li>
                 <a class="dropdown-item" href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" title="Create Matter">New</a>
                 @endcanany
               </ul>
@@ -89,12 +90,12 @@
                 Tools
               </a>
               <ul class="dropdown-menu" role="menu">
-                <a class="dropdown-item" href="{{ url('/renewal') }}">Manage renewals</a>
-                <a class="dropdown-item" href="{{ url('/fee') }}">Renewal fees</a>
+                <a class="dropdown-item" href="{{ url('/renewal') }}"><i class="bi-calendar3-event"></i> Manage renewals</a>
+                <a class="dropdown-item" href="{{ url('/fee') }}"><i class="bi-bank"></i> Renewal fees</a>
                 @can('admin')
-                <a class="dropdown-item" href="{{ url('/rule') }}">Rules</a>
-                <a class="dropdown-item" href="{{ url('/document') }}">Email template classes</a>
-                <a class="dropdown-item" href="{{ url('/template-member') }}">Email templates</a>
+                <a class="dropdown-item" href="{{ url('/rule') }}"><i class="bi-calendar3-range-fill"></i> Rules</a>
+                <a class="dropdown-item" href="{{ url('/template-member') }}"><i class="bi-envelope"></i> Email templates</a>
+                <a class="dropdown-item" href="{{ url('/document') }}"><i class="bi-envelope-fill"></i> Email template classes</a>
                 @endcan
               </ul>
             </li>
@@ -104,15 +105,16 @@
                 Tables
               </a>
               <ul class="dropdown-menu" role="menu">
-                <a class="dropdown-item" href="{{ url('/actor') }}">Actors</a>
+                <a class="dropdown-item" href="{{ url('/actor') }}"><i class="bi-people"></i> Actors</a>
                 @can('admin')
-                <a class="dropdown-item" href="{{ url('/user') }}">DB Users</a>
-                <a class="dropdown-item" href="{{ url('/eventname') }}">Event names</a>
-                <a class="dropdown-item" href="{{ url('/category') }}">Categories</a>
-                <a class="dropdown-item" href="{{ url('/role') }}">Actor roles</a>
-                <a class="dropdown-item" href="{{ url('/default_actor') }}">Default actors</a>
-                <a class="dropdown-item" href="{{ url('/type') }}">Matter types</a>
-                <a class="dropdown-item" href="{{ url('/classifier_type') }}">Classifier types</a>
+                <a class="dropdown-item" href="{{ url('/user') }}"><i class="bi-file-person"></i> DB Users</a>
+                <a class="dropdown-item" href="{{ url('/eventname') }}"><i class="bi-calendar3-event-fill"></i> Event names</a>
+                <li><hr class="dropdown-divider"></li>
+                <a class="dropdown-item" href="{{ url('/category') }}"><i class="bi-columns"></i> Categories</a>
+                <a class="dropdown-item" href="{{ url('/role') }}"><i class="bi-person-lines-fill"></i> Actor roles</a>
+                <a class="dropdown-item" href="{{ url('/default_actor') }}"><i class="bi-person-badge"></i> Default actors</a>
+                <a class="dropdown-item" href="{{ url('/type') }}"><i class="bi-diagram-3"></i> Matter types</a>
+                <a class="dropdown-item" href="{{ url('/classifier_type') }}"><i class="bi-card-heading"></i> Classifier types</a>
                 @endcan
               </ul>
             </li>
@@ -124,7 +126,7 @@
 
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                  {{ __('Logout') }}
+                  <i class="bi-box-arrow-right"></i> {{ __('Logout') }}
                 </a>
 
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

@@ -11093,11 +11093,11 @@ a.text-dark:focus {
 }
 
 .hidden-action {
-  display: none;
+  visibility: hidden;
 }
 
 .reveal-hidden:hover .hidden-action {
-  display: inline-block;
+  visibility: visible;
 }
 
 .noformat {
