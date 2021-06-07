@@ -14,12 +14,12 @@ class ActorRowEdit extends Component
     public $container_id;
 
     protected $rules = [
+        'actorPivot.actor_id' => 'required|numeric',
         'actorPivot.actor_ref' => 'string',
         'actorPivot.date' => 'date',
         'actorPivot.rate' => 'numeric',
         'actorPivot.shared' => 'boolean',
         'actorPivot.display_order' => 'numeric',
-        'actorPivot.updater' => 'string',
     ];
 
     public function mount()
@@ -31,7 +31,9 @@ class ActorRowEdit extends Component
     {
         switch ($source) {
             case 'actor':
-                $this->actorPivot->actor_id = $id;
+                if ($id) {
+                    $this->actorPivot->actor_id = $id;
+                }
                 if ($extra) {
                     $this->actorPivot->company_id = $extra;
                 }
