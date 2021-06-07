@@ -68,9 +68,9 @@
             @guest
             <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
             @else
-            <li><a class="nav-link" href={{ route('home') }}>Dashboard</a></li>
+            <li><a class="nav-link bi-columns-gap" href={{ route('home') }}> Dashboard</a></li>
             <li class="nav-item dropdown">
-              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+              <a href="#" class="nav-link bi-folder dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                 Matters
               </a>
               <ul class="dropdown-menu" role="menu">
@@ -86,49 +86,47 @@
             @cannot('client')
             @canany(['admin', 'readwrite'])
             <li class="nav-item dropdown">
-              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+              <a href="#" class="nav-link bi-tools dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                 Tools
               </a>
               <ul class="dropdown-menu" role="menu">
-                <a class="dropdown-item" href="{{ url('/renewal') }}"><i class="bi-calendar3-event"></i> Manage renewals</a>
-                <a class="dropdown-item" href="{{ url('/fee') }}"><i class="bi-bank"></i> Renewal fees</a>
+                <a class="dropdown-item bi-calendar3-event" href="{{ url('/renewal') }}"> Manage renewals</a>
+                <a class="dropdown-item bi-bank" href="{{ url('/fee') }}"> Renewal fees</a>
                 @can('admin')
-                <a class="dropdown-item" href="{{ url('/rule') }}"><i class="bi-calendar3-range-fill"></i> Rules</a>
-                <a class="dropdown-item" href="{{ url('/template-member') }}"><i class="bi-envelope"></i> Email templates</a>
-                <a class="dropdown-item" href="{{ url('/document') }}"><i class="bi-envelope-fill"></i> Email template classes</a>
+                <a class="dropdown-item bi-calendar3-range" href="{{ url('/rule') }}"> Rules</a>
+                <a class="dropdown-item bi-envelope" href="{{ url('/template-member') }}"> Email templates</a>
+                <a class="dropdown-item bi-envelope-fill" href="{{ url('/document') }}"> Email template classes</a>
                 @endcan
               </ul>
             </li>
             @endcanany
             <li class="nav-item dropdown">
-              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+              <a href="#" class="nav-link bi-table dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                 Tables
               </a>
               <ul class="dropdown-menu" role="menu">
-                <a class="dropdown-item" href="{{ url('/actor') }}"><i class="bi-people"></i> Actors</a>
+                <a class="dropdown-item bi-people" href="{{ url('/actor') }}"> Actors</a>
                 @can('admin')
-                <a class="dropdown-item" href="{{ url('/user') }}"><i class="bi-file-person"></i> DB Users</a>
-                <a class="dropdown-item" href="{{ url('/eventname') }}"><i class="bi-calendar3-event-fill"></i> Event names</a>
+                <a class="dropdown-item bi-file-person" href="{{ url('/user') }}"> DB Users</a>
+                <a class="dropdown-item bi-calendar2" href="{{ url('/eventname') }}"> Event names</a>
                 <li><hr class="dropdown-divider"></li>
-                <a class="dropdown-item" href="{{ url('/category') }}"><i class="bi-columns"></i> Categories</a>
-                <a class="dropdown-item" href="{{ url('/role') }}"><i class="bi-person-lines-fill"></i> Actor roles</a>
-                <a class="dropdown-item" href="{{ url('/default_actor') }}"><i class="bi-person-badge"></i> Default actors</a>
-                <a class="dropdown-item" href="{{ url('/type') }}"><i class="bi-diagram-3"></i> Matter types</a>
-                <a class="dropdown-item" href="{{ url('/classifier_type') }}"><i class="bi-card-heading"></i> Classifier types</a>
+                <a class="dropdown-item bi-columns" href="{{ url('/category') }}"> Categories</a>
+                <a class="dropdown-item bi-person-lines-fill" href="{{ url('/role') }}"> Actor roles</a>
+                <a class="dropdown-item bi-person-badge" href="{{ url('/default_actor') }}"> Default actors</a>
+                <a class="dropdown-item bi-diagram-3" href="{{ url('/type') }}"> Matter types</a>
+                <a class="dropdown-item bi-card-heading" href="{{ url('/classifier_type') }}"> Classifier types</a>
                 @endcan
               </ul>
             </li>
             @endcannot
             <li class="nav-item dropdown">
-              <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+              <a id="navbarDropdown" class="nav-link bi-person-circle dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                 {{ Auth::user()->login }}
               </a>
-
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   <i class="bi-box-arrow-right"></i> {{ __('Logout') }}
                 </a>
-
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                   @csrf
                 </form>
