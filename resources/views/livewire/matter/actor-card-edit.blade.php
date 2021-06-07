@@ -1,5 +1,5 @@
 <div class="card border-primary shadow-lg" style="position: absolute; left: 100px; z-index: 1000; width: 60rem">
-  <div class="card-header bg-info lead">
+  <div class="card-header bg-info text-light lead">
     Edit actors in {{ $role_name }} group
     <button type="button" class="close" wire:click.stop="$emitUp('actorChanged', 'closeActorEdit')">&times;</button>
   </div>
