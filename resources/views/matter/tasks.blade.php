@@ -38,7 +38,7 @@
           <span class="hidden-action float-right">
             <li class="list-inline-item">
               <a href="#" class="text-primary" id="addTaskToEvent" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
-                <i class="bi-calendar-plus"></i>
+                <i class="bi-calendar2-plus"></i>
               </a>
             </li>
             <li class="list-inline-item">
@@ -46,9 +46,9 @@
                 <i class="bi-calendar-x"></i>
               </a>
             </li>
-            <li class="list-inline-item" style="font-size:1rem">
+            <li class="list-inline-item">
               <a href="#" class="text-danger" id="regenerateTasks" data-event_id="{{ $event->id }}" title="Regenerate Tasks">
-                <i class="bi-arrow-repeat"></i>
+                <i class="bi-bootstrap-reboot"></i>
               </a>
             </li>
           </span>
@@ -85,13 +85,15 @@
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"></td>
       <td>
         @canany(['admin', 'readwrite'])
-        <a href="#" class="hidden-action text-danger" id="deleteTask" title="Delete task"><i class="bi-calendar-x"></i></a>
+        <a href="#" class="hidden-action text-danger" id="deleteTask" title="Delete task"><i class="bi-calendar2-x"></i></a>
         @endcanany
       </td>
       @cannot('client')
       <td>
           @if (count(App\EventName::where('code',$task->code)->first()->templates) != 0)
-            <a href="#" class="chooseTemplate text-info font-weight-bold" data-url="/document/select/{{ $matter->id }}?EventName={{ $task->code }}&Task={{ $task->id }}">@</a>
+            <a href="#" class="chooseTemplate text-info font-weight-bold" data-url="/document/select/{{ $matter->id }}?EventName={{ $task->code }}&Task={{ $task->id }}">
+              <i class="bi-envelope"></i>
+            </a>
           @endif
       </td>
       @endcannot

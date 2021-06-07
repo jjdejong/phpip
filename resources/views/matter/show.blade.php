@@ -56,13 +56,13 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       @canany(['admin', 'readwrite'])
       <div class="btn-group btn-block">
         <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=child" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Create child {{ $matter->category->category }}">
-          &oplus; New Child
+          <i class="bi-node-plus"></i> New Child
         </a>
         <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=clone" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Clone {{ $matter->category->category }}">
-          &boxbox; Clone
+          <i class="bi-files"></i> Clone
         </a>
         <a class="btn btn-info btn-sm {{ $matter->countryInfo->goesnational ? '' : 'disabled' }}" href="/matter/{{ $matter->id }}/createN" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Enter {{ $matter->category->category }} in national phase">
-          &#9872; Nat. Phase
+          <i class="bi-flag"></i> Nat. Phase
         </a>
       </div>
       @endcanany
@@ -124,7 +124,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <span class="col-4">
               Number
               <span class="hidden-action float-right">
-                &equiv;
+                <i class="bi-list"></i>
               </span>
             </span>
           </a>
@@ -156,7 +156,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         <div class="card-header {{ $matter->tasksPending->count() ? 'text-warning' : 'text-light' }} p-1 bg-primary">
           Open Tasks Due
           <a class="text-warning text-decoration-none hidden-action float-right stretched-link" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All tasks"><span class="">
-            &equiv;
+            <i class="bi-list"></i>
           </a>
         </div>
         <div class="card-body p-1" id="opentask-panel" style="overflow: auto;">
@@ -174,7 +174,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         <div class="card-header {{ $matter->renewalsPending->count() ? 'text-warning' : 'text-light' }} p-1 bg-primary">
           Renewals Due
           <a class="text-warning text-decoration-none hidden-action float-right stretched-link" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All renewals">
-            &equiv;
+            <i class="bi-list"></i>
           </a>
         </div>
         <div class="card-body p-1" id="renewal-panel" style="overflow: auto;">
@@ -192,7 +192,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <div class="col">
               Classifiers
               <span class="hidden-action float-right">
-                &equiv;
+                <i class="bi-list"></i>
               </span>
             </div>
           </a>
