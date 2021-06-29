@@ -163,8 +163,10 @@ class RenewalController extends Controller
             if ($num != 0) {
                 $i = 0;
                 foreach ($resql as $ren) {
+                    if ($ren->language == "") $ren->language = "fr";
+                    $config_prefix = 'renewal.description.' . $ren->language;
                     $client = $ren->client_name;
-                    $due_date = Carbon::parse($ren->due_date);
+                    $due_date = Carbon::parse($ren->due_date)->locale($ren->language);
                     if ($grace) {
                     //  Add six months as grace grace_period
                     // TODO Get the grace period from a rule according to country
@@ -180,21 +182,31 @@ class RenewalController extends Controller
                         $earlier = min($earlier, $due_date);
                     }
                     $renewal = [];
-                    $desc = $ren->uid . " : Annuité du titre n°" . $ren->number;
+                    $desc = sprintf(config($config_prefix . '.line1'), $ren->uid,  $ren->number);
                     if ($ren->event_name == 'FIL') {
-                        $desc .= " déposé le ";
+                        $desc .= config($config_prefix . '.filed');
                     }
                     if ($ren->event_name == 'GRT' || $ren->event_name == 'PR') {
-                        $desc .= " délivré le ";
+                        $desc .= config($config_prefix . '.granted');
                     }
-                    $desc .= Carbon::parse($ren->event_date)->isoFormat('L');
-                    $desc .= "<BR>Votre référence : " . $ren->client_ref;
+                    $desc .= Carbon::parse($ren->event_date)->locale($ren->language)->isoFormat('LL');
+                    if ($ren->client_ref != '') {
+                        $desc .= "<BR>" . config($config_prefix . '.line2') . $ren->client_ref;
+                    }
                     if ($ren->title != '') {
-                        $desc .= "<BR>Sujet : " . $ren->title;
+                        $desc .= "<BR>" . sprintf(config($config_prefix . '.line3'), $ren->title == "" ?  $ren->short_title : $ren->title);
                     }
-                    $renewal['due_date'] = $due_date->isoFormat('L');
-                    $renewal['country'] = $ren->country_FR;
                     $renewal['language'] = $ren->language;
+                    $renewal['due_date'] = $due_date->isoFormat('L');
+                    if ($renewal['language'] == 'fr') {
+                        $renewal['country'] = $ren->country_FR;
+                    }
+                    elseif ($renewal['language'] == 'de') {
+                        $renewal['country'] = $ren->country_DE;
+                    }
+                    else {
+                        $renewal['country'] = $ren->country_EN;
+                    }
                     $renewal['desc'] = $desc;
                     // Détermine le taux de tva // TODO
                     $renewal['annuity'] = intval($ren->detail);
