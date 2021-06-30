@@ -38,7 +38,7 @@
             <td>{{ $log->created_at }}</td>
             <td>{{ $log->task->detail }}</td>
             <td>{{ is_null($log->from_step) ? '' : $log->from_step ." -> ". $log->to_step }}</td>
-            <td>{{ is_null($log->from_grace) ? '' : $log->from_grace ." -> ". $log->$to_grace }}</td>
+            <td>{{ is_null($log->from_grace) ? '' : $log->from_grace ." -> ". $log->to_grace }}</td>
             <td>{{ is_null($log->from_invoice) ? '' : $log->from_invoice ." -> ". $log->to_invoice }}</td>
           </tr>
           @endforeach

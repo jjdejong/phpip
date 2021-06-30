@@ -13,7 +13,7 @@
 @section('content')
 
 <div class="row card-deck">
-  <div class="col-4">
+  <div class="col-3">
     <div class="card border-info">
       <div class="card-header text-white bg-info p-1">
         <span class="lead">Categories</span>
@@ -91,7 +91,7 @@
       </div>
     </div>
   </div>
-  <div class="col-8" id="filter">
+  <div class="col-9" id="filter">
       @livewire('dashboard-tasks', ['isrenewals' => 0])
       @livewire('dashboard-tasks', ['isrenewals' => 1])
   </div>
