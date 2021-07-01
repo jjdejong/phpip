@@ -398,7 +398,7 @@ class MatterController extends Controller
             'cnt.name AS Contact',
             DB::raw("IF(COALESCE(cli.address_billing, clic.address_billing) IS NULL,
                 CONCAT_WS('\n', COALESCE(pay.name, payc.name, cli.name, clic.name), COALESCE(pay.address, payc.address, cli.address, clic.address), COALESCE(pay.country, payc.country, cli.country, clic.country)),
-                CONCAT_WS('\n', COALESCE(cli.address_billing, clic.address_billing), COALESCE(cli.country_billing, clic.country_billing))
+                CONCAT_WS('\n', COALESCE(pay.name, payc.name), COALESCE(pay.address, payc.address, cli.address_billing, clic.address_billing), COALESCE(pay.country, payc.country, cli.country_billing, clic.country_billing))
             ) AS Billing_Address"),
             DB::raw("COALESCE(lcli.actor_ref, lclic.actor_ref) AS Client_Ref"),
             DB::raw("COALESCE(cli.email, clic.email) AS Email"),
