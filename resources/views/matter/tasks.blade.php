@@ -100,6 +100,7 @@
   </tbody>
   @endforeach
 </table>
+<a class="badge badge-primary float-right" href="https://github.com/jjdejong/phpip/wiki/Events,-Deadlines-and-Tasks" target="_blank">?</a>
 
 <template id="addTaskFormTemplate">
   <tr>

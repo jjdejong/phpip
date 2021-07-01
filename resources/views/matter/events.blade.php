@@ -57,5 +57,6 @@
     @endforeach
   </tbody>
 </table>
+<a class="badge badge-primary float-right" href="https://github.com/jjdejong/phpip/wiki/Events,-Deadlines-and-Tasks#events" target="_blank">?</a>
 <div id="templateSelect">
 </div>

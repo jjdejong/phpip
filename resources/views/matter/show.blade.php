@@ -374,6 +374,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           </svg>
           <p>File merge<br>Drop Zone</p>
         </div>
+        <div class="bg-info align-bottom text-right"><a class="badge badge-primary" href="https://github.com/jjdejong/phpip/wiki/Templates-(email-and-documents)#document-template-usage" target="_blank">?</a></div>
       </div>
     </div>
   </div>
