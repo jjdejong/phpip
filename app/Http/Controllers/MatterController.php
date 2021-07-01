@@ -397,7 +397,7 @@ class MatterController extends Controller
             DB::raw("COALESCE(cli.country, clic.country) AS Client_Country"),
             'cnt.name AS Contact',
             DB::raw("IF(COALESCE(cli.address_billing, clic.address_billing) IS NULL,
-                CONCAT_WS('\n', COALESCE(cli.name, clic.name), COALESCE(cli.address, clic.address), COALESCE(cli.country, clic.country)),
+                CONCAT_WS('\n', COALESCE(pay.name, payc.name, cli.name, clic.name), COALESCE(pay.address, payc.address, cli.address, clic.address), COALESCE(pay.country, payc.country, cli.country, clic.country)),
                 CONCAT_WS('\n', COALESCE(cli.address_billing, clic.address_billing), COALESCE(cli.country_billing, clic.country_billing))
             ) AS Billing_Address"),
             DB::raw("COALESCE(lcli.actor_ref, lclic.actor_ref) AS Client_Ref"),
@@ -445,6 +445,22 @@ class MatterController extends Controller
             AND lclic.shared = 1"),
             'matter.container_id',
             'lclic.matter_id'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk lpay
+            JOIN actor pay ON pay.id = lpay.actor_id
+            AND lpay.role = 'PAY' AND lpay.display_order = 1"),
+            'matter.id',
+            'lpay.matter_id'
+        )
+        ->leftJoin(
+            DB::raw("matter_actor_lnk lpayc
+            JOIN actor payc ON payc.id = lpayc.actor_id
+            AND lpayc.role = 'PAY'
+            AND lpayc.display_order = 1
+            AND lpayc.shared = 1"),
+            'matter.container_id',
+            'lpayc.matter_id'
         )
         ->leftJoin(
             DB::raw("matter_actor_lnk lappl
@@ -552,7 +568,7 @@ class MatterController extends Controller
         $simpledata = collect($data)->except([
             'Priority',
             'Client_Address',
-            'Billing_Adress',
+            'Billing_Address',
             'Inventor_Addresses',
             'Owner',
             'Agent'
@@ -561,7 +577,7 @@ class MatterController extends Controller
         $complexdata = collect($data)->only([
             'Priority',
             'Client_Address',
-            'Billing_Adress',
+            'Billing_Address',
             'Inventor_Addresses',
             'Owner',
             'Agent'
