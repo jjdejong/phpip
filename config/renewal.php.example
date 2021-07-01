@@ -77,20 +77,20 @@ return [
   ],
   "description" => [
     'fr' => [
-        'line1' => '%s : Annuité du titre n°%s',
-        'filed' => ' déposé le ',
-        'granted' => ' délivré le ',
-        'line2' => "Votre référence : %s",
-        'line3' => 'Sujet : %s',
-        ],
-    'en' => [
-        'line1' => '%s :  : Annuity of No %s',
-        'filed' => ' filed on ',
-        'granted' => ' granted on ',
-        'line2' => "Your ref: %s",
-        'line3' => 'Subject: %s',
-        ],
+      'line1' => '%s : Annuité du titre n°%s',
+      'filed' => ' déposé le ',
+      'granted' => ' délivré le ',
+      'line2' => 'Votre référence : %s',
+      'line3' => 'Sujet : %s',
     ],
+    'en' => [
+      'line1' => '%s: Annuity of No %s',
+      'filed' => ' filed on ',
+      'granted' => ' granted on ',
+      'line2' => 'Your ref: %s',
+      'line3' => 'Subject: %s',
+    ],
+  ],
   "xml" => [
     'body' => '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE batch-payment SYSTEM "batch-payment-v2-00.dtd" >
