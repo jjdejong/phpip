@@ -191,7 +191,7 @@ class RenewalController extends Controller
                     }
                     $desc .= Carbon::parse($ren->event_date)->locale($ren->language)->isoFormat('LL');
                     if ($ren->client_ref != '') {
-                        $desc .= "<BR>" . config($config_prefix . '.line2') . $ren->client_ref;
+                        $desc .= "<BR>" . sprintf(config($config_prefix . '.line2'), $ren->client_ref);
                     }
                     if ($ren->title != '') {
                         $desc .= "<BR>" . sprintf(config($config_prefix . '.line3'), $ren->title == "" ?  $ren->short_title : $ren->title);
