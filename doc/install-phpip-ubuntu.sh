@@ -3,7 +3,7 @@ echo "
 ********************************
 Updating Ubuntu
 ********************************"
-sudo add-apt-repository universe
+add-apt-repository universe
 apt update
 apt -y upgrade
 echo "
