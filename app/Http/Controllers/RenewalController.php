@@ -590,7 +590,7 @@ class RenewalController extends Controller
             $log_line = [
                 'task_id' => $ren->id,
                 'job_id' => $newjob,
-                'from_step' => $task->step,
+                'from_step' => $ren->step,
                 'to_step' => 6,
                 'creator' => Auth::user()->login,
                 'created_at' => $date_now
