@@ -28,11 +28,13 @@
           @foreach ($logs as $log)
           <tr data-id="{{ $log->id }}" class="reveal-hidden">
             <td>
-                <a href="/matter/{{ $log->task->matter->id }}">
-                  {{ $log->task->matter->uid }}
-                </a>
+                @if( is_null($log->task))
+                Task deleted
+                @else
+                <a href="/matter/{{$log->task->matter->id}}">{{$log->task->matter->uid}}</a>
+                @endif
             </td>
-            <td>{{ $log->task->matter->client->name }}</td>
+            <td>{{ is_null($log->task) ? 'Task deleted' : $log->task->matter->client->name }}</td>
             <td>{{ $log->job_id }}</td>
             <td>{{ $log->creatorInfo->name }}</td>
             <td>{{ $log->created_at }}</td>

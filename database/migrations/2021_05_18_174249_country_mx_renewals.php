@@ -14,20 +14,20 @@ class CountryMxRenewals extends Migration
     public function up()
     {
         DB::table('country')->where('iso', 'MX')->update([
-            'renewal_first' => NULL,
-            'renewal_base' => NULL,
-            'renewal_start' => NULL,
+            'renewal_first' => null,
+            'renewal_base' => null,
+            'renewal_start' => null,
             'checked_on' => '2021-05-18'
-		]);
-			
+        ]);
+
         DB::table('country')->where('iso', 'IR')->update([
             'renewal_first' => 2,
             'renewal_base' => 'FIL',
             'renewal_start' => 'FIL',
             'checked_on' => '2021-05-18'
-		]);
-		
-		DB::table('task_rules')->insertOrIgnore([
+        ]);
+        
+        DB::table('task_rules')->insertOrIgnore([
             [
                 'active' => 1,
                 'task' => 'REN',
@@ -58,7 +58,7 @@ class CountryMxRenewals extends Migration
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-			],
+            ],
 
             [
                 'active' => 1,
@@ -90,7 +90,7 @@ class CountryMxRenewals extends Migration
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-			],
+            ],
 
             [
                 'active' => 1,
@@ -122,7 +122,7 @@ class CountryMxRenewals extends Migration
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-			],
+            ],
         ]);
     }
 

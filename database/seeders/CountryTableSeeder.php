@@ -793,9 +793,9 @@ class CountryTableSeeder extends Seeder
                 'wo' => 0,
                 'em' => 0,
                 'oa' => 0,
-                'renewal_first' => NULL,
-                'renewal_base' => NULL,
-                'renewal_start' => NULL,
+                'renewal_first' => null,
+                'renewal_base' => null,
+                'renewal_start' => null,
                 'checked_on' => '2020-02-24',
             ),
 
@@ -1755,7 +1755,7 @@ class CountryTableSeeder extends Seeder
                 'numcode' => 0,
                 'iso' => 'IB',
                 'iso3' => 'IBU',
-                'name_DE' => 'NULL',
+                'name_DE' => 'null',
                 'name' => 'International Bureau',
                 'name_FR' => 'Bureau International',
                 'ep' => 0,
@@ -1813,9 +1813,9 @@ class CountryTableSeeder extends Seeder
                 'wo' => 0,
                 'em' => 0,
                 'oa' => 0,
-                'renewal_first' => NULL,
-                'renewal_base' => NULL,
-                'renewal_start' => NULL,
+                'renewal_first' => null,
+                'renewal_base' => null,
+                'renewal_start' => null,
                 'checked_on' => '2020-02-24',
             ),
 
@@ -2375,9 +2375,9 @@ class CountryTableSeeder extends Seeder
                 'em' => 0,
                 'oa' => 0,
                 'renewal_first' => 2,
-                'renewal_base' => 'GRT',
+                'renewal_base' => 'FIL',
                 'renewal_start' => 'GRT',
-                'checked_on' => '2020-02-24',
+                'checked_on' => '2021-08-16',
             ),
 
             array (
@@ -2697,9 +2697,9 @@ class CountryTableSeeder extends Seeder
                 'wo' => 0,
                 'em' => 0,
                 'oa' => 0,
-                'renewal_first' => NULL,
-                'renewal_base' => NULL,
-                'renewal_start' => NULL,
+                'renewal_first' => null,
+                'renewal_base' => null,
+                'renewal_start' => null,
                 'checked_on' => '2021-05-18',
             ),
 
@@ -3972,9 +3972,9 @@ class CountryTableSeeder extends Seeder
                 'wo' => 1,
                 'em' => 0,
                 'oa' => 0,
-                'renewal_first' => NULL,
-                'renewal_base' => NULL,
-                'renewal_start' => NULL,
+                'renewal_first' => null,
+                'renewal_base' => null,
+                'renewal_start' => null,
                 'checked_on' => '2020-02-24',
             ),
 
@@ -4159,9 +4159,9 @@ class CountryTableSeeder extends Seeder
                 'wo' => 0,
                 'em' => 0,
                 'oa' => 0,
-                'renewal_first' => NULL,
-                'renewal_base' => 'NULL',
-                'renewal_start' => 'NULL',
+                'renewal_first' => null,
+                'renewal_base' => 'null',
+                'renewal_start' => 'null',
                 'checked_on' => '2020-02-24',
             ),
 
@@ -4267,7 +4267,5 @@ class CountryTableSeeder extends Seeder
                 'checked_on' => '2020-02-24',
             ),
         ));
-
-
     }
 }

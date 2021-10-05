@@ -3,6 +3,7 @@
 @section('content')
 <legend class="text-primary">
   Rules
+  <a class="badge badge-pill badge-primary" href="https://github.com/jjdejong/phpip/wiki/Tables#task_rules" target="_blank">?</a>
   <a href="rule/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Rule data" data-source="/rule" data-resource="/rule/create/">Create rule</a>
 </legend>
 <div class="row">

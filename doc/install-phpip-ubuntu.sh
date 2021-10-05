@@ -3,16 +3,16 @@ echo "
 ********************************
 Updating Ubuntu
 ********************************"
-sudo add-apt-repository universe
+add-apt-repository universe
 apt update
 apt -y upgrade
 echo "
 ********************************
 Installing Apache, MySQL, PHP
 ********************************"
-apt -y install lamp-server^ php7.2-simplexml php7.2-mbstring unzip git-core composer
+apt -y install lamp-server^ php-simplexml php-mbstring unzip git-core composer
 # sed -i "s/^#application\/x-httpd-php/application\/x-httpd-php/" /etc/mime.types
-echo "CREATE DATABASE phpip DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; GRANT ALL PRIVILEGES ON phpip.* TO phpip@localhost IDENTIFIED BY 'phpip'; SET GLOBAL log_bin_trust_function_creators = 1;" | mysql
+echo "CREATE DATABASE phpip DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; CREATE USER phpip@localhost IDENTIFIED BY 'phpip'; GRANT ALL PRIVILEGES ON phpip.* TO phpip@localhost; SET GLOBAL log_bin_trust_function_creators = 1;" | mysql
 a2enmod rewrite
 echo "127.0.0.1    phpip.local" >> /etc/hosts
 echo "
