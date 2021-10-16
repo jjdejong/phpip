@@ -236,6 +236,8 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+            } else if (this.status == 501){
+                alert(JSON.parse(this.responseText).error)
             }
         }
     });

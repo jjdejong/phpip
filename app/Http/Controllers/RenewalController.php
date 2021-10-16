@@ -802,9 +802,19 @@ class RenewalController extends Controller
         }
         $xml->header->{"payment-reference-id"} = 'ANNUITY ' . date('Ymd');
         $total = 0;
+        $first = true;
         $renewals = Task::renewals()->whereIn('task.id', $tids)->get();
         foreach ($renewals as $renewal) {
             $procedure = $renewal->country;
+            if ($first) {
+                $prev_procedure = $procedure;
+                $first = false;
+            } else {
+                if ($prev_procedure != $procedure) {
+                    // The order can only be for once juridiction
+                    return response()->json(['error' => 'More than one juridiction is selected'], 501);
+                }
+            }
             $country = $renewal->country;
             if ($country == 'EP') {
                 // Use fee code from EPO
