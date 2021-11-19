@@ -475,7 +475,7 @@ class RenewalController extends Controller
         if (!isset($request->task_ids)) {
             return response()->json(['error' => "No renewal selected."]);
         }
-        // Move the renewal task to step: paid
+        // Move the renewal task to step: invoice paid
         $num = Task::whereIn('id', $request->task_ids)->update(['invoice_step' => 3]);
         return response()->json(['success' => $num . ' invoices paid']);
     }
@@ -587,21 +587,19 @@ class RenewalController extends Controller
         foreach ($resql as $ren) {
             $task = Task::find($ren->id);
             $task->done_date = $done_date;
+            $log_line = [
+                'task_id' => $ren->id,
+                'job_id' => $newjob,
+                'from_step' => $ren->step,
+                'to_step' => 6,
+                'creator' => Auth::user()->login,
+                'created_at' => $date_now
+            ];
             $task->step = 6;
             $returncode = $task->save();
             if ($returncode) {
                 $updated++;
             }
-            $log_line = [
-                'task_id' => $ren->id,
-                'job_id' => $newjob,
-                'from_step' => 2,
-                'to_step' => 4,
-                'from_invoice' => 0,
-                'to_invoice' => 1,
-                'creator' => Auth::user()->login,
-                'created_at' => $date_now
-            ];
             $data_log[] = $log_line;
         }
         RenewalsLog::insert($data_log);
@@ -804,9 +802,19 @@ class RenewalController extends Controller
         }
         $xml->header->{"payment-reference-id"} = 'ANNUITY ' . date('Ymd');
         $total = 0;
+        $first = true;
         $renewals = Task::renewals()->whereIn('task.id', $tids)->get();
         foreach ($renewals as $renewal) {
             $procedure = $renewal->country;
+            if ($first) {
+                $prev_procedure = $procedure;
+                $first = false;
+            } else {
+                if ($prev_procedure != $procedure) {
+                    // The order can only be for once juridiction
+                    return response()->json(['error' => 'More than one juridiction is selected'], 501);
+                }
+            }
             $country = $renewal->country;
             if ($country == 'EP') {
                 // Use fee code from EPO
