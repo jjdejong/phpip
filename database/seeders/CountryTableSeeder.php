@@ -3089,9 +3089,9 @@ class CountryTableSeeder extends Seeder
                 'em' => 0,
                 'oa' => 0,
                 'renewal_first' => 4,
-                'renewal_base' => 'GRT',
+                'renewal_base' => 'FIL',
                 'renewal_start' => 'GRT',
-                'checked_on' => '2020-02-24',
+                'checked_on' => '2021-12-03',
             ),
 
             array (
