@@ -15,7 +15,7 @@ apt install -y apache2 apache2-utils
 systemctl enable apache2
 a2enmod rewrite
 
-apt install mysql-server mysql-client
+apt -y install mysql-server mysql-client
 systemctl enable mysql
 
 apt -y install php php-common libapache2-mod-php php-cli php-mysql php-json php-readline php-xml php-curl php-zip php-mbstring
@@ -53,6 +53,9 @@ php artisan migrate --seed
 echo "
 ********************************
 Install finished. If you want to populate the database with sample data run
+the following commands: 
+cd /var/www/html/phpip
 php artisan db:seed --class=SampleSeeder
+
 Go to http://phpip.local and login with the credentials phpipuser:changeme
 ********************************"
