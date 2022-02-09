@@ -51,6 +51,11 @@ class Event extends Model
         return $this->hasMany('App\Task', 'trigger_id')->orderBy('due_date');
     }
 
+    public function cleanNumber($number, $country_code)
+    {
+        return preg_replace(["/^$country_code/", '/ /', '/,/', '/-/', '/\//', '/\.[0-9]/'], '', $number);
+    }
+
 // Produces a link to official published information
 
     public function publicUrl()
@@ -63,10 +68,8 @@ class Event extends Model
         } else {
             $CC = $this->matter->country;
         }
-        $country_code = $this->matter->country;
         $category = $this->matter->category_code;
-        $removethese = ["/^$country_code/", '/ /', '/,/', '/-/', '/\//', '/\.[0-9]/'];
-        $cleanednumber = preg_replace($removethese, '', $this->detail);
+        $cleanednumber = $this->cleanNumber($this->detail, $this->matter->country);
         $href = '';
         $pubno = '';
         if ($this->code == 'PUB' || $this->code == 'GRT') {
@@ -77,9 +80,9 @@ class Event extends Model
             $href = 'http://worldwide.espacenet.com/publicationDetails/biblio?DB=EPODOC&CC=' . $CC . '&NR=' . $cleanednumber;
         } else if ($this->code == 'FIL') {
             if (defined($this->matter->publication)) {
-                $pubno = preg_replace($removethese, '', $this->matter->publication->detail);
+                $pubno = $this->cleanNumber($this->matter->publication->detail, $this->matter->country);
             }
-            switch ($country_code) {
+            switch ($this->matter->country) {
                 case 'EP':
                     $href = 'https://register.epo.org/espacenet/application?number=EP' . $cleanednumber;
                     break;

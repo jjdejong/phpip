@@ -586,55 +586,28 @@ class MatterController extends Controller
         $template = new \PhpOffice\PhpWord\TemplateProcessor($file->path());
         \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
         $template->setValues($simpledata);
-        // Process the data having line breaks and replace the line breaks with ${nl} macros
+        // Prevent escaping the line break tags (for hack)
+        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(false);
         foreach ($complexdata as $key => $item) {
-            $item = str_replace("\n", "\${nl}", $item);
+            /*
+             * Hack for processing the line breaks
+             */ 
+            $item = str_replace("\n", "<w:br/>", $item);
             $template->setValue($key, $item);
 
             /*
-             * Alternative methods for processing the line breaks in a cleaner manner, but not fully operational
-             */
-            
-            /*
-            $textrun = new \PhpOffice\PhpWord\Element\TextRun();
-            $textlines = explode("\n", $item);
-            $textrun->addText(array_shift($textlines));
-            foreach ($textlines as $line) {
-                $textrun->addTextBreak();
-                $textrun->addText($line);
-            }
-            $template->setComplexValue($key, $textrun);
-            unset($textlines);
-            */
-
-            /* This method needs the macros to be placed in table cells
-            $template->cloneRow($key, sizeof($textlines));
-            $i = 1;
-            foreach ($textlines as $line) {
-                $template->setValue("$key#$i", $line);
-                $i++;
-            }
-            unset($textlines);
-            */
-
-            /* Does not work
-            // Extract (explode) each line and make it an element of an array of arrays (chunk)
-            $textlines = array_chunk(explode("\n", $item), 1);
-            foreach ($textlines as $line) {
-                $line = array_fill_keys(['line'], $line[0]);
-            }
-            // Add the 'line' key to each line
-            $textlines = array_map(function ($item) {
-                return array_fill_keys(['line'], $item[0]);
-            }, $textlines);
-            $template->cloneBlock($key, 1, true, false, $textlines);
-            */
+             * Cleaner method for processing the line breaks, but not fully operational (the style of the placeholder is not applied but replaced by "Normal")
+             */                
+            // $textrun = new \PhpOffice\PhpWord\Element\TextRun();
+            // $textlines = explode("\n", $item);
+            // $textrun->addText(array_shift($textlines));
+            // foreach ($textlines as $line) {
+            //     $textrun->addTextBreak();
+            //     $textrun->addText($line);
+            // }
+            // $template->setComplexValue($key, $textrun);
+            // unset($textlines);
         }
-
-        // Prevent escaping the line break tags
-        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(false);
-        // Set the ${nl} macros to line break tags
-        $template->setValue('nl', '<w:br/>');
         
         header("Content-Description: File Transfer");
         header('Content-Disposition: attachment; filename="merged-' . $file->getClientOriginalName()) . '"';

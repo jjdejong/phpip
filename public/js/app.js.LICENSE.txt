@@ -30,7 +30,7 @@
  */
 
 /*!
- * jQuery UI Autocomplete 1.13.0
+ * jQuery UI Autocomplete 1.13.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -39,7 +39,7 @@
  */
 
 /*!
- * jQuery UI Keycode 1.13.0
+ * jQuery UI Keycode 1.13.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -48,7 +48,7 @@
  */
 
 /*!
- * jQuery UI Menu 1.13.0
+ * jQuery UI Menu 1.13.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -57,7 +57,7 @@
  */
 
 /*!
- * jQuery UI Position 1.13.0
+ * jQuery UI Position 1.13.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -68,7 +68,7 @@
  */
 
 /*!
- * jQuery UI Unique ID 1.13.0
+ * jQuery UI Unique ID 1.13.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -77,7 +77,7 @@
  */
 
 /*!
- * jQuery UI Widget 1.13.0
+ * jQuery UI Widget 1.13.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
