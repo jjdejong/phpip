@@ -22,6 +22,7 @@ Getting phpIP from GitHub
 cd /var/www/html
 git clone https://github.com/jjdejong/phpip.git phpip
 cd phpip
+git checkout a730b85
 composer install
 cp .env.example .env
 php artisan key:generate
