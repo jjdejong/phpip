@@ -373,6 +373,62 @@ class MatterController extends Controller
         ]);
         $file = $request->file('file');
 
+        // Attempt for a cleaner creation method of the data collection using relationships
+        // $data = collect();
+        // $data->id = $matter->id;
+        // $data->File_Ref = $matter->ui;
+        // $data->Country = $matter->country;
+        // $data->File_Category = $matter->category_code;
+        // $data->Filing_Date = $matter->filing->event_date->isoFormat('L');
+        // $data->Filing_Number = $matter->filing->detail;
+        // $data->Pub_Date = $matter->publication->event_date->isoFormat('L');
+        // $data->Pub_Number = $matter->publication->detail;
+        // $data->Priority = $matter->priority;
+        // // "GROUP_CONCAT(DISTINCT CONCAT(pri.country, pri.detail, ' - ', DATE_FORMAT(pri.event_date, '%d/%m/%Y'))
+        // //    SEPARATOR '\n') AS Priority"
+        // $data->Grant_Date = $matter->grant->event_date->isoFormat('L');
+        // $data->Grant_Number = $matter->grant->detail;
+        // $data->Registration_Date = $matter->registration->event_date->isoFormat('L');
+        // $data->Registration_Number = $matter->registration->detail;
+        // $data->Pub_Reg_Date = $matter->events()->whereCode('PR')->first()->event_date->isoFormat('L');
+        // $data->Pub_Reg_Number = $matter->events()->whereCode('PR')->first()->detail;
+        // $data->Allowance_Date = $matter->events()->whereCode('ALL')->first()->event_date->isoFormat('L');
+        // $data->Expiration_Date = $matter->expire_date;
+        // $data->Client = $matter->client->name;
+        // $data->Client_Address = $matter->client->address;
+        // $data->Client_Country = $matter->client->country;
+        // $data->Contact = $matter->contact->name;
+        // if ($matter->client->address_billing) {
+        //     $data->Billing_Address = $matter->client->address_billing . '\n' . $matter->client->country_billing;
+        // } else {
+        //     $data->Billing_Address = $matter->client->name . '\n' . $matter->client->address . '\n' . $matter->client->country;
+        // }
+        // $data->Client_Ref = $matter->client->actor_ref;
+        // $data->Email = $matter->client->email;
+        // $data->VAT = $matter->client->VAT_number;
+        // $data->Title = $matter->titles()->whereTypeCode('TIT')->first()->value;
+        // $data->Official_Title = $matter->titles()->whereTypeCode('TITOF')->first()->value ?? $data->Title;
+        // $data->English_Title = $matter->titles()->whereTypeCode('TITEN')->first()->value ?? $data->Official_Title;
+        // $data->Trademark = $matter->titles()->whereTypeCode('TM')->first()->value;
+        // $data->Classes = $matter->classifiers()->whereTypeCode('TMCL')->get()->implode('value', '.');
+        // $data->Inventors = $matter->actors()->whereRoleCode('INV')->orderBy('display_order')->get()->implode('name', ' - ');
+        // "GROUP_CONCAT(DISTINCT CONCAT_WS(' ', inv.name, inv.first_name)
+        //     ORDER BY linv.display_order ASC
+        //     SEPARATOR ' - ') AS Inventors"),
+        // "GROUP_CONCAT(DISTINCT CONCAT_WS('\n', CONCAT_WS(' ', inv.name, inv.first_name), inv.address, inv.country, inv.nationality)
+        //     ORDER BY linv.display_order ASC
+        //     SEPARATOR '\n\n') AS Inventor_Addresses"),
+        // "IF(GROUP_CONCAT(DISTINCT ownc.name) IS NOT NULL OR GROUP_CONCAT(DISTINCT own.name) IS NOT NULL,
+        //     CONCAT_WS('\n', GROUP_CONCAT(DISTINCT ownc.name SEPARATOR '\n'), GROUP_CONCAT(DISTINCT own.name SEPARATOR '\n')),
+        //     CONCAT_WS('\n', GROUP_CONCAT(DISTINCT applc.name SEPARATOR '\n'), GROUP_CONCAT(DISTINCT appl.name SEPARATOR '\n'))
+        // ) AS Owner"),
+        // "CONCAT_WS('\n', agt.name, agt.address, agt.country) AS Agent"),
+        // 'lagt.actor_ref AS Agent_Ref',
+        // 'resp.name AS Responsible',
+        // 'wri.name AS Writer',
+        // 'ann.name AS Annuity_Agent'
+
+        
         $data = Matter::select(
             'matter.id',
             'matter.uid AS File_Ref',
@@ -586,18 +642,14 @@ class MatterController extends Controller
         $template = new \PhpOffice\PhpWord\TemplateProcessor($file->path());
         \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
         $template->setValues($simpledata);
-        // Prevent escaping the line break tags (for hack)
-        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(false);
+        // Process the data having line breaks and replace the line breaks with ${nl} macros
         foreach ($complexdata as $key => $item) {
-            /*
-             * Hack for processing the line breaks
-             */ 
-            $item = str_replace("\n", "<w:br/>", $item);
+            $item = str_replace("\n", "\${nl}", $item);
             $template->setValue($key, $item);
 
             /*
              * Cleaner method for processing the line breaks, but not fully operational (the style of the placeholder is not applied but replaced by "Normal")
-             */                
+             */
             // $textrun = new \PhpOffice\PhpWord\Element\TextRun();
             // $textlines = explode("\n", $item);
             // $textrun->addText(array_shift($textlines));
@@ -608,6 +660,11 @@ class MatterController extends Controller
             // $template->setComplexValue($key, $textrun);
             // unset($textlines);
         }
+
+        // Prevent escaping the line break tags
+        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(false);
+        // Set the ${nl} macros to line break tags (replacing "\n" directly with "<w:br/>" causes escaping issues)
+        $template->setValue('nl', '<w:br/>');
         
         header("Content-Description: File Transfer");
         header('Content-Disposition: attachment; filename="merged-' . $file->getClientOriginalName()) . '"';
