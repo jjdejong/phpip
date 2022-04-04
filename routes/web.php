@@ -25,8 +25,6 @@ Auth::routes(['register' => false]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-// Route::get('matter/listforactor/{dname}', 'MatterController@filesByActor');
-Route::get('matter/{matter}/info', 'MatterController@info');
 Route::group(['middleware' => 'auth'], function () {
     Route::get('matter/autocomplete', function (Request $request) {
         $term = $request->input('term');
@@ -42,6 +40,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('matter/{matter}/renewals', 'MatterController@renewals');
     Route::get('matter/{matter}/roleActors/{role}', 'MatterController@actors');
     Route::get('matter/{matter}/description/{lang}', 'MatterController@description');
+    Route::get('matter/{matter}/info', 'MatterController@info');
     Route::get('matter/{parent_matter}/createN', function (Matter $parent_matter) {
         return view('matter.createN', compact('parent_matter'));
     });
