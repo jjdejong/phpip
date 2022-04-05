@@ -1,9 +1,0 @@
-mysql_host = localhost
-mysql_user = phpipUserName
-mysql_pwd = phpipPassword
-mysql_db = phpipDatabase
-mysql_socket = /tmp/mysql.sock
-phpip_url = https://myphpiphost/matter
-email_from = user@qualified-domain
-email_to = recipientAddress
-email_bcc = BCCrecipient
