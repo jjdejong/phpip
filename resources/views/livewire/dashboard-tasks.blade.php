@@ -41,17 +41,18 @@
         <div class="col-2">
           Matter
         </div>
-        <div class="col">
+        <div class="col-2">
+          Client
+        </div>
+        <div class="col-3">
           Description
         </div>
         <div class="col-2">
           Due date
-        </div>
         @canany(['admin', 'readwrite'])
-        <div class="col-1">
-          Clear
-        </div>
+          <span class="float-right">Clear</span>
         @endcanany
+        </div>
       </div>
     </div>
     <div class="card-body p-1">
@@ -69,7 +70,10 @@
                   {{ $task->uid }}
                 </a>
               </td>
-              <td class="col text-truncate py-0">
+              <td class="col-2 text-truncate py-0">
+                {{ $task->client }}
+              </td>
+              <td class="col-3 text-truncate py-0">
                 {{ $task->title ?? $task->trademark }}
               </td>
               <td class="col-2 py-0 px-2">
@@ -78,13 +82,13 @@
                 <div class="badge badge-danger py-0" title="Overdue">&nbsp;</div>
                 @elseif ($task->due_date < now()->addWeeks(2))
                 <div class="badge badge-warning py-0" title="Urgent">&nbsp;</div>
+                @else
+                <div class="badge py-0" title="Regular">&nbsp;</div>
                 @endif
-              </td>
               @canany(['admin', 'readwrite'])
-              <td class="col-1 py-0 px-3">
-                <input type="checkbox" wire:model.defer="tasks.{{ $index }}" :key="task-{{ $task->id }}" value="{{ $task->id }}">
-              </td>
+                <input type="checkbox" class="float-right" wire:model.defer="tasks.{{ $index }}" wire:key="task-{{ $task->id }}" value="{{ $task->id }}">
               @endcanany
+              </td>
             </tr>
             @endforeach
         </table>

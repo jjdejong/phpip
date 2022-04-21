@@ -80,7 +80,7 @@ class Task extends Model
     public function openTasks($renewals, $what_tasks, $user_dashboard)
     {
         // $what_tasks, by default 0, is changed to 1 to see the "assigned_to" tasks or to the id of the client to see client specific tasks
-        $tasks = $this->select('task.id', 'en.name', 'task.detail', 'task.due_date', 'event.matter_id', 'matter.uid', 'tit.value as title', 'tm.value as trademark')
+        $tasks = $this->select('task.id', 'en.name', 'task.detail', 'task.due_date', 'event.matter_id', 'matter.uid', 'tit.value as title', 'tm.value as trademark', 'actor.name as client')
         ->join('event_name as en', 'task.code', 'en.code')
         ->join('event', 'task.trigger_id', 'event.id')
         ->join('matter', 'event.matter_id', 'matter.id')
@@ -95,9 +95,12 @@ class Task extends Model
             $j->on('tm.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
             ->where('tm.type_code', 'TM');
         })
+        ->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
+        ->join('actor', 'actor.id', 'cli.actor_id')
         ->where([
           ['task.done', 0],
-          ['matter.dead', 0]
+          ['matter.dead', 0],
+          ['cli.role', 'CLI']
         ]);
 
         if ($what_tasks == 1) {
@@ -106,11 +109,7 @@ class Task extends Model
 
         // A client is defined for querying the tasks
         if ($what_tasks > 1) {
-            $tasks->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
-            ->where([
-              ['cli.role', 'CLI'],
-              ['cli.actor_id', $what_tasks]
-            ]);
+            $tasks->where('cli.actor_id', $what_tasks);
         }
 
         if ($renewals) {
@@ -120,11 +119,7 @@ class Task extends Model
         }
 
         if (Auth::user()->default_role == 'CLI') {
-            $tasks->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
-            ->where([
-              ['cli.role', 'CLI'],
-              ['cli.actor_id', Auth::user()->id]
-            ]);
+            $tasks->where('cli.actor_id', Auth::user()->id);
         }
 
         if ($user_dashboard) {
