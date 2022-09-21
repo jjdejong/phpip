@@ -163,7 +163,9 @@ class RenewalController extends Controller
             if ($num != 0) {
                 $i = 0;
                 foreach ($resql as $ren) {
-                    if ($ren->language == "") $ren->language = "fr";
+                    if ($ren->language == "") {
+                        $ren->language = "fr";
+                    }
                     $config_prefix = 'renewal.description.' . $ren->language;
                     $client = $ren->client_name;
                     $due_date = Carbon::parse($ren->due_date)->locale($ren->language);
@@ -182,7 +184,8 @@ class RenewalController extends Controller
                         $earlier = min($earlier, $due_date);
                     }
                     $renewal = [];
-                    $desc = sprintf(config($config_prefix . '.line1'), $ren->uid,  $ren->number);
+                    $renewal['caseref'] = $ren->caseref;
+                    $desc = sprintf(config($config_prefix . '.line1'), $ren->uid, $ren->number);
                     if ($ren->event_name == 'FIL') {
                         $desc .= config($config_prefix . '.filed');
                     }
@@ -198,14 +201,15 @@ class RenewalController extends Controller
                     }
                     $renewal['language'] = $ren->language;
                     $renewal['due_date'] = $due_date->isoFormat('L');
-                    if ($renewal['language'] == 'fr') {
-                        $renewal['country'] = $ren->country_FR;
-                    }
-                    elseif ($renewal['language'] == 'de') {
-                        $renewal['country'] = $ren->country_DE;
-                    }
-                    else {
-                        $renewal['country'] = $ren->country_EN;
+                    switch ($renewal['language']) {
+                        case 'fr':
+                            $renewal['country'] = $ren->country_FR;
+                            break;
+                        case 'de':
+                            $renewal['country'] = $ren->country_DE;
+                            break;
+                        default:
+                            $renewal['country'] = $ren->country_EN;
                     }
                     $renewal['desc'] = $desc;
                     // Détermine le taux de tva // TODO
@@ -839,7 +843,7 @@ class RenewalController extends Controller
             $docid = $fees->addChild('document-id');
             $docid->addChild('country', $country);
             $docid->addChild('doc-number', $number);
-            $docid->addChild('date', Carbon::parse($renewal->event_date)->isoFormat('YMMDD'));
+            // $docid->addChild('date', Carbon::parse($renewal->event_date)->isoFormat('YMMDD'));
             $docid->addChild('kind', 'application');
             $fees->addChild('file-reference-id', $renewal->uid);
             $fees->addChild('owner', $procedure == 'FR' ? $renewal->uid : $renewal->applicant_name);
@@ -848,25 +852,24 @@ class RenewalController extends Controller
             $fee->addChild('fee-sub-amount', $renewal->cost);
             $fee->addChild('fee-factor', '1');
             $fee->addChild('fee-total-amount', $renewal->cost);
-            $fee->addChild('fee-date-due', Carbon::parse($renewal->due_date)->isoFormat('YMMDD'));
-            /*$xml .= '
-        <fees procedure="' . $procedure . '">
+            // $fee->addChild('fee-date-due', Carbon::parse($renewal->due_date)->isoFormat('YMMDD'));
+        /* Produced XML:
+        <fees procedure="$procedure">
             <document-id>
-                <country>' . $country . '</country>
-                <doc-number>' . $number . '</doc-number>
-                <date>' . $fmt->format(strtotime($renewal->event_date)) . '</date>
+                <country>$country</country>
+                <doc-number>$number</doc-number>
                 <kind>application</kind>
             </document-id>
-            <file-reference-id>' . $renewal->uid . '</file-reference-id>
-            <owner>' . $renewal->applicant_name . '</owner>
+            <file-reference-id>$renewal->uid</file-reference-id>
+            <owner>$renewal->applicant_name</owner>
             <fee>
-                <type-of-fee>' . $fee_code . '</type-of-fee>
-                <fee-sub-amount>' . $renewal->cost . '</fee-sub-amount>
+                <type-of-fee>$fee_code</type-of-fee>
+                <fee-sub-amount>$renewal->cost</fee-sub-amount>
                 <fee-factor>1</fee-factor>
-                <fee-total-amount>' . $renewal->cost . '</fee-total-amount>
-                <fee-date-due>' . $fmt->format(strtotime($renewal->event_date)) . '</fee-date-due>
+                <fee-total-amount>$renewal->cost</fee-total-amount>
             </fee>
-        </fees>';*/
+        </fees>'
+        */
         }
 
         //$header = config('renewal.xml.header');
