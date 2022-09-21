@@ -100,22 +100,27 @@ return [
   		<name>' . env('COMPANY_NAME', 'NAME') . '</name>
   		<registered-number></registered-number>
   	</sender>
+    <send-date></send-date>
   	<mode-of-payment payment-type="deposit">
   		<deposit-account>
   			<account-no>DEPOSIT</account-no>
   		</deposit-account>
   	</mode-of-payment>
-  	<send-date></send-date>
   	<payment-reference-id>TRANSACTION</payment-reference-id>
   </header>
   <detail>
   </detail>
   <trailer>
+    <mode-of-payment payment-type="deposit">
+  		<deposit-account>
+  			<account-no>DEPOSIT</account-no>
+  		</deposit-account>
+  	</mode-of-payment>
   	<batch-pay-total-amount currency="EUR">TOTAL</batch-pay-total-amount>
   	<total-records>COUNT</total-records>
   </trailer>
 </batch-payment>',
-    'EP_deposit' => 'Your EP account',
-    'FR_deposit' => 'Your FR account',
+    'EP_deposit' => 'Your EPO account',
+    'FR_deposit' => 'Your INPI account',
   ],
 ];
