@@ -843,7 +843,7 @@ class RenewalController extends Controller
             $docid = $fees->addChild('document-id');
             $docid->addChild('country', $country);
             $docid->addChild('doc-number', $number);
-            // $docid->addChild('date', Carbon::parse($renewal->event_date)->isoFormat('YMMDD'));
+            $docid->addChild('date', Carbon::parse($renewal->event_date)->isoFormat('YMMDD'));
             $docid->addChild('kind', 'application');
             $fees->addChild('file-reference-id', $renewal->uid);
             $fees->addChild('owner', $procedure == 'FR' ? $renewal->uid : $renewal->applicant_name);
@@ -858,6 +858,7 @@ class RenewalController extends Controller
             <document-id>
                 <country>$country</country>
                 <doc-number>$number</doc-number>
+                <date>' . $fmt->format(strtotime($renewal->event_date)) . '</date>
                 <kind>application</kind>
             </document-id>
             <file-reference-id>$renewal->uid</file-reference-id>
