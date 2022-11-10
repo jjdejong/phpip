@@ -49,7 +49,7 @@ class MatterPolicy
      */
     public function create(User $user)
     {
-        return true;
+        return $user->default_role === 'DBRW' || $user->default_role === 'DBA';
     }
 
     /**
@@ -61,7 +61,7 @@ class MatterPolicy
      */
     public function update(User $user, Matter $matter)
     {
-        return true;
+        return $user->default_role === 'DBRW' || $user->default_role === 'DBA';
     }
 
     /**
@@ -73,6 +73,6 @@ class MatterPolicy
      */
     public function delete(User $user, Matter $matter)
     {
-        return true;
+        return $user->default_role === 'DBRW' || $user->default_role === 'DBA';
     }
 }

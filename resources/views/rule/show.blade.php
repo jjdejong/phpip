@@ -96,11 +96,11 @@
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['use_before'] }}">Use before</label></th>
-          <td colspan="3"><input type="date" class="form-control noformat" name="use_before"></td>
+          <td colspan="3"><input type="date" class="form-control noformat" name="use_before" value="{{ $ruleInfo->use_before }}"></td>
         </tr>
         <tr>
           <th><label title="{{ $ruleComments['use_after'] }}">Use after</label></th>
-          <td colspan="3"><input type="date" class="form-control noformat" name="use_after"></td>
+          <td colspan="3"><input type="date" class="form-control noformat" name="use_after" value="{{ $ruleInfo->use_after }}"></td>
         </tr>
       </table>
     </fieldset>

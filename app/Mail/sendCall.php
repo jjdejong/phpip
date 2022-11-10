@@ -29,7 +29,7 @@ class sendCall extends Mailable
     public function __construct($step, $renewals, $validity_date, $instruction_date, $total, $total_ht, $subject, $dest)
     {
         $this->step = $step;
-        $this->renewals = $renewals;
+        $this->renewals = collect($renewals)->sortBy(['caseref', 'asc'], ['country', 'asc']);
         $this->validity_date = $validity_date;
         $this->instruction_date = $instruction_date;
         $this->total = $total;

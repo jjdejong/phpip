@@ -3,7 +3,8 @@ echo "
 ********************************
 Updating Ubuntu
 ********************************"
-add-apt-repository ppa:ondrej/php -y
+# Uncomment below for Ubuntu 20.04
+#add-apt-repository ppa:ondrej/php -y
 apt update
 apt -y upgrade
 

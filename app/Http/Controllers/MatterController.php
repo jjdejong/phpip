@@ -62,6 +62,7 @@ class MatterController extends Controller
      */
     public function create(Request $request)
     {
+        $this->authorize('create', Matter::class);
         $operation = $request->input('operation', 'new'); // new, clone, child
         $category = [];
         $category_code = $request->input('category');
@@ -98,6 +99,7 @@ class MatterController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Matter::class);
         $this->validate($request, [
             'category_code' => 'required',
             'caseref' => 'required',
@@ -190,6 +192,7 @@ class MatterController extends Controller
      */
     public function storeN(Request $request)
     {
+        $this->authorize('create', Matter::class);
         $this->validate($request, [
             'ncountry' => 'required:array'
         ]);
@@ -238,6 +241,7 @@ class MatterController extends Controller
      */
     public function edit(Matter $matter)
     {
+        $this->authorize('update', $matter);
         $matter->load(
             'container',
             'parent',
@@ -265,6 +269,7 @@ class MatterController extends Controller
      */
     public function update(Request $request, Matter $matter)
     {
+        $this->authorize('update', $matter);
         $request->validate([
             'term_adjust' => 'numeric',
             'idx' => 'numeric|nullable',
@@ -283,6 +288,7 @@ class MatterController extends Controller
      */
     public function destroy(Matter $matter)
     {
+        $this->authorize('delete', $matter);
         $matter->delete();
         return $matter;
     }

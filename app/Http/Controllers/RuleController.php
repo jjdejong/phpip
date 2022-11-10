@@ -10,6 +10,7 @@ class RuleController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Rule::class);
         $Task  = $request->input('Task');
         $Trigger = $request->input('Trigger');
         $Country = $request->input('Country');
@@ -59,6 +60,7 @@ class RuleController extends Controller
 
     public function show(Rule $rule)
     {
+        $this->authorize('view', $rule);
         $ruleInfo = $rule->load([
           'trigger:code,name',
           'country:iso,name',
@@ -83,6 +85,7 @@ class RuleController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Rule::class);
         $rule = new Rule ;
         $ruleComments = $rule->getTableComments('task_rules');
         return view('rule.create', compact('ruleComments'));
@@ -97,6 +100,7 @@ class RuleController extends Controller
     */
     public function update(Request $request, Rule $rule)
     {
+        $this->authorize('update', $rule);
         $this->validate($request, [
             'task' => 'sometimes|required',
             'trigger_event' => 'sometimes|required',
@@ -116,6 +120,7 @@ class RuleController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', Rule::class);
         $this->validate($request, [
             'task' => 'required',
             'trigger_event' => 'required',
@@ -141,6 +146,7 @@ class RuleController extends Controller
      */
     public function destroy(Rule $rule)
     {
+        $this->authorize('delete', $rule);
         $rule->delete();
         return $rule;
     }
