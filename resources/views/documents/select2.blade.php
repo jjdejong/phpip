@@ -8,7 +8,7 @@
   <input type='hidden' value="{{ $task->id }}" name="task_id">
   @endif
     <div class='container'>
-    <div class='row font-weight-bold'>
+    <div class='row fw-bold'>
       <div class="col-3 bg-light">
         Contact
       </div>
@@ -38,7 +38,7 @@
     @endforeach
   </div>
   <div class='container' data-resource="/document/select/{{ $matter->id }}">
-      <div class="row bg-light font-weight-bold">
+      <div class="row bg-light fw-bold">
           <div class="col-lg-4">
             Summary
           </div>

@@ -12,13 +12,13 @@
 
 @section('content')
 
-<div class="row card-deck">
+<div class="row">
   <div class="col-4">
     <div class="card border-info">
       <div class="card-header text-white bg-info p-1">
         <span class="lead">Categories</span>
         @canany(['admin', 'readwrite'])
-        <a href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" class="btn btn-primary float-right" title="Create Matter">Create matter</a>
+        <a href="/matter/create?operation=new" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" class="btn btn-primary float-end" title="Create Matter">Create matter</a>
         @endcanany
       </div>
       <div class="card-body pt-0">
@@ -28,7 +28,7 @@
             <th>Count</th>
             <td>
               @canany(['admin', 'readwrite'])
-              <span class="float-right text-secondary">New</span>
+              <span class="float-end text-secondary">New</span>
               @endcanany
             </td>
           </tr>
@@ -42,7 +42,7 @@
             </td>
             <td class="py-0">
               @canany(['admin', 'readwrite'])
-              <a class="badge badge-primary hidden-action float-right" href="/matter/create?operation=new&category={{$group->category_code}}" data-target="#ajaxModal" title="Create {{ $group->category }}" data-toggle="modal" data-size="modal-sm">
+              <a class="badge text-bg-primary hidden-action float-end" href="/matter/create?operation=new&category={{$group->category_code}}" data-bs-target="#ajaxModal" title="Create {{ $group->category }}" data-bs-toggle="modal" data-size="modal-sm">
                 &plus;
               </a>
               @endcanany
@@ -56,7 +56,7 @@
       <div class="card-header text-white bg-info p-1">
         <span class="lead">Users tasks</span>
         @canany(['admin', 'readwrite'])
-        <button class="btn btn-transparent text-info float-right" disabled>I</button> {{--  This invisible button is only for improving the layout! --}}
+        <button class="btn btn-transparent text-info float-end" disabled>I</button> {{--  This invisible button is only for improving the layout! --}}
         @endcanany
       </div>
       <div class="card-body pt-1">
@@ -101,30 +101,26 @@
           @cannot('client')
           <div class="col-6">
             <div class="input-group">
-              <div class="btn-group btn-group-toggle input-group-prepend" data-toggle="buttons">
-                <label class="btn btn-info active">
-                  <input type="radio" name="what_tasks" id="alltasks" value="0" checked>Everyone
-                </label>
-                @if(!Request::filled('user_dashboard'))
-                <label class="btn btn-info">
-                  <input type="radio" name="what_tasks" id="mytasks" value="1">{{ Auth::user()->login }}
-                </label>
-                @endif
-                <label class="btn btn-info">
-                  <input type="radio" name="what_tasks" id="clientTasks" value="2">Client
-                </label>
-              </div>
+              <label class="btn btn-info">
+                <input type="radio" class="btn-check" name="what_tasks" id="alltasks" value="0">Everyone
+              </label>
+              @if(!Request::filled('user_dashboard'))
+              <label class="btn btn-info">
+                <input type="radio" class="btn-check" name="what_tasks" id="mytasks" value="1">{{ Auth::user()->login }}
+              </label>
+              @endif
+              <label class="btn btn-info">
+                <input type="radio" class="btn-check" name="what_tasks" id="clientTasks" value="2">Client
+              </label>
               <input type="hidden" id="clientId" name="client_id">
-              <input type="text" class="form-control mr-3" data-ac="/actor/autocomplete" data-actarget="client_id" placeholder="Select Client">
+              <input type="text" class="form-control me-3" data-ac="/actor/autocomplete" data-actarget="client_id" placeholder="Select Client">
             </div>
           </div>
           <div class="col-4">
             <div class="input-group">
               @canany(['admin', 'readwrite'])
-              <div class="input-group-prepend">
-                <button class="btn btn-light" type="button" id="clearOpenTasks">Clear selected on</button>
-              </div>
-              <input type="text" class="form-control mr-2" name="datetaskcleardate" id="taskcleardate" value="{{ now()->isoFormat('L') }}">
+              <button class="btn btn-light" type="button" id="clearOpenTasks">Clear selected on</button>
+              <input type="text" class="form-control me-2" name="datetaskcleardate" id="taskcleardate" value="{{ now()->isoFormat('L') }}">
               @endcanany
             </div>
           </div>
@@ -162,10 +158,8 @@
           @canany(['admin', 'readwrite'])
           <div class="col">
             <div class="input-group">
-              <div class="input-group-prepend">
-                <button class="btn btn-light" type="button" id="clearRenewals">Clear selected on</button>
-              </div>
-              <input type="text" class="form-control mr-2" name="renewalcleardate" id="renewalcleardate" value="{{ now()->isoFormat('L') }}">
+              <button class="btn btn-light" type="button" id="clearRenewals">Clear selected on</button>
+              <input type="text" class="form-control me-2" name="renewalcleardate" id="renewalcleardate" value="{{ now()->isoFormat('L') }}">
             </div>
           </div>
           @endcanany
@@ -206,5 +200,5 @@
 @endsection
 
 @section('script')
-@include('home-js')
+<script src="{{ asset('js/home.js') }}" defer></script>
 @endsection

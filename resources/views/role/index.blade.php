@@ -3,7 +3,7 @@
 @section('content')
 <legend class="text-primary">
   Actor Roles
-  <a href="role/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Role" data-resource="/role/">Create a new Role</a>
+  <a href="role/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Role" data-resource="/role/">Create a new Role</a>
 </legend>
 <div class="row">
   <div class="col">

@@ -33,5 +33,5 @@
     </table>
   </fieldset>
   <button type="button" id="createFeeSubmit" class="btn btn-primary">Create lines</button><br>
-  <span id="zoneAlert" class="alert float-left"></span>
+  <span id="zoneAlert" class="alert float-start"></span>
 </form>

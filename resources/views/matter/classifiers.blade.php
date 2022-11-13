@@ -2,14 +2,14 @@
 $classifiers = $matter->classifiers->groupBy('type_name');
 @endphp
 <table class="table table-sm table-borderless">
-  <thead class="thead-light">
+  <thead class="table-light">
     <tr>
       <th class="border-top-0">Type/Value</th>
       <th class="border-top-0">URL</th>
       <th class="border-top-0">Link to matter</th>
       <th class="border-top-0">
-        <a href="#addClassifierRow" data-toggle="collapse">
-          <span class="float-right" title="Add classifier">&oplus;</span>
+        <a href="#addClassifierRow" data-bs-toggle="collapse">
+          <span class="float-end" title="Add classifier">&oplus;</span>
         </a>
       </th>
     </tr>
@@ -25,7 +25,7 @@ $classifiers = $matter->classifiers->groupBy('type_name');
   <tbody class="sortable">
     @foreach($classifier_group as $classifier)
     <tr class="reveal-hidden" data-resource="/classifier/{{ $classifier->id }}">
-      <td class="pl-2"><input type="text" class="form-control noformat" name="value" value="{{ $classifier->value }}" {{ $type == 'Image' ? 'disabled' : '' }}></td>
+      <td class="ps-2"><input type="text" class="form-control noformat" name="value" value="{{ $classifier->value }}" {{ $type == 'Image' ? 'disabled' : '' }}></td>
       <td><input type="text" class="form-control noformat" name="url" value="{{ $classifier->url }}"></td>
       <td><input type="text" class="form-control noformat" name="lnk_matter_id" data-ac="/matter/autocomplete" value="{{ $classifier->lnk_matter_id ? $classifier->linkedMatter->uid : '' }}"></td>
       <td>

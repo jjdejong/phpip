@@ -88,5 +88,5 @@
       </tr>
     </tbody>
   </table>
-  <button type="button" class="btn btn-danger float-left" id="deleteMatter">Delete Matter</button>
+  <button type="button" class="btn btn-danger float-start" id="deleteMatter">Delete Matter</button>
 </form>

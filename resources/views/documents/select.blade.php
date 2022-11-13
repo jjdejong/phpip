@@ -30,7 +30,7 @@
   </table>
   </fieldset>
   <table data-resource="/document/select/{{ $matter->id }}">
-      <thead  class="thead-light">
+      <thead  class="table-light">
         <tr>
           <th class="col-4">
             <input class="form-control filter" name="Summary" value="{{ array_key_exists('Summary', $oldfilters) ? $oldfilters['Summary'] : "" }}" placeholder="Summary">

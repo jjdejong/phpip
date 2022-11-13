@@ -3,7 +3,7 @@
 @section('content')
 <legend class="text-primary">
   Document Classes
-  <a href="document/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Document class" data-source="/document" data-resource="/document/create/">Create a new class of templates</a>
+  <a href="document/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Document class" data-source="/document" data-resource="/document/create/">Create a new class of templates</a>
 </legend>
 <div class="row">
   <div class="col">

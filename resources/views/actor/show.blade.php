@@ -1,9 +1,9 @@
 <div class="card overflow-auto" style="height: 480px;">
   <div class="nav nav-pills" role="tablist">
-    <a class="nav-item nav-link active" data-toggle="tab" href="#actorMain" role="tab">Main</a>
-    <a class="nav-item nav-link" data-toggle="tab" href="#actorContact" role="tab">Contact</a>
-    <a class="nav-item nav-link" data-toggle="tab" href="#actorOther" role="tab">Other</a>
-    <a class="nav-item nav-link" data-toggle="tab" id="actorUsedInToggle" href="/actor/{{ $actorInfo->id }}/usedin" data-target="#actorUsedIn" role="tab">Used in</a>
+    <a class="nav-item nav-link active" data-bs-toggle="tab" href="#actorMain" role="tab">Main</a>
+    <a class="nav-item nav-link" data-bs-toggle="tab" href="#actorContact" role="tab">Contact</a>
+    <a class="nav-item nav-link" data-bs-toggle="tab" href="#actorOther" role="tab">Other</a>
+    <a class="nav-item nav-link" data-bs-toggle="tab" id="actorUsedInToggle" href="/actor/{{ $actorInfo->id }}/usedin" data-bs-target="#actorUsedIn" role="tab">Used in</a>
     @canany(['admin', 'readwrite'])
     <button id="deleteActor" title="Delete actor" class="nav-item nav-link btn btn-outline-danger"  data-url='/actor/{{ $actorInfo->id }}' data-message="the actor {{ $actorInfo->name }}">
       Delete
@@ -59,7 +59,7 @@
         </tr>
         <tr>
           <td colspan="2">
-            <label class="font-weight-bolder" title="{{ $actorComments['notes'] }}">Notes</label>
+            <label class="fw-bolder" title="{{ $actorComments['notes'] }}">Notes</label>
             <textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea>
           </td>
         </tr>

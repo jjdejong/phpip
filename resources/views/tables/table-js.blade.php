@@ -16,7 +16,7 @@
     }, 300));
 
     // Reload the list when closing the modal window
-    $("#ajaxModal").on("hidden.bs.modal", function (event) {
+    ajaxModal.addEventListener('hidden.bs.modal', event => {
       refreshList();
     });
 </script>

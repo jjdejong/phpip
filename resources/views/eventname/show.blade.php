@@ -36,7 +36,7 @@
 		<tr>
 			<th colspan="3">Linked templates</th>
 			<td>
-				<a data-toggle="collapse" class="badge badge-pill badge-info font-weight-normal ml-2" href="#addEventRow" id="addEventTempalte" title="Add template">
+				<a data-bs-toggle="collapse" class="badge rounded-pill text-bg-info fw-normal ms-2" href="#addEventRow" id="addEventTempalte" title="Add template">
 					&plus;
 				</a>
 			</td>
@@ -48,10 +48,8 @@
           <div class="input-group">
             <input type="hidden" name="template_class_id" value="">
             <input type="text" class="form-control form-control-sm" name="className" placeholder="Class" data-ac="/template-class/autocomplete" data-actarget="template_class_id">
-            <div class="input-group-append">
-              <button type="button" class="btn btn-primary btn-sm" id="addEventTemplateSubmit">&check;</button>
-              <button type="reset" class="btn btn-outline-primary btn-sm">&times;</button>
-            </div>
+            <button type="button" class="btn btn-primary btn-sm" id="addEventTemplateSubmit">&check;</button>
+            <button type="reset" class="btn btn-outline-primary btn-sm">&times;</button>
           </div>
         </form>
       </td>

@@ -1,10 +1,10 @@
 <table class="table table-hover table-sm">
-  <thead class="thead-light">
+  <thead class="table-light">
     <tr>
       <th>
         Event
         @canany(['admin', 'readwrite'])
-        <a data-toggle="collapse" class="badge badge-pill badge-info font-weight-normal ml-2" href="#addEventRow" id="addEvent" title="Add event">
+        <a data-bs-toggle="collapse" class="badge rounded-pill text-bg-info fw-normal ms-2" href="#addEventRow" id="addEvent" title="Add event">
           &plus;
         </a>
         @endcanany
@@ -29,10 +29,8 @@
             <input type="text" class="form-control form-control-sm" name="notes" placeholder="Notes">
             <input type="hidden" name="alt_matter_id">
             <input type="text" class="form-control form-control-sm"  placeholder="Refers to" data-ac="/matter/autocomplete" data-actarget="alt_matter_id">
-            <div class="input-group-append">
-              <button type="button" class="btn btn-primary btn-sm" id="addEventSubmit">&check;</button>
-              <button type="reset" class="btn btn-outline-primary btn-sm">&times;</button>
-            </div>
+            <button type="button" class="btn btn-primary btn-sm" id="addEventSubmit">&check;</button>
+            <button type="reset" class="btn btn-outline-primary btn-sm">&times;</button>
           </div>
         </form>
       </td>
@@ -57,6 +55,6 @@
     @endforeach
   </tbody>
 </table>
-<a class="badge badge-primary float-right" href="https://github.com/jjdejong/phpip/wiki/Events,-Deadlines-and-Tasks#events" target="_blank">?</a>
+<a class="badge text-bg-primary float-end" href="https://github.com/jjdejong/phpip/wiki/Events,-Deadlines-and-Tasks#events" target="_blank">?</a>
 <div id="templateSelect">
 </div>

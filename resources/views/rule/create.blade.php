@@ -153,5 +153,5 @@
       </tr>
     </table>
   </fieldset>
-  <button type="button" class="btn btn-primary btn-block" id="createRuleSubmit" data-redirect="/rule">Create rule</button><br>
+  <button type="button" class="btn btn-primary" id="createRuleSubmit" data-redirect="/rule">Create rule</button><br>
 </form>

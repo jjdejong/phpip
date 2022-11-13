@@ -3,7 +3,7 @@
 @section('content')
 <legend class="text-primary">
   Email Templates
-  <a href="template-member/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Document member" data-source="/template-member" data-resource="/template-member/create/">Create a new member of templates</a>
+  <a href="template-member/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Document member" data-source="/template-member" data-resource="/template-member/create/">Create a new member of templates</a>
 </legend>
 <div class="row">
   <div class="col">

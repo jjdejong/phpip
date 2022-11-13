@@ -1,8 +1,8 @@
 <div class="card reload-part" style="height: 480px;">
   <div class="nav nav-pills nav-fill" role="tablist">
-    <a class="nav-item nav-link active p-2" data-toggle="tab" href="#ruleMain" role="tab">Main</a>
-    <a class="nav-item nav-link p-2" data-toggle="tab" href="#ruleConditions" role="tab">Conditions</a>
-    <a class="nav-item nav-link p-2" data-toggle="tab" href="#ruleCost" role="tab">Cost</a>
+    <a class="nav-item nav-link active p-2" data-bs-toggle="tab" href="#ruleMain" role="tab">Main</a>
+    <a class="nav-item nav-link p-2" data-bs-toggle="tab" href="#ruleConditions" role="tab">Conditions</a>
+    <a class="nav-item nav-link p-2" data-bs-toggle="tab" href="#ruleCost" role="tab">Cost</a>
     <button id="deleteRule" title="Delete rule" class="nav-item nav-link p-2 btn btn-outline-danger" data-url='/rule/{{ $ruleInfo->id }}' data-message="the rule {{ $ruleInfo->taskInfo->name  }}" >
       Delete
     </button>
@@ -129,10 +129,8 @@
               <div class="input-group">
                 <input type="hidden" name="template_class_id" value="">
                 <input type="text" class="form-control form-control-sm" name="className" placeholder="Class" data-ac="/template-class/autocomplete" data-actarget="template_class_id">
-                <div class="input-group-append">
-                  <button type="button" class="btn btn-primary btn-sm" id="addRuleTemplateSubmit">&check;</button>
-                  <button type="reset" class="btn btn-outline-primary btn-sm">&times;</button>
-                </div>
+                <button type="button" class="btn btn-primary btn-sm" id="addRuleTemplateSubmit">&check;</button>
+                <button type="reset" class="btn btn-outline-primary btn-sm">&times;</button>
               </div>
             </form>
           </td>

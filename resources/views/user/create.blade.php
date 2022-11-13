@@ -46,5 +46,5 @@
 			</td>
     </tr>
   </table>
-	<button type="button" id="createUserSubmit" class="btn btn-primary btn-block">Create</button>
+	<button type="button" id="createUserSubmit" class="btn btn-primary">Create</button>
 </form>

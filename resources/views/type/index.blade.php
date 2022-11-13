@@ -3,7 +3,7 @@
 @section('content')
 <legend class="text-primary">
   Matter Types
-  <a href="type/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Type" data-resource="/type/">Create a new Matter Type</a>
+  <a href="type/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Type" data-resource="/type/">Create a new Matter Type</a>
 </legend>
 <div class="row">
   <div class="col">

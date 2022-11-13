@@ -271,30 +271,30 @@
             Manage renewals
         </span>
         <a href="/logs" class="btn btn-info">View logs</a>
-        <button id="clearFilters" type="button" class="btn btn-info float-right">&larrpl; Clear filters</button>
-        <a href="https://github.com/jjdejong/phpip/wiki/Renewal-Management" target="_blank" title="Help" class="btn btn-outline-primary btn-sm float-right">?</a>
+        <button id="clearFilters" type="button" class="btn btn-info float-end">&larrpl; Clear filters</button>
+        <a href="https://github.com/jjdejong/phpip/wiki/Renewal-Management" target="_blank" title="Help" class="btn btn-outline-primary btn-sm float-end">?</a>
     </div>
     <div class="card-header py-1">
         <nav class="mt-1">
             <div class="nav nav-pills justify-content-center" id="tabsGroup">
-                <a class="nav-item nav-link {{ !$step && !$invoice_step ? 'active' : '' }}" href="#p1" data-toggle="tab" data-step="0">First call</a>
-                <a class="nav-item nav-link {{ $step == 2 ? 'active' : '' }}" href="#p2" data-toggle="tab" data-step="2">Reminder</a>
-                <a class="nav-item nav-link {{ $step == 4 ? 'active' : '' }}" href="#p3" data-toggle="tab" data-step="4">Payment</a>
+                <a class="nav-item nav-link {{ !$step && !$invoice_step ? 'active' : '' }}" href="#p1" data-bs-toggle="tab" data-step="0">First call</a>
+                <a class="nav-item nav-link {{ $step == 2 ? 'active' : '' }}" href="#p2" data-bs-toggle="tab" data-step="2">Reminder</a>
+                <a class="nav-item nav-link {{ $step == 4 ? 'active' : '' }}" href="#p3" data-bs-toggle="tab" data-step="4">Payment</a>
                 @if (config('renewal.general.receipt_tabs'))
-                <a class="nav-item nav-link {{ $step == 6 ? 'active' : '' }}" href="#p4" data-toggle="tab" data-step="6">Receipts</a>
-                <a class="nav-item nav-link {{ $step == 8 ? 'active' : '' }}" href="#p5" data-toggle="tab" data-step="8">Receipts received</a>
+                <a class="nav-item nav-link {{ $step == 6 ? 'active' : '' }}" href="#p4" data-bs-toggle="tab" data-step="6">Receipts</a>
+                <a class="nav-item nav-link {{ $step == 8 ? 'active' : '' }}" href="#p5" data-bs-toggle="tab" data-step="8">Receipts received</a>
                 @endif
-                <a class="nav-item nav-link {{ $step == 12 ? 'active' : '' }}" href="#p6" data-toggle="tab" data-step="12">Abandoned</a>
-                <a class="nav-item nav-link {{ $step == 14 ? 'active' : '' }}" href="#p9" data-toggle="tab" data-step="14">Lapsed</a>
-                <a class="nav-item nav-link {{ $step == 10 ? 'active' : '' }}" href="#p10" data-toggle="tab" data-step="10">Closed</a>
-                <a class="nav-item nav-link {{ $invoice_step == 1 ? 'active' : '' }}" href="#p7" data-toggle="tab" data-invoice_step="1">Invoicing</a>
-                <a class="nav-item nav-link {{ $invoice_step == 2 ? 'active' : '' }}" href="#p8" data-toggle="tab" data-invoice_step="2">Invoiced</a>
-                <a class="nav-item nav-link {{ $invoice_step == 3 ? 'active' : '' }}" href="#p11" data-toggle="tab" data-invoice_step="3">Invoices paid</a>
+                <a class="nav-item nav-link {{ $step == 12 ? 'active' : '' }}" href="#p6" data-bs-toggle="tab" data-step="12">Abandoned</a>
+                <a class="nav-item nav-link {{ $step == 14 ? 'active' : '' }}" href="#p9" data-bs-toggle="tab" data-step="14">Lapsed</a>
+                <a class="nav-item nav-link {{ $step == 10 ? 'active' : '' }}" href="#p10" data-bs-toggle="tab" data-step="10">Closed</a>
+                <a class="nav-item nav-link {{ $invoice_step == 1 ? 'active' : '' }}" href="#p7" data-bs-toggle="tab" data-invoice_step="1">Invoicing</a>
+                <a class="nav-item nav-link {{ $invoice_step == 2 ? 'active' : '' }}" href="#p8" data-bs-toggle="tab" data-invoice_step="2">Invoiced</a>
+                <a class="nav-item nav-link {{ $invoice_step == 3 ? 'active' : '' }}" href="#p11" data-bs-toggle="tab" data-invoice_step="3">Invoices paid</a>
             </div>
         </nav>
         <div class="tab-content mt-1">
             <div class="tab-pane {{ !$step && !$invoice_step ? 'active' : '' }}" id="p1">
-                <div class="container text-right">
+                <div class="container text-end">
                     <div class="btn-group">
                         <button class="btn btn-info" type="button" id="callRenewals">Send call email</button>
                         <button class="btn btn-info" type="button" id="renewalsSent">Call sent manually</button>
@@ -302,7 +302,7 @@
                 </div>
             </div>
             <div class="tab-pane {{ $step == 2 ? 'active' : '' }}" id="p2">
-                <div class="container text-right">
+                <div class="container text-end">
                     <div class="btn-group">
                         <button class="btn btn-outline-info" type="button" id="reminderRenewals">Send reminder email</button>
                         <button class="btn btn-outline-info" type="button" id="lastReminderRenewals" title="Send reminder and enter grace period">Send last reminder email</button>
@@ -313,7 +313,7 @@
                 </div>
             </div>
             <div class="tab-pane {{ $step == 4 ? 'active' : ''}}" id="p3">
-                <div class="container text-right">
+                <div class="container text-end">
                     <div class="btn-group">
                         <button class="btn btn-outline-info" type="button" id="xmlRenewals" title="Generate xml files for EP or FR">Download XML order to pay</button>
                         <button class="btn btn-info" type="button" id='doneRenewals'>Paid</button>
@@ -322,23 +322,23 @@
             </div>
             @if (config('renewal.general.receipt_tabs'))
             <div class="tab-pane {{ $step == 6 ? 'active' : ''}}" id="p4">
-                <div class="container text-right">
+                <div class="container text-end">
                     <button class="btn btn-info" type="button" id="receiptRenewals">Official receipts received</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 8 ? 'active' : ''}}" id="p5">
-                <div class="container text-right">
+                <div class="container text-end">
                     <button class="btn btn-info" type="button" id="sendReceiptsRenewals">Receipts sent</button>
                 </div>
             </div>
             @endif
             <div class="tab-pane {{ $step == 12 ? 'active' : ''}}" id="p6">
-                <div class="container text-right">
+                <div class="container text-end">
                     <button class="btn btn-info" type="button" id="lapsingRenewals">Lapse</button>
                 </div>
             </div>
             <div class="tab-pane {{ $invoice_step == 1 ? 'active' : ''}}" id="p7">
-                <div class="container text-right">
+                <div class="container text-end">
                     <div class="btn-group">
                         @if (config('renewal.invoice.backend') == 'dolibarr')
                         <button class="btn btn-info" type="button" id="invoiceRenewals">Generate invoice</button>
@@ -349,29 +349,29 @@
                 </div>
             </div>
             <div class="tab-pane {{ $invoice_step == 2 ? 'active' : ''}}" id="p8">
-                <div class="container text-right">
+                <div class="container text-end">
                     <button class="btn btn-info" type="button" id="invoicesPaid">Paid</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 14 ? 'active' : ''}}" id="p9">
-                <div class="container text-right">
+                <div class="container text-end">
                     <button class="btn btn-info" type="button" id="sendLapsedRenewals">Lapse communication sent</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 10 ? 'active' : ''}}" id="p10">
-                <div class="container text-right">
+                <div class="container text-end">
                     <button class="btn btn-secondary" type="button" disabled>Closed renewals</button>
                 </div>
             </div>
             <div class="tab-pane lead {{ $invoice_step == 3 ? 'active' : ''}}" id="p11">
-                <div class="container text-right">
+                <div class="container text-end">
                     <button class="btn btn-secondary" type="button" disabled>Paid invoices</button>
                 </div>
             </div>
         </div>
     </div>
     <div class="card-header py-1">
-        <div class="row font-weight-bold">
+        <div class="row fw-bold">
             <div class="input-group"  id="filterFields">
                 <div class="col-2">
                     <input type="text" class="form-control form-control-sm" name="Name" value="{{ Request::get('Name') }}" placeholder="Client">
@@ -391,7 +391,7 @@
                             <input type="text" class="form-control form-control-sm" name="Qt" value="{{ Request::get('Qt') }}" placeholder="Qt">
                         </div>
                         <div class="col-2">
-                            <div class="btn-group-toggle" data-toggle="buttons" title="In grace period">
+                            <div class="btn-group-toggle" data-bs-toggle="buttons" title="In grace period">
                                 <label class="btn btn-outline-primary btn-sm">
                                     <input id="grace" name="grace_period" type="checkbox">Grace
                                 </label>
@@ -412,7 +412,7 @@
                     </div>
                 </div>
                 <div class="col-1 px-2">
-                    <div class="btn-group-toggle" data-toggle="buttons" title="Select/unselect all">
+                    <div class="btn-group-toggle" data-bs-toggle="buttons" title="Select/unselect all">
                         <label class="btn btn-outline-primary btn-sm">
                             <input id="selectAll" type="checkbox">&check;
                         </label>
@@ -463,11 +463,11 @@
                 <td class="col-2 text-center">
                     {{ Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}
                     @if ($task->done)
-                    <div class="badge badge-success" title="Done">&check;</div>
+                    <div class="badge text-bg-success" title="Done">&check;</div>
                     @elseif ($task->due_date < now())
-                    <div class="badge badge-danger" title="Overdue">&nbsp;!&nbsp;</div>
+                    <div class="badge text-bg-danger" title="Overdue">&nbsp;!&nbsp;</div>
                     @elseif ($task->due_date < now()->addWeeks(1))
-                    <div class="badge badge-warning" title="Urgent">&nbsp;!&nbsp;</div>
+                    <div class="badge text-bg-warning" title="Urgent">&nbsp;!&nbsp;</div>
                     @endif
                 </td>
                 <td class="col-1 px-3">

@@ -3,7 +3,7 @@
 @section('content')
 <legend class="text-primary">
     Users
-    <a href="user/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Create User">Create user</a>
+    <a href="user/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Create User">Create user</a>
 </legend>
 <div class="row">
   <div class="col">
@@ -56,7 +56,7 @@
 @endsection
 
 @section('script')
-<script>
+<script type="module">
 
   var url = new URL(window.location.href);
 

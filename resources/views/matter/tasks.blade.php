@@ -2,7 +2,7 @@
   $ncols = 7; 
 @endphp
 <table class="table table-hover table-sm">
-  <thead class="thead-light">
+  <thead class="table-light">
     <tr>
       <th>Tasks by event</th>
       <th>Due date</th>
@@ -35,7 +35,7 @@
           <li class="list-inline-item">{{ $event->info->name }}</li>
           <li class="list-inline-item">{{ $event->event_date->isoFormat('L') }}</li>
           @canany(['admin', 'readwrite'])
-          <span class="hidden-action float-right">
+          <span class="hidden-action float-end">
             <li class="list-inline-item">
               <a href="#" class="text-primary" id="addTaskToEvent" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
                 &CirclePlus;
@@ -67,7 +67,7 @@
     @foreach ($event->tasks as $task)
     <tr class="reveal-hidden {{ $task->done ? 'text-success' : 'text-danger' }}" data-resource="/task/{{ $task->id }}">
       <td nowrap>
-        <span class="ml-2">{{ $task->info->name }}</span>
+        <span class="ms-2">{{ $task->info->name }}</span>
         <span data-name="detail" contenteditable>{{ $task->detail ?? '--' }}</span>
       </td>
       <td><input type="text" class="form-control noformat" name="due_date" value="{{ $task->due_date->isoFormat('L') }}"></td>
@@ -91,7 +91,7 @@
       @cannot('client')
       <td>
           @if (count(App\EventName::where('code',$task->code)->first()->templates) != 0)
-            <a href="#" class="chooseTemplate text-info font-weight-bold" data-url="/document/select/{{ $matter->id }}?EventName={{ $task->code }}&Task={{ $task->id }}">@</a>
+            <a href="#" class="chooseTemplate text-info fw-bold" data-url="/document/select/{{ $matter->id }}?EventName={{ $task->code }}&Task={{ $task->id }}">@</a>
           @endif
       </td>
       @endcannot
@@ -100,7 +100,7 @@
   </tbody>
   @endforeach
 </table>
-<a class="badge badge-primary float-right" href="https://github.com/jjdejong/phpip/wiki/Events,-Deadlines-and-Tasks" target="_blank">?</a>
+<a class="badge text-bg-primary float-end" href="https://github.com/jjdejong/phpip/wiki/Events,-Deadlines-and-Tasks" target="_blank">?</a>
 
 <template id="addTaskFormTemplate">
   <tr>
@@ -115,10 +115,8 @@
           <input type="hidden" name="assigned_to">
           <input type="text" class="form-control form-control-sm" placeholder="Assigned to" data-ac="/user/autocomplete" data-actarget="assigned_to">
           <input type="text" class="form-control form-control-sm" name="notes" placeholder="Notes">
-          <div class="input-group-append">
-            <button type="button" class="btn btn-primary btn-sm" id="addTaskSubmit">&check;</button>
-            <button type="reset" class="btn btn-outline-primary btn-sm" onClick="$(this).parents('tr').html('')">&times;</button>
-          </div>
+          <button type="button" class="btn btn-primary btn-sm" id="addTaskSubmit">&check;</button>
+          <button type="reset" class="btn btn-outline-primary btn-sm" onClick="$(this).parents('tr').html('')">&times;</button>
         </div>
       </form>
     </td>

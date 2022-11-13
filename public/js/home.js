@@ -1,20 +1,21 @@
-<script>
   var lastTasksFlag = 0;
 
   window.onload = refreshTasks(0);
 
   function refreshTasks(flag) {
-      lastTasksFlag = flag;
-      if (flag === '2') {
-        flag = clientId.value;
-      }
-      var url = '/task?what_tasks=' + flag;
-      @if(Request::filled('user_dashboard'))
-      url += '&user_dashboard={{ Request::get('user_dashboard') }}';
-      @endif
-      fetchInto(url, tasklist);
-      url += '&isrenewals=1';
-      fetchInto(url, renewallist);
+    var urlParams = new URLSearchParams(window.location.search);
+    var user_dashboard_val = urlParams.get('user_dashboard');
+    lastTasksFlag = flag;
+    if (flag === '2') {
+      flag = clientId.value;
+    }
+    var url = '/task?what_tasks=' + flag;
+    if (user_dashboard_val != null) {
+      url += '&user_dashboard=' + user_dashboard_val;
+    }
+    fetchInto(url, tasklist);
+    url += '&isrenewals=1';
+    fetchInto(url, renewallist);
   }
 
   filter.onchange = (e) => {
@@ -73,4 +74,3 @@
       }
     );
   }
-</script>

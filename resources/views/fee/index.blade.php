@@ -4,7 +4,7 @@
 <div class="container-fluid">
   <legend class="text-primary">
     Fees
-    <a href="fee/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="New line" data-resource="/fee/">Add a new line</a>
+    <a href="fee/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="New line" data-resource="/fee/">Add a new line</a>
   </legend>
   <div class="card border-primary overflow-auto" style="max-height: 640px;">
     <div class="card-header bg-primary text-light py-1">
@@ -17,10 +17,10 @@
       <div id="filter" class="row text-center">
         <div class="col-3">
           <div class="row">
-            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/country" name="Country" placeholder="Country"></div>
-            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/category" name="Category" placeholder="Category"></div>
-            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/country" name="Origin" placeholder="Origin"></div>
-            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" name="Qt" placeholder="Yr"></div>
+            <div class="col-3 ps-0"><input class="filter-input form-control form-control-sm" data-source="/country" name="Country" placeholder="Country"></div>
+            <div class="col-3 ps-0"><input class="filter-input form-control form-control-sm" data-source="/category" name="Category" placeholder="Category"></div>
+            <div class="col-3 ps-0"><input class="filter-input form-control form-control-sm" data-source="/country" name="Origin" placeholder="Origin"></div>
+            <div class="col-3 ps-0"><input class="filter-input form-control form-control-sm" name="Qt" placeholder="Yr"></div>
           </div>
         </div>
         <div class="col-4">
@@ -73,18 +73,18 @@
         </div>
         <div class="col-4">
           <div class="row">
-            <div class="col-3 bg-light pr-3"><input type="text" class="form-control noformat text-right" name="cost" value="{{ $fee->cost }}"></div>
-            <div class="col-3 bg-light pr-3"><input type="text" class="form-control noformat text-right" name="fee" value="{{ $fee->fee }}"></div>
-            <div class="col-3 pr-3"><input type="text" class="form-control noformat text-right" name="cost_reduced" value="{{ $fee->cost_reduced }}"></div>
-            <div class="col-3 pr-3"><input type="text" class="form-control noformat text-right" name="fee_reduced" value="{{ $fee->fee_reduced }}"></div>
+            <div class="col-3 bg-light pe-3"><input type="text" class="form-control noformat text-end" name="cost" value="{{ $fee->cost }}"></div>
+            <div class="col-3 bg-light pe-3"><input type="text" class="form-control noformat text-end" name="fee" value="{{ $fee->fee }}"></div>
+            <div class="col-3 pe-3"><input type="text" class="form-control noformat text-end" name="cost_reduced" value="{{ $fee->cost_reduced }}"></div>
+            <div class="col-3 pe-3"><input type="text" class="form-control noformat text-end" name="fee_reduced" value="{{ $fee->fee_reduced }}"></div>
           </div>
         </div>
         <div class="col-4">
           <div class="row">
-            <div class="col-3 bg-light pr-3"><input type="text" class="form-control noformat text-right" name="cost_sup" value="{{ $fee->cost_sup }}"></div>
-            <div class="col-3 bg-light pr-3"><input type="text" class="form-control noformat text-right" name="fee_sup" value="{{ $fee->fee_sup }}"></div>
-            <div class="col-3 pr-3"><input type="text" class="form-control noformat text-right" name="cost_sup_reduced" value="{{ $fee->cost_sup_reduced }}"></div>
-            <div class="col-3 pr-3"><input type="text" class="form-control noformat text-right" name="fee_sup_reduced" value="{{ $fee->fee_sup_reduced }}"></div>
+            <div class="col-3 bg-light pe-3"><input type="text" class="form-control noformat text-end" name="cost_sup" value="{{ $fee->cost_sup }}"></div>
+            <div class="col-3 bg-light pe-3"><input type="text" class="form-control noformat text-end" name="fee_sup" value="{{ $fee->fee_sup }}"></div>
+            <div class="col-3 pe-3"><input type="text" class="form-control noformat text-end" name="cost_sup_reduced" value="{{ $fee->cost_sup_reduced }}"></div>
+            <div class="col-3 pe-3"><input type="text" class="form-control noformat text-end" name="fee_sup_reduced" value="{{ $fee->fee_sup_reduced }}"></div>
           </div>
         </div>
         <div class="col-1"><input type="text" class="form-control noformat text-center" name="currency" value="{{ $fee->currency }}"></div>

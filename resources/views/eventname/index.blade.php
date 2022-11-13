@@ -3,7 +3,7 @@
 @section('content')
 <legend class="text-primary">
   Event Names
-  <a href="eventname/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Event name" data-resource="/eventname/">Create a new event name</a>
+  <a href="eventname/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Event name" data-resource="/eventname/">Create a new event name</a>
 </legend>
 <div class="row">
   <div class="col">

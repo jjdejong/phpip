@@ -1,5 +1,17 @@
+//import { debounce } from 'lodash-es';
+//window.debounce = debounce;
 
-window.debounce = require('lodash.debounce');
+import * as Popper from '@popperjs/core'
+window.Popper = Popper
+
+import * as bootstrap from 'bootstrap';
+window.bootstrap = bootstrap;
+
+import { $, jQuery } from 'jquery';
+window.$ = $;
+window.jQuery = jQuery;
+
+import 'jquery-ui/ui/widgets/autocomplete';
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -7,22 +19,19 @@ window.debounce = require('lodash.debounce');
  * code may be modified to fit the specific needs of your application.
  */
 
-try {
-  window.Popper = require('popper.js').default;
-  window.$ = window.jQuery = require('jquery');
-  require('bootstrap');
-  require('jquery-ui/ui/widgets/autocomplete')
+
   // Registering the CSRF Token as a common header with jQuery Ajax so that all
   // outgoing HTTP requests automatically have it attached.
-  /*let token = document.head.querySelector('meta[name="csrf-token"]');
+  /*
+  let token = document.head.querySelector('meta[name="csrf-token"]');
   $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': token.content
     }
-  });*/
-} catch (e) {}
+  });
+  */
 
-// Adapt jquery-ui to use Bootstrap
+  // Adapt jquery-ui to use Bootstrap
 (function( $, undefined ) {
 	// Conversion of menu classes to Bootstrap
   $.ui.menu.prototype.options.classes[ "ui-widget" ] = "";
@@ -45,7 +54,8 @@ try {
  */
 
 /*
-window.axios = require('axios');
+import axios from 'axios';
+window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 */

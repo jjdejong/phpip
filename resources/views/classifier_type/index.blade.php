@@ -3,7 +3,7 @@
 @section('content')
 <legend class="text-primary">
   Classifier Types
-  <a href="classifier_type/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Type" data-resource="/classifier_type/">Create a new Classifier Type</a>
+  <a href="classifier_type/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Type" data-resource="/classifier_type/">Create a new Classifier Type</a>
 </legend>
 <div class="row">
   <div class="col">

@@ -3,7 +3,7 @@
 @section('content')
 <legend class="text-primary">
     Actors
-    <a href="actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Create Actor">Create actor</a>
+    <a href="actor/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Create Actor">Create actor</a>
 </legend>
 <div class="row">
   <div class="col">
@@ -14,9 +14,9 @@
             <th class="border-top-0"><input class="form-control form-control-sm" name="Name" placeholder="Name" value="{{ Request::get('Name') }}"></th>
             <th class="align-middle border-top-0">First name</th>
             <th class="align-middle border-top-0">Display name</th>
-            <th class="align-middle text-center border-top-0">Company <span class="float-right">Person</span></th>
+            <th class="align-middle text-center border-top-0">Company <span class="float-end">Person</span></th>
             <th class="border-top-0">
-              <select id="person" class="custom-select custom-select-sm px-0" name="selector">
+              <select id="person" class="form-select form-select-sm px-0" name="selector">
                 <option value="" selected>All</option>
                 <option value="phy_p">Physical</option>
                 <option value="leg_p">Legal</option>

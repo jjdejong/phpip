@@ -2,7 +2,7 @@
   @foreach ($tasks as $task)
   <tr class="row">
     <td class="col text-truncate py-0">
-      <a href="/matter/{{ $task->matter_id }}/{{ $isrenewals ? 'renewals' : 'tasks' }}" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" data-resource="/task/" title="All tasks">
+      <a href="/matter/{{ $task->matter_id }}/{{ $isrenewals ? 'renewals' : 'tasks' }}" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-lg" data-resource="/task/" title="All tasks">
         {{ $task->name }} {{ $task->detail }}
       </a>
     </td>
@@ -17,9 +17,9 @@
     <td class="col-2 py-0 px-2">
       {{ $task->due_date->isoFormat('L') }}
       @if ($task->due_date < now())
-      <div class="badge badge-danger py-0" title="Overdue">&nbsp;</div>
+      <div class="badge text-bg-danger py-0" title="Overdue">&nbsp;</div>
       @elseif ($task->due_date < now()->addWeeks(2))
-      <div class="badge badge-warning py-0" title="Urgent">&nbsp;</div>
+      <div class="badge text-bg-warning py-0" title="Urgent">&nbsp;</div>
       @endif
     </td>
     @canany(['admin', 'readwrite'])

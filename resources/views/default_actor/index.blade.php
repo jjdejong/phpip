@@ -3,7 +3,7 @@
 @section('content')
 <legend class="text-primary">
   Default Actors
-  <a href="default_actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Default actors" data-resource="/default_actor/">Add a new default actor</a>
+  <a href="default_actor/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Default actors" data-resource="/default_actor/">Add a new default actor</a>
 </legend>
 <div class="row">
   <div class="col">
