@@ -8,7 +8,7 @@
 @import 'variables';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';
 
 //@import "~jquery-ui/themes/base/all.css";
 
@@ -18,6 +18,14 @@
 }
 .reveal-hidden:hover .hidden-action {
     display: inline-block;
+}
+
+// Remove underlines for links (do not apply to classes which have their own behavior)
+a:not(.nav-link):not(.btn) {
+  text-decoration: none;
+}
+a:not(.nav-link):not(.btn):hover {
+  text-decoration: underline;
 }
 
 // Clear all input field formatting for in-place edition fields

@@ -19,7 +19,7 @@ var fetchREST = async (url, method, body) => {
     response = await fetch(url, {
         headers: {
             "X-Requested-With": "XMLHttpRequest",
-            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content
         },
         method: method,
         body: body

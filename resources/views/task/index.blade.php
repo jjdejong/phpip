@@ -1,6 +1,6 @@
 <table class="table table-striped table-sm mb-1" style="width: 100%; table-layout: fixed;">
   @foreach ($tasks as $task)
-  <tr class="row">
+  <tr class="row g-0">
     <td class="col text-truncate py-0">
       <a href="/matter/{{ $task->matter_id }}/{{ $isrenewals ? 'renewals' : 'tasks' }}" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-lg" data-resource="/task/" title="All tasks">
         {{ $task->name }} {{ $task->detail }}

@@ -126,7 +126,7 @@
           </div>
           @endcannot
         </form>
-        <div class="row mt-1">
+        <div class="row mt-1 g-0">
           <div class="col">
           </div>
           <div class="col-2">
@@ -164,7 +164,7 @@
           </div>
           @endcanany
         </div>
-        <div class="row mt-1">
+        <div class="row mt-1 g-0">
           <div class="col">
           </div>
           <div class="col-2">

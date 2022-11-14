@@ -173,7 +173,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     </div>
   </div>
   <div id="multiPanel" class="card col-9 p-0" style="background: transparent;">
-    <div class="row mb-1">
+    <div class="row mb-1 g-0">
       <div class="card col-6 p-0 border-primary reveal-hidden" style="min-height: 138px;">
         <div class="card-header bg-primary p-1">
           <a class="row text-light text-decoration-none" href="/matter/{{ $matter->id }}/events" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-lg" title="All events">
@@ -189,7 +189,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
         <div class="card-body p-1" id="statusPanel" style="overflow: auto;">
           @foreach ( $matter->events->where('info.status_event', 1) as $event )
-          <div class="row">
+          <div class="row g-0">
             <span class="col-5">{{ $event->info->name }}</span>
             @if ( $event->alt_matter_id )
             <span class="col-3">{{ ($event->link->event_date ?? $event->event_date)->isoFormat('L') }}</span>
@@ -227,7 +227,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
       </div>
     </div>
-    <div class="row mb-1">
+    <div class="row mb-1 g-0">
       <div class="card col-2 p-0 border-primary reveal-hidden" style="min-height: 138px;">
         <div class="card-header {{ $matter->renewalsPending->count() ? 'text-warning' : 'text-light' }} p-1 bg-primary">
           Renewals Due
@@ -320,7 +320,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row g-0">
       <div class="card border-secondary col-10 p-0" style="min-height: 100px;">
         <div class="card-header p-1 bg-secondary text-light">
           Notes
