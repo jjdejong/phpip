@@ -3,8 +3,8 @@
 // Initialize popovers with custom template
 var popoverTemplate = '<div class="popover border-info" role="tooltip"><div class="tooltip-arrow"></div><h3 class="popover-header bg-info text-white"></h3><div class="popover-body"></div></div>';
 
-const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
-const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+// const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+// const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
 
 $('body').popover({
   selector: '[data-bs-toggle="popover"]',
@@ -16,7 +16,7 @@ $('body').popover({
 });
 
 // Process actor addition popovers
-$('body').on("shown.bs.popover", function(e) {
+app.addEventListener('shown.bs.popover', e => {
   // First destroy existing popover when a new popover is opened
   $('.popover').siblings('.popover').first().popover('dispose');
 

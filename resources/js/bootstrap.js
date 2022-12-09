@@ -1,15 +1,14 @@
 //import { debounce } from 'lodash-es';
 //window.debounce = debounce;
 
-import * as Popper from '@popperjs/core'
-window.Popper = Popper
+//import '@popperjs/core';
+//window.Popper = Popper
 
 import * as bootstrap from 'bootstrap';
-window.bootstrap = bootstrap;
+//window.bootstrap = bootstrap;
 
-import { $, jQuery } from 'jquery';
-window.$ = $;
-window.jQuery = jQuery;
+// import jQuery from 'jquery';
+// window.$ = window.jQuery = jQuery;
 
 import 'jquery-ui/ui/widgets/autocomplete';
 

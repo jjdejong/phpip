@@ -1,51 +1,51 @@
 
 // Body
-$body-bg: #f5f8fa;
-
-// Borders
-$laravel-border-color: darken($body-bg, 10%);
-$list-group-border: $laravel-border-color;
-$navbar-default-border: $laravel-border-color;
-$panel-default-border: $laravel-border-color;
-$panel-inner-border: $laravel-border-color;
-
-// Brands
-$brand-primary: #586992;
-$brand-info: #8eb4cb;
-//$brand-success: #2ab27b;
-//$brand-warning: #cbb956;
-$brand-danger: #bf5329;
+$body-bg: #99a;
+$card-bg: #f5f5f5;
 
 // Typography
-$font-family-sans-serif: "Open Sans Condensed", sans-serif;
-$icon-font-path: "~bootstrap/scss/bootstrap";
-$font-size-base: 14px;
-$line-height-base: 1.2;
-$text-color: #636b6f;
+$font-family-sans-serif: "Roboto", sans-serif;
+$font-size-base: 0.8rem;
+$line-height-base: 1.1;
+$enable-responsive-font-sizes: true;
 
-// Navbar
-$navbar-default-bg: #fff;
 
-// Buttons
-$btn-default-color: $text-color;
+// Spacing
+//$grid-gutter-width: 6px;
 
-// Inputs
-$input-border: lighten($text-color, 40%);
-$input-border-focus: lighten($brand-primary, 25%);
-$input-color-placeholder: lighten($text-color, 30%);
+// Colors
+$primary: #0c3f70;
+//$primary: #013C80; // Keep-IP
+$info: #618faa;
+$warning: #FFD37F;
+$blue: #3490dc;
+$indigo: #6574cd;
+$purple: #9561e2;
+$pink: #f66D9b;
+$red: #e3342f;
+$orange: #f6993f;
+$yellow: #ffed4a;
+$green: #38c172;
+$teal: #4dc0b5;
+$cyan: #6cb2eb;
 
-// Panels
-//$panel-default-heading-bg: #fff;
-$panel-body-padding: 4px;
-$panel-heading-padding: 2px 8px;
+//$enable-gradients: true;
+//$enable-shadows: true;
 
-// Grid
-$grid-gutter-width: 8px;
+// Various
 
-// Input fields (custom). Also affects buttons
-$padding-base-vertical: 3px;
-$padding-base-horizontal: 6px;
-$padding-small-vertical: 2px;
-$padding-small-horizontal: 5px;
-$padding-large-vertical: 5px;
-$padding-large-horizontal: 8px;
+// $table-cell-padding:          .5rem !default;
+// $table-cell-padding-sm:       .25rem !default;
+$table-cell-padding:         .4rem;
+$table-cell-padding-sm:      .15rem;
+
+// $list-group-item-padding-y: .75rem !default;
+$list-group-item-padding-y: .25rem;
+// $list-group-item-padding-x: 1.25rem;
+$list-group-item-padding-x: .5rem;
+
+// $dropdown-item-padding-x: 1.5rem !default;
+$dropdown-item-padding-x: .5rem;
+
+// $badge-font-weight: $fw-bold !default;
+$badge-font-weight: fw-normal;
