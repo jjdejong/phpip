@@ -242,7 +242,7 @@ foreach ($mandateOn as $AQSpatent) {
           $set[] = "invoice_step = 1";
         }
       }
-      if ($renewal->cancelled && $myRenewal->notes != 'Cancelled') {
+      if ($renewal->cancelled == '1' && $myRenewal->notes != 'Cancelled') {
         // Payment cancelled or unnecessary
         $set[] = "notes = 'Cancelled'";
       }
@@ -332,7 +332,7 @@ foreach ($mandateOn as $AQSpatent) {
         } else {
           $somethingupdated = "invoiced cost $cost (but no payment date)";
         }
-      } elseif ($renewal->cancelled) {
+      } elseif ($renewal->cancelled == '1') {
         // Payment cancelled or unnecessary
         $q = "INSERT INTO task (code, detail, due_date, notes, trigger_id, created_at, creator, updated_at)
 				    VALUES ('REN', '$renewal->year', '$renewal->dueDate', 'Cancelled', '$trigger_id', Now(), 'AQS', Now())";
