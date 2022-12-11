@@ -1,7 +1,7 @@
 #!/usr/bin/php
 
 <?php
-$aqs = parse_ini_file('aqsREST.ini');
+$aqs = parse_ini_file('aqs.ini');
 $jwt_payload = '{"sub":"OMNIPAT","qsh":"/me/patents","iat":' . time() . ',"exp":' . time() + 1000 . '}';
 
 function base64UrlEncode($data)
@@ -132,7 +132,7 @@ foreach ($mandateOn as $AQSpatent) {
     $result->close();
   } else {
     // No UID, try to find a unique ID with country, caseref, origin, type and annuity count
-    $q = "SELECT matter.id, actor_ref FROM matter 
+    $q = "SELECT matter.id, actor_ref FROM matter
         JOIN matter_actor_lnk ON matter.id = matter_actor_lnk.matter_id
 		    WHERE matter_actor_lnk.actor_id = $aqs_id
 		    AND country = '$AQSpatent->country'
