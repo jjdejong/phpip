@@ -293,7 +293,7 @@ foreach ($mandateOn as $AQSpatent) {
       } else {
         $fee = 0;
       }
-      if (isset($renewal->invoicedFees->total) && $renewal->paymentDate) { // Cost provided - insert with costs
+      if (isset($renewal->invoicedFees->total) && strlen($renewal->paymentDate) > 0) { // Cost provided - insert with costs
         $q = "INSERT INTO task (code, detail, done_date, due_date, currency, cost, fee, notes, trigger_id, step, invoice_step, created_at, creator, updated_at)
 				    VALUES ('REN', '$renewal->year', '$renewal->paymentDate', '$renewal->dueDate', '$renewal->clientCurrency', $cost, $fee, 'Invoiced by AQS', $trigger_id, -1, 1, Now(), 'AQS', Now())";
         $result = $db->query($q);
@@ -312,7 +312,7 @@ foreach ($mandateOn as $AQSpatent) {
         } else {
           $somethingupdated = "estimated cost $cost";
         }
-      } elseif (!$renewal->invoicedFees->total && $renewal->paymentDate) {
+      } elseif (!$renewal->invoicedFees->total && strlen($renewal->paymentDate) > 0) {
         // No costs provided but paid
         $q = "INSERT INTO task (code, detail, done_date, due_date, trigger_id, step, invoice_step, created_at, creator, updated_at)
 				    VALUES ('REN', '$renewal->year', '$renewal->paymentDate', '$renewal->dueDate', '$trigger_id', -1, 1, Now(), 'AQS', Now())";
@@ -322,7 +322,7 @@ foreach ($mandateOn as $AQSpatent) {
         } else {
           $somethingupdated = "paid on $renewal->paymentDate but not invoiced";
         }
-      } elseif ($renewal->invoicedFees->total && !$renewal->paymentDate) {
+      } elseif (isset($renewal->invoicedFees->total) && !$renewal->paymentDate) {
         // Invoiced but no payment date
         $q = "INSERT INTO task (code, detail, due_date, currency, cost, fee, notes, trigger_id, created_at, creator, updated_at)
 				    VALUES ('REN', '$renewal->year', '$renewal->dueDate', '$renewal->clientCurrency', $cost, $fee, 'Invoiced by AQS', '$trigger_id', Now(), 'AQS', Now())";
