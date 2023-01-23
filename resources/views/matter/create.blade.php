@@ -1,6 +1,5 @@
 <form id="createMatterForm" autocomplete="off" class="ui-front">
   <input type="hidden" name="operation" value="{{ $operation ?? "new" }}">
-  <input type="hidden" name="parent_id" value="{{ $parent_matter->id ?? '' }}">
   <div class="form-group row">
     <label for="category" class="col-4 col-form-label font-weight-bold">Category</label>
     <div class="col-8">
@@ -8,6 +7,26 @@
       <input type="text" class="form-control" data-ac="/category/autocomplete" data-actarget="category_code" data-aclength="0" placeholder="{{ $category['name'] ?? ( $parent_matter->category->category ??  '' ) }}" autocomplete="off">
     </div>
   </div>
+  @if ( $operation == 'ops' )
+  <div class="form-group row">
+    <label for="app_num" class="col-4 col-form-label font-weight-bold">App Number</label>
+    <div class="col-8">
+      <input type="text" name="app_num" class="form-control" placeholder="CCYYNNNNNN">
+    </div>
+    <small class="form-text text-muted">
+      Application number in DOCDB format: country code followed by the number (only digits, no spaces and without the ending ".n"). 
+      For numbers without a two-digit year (like the US), insert YY. For PCTs: CCYYYY012345W.
+    </small>
+  </div>
+  <div class="form-group row">
+    <label for="client_id" class="col-4 col-form-label font-weight-bold">Client</label>
+    <div class="col-8">
+      <input type="hidden" name="client_id">
+      <input type="text" class="form-control" data-ac="/actor/autocomplete" data-actarget="client_id" autocomplete="off">
+    </div>
+  </div>
+  @else
+  <input type="hidden" name="parent_id" value="{{ $parent_matter->id ?? '' }}">
   <div class="form-group row">
     <label for="country" class="col-4 col-form-label font-weight-bold">Country</label>
     <div class="col-8">
@@ -29,6 +48,7 @@
       <input type="text" class="form-control" data-ac="/type/autocomplete" data-actarget="type_code" data-aclength="0" value="{{ $parent_matter->type->type ?? '' }}" autocomplete="off">
     </div>
   </div>
+  @endif
   <div class="form-group row">
     <label for="caseref" class="col-4 col-form-label font-weight-bold">Caseref</label>
     <div class="col-8">
@@ -62,6 +82,10 @@
   @endif
 
   <div>
+    @if ( $operation == 'ops' )
+    <button type="button" id="createFamilySubmit" class="btn btn-primary btn-block">Create</button>
+    @else
     <button type="button" id="createMatterSubmit" class="btn btn-primary btn-block">Create</button>
+    @endif
   </div>
 </form>
