@@ -219,7 +219,7 @@ class MatterController extends Controller
                 $new_matter->grant()->save($parent_matter->grant->replicate());
             }
 
-            // Insert "entered" event
+            // Insert "entered" event tracing the actual date of the step
             $new_matter->events()->create(["code" => 'ENT', "event_date" => now()]);
             // Insert "Parent filed" event tracing the filing number of the parent PCT or EP
             $new_matter->events()->create(['code' => 'PFIL', 'alt_matter_id' => $request->parent_id]);
@@ -236,18 +236,17 @@ class MatterController extends Controller
     {
         $this->authorize('create', Matter::class);
         $this->validate($request, [
-            'app_num' => 'required',
+            'docnum' => 'required',
             'caseref' => 'required',
             'category_code' => 'required',
             'client_id' => 'required'
         ]);
 
-        $apps = collect($this->getOPSfamily($request->app_num));
-        $ep_app = $apps->where('app.country' == 'EP')->keys()->first();
-        $pct_app = $apps->where('pub.country' == 'WO')->keys()->first();
+        $apps = collect($this->getOPSfamily($request->docnum));
         $pct_id = 0;
         $first_app_id = 0;
-        foreach ($apps as $key => &$app) {
+        $matter_id_num = [];
+        foreach ($apps as $key => $app) {
             $request->merge([
               'country' => $app['app']['country'],
               'creator' => Auth::user()->login
@@ -255,11 +254,14 @@ class MatterController extends Controller
             if ($app['pct'] != null) {
                 $request->merge(['origin' => 'WO']);
             }
+            $parent_num = '';
             if ($app['div'] != null) {
                 $request->merge(['type_code' => 'DIV']);
+                $parent_num = $app['div'];
             }
             if ($app['cnt'] != null) {
                 $request->merge(['type_code' => 'CNT']);
+                $parent_num = $app['cnt'];
             }
 
             // Unique UID handling
@@ -277,8 +279,10 @@ class MatterController extends Controller
                 $request->merge(['idx' => $idx + 1]);
             }
 
-            $new_matter = Matter::create($request->except(['_token', '_method', 'app_num', 'client_id']));
-            $app['matter_id'] = $new_matter->id;
+            $new_matter = Matter::create($request->except(['_token', '_method', 'docnum', 'client_id']));
+            $matter_id_num[$app['app']['number']] = $new_matter->id;
+                   
+            //return response()->json(['errors' => ['message' => $apps[$key]]]);
             if ($app['app']['country'] == 'WO') {
                 $pct_id = $new_matter->id;
             }
@@ -294,8 +298,18 @@ class MatterController extends Controller
                 $new_matter->parent_id = $pct_id;
                 $new_matter->events()->create(['code' => 'PFIL', 'alt_matter_id' => $pct_id]);
             }
-            $new_matter->events()->create(["code" => 'FIL', "event_date" => $app['app']['date'], 'detail' => $app['app']['number']]);
-            $new_matter->events()->create(["code" => 'PUB', "event_date" => $app['pub']['date'], 'detail' => $app['pub']['number']]);
+            if ($parent_num) {
+                //return response()->json(['errors' => ['message' => $matter_id_num]]);
+                $new_matter->events()->create(["code" => 'ENT', "event_date" => $app['app']['date'], 'detail' => 'Child filing date']);
+                $parent = $apps->where('app.number', $parent_num)->first();
+                $new_matter->events()->create(["code" => 'FIL', "event_date" => $parent['app']['date'], 'detail' => $app['app']['number']]);
+                $new_matter->parent_id = $matter_id_num["$parent_num"];
+            } else {
+                $new_matter->events()->create(["code" => 'FIL', "event_date" => $app['app']['date'], 'detail' => $app['app']['number']]);
+            }
+            if (array_key_exists('pub', $app)) {
+                $new_matter->events()->create(["code" => 'PUB', "event_date" => $app['pub']['date'], 'detail' => $app['pub']['number']]);
+            }
             if (array_key_exists('grt', $app)) {
                 $new_matter->events()->create(["code" => 'GRT', "event_date" => $app['grt']['date'], 'detail' => $app['grt']['number']]);
             }
@@ -801,7 +815,7 @@ class MatterController extends Controller
         return view('matter.summary', compact('description'));
     }
 
-    public static function getOPSfamily($app_num)
+    public static function getOPSfamily($docnum)
     {
         $ops_key = env('OPS_APP_KEY');
 		$ops_secret = env('OPS_SECRET');
@@ -810,8 +824,11 @@ class MatterController extends Controller
             'Authorization' => 'Basic ' .base64_encode($ops_key.':'.$ops_secret)
         ])->asForm()->post($token_url, ['grant_type' => 'client_credentials']);
         
-        //$ops_legal = "http://ops.epo.org/3.2/rest-services/family/application/docdb/$app_num/legal.json";
-        $ops_biblio = "https://ops.epo.org/3.2/rest-services/family/application/docdb/$app_num/biblio.json";
+        //$ops_legal = "http://ops.epo.org/3.2/rest-services/family/application/docdb/$docnum/legal.json";
+        // Using application number
+        //$ops_biblio = "https://ops.epo.org/3.2/rest-services/family/application/docdb/$docnum/biblio.json";
+        // Using publication number
+        $ops_biblio = "https://ops.epo.org/3.2/rest-services/family/publication/docdb/$docnum/biblio.json";
         $ops_response = Http::withToken($token_response['access_token'])
             ->asForm()
             ->get($ops_biblio);
@@ -819,13 +836,13 @@ class MatterController extends Controller
         //$ops = $ops_response->collect();
 
         if ($ops_response->clientError()) {
-            return response()->json(['errors' => ['app_num' => ['Number not found']], 'message' => 'Number not found in OPS']);
+            return response()->json(['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS']);
         }
 
         if ($ops_response->serverError()) {
-            return response()->json(['errors' => ['app_num' => ['OPS server error']], 'message' => 'OPS server error, try again']);
+            return response()->json(['errors' => ['docnum' => ['OPS server error']], 'message' => 'OPS server error, try again']);
         }
-       
+
         $members = collect($ops_response['ops:world-patent-data']['ops:patent-family']['ops:family-member']);
         // Sort members by increasing doc-id, i.e. by increasing filing date so that the first is the priority application
         $sorted = $members->sortBy(function ($member, $key) {
@@ -835,27 +852,12 @@ class MatterController extends Controller
         $grouped = $sorted->groupBy(function ($member, $key) {
             return $member['application-reference']['@doc-id'];
         });
-        
+        //return $grouped;
         $apps = [];
         $app = $grouped->first()->first()['priority-claim']['document-id'];
         $apps[0]['pri']['date'] = date("Y-m-d", strtotime($app['date']['$']));
         $apps[0]['pri']['country'] = $app['country']['$'];
         $apps[0]['pri']['number'] = $app['doc-number']['$'];
-        
-        // Title
-        $apps[0]['pri']['title'] = collect($grouped->first()->first()['exchange-document']['bibliographic-data']['invention-title'])->last()['$'];
-
-        // Each inventor is under [i]['inventor-name']['name']['$'] both in "epodoc" and "original" format indicated by [i]['@data-format']
-        // take the higher half of the array indexes in original format
-         $inventors = collect($grouped->first()->first()['exchange-document']['bibliographic-data']['parties']['inventors']['inventor'])
-            ->where('@data-format', 'original');
-         $apps[0]['pri']['inventors'] = $inventors->values()->pluck('inventor-name.name.$');
-
-        // Each applicant is under [i]['applicant-name']['name']['$'] both in "epodoc" and "original" format indicated by [i]['@data-format']
-        // take the higher half of the array indexes in original format
-        $applicants = collect($grouped->first()->first()['exchange-document']['bibliographic-data']['parties']['applicants']['applicant'])
-            ->where('@data-format', 'original');
-        $apps[0]['pri']['applicants'] = $applicants->values()->pluck('applicant-name.name.$');
         
         $i = 0;
         foreach ($grouped as $item) {
@@ -865,13 +867,38 @@ class MatterController extends Controller
 
             if ($app['kind']['$'] == 'W') {
                 $apps[$i]['app']['country'] = 'WO';
-                $apps[$i]['app']['number'] = $app['country']['$'] . $app['doc-number']['$'];
+                $app_number = $app['country']['$'] . $app['doc-number']['$'];
             } else {
                 $apps[$i]['app']['country'] = $app['country']['$'];
-                $apps[$i]['app']['number'] = $app['doc-number']['$'];
+                $app_number = $app['doc-number']['$'];
+            }
+            // Remove year from US app number
+            if ($app['country']['$'] == 'US') {
+                $apps[$i]['app']['number'] = substr($app_number, -8);
+            } else {
+                $apps[$i]['app']['number'] = $app_number;
+            }
+
+            // Data taken from EP case, if present
+            if ($app['country']['$'] == 'EP') {
+                // Title (the last is the English title)
+                $apps[0]['pri']['title'] = collect($item->first()['exchange-document']['bibliographic-data']['invention-title'])->last()['$'];
+
+                // Each inventor is under [i]['inventor-name']['name']['$'] both in "epodoc" and "original" format indicated by [i]['@data-format']
+                // take the higher half of the array indexes in original format
+                $inventors = collect($item->first()['exchange-document']['bibliographic-data']['parties']['inventors']['inventor'])
+                    ->where('@data-format', 'original');
+                $apps[0]['pri']['inventors'] = $inventors->values()->pluck('inventor-name.name.$');
+
+                // Each applicant is under [i]['applicant-name']['name']['$'] both in "epodoc" and "original" format indicated by [i]['@data-format']
+                // take the higher half of the array indexes in original format
+                $applicants = collect($item->first()['exchange-document']['bibliographic-data']['parties']['applicants']['applicant'])
+                    ->where('@data-format', 'original');
+                $apps[0]['pri']['applicants'] = $applicants->values()->pluck('applicant-name.name.$');
             }
 
             foreach ($item as $subitem) {
+                // Again take the first of each, in DOCDB format
                 $pub = $subitem['publication-reference']['document-id'][0];
                 switch ($pub['kind']['$']) {
                     case 'A':
@@ -894,9 +921,16 @@ class MatterController extends Controller
                 // Possible divisional
                 $div = collect($subitem['priority-claim'])->where('priority-linkage-type.$', '3')->first();
                 $apps[$i]['div'] = @$div['document-id']['doc-number']['$'];
+                if ($div && $pub['country']['$'] == 'US') {
+                    $apps[$i]['div'] = substr($apps[$i]['div'], -8);
+                }
                 // Possible continuation
-                $div = collect($subitem['priority-claim'])->where('priority-linkage-type.$', '1')->first();
+                $div = collect($subitem['priority-claim'])->whereIn('priority-linkage-type.$', ['1', 'C'])->first();
                 $apps[$i]['cnt'] = @$div['document-id']['doc-number']['$'];
+                if ($div && $pub['country']['$'] == 'US') {
+                    $apps[$i]['cnt'] = substr($apps[$i]['cnt'], -8);
+                }
+                $apps[$i]['matter_id'] = 0;
             }
             $i++;
         }

@@ -9,13 +9,15 @@
   </div>
   @if ( $operation == 'ops' )
   <div class="form-group row">
-    <label for="app_num" class="col-4 col-form-label font-weight-bold">App Number</label>
+    <label for="docnum" class="col-4 col-form-label font-weight-bold">Pub Number</label>
     <div class="col-8">
-      <input type="text" name="app_num" class="form-control" placeholder="CCYYNNNNNN">
+      <input type="text" name="docnum" class="form-control" placeholder="CCNNNNNN">
     </div>
     <small class="form-text text-muted">
-      Application number in DOCDB format: country code followed by the number (only digits, no spaces and without the ending ".n"). 
-      For numbers without a two-digit year (like the US), insert YY. For PCTs: CCYYYY012345W.
+      Publication number prefixed with the country code and optionally suffixed with the kind code. 
+      No spaces nor non-alphanumeric characters. 
+      {{-- Application number in DOCDB format: country code followed by the number (only digits, no spaces and without the ending ".n"). 
+      For numbers without a two-digit year (like the US), insert YY. For PCTs: CCYYYY012345W. --}}
     </small>
   </div>
   <div class="form-group row">

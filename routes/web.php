@@ -45,7 +45,7 @@ Route::group(['middleware' => 'auth'], function () {
         return view('matter.createN', compact('parent_matter'));
     });
     Route::post('matter/storeN', 'MatterController@storeN');
-    Route::get('matter/getOPSfamily/{app_num}', 'MatterController@getOPSfamily');
+    Route::get('matter/getOPSfamily/{docnum}', 'MatterController@getOPSfamily');
     Route::post('matter/storeFamily', 'MatterController@storeFamily');
     Route::post('matter/clear-tasks', 'HomeController@clearTasks');
 
