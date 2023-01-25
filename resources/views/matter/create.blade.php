@@ -62,6 +62,10 @@
   @endif
 
   <div>
-    <button type="button" id="createMatterSubmit" class="btn btn-primary">Create</button>
+    @if ( $operation == 'ops' )
+    <button type="button" id="createFamilySubmit" class="btn btn-primary btn-block">Create</button>
+    @else
+    <button type="button" id="createMatterSubmit" class="btn btn-primary btn-block">Create</button>
+    @endif
   </div>
 </form>

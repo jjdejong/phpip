@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actor;
 use App\Matter;
 use App\Event;
 use App\ActorPivot;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Http;
 
 class MatterController extends Controller
 {
@@ -63,10 +65,10 @@ class MatterController extends Controller
     public function create(Request $request)
     {
         $this->authorize('create', Matter::class);
-        $operation = $request->input('operation', 'new'); // new, clone, child
+        $operation = $request->input('operation', 'new'); // new, clone, child, ops
         $category = [];
-        $category_code = $request->input('category');
-        if ($operation != 'new') {
+        $category_code = $request->input('category', 'PAT');
+        if ($operation != 'new' && $operation != 'ops') {
             $parent_matter = Matter::with('container', 'countryInfo', 'originInfo', 'category', 'type')
                 ->find($request->matter_id);
             if ($operation == 'clone') {
@@ -77,16 +79,14 @@ class MatterController extends Controller
             }
         } else {
             $parent_matter = new Matter; // Create empty matter object to avoid undefined errors in view
-            if ($category_code != '') {
-                $ref_prefix = \App\Category::find($category_code)['ref_prefix'];
-                $category = [
-                    'code' => $category_code,
-                    'next_caseref' =>  Matter::where('caseref', 'like', $ref_prefix . '%')
-                        ->max('caseref'),
-                    'name' => \App\Category::find($category_code)['category']
-                ];
-                ++$category['next_caseref'];
-            }
+            $ref_prefix = \App\Category::find($category_code)['ref_prefix'];
+            $category = [
+                'code' => $category_code,
+                'next_caseref' =>  Matter::where('caseref', 'like', $ref_prefix . '%')
+                    ->max('caseref'),
+                'name' => \App\Category::find($category_code)['category']
+            ];
+            ++$category['next_caseref'];
         }
         return view('matter.create', compact('parent_matter', 'operation', 'category'));
     }
@@ -220,7 +220,7 @@ class MatterController extends Controller
                 $new_matter->grant()->save($parent_matter->grant->replicate());
             }
 
-            // Insert "entered" event
+            // Insert "entered" event tracing the actual date of the step
             $new_matter->events()->create(["code" => 'ENT', "event_date" => now()]);
             // Insert "Parent filed" event tracing the filing number of the parent PCT or EP
             $new_matter->events()->create(['code' => 'PFIL', 'alt_matter_id' => $request->parent_id]);
@@ -231,6 +231,98 @@ class MatterController extends Controller
         }
 
         return response()->json(['redirect' => "/matter?Ref=$request->caseref&origin=$parent_matter->country"]);
+    }
+
+    public function storeFamily(Request $request)
+    {
+        $this->authorize('create', Matter::class);
+        $this->validate($request, [
+            'docnum' => 'required',
+            'caseref' => 'required',
+            'category_code' => 'required',
+            'client_id' => 'required'
+        ]);
+
+        $apps = collect($this->getOPSfamily($request->docnum));
+        $pct_id = 0;
+        $first_app_id = 0;
+        $matter_id_num = [];
+        foreach ($apps as $key => $app) {
+            $request->merge([
+              'country' => $app['app']['country'],
+              'creator' => Auth::user()->login
+            ]);
+            if ($app['pct'] != null) {
+                $request->merge(['origin' => 'WO']);
+            }
+            $parent_num = '';
+            if ($app['div'] != null) {
+                $request->merge(['type_code' => 'DIV']);
+                $parent_num = $app['div'];
+            }
+            if ($app['cnt'] != null) {
+                $request->merge(['type_code' => 'CNT']);
+                $parent_num = $app['cnt'];
+            }
+
+            // Unique UID handling
+            $matters = Matter::where([
+                ['caseref', $request->caseref],
+                ['country', $request->country],
+                ['category_code', $request->category_code],
+                ['origin', $request->origin],
+                ['type_code', $request->type_code]
+            ]);
+            
+            $idx = $matters->count();
+
+            if ($idx > 0) {
+                $request->merge(['idx' => $idx + 1]);
+            }
+
+            $new_matter = Matter::create($request->except(['_token', '_method', 'docnum', 'client_id']));
+            $matter_id_num[$app['app']['number']] = $new_matter->id;
+                   
+            if ($app['app']['country'] == 'WO') {
+                $pct_id = $new_matter->id;
+            }
+            if ($key == 0) {
+                $first_app_id = $new_matter->id;
+                $new_matter->classifiersNative()->create(['type_code' => 'TIT', 'value' => $app['pri']['title']]);
+                $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'CLI', 'shared' => 1]);
+                $applicants = collect($app['pri']['applicants'])->implode('; ');
+                if (strtolower($applicants) == strtolower(Actor::find($request->client_id)->name)) {
+                    $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'APP', 'shared' => 1]);
+                }
+                $new_matter->notes = 'Applicants: ' .$applicants ."\nInventors: " .collect($app['pri']['inventors'])->implode(' - ');
+            } else {
+                $new_matter->container_id = $first_app_id;
+                $new_matter->events()->create(["code" => 'PRI', 'alt_matter_id' => $first_app_id]);
+            }
+            if ($app['pct'] != null && $pct_id != 0) {
+                $new_matter->parent_id = $pct_id;
+                $new_matter->events()->create(['code' => 'PFIL', 'alt_matter_id' => $pct_id]);
+            }
+            if ($parent_num) {
+                //return response()->json(['errors' => ['message' => $matter_id_num]]);
+                $new_matter->events()->create(["code" => 'ENT', "event_date" => $app['app']['date'], 'detail' => 'Child filing date']);
+                $parent = $apps->where('app.number', $parent_num)->first();
+                $new_matter->events()->create(["code" => 'FIL', "event_date" => $parent['app']['date'], 'detail' => $app['app']['number']]);
+                $new_matter->parent_id = $matter_id_num["$parent_num"];
+            } else {
+                $new_matter->events()->create(["code" => 'FIL', "event_date" => $app['app']['date'], 'detail' => $app['app']['number']]);
+            }
+            if (array_key_exists('pub', $app)) {
+                $new_matter->events()->create(["code" => 'PUB', "event_date" => $app['pub']['date'], 'detail' => $app['pub']['number']]);
+            }
+            if (array_key_exists('grt', $app)) {
+                $new_matter->events()->create(["code" => 'GRT', "event_date" => $app['grt']['date'], 'detail' => $app['grt']['number']]);
+            }
+
+            $new_matter->save();
+        }
+
+        return response()->json(['redirect' => "/matter?Ref=$request->caseref"]);
     }
 
     /**
@@ -726,5 +818,144 @@ class MatterController extends Controller
     {
         $description = $matter->getDescription($matter->id, $lang);
         return view('matter.summary', compact('description'));
+    }
+
+    public static function getOPSfamily($docnum)
+    {
+        $ops_key = env('OPS_APP_KEY');
+		$ops_secret = env('OPS_SECRET');
+        $token_url = 'https://ops.epo.org/3.2/auth/accesstoken';
+        $token_response = Http::withHeaders([
+            'Authorization' => 'Basic ' .base64_encode($ops_key.':'.$ops_secret)
+        ])->asForm()->post($token_url, ['grant_type' => 'client_credentials']);
+        
+        //$ops_legal = "http://ops.epo.org/3.2/rest-services/family/application/docdb/$docnum/legal.json";
+        // Using application number
+        //$ops_biblio = "https://ops.epo.org/3.2/rest-services/family/application/docdb/$docnum/biblio.json";
+        // Using publication number
+        $ops_biblio = "https://ops.epo.org/3.2/rest-services/family/publication/docdb/$docnum/biblio.json";
+        $ops_response = Http::withToken($token_response['access_token'])
+            ->asForm()
+            ->get($ops_biblio);
+
+        //$ops = $ops_response->collect();
+
+        if ($ops_response->clientError()) {
+            return response()->json(['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS']);
+        }
+
+        if ($ops_response->serverError()) {
+            return response()->json(['errors' => ['docnum' => ['OPS server error']], 'message' => 'OPS server error, try again']);
+        }
+
+        $members = collect($ops_response['ops:world-patent-data']['ops:patent-family']['ops:family-member']);
+        // Sort members by increasing doc-id, i.e. by increasing filing date so that the first is the priority application
+        $sorted = $members->sortBy(function ($member, $key) {
+            return $member['application-reference']['@doc-id'];
+        });
+        // Group all members by doc-id, so that publications and grants appear in a same record (yet as two arrays)
+        $grouped = $sorted->groupBy(function ($member, $key) {
+            return $member['application-reference']['@doc-id'];
+        });
+        //return $grouped;
+        $apps = [];
+        $app = $grouped->first()->first()['priority-claim']['document-id'];
+        $apps[0]['pri']['date'] = date("Y-m-d", strtotime($app['date']['$']));
+        $apps[0]['pri']['country'] = $app['country']['$'];
+        $apps[0]['pri']['number'] = $app['doc-number']['$'];
+        
+        $i = 0;
+        foreach ($grouped as $item) {
+            // The first is in DOCDB format, the other (not used) in EPODOC format
+            $app = $item->first()['application-reference']['document-id'];
+            $apps[$i]['app']['date'] = date("Y-m-d", strtotime($app['date']['$']));
+
+            if ($app['kind']['$'] == 'W') {
+                $apps[$i]['app']['country'] = 'WO';
+                $app_number = $app['country']['$'] . $app['doc-number']['$'];
+            } else {
+                $apps[$i]['app']['country'] = $app['country']['$'];
+                $app_number = $app['doc-number']['$'];
+            }
+            // Remove year from US app number
+            if ($app['country']['$'] == 'US') {
+                $apps[$i]['app']['number'] = substr($app_number, -8);
+            } else {
+                $apps[$i]['app']['number'] = $app_number;
+            }
+
+            // Data taken from EP case, if present
+            if ($app['country']['$'] == 'EP') {
+                // Title (the last is the English title)
+                $apps[0]['pri']['title'] = collect($item->first()['exchange-document']['bibliographic-data']['invention-title'])->last()['$'];
+
+                // Each inventor is under [i]['inventor-name']['name']['$'] both in "epodoc" and "original" format indicated by [i]['@data-format']
+                // take the higher half of the array indexes in original format
+                $inventors = collect($item->first()['exchange-document']['bibliographic-data']['parties']['inventors']['inventor'])
+                    ->where('@data-format', 'original');
+                $apps[0]['pri']['inventors'] = $inventors->values()->pluck('inventor-name.name.$');
+
+                // Each applicant is under [i]['applicant-name']['name']['$'] both in "epodoc" and "original" format indicated by [i]['@data-format']
+                // take the higher half of the array indexes in original format
+                $applicants = collect($item->first()['exchange-document']['bibliographic-data']['parties']['applicants']['applicant'])
+                    ->where('@data-format', 'original');
+                $apps[0]['pri']['applicants'] = $applicants->values()->pluck('applicant-name.name.$');
+            }
+
+            foreach ($item as $subitem) {
+                // Again take the first of each, in DOCDB format
+                $pub = $subitem['publication-reference']['document-id'][0];
+                switch ($pub['kind']['$']) {
+                    case 'A':
+                    case 'A1':
+                    case 'A2':
+                        $apps[$i]['pub']['country'] = $pub['country']['$'];
+                        $apps[$i]['pub']['number'] = $pub['doc-number']['$'];
+                        $apps[$i]['pub']['date'] = date("Y-m-d", strtotime($pub['date']['$']));
+                        break;
+                    case 'B':
+                    case 'B1':
+                        $apps[$i]['grt']['country'] = $pub['country']['$'];
+                        $apps[$i]['grt']['number'] = $pub['doc-number']['$'];
+                        $apps[$i]['grt']['date'] = date("Y-m-d", strtotime($pub['date']['$']));
+                        break;
+                }
+                // PCT origin
+                $pct_nat = collect($subitem['priority-claim'])->where('priority-linkage-type.$', 'W')->first();
+                $apps[$i]['pct'] = @$pct_nat['document-id']['doc-number']['$'];
+                // Possible divisional
+                $div = collect($subitem['priority-claim'])->where('priority-linkage-type.$', '3')->first();
+                $apps[$i]['div'] = @$div['document-id']['doc-number']['$'];
+                if ($div && $pub['country']['$'] == 'US') {
+                    $apps[$i]['div'] = substr($apps[$i]['div'], -8);
+                }
+                // Possible continuation
+                $div = collect($subitem['priority-claim'])->whereIn('priority-linkage-type.$', ['1', 'C'])->first();
+                $apps[$i]['cnt'] = @$div['document-id']['doc-number']['$'];
+                if ($div && $pub['country']['$'] == 'US') {
+                    $apps[$i]['cnt'] = substr($apps[$i]['cnt'], -8);
+                }
+                $apps[$i]['matter_id'] = 0;
+            }
+            $i++;
+        }
+
+        // Find EP validations (doesn't always work)
+        // $ep_app = collect($apps)->where('app.country', 'EP')->first()['app'];
+        // $ep_val = [];
+        // if ($ep_app) {
+        //     $ops = Http::withToken($token_response['access_token'])
+        //         ->asForm()->get("https://ops.epo.org/3.2/rest-services/legal/application/docdb/$ep_app[country].$ep_app[number].json")
+        //         ->json()['ops:world-patent-data']['ops:patent-family']['ops:family-member'];
+            
+        //     // Create list of validation countries identified by the EPO and remove null array elements
+        //     $ep_val = @collect($ops[0]['ops:legal'])->pluck('ops:L500EP.ops:L501EP.$')->reject(function ($item, $key) {
+        //         return $item == null;
+        //     });
+        // }
+
+        //return $grouped->values()->all();
+        //return $ep_val;
+        return $apps;
     }
 }
