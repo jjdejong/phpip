@@ -151,6 +151,10 @@ app.addEventListener('click', (e) => {
         submitModalForm('/matter/storeN', natMatterForm);
         break;
 
+    case 'createFamilySubmit':
+        submitModalForm('/matter/storeFamily', createMatterForm);
+        break;
+
     case 'createActorSubmit':
         submitModalForm('/actor', createActorForm);
         break;
