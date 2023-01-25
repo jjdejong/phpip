@@ -1,6 +1,5 @@
 <form id="createMatterForm" autocomplete="off" class="ui-front">
   <input type="hidden" name="operation" value="{{ $operation ?? "new" }}">
-  <input type="hidden" name="parent_id" value="{{ $parent_matter->id ?? '' }}">
   <div class="row">
     <label for="category" class="col-4 col-form-label fw-bold">Category</label>
     <div class="col-8">
@@ -8,6 +7,28 @@
       <input type="text" class="form-control" data-ac="/category/autocomplete" data-actarget="category_code" data-aclength="0" placeholder="{{ $category['name'] ?? ( $parent_matter->category->category ??  '' ) }}" autocomplete="off">
     </div>
   </div>
+  @if ( $operation == 'ops' )
+  <div class="row">
+    <label for="docnum" class="col-4 col-form-label fw-bold">Pub Number</label>
+    <div class="col-8">
+      <input type="text" name="docnum" class="form-control" placeholder="CCNNNNNN">
+    </div>
+    <small class="form-text text-muted">
+      Publication number prefixed with the country code and optionally suffixed with the kind code. 
+      No spaces nor non-alphanumeric characters. 
+      {{-- Application number in DOCDB format: country code followed by the number (only digits, no spaces and without the ending ".n"). 
+      For numbers without a two-digit year (like the US), insert YY. For PCTs: CCYYYY012345W. --}}
+    </small>
+  </div>
+  <div class="row">
+    <label for="client_id" class="col-4 col-form-label fw-bold">Client</label>
+    <div class="col-8">
+      <input type="hidden" name="client_id">
+      <input type="text" class="form-control" data-ac="/actor/autocomplete" data-actarget="client_id" autocomplete="off">
+    </div>
+  </div>
+  @else
+  <input type="hidden" name="parent_id" value="{{ $parent_matter->id ?? '' }}">
   <div class="row">
     <label for="country" class="col-4 col-form-label fw-bold">Country</label>
     <div class="col-8">
@@ -29,6 +50,7 @@
       <input type="text" class="form-control" data-ac="/type/autocomplete" data-actarget="type_code" data-aclength="0" value="{{ $parent_matter->type->type ?? '' }}" autocomplete="off">
     </div>
   </div>
+  @endif
   <div class="row">
     <label for="caseref" class="col-4 col-form-label fw-bold">Caseref</label>
     <div class="col-8">
@@ -63,9 +85,9 @@
 
   <div>
     @if ( $operation == 'ops' )
-    <button type="button" id="createFamilySubmit" class="btn btn-primary btn-block">Create</button>
+    <button type="button" id="createFamilySubmit" class="btn btn-primary">Create</button>
     @else
-    <button type="button" id="createMatterSubmit" class="btn btn-primary btn-block">Create</button>
+    <button type="button" id="createMatterSubmit" class="btn btn-primary">Create</button>
     @endif
   </div>
 </form>
