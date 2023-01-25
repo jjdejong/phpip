@@ -7,6 +7,8 @@ There are many IP rights management tools out there. They are all proprietary an
 
 Since we are patent attorneys and don't have resources for selling and maintaining our software, yet would like others to benefit from it, and hopefully contribute, we decided to open source it. This is an important step in reaching the goal of creating a tool adapted to the user's specific needs. We also designed phpIP to be extremely flexible, so that, hopefully, most users will be able to configure it (and not redesign it) to fit their needs.
 
+Head for the Wiki for further information.
+
 # Basic structure of phpIP #
 
 ## “Micro-kernel” structure ##
