@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actor;
 use App\Matter;
 use App\Event;
 use App\ActorPivot;
@@ -282,7 +283,6 @@ class MatterController extends Controller
             $new_matter = Matter::create($request->except(['_token', '_method', 'docnum', 'client_id']));
             $matter_id_num[$app['app']['number']] = $new_matter->id;
                    
-            //return response()->json(['errors' => ['message' => $apps[$key]]]);
             if ($app['app']['country'] == 'WO') {
                 $pct_id = $new_matter->id;
             }
@@ -290,6 +290,11 @@ class MatterController extends Controller
                 $first_app_id = $new_matter->id;
                 $new_matter->classifiersNative()->create(['type_code' => 'TIT', 'value' => $app['pri']['title']]);
                 $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'CLI', 'shared' => 1]);
+                $applicants = collect($app['pri']['applicants'])->implode('; ');
+                if (strtolower($applicants) == strtolower(Actor::find($request->client_id)->name)) {
+                    $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'APP', 'shared' => 1]);
+                }
+                $new_matter->notes = 'Applicants: ' .$applicants ."\nInventors: " .collect($app['pri']['inventors'])->implode(' - ');
             } else {
                 $new_matter->container_id = $first_app_id;
                 $new_matter->events()->create(["code" => 'PRI', 'alt_matter_id' => $first_app_id]);
