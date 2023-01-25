@@ -1,7 +1,7 @@
 #!/usr/bin/php
 
 <?php
-$aqs = parse_ini_file('aqsREST.ini');
+$aqs = parse_ini_file('aqs.ini');
 $jwt_payload = '{"sub":"OMNIPAT","qsh":"/me/patents","iat":' . time() . ',"exp":' . time() + 1000 . '}';
 
 function base64UrlEncode($data)
@@ -132,7 +132,7 @@ foreach ($mandateOn as $AQSpatent) {
     $result->close();
   } else {
     // No UID, try to find a unique ID with country, caseref, origin, type and annuity count
-    $q = "SELECT matter.id, actor_ref FROM matter 
+    $q = "SELECT matter.id, actor_ref FROM matter
         JOIN matter_actor_lnk ON matter.id = matter_actor_lnk.matter_id
 		    WHERE matter_actor_lnk.actor_id = $aqs_id
 		    AND country = '$AQSpatent->country'
@@ -242,7 +242,7 @@ foreach ($mandateOn as $AQSpatent) {
           $set[] = "invoice_step = 1";
         }
       }
-      if ($renewal->cancelled && $myRenewal->notes != 'Cancelled') {
+      if ($renewal->cancelled == '1' && $myRenewal->notes != 'Cancelled') {
         // Payment cancelled or unnecessary
         $set[] = "notes = 'Cancelled'";
       }
@@ -293,7 +293,7 @@ foreach ($mandateOn as $AQSpatent) {
       } else {
         $fee = 0;
       }
-      if (isset($renewal->invoicedFees->total) && $renewal->paymentDate) { // Cost provided - insert with costs
+      if (isset($renewal->invoicedFees->total) && strlen($renewal->paymentDate) > 0) { // Cost provided - insert with costs
         $q = "INSERT INTO task (code, detail, done_date, due_date, currency, cost, fee, notes, trigger_id, step, invoice_step, created_at, creator, updated_at)
 				    VALUES ('REN', '$renewal->year', '$renewal->paymentDate', '$renewal->dueDate', '$renewal->clientCurrency', $cost, $fee, 'Invoiced by AQS', $trigger_id, -1, 1, Now(), 'AQS', Now())";
         $result = $db->query($q);
@@ -312,7 +312,7 @@ foreach ($mandateOn as $AQSpatent) {
         } else {
           $somethingupdated = "estimated cost $cost";
         }
-      } elseif (!$renewal->invoicedFees->total && $renewal->paymentDate) {
+      } elseif (!$renewal->invoicedFees->total && strlen($renewal->paymentDate) > 0) {
         // No costs provided but paid
         $q = "INSERT INTO task (code, detail, done_date, due_date, trigger_id, step, invoice_step, created_at, creator, updated_at)
 				    VALUES ('REN', '$renewal->year', '$renewal->paymentDate', '$renewal->dueDate', '$trigger_id', -1, 1, Now(), 'AQS', Now())";
@@ -322,7 +322,7 @@ foreach ($mandateOn as $AQSpatent) {
         } else {
           $somethingupdated = "paid on $renewal->paymentDate but not invoiced";
         }
-      } elseif ($renewal->invoicedFees->total && !$renewal->paymentDate) {
+      } elseif (isset($renewal->invoicedFees->total) && !$renewal->paymentDate) {
         // Invoiced but no payment date
         $q = "INSERT INTO task (code, detail, due_date, currency, cost, fee, notes, trigger_id, created_at, creator, updated_at)
 				    VALUES ('REN', '$renewal->year', '$renewal->dueDate', '$renewal->clientCurrency', $cost, $fee, 'Invoiced by AQS', '$trigger_id', Now(), 'AQS', Now())";
@@ -332,7 +332,7 @@ foreach ($mandateOn as $AQSpatent) {
         } else {
           $somethingupdated = "invoiced cost $cost (but no payment date)";
         }
-      } elseif ($renewal->cancelled) {
+      } elseif ($renewal->cancelled == '1') {
         // Payment cancelled or unnecessary
         $q = "INSERT INTO task (code, detail, due_date, notes, trigger_id, created_at, creator, updated_at)
 				    VALUES ('REN', '$renewal->year', '$renewal->dueDate', 'Cancelled', '$trigger_id', Now(), 'AQS', Now())";
