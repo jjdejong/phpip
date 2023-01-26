@@ -16,7 +16,7 @@ class ActorRowEdit extends Component
     protected $rules = [
         'actorPivot.actor_id' => 'required|numeric',
         'actorPivot.actor_ref' => 'string',
-        'actorPivot.date' => 'date',
+        'actorPivot.date' => 'nullable|date',
         'actorPivot.rate' => 'numeric',
         'actorPivot.shared' => 'boolean',
         'actorPivot.display_order' => 'numeric',

@@ -20,9 +20,9 @@ class ActorAdd extends Component
         'actorPivot.matter_id' => 'required|numeric',
         'actorPivot.actor_id' => 'required|numeric',
         'actorPivot.role' => 'required|string',
-        'actorPivot.shared' => 'numeric',
-        'actorPivot.company_id' => 'numeric',
-        'actorPivot.date' => 'date',
+        'actorPivot.shared' => 'boolean',
+        'actorPivot.company_id' => 'nullable|numeric',
+        'actorPivot.date' => 'nullable|date',
         'actorPivot.actor_ref' => 'string',
         'actorPivot.creator' => 'string',
         'actorPivot.display_order' => 'numeric',
@@ -79,6 +79,7 @@ class ActorAdd extends Component
         $this->actorPivot->creator = Auth::user()->login;
 
         $this->validate();
+        //dd($this->actorPivot);
         $this->actorPivot->save();
         
         $this->mount();
