@@ -915,6 +915,7 @@ class MatterController extends Controller
                         break;
                     case 'B':
                     case 'B1':
+                    case 'B2':
                         $apps[$i]['grt']['country'] = $pub['country']['$'];
                         $apps[$i]['grt']['number'] = $pub['doc-number']['$'];
                         $apps[$i]['grt']['date'] = date("Y-m-d", strtotime($pub['date']['$']));
@@ -935,7 +936,6 @@ class MatterController extends Controller
                 if ($div && $pub['country']['$'] == 'US') {
                     $apps[$i]['cnt'] = substr($apps[$i]['cnt'], -8);
                 }
-                $apps[$i]['matter_id'] = 0;
             }
             $i++;
         }
