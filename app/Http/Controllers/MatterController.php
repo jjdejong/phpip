@@ -252,6 +252,9 @@ class MatterController extends Controller
               'country' => $app['app']['country'],
               'creator' => Auth::user()->login
             ]);
+            if ($app['app']['kind'] == 'P') {
+                $request->merge(['type_code' => 'PRO']);
+            }
             if ($app['pct'] != null) {
                 $request->merge(['origin' => 'WO']);
             }
@@ -869,7 +872,7 @@ class MatterController extends Controller
             // The first is in DOCDB format, the other (not used) in EPODOC format
             $app = $item->first()['application-reference']['document-id'];
             $apps[$i]['app']['date'] = date("Y-m-d", strtotime($app['date']['$']));
-
+            $apps[$i]['app']['kind'] = $app['kind']['$'];
             if ($app['kind']['$'] == 'W') {
                 $apps[$i]['app']['country'] = 'WO';
                 $app_number = $app['country']['$'] . $app['doc-number']['$'];
