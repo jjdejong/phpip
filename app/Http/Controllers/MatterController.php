@@ -934,7 +934,7 @@ class MatterController extends Controller
                     $apps[$i]['div'] = substr($apps[$i]['div'], -8);
                 }
                 // Possible continuation
-                $div = collect($subitem['priority-claim'])->whereIn('priority-linkage-type.$', ['1', 'C'])->first();
+                $div = collect($subitem['priority-claim'])->whereIn('priority-linkage-type.$', ['1', '2', 'C'])->first();
                 $apps[$i]['cnt'] = @$div['document-id']['doc-number']['$'];
                 if ($div && $pub['country']['$'] == 'US') {
                     $apps[$i]['cnt'] = substr($apps[$i]['cnt'], -8);
