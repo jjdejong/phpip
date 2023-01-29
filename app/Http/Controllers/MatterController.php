@@ -252,6 +252,9 @@ class MatterController extends Controller
               'country' => $app['app']['country'],
               'creator' => Auth::user()->login
             ]);
+            // Remove if set from a previous iteration
+            $request->request->remove('type_code');
+            $request->request->remove('origin');
             if ($app['app']['kind'] == 'P') {
                 $request->merge(['type_code' => 'PRO']);
             }
@@ -868,9 +871,13 @@ class MatterController extends Controller
         $apps[0]['pri']['number'] = $app['doc-number']['$'];
         
         $i = 0;
-        foreach ($grouped as $item) {
+        foreach ($grouped as $member) {
             // The first is in DOCDB format, the other (not used) in EPODOC format
-            $app = $item->first()['application-reference']['document-id'];
+            $app = $member->first()['application-reference']['document-id'];
+            // Don't want filings of EP translations
+            if ( $app['kind']['$'] == 'T') {
+                continue;
+            }
             $apps[$i]['app']['date'] = date("Y-m-d", strtotime($app['date']['$']));
             $apps[$i]['app']['kind'] = $app['kind']['$'];
             if ($app['kind']['$'] == 'W') {
@@ -881,33 +888,33 @@ class MatterController extends Controller
                 $app_number = $app['doc-number']['$'];
             }
             // Remove year from US app number
-            if ($app['country']['$'] == 'US') {
-                $apps[$i]['app']['number'] = substr($app_number, -8);
-            } else {
+            // if ($app['country']['$'] == 'US') {
+            //     $apps[$i]['app']['number'] = substr($app_number, -8);
+            // } else {
                 $apps[$i]['app']['number'] = $app_number;
-            }
+            //}
 
             // Data taken from EP case, if present
             if ($app['country']['$'] == 'EP') {
                 // Title (the last is the English title)
-                $apps[0]['pri']['title'] = collect($item->first()['exchange-document']['bibliographic-data']['invention-title'])->last()['$'];
+                $apps[0]['pri']['title'] = collect($member->first()['exchange-document']['bibliographic-data']['invention-title'])->last()['$'];
 
                 // Each inventor is under [i]['inventor-name']['name']['$'] both in "epodoc" and "original" format indicated by [i]['@data-format']
                 // take the higher half of the array indexes in original format
-                $inventors = collect($item->first()['exchange-document']['bibliographic-data']['parties']['inventors']['inventor'])
+                $inventors = collect($member->first()['exchange-document']['bibliographic-data']['parties']['inventors']['inventor'])
                     ->where('@data-format', 'original');
                 $apps[0]['pri']['inventors'] = $inventors->values()->pluck('inventor-name.name.$');
 
                 // Each applicant is under [i]['applicant-name']['name']['$'] both in "epodoc" and "original" format indicated by [i]['@data-format']
                 // take the higher half of the array indexes in original format
-                $applicants = collect($item->first()['exchange-document']['bibliographic-data']['parties']['applicants']['applicant'])
+                $applicants = collect($member->first()['exchange-document']['bibliographic-data']['parties']['applicants']['applicant'])
                     ->where('@data-format', 'original');
                 $apps[0]['pri']['applicants'] = $applicants->values()->pluck('applicant-name.name.$');
             }
 
-            foreach ($item as $subitem) {
+            foreach ($member as $event) {
                 // Again take the first of each, in DOCDB format
-                $pub = $subitem['publication-reference']['document-id'][0];
+                $pub = $event['publication-reference']['document-id'][0];
                 switch ($pub['kind']['$']) {
                     case 'A':
                     case 'A1':
@@ -925,20 +932,21 @@ class MatterController extends Controller
                         break;
                 }
                 // PCT origin
-                $pct_nat = collect($subitem['priority-claim'])->where('priority-linkage-type.$', 'W')->first();
+                $pct_nat = collect($event['priority-claim'])->where('priority-linkage-type.$', 'W')->first();
                 $apps[$i]['pct'] = @$pct_nat['document-id']['doc-number']['$'];
                 // Possible divisional
-                $div = collect($subitem['priority-claim'])->where('priority-linkage-type.$', '3')->first();
+                $div = collect($event['priority-claim'])->where('priority-linkage-type.$', '3')->first();
                 $apps[$i]['div'] = @$div['document-id']['doc-number']['$'];
-                if ($div && $pub['country']['$'] == 'US') {
-                    $apps[$i]['div'] = substr($apps[$i]['div'], -8);
-                }
+                // Take the year off the app number for the US, because it is wrong
+                // if ($div && $pub['country']['$'] == 'US') {
+                //     $apps[$i]['div'] = substr($apps[$i]['div'], -8);
+                // }
                 // Possible continuation
-                $div = collect($subitem['priority-claim'])->whereIn('priority-linkage-type.$', ['1', '2', 'C'])->first();
+                $div = collect($event['priority-claim'])->whereIn('priority-linkage-type.$', ['1', '2', 'C'])->first();
                 $apps[$i]['cnt'] = @$div['document-id']['doc-number']['$'];
-                if ($div && $pub['country']['$'] == 'US') {
-                    $apps[$i]['cnt'] = substr($apps[$i]['cnt'], -8);
-                }
+                // if ($div && $pub['country']['$'] == 'US') {
+                //     $apps[$i]['cnt'] = substr($apps[$i]['cnt'], -8);
+                // }
             }
             $i++;
         }

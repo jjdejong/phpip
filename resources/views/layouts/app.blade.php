@@ -314,6 +314,7 @@
           break;
 
         case 'createFamilySubmit':
+          createFamilySubmit.insertAdjacentHTML('afterbegin', '<i class="spinner-border spinner-border-sm" role="status" />');
           submitModalForm('/matter/storeFamily', createMatterForm);
           break;
 
