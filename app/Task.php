@@ -17,18 +17,23 @@ class Task extends Model
         'due_date',
         'done_date'
     ];
+    protected $casts = [
+        'due_date' => 'date:Y-m-d',
+        'done_date' => 'date:Y-m-d'
+    ];
 
-    public function setDueDateAttribute($value)
-    {
-        $locale = Carbon::getLocale();
-        $this->attributes['due_date'] = Carbon::createFromLocaleIsoFormat('L', $locale, $value);
-    }
+    // This is moved to the task's store() method, allowing easier programmatic date updates
+    // public function setDueDateAttribute($value)
+    // {
+    //     $locale = Carbon::getLocale();
+    //     $this->attributes['due_date'] = Carbon::createFromLocaleIsoFormat('L', $locale, $value);
+    // }
 
-    public function setDoneDateAttribute($value)
-    {
-        $locale = Carbon::getLocale();
-        $this->attributes['done_date'] = Carbon::createFromLocaleIsoFormat('L', $locale, $value);
-    }
+    // public function setDoneDateAttribute($value)
+    // {
+    //     $locale = Carbon::getLocale();
+    //     $this->attributes['done_date'] = Carbon::createFromLocaleIsoFormat('L', $locale, $value);
+    // }
 
     public function info()
     {

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Http;
+use SimpleXMLElement;
 
 class MatterController extends Controller
 {
@@ -324,8 +325,58 @@ class MatterController extends Controller
             if (array_key_exists('grt', $app)) {
                 $new_matter->events()->create(["code" => 'GRT', "event_date" => $app['grt']['date'], 'detail' => $app['grt']['number']]);
             }
-
-            $new_matter->save();
+            if (array_key_exists('procedure', $app)) {
+                foreach ($app['procedure'] as $step) {
+                    switch ($step['code']) {
+                        case 'EXRE':
+                            // Exam report
+                            $exa = $new_matter->events()->create(["code" => 'EXA', "event_date" => $step['dispatched']]);
+                            if ($step['replied'] && $exa->event_date < now()->subMonths(4)) {
+                                $exa->tasks()->create([
+                                    "code" => 'REP', 
+                                    "due_date" => $exa->event_date->addMonths(4), 
+                                    "done_date" => $step['replied'],
+                                    "done" => 1,
+                                    "detail" => 'Exam Report']);
+                            }
+                            break;
+                        case 'RFEE':
+                            // Renewals
+                            if ($ren = $new_matter->renewalsPending->where('detail', $step['ren_year'])->first()) {
+                                $ren->done_date = $step['ren_paid'];
+                            } else {
+                                $new_matter->filing->tasks()->create([
+                                    "code" => 'REN',
+                                    "detail" => $step['ren_year'],
+                                    "due_date" => $new_matter->filing->event_date->addYears($step['ren_year'] - 1)->lastOfMonth(),
+                                    "done_date" => $step['ren_paid'],
+                                    "done" => 1
+                                ]);
+                            }
+                            break;
+                        case 'IGRA':
+                            // Intention to grant
+                            $grt = $new_matter->events()->create(["code" => 'ALL', "event_date" => $step['dispatched']]);
+                            if ($step['grt_paid'] && $grt->event_date < now()->subMonths(4)) {
+                                $grt->tasks()->create([
+                                    "code" => 'PAY', 
+                                    "due_date" => $grt->event_date->addMonths(4), 
+                                    "done_date" => $step['grt_paid'],
+                                    "done" => 1,
+                                    "detail" => 'Grant Fee']);
+                            }
+                            break;
+                        case 'EXAM52':
+                            // Filing request (useful for divisional actual filing date)
+                            if ($new_matter->type_code == 'DIV') {
+                                $new_matter->events->where('code', 'ENT')->first()->event_date = $step['request'];
+                            }
+                            break;
+                    }
+                }
+            }
+            // The push() method saves the model with all its relationships
+            $new_matter->push();
         }
 
         return response()->json(['redirect' => "/matter?Ref=$request->caseref"]);
@@ -863,7 +914,7 @@ class MatterController extends Controller
         $grouped = $sorted->groupBy(function ($member, $key) {
             return $member['application-reference']['@doc-id'];
         });
-        //return $grouped;
+        // return $grouped;
         $apps = [];
         $app = $grouped->first()->first()['priority-claim']['document-id'];
         $apps[0]['pri']['date'] = date("Y-m-d", strtotime($app['date']['$']));
@@ -887,12 +938,7 @@ class MatterController extends Controller
                 $apps[$i]['app']['country'] = $app['country']['$'];
                 $app_number = $app['doc-number']['$'];
             }
-            // Remove year from US app number
-            // if ($app['country']['$'] == 'US') {
-            //     $apps[$i]['app']['number'] = substr($app_number, -8);
-            // } else {
-                $apps[$i]['app']['number'] = $app_number;
-            //}
+            $apps[$i]['app']['number'] = $app_number;
 
             // Data taken from EP case, if present
             if ($app['country']['$'] == 'EP') {
@@ -910,6 +956,45 @@ class MatterController extends Controller
                 $applicants = collect($member->first()['exchange-document']['bibliographic-data']['parties']['applicants']['applicant'])
                     ->where('@data-format', 'original');
                 $apps[0]['pri']['applicants'] = $applicants->values()->pluck('applicant-name.name.$');
+
+                // Get procedural steps'
+                $ops_procedure = 'https://ops.epo.org/3.2/rest-services/register/application/epodoc/EP' .$app_number .'/procedural-steps';
+                $ops_response = Http::withToken($token_response['access_token'])
+                    ->asForm()
+                    ->get($ops_procedure);
+
+                if ($ops_response->clientError()) {
+                    return response()->json(['errors' => ['docnum' => ['Number not found']], 'message' => 'EP events retrieval error. Family only partially imported']);
+                }
+                if ($ops_response->serverError()) {
+                    return response()->json(['errors' => ['docnum' => ['OPS server error']], 'message' => 'OPS server error. Family only partially imported']);
+                }
+
+                $xml = new SimpleXMLElement($ops_response);
+                $steps = $xml->xpath('//reg:procedural-step');
+                $proc =[];
+                foreach ($steps as $k => $step){
+                    $proc[$k]['code'] = (string) $step->xpath('reg:procedural-step-code')[0];
+                    if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_REQUEST"]/reg:date')) {
+                        $proc[$k]['request'] = date("Y-m-d", strtotime($date[0]));
+                    }
+                    if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_DISPATCH"]/reg:date')) {
+                        $proc[$k]['dispatched'] = date("Y-m-d", strtotime($date[0]));
+                    };
+                    if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_REPLY"]/reg:date')) {
+                        $proc[$k]['replied'] = date("Y-m-d", strtotime($date[0]));
+                    };
+                    if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_PAYMENT"]/reg:date')) {
+                        $proc[$k]['ren_paid'] = date("Y-m-d", strtotime($date[0]));
+                    };
+                    if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="GRANT_FEE_PAID"]/reg:date')) {
+                        $proc[$k]['grt_paid'] = date("Y-m-d", strtotime($date[0]));
+                    };
+                    if ($year = $step->xpath('reg:procedural-step-text[@step-text-type="YEAR"]')) {
+                        $proc[$k]['ren_year'] = (int) $year[0];
+                    };
+                }
+                $apps[$i]['procedure'] = $proc;
             }
 
             foreach ($member as $event) {
@@ -929,6 +1014,18 @@ class MatterController extends Controller
                         $apps[$i]['grt']['country'] = $pub['country']['$'];
                         $apps[$i]['grt']['number'] = $pub['doc-number']['$'];
                         $apps[$i]['grt']['date'] = date("Y-m-d", strtotime($pub['date']['$']));
+                        // Find EP validations (doesn't always work)
+                        // if ($pub['country']['$'] == 'EP') {
+                        //     $ops = Http::withToken($token_response['access_token'])
+                        //         ->asForm()->get("https://ops.epo.org/3.2/rest-services/legal/publication/docdb/EP" .$pub['doc-number']['$'] .'.json')
+                        //         ->json()['ops:world-patent-data']['ops:patent-family']['ops:family-member'];
+                            
+                        //     // Create list of validation countries identified by the EPO and remove null array elements
+                        //     $ep_val = @collect($ops[0]['ops:legal'])->pluck('ops:L500EP.ops:L501EP.$')->reject(function ($item, $key) {
+                        //         return $item == null;
+                        //     });
+                        //     $apps[$i]['grt']['validations'] = $ep_val;
+                        // }
                         break;
                 }
                 // PCT origin
@@ -937,36 +1034,12 @@ class MatterController extends Controller
                 // Possible divisional
                 $div = collect($event['priority-claim'])->where('priority-linkage-type.$', '3')->first();
                 $apps[$i]['div'] = @$div['document-id']['doc-number']['$'];
-                // Take the year off the app number for the US, because it is wrong
-                // if ($div && $pub['country']['$'] == 'US') {
-                //     $apps[$i]['div'] = substr($apps[$i]['div'], -8);
-                // }
                 // Possible continuation
                 $div = collect($event['priority-claim'])->whereIn('priority-linkage-type.$', ['1', '2', 'C'])->first();
                 $apps[$i]['cnt'] = @$div['document-id']['doc-number']['$'];
-                // if ($div && $pub['country']['$'] == 'US') {
-                //     $apps[$i]['cnt'] = substr($apps[$i]['cnt'], -8);
-                // }
             }
             $i++;
         }
-
-        // Find EP validations (doesn't always work)
-        // $ep_app = collect($apps)->where('app.country', 'EP')->first()['app'];
-        // $ep_val = [];
-        // if ($ep_app) {
-        //     $ops = Http::withToken($token_response['access_token'])
-        //         ->asForm()->get("https://ops.epo.org/3.2/rest-services/legal/application/docdb/$ep_app[country].$ep_app[number].json")
-        //         ->json()['ops:world-patent-data']['ops:patent-family']['ops:family-member'];
-            
-        //     // Create list of validation countries identified by the EPO and remove null array elements
-        //     $ep_val = @collect($ops[0]['ops:legal'])->pluck('ops:L500EP.ops:L501EP.$')->reject(function ($item, $key) {
-        //         return $item == null;
-        //     });
-        // }
-
-        //return $grouped->values()->all();
-        //return $ep_val;
         return $apps;
     }
 }

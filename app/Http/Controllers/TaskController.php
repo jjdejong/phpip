@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Task;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class TaskController extends Controller
 {
@@ -32,6 +33,10 @@ class TaskController extends Controller
             'cost' => 'nullable|numeric',
             'fee' => 'nullable|numeric'
         ]);
+        $request->merge(['due_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->due_date)]);
+        if ($request->filled('done_date')) {
+            $request->merge(['done_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->done_date)]);
+        }
         $request->merge([ 'creator' => Auth::user()->login ]);
         return Task::create($request->except(['_token', '_method']));
     }
