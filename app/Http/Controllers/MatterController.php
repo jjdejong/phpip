@@ -906,9 +906,10 @@ class MatterController extends Controller
         }
 
         $members = collect($ops_response['ops:world-patent-data']['ops:patent-family']['ops:family-member']);
-        // Sort members by increasing doc-id, i.e. by increasing filing date so that the first is the priority application
+        // Sort members by increasing filing date and doc-id, so that the first is the priority application
         $sorted = $members->sortBy(function ($member, $key) {
-            return $member['application-reference']['@doc-id'];
+            //return $member['application-reference']['@doc-id'];
+            return array_pop($member['application-reference']['document-id']['date']) .$member['application-reference']['@doc-id'];
         });
         // Group all members by doc-id, so that publications and grants appear in a same record (yet as two arrays)
         $grouped = $sorted->groupBy(function ($member, $key) {
@@ -929,6 +930,7 @@ class MatterController extends Controller
             if ( $app['kind']['$'] == 'T') {
                 continue;
             }
+            $apps[$i]['id'] = $member->first()['application-reference']['@doc-id'];
             $apps[$i]['app']['date'] = date("Y-m-d", strtotime($app['date']['$']));
             $apps[$i]['app']['kind'] = $app['kind']['$'];
             if ($app['kind']['$'] == 'W') {
