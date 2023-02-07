@@ -62,17 +62,21 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         $this->validate($request, [
-            'due_date' => 'sometimes',
+            'due_date' => 'sometimes|filled',
             'cost' => 'nullable|numeric',
             'fee' => 'nullable|numeric'
         ]);
         $request->merge([ 'updater' => Auth::user()->login ]);
+        if ($request->filled('done_date')) {
+            $request->merge(['done_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->done_date)]);
+        }
         // Remove task rule when due date is manually changed
-        if ($request->has('due_date')) {
+        if ($request->filled('due_date')) {
+            $request->merge(['due_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->due_date)]);
             $request->merge(['rule_used' => null]);
         }
         // Remove renewal from renewal management pipeline
-        if (($request->has('done_date') || $request->done) && $task->code == 'REN') {
+        if (($request->filled('done_date') || $request->done) && $task->code == 'REN') {
             $request->merge(['step' => -1]);
         }
         $task->update($request->except(['_token', '_method']));
