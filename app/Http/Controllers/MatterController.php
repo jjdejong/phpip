@@ -246,7 +246,7 @@ class MatterController extends Controller
 
         $apps = collect($this->getOPSfamily($request->docnum));
         $pct_id = 0;
-        $first_app_id = 0;
+        $first_app_id = null;
         $matter_id_num = [];
         foreach ($apps as $key => $app) {
             $request->merge([
@@ -297,11 +297,67 @@ class MatterController extends Controller
                 $first_app_id = $new_matter->id;
                 $new_matter->classifiersNative()->create(['type_code' => 'TIT', 'value' => $app['pri']['title']]);
                 $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'CLI', 'shared' => 1]);
-                $applicants = collect($app['pri']['applicants'])->implode('; ');
-                if (strtolower($applicants) == strtolower(Actor::find($request->client_id)->name)) {
-                    $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'APP', 'shared' => 1]);
+                if (strtolower($app['pri']['applicants'][0]) == strtolower(Actor::find($request->client_id)->name)) {
+                    $new_matter->actorPivot()->create([
+                        'actor_id' => $request->client_id, 
+                        'role' => 'APP',
+                        'shared' => 1]);
                 }
-                $new_matter->notes = 'Applicants: ' .$applicants ."\nInventors: " .collect($app['pri']['inventors'])->implode(' - ');
+                foreach ($app['pri']['applicants'] as $applicant) {
+                    // Search for phonetically equivalent in the actor table, and take first
+                    if (substr($applicant, -1) == ',') {
+                        // Remove ending comma
+                        $applicant = substr($applicant, 0, -1);
+                    }
+                    if ($actor = Actor::whereRaw("name SOUNDS LIKE '$applicant'")->first()) {
+                        // Some applicants are listed twice, with and without accents, so ignore unique key error for a second attempt
+                        $new_matter->actorPivot()->firstOrCreate([
+                            'actor_id' => $actor->id,
+                            'role' => 'APP',
+                            'shared' => 1
+                        ]);
+                    } else {
+                        $new_actor = Actor::create([
+                            'name' => $applicant, 
+                            'default_role' => 'APP',
+                            'phy_person' => 0,
+                            'notes' => "Inserted by OPS family create tool for matter ID $new_matter->id"
+                        ]);
+                        $new_matter->actorPivot()->firstOrCreate([
+                            'actor_id' => $new_actor->id,
+                            'role' => 'APP',
+                            'shared' => 1
+                        ]);
+                    }
+                }
+                foreach ($app['pri']['inventors'] as $inventor) {
+                    // Search for phonetically equivalent in the actor table, and take first
+                    if (substr($inventor, -1) == ',') {
+                        // Remove ending comma
+                        $inventor = substr($inventor, 0, -1);
+                    }
+                    if ($actor = Actor::whereRaw("name SOUNDS LIKE '$inventor'")->first()) {
+                        // Some inventors are listed twice, with and without accents, so ignore second attempt
+                        $new_matter->actorPivot()->firstOrCreate([
+                            'actor_id' => $actor->id,
+                            'role' => 'INV',
+                            'shared' => 1
+                        ]);
+                    } else {
+                        $new_actor = Actor::create([
+                            'name' => $inventor, 
+                            'default_role' => 'INV',
+                            'phy_person' => 1,
+                            'notes' => "Inserted by OPS family create tool for matter ID $new_matter->id"
+                        ]);
+                        $new_matter->actorPivot()->firstOrCreate([
+                            'actor_id' => $new_actor->id,
+                            'role' => 'INV',
+                            'shared' => 1
+                        ]);
+                    }
+                }
+                $new_matter->notes = 'Applicants: ' .collect($app['pri']['applicants'])->implode('; ') ."\nInventors: " .collect($app['pri']['inventors'])->implode(' - ');
             } else {
                 $new_matter->container_id = $first_app_id;
                 $new_matter->events()->create(["code" => 'PRI', 'alt_matter_id' => $first_app_id]);
@@ -331,7 +387,7 @@ class MatterController extends Controller
                         case 'EXRE':
                             // Exam report
                             $exa = $new_matter->events()->create(["code" => 'EXA', "event_date" => $step['dispatched']]);
-                            if ($step['replied'] && $exa->event_date < now()->subMonths(4)) {
+                            if (array_key_exists('replied', $step) && $exa->event_date < now()->subMonths(4)) {
                                 $exa->tasks()->create([
                                     "code" => 'REP', 
                                     "due_date" => $exa->event_date->addMonths(4), 
@@ -895,8 +951,6 @@ class MatterController extends Controller
             ->asForm()
             ->get($ops_biblio);
 
-        //$ops = $ops_response->collect();
-
         if ($ops_response->clientError()) {
             return response()->json(['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS']);
         }
@@ -915,7 +969,7 @@ class MatterController extends Controller
         $grouped = $sorted->groupBy(function ($member, $key) {
             return $member['application-reference']['@doc-id'];
         });
-        // return $grouped;
+
         $apps = [];
         $app = $grouped->first()->first()['priority-claim']['document-id'];
         $apps[0]['pri']['date'] = date("Y-m-d", strtotime($app['date']['$']));
