@@ -245,6 +245,9 @@ class MatterController extends Controller
         ]);
 
         $apps = collect($this->getOPSfamily($request->docnum));
+        if ($apps->has('errors') || $apps->has('exception')) {
+            return response()->json($apps);
+        }
         $pct_id = 0;
         $first_app_id = null;
         $matter_id_num = [];
@@ -435,7 +438,7 @@ class MatterController extends Controller
             $new_matter->push();
         }
 
-        return response()->json(['redirect' => "/matter?Ref=$request->caseref"]);
+        return response()->json(['redirect' => "/matter?Ref=$request->caseref&tab=1"]);
     }
 
     /**
@@ -952,11 +955,11 @@ class MatterController extends Controller
             ->get($ops_biblio);
 
         if ($ops_response->clientError()) {
-            return response()->json(['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS']);
+            return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS'];
         }
 
         if ($ops_response->serverError()) {
-            return response()->json(['errors' => ['docnum' => ['OPS server error']], 'message' => 'OPS server error, try again']);
+            return ['exception' => 'OPS server error', 'message' => 'OPS server error, try again'];
         }
 
         $members = collect($ops_response['ops:world-patent-data']['ops:patent-family']['ops:family-member']);

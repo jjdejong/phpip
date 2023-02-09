@@ -187,13 +187,14 @@
         body: body
       });
       switch (response.status) {
-        case 500:
-          response.text().then(function (text) {
-            alert("Unexpected result: " + text)
-          });
-          break;
+      //   case 500:
+      //     response.text().then(function (text) {
+      //       alert("Unexpected result: " + text)
+      //     });
+      //     break;
         case 419:
           alert("Token expired. Refresh the page");
+          location.reload();
           break;
         default:
           return response.json();
@@ -253,7 +254,7 @@
 
       switch (e.target.id) {
         case 'createMatterSubmit':
-          submitModalForm('/matter', createMatterForm);
+          submitModalForm('/matter', createMatterForm, null, e.target);
           break;
 
         case 'deleteMatter':
@@ -276,7 +277,7 @@
           break;
 
         case 'addTaskSubmit':
-          submitModalForm('/task', addTaskForm, 'reloadModal');
+          submitModalForm('/task', addTaskForm, 'reloadModal', e.target);
           break;
 
         case 'deleteEvent':
@@ -288,12 +289,12 @@
 
           // Specific processing of the event list modal
         case 'addEventSubmit':
-          submitModalForm('/event', addEventForm, 'reloadModal');
+          submitModalForm('/event', addEventForm, 'reloadModal', e.target);
           break;
 
           // Classifier list modal
         case 'addClassifierSubmit':
-          submitModalForm('/classifier', addClassifierForm, 'reloadModal');
+          submitModalForm('/classifier', addClassifierForm, 'reloadModal', e.target);
           break;
 
           // Generic processing of deletions
@@ -310,72 +311,71 @@
           break;
 
         case 'nationalizeSubmit':
-          submitModalForm('/matter/storeN', natMatterForm);
+          submitModalForm('/matter/storeN', natMatterForm, null, e.target);
           break;
 
         case 'createFamilySubmit':
-          createFamilySubmit.insertAdjacentHTML('afterbegin', '<i class="spinner-border spinner-border-sm" role="status" />');
-          submitModalForm('/matter/storeFamily', createMatterForm);
+          submitModalForm('/matter/storeFamily', createMatterForm, null, e.target);
           break;
 
         case 'createActorSubmit':
-          submitModalForm('/actor', createActorForm);
+          submitModalForm('/actor', createActorForm, null, e.target);
           break;
 
         case 'createUserSubmit':
-          submitModalForm('/user', createUserForm);
+          submitModalForm('/user', createUserForm, null, e.target);
           break;
 
         case 'createDActorSubmit':
-          submitModalForm('/default_actor', createDActorForm);
+          submitModalForm('/default_actor', createDActorForm, null, e.target);
           break;
 
         case 'createEventNameSubmit':
-          submitModalForm('/eventname', createEventForm);
+          submitModalForm('/eventname', createEventForm, null, e.target);
           break;
 
         case 'createCategorySubmit':
-          submitModalForm('/category', createCategoryForm);
+          submitModalForm('/category', createCategoryForm, null, e.target);
           break;
 
         case 'createRoleSubmit':
-          submitModalForm('/role', createRoleForm);
+          submitModalForm('/role', createRoleForm, null, e.target);
           break;
 
         case 'createTypeSubmit':
-          submitModalForm('/type', createTypeForm);
+          submitModalForm('/type', createTypeForm, null, e.target);
           break;
 
         case 'createRuleSubmit':
-          submitModalForm('/rule', createRuleForm);
+          submitModalForm('/rule', createRuleForm, null, e.target);
           break;
 
         case 'createFeeSubmit':
-          submitModalForm('/fee', createFeeForm);
+          submitModalForm('/fee', createFeeForm, null, e.target);
           break;
 
         case 'createClassSubmit':
-          submitModalForm('/document', createClassForm);
+          submitModalForm('/document', createClassForm, null, e.target);
           break;
 
         case 'createMemberSubmit':
-          submitModalForm('/template-member', createMemberForm);
+          submitModalForm('/template-member', createMemberForm, null, e.target);
           break;
 
         case 'createClassifierTypeSubmit':
-          submitModalForm('/classifier_type', createClassifierTypeForm);
+          submitModalForm('/classifier_type', createClassifierTypeForm, null, e.target);
           break;
 
         case 'sendDocument':
-          submitModalForm('/document', sendDocumentForm);
+          submitModalForm('/document', sendDocumentForm, null, e.target);
           break;
 
         case 'addEventTemplateSubmit':
-          submitModalForm('/event-class', addTemplateForm,'reloadPartial');
+          submitModalForm('/event-class', addTemplateForm,'reloadPartial', e.target);
           break;
 
         case 'addRuleTemplateSubmit':
-          submitModalForm('/rule-class', addTemplateForm,'reloadPartial');
+          submitModalForm('/rule-class', addTemplateForm,'reloadPartial', e.target);
           break;
 
         case 'deleteActor':
@@ -514,14 +514,18 @@
       if (e.target.matches(".noformat, textarea, [contenteditable]")) {
         e.target.classList.add("border", "border-info");
       } else if (e.target.matches('.filter')) {
-          // Manage filters input fields in Email template selection box
+        // Manage filters input fields in Email template selection box
         var url = new URL(window.location.origin + e.target.closest('[data-resource]').dataset.resource);
         if (e.target.value.length === 0) {
           url.searchParams.delete(e.target.name);
         } else {
           url.searchParams.set(e.target.name, e.target.value);
         }
-          reloadPart(url, 'tableList');
+        reloadPart(url, 'tableList');
+      } else {
+        if (e.target.classList.contains('is-invalid')) {
+          e.target.classList.remove('is-invalid');
+        }
       }
     });
 
@@ -588,8 +592,8 @@
             }
           },
           change: function(event, ui) {
-            if (!ui.item) {
-              // User has not selected anything
+            if (!ui.item && !e.target.hasAttribute('data-freetext')) {
+              // Clear the input if the user leaves without a selection
               e.target.value = "";
               if (e.target.form && e.target.hasAttribute('data-actarget')) {
                 e.target.form[e.target.dataset.actarget].value = "";
@@ -600,15 +604,29 @@
       }
     });
 
-    var submitModalForm = (target, Form, after) => {
+    // target: the URL to submit to, Form: the form element, after: optional further action, submitbutton: the button elemlent (optional)
+    var submitModalForm = (target, Form, after, submitbutton) => {
+      submitbutton.insertAdjacentHTML('afterbegin', '<i class="spinner-border spinner-border-sm" role="status" />');
       formData = new FormData(Form);
       params = new URLSearchParams(formData);
+      footerAlert.classList.remove("alert-danger");
+      footerAlert.innerHTML = "";
       fetchREST(target, 'POST', formData)
         .then(data => {
           if (data.errors) {
+            // Remove spinner if present
+            if (spinner = submitbutton.getElementsByTagName('i')[0]) {
+              spinner.remove();
+            }
             footerAlert.innerHTML = data.message;
             footerAlert.classList.add('alert-danger');
             processSubmitErrors(data.errors, Form);
+          } else if (data.exception) {
+            if (spinner = submitbutton.getElementsByTagName('i')[0]) {
+              spinner.remove();
+            }
+            footerAlert.innerHTML = data.message;
+            footerAlert.classList.add('alert-danger');
           } else if (data.redirect) {
             // Redirect to the created model (link returned by the controller store() function)
             location.href = data.redirect;
@@ -617,7 +635,7 @@
               fetchInto(contentSrc, ajaxModal.querySelector('.modal-body'));
             } else if (after === 'reloadPartial') {
                 fetchInto(contentSrc, app.querySelector('.reload-part'));
-              } else { // reloadPage
+            } else { // reloadPage
               location.reload();
             }
           }
@@ -636,6 +654,7 @@
         if (inputElt.type === 'file') {
           footerAlert.append(' ' + value[0]);
         } else {
+          inputElt.value = '';
           inputElt.placeholder = key + ' is required';
         }
         inputElt.classList.add('is-invalid');
