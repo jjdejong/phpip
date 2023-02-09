@@ -252,7 +252,8 @@ class MatterController extends Controller
         $container = [];
         $container_id = null;
         $matter_id_num = [];
-        if ($existing_fam = Matter::where('caseref', $request->caseref)->get()) {
+        $existing_fam = Matter::where('caseref', $request->caseref)->get();
+        if ($existing_fam->count()) {
             $container = $existing_fam->where('container_id', null)->first();
             $container_id = $container->id;
             foreach ($existing_fam as $existing_app) {
@@ -416,17 +417,12 @@ class MatterController extends Controller
                             break;
                         case 'RFEE':
                             // Renewals
-                            if ($ren = $new_matter->renewalsPending->where('detail', $step['ren_year'])->first()) {
-                                $ren->done_date = $step['ren_paid'];
-                            } else {
-                                $new_matter->filing->tasks()->create([
-                                    "code" => 'REN',
-                                    "detail" => $step['ren_year'],
-                                    "due_date" => $new_matter->filing->event_date->addYears($step['ren_year'] - 1)->lastOfMonth(),
-                                    "done_date" => $step['ren_paid'],
-                                    "done" => 1
-                                ]);
-                            }
+                            $new_matter->filing->tasks()->updateOrCreate(
+                                ["code" => 'REN', "detail" => $step['ren_year']],
+                                ["due_date" => $new_matter->filing->event_date->addYears($step['ren_year'] - 1)->lastOfMonth(),
+                                "done_date" => $step['ren_paid'],
+                                "done" => 1]
+                            );
                             break;
                         case 'IGRA':
                             // Intention to grant
