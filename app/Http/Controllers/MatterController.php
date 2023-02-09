@@ -966,7 +966,7 @@ class MatterController extends Controller
             ->get($ops_biblio);
 
         if ($ops_response->clientError()) {
-            return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS'];
+            return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS Family'];
         }
 
         if ($ops_response->serverError()) {
@@ -1011,7 +1011,7 @@ class MatterController extends Controller
             $apps[$i]['app']['number'] = $app_number;
 
             // Data taken from EP case, if present
-            if ($app['country']['$'] == 'EP') {
+            if ($apps[$i]['app']['country'] == 'EP') {
                 // Title (the last is the English title)
                 $apps[0]['pri']['title'] = collect($member->first()['exchange-document']['bibliographic-data']['invention-title'])->last()['$'];
 
@@ -1027,17 +1027,17 @@ class MatterController extends Controller
                     ->where('@data-format', 'original');
                 $apps[0]['pri']['applicants'] = $applicants->values()->pluck('applicant-name.name.$');
 
-                // Get procedural steps'
+                // Get procedural steps
                 $ops_procedure = 'https://ops.epo.org/3.2/rest-services/register/application/epodoc/EP' .$app_number .'/procedural-steps';
                 $ops_response = Http::withToken($token_response['access_token'])
                     ->asForm()
                     ->get($ops_procedure);
 
                 if ($ops_response->clientError()) {
-                    return response()->json(['errors' => ['docnum' => ['Number not found']], 'message' => 'EP events retrieval error. Family only partially imported']);
+                    return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS Register'];
                 }
                 if ($ops_response->serverError()) {
-                    return response()->json(['errors' => ['docnum' => ['OPS server error']], 'message' => 'OPS server error. Family only partially imported']);
+                    return ['exception' => 'OPS server error', 'message' => 'OPS server error, try again'];
                 }
 
                 $xml = new SimpleXMLElement($ops_response);
@@ -1061,6 +1061,36 @@ class MatterController extends Controller
                         $proc[$k]['grt_paid'] = date("Y-m-d", strtotime($date[0]));
                     };
                     if ($year = $step->xpath('reg:procedural-step-text[@step-text-type="YEAR"]')) {
+                        $proc[$k]['ren_year'] = (int) $year[0];
+                    };
+                }
+                $apps[$i]['procedure'] = $proc;
+            }
+
+            if ($apps[$i]['app']['country'] == 'FR') {
+                // Get legal
+                $ops_procedure = 'https://ops.epo.org/3.2/rest-services/legal/application/docdb/FR' .$app_number;
+                $ops_response = Http::withToken($token_response['access_token'])
+                    ->asForm()
+                    ->get($ops_procedure);
+
+                if ($ops_response->clientError()) {
+                    return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS Legal'];
+                }
+                if ($ops_response->serverError()) {
+                    return ['exception' => 'OPS server error', 'message' => 'OPS server error, try again'];
+                }
+
+                $xml = new SimpleXMLElement($ops_response);
+                $steps = $xml->xpath('//ops:legal[@code="PLFP"]');
+                $proc =[];
+                foreach ($steps as $k => $step) {
+                    // Code compatible with EP procedural steps
+                    $proc[$k]['code'] = 'RFEE';
+                    if ($date = $step->xpath('ops:L007EP')) {
+                        $proc[$k]['ren_paid'] = date("Y-m-d", strtotime($date[0]));
+                    };
+                    if ($year = $step->xpath('ops:L500EP/ops:L520EP')) {
                         $proc[$k]['ren_year'] = (int) $year[0];
                     };
                 }
