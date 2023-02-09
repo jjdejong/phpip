@@ -249,9 +249,24 @@ class MatterController extends Controller
             return response()->json($apps);
         }
         $pct_id = 0;
-        $first_app_id = null;
+        $container = [];
+        $container_id = null;
         $matter_id_num = [];
+        if ($existing_fam = Matter::where('caseref', $request->caseref)->get()) {
+            $container = $existing_fam->where('container_id', null)->first();
+            $container_id = $container->id;
+            foreach ($existing_fam as $existing_app) {
+                $matter_id_num[$existing_app->filing->cleanNumber()] = $existing_app->id;
+                if ($existing_app->country == 'WO') {
+                    $pct_id = $existing_app->id;
+                }
+            } 
+        }
         foreach ($apps as $key => $app) {
+            if (array_key_exists($app['app']['number'], $matter_id_num)) {
+                // Member exists, do not create
+                continue;
+            }
             $request->merge([
               'country' => $app['app']['country'],
               'creator' => Auth::user()->login
@@ -297,7 +312,7 @@ class MatterController extends Controller
                 $pct_id = $new_matter->id;
             }
             if ($key == 0) {
-                $first_app_id = $new_matter->id;
+                $container_id = $new_matter->id;
                 $new_matter->classifiersNative()->create(['type_code' => 'TIT', 'value' => $app['pri']['title']]);
                 $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'CLI', 'shared' => 1]);
                 if (strtolower($app['pri']['applicants'][0]) == strtolower(Actor::find($request->client_id)->name)) {
@@ -362,8 +377,8 @@ class MatterController extends Controller
                 }
                 $new_matter->notes = 'Applicants: ' .collect($app['pri']['applicants'])->implode('; ') ."\nInventors: " .collect($app['pri']['inventors'])->implode(' - ');
             } else {
-                $new_matter->container_id = $first_app_id;
-                $new_matter->events()->create(["code" => 'PRI', 'alt_matter_id' => $first_app_id]);
+                $new_matter->container_id = $container_id;
+                $new_matter->events()->create(["code" => 'PRI', 'alt_matter_id' => $container_id]);
             }
             if ($app['pct'] != null && $pct_id != 0) {
                 $new_matter->parent_id = $pct_id;

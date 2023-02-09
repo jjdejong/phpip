@@ -57,7 +57,7 @@
       @if ( $operation == 'child' )
       <input type="text" class="form-control" name="caseref" value="{{ $parent_matter->caseref ?? '' }}" readonly>
       @else
-      <input type="text" class="form-control" data-ac="/matter/new-caseref" name="caseref" value="{{ $parent_matter->caseref ?? ( $category['next_caseref'] ?? '') }}" autocomplete="off">
+      <input type="text" class="form-control" data-ac="/matter/new-caseref" data-freetext name="caseref" value="{{ $parent_matter->caseref ?? ( $category['next_caseref'] ?? '') }}" autocomplete="off">
       @endif
     </div>
   </div>
