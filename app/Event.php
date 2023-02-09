@@ -51,9 +51,9 @@ class Event extends Model
         return $this->hasMany('App\Task', 'trigger_id')->orderBy('due_date');
     }
 
-    public function cleanNumber($number, $country_code)
+    public function cleanNumber()
     {
-        return preg_replace(["/^$country_code/", '/ /', '/,/', '/-/', '/\//', '/\.[0-9]/'], '', $number);
+        return preg_replace(["/^$this->matter->country/", '/ /', '/,/', '/-/', '/\//', '/\.[0-9]/'], '', $this->detail);
     }
 
 // Produces a link to official published information
@@ -69,7 +69,7 @@ class Event extends Model
             $CC = $this->matter->country;
         }
         $category = $this->matter->category_code;
-        $cleanednumber = $this->cleanNumber($this->detail, $this->matter->country);
+        $cleanednumber = $this->cleanNumber();
         $href = '';
         $pubno = '';
         if ($this->code == 'PUB' || $this->code == 'GRT') {
@@ -80,7 +80,7 @@ class Event extends Model
             $href = 'http://worldwide.espacenet.com/publicationDetails/biblio?DB=EPODOC&CC=' . $CC . '&NR=' . $cleanednumber;
         } else if ($this->code == 'FIL') {
             if (defined($this->matter->publication)) {
-                $pubno = $this->cleanNumber($this->matter->publication->detail, $this->matter->country);
+                $pubno = $this->matter->publication->cleanNumber();
             }
             switch ($this->matter->country) {
                 case 'EP':
