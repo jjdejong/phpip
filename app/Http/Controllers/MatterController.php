@@ -1028,73 +1028,77 @@ class MatterController extends Controller
                 $apps[0]['pri']['applicants'] = $applicants->values()->pluck('applicant-name.name.$');
 
                 // Get procedural steps
-                $ops_procedure = 'https://ops.epo.org/3.2/rest-services/register/application/epodoc/EP' .$app_number .'/procedural-steps';
+                $ops_procedure = "https://ops.epo.org/3.2/rest-services/register/application/epodoc/EP$app_number/procedural-steps";
                 $ops_response = Http::withToken($token_response['access_token'])
                     ->asForm()
                     ->get($ops_procedure);
 
-                if ($ops_response->clientError()) {
-                    return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS Register'];
-                }
-                if ($ops_response->serverError()) {
-                    return ['exception' => 'OPS server error', 'message' => 'OPS server error, try again'];
-                }
-
-                $xml = new SimpleXMLElement($ops_response);
-                $steps = $xml->xpath('//reg:procedural-step');
-                $proc =[];
-                foreach ($steps as $k => $step){
-                    $proc[$k]['code'] = (string) $step->xpath('reg:procedural-step-code')[0];
-                    if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_REQUEST"]/reg:date')) {
-                        $proc[$k]['request'] = date("Y-m-d", strtotime($date[0]));
+                // if ($ops_response->clientError()) {
+                //     return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS Register'];
+                // }
+                // if ($ops_response->serverError()) {
+                //     return ['exception' => 'OPS server error', 'message' => 'OPS server error, try again'];
+                // }
+                if ($ops_response->successful()) {
+                    $xml = new SimpleXMLElement($ops_response);
+                    $steps = $xml->xpath('//reg:procedural-step');
+                    $proc =[];
+                    foreach ($steps as $k => $step){
+                        $proc[$k]['code'] = (string) $step->xpath('reg:procedural-step-code')[0];
+                        if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_REQUEST"]/reg:date')) {
+                            $proc[$k]['request'] = date("Y-m-d", strtotime($date[0]));
+                        }
+                        if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_DISPATCH"]/reg:date')) {
+                            $proc[$k]['dispatched'] = date("Y-m-d", strtotime($date[0]));
+                        };
+                        if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_REPLY"]/reg:date')) {
+                            $proc[$k]['replied'] = date("Y-m-d", strtotime($date[0]));
+                        };
+                        if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_PAYMENT"]/reg:date')) {
+                            $proc[$k]['ren_paid'] = date("Y-m-d", strtotime($date[0]));
+                        };
+                        if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="GRANT_FEE_PAID"]/reg:date')) {
+                            $proc[$k]['grt_paid'] = date("Y-m-d", strtotime($date[0]));
+                        };
+                        if ($year = $step->xpath('reg:procedural-step-text[@step-text-type="YEAR"]')) {
+                            $proc[$k]['ren_year'] = (int) $year[0];
+                        };
                     }
-                    if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_DISPATCH"]/reg:date')) {
-                        $proc[$k]['dispatched'] = date("Y-m-d", strtotime($date[0]));
-                    };
-                    if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_REPLY"]/reg:date')) {
-                        $proc[$k]['replied'] = date("Y-m-d", strtotime($date[0]));
-                    };
-                    if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_PAYMENT"]/reg:date')) {
-                        $proc[$k]['ren_paid'] = date("Y-m-d", strtotime($date[0]));
-                    };
-                    if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="GRANT_FEE_PAID"]/reg:date')) {
-                        $proc[$k]['grt_paid'] = date("Y-m-d", strtotime($date[0]));
-                    };
-                    if ($year = $step->xpath('reg:procedural-step-text[@step-text-type="YEAR"]')) {
-                        $proc[$k]['ren_year'] = (int) $year[0];
-                    };
+                    $apps[$i]['procedure'] = $proc;
                 }
-                $apps[$i]['procedure'] = $proc;
             }
 
-            if ($apps[$i]['app']['country'] == 'FR') {
+            if ($apps[$i]['app']['country'] == 'FR' || $apps[$i]['app']['country'] == 'US') {
                 // Get legal
-                $ops_procedure = 'https://ops.epo.org/3.2/rest-services/legal/application/docdb/FR' .$app_number;
+                $ops_procedure = "https://ops.epo.org/3.2/rest-services/legal/application/docdb/{$apps[$i]['app']['country']}$app_number";
                 $ops_response = Http::withToken($token_response['access_token'])
                     ->asForm()
                     ->get($ops_procedure);
 
-                if ($ops_response->clientError()) {
-                    return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS Legal'];
-                }
-                if ($ops_response->serverError()) {
-                    return ['exception' => 'OPS server error', 'message' => 'OPS server error, try again'];
-                }
+                // if ($ops_response->clientError()) {
+                //     return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS Legal'];
+                // }
+                // if ($ops_response->serverError()) {
+                //     return ['exception' => 'OPS server error', 'message' => 'OPS server error, try again'];
+                // }
 
-                $xml = new SimpleXMLElement($ops_response);
-                $steps = $xml->xpath('//ops:legal[@code="PLFP"]');
-                $proc =[];
-                foreach ($steps as $k => $step) {
-                    // Code compatible with EP procedural steps
-                    $proc[$k]['code'] = 'RFEE';
-                    if ($date = $step->xpath('ops:L007EP')) {
-                        $proc[$k]['ren_paid'] = date("Y-m-d", strtotime($date[0]));
-                    };
-                    if ($year = $step->xpath('ops:L500EP/ops:L520EP')) {
-                        $proc[$k]['ren_year'] = (int) $year[0];
-                    };
+                if ($ops_response->successful()) {
+                    $xml = new SimpleXMLElement($ops_response);
+                    // Get renewals. Code RFEE for FR and MAFP for US
+                    $steps = $xml->xpath('//ops:legal[@code="PLFP"] | //ops:legal[@code="MAFP"]');
+                    $proc =[];
+                    foreach ($steps as $k => $step) {
+                        // Code compatible with EP procedural steps
+                        $proc[$k]['code'] = 'RFEE';
+                        if ($date = $step->xpath('ops:L007EP')) {
+                            $proc[$k]['ren_paid'] = date("Y-m-d", strtotime($date[0]));
+                        };
+                        if ($year = $step->xpath('ops:L500EP/ops:L520EP')) {
+                            $proc[$k]['ren_year'] = (int) $year[0];
+                        };
+                    }
+                    $apps[$i]['procedure'] = $proc;
                 }
-                $apps[$i]['procedure'] = $proc;
             }
 
             foreach ($member as $event) {
@@ -1117,7 +1121,7 @@ class MatterController extends Controller
                         // Find EP validations (doesn't always work)
                         // if ($pub['country']['$'] == 'EP') {
                         //     $ops = Http::withToken($token_response['access_token'])
-                        //         ->asForm()->get("https://ops.epo.org/3.2/rest-services/legal/publication/docdb/EP" .$pub['doc-number']['$'] .'.json')
+                        //         ->asForm()->get("https://ops.epo.org/3.2/rest-services/legal/publication/docdb/EP{$pub['doc-number']['$']}.json")
                         //         ->json()['ops:world-patent-data']['ops:patent-family']['ops:family-member'];
                             
                         //     // Create list of validation countries identified by the EPO and remove null array elements
