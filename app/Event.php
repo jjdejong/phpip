@@ -53,7 +53,7 @@ class Event extends Model
 
     public function cleanNumber()
     {
-        return preg_replace(["/^$this->matter->country/", '/ /', '/,/', '/-/', '/\//', '/\.[0-9]/'], '', $this->detail);
+        return preg_replace(["/^{$this->matter->country}/", '/ /', '/,/', '/-/', '/\//', '/\.[0-9]/'], '', $this->detail);
     }
 
 // Produces a link to official published information
