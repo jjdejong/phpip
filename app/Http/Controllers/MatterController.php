@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Http;
 use SimpleXMLElement;
+use Illuminate\Support\Arr;
 
 class MatterController extends Controller
 {
@@ -248,7 +249,6 @@ class MatterController extends Controller
         if ($apps->has('errors') || $apps->has('exception')) {
             return response()->json($apps);
         }
-        $pct_id = 0;
         $container = [];
         $container_id = null;
         $matter_id_num = [];
@@ -258,9 +258,6 @@ class MatterController extends Controller
             $container_id = $container->id;
             foreach ($existing_fam as $existing_app) {
                 $matter_id_num[$existing_app->filing->cleanNumber()] = $existing_app->id;
-                if ($existing_app->country == 'WO') {
-                    $pct_id = $existing_app->id;
-                }
             } 
         }
         foreach ($apps as $key => $app) {
@@ -275,6 +272,7 @@ class MatterController extends Controller
             // Remove if set from a previous iteration
             $request->request->remove('type_code');
             $request->request->remove('origin');
+            $request->request->remove('idx');
             if ($app['app']['kind'] == 'P') {
                 $request->merge(['type_code' => 'PRO']);
             }
@@ -309,20 +307,18 @@ class MatterController extends Controller
             $new_matter = Matter::create($request->except(['_token', '_method', 'docnum', 'client_id']));
             $matter_id_num[$app['app']['number']] = $new_matter->id;
                    
-            if ($app['app']['country'] == 'WO') {
-                $pct_id = $new_matter->id;
-            }
             if ($key == 0) {
                 $container_id = $new_matter->id;
-                $new_matter->classifiersNative()->create(['type_code' => 'TIT', 'value' => $app['pri']['title']]);
+                $new_matter->classifiersNative()->create(['type_code' => 'TIT', 'value' => $app['title']]);
                 $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'CLI', 'shared' => 1]);
-                if (strtolower($app['pri']['applicants'][0]) == strtolower(Actor::find($request->client_id)->name)) {
+                if (strtolower($app['applicants'][0]) == strtolower(Actor::find($request->client_id)->name)) {
                     $new_matter->actorPivot()->create([
                         'actor_id' => $request->client_id, 
                         'role' => 'APP',
-                        'shared' => 1]);
+                        'shared' => 1
+                    ]);
                 }
-                foreach ($app['pri']['applicants'] as $applicant) {
+                foreach ($app['applicants'] as $applicant) {
                     // Search for phonetically equivalent in the actor table, and take first
                     if (substr($applicant, -1) == ',') {
                         // Remove ending comma
@@ -349,7 +345,7 @@ class MatterController extends Controller
                         ]);
                     }
                 }
-                foreach ($app['pri']['inventors'] as $inventor) {
+                foreach ($app['inventors'] as $inventor) {
                     // Search for phonetically equivalent in the actor table, and take first
                     if (substr($inventor, -1) == ',') {
                         // Remove ending comma
@@ -376,14 +372,19 @@ class MatterController extends Controller
                         ]);
                     }
                 }
-                $new_matter->notes = 'Applicants: ' .collect($app['pri']['applicants'])->implode('; ') ."\nInventors: " .collect($app['pri']['inventors'])->implode(' - ');
+                $new_matter->notes = 'Applicants: ' .collect($app['applicants'])->implode('; ') ."\nInventors: " .collect($app['inventors'])->implode(' - ');
             } else {
                 $new_matter->container_id = $container_id;
-                $new_matter->events()->create(["code" => 'PRI', 'alt_matter_id' => $container_id]);
+                foreach ($app['pri'] as $pri) {
+                    // Exclude "auto" priority claim
+                    if ($pri['number'] != $app['app']['number']){
+                        $new_matter->events()->create(["code" => 'PRI', 'alt_matter_id' => $matter_id_num[$pri['number']]]);
+                    }
+                } 
             }
-            if ($app['pct'] != null && $pct_id != 0) {
-                $new_matter->parent_id = $pct_id;
-                $new_matter->events()->create(['code' => 'PFIL', 'alt_matter_id' => $pct_id]);
+            if ($app['pct'] != null) {
+                $new_matter->parent_id = $matter_id_num[$app['pct']];
+                $new_matter->events()->create(['code' => 'PFIL', 'alt_matter_id' => $new_matter->parent_id]);
             }
             if ($parent_num) {
                 //return response()->json(['errors' => ['message' => $matter_id_num]]);
@@ -968,64 +969,87 @@ class MatterController extends Controller
         if ($ops_response->clientError()) {
             return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS Family'];
         }
-
         if ($ops_response->serverError()) {
             return ['exception' => 'OPS server error', 'message' => 'OPS server error, try again'];
         }
 
-        $members = collect($ops_response['ops:world-patent-data']['ops:patent-family']['ops:family-member']);
-        // Sort members by increasing filing date and doc-id, so that the first is the priority application
-        $sorted = $members->sortBy(function ($member, $key) {
-            //return $member['application-reference']['@doc-id'];
-            return array_pop($member['application-reference']['document-id']['date']) .$member['application-reference']['@doc-id'];
-        });
-        // Group all members by doc-id, so that publications and grants appear in a same record (yet as two arrays)
-        $grouped = $sorted->groupBy(function ($member, $key) {
-            return $member['application-reference']['@doc-id'];
-        });
-
-        $apps = [];
-        $app = $grouped->first()->first()['priority-claim']['document-id'];
-        $apps[0]['pri']['date'] = date("Y-m-d", strtotime($app['date']['$']));
-        $apps[0]['pri']['country'] = $app['country']['$'];
-        $apps[0]['pri']['number'] = $app['doc-number']['$'];
-        
+        $members = data_get($ops_response, 'ops:world-patent-data.ops:patent-family.ops:family-member');
+        if (Arr::isList($members)) {
+            // Sort members by increasing filing date and doc-id, so that the first is the priority application
+            $members = collect($members)->sortBy(function ($member) {
+                return $member['application-reference']['document-id']['date']['$'] .$member['application-reference']['@doc-id'];
+            });
+            // Group all members by doc-id, so that publications and grants appear in a same record (yet as two arrays)
+            $members = collect($members)->groupBy(function ($member) {
+                return $member['application-reference']['@doc-id'];
+            });
+        } else {
+            // Turn single element into a list of one element
+            $members = [$members['application-reference']['@doc-id'] => [0 => $members]];
+        }
+        $apps = [];      
         $i = 0;
-        foreach ($grouped as $member) {
-            // The first is in DOCDB format, the other (not used) in EPODOC format
-            $app = $member->first()['application-reference']['document-id'];
+        foreach ($members as $key => $member) {
+            // [0] is the item referring to the publication and [1] is the item referring to the grant
+            $app = $member[0]['application-reference']['document-id'];
             // Don't want filings of EP translations
             if ( $app['kind']['$'] == 'T') {
                 continue;
             }
-            $apps[$i]['id'] = $member->first()['application-reference']['@doc-id'];
+            // $key is the @doc-id
+            $apps[$i]['id'] = $key;
+
+            if (Arr::isList($member[0]['priority-claim'])) {
+                $pri = collect($member[0]['priority-claim'])->where('priority-active-indicator.$', 'YES')->toArray();
+            } else {
+                // Turn single element into a list of one element
+                $pri = [0 => $member[0]['priority-claim']];
+            }
+
+            foreach ($pri as $k => $p) {
+                $apps[$i]['pri'][$k]['country'] = $p['document-id']['country']['$'];
+                $apps[$i]['pri'][$k]['number'] = $p['document-id']['doc-number']['$'];
+                $apps[$i]['pri'][$k]['kind'] = $p['document-id']['kind']['$'];
+                $apps[$i]['pri'][$k]['date'] = date("Y-m-d", strtotime($p['document-id']['date']['$']));
+            }
+            
             $apps[$i]['app']['date'] = date("Y-m-d", strtotime($app['date']['$']));
             $apps[$i]['app']['kind'] = $app['kind']['$'];
             if ($app['kind']['$'] == 'W') {
-                $apps[$i]['app']['country'] = 'WO';
+                $country = 'WO';
                 $app_number = $app['country']['$'] . $app['doc-number']['$'];
             } else {
-                $apps[$i]['app']['country'] = $app['country']['$'];
+                $country = $app['country']['$'];
                 $app_number = $app['doc-number']['$'];
             }
+            if ($country == 'US') {
+                if (strlen($app_number) == 8) {
+                    // Get only the first six digits, removing YY from the end. The serial is below 13 and is missing from the number
+                    $app_number = substr($app_number, 0, 6);
+                } else {
+                    // Remove the YYYY prefix
+                    $app_number = substr($app_number, 4);
+                }
+            }
+            $apps[$i]['app']['country'] = $country;
             $apps[$i]['app']['number'] = $app_number;
 
-            // Data taken from EP case, if present
-            if ($apps[$i]['app']['country'] == 'EP') {
+            // Data taken from EP or PCT case
+            if ((in_array($apps[$i]['app']['country'], ['EP', 'WO'])) && !data_get($apps, '0.pri.title')) {
                 // Title (the last is the English title)
-                $apps[0]['pri']['title'] = collect($member->first()['exchange-document']['bibliographic-data']['invention-title'])->last()['$'];
+                $apps[0]['title'] = collect($member[0]['exchange-document']['bibliographic-data']['invention-title'])->last()['$'];
 
                 // Each inventor is under [i]['inventor-name']['name']['$'] both in "epodoc" and "original" format indicated by [i]['@data-format']
                 // take the higher half of the array indexes in original format
-                $inventors = collect($member->first()['exchange-document']['bibliographic-data']['parties']['inventors']['inventor'])
+                $inventors = collect($member[0]['exchange-document']['bibliographic-data']['parties']['inventors']['inventor'])
                     ->where('@data-format', 'original');
-                $apps[0]['pri']['inventors'] = $inventors->values()->pluck('inventor-name.name.$');
+                $apps[0]['inventors'] = $inventors->values()->pluck('inventor-name.name.$');
 
                 // Each applicant is under [i]['applicant-name']['name']['$'] both in "epodoc" and "original" format indicated by [i]['@data-format']
                 // take the higher half of the array indexes in original format
-                $applicants = collect($member->first()['exchange-document']['bibliographic-data']['parties']['applicants']['applicant'])
+                $applicants = collect($member[0]['exchange-document']['bibliographic-data']['parties']['applicants']['applicant'])
                     ->where('@data-format', 'original');
-                $apps[0]['pri']['applicants'] = $applicants->values()->pluck('applicant-name.name.$');
+                $apps[0]['applicants'] = $applicants->values()->pluck('applicant-name.name.$');
 
                 // Get procedural steps
                 $ops_procedure = "https://ops.epo.org/3.2/rest-services/register/application/epodoc/EP$app_number/procedural-steps";
@@ -1033,12 +1057,6 @@ class MatterController extends Controller
                     ->asForm()
                     ->get($ops_procedure);
 
-                // if ($ops_response->clientError()) {
-                //     return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS Register'];
-                // }
-                // if ($ops_response->serverError()) {
-                //     return ['exception' => 'OPS server error', 'message' => 'OPS server error, try again'];
-                // }
                 if ($ops_response->successful()) {
                     $xml = new SimpleXMLElement($ops_response);
                     $steps = $xml->xpath('//reg:procedural-step');
@@ -1068,7 +1086,7 @@ class MatterController extends Controller
                 }
             }
 
-            if ($apps[$i]['app']['country'] == 'FR' || $apps[$i]['app']['country'] == 'US') {
+            if (in_array($apps[$i]['app']['country'], ['FR', 'US'])) {
                 // Get legal
                 $ops_procedure = "https://ops.epo.org/3.2/rest-services/legal/application/docdb/{$apps[$i]['app']['country']}$app_number";
                 $ops_response = Http::withToken($token_response['access_token'])
@@ -1100,10 +1118,11 @@ class MatterController extends Controller
                     $apps[$i]['procedure'] = $proc;
                 }
             }
-
+            // The publication and the grant have been grouped into a single member as two publication references to iterate through
             foreach ($member as $event) {
-                // Again take the first of each, in DOCDB format
-                $pub = $event['publication-reference']['document-id'][0];
+                // Take DOCDB format
+                $pub = collect($event['publication-reference']['document-id'])->where('@document-id-type', 'docdb')->first();
+                //return $pub;
                 switch ($pub['kind']['$']) {
                     case 'A':
                     case 'A1':
@@ -1132,15 +1151,47 @@ class MatterController extends Controller
                         // }
                         break;
                 }
+                
                 // PCT origin
-                $pct_nat = collect($event['priority-claim'])->where('priority-linkage-type.$', 'W')->first();
-                $apps[$i]['pct'] = @$pct_nat['document-id']['doc-number']['$'];
+                if ($pct_nat = collect($event['priority-claim'])->where('priority-linkage-type.$', 'W')->first()) {
+                    $apps[$i]['pct'] = $pct_nat['document-id']['country']['$'] . $pct_nat['document-id']['doc-number']['$'];
+                } else {
+                    $apps[$i]['pct'] = null;
+                }
+
                 // Possible divisional
-                $div = collect($event['priority-claim'])->where('priority-linkage-type.$', '3')->first();
-                $apps[$i]['div'] = @$div['document-id']['doc-number']['$'];
+                if ($div = collect($event['priority-claim'])->where('priority-linkage-type.$', '3')->first()) {
+                    $app_number = $div['document-id']['doc-number']['$'];
+                    if ($div['document-id']['country']['$'] == 'US') {
+                        if (strlen($app_number) == 8) {
+                            // Get only the first six digits, removing YY from the end. The serial is below 13 and is missing from the number
+                            $app_number = substr($app_number, 0, 6);
+                        } else {
+                            // Remove the YYYY prefix
+                            $app_number = substr($app_number, 4);
+                        }
+                    }
+                    $apps[$i]['div'] = $app_number;
+                } else {
+                    $apps[$i]['div'] = null;
+                }
+                
                 // Possible continuation
-                $div = collect($event['priority-claim'])->whereIn('priority-linkage-type.$', ['1', '2', 'C'])->first();
-                $apps[$i]['cnt'] = @$div['document-id']['doc-number']['$'];
+                if ($div = collect($event['priority-claim'])->whereIn('priority-linkage-type.$', ['1', '2', 'C'])->first()) {
+                    $app_number = $div['document-id']['doc-number']['$'];
+                    if ($div['document-id']['country']['$'] == 'US') {
+                        if (strlen($app_number) == 8) {
+                            // Get only the first six digits, removing YY from the end. The serial is below 13 and is missing from the number
+                            $app_number = substr($app_number, 0, 6);
+                        } else {
+                            // Remove the YYYY prefix
+                            $app_number = substr($app_number, 4);
+                        }
+                    }
+                    $apps[$i]['cnt'] = $app_number;
+                } else {
+                    $apps[$i]['cnt'] = null;
+                }
             }
             $i++;
         }
