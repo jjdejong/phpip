@@ -309,6 +309,16 @@ class MatterController extends Controller
                    
             if ($key == 0) {
                 $container_id = $new_matter->id;
+                foreach ($app['pri'] as $pri) {
+                    // Create priority filings that refer to applications not returned by OPS (US provisionals)
+                    if ($pri['number'] != $app['app']['number']){
+                        $new_matter->events()->create([
+                            'code' => 'PRI',
+                            'detail' => $pri['country'] . $pri['number'],
+                            'event_date' => $pri['date']
+                        ]);
+                    }
+                } 
                 $new_matter->classifiersNative()->create(['type_code' => 'TIT', 'value' => $app['title']]);
                 $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'CLI', 'shared' => 1]);
                 if (strtolower($app['applicants'][0]) == strtolower(Actor::find($request->client_id)->name)) {
@@ -376,9 +386,18 @@ class MatterController extends Controller
             } else {
                 $new_matter->container_id = $container_id;
                 foreach ($app['pri'] as $pri) {
-                    // Exclude "auto" priority claim
+                    // Create priority filings, excluding "auto" priority claim
                     if ($pri['number'] != $app['app']['number']){
-                        $new_matter->events()->create(["code" => 'PRI', 'alt_matter_id' => $matter_id_num[$pri['number']]]);
+                        if ($matter_id_num[$pri['number']]) {
+                            // The priority application is in the family
+                            $new_matter->events()->create(['code' => 'PRI', 'alt_matter_id' => $matter_id_num[$pri['number']]]);
+                        } else {
+                            $new_matter->events()->create([
+                                'code' => 'PRI',
+                                'detail' => $pri['country'] . $pri['number'],
+                                'event_date' => $pri['date']
+                            ]);
+                        }
                     }
                 } 
             }
