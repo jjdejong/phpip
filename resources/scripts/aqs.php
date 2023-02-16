@@ -80,7 +80,7 @@ $patsprocessed = 0; // total patents processed
 $annsprocessed = 0; // total annuities processed
 $ambiguous = 0;     // counts patents that have multiple matches
 
-$mandateOn = $xml->xpath('/response/item[mandate="ON"]');
+$mandateOn = $xml->xpath('/response/item[mandate!="OFF"]');
 foreach ($mandateOn as $AQSpatent) {
   if (!$AQSpatent->events) {
     // Patent has no renewals - skip
