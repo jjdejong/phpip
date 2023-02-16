@@ -1,5 +1,6 @@
 
-window.debounce = require('lodash.debounce');
+import debounce from 'lodash.debounce';
+window.debounce = debounce;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -45,7 +46,8 @@ try {
  */
 
 /*
-window.axios = require('axios');
+import axios from 'axios';
+window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 */
