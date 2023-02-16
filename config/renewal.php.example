@@ -19,6 +19,8 @@ return [
   "invoice" => [
     // Set to "dolibarr" if you are using Dolibarr for invoices
     "backend" => "none",
+    "vat_rate" => 0.2,
+    "default_fee" => 145,
     // Captions for CVS export when Dolibarr is not used. Use in the order of the Task::renewals() output
     "captions" => [
       'task.id',

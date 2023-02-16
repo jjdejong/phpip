@@ -162,6 +162,7 @@ class RenewalController extends Controller
             $sum = $sum + $num;
             if ($num != 0) {
                 $i = 0;
+                $earlier = '';
                 foreach ($resql as $ren) {
                     if ($ren->language == "") {
                         $ren->language = "fr";
@@ -214,8 +215,8 @@ class RenewalController extends Controller
                     $renewal['desc'] = $desc;
                     // Détermine le taux de tva // TODO
                     $renewal['annuity'] = intval($ren->detail);
-                    $tx_tva = 0.2;
-                    $renewal['tx_tva'] = $tx_tva * 100;
+                    $vat_rate = config('renewal.invoice.vat_rate', 0.2);
+                    $renewal['vat_rate'] = $vat_rate * 100;
                     if ($ren->grace_period) {
                         $cost = $ren->sme_status ? $ren->cost_sup_reduced : $ren->cost_sup;
                         $fee = ($ren->sme_status ? $ren->fee_sup_reduced : $ren->fee_sup) * (1.0 - $ren->discount) * $fee_factor;
@@ -225,10 +226,10 @@ class RenewalController extends Controller
                     }
                     $renewal['cost'] =  number_format($cost, 2, ',', ' ');
                     $renewal['fee'] =  number_format($fee, 2, ',', ' ');
-                    $renewal['tva'] =  $fee *  $tx_tva;
+                    $renewal['tva'] =  $fee * $vat_rate;
                     $renewal['total_ht'] = number_format($fee + $cost, 2, ',', ' ');
-                    $renewal['total'] = number_format($fee * (1 + $tx_tva) + $cost, 2, ',', ' ');
-                    $total = $total + $fee * (1 + $tx_tva) + $cost;
+                    $renewal['total'] = number_format($fee * (1 + $vat_rate) + $cost, 2, ',', ' ');
+                    $total = $total + $fee * (1 + $vat_rate) + $cost;
                     $total_ht = $total_ht + $fee + $cost;
                     $previousClient = $client;
                     $i++;
@@ -355,16 +356,17 @@ class RenewalController extends Controller
             if ($apikey == null) {
                 return response()->json(['error' => "Api is not configured"]);
             }
-            Log::debug("Facturation dans Dolibarr");
+            logger("Facturation dans Dolibarr");
             if ($resql) {
                 $num = $resql->count();
                 if ($num == 0) {
                     return response()->json(['error' => "No renewal selected."]);
                 } else {
                     $i = 0;
+                    $earlier = '';
                     foreach ($resql as $ren) {
                         $client = $ren->client_name;
-                        Log::debug("Ligne ".$i);
+                        logger("Ligne ".$i);
                         if ($firstPass) {
                             // retrouve la correspondance de société
                             $result = $this->_client($client, $apikey);
@@ -396,9 +398,9 @@ class RenewalController extends Controller
                         $desc .= "\nÉchéance le " . Carbon::parse($ren->due_date)->isoFormat('LL');
                     // Détermine le taux de tva
                         if ($soc_res['tva_intra'] == "" || substr($soc_res['tva_intra'], 2) == "FR") {
-                            $tx_tva = 0.2;
+                            $vat_rate = 0.2;
                         } else {
-                            $tx_tva = 0.0;
+                            $vat_rate = 0.0;
                         }
                         if ($ren->grace_period) {
                             $fee = $ren->fee;
@@ -422,14 +424,14 @@ class RenewalController extends Controller
                         $newlines[] = [
                             "desc" => $desc,
                             "product_type" => 1,
-                            "tva_tx" => ($tx_tva * 100),
+                            "tva_tx" => ($vat_rate * 100),
                             "remise_percent" => 0,
                             "qty" => 1,
                             "subprice" => $fee,
-                            "total_tva" => $fee * $tx_tva,
-                            "total_ttc" => $fee  * (1.0 +  $tx_tva)
+                            "total_tva" => $fee * $vat_rate,
+                            "total_ttc" => $fee  * (1.0 +  $vat_rate)
                         ];
-                        Log::debug("Ajout ligne ".$desc);
+                        logger("Ajout ligne ".$desc);
                         if ($cost != 0) {
                             // Ajout d'une deuxième ligne
                             $newlines[] = [
@@ -581,7 +583,6 @@ class RenewalController extends Controller
         }
         $resql = $query->get();
 
-        $done_date = now()->isoFormat('L');
         $updated = 0;
         // For logs
         $newjob = RenewalsLog::max('job_id');
@@ -590,7 +591,7 @@ class RenewalController extends Controller
 
         foreach ($resql as $ren) {
             $task = Task::find($ren->id);
-            $task->done_date = $done_date;
+            $task->done_date = now();
             $log_line = [
                 'task_id' => $ren->id,
                 'job_id' => $newjob,
@@ -629,7 +630,6 @@ class RenewalController extends Controller
         $data_log = [];
 
         $updated = 0;
-        $date_now = now();
         foreach ($resql as $ren) {
             $task = Task::find($ren->id);
             $task->step = 8;
@@ -643,7 +643,7 @@ class RenewalController extends Controller
                 'from_step' => $task->step,
                 'to_step' => 8,
                 'creator' => Auth::user()->login,
-                'created_at' => $date_now
+                'created_at' => now()
             ];
             $data_log[] = $log_line;
         }
@@ -670,7 +670,6 @@ class RenewalController extends Controller
         $newjob++;
         $data_log = [];
         $updated = 0;
-        $date_now = now();
         foreach ($resql as $ren) {
             $task = Task::find($ren->id);
             $log_line = [
@@ -681,7 +680,7 @@ class RenewalController extends Controller
                 'from_done' => $task->done,
                 'to_done' => 1,
                 'creator' => Auth::user()->login,
-                'created_at' => $date_now
+                'created_at' => now()
             ];
             if ($task->done) {
                 $task->step = -1;
@@ -759,7 +758,6 @@ class RenewalController extends Controller
         $newjob++;
 
         $updated = 0;
-        $date_now = now();
         foreach ($resql as $ren) {
             $task = Task::find($ren->id);
             $task->step = 14;
@@ -777,7 +775,7 @@ class RenewalController extends Controller
                 'from_step' => $task->step,
                 'to_step' => 14,
                 'creator' => Auth::user()->login,
-                'created_at' => $date_now
+                'created_at' => now()
             ];
             $data_log[] = $log_line;
         }
@@ -793,6 +791,7 @@ class RenewalController extends Controller
     {
         $tids = $request->task_ids;
         $procedure = '';
+        $prev_procedure ='';
         // For logs
         $newjob = RenewalsLog::max('job_id');
         $newjob++;
@@ -897,7 +896,6 @@ class RenewalController extends Controller
         rewind($fd);
         if ($clear) {
             $updated = 0;
-            $date_now = now();
             foreach ($renewals as $renewal) {
                 $log_line = [
                     'task_id' => $renewal->id,
@@ -907,7 +905,7 @@ class RenewalController extends Controller
                     'from_done' => $renewal->done,
                     'to_done' => 1,
                     'creator' => Auth::user()->login,
-                    'created_at' => $date_now
+                    'created_at' => now()
                 ];
                 $data_log[] = $log_line;
                 $task = Task::find($renewal->id);
