@@ -270,9 +270,9 @@
         <span class="lead">
             Manage renewals
         </span>
+        <a href="https://github.com/jjdejong/phpip/wiki/Renewal-Management" target="_blank" title="Help" class="btn btn-outline-primary btn-sm">?</a>
         <a href="/logs" class="btn btn-info">View logs</a>
         <button id="clearFilters" type="button" class="btn btn-info float-right">&larrpl; Clear filters</button>
-        <a href="https://github.com/jjdejong/phpip/wiki/Renewal-Management" target="_blank" title="Help" class="btn btn-outline-primary btn-sm float-right">?</a>
     </div>
     <div class="card-header py-1">
         <nav class="mt-1">
@@ -453,10 +453,10 @@
                             {!! $task->grace_period ? "&#9888;" : "" !!}
                         </div>
                         <div class="col-3">
-                            {{ $task->sme_status ? $task->cost_reduced : $task->cost }}
+                            {{ $task->cost }}
                         </div>
                         <div class="col-3">
-                            {{ ($task->sme_status ? $task->fee_reduced : $task->fee) * (1.0 - $task->discount) }}
+                            {{ $task->fee }}
                         </div>
                     </div>
                 </td>
