@@ -318,7 +318,7 @@ class MatterController extends Controller
                             'event_date' => $pri['date']
                         ]);
                     }
-                } 
+                }
                 $new_matter->classifiersNative()->create(['type_code' => 'TIT', 'value' => $app['title']]);
                 $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'CLI', 'shared' => 1]);
                 if (strtolower($app['applicants'][0]) == strtolower(Actor::find($request->client_id)->name)) {
@@ -388,7 +388,7 @@ class MatterController extends Controller
                 foreach ($app['pri'] as $pri) {
                     // Create priority filings, excluding "auto" priority claim
                     if ($pri['number'] != $app['app']['number']){
-                        if ($matter_id_num[$pri['number']]) {
+                        if (array_key_exists($pri['number'], $matter_id_num)) {
                             // The priority application is in the family
                             $new_matter->events()->create(['code' => 'PRI', 'alt_matter_id' => $matter_id_num[$pri['number']]]);
                         } else {
@@ -446,8 +446,11 @@ class MatterController extends Controller
                             break;
                         case 'IGRA':
                             // Intention to grant
-                            $grt = $new_matter->events()->create(["code" => 'ALL', "event_date" => $step['dispatched']]);
-                            if ($step['grt_paid'] && $grt->event_date < now()->subMonths(4)) {
+                            if (array_key_exists('dispatched', $step)) {
+                                // Sometimes the dispatch and the payment are in different steps
+                                $grt = $new_matter->events()->create(["code" => 'ALL', "event_date" => $step['dispatched']]);
+                            }
+                            if (array_key_exists('grt_paid', $step) && $grt->event_date < now()->subMonths(4)) {
                                 $grt->tasks()->create([
                                     "code" => 'PAY', 
                                     "due_date" => $grt->event_date->addMonths(4), 
