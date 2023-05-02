@@ -188,28 +188,33 @@ class RenewalController extends Controller
         // TODO Manage languages of the calls
         // TODO Check first that each client has email
 
-        if (!isset($ids)) {
+        if (empty($ids)) {
             return "No renewal selected.";
         }
         $previousClient = "ZZZZZZZZZZZZZZZZZZZZZZZZ";
         $firstPass = true;
         $sum = 0;
         // For logs
-        $newjob = RenewalsLog::max('job_id');
-        $newjob++;
+        $newjob = RenewalsLog::max('job_id') + 1;
         for ($grace = 0; $grace < count($notify_type); $grace++) {
             $from_grace =  ($notify_type[$grace] == 'last') ? 0 : null ;
             $to_grace =  ($notify_type[$grace] == 'last') ? 1 : null ;
-            $resql = Task::renewals()->whereIn('task.id', $ids)
-            ->where('grace_period', $grace)
-            ->orderBy('pa_cli.name')->get();
+            $resql = Task::renewals()
+                ->whereIn('task.id', $ids)
+                ->where('grace_period', $grace)
+                ->orderBy('pa_cli.name')
+                ->get();
             $num = $resql->count();
             $sum = $sum + $num;
             if ($num != 0) {
                 $i = 0;
                 $earlier = '';
+                $renewals = [];
+                $total = 0;
+                $total_ht = 0;
+                $data = [];
                 foreach ($resql as $ren) {
-                    if ($ren->language == "") {
+                    if (empty($ren->language)) {
                         $ren->language = "fr";
                     }
                     $config_prefix = 'renewal.description.' . $ren->language;
@@ -218,14 +223,11 @@ class RenewalController extends Controller
                     if ($grace) {
                     //  Add six months as grace grace_period
                     // TODO Get the grace period from a rule according to country
-                        $due_date = $due_date->addMonths(6);
+                        $due_date->addMonths(6);
                     }
                     if ($firstPass) {
                         $firstPass = false;
                         $earlier = $due_date;
-                        $renewals = [];
-                        $total = 0;
-                        $total_ht = 0;
                     } else {
                         $earlier = min($earlier, $due_date);
                     }
