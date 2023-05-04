@@ -206,5 +206,5 @@
 @endsection
 
 @section('script')
-@include('home-js')
+<script src="{{ asset('js/home.js') }}" defer></script>
 @endsection
