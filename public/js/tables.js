@@ -1,3 +1,4 @@
+// This file is common to various index files for filtering lists
 var url = new URL(window.location.href);
 
 function refreshList() {
@@ -14,7 +15,12 @@ filter.addEventListener('input', debounce(e => {
   refreshList();
 }, 300));
 
-// Reload the list when closing the modal window
+// Reload the list when closing the creation modal
 $("#ajaxModal").on("hidden.bs.modal", function (event) {
+  refreshList();
+});
+
+// Refresh the list when an input field of ajaxPanel is changed
+ajaxPanel.addEventListener('xhrsent', function (event) {
   refreshList();
 });

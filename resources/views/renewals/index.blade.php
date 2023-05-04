@@ -228,7 +228,7 @@
 @endsection
 
 @section('script')
-<script src="{{ asset('js/renewal-index.js') }}" defer></script>
+<script src="{{ asset('js/renewal-index.js') }}"></script>
 {{-- TODO: put this in the renewal-index.js file avoiding the blade directives --}}
 <script>
     @if(config('renewal.invoice.backend') == 'dolibarr')

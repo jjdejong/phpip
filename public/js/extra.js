@@ -314,6 +314,9 @@ app.addEventListener("change", e => {
                         // Don't reload but set border back to normal
                         e.target.classList.remove('border-info', 'border-danger');
                         e.target.classList.add('is-valid');
+                        // Trigger a xhrsent event for whoever wants to refresh a list
+                        var event = new Event('xhrsent', { bubbles: true });
+                        e.target.dispatchEvent(event);
                     }
                     footerAlert.classList.remove("alert-danger");
                     footerAlert.innerHTML = "";

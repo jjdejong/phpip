@@ -10,7 +10,7 @@
     <div class="card border-primary">
       <table class="table table-striped table-hover table-sm col">
         <thead>
-          <tr id="filterFields" class="bg-primary text-light">
+          <tr id="filter" class="bg-primary text-light">
             <th class="border-top-0"><input class="form-control form-control-sm" name="Name" placeholder="Name" value="{{ Request::get('Name') }}"></th>
             <th class="align-middle border-top-0">First name</th>
             <th class="align-middle border-top-0">Display name</th>
@@ -25,7 +25,7 @@
             </th>
           </tr>
         </thead>
-        <tbody id="actorList">
+        <tbody id="tableList">
           @foreach ($actorslist as $actor)
           <tr class="reveal-hidden" data-id="{{ $actor->id }}">
             <td>
@@ -71,5 +71,15 @@
 @endsection
 
 @section('script')
-<script src="{{ asset('js/actor-index.js') }}"></script>
+<script src="{{ asset('js/tables.js') }}"></script>
+<script>
+  person.onchange = (e) => {
+    if (e.target.value.length === 0) {
+      url.searchParams.delete(e.target.name);
+    } else {
+      url.searchParams.set(e.target.name, e.target.value);
+    }
+    refreshList();
+  }
+</script>
 @endsection
