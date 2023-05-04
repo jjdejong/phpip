@@ -196,7 +196,7 @@ class MatterController extends Controller
     {
         $this->authorize('create', Matter::class);
         $this->validate($request, [
-            'ncountry' => 'required:array'
+            'ncountry' => 'required|array'
         ]);
 
         $parent_id = $request->parent_id;
@@ -260,7 +260,7 @@ class MatterController extends Controller
                 $matter_id_num[$existing_app->filing->cleanNumber()] = $existing_app->id;
             } 
         }
-        foreach ($apps as $key => $app) {
+        foreach ($apps as $key => &$app) {
             if (array_key_exists($app['app']['number'], $matter_id_num)) {
                 // Member exists, do not create
                 continue;
@@ -409,11 +409,11 @@ class MatterController extends Controller
                 //return response()->json(['errors' => ['message' => $matter_id_num]]);
                 $new_matter->events()->create(["code" => 'ENT', "event_date" => $app['app']['date'], 'detail' => 'Child filing date']);
                 $parent = $apps->where('app.number', $parent_num)->first();
-                $new_matter->events()->create(["code" => 'FIL', "event_date" => $parent['app']['date'], 'detail' => $app['app']['number']]);
+                // Change this app's filing date to the parent's filing date for potentiel children of this app
+                $app->merge(['app.date' => $parent['app']['date']]);
                 $new_matter->parent_id = $matter_id_num["$parent_num"];
-            } else {
-                $new_matter->events()->create(["code" => 'FIL', "event_date" => $app['app']['date'], 'detail' => $app['app']['number']]);
             }
+            $new_matter->events()->create(["code" => 'FIL', "event_date" => $app['app']['date'], 'detail' => $app['app']['number']]);
             if (array_key_exists('pub', $app)) {
                 $new_matter->events()->create(["code" => 'PUB', "event_date" => $app['pub']['date'], 'detail' => $app['pub']['number']]);
             }
