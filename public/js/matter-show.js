@@ -198,7 +198,7 @@ dropZone.ondrop = function (event) {
   fetch(this.dataset.url, {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
-        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content
       },
       method: 'POST',
       body: formData
