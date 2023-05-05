@@ -99,7 +99,7 @@ $('body').on("shown.bs.popover", function (e) {
         } else {
           addActorForm.reset();
           $('.popover').popover('dispose');
-          reloadPart("/matter/{{ $matter->id }}", 'actorPanel');
+          reloadPart(window.location.href, 'actorPanel');
         }
       });
   };
@@ -217,7 +217,7 @@ dropZone.ondrop = function (event) {
       var tempLink = document.createElement('a');
       tempLink.style.display = 'none';
       tempLink.href = URL.createObjectURL(blob);
-      tempLink.download = "{{ $matter->uid }}-" + file.name;
+      tempLink.download = document.body.querySelector("[title='See family']").innerHTML + '-' + file.name;
       document.body.appendChild(tempLink);
       tempLink.click();
       document.body.removeChild(tempLink);
