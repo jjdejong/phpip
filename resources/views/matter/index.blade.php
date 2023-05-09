@@ -98,6 +98,12 @@
     window.location.href = exportUrl;
   };
 
+  report.onclick = e => {
+    let reportUrl = '/matter/report' + url.search;
+    e.preventDefault(); //stop the browser from following
+    window.location.href = reportUrl;
+  };
+
   filterFields.addEventListener('input', debounce( e => {
     if (e.target.value.length === 0) {
       url.searchParams.delete(e.target.name);
@@ -153,6 +159,9 @@
       <input type="hidden" name="display_with" value="{{ Request::get('display_with') }}">
       <div class="btn-group mr-3">
         <button id="exportList" type="button" class="btn btn-secondary"> &DownArrowBar; Export</button>
+      </div>
+      <div class="btn-group mr-3">
+        <button id="report" type="button" class="btn btn-secondary"> &DownArrowBar; Report</button>
       </div>
       <div class="button-group">
         <button id="clearFilters" type="button" class="btn btn-dark">&larrpl; Clear filters</button>

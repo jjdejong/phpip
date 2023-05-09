@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Http;
 use SimpleXMLElement;
 use Illuminate\Support\Arr;
+use ExcelReport;
+use PdfReport;
 
 class MatterController extends Controller
 {
@@ -607,6 +609,34 @@ class MatterController extends Controller
             200,
             [ 'Content-Type' => 'application/csv', 'Content-Disposition' => 'attachment; filename=' . $filename ]
         );
+    }
+
+    
+    /**
+     * Report a Matters list
+     * *
+     */
+    public function report(Request $request)
+    {
+        $filters = $request->except([
+            'display_with',
+            'page',
+            'filter',
+            'value',
+            'sortkey',
+            'sortdir',
+            'tab',
+            'include_dead'
+        ]);
+
+        $matters = Matter::filter(
+            $request->input('sortkey', 'caseref'),
+            $request->input('sortdir', 'asc'),
+            $filters,
+            $request->display_with,
+            $request->include_dead
+        )->orderBy("Cat")->orderBy('caseref')->get()->toArray();
+        return view('report.report1-fr', compact('matters'));
     }
 
     /**

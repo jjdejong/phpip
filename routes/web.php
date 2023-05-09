@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth'], function () {
             ->take(15)->get();
     });
     Route::get('matter/export', 'MatterController@export');
+    Route::get('matter/report', 'MatterController@report');
     Route::post('matter/{matter}/mergeFile', 'MatterController@mergeFile');
     Route::get('matter/{matter}/events', 'MatterController@events');
     Route::get('matter/{matter}/tasks', 'MatterController@tasks');
