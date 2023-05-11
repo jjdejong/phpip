@@ -354,15 +354,6 @@ app.addEventListener("input", e => {
     // Mark the field
     if (e.target.matches(".noformat, textarea, [contenteditable]")) {
         e.target.classList.add("border", "border-info");
-    } else if (e.target.matches('.filter')) {
-        // Manage filters input fields in Email template selection box
-        var url = new URL(window.location.origin + e.target.closest('[data-resource]').dataset.resource);
-        if (e.target.value.length === 0) {
-            url.searchParams.delete(e.target.name);
-        } else {
-            url.searchParams.set(e.target.name, e.target.value);
-        }
-        reloadPart(url, 'tableList');
     } else {
         if (e.target.classList.contains('is-invalid')) {
             e.target.classList.remove('is-invalid');
