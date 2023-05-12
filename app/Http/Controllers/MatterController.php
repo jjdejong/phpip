@@ -28,7 +28,8 @@ class MatterController extends Controller
             'sortkey',
             'sortdir',
             'tab',
-            'include_dead'
+            'include_dead',
+            'report_list'
         ]);
         
         $matters = Matter::filter(
@@ -626,8 +627,11 @@ class MatterController extends Controller
             'sortkey',
             'sortdir',
             'tab',
-            'include_dead'
+            'include_dead',
+            'report_list'
         ]);
+        $option = $request->input('report_list');
+        $report_name = "report." . $option;
 
         $matters = Matter::filter(
             $request->input('sortkey', 'caseref'),
@@ -636,7 +640,7 @@ class MatterController extends Controller
             $request->display_with,
             $request->include_dead
         )->orderBy("Cat")->orderBy('caseref')->get()->toArray();
-        return view('report.report1-fr', compact('matters'));
+        return view($report_name, compact('matters'));
     }
 
     /**

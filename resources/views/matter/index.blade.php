@@ -97,8 +97,10 @@
     e.preventDefault(); //stop the browser from following
     window.location.href = exportUrl;
   };
-
   report.onclick = e => {
+    var l = document.getElementById("report_list");
+    var report = l.options[l.selectedIndex].value;
+    url.searchParams.set("report_list", report)
     let reportUrl = '/matter/report' + url.search;
     e.preventDefault(); //stop the browser from following
     window.location.href = reportUrl;
@@ -160,9 +162,18 @@
       <div class="btn-group mr-3">
         <button id="exportList" type="button" class="btn btn-secondary"> &DownArrowBar; Export</button>
       </div>
-      <div class="btn-group mr-3">
-        <button id="report" type="button" class="btn btn-secondary"> &DownArrowBar; Report</button>
-      </div>
+      <form method="POST" action="/matter/report">
+        <div class="btn-group mr-3">
+                <select class="custom-select" id="report_list" name="report_list">
+                    <option value="report1-fr">By family, only alive (fr)</option>
+                    <option value="report2-fr">By family, with dead (fr)</option>
+                    <option value="report1" selected>By family, with dead (en)</option>
+                </select>
+        </div>
+        <div class="btn-group mr-2">
+            <button id="report" type="button" class="btn btn-secondary"> &DownArrowBar; Report</button>
+        </div>
+      </form>
       <div class="button-group">
         <button id="clearFilters" type="button" class="btn btn-dark">&larrpl; Clear filters</button>
       </div>
