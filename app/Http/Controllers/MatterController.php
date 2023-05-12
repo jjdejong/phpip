@@ -552,7 +552,8 @@ class MatterController extends Controller
             'sortkey',
             'sortdir',
             'tab',
-            'include_dead'
+            'include_dead',
+            'report_list'
         ]);
 
         $export = Matter::filter(
@@ -592,6 +593,9 @@ class MatterController extends Controller
             'Responsible',
             'Delegate',
             'Dead',
+            'Expiration date',
+            'Next renewal',
+            'Next renewal date',
             'Ctnr'
         ];
 

@@ -248,6 +248,8 @@ class Matter extends Model
             'matter.responsible',
             'del.login AS delegate',
             'matter.dead',
+            'matter.expire_date',
+            DB::raw("MIN(CAST( ren.detail AS SIGNED INTEGER )) AS QT, MIN(ren.due_date) AS next"),
             DB::raw("IF(isnull(matter.container_id), 1, 0) AS Ctnr")
         )
         ->join('matter_category', 'matter.category_code', 'matter_category.code')
@@ -307,6 +309,10 @@ class Matter extends Model
                 $join->on('status.matter_id', 'e2.matter_id')->whereColumn('status.event_date', '<', 'e2.event_date');
             }
         )
+        ->leftJoin('event', 'matter.id', 'event.matter_id')
+        ->leftJoin('task AS ren', function ($join) {
+            $join->on('event.id', 'ren.trigger_id')->where('ren.code', 'REN')->where('ren.done', 0);
+        })
         ->leftJoin(DB::raw('classifier tit1
             JOIN classifier_type ct1 ON tit1.type_code = ct1.code AND ct1.main_display = 1 AND ct1.display_order = 1'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit1.matter_id')
         ->leftJoin(DB::raw('classifier tit2
