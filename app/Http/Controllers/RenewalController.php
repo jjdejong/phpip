@@ -410,8 +410,11 @@ class RenewalController extends Controller
                         if ($firstPass) {
                             // retrouve la correspondance de société
                             $result = $this->_client($client, $apikey);
-                            if (isset($result["error"]) && $result["error"]["code"] >= "404") {
-                                return response()->json(['error' => "$client not found in Dolibarr.\n"]);
+                            if (isset($result["error"])) {
+                                if ( $result["error"]["code"] >= "404")
+                                    return response()->json(['error' => "$client not found in Dolibarr.\n"]);
+                                elseif ( $result["error"]["code"] === "318")
+                                    return response()->json(['error' =>  $result["error"]]);
                             }
                             $firstPass = false;
                             $soc_res = $result[0];
@@ -547,7 +550,7 @@ class RenewalController extends Controller
         // Search for client correspondence in Dolibarr
         $curl = curl_init();
         $httpheader = ['DOLAPIKEY: ' . $apikey];
-        $data = ['sqlfilters' => '(t.nom like "' . $client . '%")'];
+        $data = ['sqlfilters' => "(t.nom:like:'" . $client . "%')"];
 
         // Get from config/renewal.php
         $url = config('renewal.api.dolibarr_url') . "/thirdparties?" . http_build_query($data);
