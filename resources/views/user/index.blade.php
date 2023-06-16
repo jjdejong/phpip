@@ -2,8 +2,8 @@
 
 @section('content')
 <legend class="text-primary">
-    Users
-    <a href="user/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Create User">Create user</a>
+    {{ _i('Users') }}
+    <a href="user/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="{{ _i('Create User') }}">{{ _i('Create user') }}</a>
 </legend>
 <div class="row">
   <div class="col">
@@ -11,17 +11,17 @@
       <table class="table table-striped table-hover table-sm col">
         <thead class="card-header">
           <tr id="filterFields" class="bg-primary text-light">
-            <th class="border-top-0"><input class="form-control form-control-sm" name="Name" placeholder="Name" value="{{ Request::get('Name') }}"></th>
-            <th class="align-middle border-top-0">Role</th>
-            <th class="align-middle border-top-0">Login</th>
-            <th class="align-middle border-top-0">Company</th>
+            <th class="border-top-0"><input class="form-control form-control-sm" name="Name" placeholder="{{ _i('Name') }}" value="{{ Request::get('Name') }}"></th>
+            <th class="align-middle border-top-0">{{ _i('Role') }}</th>
+            <th class="align-middle border-top-0">{{ _i('Login') }}</th>
+            <th class="align-middle border-top-0">{{ _i('Company') }}</th>
           </tr>
         </thead>
         <tbody id="userList" class="card-body">
           @foreach ($userslist as $user)
           <tr class="reveal-hidden" data-id="{{ $user->id }}">
             <td>
-              <a @if($user->warn) class="text-danger text-decoration-none" @endif href="/user/{{ $user->id }}" data-panel="ajaxPanel" title="User data">
+              <a @if($user->warn) class="text-danger text-decoration-none" @endif href="/user/{{ $user->id }}" data-panel="ajaxPanel" title="{{ _i('User data') }}">
                 {{ $user->name }}
               </a>
             </td>
@@ -42,11 +42,11 @@
   <div class="col-4">
     <div class="card border-info">
       <div class="card-header bg-info text-light">
-        User information
+        {{ _i('User information') }}
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          Click on user name to view and edit details
+          {{ _i('Click on user name to view and edit details') }}
         </div>
       </div>
     </div>
