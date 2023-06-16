@@ -200,12 +200,12 @@
                     resolve(JSON.parse(this.responseText).success);
                 }
                 if (this.status === 419) {
-                    reject("Token expired. Refresh the page");
+                    reject("{{ _i('Token expired. Refresh the page') }}");
                 }
                 if (this.status === 404) {
-                    reject("No email template found - check that your templates match your client's language");
+                    reject("{{ _i('No email template found - check that your templates match your client\'s language') }}");
                 } else {
-                    reject("Something went wrong");
+                    reject("{{ _i('Something went wrong') }}");
                 }
             }
         });
@@ -214,7 +214,7 @@
     xmlRenewals.addEventListener("click", function () {
         var tids = getSelected();
         if (tids.length === 0) {
-            alert("No renewals selected for order");
+            alert("{{ _i('No renewals selected for order') }}");
             return;
         }
         var string = JSON.stringify({task_ids: tids, clear: false});
@@ -268,104 +268,104 @@
 <div class="card">
     <div class="card-header py-1">
         <span class="lead">
-            Manage renewals
+            {{ _i('Manage renewals') }}
         </span>
-        <a href="https://github.com/jjdejong/phpip/wiki/Renewal-Management" target="_blank" title="Help" class="btn btn-outline-primary btn-sm">?</a>
-        <a href="/logs" class="btn btn-info">View logs</a>
-        <button id="clearFilters" type="button" class="btn btn-info float-right">&larrpl; Clear filters</button>
+        <a href="https://github.com/jjdejong/phpip/wiki/Renewal-Management" target="_blank" title="{{ _i('Help') }}" class="btn btn-outline-primary btn-sm">?</a>
+        <a href="/logs" class="btn btn-info">{{ _i('View logs') }}</a>
+        <button id="clearFilters" type="button" class="btn btn-info float-right">&larrpl; {{ _i('Clear filters') }}</button>
     </div>
     <div class="card-header py-1">
         <nav class="mt-1">
             <div class="nav nav-pills justify-content-center" id="tabsGroup">
-                <a class="nav-item nav-link {{ !$step && !$invoice_step ? 'active' : '' }}" href="#p1" data-toggle="tab" data-step="0">First call</a>
-                <a class="nav-item nav-link {{ $step == 2 ? 'active' : '' }}" href="#p2" data-toggle="tab" data-step="2">Reminder</a>
-                <a class="nav-item nav-link {{ $step == 4 ? 'active' : '' }}" href="#p3" data-toggle="tab" data-step="4">Payment</a>
+                <a class="nav-item nav-link {{ !$step && !$invoice_step ? 'active' : '' }}" href="#p1" data-toggle="tab" data-step="0">{{ _i('First call') }}</a>
+                <a class="nav-item nav-link {{ $step == 2 ? 'active' : '' }}" href="#p2" data-toggle="tab" data-step="2">{{ _i('Reminder') }}</a>
+                <a class="nav-item nav-link {{ $step == 4 ? 'active' : '' }}" href="#p3" data-toggle="tab" data-step="4">{{ _i('Payment') }}</a>
                 @if (config('renewal.general.receipt_tabs'))
-                <a class="nav-item nav-link {{ $step == 6 ? 'active' : '' }}" href="#p4" data-toggle="tab" data-step="6">Receipts</a>
-                <a class="nav-item nav-link {{ $step == 8 ? 'active' : '' }}" href="#p5" data-toggle="tab" data-step="8">Receipts received</a>
+                <a class="nav-item nav-link {{ $step == 6 ? 'active' : '' }}" href="#p4" data-toggle="tab" data-step="6">{{ _i('Receipts') }}</a>
+                <a class="nav-item nav-link {{ $step == 8 ? 'active' : '' }}" href="#p5" data-toggle="tab" data-step="8">{{ _i('Receipts received') }}</a>
                 @endif
-                <a class="nav-item nav-link {{ $step == 12 ? 'active' : '' }}" href="#p6" data-toggle="tab" data-step="12">Abandoned</a>
-                <a class="nav-item nav-link {{ $step == 14 ? 'active' : '' }}" href="#p9" data-toggle="tab" data-step="14">Lapsed</a>
-                <a class="nav-item nav-link {{ $step == 10 ? 'active' : '' }}" href="#p10" data-toggle="tab" data-step="10">Closed</a>
-                <a class="nav-item nav-link {{ $invoice_step == 1 ? 'active' : '' }}" href="#p7" data-toggle="tab" data-invoice_step="1">Invoicing</a>
-                <a class="nav-item nav-link {{ $invoice_step == 2 ? 'active' : '' }}" href="#p8" data-toggle="tab" data-invoice_step="2">Invoiced</a>
-                <a class="nav-item nav-link {{ $invoice_step == 3 ? 'active' : '' }}" href="#p11" data-toggle="tab" data-invoice_step="3">Invoices paid</a>
+                <a class="nav-item nav-link {{ $step == 12 ? 'active' : '' }}" href="#p6" data-toggle="tab" data-step="12">{{ _i('Abandoned') }}</a>
+                <a class="nav-item nav-link {{ $step == 14 ? 'active' : '' }}" href="#p9" data-toggle="tab" data-step="14">{{ _i('Lapsed') }}</a>
+                <a class="nav-item nav-link {{ $step == 10 ? 'active' : '' }}" href="#p10" data-toggle="tab" data-step="10">{{ _i('Closed') }}</a>
+                <a class="nav-item nav-link {{ $invoice_step == 1 ? 'active' : '' }}" href="#p7" data-toggle="tab" data-invoice_step="1">{{ _i('Invoicing') }}</a>
+                <a class="nav-item nav-link {{ $invoice_step == 2 ? 'active' : '' }}" href="#p8" data-toggle="tab" data-invoice_step="2">{{ _i('Invoiced') }}</a>
+                <a class="nav-item nav-link {{ $invoice_step == 3 ? 'active' : '' }}" href="#p11" data-toggle="tab" data-invoice_step="3">{{ _i('Invoices paid') }}</a>
             </div>
         </nav>
         <div class="tab-content mt-1">
             <div class="tab-pane {{ !$step && !$invoice_step ? 'active' : '' }}" id="p1">
                 <div class="container text-right">
                     <div class="btn-group">
-                        <button class="btn btn-info" type="button" id="callRenewals">Send call email</button>
-                        <button class="btn btn-info" type="button" id="renewalsSent">Call sent manually</button>
+                        <button class="btn btn-info" type="button" id="callRenewals">{{ _i('Send call email') }}</button>
+                        <button class="btn btn-info" type="button" id="renewalsSent">{{ _i('Call sent manually') }}</button>
                     </div>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 2 ? 'active' : '' }}" id="p2">
                 <div class="container text-right">
                     <div class="btn-group">
-                        <button class="btn btn-outline-info" type="button" id="reminderRenewals">Send reminder email</button>
-                        <button class="btn btn-outline-info" type="button" id="lastReminderRenewals" title="Send reminder and enter grace period">Send last reminder email</button>
-                        <button class="btn btn-info" type="button" id="instructedRenewals" title="Instructions received to pay">Payment order received</button>
-                        <button class="btn btn-info" type="button" id="abandonRenewals" title="Abandon instructions received">Abandon</button>
-                        <button class="btn btn-info" type="button" id="lapsedRenewals" title="Office lapse communication received">Lapsed</button>
+                        <button class="btn btn-outline-info" type="button" id="reminderRenewals">{{ _i('Send reminder email') }}</button>
+                        <button class="btn btn-outline-info" type="button" id="lastReminderRenewals" title="{{ _i('Send reminder and enter grace period') }}">{{ _i('Send last reminder email') }}</button>
+                        <button class="btn btn-info" type="button" id="instructedRenewals" title="{{ _i('Instructions received to pay') }}">{{ _i('Payment order received') }}</button>
+                        <button class="btn btn-info" type="button" id="abandonRenewals" title="{{ _i('Abandon instructions received') }}">{{ _i('Abandon') }}</button>
+                        <button class="btn btn-info" type="button" id="lapsedRenewals" title="{{ _i('Office lapse communication received') }}">{{ _i('Lapsed') }}</button>
                     </div>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 4 ? 'active' : ''}}" id="p3">
                 <div class="container text-right">
                     <div class="btn-group">
-                        <button class="btn btn-outline-info" type="button" id="xmlRenewals" title="Generate xml files for EP or FR">Download XML order to pay</button>
-                        <button class="btn btn-info" type="button" id='doneRenewals'>Paid</button>
+                        <button class="btn btn-outline-info" type="button" id="xmlRenewals" title="{{ _i('Generate xml files for EP or FR') }}">{{ _i('Download XML order to pay') }}</button>
+                        <button class="btn btn-info" type="button" id='doneRenewals'>{{ _i('Paid') }}</button>
                     </div>
                 </div>
             </div>
             @if (config('renewal.general.receipt_tabs'))
             <div class="tab-pane {{ $step == 6 ? 'active' : ''}}" id="p4">
                 <div class="container text-right">
-                    <button class="btn btn-info" type="button" id="receiptRenewals">Official receipts received</button>
+                    <button class="btn btn-info" type="button" id="receiptRenewals">{{ _i('Official receipts received') }}</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 8 ? 'active' : ''}}" id="p5">
                 <div class="container text-right">
-                    <button class="btn btn-info" type="button" id="sendReceiptsRenewals">Receipts sent</button>
+                    <button class="btn btn-info" type="button" id="sendReceiptsRenewals">{{ _i('Receipts sent') }}</button>
                 </div>
             </div>
             @endif
             <div class="tab-pane {{ $step == 12 ? 'active' : ''}}" id="p6">
                 <div class="container text-right">
-                    <button class="btn btn-info" type="button" id="lapsingRenewals">Lapse</button>
+                    <button class="btn btn-info" type="button" id="lapsingRenewals">{{ _i('Lapse') }}</button>
                 </div>
             </div>
             <div class="tab-pane {{ $invoice_step == 1 ? 'active' : ''}}" id="p7">
                 <div class="container text-right">
                     <div class="btn-group">
                         @if (config('renewal.invoice.backend') == 'dolibarr')
-                        <button class="btn btn-info" type="button" id="invoiceRenewals">Generate invoice</button>
+                        <button class="btn btn-info" type="button" id="invoiceRenewals">{{ _i('Generate invoice') }}</button>
                         @endif
-                        <button class="btn btn-outline-info" type="button" id="renewalsExport">Export all</button>
-                        <button class="btn btn-info" type="button" id="renewalsInvoiced">Invoiced</button>
+                        <button class="btn btn-outline-info" type="button" id="renewalsExport">{{ _i('Export all') }}</button>
+                        <button class="btn btn-info" type="button" id="renewalsInvoiced">{{ _i('Invoiced') }}</button>
                     </div>
                 </div>
             </div>
             <div class="tab-pane {{ $invoice_step == 2 ? 'active' : ''}}" id="p8">
                 <div class="container text-right">
-                    <button class="btn btn-info" type="button" id="invoicesPaid">Paid</button>
+                    <button class="btn btn-info" type="button" id="invoicesPaid">{{ _i('Paid') }}</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 14 ? 'active' : ''}}" id="p9">
                 <div class="container text-right">
-                    <button class="btn btn-info" type="button" id="sendLapsedRenewals">Lapse communication sent</button>
+                    <button class="btn btn-info" type="button" id="sendLapsedRenewals">{{ _i('Lapse communication sent') }}</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 10 ? 'active' : ''}}" id="p10">
                 <div class="container text-right">
-                    <button class="btn btn-secondary" type="button" disabled>Closed renewals</button>
+                    <button class="btn btn-secondary" type="button" disabled>{{ _i('Closed renewals') }}</button>
                 </div>
             </div>
             <div class="tab-pane lead {{ $invoice_step == 3 ? 'active' : ''}}" id="p11">
                 <div class="container text-right">
-                    <button class="btn btn-secondary" type="button" disabled>Paid invoices</button>
+                    <button class="btn btn-secondary" type="button" disabled>{{ _i('Paid invoices') }}</button>
                 </div>
             </div>
         </div>
@@ -374,45 +374,45 @@
         <div class="row font-weight-bold">
             <div class="input-group"  id="filterFields">
                 <div class="col-2">
-                    <input type="text" class="form-control form-control-sm" name="Name" value="{{ Request::get('Name') }}" placeholder="Client">
+                    <input type="text" class="form-control form-control-sm" name="Name" value="{{ Request::get('Name') }}" placeholder="{{ _i('Client') }}">
                 </div>
                 <div class="col-3">
-                    <input type="text" class="form-control form-control-sm" name="Title" value="{{ Request::get('Title') }}" placeholder="Title">
+                    <input type="text" class="form-control form-control-sm" name="Title" value="{{ Request::get('Title') }}" placeholder="{{ _i('Title') }}">
                 </div>
                 <div class="col-1">
-                    <input type="text" class="form-control form-control-sm" name="Case" value="{{ Request::get('Case') }}" placeholder="Matter">
+                    <input type="text" class="form-control form-control-sm" name="Case" value="{{ Request::get('Case') }}" placeholder="{{ _i('Matter') }}">
                 </div>
                 <div class="col-3">
                     <div class="row">
                         <div class="col-2">
-                            <input type="text" class="form-control form-control-sm" name="Country" value="{{ Request::get('Country') }}" placeholder="Ctry">
+                            <input type="text" class="form-control form-control-sm" name="Country" value="{{ Request::get('Country') }}" placeholder="{{ _i('Ctry') }}">
                         </div>
                         <div class="col-2">
-                            <input type="text" class="form-control form-control-sm" name="Qt" value="{{ Request::get('Qt') }}" placeholder="Qt">
+                            <input type="text" class="form-control form-control-sm" name="Qt" value="{{ Request::get('Qt') }}" placeholder="{{ _i('Qt') }}">
                         </div>
                         <div class="col-2">
-                            <div class="btn-group-toggle" data-toggle="buttons" title="In grace period">
+                            <div class="btn-group-toggle" data-toggle="buttons" title="{{ _i('In grace period') }}">
                                 <label class="btn btn-outline-primary btn-sm">
-                                    <input id="grace" name="grace_period" type="checkbox">Grace
+                                    <input id="grace" name="grace_period" type="checkbox">{{ _i('Grace') }}
                                 </label>
                             </div>
                         </div>
                         <div class="col-3 py-2">
-                            Cost
+                            {{ _i('Cost') }}
                         </div>
                         <div class="col-3 py-2">
-                            Fee
+                            {{ _i('Fee') }}
                         </div>
                     </div>
                 </div>
                 <div class="col">
                     <div class="input-group">
-                        <input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">
-                        <input type="date" class="form-control form-control-sm" name="Untildate" id="Untildate" title="Until selected date" value="{{ Request::get('Untildate') }}">
+                        <input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate" title="{{ _i('From selected date') }}" value="{{ Request::get('Fromdate') }}">
+                        <input type="date" class="form-control form-control-sm" name="Untildate" id="Untildate" title="{{ _i('Until selected date') }}" value="{{ Request::get('Untildate') }}">
                     </div>
                 </div>
                 <div class="col-1 px-2">
-                    <div class="btn-group-toggle" data-toggle="buttons" title="Select/unselect all">
+                    <div class="btn-group-toggle" data-toggle="buttons" title="{{ _i('Select/unselect all') }}">
                         <label class="btn btn-outline-primary btn-sm">
                             <input id="selectAll" type="checkbox">&check;
                         </label>
@@ -424,7 +424,7 @@
     <div class="card-body pt-2" id="renewalList">
         @if (count($renewals) == 0)
         <div class="row text-danger">
-            The list is empty
+            {{ _i('The list is empty') }}
         </div>
         @else
         <table class="table table-striped table-sm mb-1">
@@ -463,11 +463,11 @@
                 <td class="col-2 text-center">
                     {{ Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}
                     @if ($task->done)
-                    <div class="badge badge-success" title="Done">&check;</div>
+                    <div class="badge badge-success" title="{{ _i('Done') }}">&check;</div>
                     @elseif ($task->due_date < now())
-                    <div class="badge badge-danger" title="Overdue">&nbsp;!&nbsp;</div>
+                    <div class="badge badge-danger" title="{{ _i('Overdue') }}">&nbsp;!&nbsp;</div>
                     @elseif ($task->due_date < now()->addWeeks(1))
-                    <div class="badge badge-warning" title="Urgent">&nbsp;!&nbsp;</div>
+                    <div class="badge badge-warning" title="{{ _i('Urgent') }}">&nbsp;!&nbsp;</div>
                     @endif
                 </td>
                 <td class="col-1 px-3">
