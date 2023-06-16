@@ -13,10 +13,10 @@
         Contact
       </div>
       <div class="col-1 bg-light">
-        Send to:
+        {{ _i("Send to:") }}
       </div>
       <div class="col-1 bg-light">
-        CC:
+        {{ _i('CC:') }}
       </div>
       <div class="col-7">
       </div>
@@ -40,16 +40,16 @@
   <div class='container' data-resource="/document/select/{{ $matter->id }}">
       <div class="row bg-light font-weight-bold">
           <div class="col-lg-4">
-            Summary
+            {{ _i("Summary") }}
           </div>
           <div class="col-lg-2">
-            Language
+            {{ _i("Language") }}
           </div>
           <div class="col-lg-2">
-            Category
+            {{ _i("Category") }}
           </div>
           <div class="col-lg-3">
-            Style
+            {{ _i("Style") }}
           </div>
           <div class="col-lg-1">
           </div>
@@ -70,7 +70,7 @@
             {{ $member->style }}
           </div>
           <div class = "col-lg-1">
-            <a class="sendDocument btn btn-info px-1 py-0">Prepare</a>
+            <a class="sendDocument btn btn-info px-1 py-0">{{ _i('Prepare') }}</a>
           </div>
         </div>
       @endforeach

@@ -15,6 +15,7 @@ use Log;
 use DB;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Illuminate\Support\Facades\Blade;
+use LaravelGettext;
 
   function render($__php, $__data)
   {
@@ -44,6 +45,7 @@ class DocumentController extends Controller
      */
     public function index(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $Notes  = $request->input('Notes');
         $Name = $request->input('Name');
         $template_classes = TemplateClass::query() ;
@@ -67,6 +69,7 @@ class DocumentController extends Controller
      */
     public function create()
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor ;
         $tableComments = $table->getTableComments('template_classes');
         return view('documents.create', compact('tableComments'));
@@ -95,6 +98,7 @@ class DocumentController extends Controller
      */
     public function show(TemplateClass $class)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('template_classes');
         $class->with(['role']);
@@ -135,7 +139,9 @@ class DocumentController extends Controller
          * @return \Illuminate\Http\Response
          */
 
-  public function select(Matter $matter, Request $request) {
+  public function select(Matter $matter, Request $request)
+    {
+        LaravelGettext::setLocale(Auth::user()->language);
     $template_id = $request->input('template_id');
     //limit to actors with email
     $contacts = MatterActors::where([['matter_id',$matter->id],['role_code','CNT']])->whereNotNull('email');
@@ -221,7 +227,9 @@ class DocumentController extends Controller
     * @param  \App\TemplateMember $member
     * @return \Illuminate\Http\Response
   */
-    public function mailto(TemplateMember $member, Request $request) {
+    public function mailto(TemplateMember $member, Request $request)
+    {
+        LaravelGettext::setLocale(Auth::user()->language);
       // Todo Add field for maually add an address
       $data =  array();
       $subject = Blade::compileString($member->subject);
@@ -273,7 +281,7 @@ class DocumentController extends Controller
         }
       }
       else {
-        return json_encode(['message' =>"You need to select at least one contact."]);
+        return json_encode(['message' => _i("You need to select at least one contact.")]);
       }
     }
 }
