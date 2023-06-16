@@ -15,11 +15,22 @@ use SimpleXMLElement;
 use Illuminate\Support\Arr;
 use ExcelReport;
 use PdfReport;
+use Session;
+use Log;
+use LaravelGettext;
+// $locale = "fr_FR.UTF-8";
+//         putenv("LANG=" . $locale);
+//         setlocale(LC_ALL, $locale);
+/*
+        putenv("LANG=". Session::get('locale'));
+        setlocale(LC_MESSAGES, Session::get('locale'));*/
 
 class MatterController extends Controller
 {
+
     public function index(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $filters = $request->except([
             'display_with',
             'page',
@@ -45,6 +56,7 @@ class MatterController extends Controller
 
     public function show(Matter $matter)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('view', $matter);
         $matter->load(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers']);
         return view('matter.show', compact('matter'));
@@ -57,6 +69,7 @@ class MatterController extends Controller
     **/
     public function info($id)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         return Matter::with(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers'])
             ->find($id);
     }
@@ -69,6 +82,7 @@ class MatterController extends Controller
      */
     public function create(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('create', Matter::class);
         $operation = $request->input('operation', 'new'); // new, clone, child, ops
         $category = [];
@@ -104,6 +118,7 @@ class MatterController extends Controller
      */
     public function store(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('create', Matter::class);
         $this->validate($request, [
             'category_code' => 'required',
@@ -197,6 +212,7 @@ class MatterController extends Controller
      */
     public function storeN(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('create', Matter::class);
         $this->validate($request, [
             'ncountry' => 'required:array'
@@ -376,7 +392,7 @@ class MatterController extends Controller
                             'name' => $inventor, 
                             'default_role' => 'INV',
                             'phy_person' => 1,
-                            'notes' => "Inserted by OPS family create tool for matter ID $new_matter->id"
+                            'notes' => _("Inserted by OPS family create tool for matter ID $new_matter->id")
                         ]);
                         $new_matter->actorPivot()->firstOrCreate([
                             'actor_id' => $new_actor->id,
@@ -385,7 +401,7 @@ class MatterController extends Controller
                         ]);
                     }
                 }
-                $new_matter->notes = 'Applicants: ' .collect($app['applicants'])->implode('; ') ."\nInventors: " .collect($app['inventors'])->implode(' - ');
+                $new_matter->notes = _("Applicants"). ': ' .collect($app['applicants'])->implode('; ') ."\n". _("Inventors") .": " .collect($app['inventors'])->implode(' - ');
             } else {
                 $new_matter->container_id = $container_id;
                 foreach ($app['pri'] as $pri) {
@@ -410,7 +426,7 @@ class MatterController extends Controller
             }
             if ($parent_num) {
                 //return response()->json(['errors' => ['message' => $matter_id_num]]);
-                $new_matter->events()->create(["code" => 'ENT', "event_date" => $app['app']['date'], 'detail' => 'Child filing date']);
+                $new_matter->events()->create(["code" => 'ENT', "event_date" => $app['app']['date'], 'detail' => _('Child filing date')]);
                 $parent = $apps->where('app.number', $parent_num)->first();
                 $new_matter->events()->create(["code" => 'FIL', "event_date" => $parent['app']['date'], 'detail' => $app['app']['number']]);
                 $new_matter->parent_id = $matter_id_num["$parent_num"];
@@ -435,7 +451,7 @@ class MatterController extends Controller
                                     "due_date" => $exa->event_date->addMonths(4), 
                                     "done_date" => $step['replied'],
                                     "done" => 1,
-                                    "detail" => 'Exam Report']);
+                                    "detail" => _('Exam Report')]);
                             }
                             break;
                         case 'RFEE':
@@ -459,7 +475,7 @@ class MatterController extends Controller
                                     "due_date" => $grt->event_date->addMonths(4), 
                                     "done_date" => $step['grt_paid'],
                                     "done" => 1,
-                                    "detail" => 'Grant Fee']);
+                                    "detail" => _('Grant Fee')]);
                             }
                             break;
                         case 'EXAM52':
@@ -486,6 +502,7 @@ class MatterController extends Controller
      */
     public function edit(Matter $matter)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('update', $matter);
         $matter->load(
             'container',
@@ -514,6 +531,7 @@ class MatterController extends Controller
      */
     public function update(Request $request, Matter $matter)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('update', $matter);
         $request->validate([
             'term_adjust' => 'numeric',
@@ -544,6 +562,7 @@ class MatterController extends Controller
      */
     public function export(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $filters = $request->except([
             'display_with',
             'page',
@@ -565,37 +584,37 @@ class MatterController extends Controller
         )->get()->toArray();
 
         $captions = [
-            'Our Ref',
-            'Country',
-            'Cat',
-            'Origin',
-            'Status',
-            'Status date',
-            'Client',
-            'Client Ref',
-            'Applicant',
-            'Agent',
-            'Agent Ref',
-            'Title',
-            'Title2',
-            'Title3',
-            'Inventor 1',
-            'Filed',
-            'FilNo',
-            'Published',
-            'Pub. No',
-            'Granted',
-            'Grt No',
-            'ID',
-            'container_ID',
-            'parent_ID',
-            'Type',
-            'Responsible',
-            'Delegate',
-            'Dead',
-            'Expiration date',
-            'Next renewal',
-            'Next renewal date',
+            _('Our Ref'),
+            _('Country'),
+            _('Cat'),
+            _('Origin'),
+            _('Status'),
+            _('Status date'),
+            _('Client'),
+            _('Client Ref'),
+            _('Applicant'),
+            _('Agent'),
+            _('Agent Ref'),
+            _('Title'),
+            _('Title2'),
+            _('Title3'),
+            _('Inventor 1'),
+            _('Filed'),
+            _('FilNo'),
+            _('Published'),
+            _('Pub. No'),
+            _('Granted'),
+            _('Grt No'),
+            _('ID'),
+            _('container_ID'),
+            _('parent_ID'),
+            _('Type'),
+            _('Responsible'),
+            _('Delegate'),
+            _('Dead'),
+            _('Expiration date'),
+            _('Next renewal'),
+            _('Next renewal date'),
             'Ctnr'
         ];
 
@@ -623,6 +642,7 @@ class MatterController extends Controller
      */
     public function report(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $filters = $request->except([
             'display_with',
             'page',
@@ -654,9 +674,9 @@ class MatterController extends Controller
     public function mergeFile(Matter $matter, Request $request)
     {
         // No dedicated "form request" class being defined, this validation will silently terminate the operation when unsuccessful
-        $this->validate($request, [
-            'file'  => 'required|file|mimes:docx,dotx'
-        ]);
+//         $this->validate($request, [
+//             'file'  => 'required|file|mimes:docx,dotx'
+//         ]);
         $file = $request->file('file');
 
         // Attempt for a cleaner creation method of the data collection using relationships
@@ -998,6 +1018,7 @@ class MatterController extends Controller
 
     public function classifiers(Matter $matter)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $matter->load(['classifiers']);
         return view('matter.classifiers', compact('matter'));
     }
@@ -1027,10 +1048,10 @@ class MatterController extends Controller
             ->get($ops_biblio);
 
         if ($ops_response->clientError()) {
-            return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS Family'];
+            return ['errors' => ['docnum' => [_('Number not found')]], 'message' => _('Number not found in OPS Family')];
         }
         if ($ops_response->serverError()) {
-            return ['exception' => 'OPS server error', 'message' => 'OPS server error, try again'];
+            return ['exception' => _('OPS server error'), 'message' => _('OPS server error, try again')];
         }
 
         $members = data_get($ops_response, 'ops:world-patent-data.ops:patent-family.ops:family-member');

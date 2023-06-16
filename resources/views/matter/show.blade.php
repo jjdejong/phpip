@@ -11,11 +11,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 <div class="row card-deck mb-1">
   <div id="refsPanel" class="card border-primary col-3 p-0">
     <div class="card-header bg-primary text-light reveal-hidden p-1">
-      <a class="bg-primary text-white lead" href="/matter?Ref={{ $matter->caseref }}" title="See family" {!! $matter->dead ? 'style="text-decoration: line-through;"' : '' !!}>{{ $matter->uid }}</a>
+      <a class="bg-primary text-white lead" href="/matter?Ref={{ $matter->caseref }}" title="{{ _i("See family") }}" {!! $matter->dead ? 'style="text-decoration: line-through;"' : '' !!}>{{ $matter->uid }}</a>
       ({{ $matter->category->category }})
       @canany(['admin', 'readwrite'])
       <a class="bg-primary text-white float-right hidden-action"
-         data-toggle="modal" data-target="#ajaxModal" href="/matter/{{ $matter->id }}/edit" title="Advanced matter edition">
+         data-toggle="modal" data-target="#ajaxModal" href="/matter/{{ $matter->id }}/edit" title="{{ _i('Advanced matter edition') }}">
         &#9998;
       </a>
       @endcanany
@@ -23,45 +23,45 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     <div class="card-body p-1">
       <dl class="row mb-0">
         @if ($matter->container_id)
-        <dt class="col-4 text-right">Container:</dt>
+        <dt class="col-4 text-right">{{ _i("Container:") }}</dt>
         <dd class="col-8 mb-0">
-          <a href="/matter/{{ $matter->container_id }}" title="See container">
+          <a href="/matter/{{ $matter->container_id }}" title="{{ _i('See container') }}">
             {{ $matter->container->uid }}
           </a>
         </dd>
         @endif
         @if ($matter->parent_id)
-        <dt class="col-4 text-right">Parent:</dt>
+        <dt class="col-4 text-right">{{ _i("Parent:") }}</dt>
         <dd class="col-8 mb-0">
-          <a href="/matter/{{ $matter->parent_id }}" title="See parent">
+          <a href="/matter/{{ $matter->parent_id }}" title="{{ _i('See parent') }}">
             {{ $matter->parent->uid }}
           </a>
         </dd>
         @endif
         @if ($matter->alt_ref)
-        <dt class="col-4 text-right">Alt. ref:</dt>
+        <dt class="col-4 text-right">{{ _i("Alt. ref:") }}</dt>
         <dd class="col-8 mb-0">{{ $matter->alt_ref }}</dd>
         @endif
         @if ($matter->expire_date)
-        <dt class="col-4 text-right">Expiry:</dt>
+        <dt class="col-4 text-right">{{ _i("Expiry:") }}</dt>
         <dd class="col-8">{{ Carbon\Carbon::parse($matter->expire_date)->isoFormat('L') }}</dd>
         @endif
       </dl>
       <div class="alert alert-info text-center py-1 mb-0">
-        <b>Responsible:</b>
+        <b>{{ _i("Responsible:") }}</b>
         {{$matter->responsible}}
       </div>
     </div>
     <div class="card-footer p-1">
       @canany(['admin', 'readwrite'])
       <div class="btn-group btn-block">
-        <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=child" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Create child {{ $matter->category->category }}">
-          &oplus; New Child
+        <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=child" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="{{ _i('Create child') . '  ' . _i($matter->category->category) }}">
+          &oplus; {{ _i("New Child") }}
         </a>
-        <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=clone" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Clone {{ $matter->category->category }}">
-          &boxbox; Clone
+        <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=clone" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Clone {{ _i($matter->category->category) }}">
+          &boxbox; {{ _i("Clone") }}
         </a>
-        <a class="btn btn-info btn-sm {{ $matter->countryInfo->goesnational ? '' : 'disabled' }}" href="/matter/{{ $matter->id }}/createN" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="Enter {{ $matter->category->category }} in national phase">
+        <a class="btn btn-info btn-sm {{ $matter->countryInfo->goesnational ? '' : 'disabled' }}" href="/matter/{{ $matter->id }}/createN" data-toggle="modal" data-target="#ajaxModal" data-size="modal-sm" title="{{ sprintf('Enter %s in national phase', _i($matter->category->category)) }}">
           &#9872; Nat. Phase
         </a>
       </div>
@@ -128,14 +128,14 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         <div class="card-header bg-primary text-light p-1">
           {{ $role_name }}
           @canany(['admin', 'readwrite'])
-          <a class="hidden-action float-right text-light font-weight-bold ml-3" data-toggle="popover" title="Add {{ $role_name }}"
+          <a class="hidden-action float-right text-light font-weight-bold ml-3" data-toggle="popover" title="{{ sprintf(_i('Add %s'), $role_name ) }}"
              data-role_name="{{ $role_name }}"
              data-role_code="{{ $role_group->first()->role_code }}"
              data-shareable="{{ $role_group->first()->shareable }}"
              href="javascript:void(0)">
             &oplus;
           </a>
-          <a class="hidden-action float-right text-light font-weight-bold" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group->first()->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
+          <a class="hidden-action float-right text-light font-weight-bold" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title=" {{ sprintf(_i('Edit actors in %s group'), $role_group->first()->role_name) }}" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
             &#9998;
           </a>
           @endcanany
@@ -145,13 +145,13 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             @foreach ( $role_group as $actor )
             <li class="text-truncate {{ $actor->inherited ? 'font-italic' : '' }}">
               @if ( $actor->warn )
-              <span title="Special instructions">&#9888;</span>
+              <span title="{{ _i('Special instructions') }}">&#9888;</span>
               @endif
               <a @if ($actor->warn) class="text-danger" @endif
                 href="/actor/{{ $actor->actor_id }}"
                 data-toggle="modal"
                 data-target="#ajaxModal"
-                title="Actor data">
+                title="{{ _i('Actor data') }}">
               {{ $actor->display_name }}
               </a>
               @if ( $actor->show_ref && $actor->actor_ref )
@@ -178,11 +178,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     <div class="card-deck mb-1">
       <div class="card border-primary reveal-hidden" style="min-height: 138px;">
         <div class="card-header bg-primary p-1">
-          <a class="row text-light text-decoration-none" href="/matter/{{ $matter->id }}/events" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All events">
-            <span class="col-5">Status</span>
-            <span class="col-3">Date</span>
+          <a class="row text-light text-decoration-none" href="/matter/{{ $matter->id }}/events" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="{{ _i('All events') }}">
+            <span class="col-5">{{ _i("Status") }}</span>
+            <span class="col-3">{{ _i("Date") }}</span>
             <span class="col-4">
-              Number
+              {{ _i('Number') }}
               <span class="hidden-action float-right">
                 &equiv;
               </span>
@@ -214,8 +214,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       </div>
       <div class="card col-6 p-0 border-primary reveal-hidden">
         <div class="card-header {{ $matter->tasksPending->count() ? 'text-warning' : 'text-light' }} p-1 bg-primary">
-          Open Tasks Due
-          <a class="text-warning text-decoration-none hidden-action float-right stretched-link" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All tasks"><span class="">
+          {{ _i("Open Tasks Due") }}
+          <a class="text-warning text-decoration-none hidden-action float-right stretched-link" href="/matter/{{ $matter->id }}/tasks" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="{{ _i('All tasks') }}"><span class="">
             &equiv;
           </a>
         </div>
@@ -232,8 +232,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     <div class="row card-deck mb-1">
       <div class="card col-2 p-0 border-primary reveal-hidden" style="min-height: 138px;">
         <div class="card-header {{ $matter->renewalsPending->count() ? 'text-warning' : 'text-light' }} p-1 bg-primary">
-          Renewals Due
-          <a class="text-warning text-decoration-none hidden-action float-right stretched-link" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="All renewals">
+          {{ _i("Renewals Due") }}
+          <a class="text-warning text-decoration-none hidden-action float-right stretched-link" href="/matter/{{ $matter->id }}/renewals" data-toggle="modal" data-target="#ajaxModal" data-size="modal-lg" title="{{ _i('All renewals') }}">
             &equiv;
           </a>
         </div>
@@ -248,9 +248,9 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       </div>
       <div class="card col-6 p-0 border-primary reveal-hidden">
         <div class="card-header p-1 bg-primary">
-          <a class="row text-light text-decoration-none" href="/matter/{{ $matter->id }}/classifiers" data-target="#ajaxModal" data-toggle="modal" title="Classifier detail">
+          <a class="row text-light text-decoration-none" href="/matter/{{ $matter->id }}/classifiers" data-target="#ajaxModal" data-toggle="modal" title="{{ _i('Classifier detail') }}">
             <div class="col">
-              Classifiers
+              {{ _i("Classifiers") }}
               <span class="hidden-action float-right">
                 &equiv;
               </span>
@@ -284,7 +284,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           @if ( !in_array('Link', $classifiers->keys()->all()) && !$matter->linkedBy->isEmpty() )
           <div class="card">
             <div class="card-body p-1">
-              <span class="font-weight-bolder align-middle">Link</span>
+              <span class="font-weight-bolder align-middle">{{ _i('Link') }}</span>
                 @foreach ( $matter->linkedBy as $linkedBy )
                   <a href="/matter/{{ $linkedBy->id }}" class="badge badge-primary align-middle">{{ $linkedBy->uid }}</a>
                 @endforeach
@@ -295,13 +295,13 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       </div>
       <div class="card border-info col-4 p-0">
         <div class="card-header bg-info text-white p-1">
-          Related Matters
+          {{ _i('Related Matters') }}
           <span class="float-right">&#9432;</span>
         </div>
         <div class="card-body p-1" id="relationsPanel" style="overflow: auto;">
           @if ( $matter->family->count() )
           <dl class="mb-1">
-            <dt>Fam</dt>
+            <dt>{{ _i('Fam') }}</dt>
             <dd class="mb-1">
               @foreach ( $matter->family as $member )
               <a class="badge badge-{{ $member->suffix == $matter->suffix ? 'secondary' : 'primary' }}" href="/matter/{{ $member->id }}">{{ $member->suffix }}</a>
@@ -325,19 +325,19 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     <div class="row card-deck">
       <div class="card border-secondary col-10 p-0" style="min-height: 100px;">
         <div class="card-header p-1 bg-secondary text-light">
-          Notes
+          {{ _i('Notes') }}
         </div>
         <div class="card-body p-1" style="overflow: auto;">
           <textarea id="notes" class="form-control noformat" name="notes" data-resource="/matter/{{ $matter->id }}">{{ $matter->notes }}</textarea>
         </div>
         <div class="card-footer p-1">
-          Summaries:
+          {{ _i('Summaries:') }}
           <a class="badge badge-primary align-middle"
               href="/matter/{{ $matter->id }}/description/en"
               data-toggle="modal"
               data-target="#ajaxModal"
               data-size="modal-lg"
-              title="Copy a summary in English">
+              title="{{ _i('Copy a summary in English') }}">
               &boxbox; EN
           </a>
           <a class="badge badge-primary align-middle"
@@ -345,16 +345,16 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               data-toggle="modal"
               data-target="#ajaxModal"
               data-size="modal-lg"
-              title="Copy a summary in French">
+              title="{{ _i('Copy a summary in French') }}">
               &boxbox; FR
           </a>
-          Email:
+          {{ _i('Email:') }}
           <a class="badge badge-primary align-middle"
               href="/document/select/{{ $matter->id }}?Language=en"
               data-toggle="modal"
               data-target="#ajaxModal"
               data-size="modal-lg"
-              title="Prepare an email">
+              title="{{ _i('Prepare an email') }}">
               &#9993; EN
           </a>
           <a class="badge badge-primary align-middle"
@@ -362,7 +362,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               data-toggle="modal"
               data-target="#ajaxModal"
               data-size="modal-lg"
-              title="Prepare an email">
+              title="{{ _i('Prepare an email') }}">
               &#9993; FR
           </a>
         </div>
@@ -372,7 +372,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-intersect" viewBox="0 0 16 16">
             <path d="M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2V2zm5 10v2a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2v5a2 2 0 0 1-2 2H5zm6-8V2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h2V6a2 2 0 0 1 2-2h5z"/>
           </svg>
-          <p>File merge<br>Drop Zone</p>
+          <p>{{ _i("File merge") }}<br>{{ _i("Drop Zone") }}</p>
         </div>
         <div class="bg-info align-bottom text-right"><a class="badge badge-primary" href="https://github.com/jjdejong/phpip/wiki/Templates-(email-and-documents)#document-template-usage" target="_blank">?</a></div>
       </div>
@@ -393,11 +393,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
      <div class="form-group">
        <div class="form-check my-1">
          <input class="form-check-input mt-0" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
-         <label class="form-check-label" for="actorShared">Add to container and share</label>
+         <label class="form-check-label" for="actorShared">{{ _i("Add to container and share") }}</label>
        </div>
        <div class="form-check my-1">
          <input class="form-check-input mt-0" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
-         <label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
+         <label class="form-check-label" for="actorNotShared">{{ _i("Add to this matter only (not shared)") }}</label>
        </div>
      </div>
      <div class="btn-group" role="group">

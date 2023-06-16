@@ -137,45 +137,45 @@
     <form class="btn-toolbar" role="toolbar">
       <div class="btn-group-toggle mr-3" data-toggle="buttons">
         <label id="showContainers" class="btn btn-info {{ Request::get('Ctnr') ? 'active' : '' }}">
-          <input type="checkbox" name="Ctnr" {{ Request::get('Ctnr') ? 'checked' : '' }}> Show Containers
+          <input type="checkbox" name="Ctnr" {{ Request::get('Ctnr') ? 'checked' : '' }}> {{ _i("Show Containers") }}
         </label>
       </div>
       <div class="btn-group btn-group-toggle mr-3" data-toggle="buttons" id="actorStatus">
         <label id="showActors" class="btn btn-info {{ $tab == 1 ? '' : 'active' }}">
-          <input type="radio" name="tab" {{ $tab == 1 ? '' : 'checked' }}> Actor View
+          <input type="radio" name="tab" {{ $tab == 1 ? '' : 'checked' }}> {{ _i("Actor View") }}
         </label>
         <label id="showStatus" class="btn btn-info {{ $tab == 1 ? 'active' : '' }}">
-          <input type="radio" name="tab" {{ $tab == 1 ? 'checked' : '' }}> Status View
+          <input type="radio" name="tab" {{ $tab == 1 ? 'checked' : '' }}> {{ _i("Status View") }}
         </label>
       </div>
       <div class="btn-group-toggle mr-3" id="mineAll" data-toggle="buttons">
         <label id="showResponsible" class="btn btn-info {{ Request::has('responsible') ? 'active' : '' }}" data-responsible="{{ Auth::user()->login }}">
-          <input type="checkbox" name="responsible" {{ Request::has('responsible') ? 'checked' : '' }}> Show Mine
+          <input type="checkbox" name="responsible" {{ Request::has('responsible') ? 'checked' : '' }}>  {{ _i("Show Mine") }}
         </label>
       </div>
       <div class="btn-group-toggle mr-3" data-toggle="buttons">
         <label id="includeDead" class="btn btn-info {{ Request::get('include_dead') ? 'active' : '' }}">
-          <input type="checkbox" name="include_dead" {{ Request::get('include_dead') ? 'checked' : '' }}> Include Dead
+          <input type="checkbox" name="include_dead" {{ Request::get('include_dead') ? 'checked' : '' }}>  {{ _i("Include Dead") }}
         </label>
       </div>
       <input type="hidden" name="display_with" value="{{ Request::get('display_with') }}">
       <div class="btn-group mr-3">
-        <button id="exportList" type="button" class="btn btn-secondary"> &DownArrowBar; Export</button>
+        <button id="exportList" type="button" class="btn btn-secondary"> &DownArrowBar;  {{ _i("Export") }}</button>
       </div>
       <form method="POST" action="/matter/report">
         <div class="btn-group mr-3">
                 <select class="custom-select" id="report_list" name="report_list">
-                    <option value="report1-fr">By family, only alive (fr)</option>
-                    <option value="report2-fr">By family, with dead (fr)</option>
-                    <option value="report1" selected>By family, with dead (en)</option>
+                    <option value="report1-fr">{{ _i("By family, only alive (fr)") }}</option>
+                    <option value="report2-fr">{{ _i("By family, with dead (fr)") }}</option>
+                    <option value="report1" selected>{{ _i("By family, with dead (en)") }}</option>
                 </select>
         </div>
         <div class="btn-group mr-2">
-            <button id="report" type="button" class="btn btn-secondary"> &DownArrowBar; Report</button>
+            <button id="report" type="button" class="btn btn-secondary"> &DownArrowBar; {{ _i("Report") }}</button>
         </div>
       </form>
       <div class="button-group">
-        <button id="clearFilters" type="button" class="btn btn-dark">&larrpl; Clear filters</button>
+        <button id="clearFilters" type="button" class="btn btn-dark">&larrpl; {{ _i("Clear filters") }}</button>
       </div>
     </form>
   </div>
@@ -214,7 +214,7 @@
           @can('client')
           <td class="tab0 {{ $hideTab0 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control form-control-sm" name="Applicant" placeholder="Applicant" value="{{ Request::get('Applicant') }}">
+              <input class="form-control form-control-sm" name="Applicant" placeholder="{{ _i('Applicant') }}" value="{{ Request::get('Applicant') }}">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'app.name' ? 'active' : '' }}" type="button" data-sortkey="app.name" data-sortdir="asc">&UpDownArrow;</button>
               </div>
@@ -223,17 +223,17 @@
           @endcan
           <td class="tab0 {{ $hideTab0 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control form-control-sm" name="Agent" placeholder="Agent" value="{{ Request::get('Agent') }}">
+              <input class="form-control form-control-sm" name="Agent" placeholder="{{ _('Agent') }}" value="{{ Request::get('Agent') }}">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'agt.name' ? 'active' : '' }}" type="button" data-sortkey="agt.name" data-sortdir="asc">&UpDownArrow;</button>
               </div>
             </div>
           </td>
-          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="16" name="AgtRef" placeholder="Agt. Ref" value="{{ Request::get('AgtRef') }}"></td>
-          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Title" placeholder="Title" value="{{ Request::get('Title') }}"></td>
+          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="16" name="AgtRef" placeholder="{{ _('Agt. Ref') }}" value="{{ Request::get('AgtRef') }}"></td>
+          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Title" placeholder="{{ _('Title') }}" value="{{ Request::get('Title') }}"></td>
           <td class="tab0 {{ $hideTab0 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control form-control-sm" name="Inventor1" placeholder="Inventor" value="{{ Request::get('Inventor1') }}">
+              <input class="form-control form-control-sm" name="Inventor1" placeholder="{{ _('Inventor') }}" value="{{ Request::get('Inventor1') }}">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'inv.name' ? 'active' : '' }}" type="button" data-sortkey="inv.name" data-sortdir="asc">&UpDownArrow;</button>
               </div>
@@ -241,7 +241,7 @@
           </td>
           <td class="tab1 {{ $hideTab1 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control form-control-sm" name="Status_date" placeholder="Date" value="{{ Request::get('Status_date') }}">
+              <input class="form-control form-control-sm" name="Status_date" placeholder="{{ _('Date') }}" value="{{ Request::get('Status_date') }}">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'status.event_date' ? 'active' : '' }}" type="button" data-sortkey="status.event_date" data-sortdir="asc">&UpDownArrow;</button>
               </div>
@@ -249,31 +249,31 @@
           </td>
           <td class="tab1 {{ $hideTab1 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control form-control-sm" name="Filed" placeholder="Filed" value="{{ Request::get('Filed') }}">
+              <input class="form-control form-control-sm" name="Filed" placeholder="{{ _('Filed') }}" value="{{ Request::get('Filed') }}">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'fil.event_date' ? 'active' : '' }}" type="button" data-sortkey="fil.event_date" data-sortdir="asc">&UpDownArrow;</button>
               </div>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="FilNo" placeholder="Number" value="{{ Request::get('FilNo') }}"></td>
+          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="FilNo" placeholder="{{ _i('Number') }}" value="{{ Request::get('FilNo') }}"></td>
           <td class="tab1 {{ $hideTab1 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control form-control-sm" name="Published" placeholder="Published" value="{{ Request::get('Published') }}">
+              <input class="form-control form-control-sm" name="Published" placeholder="{{ _i('Published') }}" value="{{ Request::get('Published') }}">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'pub.event_date' ? 'active' : '' }}" type="button" data-sortkey="pub.event_date" data-sortdir="asc">&UpDownArrow;</button>
               </div>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="PubNo" placeholder="Number" value="{{ Request::get('PubNo') }}"></td>
+          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="PubNo" placeholder="{{ _i('Number') }}" value="{{ Request::get('PubNo') }}"></td>
           <td class="tab1 {{ $hideTab1 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control form-control-sm" name="Granted" placeholder="Granted" value="{{ Request::get('Granted') }}">
+              <input class="form-control form-control-sm" name="Granted" placeholder='{{ _i("Granted") }}' value="{{ Request::get('Granted') }}">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'grt.event_date' ? 'active' : '' }}" type="button" data-sortkey="grt.event_date" data-sortdir="asc">&UpDownArrow;</button>
               </div>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="GrtNo" placeholder="Number" value="{{ Request::get('GrtNo') }}"></td>
+          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="GrtNo" placeholder="{{ _i('Number') }}" value="{{ Request::get('GrtNo') }}"></td>
         </tr>
       </thead>
       <tbody id="matterList">
@@ -305,7 +305,7 @@
           <td>{{ $matter->Cat }}</td>
           <td>
             @if ( $published )
-            <a href="http://worldwide.espacenet.com/publicationDetails/biblio?DB=EPODOC&CC={{ $CC }}&NR={{ $pubno }}" target="_blank" title="Open in Espacenet">{{ $matter->Status }}</a>
+            <a href="http://worldwide.espacenet.com/publicationDetails/biblio?DB=EPODOC&CC={{ $CC }}&NR={{ $pubno }}" target="_blank" title='{{ _i("Open in Espacenet") }}'>{{ _i($matter->Status) }}</a>
             @else
             {{ $matter->Status }}
             @endif

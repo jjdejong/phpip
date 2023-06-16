@@ -2,19 +2,19 @@
   <thead class="thead-light">
     <tr>
       <th>
-        Event
+        {{ _i("Event") }}
         @canany(['admin', 'readwrite'])
-        <a data-toggle="collapse" class="badge badge-pill badge-info font-weight-normal ml-2" href="#addEventRow" id="addEvent" title="Add event">
+        <a data-toggle="collapse" class="badge badge-pill badge-info font-weight-normal ml-2" href="#addEventRow" id="addEvent" title="{{ _i('Add event') }}">
           &plus;
         </a>
         @endcanany
       </th>
-      <th>Date</th>
-      <th>Number</th>
-      <th>Notes</th>
-      <th>Refers to</th>
+      <th>{{ _i("Date") }}</th>
+      <th>{{ _i("Number") }}</th>
+      <th>{{ _i("Notes") }}</th>
+      <th>{{ _i("Refers to") }}</th>
       @cannot('client')
-      <th>Email</th>
+      <th>{{ _i("Email") }}</th>
       @endcannot
     </tr>
     <tr id="addEventRow" class="collapse">
@@ -23,12 +23,12 @@
           <input type="hidden" name="matter_id" value="{{ $matter->id }}">
           <div class="input-group">
             <input type="hidden" name="code">
-            <input type="text" class="form-control form-control-sm" name="eventName" placeholder="Event" data-ac="/event-name/autocomplete/0?category={{ $matter->category_code }}" data-actarget="code">
+            <input type="text" class="form-control form-control-sm" name="eventName" placeholder="{{ _i('Event') }}" data-ac="/event-name/autocomplete/0?category={{ $matter->category_code }}" data-actarget="code">
             <input type="text" class="form-control form-control-sm" name="event_date" placeholder="Date (xx/xx/yyyy)">
-            <input type="text" class="form-control form-control-sm" name="detail" placeholder="Detail">
-            <input type="text" class="form-control form-control-sm" name="notes" placeholder="Notes">
+            <input type="text" class="form-control form-control-sm" name="detail" placeholder="{{ _i('Detail') }}">
+            <input type="text" class="form-control form-control-sm" name="notes" placeholder="{{ _i('Notes') }}">
             <input type="hidden" name="alt_matter_id">
-            <input type="text" class="form-control form-control-sm"  placeholder="Refers to" data-ac="/matter/autocomplete" data-actarget="alt_matter_id">
+            <input type="text" class="form-control form-control-sm"  placeholder="{{ _i('Refers to') }}" data-ac="/matter/autocomplete" data-actarget="alt_matter_id">
             <div class="input-group-append">
               <button type="button" class="btn btn-primary btn-sm" id="addEventSubmit">&check;</button>
               <button type="reset" class="btn btn-outline-primary btn-sm">&times;</button>

@@ -4,26 +4,26 @@
 <table class="table table-hover table-sm">
   <thead class="thead-light">
     <tr>
-      <th>Tasks by event</th>
-      <th>Due date</th>
-      <th>OK</th>
-      <th>Date</th>
+      <th>{{ _i("Tasks by event") }}</th>
+      <th>{{ _i("Due date") }}</th>
+      <th>{{ _i("OK") }}</th>
+      <th>{{ _i("Date") }}</th>
       @cannot('client')
       @if($is_renewals)
       @php
         $ncols += 3;
       @endphp
-      <th>Cost</th>
-      <th>Fee</th>
-      <th>Cur.</th>
-      {{-- <th>Time</th> --}}
+      <th>{{ _i("Cost") }}</th>
+      <th>{{ _i("Fee") }}</th>
+      <th>{{ _i("Cur.") }}</th>
+      {{-- <th>{{ _i("Time") }}</th> --}}
       @endif
       @endcannot
-      <th>By</th>
-      <th>Notes</th>
+      <th>{{ _i("By") }}</th>
+      <th>{{ _i("Notes") }}</th>
       <th style="width: 24px;">&nbsp;</th>
       @cannot('client')
-      <th>Email</th>
+      <th>{{ _i("Email") }}</th>
       @endcannot
     </tr>
   </thead>
@@ -37,17 +37,17 @@
           @canany(['admin', 'readwrite'])
           <span class="hidden-action float-right">
             <li class="list-inline-item">
-              <a href="#" class="text-primary" id="addTaskToEvent" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
+              <a href="#" class="text-primary" id="addTaskToEvent" data-event_id="{{ $event->id }}" title="{{ _i('Add task to ') . $event->info->name }}">
                 &CirclePlus;
               </a>
             </li>
             <li class="list-inline-item">
-              <a href="#" class="text-danger" id="deleteEvent" data-event_id="{{ $event->id }}" title="Delete event (with tasks)">
+              <a href="#" class="text-danger" id="deleteEvent" data-event_id="{{ $event->id }}" title="{{ _i('Delete event (with tasks)') }}">
                 &CircleTimes;
               </a>
             </li>
             <li class="list-inline-item" style="font-size:1rem">
-              <a href="#" class="text-danger" id="regenerateTasks" data-event_id="{{ $event->id }}" title="Regenerate Tasks">
+              <a href="#" class="text-danger" id="regenerateTasks" data-event_id="{{ $event->id }}" title="{{ _i('Regenerate Tasks') }}">
                 &#8623;
               </a>
             </li>
@@ -85,7 +85,7 @@
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"></td>
       <td>
         @canany(['admin', 'readwrite'])
-        <a href="#" class="hidden-action text-danger" id="deleteTask" title="Delete task">&CircleTimes;</a>
+        <a href="#" class="hidden-action text-danger" id="deleteTask" title="{{ _i('Delete task') }}">&CircleTimes;</a>
         @endcanany
       </td>
       @cannot('client')
@@ -110,11 +110,11 @@
         <div class="input-group">
           <input type="hidden" name="code">
           <input type="text" class="form-control form-control-sm" placeholder="Task" data-ac="/event-name/autocomplete/1?category={{ $matter->category_code }}" data-actarget="code">
-          <input type="text" class="form-control form-control-sm" name="detail" placeholder="Detail">
-          <input type="text" class="form-control form-control-sm" placeholder="Due date (xx/xx/yyyy)" name="due_date">
+          <input type="text" class="form-control form-control-sm" name="detail" placeholder="{{ _i('Detail') }}">
+          <input type="text" class="form-control form-control-sm" placeholder="{{ _i('Due date (xx/xx/yyyy)') }}" name="due_date">
           <input type="hidden" name="assigned_to">
-          <input type="text" class="form-control form-control-sm" placeholder="Assigned to" data-ac="/user/autocomplete" data-actarget="assigned_to">
-          <input type="text" class="form-control form-control-sm" name="notes" placeholder="Notes">
+          <input type="text" class="form-control form-control-sm" placeholder="{{ _i('Assigned to') }}" data-ac="/user/autocomplete" data-actarget="assigned_to">
+          <input type="text" class="form-control form-control-sm" name="notes" placeholder="{{ _i('Notes') }}">
           <div class="input-group-append">
             <button type="button" class="btn btn-primary btn-sm" id="addTaskSubmit">&check;</button>
             <button type="reset" class="btn btn-outline-primary btn-sm" onClick="$(this).parents('tr').html('')">&times;</button>

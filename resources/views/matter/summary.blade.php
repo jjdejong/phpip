@@ -4,5 +4,5 @@
 @endforeach
 </div>
 <div class="float-right">
-  <button id="sumButton"  type="button" class="btn btn-primary float-center" data-dismiss="modal">Copy</button>
+  <button id="sumButton"  type="button" class="btn btn-primary float-center" data-dismiss="modal">{{ _i("Copy") }}</button>
 </div>
