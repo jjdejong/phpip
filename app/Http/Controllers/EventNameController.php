@@ -7,6 +7,7 @@ use App\Actor;
 use App\EventClassLnk;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use LaravelGettext;
 
 class EventNameController extends Controller
 {
@@ -17,6 +18,7 @@ class EventNameController extends Controller
      */
     public function index(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $Code  = $request->input('Code');
         $Name = $request->input('Name');
         $ename = EventName::query() ;
@@ -39,6 +41,7 @@ class EventNameController extends Controller
      */
     public function create()
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor ;
         $tableComments = $table->getTableComments('event_name');
         return view('eventname.create', compact('tableComments'));
@@ -70,6 +73,7 @@ class EventNameController extends Controller
      */
     public function show(EventName $eventname)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('event_name');
         $eventname->load(['countryInfo:iso,name', 'categoryInfo:code,category', 'default_responsibleInfo:id,name']);
