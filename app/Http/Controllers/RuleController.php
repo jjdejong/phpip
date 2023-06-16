@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Rule;
 use Illuminate\Support\Facades\Auth;
+use LaravelGettext;
 
 class RuleController extends Controller
 {
     public function index(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('viewAny', Rule::class);
         $Task  = $request->input('Task');
         $Trigger = $request->input('Trigger');
@@ -60,6 +62,7 @@ class RuleController extends Controller
 
     public function show(Rule $rule)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('view', $rule);
         $ruleInfo = $rule->load([
           'trigger:code,name',
@@ -85,6 +88,7 @@ class RuleController extends Controller
      */
     public function create()
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('create', Rule::class);
         $rule = new Rule ;
         $ruleComments = $rule->getTableComments('task_rules');
@@ -100,6 +104,7 @@ class RuleController extends Controller
     */
     public function update(Request $request, Rule $rule)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('update', $rule);
         $this->validate($request, [
             'task' => 'sometimes|required',
@@ -120,6 +125,7 @@ class RuleController extends Controller
 
     public function store(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('create', Rule::class);
         $this->validate($request, [
             'task' => 'required',
