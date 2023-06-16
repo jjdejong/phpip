@@ -2,8 +2,8 @@
 
 @section('content')
 <legend class="text-primary">
-  Default Actors
-  <a href="default_actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Default actors" data-resource="/default_actor/">Add a new default actor</a>
+  {{ _i('Default Actors') }}
+  <a href="default_actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="{{ _i('Default actors') }}" data-resource="/default_actor/">{{ _i('Add a new default actor') }}</a>
 </legend>
 <div class="row">
   <div class="col">
@@ -11,18 +11,18 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="bg-primary text-light">
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Actor" placeholder="Actor"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Role" placeholder="Role"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Country" placeholder="Country"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Category" placeholder="Category"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Client" placeholder="Client"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Actor" placeholder="{{ _i('Actor') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Role" placeholder="{{ _i('Role') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Country" placeholder="{{ _i('Country') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Category" placeholder="{{ _i('Category') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Client" placeholder="{{ _i('Client') }}"></th>
           </tr>
         </thead>
         <tbody id="tableList">
           @foreach ($default_actors as $default_actor)
           <tr class="reveal-hidden" data-id="{{ $default_actor->id }}">
             <td>
-              <a href="/default_actor/{{ $default_actor->id }}" data-panel="ajaxPanel" title="Actor">
+              <a href="/default_actor/{{ $default_actor->id }}" data-panel="ajaxPanel" title="{{ _i('Actor') }}">
                 {{ $default_actor->actor->name }}
               </a>
             </td>
@@ -39,11 +39,11 @@
   <div class="col-5">
     <div class="card border-info">
       <div class="card-header bg-info text-light">
-        Default actor information
+        {{ _i('Default actor information') }}
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          Click on line to view and edit details
+          {{ _i('Click on line to view and edit details') }}
         </div>
       </div>
     </div>
