@@ -6,6 +6,7 @@ use App\Category;
 use App\Actor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use LaravelGettext;
 
 class CategoryController extends Controller
 {
@@ -16,6 +17,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $Code  = $request->input('Code');
         $Category = $request->input('Category');
         $category = Category::query() ;
@@ -38,6 +40,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor ;
         $tableComments = $table->getTableComments('matter_category');
         return view('category.create', compact('tableComments'));
@@ -68,6 +71,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('matter_category');
         $category->load(['displayWithInfo:code,category']);
