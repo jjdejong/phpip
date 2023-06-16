@@ -6,12 +6,14 @@ use App\Fee;
 use App\Actor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use LaravelGettext;
 
 class FeeController extends Controller
 {
 
     public function index(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $fees = new Fee;
         $filters = $request->except(['page']);
         if (!empty($filters)) {
@@ -49,6 +51,7 @@ class FeeController extends Controller
      */
     public function create()
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor ;
         $tableComments = $table->getTableComments('fees');
         return view('fee.create', compact('tableComments'));

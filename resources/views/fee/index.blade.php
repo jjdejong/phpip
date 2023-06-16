@@ -4,35 +4,35 @@
 <div class="container-fluid">
   <legend class="text-primary">
     Fees
-    <a href="fee/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="New line" data-resource="/fee/">Add a new line</a>
+    <a href="fee/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="{{ _i('New line') }}" data-resource="/fee/">{{ _i('Add a new line') }}</a>
   </legend>
   <div class="card border-primary overflow-auto" style="max-height: 640px;">
     <div class="card-header bg-primary text-light py-1">
       <div class="row text-center">
         <div class="col-3"></div>
-        <div class="col-4 py-2">Normal</div>
-        <div class="col-4 bg-info py-2">Grace period</div>
+        <div class="col-4 py-2">{{ _i("Normal") }}</div>
+        <div class="col-4 bg-info py-2">{{ _i("Grace period") }}</div>
         <div class="col-1"></div>
       </div>
       <div id="filter" class="row text-center">
         <div class="col-3">
           <div class="row">
-            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/country" name="Country" placeholder="Country"></div>
-            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/category" name="Category" placeholder="Category"></div>
-            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/country" name="Origin" placeholder="Origin"></div>
-            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" name="Qt" placeholder="Yr"></div>
+            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/country" name="{{ _i('Country') }}" placeholder="{{ _i('Country') }}"></div>
+            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/category" name="{{ _i('Category') }}" placeholder="{{ _i('Category') }}"></div>
+            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" data-source="/country" name="{{ _i('Origin') }}" placeholder="{{ _i('Origin') }}"></div>
+            <div class="col-3 pl-0"><input class="filter-input form-control form-control-sm" name="{{ _i('Qt') }}" placeholder="{{ _i('Yr') }}"></div>
           </div>
         </div>
         <div class="col-4">
           <div class="row">
-            <div class="col-6 py-2">Standard</div>
-            <div class="bg-secondary col-6 py-2">Reduced</div>
+            <div class="col-6 py-2">{{ _i('Standard') }}</div>
+            <div class="bg-secondary col-6 py-2">{{ _i('Reduced') }}</div>
           </div>
         </div>
         <div class="col-4">
           <div class="row">
-            <div class="bg-info col-6 py-2">Standard</div>
-            <div class="bg-secondary col-6 py-2">Reduced</div>
+            <div class="bg-info col-6 py-2">{{ _i('Standard') }}</div>
+            <div class="bg-secondary col-6 py-2">{{ _i('Reduced') }}</div>
           </div>
         </div>
         <div class="col-1"></div>
@@ -41,23 +41,23 @@
         <div class="col-3"></div>
         <div class="col-4">
           <div class="row">
-            <div class="col-3 py-1">Cost</div>
-            <div class="col-3 py-1">Fee</div>
-            <div class="bg-secondary col-3 py-1">Cost</div>
-            <div class="bg-secondary col-3 py-1">Fee</div>
+            <div class="col-3 py-1">{{ _i('Cost') }}</div>
+            <div class="col-3 py-1">{{ _i('Fee') }}</div>
+            <div class="bg-secondary col-3 py-1">{{ _i('Cost') }}</div>
+            <div class="bg-secondary col-3 py-1">{{ _i("Fee") }}</div>
           </div>
         </div>
         <div class="col-4">
           <div class="row">
-            <div class="bg-info col-3 py-1">Cost</div>
-            <div class="bg-info col-3 py-1">Fee</div>
-            <div class="bg-secondary col-3 py-1">Cost</div>
-            <div class="bg-secondary col-3 py-1">Fee</div>
+            <div class="bg-info col-3 py-1">{{ _i("Cost") }}</div>
+            <div class="bg-info col-3 py-1">{{ _i("Fee") }}</div>
+            <div class="bg-secondary col-3 py-1">{{ _i("Cost") }}</div>
+            <div class="bg-secondary col-3 py-1">{{ _i("Fee") }}</div>
           </div>
         </div>
-        <div class="col-1">Currency</div>
-        {{-- <div class="col-1">Use after</div>
-        <div class="col-1">Use before</div> --}}
+        <div class="col-1">{{ _i("Currency") }}</div>
+        {{-- <div class="col-1">{{ _i("Use after") }}</div>
+        <div class="col-1">{{ _i("Use before") }}</div> --}}
       </div>
     </div>
     <div class="card-body pt-2" id="tableList">
