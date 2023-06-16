@@ -34,7 +34,7 @@
     let params = new URLSearchParams();
     let list = renewallist.querySelectorAll('input:checked');
     if (list.length === 0) {
-      alert("No renewals selected for clearing!");
+      alert('{{ _i("No renewals selected for clearing!") }}');
       return;
     }
     list.forEach((current) => {
@@ -56,7 +56,7 @@
     let params = new URLSearchParams();
     let list = tasklist.querySelectorAll('input:checked');
     if (list.length === 0) {
-      alert("No tasks selected for clearing!");
+      alert('{{ _i("No tasks selected for clearing!") }}');
       return;
     }
     list.forEach((current) => {

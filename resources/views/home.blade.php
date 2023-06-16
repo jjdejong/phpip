@@ -16,33 +16,33 @@
   <div class="col-4">
     <div class="card border-info">
       <div class="card-header text-white bg-info p-1">
-        <span class="lead">Categories</span>
+        <span class="lead">{{ _i("Categories") }}</span>
         @canany(['admin', 'readwrite'])
-        <a href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" class="btn btn-primary float-right" title="Create Matter">Create matter</a>
+        <a href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" class="btn btn-primary float-right" title="Create Matter">{{ _i("Create matter") }}</a>
         @endcanany
       </div>
       <div class="card-body pt-0">
         <table  class="table table-striped table-sm">
           <tr>
             <th></th>
-            <th>Count</th>
+            <th>{{ _i("Count") }}</th>
             <td>
               @canany(['admin', 'readwrite'])
-              <span class="float-right text-secondary">New</span>
+              <span class="float-right text-secondary">{{ _i("New") }}</span>
               @endcanany
             </td>
           </tr>
           @foreach ($categories as $group)
           <tr class="reveal-hidden">
             <td class="py-0">
-              <a href="/matter?Cat={{ $group->category_code }}">{{ $group->category }}</a>
+              <a href="/matter?Cat={{ $group->category_code }}">{{ _i($group->category) }}</a>
             </td>
             <td class="py-0">
               {{ $group->total }}
             </td>
             <td class="py-0">
               @canany(['admin', 'readwrite'])
-              <a class="badge badge-primary hidden-action float-right" href="/matter/create?operation=new&category={{$group->category_code}}" data-target="#ajaxModal" title="Create {{ $group->category }}" data-toggle="modal" data-size="modal-sm">
+              <a class="badge badge-primary hidden-action float-right" href="/matter/create?operation=new&category={{$group->category_code}}" data-target="#ajaxModal" title="Create {{ _i($group->category) }}" data-toggle="modal" data-size="modal-sm">
                 &plus;
               </a>
               @endcanany
@@ -54,7 +54,7 @@
     </div>
     <div class="card border-info mt-1">
       <div class="card-header text-white bg-info p-1">
-        <span class="lead">Users tasks</span>
+        <span class="lead">{{ _i("Users tasks") }}</span>
         @canany(['admin', 'readwrite'])
         <button class="btn btn-transparent text-info float-right" disabled>I</button> {{--  This invisible button is only for improving the layout! --}}
         @endcanany
@@ -63,8 +63,8 @@
         <table class="table table-striped table-sm">
           <tr>
             <th></th>
-            <th>Open</th>
-            <th>Hottest</th>
+            <th>{{ _i("Open") }}</th>
+            <th>{{ _i("Hottest") }}</th>
           </tr>
         @foreach ($taskscount as $group)
           @if ($group->no_of_tasks > 0)
@@ -96,14 +96,14 @@
       <div class="card-header text-white bg-primary p-1">
         <form class="row">
           <div class="lead col-2">
-            Open tasks
+            {{ _i("Open tasks") }}
           </div>
           @cannot('client')
           <div class="col-6">
             <div class="input-group">
               <div class="btn-group btn-group-toggle input-group-prepend" data-toggle="buttons">
                 <label class="btn btn-info active">
-                  <input type="radio" name="what_tasks" id="alltasks" value="0" checked>Everyone
+                  <input type="radio" name="what_tasks" id="alltasks" value="0" checked>{{ _i("Everyone") }}
                 </label>
                 @if(!Request::filled('user_dashboard'))
                 <label class="btn btn-info">
@@ -111,18 +111,18 @@
                 </label>
                 @endif
                 <label class="btn btn-info">
-                  <input type="radio" name="what_tasks" id="clientTasks" value="2">Client
+                  <input type="radio" name="what_tasks" id="clientTasks" value="2">{{ _i("Client") }}
                 </label>
               </div>
               <input type="hidden" id="clientId" name="client_id">
-              <input type="text" class="form-control mr-3" data-ac="/actor/autocomplete" data-actarget="client_id" placeholder="Select Client">
+              <input type="text" class="form-control mr-3" data-ac="/actor/autocomplete" data-actarget="client_id" placeholder="{{ _i('Select Client') }}">
             </div>
           </div>
           <div class="col-4">
             <div class="input-group">
               @canany(['admin', 'readwrite'])
               <div class="input-group-prepend">
-                <button class="btn btn-light" type="button" id="clearOpenTasks">Clear selected on</button>
+                <button class="btn btn-light" type="button" id="clearOpenTasks">{{ _i("Clear selected on") }}</button>
               </div>
               <input type="text" class="form-control mr-2" name="datetaskcleardate" id="taskcleardate" value="{{ now()->isoFormat('L') }}">
               @endcanany
@@ -134,17 +134,17 @@
           <div class="col">
           </div>
           <div class="col-2">
-            Matter
+            {{ _i("Matter") }}
           </div>
           <div class="col">
-            Description
+            {{ _i("Description") }}
           </div>
           <div class="col-2">
-            Due date
+            {{ _i("Due date") }}
           </div>
           @canany(['admin', 'readwrite'])
           <div class="col-1">
-            Clear
+            {{ _i("Clear") }}
           </div>
           @endcanany
         </div>
@@ -157,13 +157,13 @@
       <div class="card-header text-white bg-primary p-1">
         <div class="row">
           <div class="lead col-8">
-            Open renewals
+            {{ _i("Open renewals") }}
           </div>
           @canany(['admin', 'readwrite'])
           <div class="col">
             <div class="input-group">
               <div class="input-group-prepend">
-                <button class="btn btn-light" type="button" id="clearRenewals">Clear selected on</button>
+                <button class="btn btn-light" type="button" id="clearRenewals">{{ _i("Clear selected on") }}</button>
               </div>
               <input type="text" class="form-control mr-2" name="renewalcleardate" id="renewalcleardate" value="{{ now()->isoFormat('L') }}">
             </div>
@@ -174,17 +174,17 @@
           <div class="col">
           </div>
           <div class="col-2">
-            Matter
+            {{ _i("Matter") }}
           </div>
           <div class="col">
-            Description
+            {{ _i("Description") }}
           </div>
           <div class="col-2">
-            Due date
+            {{ _i("Due date") }}
           </div>
           @canany(['admin', 'readwrite'])
           <div class="col-1">
-            Clear
+            {{ _i("Clear") }}
           </div>
           @endcanany
         </div>

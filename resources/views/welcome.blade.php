@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>PhpIP</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -68,12 +68,12 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        <a href="{{ url('/home') }}">{{ _i("Home") }}</a>
                     @else
-                        <a href="{{ route('login') }}">Login</a>
+                        <a href="{{ route('login') }}">{{ _i("Login") }}</a>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
+                            <a href="{{ route('register') }}">{{ _i("Register") }}</a>
                         @endif
                     @endauth
                 </div>
@@ -84,13 +84,13 @@
                     PhpIP
                 </div>
                 <div class="subtitle m-b-md">
-                    IP rights portfolio manager and docketing system
+                    {{ _i("IP rights portfolio manager and docketing system") }}
                 </div>
 
                 <div class="links">
-                    <a href="https://github.com/jjdejong/phpip/wiki">Documentation</a>
-                    <a href="https://github.com/jjdejong/phpip/issues">Submit bugs</a>
-                    <a href="https://github.com/jjdejong/phpip">Retreive sources on GitHub</a>
+                    <a href="https://github.com/jjdejong/phpip/wiki">{{ _i("Documentation") }}</a>
+                    <a href="https://github.com/jjdejong/phpip/issues">{{ _i("Submit bugs") }}</a>
+                    <a href="https://github.com/jjdejong/phpip">{{ _i("Retreive sources on GitHub") }}</a>
                 </div>
             </div>
         </div>

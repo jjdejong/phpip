@@ -36,21 +36,21 @@
         <form method="POST" action="/matter/search">
           @csrf
           <div class="input-group">
-            <input type="search" class="form-control" id="matter-search" name="matter_search" placeholder="Search" autocomplete="off">
+            <input type="search" class="form-control" id="matter-search" name="matter_search" placeholder="{{ _i('Search') }}" autocomplete="off">
             <div class="input-group-append">
               <select class="custom-select" id="matter-option" name="search_field">
-                <option value="Ref" selected>Case reference</option>
-                <option value="Responsible">Responsible</option>
-                <option value="Title">Title</option>
-                <option value="Client">Client</option>
-                <option value="Applicant">Applicant</option>
+                <option value="Ref" selected>{{ _i("Case reference") }}</option>
+                <option value="Responsible">{{ _i("Responsible") }}</option>
+                <option value="Title">{{ _i("Title") }}</option>
+                <option value="Client">{{ _i("Client") }}</option>
+                <option value="Applicant">{{ _i("Applicant") }}</option>
               </select>
-              <button class="btn btn-info" type="submit">Go</button>
+              <button class="btn btn-info" type="submit">{{ _i("Go") }}</button>
             </div>
           </div>
         </form>
         @endauth
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ _i('Toggle navigation') }}">
           <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -63,20 +63,20 @@
           <ul class="navbar-nav ml-auto">
             <!-- Authentication Links -->
             @guest
-            <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
+            <li><a class="nav-link" href="{{ route('login') }}">{{ _i('Login') }}</a></li>
             @else
-            <li><a class="nav-link" href={{ route('home') }}>Dashboard</a></li>
+            <li><a class="nav-link" href={{ route('home') }}>{{ _i("Dashboard") }}</a></li>
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                Matters
+                {{ _i('Matters') }}
               </a>
               <ul class="dropdown-menu" role="menu">
-                <a class="dropdown-item" href="{{ url('/matter') }}">All</a>
-                <a class="dropdown-item" href="{{ url('/matter?display_with=PAT') }}">Patents</a>
-                <a class="dropdown-item" href="{{ url('/matter?display_with=TM') }}">Trademarks</a>
+                <a class="dropdown-item" href="{{ url('/matter') }}">{{ _i("All") }}</a>
+                <a class="dropdown-item" href="{{ url('/matter?display_with=PAT') }}">{{ _i("Patents") }}</a>
+                <a class="dropdown-item" href="{{ url('/matter?display_with=TM') }}">{{ _i("Trademarks") }}</a>
                 @canany(['admin', 'readwrite'])
-                <a class="dropdown-item" href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" title="Create Matter">Create</a>
-                <a class="dropdown-item" href="/matter/create?operation=ops" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" title="Create family from OPS">Create family from OPS</a>
+                <a class="dropdown-item" href="/matter/create?operation=new" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" title="{{ _i('Create Matter') }}">{{ _i("Create") }}</a>
+                <a class="dropdown-item" href="/matter/create?operation=ops" data-target="#ajaxModal" data-toggle="modal" data-size="modal-sm" title="{{ _i('Create family from OPS') }}">{{ _i('Create family from OPS') }}</a>
                 @endcanany
               </ul>
             </li>
@@ -84,33 +84,33 @@
             @canany(['admin', 'readwrite'])
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                Tools
+                {{ _i("Tools") }}
               </a>
               <ul class="dropdown-menu" role="menu">
-                <a class="dropdown-item" href="{{ url('/renewal') }}">Manage renewals</a>
-                <a class="dropdown-item" href="{{ url('/fee') }}">Renewal fees</a>
+                <a class="dropdown-item" href="{{ url('/renewal') }}">{{ _i("Manage renewals") }}</a>
+                <a class="dropdown-item" href="{{ url('/fee') }}">{{ _i("Renewal fees") }}</a>
                 @can('admin')
-                <a class="dropdown-item" href="{{ url('/rule') }}">Rules</a>
-                <a class="dropdown-item" href="{{ url('/document') }}">Email template classes</a>
-                <a class="dropdown-item" href="{{ url('/template-member') }}">Email templates</a>
+                <a class="dropdown-item" href="{{ url('/rule') }}">{{ _i("Rules") }}</a>
+                <a class="dropdown-item" href="{{ url('/document') }}">{{ _i("Email template classes") }}</a>
+                <a class="dropdown-item" href="{{ url('/template-member') }}">{{ _i("Email templates") }}</a>
                 @endcan
               </ul>
             </li>
             @endcanany
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                Tables
+                {{ _i('Tables') }}
               </a>
               <ul class="dropdown-menu" role="menu">
-                <a class="dropdown-item" href="{{ url('/actor') }}">Actors</a>
+                <a class="dropdown-item" href="{{ url('/actor') }}">{{ _i("Actors") }}</a>
                 @can('admin')
-                <a class="dropdown-item" href="{{ url('/user') }}">DB Users</a>
-                <a class="dropdown-item" href="{{ url('/eventname') }}">Event names</a>
-                <a class="dropdown-item" href="{{ url('/category') }}">Categories</a>
-                <a class="dropdown-item" href="{{ url('/role') }}">Actor roles</a>
-                <a class="dropdown-item" href="{{ url('/default_actor') }}">Default actors</a>
-                <a class="dropdown-item" href="{{ url('/type') }}">Matter types</a>
-                <a class="dropdown-item" href="{{ url('/classifier_type') }}">Classifier types</a>
+                <a class="dropdown-item" href="{{ url('/user') }}">{{ _i("DB Users") }}</a>
+                <a class="dropdown-item" href="{{ url('/eventname') }}">{{ _i("Event names") }}</a>
+                <a class="dropdown-item" href="{{ url('/category') }}">{{ _i("Categories") }}</a>
+                <a class="dropdown-item" href="{{ url('/role') }}">{{ _i("Actor roles") }}</a>
+                <a class="dropdown-item" href="{{ url('/default_actor') }}">{{ _i("Default actors") }}</a>
+                <a class="dropdown-item" href="{{ url('/type') }}">{{ _i("Matter types") }}</a>
+                <a class="dropdown-item" href="{{ url('/classifier_type') }}">{{ _i("Classifier types") }}</a>
                 @endcan
               </ul>
             </li>
@@ -147,12 +147,12 @@
             </div>
             <div class="modal-body">
               <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
+                <span class="sr-only">{{ _i("Loading") }}...</span>
               </div>
             </div>
             <div class="modal-footer">
               <span id="footerAlert" class="alert float-left"></span>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ _i("Close") }}</button>
             </div>
           </div>
         </div>
@@ -193,7 +193,7 @@
       //     });
       //     break;
         case 419:
-          alert("Token expired. Refresh the page");
+          alert(("Token expired. Refresh the page"));
           location.reload();
           break;
         default:
@@ -258,7 +258,7 @@
           break;
 
         case 'deleteMatter':
-          if (confirm("Deleting the matter. Continue anyway?")) {
+          if (confirm( "{{ _i('Deleting the matter. Continue anyway?') }}" )) {
             fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
               .then(data => {
                 if (data.message) {
@@ -281,7 +281,7 @@
           break;
 
         case 'deleteEvent':
-          if (confirm("Deleting the event will also delete the linked tasks. Continue anyway?")) {
+          if (confirm( "{{ _i('Deleting the event will also delete the linked tasks. Continue anyway?') }}")) {
             fetchREST('/event/' + e.target.dataset.event_id, 'DELETE')
               .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
           }
@@ -388,11 +388,11 @@
         case 'deleteCategory':
         case 'deleteClass':
         case 'deleteMember':
-          if (confirm("Deleting  "+   e.target.dataset.message + ". Continue anyway?")) {
+          if (confirm( '{{ _i("Deleting  ") }}' +   e.target.dataset.message + ". " + '{{ _i("Continue anyway?") }}')) {
             fetchREST(e.target.dataset.url, 'DELETE')
               .then(data => {
                 if (data.message) {
-                  alert("Couldn't delete " + e.target.dataset.message+ ". Check the dependencies. Database said: " + data.message);
+                  alert( '{{ _i("Could not delete ") }}' + e.target.dataset.message+ ". " + '{{ _i("Check the dependencies. Database said: ") }}' + data.message);
                   return false;
                 } else {
                   location.reload();
@@ -402,7 +402,7 @@
           break;
 
         case 'regenerateTasks':
-          if (confirm("Regenerating the tasks will delete all the existing automatically created tasks and renewals for this event.\nPast tasks will not be recreated - make sure they have been dealt with.\nContinue anyway?")) {
+          if (confirm( "{{ _i('Regenerating the tasks will delete all the existing automatically created tasks and renewals for this event.\nPast tasks will not be recreated - make sure they have been dealt with.\nContinue anyway?') }}" )) {
             fetchREST('/event/' + e.target.dataset.event_id + '/recreateTasks', 'POST')
               .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
           }
@@ -473,7 +473,7 @@
                   // Reload modal with updated content
                   fetchInto(contentSrc, ajaxModal.querySelector(".modal-body"));
                 } else {
-                  // Don't reload but set border back to normal
+                  // Do not reload but set border back to normal
                   e.target.classList.remove('border-info', 'border-danger');
                   e.target.classList.add('is-valid');
                 }
@@ -579,7 +579,7 @@
               e.target.value = ui.item.value;
               e.target.form[e.target.dataset.actarget].value = ui.item.key;
               if (window.createMatterForm && e.target.dataset.actarget == 'category_code') {
-                // We're in a matter creation form - fill caseref with corresponding new value
+                // We are in a matter creation form - fill caseref with corresponding new value
                 fetchREST('/matter/new-caseref?term=' + ui.item.prefix, 'GET')
                 .then(data => {
                   createMatterForm.caseref.value = data[0].value;
