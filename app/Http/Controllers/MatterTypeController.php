@@ -6,6 +6,7 @@ use App\MatterType;
 use App\Actor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use LaravelGettext;
 
 class MatterTypeController extends Controller
 {
@@ -16,6 +17,7 @@ class MatterTypeController extends Controller
      */
     public function index(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $Code  = $request->input('Code');
         $Type = $request->input('Type');
         $type = MatterType::query() ;
@@ -38,6 +40,7 @@ class MatterTypeController extends Controller
      */
     public function create()
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor ;
         $tableComments = $table->getTableComments('matter_type');
         return view('type.create', compact('tableComments'));
@@ -67,6 +70,7 @@ class MatterTypeController extends Controller
      */
     public function show(MatterType $type)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('matter_type');
         return view('type.show', compact('type', 'tableComments'));
