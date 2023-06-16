@@ -6,6 +6,7 @@ use App\ClassifierType;
 use App\Actor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use LaravelGettext;
 
 class ClassifierTypeController extends Controller
 {
@@ -16,6 +17,7 @@ class ClassifierTypeController extends Controller
      */
     public function index(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $Code  = $request->input('Code');
         $Type = $request->input('Type');
         $classifierType = ClassifierType::query() ;
@@ -38,6 +40,7 @@ class ClassifierTypeController extends Controller
      */
     public function create()
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor ;
         $tableComments = $table->getTableComments('classifier_type');
         return view('classifier_type.create', compact('tableComments'));
@@ -67,6 +70,7 @@ class ClassifierTypeController extends Controller
      */
     public function show(ClassifierType $classifier_type)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('classifier_type');
         $classifier_type->load(['category:code,category']);

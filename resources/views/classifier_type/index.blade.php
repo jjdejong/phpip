@@ -2,8 +2,8 @@
 
 @section('content')
 <legend class="text-primary">
-  Classifier Types
-  <a href="classifier_type/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Type" data-resource="/classifier_type/">Create a new Classifier Type</a>
+  {{ _i('Classifier Types') }}
+  <a href="classifier_type/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="{{ _i('Type') }}" data-resource="/classifier_type/">{{ _i('Create a new Classifier Type') }}</a>
 </legend>
 <div class="row">
   <div class="col">
@@ -11,16 +11,16 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="bg-primary text-light">
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/classifier_type" name="Code" placeholder="Code"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/classifier_type" name="Type" placeholder="Type"></th>
-            <th class="align-middle border-top-0">Category</th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/classifier_type" name="Code" placeholder="{{ _i('Code') }}"></th>
+            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/classifier_type" name="Type" placeholder="{{ _i('Type') }}"></th>
+            <th class="align-middle border-top-0">{{ _i('Category') }}</th>
           </tr>
         </thead>
         <tbody id="tableList">
           @foreach ($types as $type)
           <tr class="reveal-hidden" data-id="{{ $type->code }}">
             <td>
-              <a href="/classifier_type/{{ $type->code }}" data-panel="ajaxPanel" title="Type info">
+              <a href="/classifier_type/{{ $type->code }}" data-panel="ajaxPanel" title="{{ _i('Type info') }}">
                 {{ $type->code }}
               </a>
             </td>
@@ -35,11 +35,11 @@
   <div class="col-5">
     <div class="card border-info">
       <div class="card-header bg-info text-light">
-        Type information
+        {{ _i('Type information') }}
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          Click on type to view and edit details
+          {{ _i('Click on type to view and edit details') }}
         </div>
       </div>
     </div>
