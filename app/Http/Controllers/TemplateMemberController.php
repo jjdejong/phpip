@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Actor;
+use LaravelGettext;
 
 class TemplateMemberController extends Controller
 {
@@ -21,6 +22,7 @@ class TemplateMemberController extends Controller
 
     public function index(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $Summary  = $request->summary;
         $Style  = $request->style;
         $Language  = $request->language;
@@ -61,6 +63,7 @@ class TemplateMemberController extends Controller
      */
     public function create()
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor ;
         $tableComments = $table->getTableComments('template_members');
         $languages = $this->languages;
@@ -75,6 +78,7 @@ class TemplateMemberController extends Controller
      */
     public function store(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $request->validate([
             'class_id' => 'required',
             'language' => 'required'
@@ -92,6 +96,7 @@ class TemplateMemberController extends Controller
      */
     public function show(TemplateMember $templateMember)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('template_members');
         $templateMember->with(['class','style','language']);
