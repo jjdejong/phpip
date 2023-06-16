@@ -6,6 +6,7 @@ use App\Role;
 use App\Actor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use LaravelGettext;
 
 class RoleController extends Controller
 {
@@ -16,6 +17,7 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $Code  = $request->input('Code');
         $Name = $request->input('Name');
         $role = Role::query() ;
@@ -38,6 +40,7 @@ class RoleController extends Controller
      */
     public function create()
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor ;
         $tableComments = $table->getTableComments('actor_role');
         return view('role.create', compact('tableComments'));
@@ -68,6 +71,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('actor_role');
         $role->get();
