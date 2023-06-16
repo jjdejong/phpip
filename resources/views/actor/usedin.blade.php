@@ -3,7 +3,7 @@ $mdeps = $matter_dependencies->groupBy('role');
 $adeps = $other_dependencies->groupBy('Dependency');
 @endphp
 
-<p class="font-weight-bolder my-2">Matter Dependencies (only the first few are shown)</p>
+<p class="font-weight-bolder my-2">{{ _i("Matter Dependencies (only the first few are shown)") }}</p>
 @forelse($mdeps as $role => $rmdeps)
   <div class="card m-1">
     <div class="card-header p-0">
@@ -16,9 +16,9 @@ $adeps = $other_dependencies->groupBy('Dependency');
     </div>
   </div>
 @empty
-  No dependencies
+  {{ _i("No dependencies") }}
 @endforelse
-<p class="font-weight-bolder my-2">Inter-Actor Dependencies</p>
+<p class="font-weight-bolder my-2">{{ _i("Inter-Actor Dependencies") }}</p>
 @forelse($adeps as $dep => $aadeps)
   <div class="card m-1">
     <div class="card-header p-0">
@@ -31,5 +31,5 @@ $adeps = $other_dependencies->groupBy('Dependency');
     </div>
   </div>
 @empty
-  No dependencies
+  {{ _i("No dependencies") }}
 @endforelse

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use LaravelGettext;
 
 class ActorController extends Controller
 {
@@ -15,6 +16,7 @@ class ActorController extends Controller
      */
     public function index(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('viewAny', Actor::class);
         $actor = new Actor;
         if ($request->filled('Name')) {
@@ -43,6 +45,7 @@ class ActorController extends Controller
      */
     public function create()
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('create', Actor::class);
         $table = new Actor;
         //TODO getTableComments is the same as in Rule.php. To render common
@@ -58,6 +61,7 @@ class ActorController extends Controller
      */
     public function store(Request $request)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('create', Actor::class);
         $request->validate([
             'name' => 'required|max:100',
@@ -75,6 +79,7 @@ class ActorController extends Controller
      */
     public function show(Actor $actor)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('view', $actor);
         $actorInfo = $actor->load(['company:id,name', 'parent:id,name', 'site:id,name', 'droleInfo', 'countryInfo:iso,name', 'country_mailingInfo:iso,name', 'country_billingInfo:iso,name', 'nationalityInfo:iso,name']);
         $actorComments = $actor->getTableComments('actor');

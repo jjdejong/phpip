@@ -2,8 +2,8 @@
 
 @section('content')
 <legend class="text-primary">
-    Actors
-    <a href="actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Create Actor">Create actor</a>
+    {{ _i('Actors') }}
+    <a href="actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="{{ _i('Create Actor') }}">{{ _i("Create actor") }}</a>
 </legend>
 <div class="row">
   <div class="col">
@@ -11,16 +11,16 @@
       <table class="table table-striped table-hover table-sm col">
         <thead>
           <tr id="filterFields" class="bg-primary text-light">
-            <th class="border-top-0"><input class="form-control form-control-sm" name="Name" placeholder="Name" value="{{ Request::get('Name') }}"></th>
-            <th class="align-middle border-top-0">First name</th>
-            <th class="align-middle border-top-0">Display name</th>
-            <th class="align-middle text-center border-top-0">Company <span class="float-right">Person</span></th>
+            <th class="border-top-0"><input class="form-control form-control-sm" name="Name" placeholder="{{ _i('Name') }}" value="{{ Request::get('Name') }}"></th>
+            <th class="align-middle border-top-0">{{ _i("First name") }}</th>
+            <th class="align-middle border-top-0">{{ _i("Display name") }}</th>
+            <th class="align-middle text-center border-top-0">{{ _i('Company') }} <span class="float-right">{{ _i("Person") }}</span></th>
             <th class="border-top-0">
               <select id="person" class="custom-select custom-select-sm px-0" name="selector">
-                <option value="" selected>All</option>
-                <option value="phy_p">Physical</option>
-                <option value="leg_p">Legal</option>
-                <option value="warn">Warn</option>
+                <option value="" selected>{{ _i("All") }}</option>
+                <option value="phy_p">{{ _i("Physical") }}</option>
+                <option value="leg_p">{{ _i("Legal") }}</option>
+                <option value="warn">{{ _i("Warn") }}</option>
               </select>
             </th>
           </tr>
@@ -29,7 +29,7 @@
           @foreach ($actorslist as $actor)
           <tr class="reveal-hidden" data-id="{{ $actor->id }}">
             <td>
-              <a @if($actor->warn) class="text-danger text-decoration-none" @endif href="/actor/{{ $actor->id }}" data-panel="ajaxPanel" title="Actor data">
+              <a @if($actor->warn) class="text-danger text-decoration-none" @endif href="/actor/{{ $actor->id }}" data-panel="ajaxPanel" title="{{ _i('Actor data') }}">
                 {{ $actor->name }}
               </a>
             </td>
@@ -38,9 +38,9 @@
             <td>{{ empty($actor->company) ? '' : $actor->company->name }}</td>
             <td>
               @if ($actor->phy_person)
-              Physical
+              {{ _i("Physical") }}
               @else
-              Legal
+              {{ _i("Legal") }}
               @endif
             </td>
           </tr>
@@ -57,11 +57,11 @@
   <div class="col-4">
     <div class="card border-info">
       <div class="card-header bg-info text-light">
-        Actor information
+        {{ _i("Actor information") }}
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          Click on actor name to view and edit details
+          {{ _i("Click on actor name to view and edit details") }}
         </div>
       </div>
     </div>

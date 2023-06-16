@@ -7,6 +7,7 @@ use App\Actor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use LaravelGettext;
 
 class ActorPivotController extends Controller
 {
@@ -100,6 +101,7 @@ class ActorPivotController extends Controller
      */
     public function usedIn(int $actor)
     {
+        LaravelGettext::setLocale(Auth::user()->language);
         $actorpivot = new ActorPivot();
         $matter_dependencies = $actorpivot->with('matter', 'role')->where('actor_id', $actor)->get()->take(50);
         $actor_model = new Actor();
