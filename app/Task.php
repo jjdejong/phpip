@@ -13,10 +13,6 @@ class Task extends Model
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $touches = ['matter'];
-    protected $dates = [
-        'due_date',
-        'done_date'
-    ];
     protected $casts = [
         'due_date' => 'date:Y-m-d',
         'done_date' => 'date:Y-m-d'

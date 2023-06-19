@@ -10,9 +10,6 @@ class Event extends Model
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $touches = ['matter'];
-    protected $dates = [
-      'event_date'
-    ];
     protected $casts = [
       'event_date' => 'date:Y-m-d'
     ];

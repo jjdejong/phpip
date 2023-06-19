@@ -12,8 +12,8 @@ class Matter extends Model
     protected $table = 'matter';
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    /*protected $dates = [
-        'expire_date'
+    /*protected $casts = [
+        'expire_date' => 'date:Y-m-d'
     ];*/
 
     public function family()
