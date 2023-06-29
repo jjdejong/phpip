@@ -1,21 +1,21 @@
-var contentSrc, // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
+let contentSrc, // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
     ceInitialContent, // Used for detecting changes of content-editable elements
     cTypeCode; // Used for toggling image file input in matter.classifiers
-
+   
 // Ajax fill an element from a url returning HTML
-var fetchInto = async (url, element) => {
+let fetchInto = async (url, element) => {
     response = await fetch(url);
     element.innerHTML = await response.text();
 }
 
-var reloadPart = async (url, partId) => {
+let reloadPart = async (url, partId) => {
     response = await fetch(url);
     let doc = new DOMParser().parseFromString(await response.text(), "text/html");
     document.getElementById(partId).innerHTML = doc.getElementById(partId).innerHTML;
 }
 
 // Perform REST operations with native JS
-var fetchREST = async (url, method, body) => {
+let fetchREST = async (url, method, body) => {
     response = await fetch(url, {
         headers: {
             "X-Requested-With": "XMLHttpRequest",
@@ -361,6 +361,153 @@ app.addEventListener("input", e => {
     }
 });
 
+// New autocomplete
+const autocomplete = AutocompleteWidget();
+app.addEventListener('focus', event => {
+    // Attach autocompletion widget to a corresponding element
+    if (event.target.hasAttribute('data-ac')) {
+        autocomplete.attachWidget(event.target);
+    }
+    // Store the initial value of a content editable element
+    if (event.target.matches("[contenteditable]")) {
+        ceInitialContent = event.target.innerText;
+    }
+}, true);
+
+function AutocompleteWidget() {
+    let minLength = 1;
+    let sourceUrl = '';
+    let acTarget = null;
+    let itemSelected = false;
+    let suggestionList = document.createElement('div');
+    suggestionList.classList.add('autocomplete-list');
+  
+    function attachWidget(input) {
+        if (document.body.contains(suggestionList)) {
+            // Remove a previous instance if it still exists
+            document.body.removeChild(suggestionList);
+        }
+        const inputRect = input.getBoundingClientRect();
+        const modal = input.closest('.modal');
+        const modalRect = modal ? modal.getBoundingClientRect() : { top: 0, left: 0 };
+        suggestionList.style.left = `${inputRect.left}px`;
+        suggestionList.style.top = `${modalRect.top + inputRect.bottom}px`;
+        suggestionList.style.width = `${inputRect.width}px`;
+        document.body.appendChild(suggestionList);
+        minLength = parseInt(input.getAttribute('data-aclength')) || 1;
+        sourceUrl = input.getAttribute('data-ac');
+        const targetName = input.getAttribute('data-actarget');
+        acTarget = targetName ? input.parentNode.querySelector(`input[name="${targetName}"]`) : null;
+
+        input.addEventListener('input', inputHandler);
+        input.addEventListener('blur', blurHandler);
+        input.addEventListener('change', changeHandler);
+    }
+  
+    function detachWidget(input) {
+        input.removeEventListener('input', inputHandler);
+        input.removeEventListener('blur', blurHandler);
+        input.removeEventListener('change', changeHandler);
+    
+        itemSelected = false;
+    }
+  
+    const inputHandler = (event) => {
+        const term = event.target.value;
+        itemSelected = false;
+        suggestionList.innerHTML = '';
+
+        if (term.length >= minLength) {
+            fetchSuggestions(sourceUrl, term)
+            .then(suggestions => displaySuggestions(suggestions, event.target));
+        }
+    }
+
+    async function fetchSuggestions(url, term) {
+        const separator = url.includes('?') ? '&' : '?';
+        const fetchUrl = url + separator + 'term=' + encodeURIComponent(term);
+    
+        try {
+            const response = await fetch(fetchUrl);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching suggestions:', error);
+            return [];
+        }
+    }
+  
+    function displaySuggestions(suggestions, input) {
+        suggestions.forEach(suggestion => {
+            const listItem = document.createElement('div');
+            listItem.classList.add('autocomplete-item');
+            listItem.textContent = suggestion.value;
+            listItem.dataset.key = suggestion.key;
+
+            listItem.addEventListener('click', () => handleSelectedItem(suggestion, input), true);
+
+            suggestionList.appendChild(listItem);
+        });
+    }
+  
+    const blurHandler = (event) => {
+        detachWidget(event.target);
+        setTimeout(() => { suggestionList.innerHTML = ''; }, 200);
+    }
+
+    const changeHandler = (event) => {
+        // Delay handling the change event after handling the click event
+        setTimeout(() => {
+            console.log(acTarget);
+            // Clear the input if nothing is selected and the value has changed
+            if (!itemSelected && !event.target.hasAttribute('data-freetext')) {
+                event.target.value = '';
+                if (acTarget) {
+                    acTarget.value = '';
+                }
+            }
+        });
+    }
+
+    function handleSelectedItem(selectedItem, input) {
+        itemSelected = true;
+        if (input.id == 'addCountry') {
+            let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
+            newCountry.id = 'country-' + selectedItem.key;
+            newCountry.children[0].value = selectedItem.key;
+            newCountry.children[1].value = selectedItem.value;
+            ncountries.appendChild(newCountry);
+            // Wait for the new country entry to be added to the DOM before resetting the input field
+            setTimeout(() => {
+                addCountry.value = "";
+            }, 0);
+        } else if (acTarget) {
+            // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
+            input.value = selectedItem.value;
+            acTarget.value = selectedItem.key;
+            if (window.createMatterForm && input.dataset.actarget == 'category_code') {
+                // We're in a matter creation form - fill caseref with corresponding suggested value
+                fetchREST('/matter/new-caseref?term=' + selectedItem.prefix, 'GET')
+                    .then(data => {
+                        createMatterForm.caseref.value = data[0].value;
+                    });
+            }
+        } else {
+            // Used for content editable fields where the same field is used for sending the id to the server
+            input.value = selectedItem.key;
+            input.blur();
+        }
+
+        suggestionList.innerHTML = '';
+    }
+  
+    return {
+        attachWidget,
+        detachWidget
+    };
+}
+// End new autocomplete
+
 app.addEventListener("focusout", e => {
     if (e.target.matches("[contenteditable]") && e.target.innerText !== ceInitialContent) {
         let params = new URLSearchParams();
@@ -370,71 +517,6 @@ app.addEventListener("focusout", e => {
             .then(data => {
                 e.target.classList.remove('border-info');
             })
-    }
-});
-
-app.addEventListener("focusin", e => {
-    if (e.target.matches("[contenteditable]")) {
-        ceInitialContent = e.target.innerText;
-    }
-
-    if (e.target.hasAttribute('data-ac')) {
-        // Process autocomplete fields
-        var aclength = 1;
-        if (e.target.hasAttribute('data-aclength')) {
-            aclength = e.target.dataset.aclength;
-        }
-        if (e.target.closest('tr')) {
-            e.target.closest('tr').classList.add('ui-front');
-        }
-        $(e.target).autocomplete({
-            autoFocus: true,
-            minLength: aclength,
-            source: e.target.dataset.ac,
-            // create: function(event, ui) {
-            //   // Fires search immediately (but selection does not trigger blur or change)
-            //   if ( aclength == 0 ) {
-            //     $(this).autocomplete("search", "");
-            //   }
-            // },
-            select: (event, ui) => {
-                if (e.target.id == 'addCountry') {
-                    let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
-                    newCountry.id = 'country-' + ui.item.key;
-                    newCountry.children[0].value = ui.item.key;
-                    newCountry.children[1].value = ui.item.value;
-                    ncountries.appendChild(newCountry);
-                    // Wait for the new country entry to be added to the DOM before resetting the input field
-                    setTimeout(() => {
-                        addCountry.value = "";
-                    }, 0);
-                } else if (e.target.hasAttribute('data-actarget')) {
-                    // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
-                    e.target.value = ui.item.value;
-                    e.target.form[e.target.dataset.actarget].value = ui.item.key;
-                    if (window.createMatterForm && e.target.dataset.actarget == 'category_code') {
-                        // We're in a matter creation form - fill caseref with corresponding new value
-                        fetchREST('/matter/new-caseref?term=' + ui.item.prefix, 'GET')
-                            .then(data => {
-                                createMatterForm.caseref.value = data[0].value;
-                            });
-                    }
-                } else {
-                    // Used for content editable fields where the same field is used for sending the id to the server
-                    e.target.value = ui.item.key;
-                    e.target.blur();
-                }
-            },
-            change: function (event, ui) {
-                if (!ui.item && !e.target.hasAttribute('data-freetext')) {
-                    // Clear the input if the user leaves without a selection
-                    e.target.value = "";
-                    if (e.target.form && e.target.hasAttribute('data-actarget')) {
-                        e.target.form[e.target.dataset.actarget].value = "";
-                    }
-                }
-            }
-        });
     }
 });
 
