@@ -377,16 +377,11 @@ app.addEventListener('focus', event => {
 function AutocompleteWidget() {
     let minLength = 1;
     let sourceUrl = '';
-    let acTarget = null;
     let itemSelected = false;
     let suggestionList = document.createElement('div');
     suggestionList.classList.add('autocomplete-list');
   
     function attachWidget(input) {
-        if (document.body.contains(suggestionList)) {
-            // Remove a previous instance if it still exists
-            document.body.removeChild(suggestionList);
-        }
         const inputRect = input.getBoundingClientRect();
         const modal = input.closest('.modal');
         const modalRect = modal ? modal.getBoundingClientRect() : { top: 0, left: 0 };
@@ -397,19 +392,10 @@ function AutocompleteWidget() {
         minLength = parseInt(input.getAttribute('data-aclength')) || 1;
         sourceUrl = input.getAttribute('data-ac');
         const targetName = input.getAttribute('data-actarget');
-        acTarget = targetName ? input.parentNode.querySelector(`input[name="${targetName}"]`) : null;
 
         input.addEventListener('input', inputHandler);
         input.addEventListener('blur', blurHandler);
         input.addEventListener('change', changeHandler);
-    }
-  
-    function detachWidget(input) {
-        input.removeEventListener('input', inputHandler);
-        input.removeEventListener('blur', blurHandler);
-        input.removeEventListener('change', changeHandler);
-    
-        itemSelected = false;
     }
   
     const inputHandler = (event) => {
@@ -451,18 +437,17 @@ function AutocompleteWidget() {
     }
   
     const blurHandler = (event) => {
-        detachWidget(event.target);
         setTimeout(() => { suggestionList.innerHTML = ''; }, 200);
     }
 
     const changeHandler = (event) => {
-        // Delay handling the change event after handling the click event
         setTimeout(() => {
-            console.log(acTarget);
             // Clear the input if nothing is selected and the value has changed
             if (!itemSelected && !event.target.hasAttribute('data-freetext')) {
                 event.target.value = '';
-                if (acTarget) {
+                const targetName = event.target.getAttribute('data-actarget');
+                if (targetName) {
+                    const acTarget = event.target.parentNode.querySelector(`input[name="${targetName}"]`);
                     acTarget.value = '';
                 }
             }
@@ -471,6 +456,7 @@ function AutocompleteWidget() {
 
     function handleSelectedItem(selectedItem, input) {
         itemSelected = true;
+        suggestionList.innerHTML = '';
         if (input.id == 'addCountry') {
             let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
             newCountry.id = 'country-' + selectedItem.key;
@@ -481,10 +467,14 @@ function AutocompleteWidget() {
             setTimeout(() => {
                 addCountry.value = "";
             }, 0);
-        } else if (acTarget) {
+        } else if (input.hasAttribute('data-actarget')) {
             // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
             input.value = selectedItem.value;
-            acTarget.value = selectedItem.key;
+            const targetName = input.getAttribute('data-actarget');
+            if (targetName) {
+                const acTarget = input.parentNode.querySelector(`input[name="${targetName}"]`);
+                acTarget.value = selectedItem.key;
+            }
             if (window.createMatterForm && input.dataset.actarget == 'category_code') {
                 // We're in a matter creation form - fill caseref with corresponding suggested value
                 fetchREST('/matter/new-caseref?term=' + selectedItem.prefix, 'GET')
@@ -497,13 +487,10 @@ function AutocompleteWidget() {
             input.value = selectedItem.key;
             input.blur();
         }
-
-        suggestionList.innerHTML = '';
     }
   
     return {
-        attachWidget,
-        detachWidget
+        attachWidget
     };
 }
 // End new autocomplete

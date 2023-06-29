@@ -385,7 +385,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
      <input type="hidden" name="role">
      <input type="hidden" name="shared">
      <input type="hidden" name="actor_id">
-     <div class="ui-front">
+     <div>
        <input type="text" class="form-control form-control-sm" id="roleName" data-actarget="role" placeholder="Role">
        <input type="text" class="form-control form-control-sm" id="actorName" data-actarget="actor_id" placeholder="Name">
        <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">

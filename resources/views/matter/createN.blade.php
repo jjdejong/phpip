@@ -1,4 +1,4 @@
-<form id="natMatterForm" class="ui-front">
+<form id="natMatterForm">
 	<input type="hidden" name="caseref" value="{{ $parent_matter->caseref }}" />
 	<input type="hidden" name="category_code" value="{{ $parent_matter->category_code }}" />
 	<input type="hidden" name="origin" value="{{ $parent_matter->country }}" />

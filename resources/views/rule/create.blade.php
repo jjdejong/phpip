@@ -13,7 +13,7 @@
       </tr>
       <tr>
         <td><label for="for_country_new" title="{{ $ruleComments['for_country'] }}">Country</label></td>
-        <td class="ui-front">
+        <td>
           <input type='hidden' name='for_country'>
           <input type="text" class="form-control form-control-sm" data-ac="/country/autocomplete" data-actarget="for_country" autocomplete="off">
         </td>
