@@ -273,7 +273,7 @@ app.addEventListener("change", e => {
         // Generic in-place edition of input fields
         if (e.target.hasAttribute('data-ac')) {
             // Destroy autocomplete widget
-            $(e.target).autocomplete('destroy');
+            // $(e.target).autocomplete('destroy');
         }
         let params = new URLSearchParams();
         if (e.target.type === 'checkbox') {
@@ -363,7 +363,7 @@ app.addEventListener("input", e => {
 
 // New autocomplete
 const autocomplete = AutocompleteWidget();
-app.addEventListener('focus', event => {
+document.body.addEventListener('focus', event => {
     // Attach autocompletion widget to a corresponding element
     if (event.target.hasAttribute('data-ac')) {
         autocomplete.attachWidget(event.target);
@@ -427,7 +427,12 @@ function AutocompleteWidget() {
         suggestions.forEach(suggestion => {
             const listItem = document.createElement('div');
             listItem.classList.add('autocomplete-item');
-            listItem.textContent = suggestion.value;
+            // Handle situation where the ajax data returns a label that should be displayed instead of the value
+            if (suggestion.label) {
+                listItem.textContent = suggestion.label;
+            } else {
+                listItem.textContent = suggestion.value;
+            }
             listItem.dataset.key = suggestion.key;
 
             listItem.addEventListener('click', () => handleSelectedItem(suggestion, input), true);
@@ -485,8 +490,11 @@ function AutocompleteWidget() {
         } else {
             // Used for content editable fields where the same field is used for sending the id to the server
             input.value = selectedItem.key;
-            input.blur();
+            //input.blur();
         }
+        // Send event for further processing 
+        const acCompleted = new CustomEvent('acCompleted', { detail: selectedItem });
+        input.dispatchEvent(acCompleted);
     }
   
     return {

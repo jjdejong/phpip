@@ -382,14 +382,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 <template id="actorPopoverTemplate">
   <form id="addActorForm" autocomplete="off">
-     <input type="hidden" name="role">
-     <input type="hidden" name="shared">
-     <input type="hidden" name="actor_id">
-     <div>
-       <input type="text" class="form-control form-control-sm" id="roleName" data-actarget="role" placeholder="Role">
-       <input type="text" class="form-control form-control-sm" id="actorName" data-actarget="actor_id" placeholder="Name">
-       <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
-     </div>
+      <input type="hidden" name="role">
+      <input type="hidden" name="shared">
+      <input type="hidden" name="actor_id">
+      <input type="text" class="form-control form-control-sm" id="roleName" data-ac="/role/autocomplete" data-actarget="role" placeholder="Role">
+      <input type="text" class="form-control form-control-sm" id="actorName" data-ac="/actor/autocomplete/1" data-actarget="actor_id" placeholder="Name">
+      <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
      <div class="form-group">
        <div class="form-check my-1">
          <input class="form-check-input mt-0" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">

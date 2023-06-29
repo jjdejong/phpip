@@ -127,7 +127,7 @@ Route::group(['middleware' => 'auth'], function () {
             ->where('name', 'like', "$term%")
             ->take(10)->get();
         if ($list->count() < 5 && $create_option) {
-            $list->push(['label' => 'Unknown. Create?', 'key' => 'create']);
+            $list->push(['label' => "Create $term?", 'key' => 'create', 'value' => $term]);
         }
         return $list;
     });
