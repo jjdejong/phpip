@@ -66,7 +66,7 @@ class Rule extends Model
         if (! isset($table_name)) {
             return false;
         }
-        $tableInfo = DB::connection()->getDoctrineSchemaManager()->listTableDetails($table_name);
+        $tableInfo = DB::connection()->getDoctrineSchemaManager()->introspectTable($table_name);
         $comments = array ();
         foreach ($tableInfo->getColumns() as $column) {
             $comments[$column->getName()] = $column->getComment();

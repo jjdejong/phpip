@@ -270,59 +270,58 @@ app.addEventListener('click', (e) => {
 
 app.addEventListener("change", e => {
     if (e.target.matches(".noformat")) {
-        // Generic in-place edition of input fields
-        if (e.target.hasAttribute('data-ac')) {
-            // Destroy autocomplete widget
-            // $(e.target).autocomplete('destroy');
-        }
-        let params = new URLSearchParams();
-        if (e.target.type === 'checkbox') {
-            if (e.target.checked) {
-                e.target.value = 1;
-            } else {
-                e.target.value = 0;
-            }
-        }
-        params.append(e.target.name, e.target.value);
-        let resource = e.target.closest('[data-resource]').dataset.resource;
-        fetchREST(resource, 'PUT', params)
-            .then(data => {
-                if (data.errors) {
-                    if (ajaxModal.matches('.show')) {
-                        footerAlert.innerHTML = Object.values(data.errors)[0];
-                        footerAlert.classList.add('alert-danger');
-                    } else {
-                        e.target.classList.remove('border-info', 'is-valid');
-                        e.target.classList.add('border-danger');
-                        e.target.value = Object.values(data.errors)[0];
-                    }
-                } else if (data.message) {
-                    if (ajaxModal.matches('.show')) {
-                        footerAlert.innerHTML = data.message;
-                        footerAlert.classList.add('alert-danger');
-                    } else {
-                        e.target.classList.remove('border-info', 'is-valid');
-                        e.target.classList.add('border-danger');
-                        e.target.value = 'Invalid';
-                        console.log(data.message);
-                    }
+        // Delay to finish potential autocompletion process
+        setTimeout(() => {
+            // Generic in-place edition of input fields
+            let params = new URLSearchParams();
+            if (e.target.type === 'checkbox') {
+                if (e.target.checked) {
+                    e.target.value = 1;
                 } else {
-                    if (!window.ajaxPanel && contentSrc.length !== 0 && !e.target.closest('.tab-content')) {
-                        // Reload modal with updated content
-                        fetchInto(contentSrc, ajaxModal.querySelector(".modal-body"));
-                    } else {
-                        // Don't reload but set border back to normal
-                        e.target.classList.remove('border-info', 'border-danger');
-                        e.target.classList.add('is-valid');
-                        // Trigger a xhrsent event for whoever wants to refresh a list
-                        var event = new Event('xhrsent', { bubbles: true });
-                        e.target.dispatchEvent(event);
-                    }
-                    footerAlert.classList.remove("alert-danger");
-                    footerAlert.innerHTML = "";
+                    e.target.value = 0;
                 }
-            })
-            .catch(error => console.log(error));
+            }
+            params.append(e.target.name, e.target.value);
+            let resource = e.target.closest('[data-resource]').dataset.resource;
+            fetchREST(resource, 'PUT', params)
+                .then(data => {
+                    if (data.errors) {
+                        if (ajaxModal.matches('.show')) {
+                            footerAlert.innerHTML = Object.values(data.errors)[0];
+                            footerAlert.classList.add('alert-danger');
+                        } else {
+                            e.target.classList.remove('border-info', 'is-valid');
+                            e.target.classList.add('border-danger');
+                            e.target.value = Object.values(data.errors)[0];
+                        }
+                    } else if (data.message) {
+                        if (ajaxModal.matches('.show')) {
+                            footerAlert.innerHTML = data.message;
+                            footerAlert.classList.add('alert-danger');
+                        } else {
+                            e.target.classList.remove('border-info', 'is-valid');
+                            e.target.classList.add('border-danger');
+                            e.target.value = 'Invalid';
+                            console.log(data.message);
+                        }
+                    } else {
+                        if (!window.ajaxPanel && contentSrc.length !== 0 && !e.target.closest('.tab-content')) {
+                            // Reload modal with updated content
+                            fetchInto(contentSrc, ajaxModal.querySelector(".modal-body"));
+                        } else {
+                            // Don't reload but set border back to normal
+                            e.target.classList.remove('border-info', 'border-danger');
+                            e.target.classList.add('is-valid');
+                            // Trigger a xhrsent event for whoever wants to refresh a list
+                            var event = new Event('xhrsent', { bubbles: true });
+                            e.target.dispatchEvent(event);
+                        }
+                        footerAlert.classList.remove("alert-danger");
+                        footerAlert.innerHTML = "";
+                    }
+                })
+                .catch(error => console.log(error));
+        });
     }
     // matter.classifiers addClassifierForm - replace input fields with file upload field when selecting an image type
     if (e.target.dataset.actarget === 'type_code' && e.target.value === 'Image') {
@@ -363,7 +362,7 @@ app.addEventListener("input", e => {
 
 // New autocomplete
 const autocomplete = AutocompleteWidget();
-document.body.addEventListener('focus', event => {
+document.body.addEventListener('focusin', event => {
     // Attach autocompletion widget to a corresponding element
     if (event.target.hasAttribute('data-ac')) {
         autocomplete.attachWidget(event.target);
@@ -372,7 +371,7 @@ document.body.addEventListener('focus', event => {
     if (event.target.matches("[contenteditable]")) {
         ceInitialContent = event.target.innerText;
     }
-}, true);
+});
 
 function AutocompleteWidget() {
     let minLength = 1;
@@ -385,16 +384,14 @@ function AutocompleteWidget() {
         const inputRect = input.getBoundingClientRect();
         const modal = input.closest('.modal');
         const modalRect = modal ? modal.getBoundingClientRect() : { top: 0, left: 0 };
-        suggestionList.style.left = `${inputRect.left}px`;
-        suggestionList.style.top = `${modalRect.top + inputRect.bottom}px`;
-        suggestionList.style.width = `${inputRect.width}px`;
+        suggestionList.style.left = inputRect.left + 'px';
+        suggestionList.style.top = modalRect.top + inputRect.bottom + 'px';
+        suggestionList.style.width = inputRect.width + 'px';
         document.body.appendChild(suggestionList);
         minLength = parseInt(input.getAttribute('data-aclength')) || 1;
         sourceUrl = input.getAttribute('data-ac');
-        const targetName = input.getAttribute('data-actarget');
 
         input.addEventListener('input', inputHandler);
-        input.addEventListener('blur', blurHandler);
         input.addEventListener('change', changeHandler);
     }
   
@@ -402,6 +399,7 @@ function AutocompleteWidget() {
         const term = event.target.value;
         itemSelected = false;
         suggestionList.innerHTML = '';
+        //document.body.removeChild(suggestionList);
 
         if (term.length >= minLength) {
             fetchSuggestions(sourceUrl, term)
@@ -424,6 +422,7 @@ function AutocompleteWidget() {
     }
   
     function displaySuggestions(suggestions, input) {
+        let listWidth = 100;
         suggestions.forEach(suggestion => {
             const listItem = document.createElement('div');
             listItem.classList.add('autocomplete-item');
@@ -435,20 +434,23 @@ function AutocompleteWidget() {
             }
             listItem.dataset.key = suggestion.key;
 
-            listItem.addEventListener('click', () => handleSelectedItem(suggestion, input), true);
-
+            // Use "mousedown" rather than "click" to obtain immediate action when an item is selected
+            listItem.addEventListener('mousedown', (event) => handleSelectedItem(event, suggestion, input), true);
+            
+            // Calculate an approximate width based on the number of characters
+            const listItemWidth = suggestion.value.length * 8;
+            listWidth = Math.max(listWidth, listItemWidth);
             suggestionList.appendChild(listItem);
         });
-    }
-  
-    const blurHandler = (event) => {
-        setTimeout(() => { suggestionList.innerHTML = ''; }, 200);
+        suggestionList.style.width = listWidth + 'px';
+        //document.body.appendChild(suggestionList);
     }
 
     const changeHandler = (event) => {
+        // Delay to first handle a potential item selection that sets the itemSelected flag
         setTimeout(() => {
-            // Clear the input if nothing is selected and the value has changed
-            if (!itemSelected && !event.target.hasAttribute('data-freetext')) {
+            // Clear the input if nothing is selected and the value was changed manually
+            if (!itemSelected) {
                 event.target.value = '';
                 const targetName = event.target.getAttribute('data-actarget');
                 if (targetName) {
@@ -459,7 +461,7 @@ function AutocompleteWidget() {
         });
     }
 
-    function handleSelectedItem(selectedItem, input) {
+    function handleSelectedItem(event, selectedItem, input) {
         itemSelected = true;
         suggestionList.innerHTML = '';
         if (input.id == 'addCountry') {
@@ -490,11 +492,26 @@ function AutocompleteWidget() {
         } else {
             // Used for content editable fields where the same field is used for sending the id to the server
             input.value = selectedItem.key;
-            //input.blur();
         }
+
+        event.preventDefault() // Prevent other click events from being triggered
+
         // Send event for further processing 
         const acCompleted = new CustomEvent('acCompleted', { detail: selectedItem });
         input.dispatchEvent(acCompleted);
+
+        // Remove the suggestion list
+        document.body.removeChild(suggestionList);
+        
+        // Set focus on next input by simulating a "Tab" press
+        if (input.form) {
+            const inputs = Array.from(input.form.querySelectorAll('input:not([type="hidden"])'));
+            const currentIndex = inputs.indexOf(input);
+            const nextIndex = (currentIndex + 1) % inputs.length;
+            inputs[nextIndex].focus();
+        } else {
+            input.blur();
+        }
     }
   
     return {
