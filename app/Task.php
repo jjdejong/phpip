@@ -13,22 +13,23 @@ class Task extends Model
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $touches = ['matter'];
-    protected $dates = [
-        'due_date',
-        'done_date'
+    protected $casts = [
+        'due_date' => 'date:Y-m-d',
+        'done_date' => 'date:Y-m-d'
     ];
 
-    public function setDueDateAttribute($value)
-    {
-        $locale = Carbon::getLocale();
-        $this->attributes['due_date'] = Carbon::createFromLocaleIsoFormat('L', $locale, $value);
-    }
+    // This is moved to the task's store() method, allowing easier programmatic date updates
+    // public function setDueDateAttribute($value)
+    // {
+    //     $locale = Carbon::getLocale();
+    //     $this->attributes['due_date'] = Carbon::createFromLocaleIsoFormat('L', $locale, $value);
+    // }
 
-    public function setDoneDateAttribute($value)
-    {
-        $locale = Carbon::getLocale();
-        $this->attributes['done_date'] = Carbon::createFromLocaleIsoFormat('L', $locale, $value);
-    }
+    // public function setDoneDateAttribute($value)
+    // {
+    //     $locale = Carbon::getLocale();
+    //     $this->attributes['done_date'] = Carbon::createFromLocaleIsoFormat('L', $locale, $value);
+    // }
 
     public function info()
     {
@@ -148,12 +149,12 @@ class Task extends Model
             'event.matter_id',
             DB::raw('IFNULL(fees.cost, task.cost) AS cost'),
             DB::raw('IFNULL(fees.fee, task.fee) AS fee'),
-            DB::raw('IFNULL(fees.cost_reduced, IFNULL(fees.cost, task.cost)) AS cost_reduced'),
-            DB::raw('IFNULL(fees.fee_reduced, IFNULL(fees.fee, task.fee)) AS fee_reduced'),
-            DB::raw('IFNULL(fees.cost_sup, IFNULL(fees.cost, task.cost)) AS cost_sup'),
-            DB::raw('IFNULL(fees.fee_sup, IFNULL(fees.fee, task.fee)) AS fee_sup'),
-            DB::raw('IFNULL(fees.cost_sup_reduced, IFNULL(fees.cost, task.cost)) AS cost_sup_reduced'),
-            DB::raw('IFNULL(fees.fee_sup_reduced, IFNULL(fees.fee, task.fee)) AS fee_sup_reduced'),
+            DB::raw('COALESCE(fees.cost_reduced, fees.cost, task.cost) AS cost_reduced'),
+            DB::raw('COALESCE(fees.fee_reduced, fees.fee, task.fee) AS fee_reduced'),
+            DB::raw('COALESCE(fees.cost_sup, fees.cost, task.cost) AS cost_sup'),
+            DB::raw('COALESCE(fees.fee_sup, fees.fee, task.fee) AS fee_sup'),
+            DB::raw('COALESCE(fees.cost_sup_reduced, fees.cost, task.cost) AS cost_sup_reduced'),
+            DB::raw('COALESCE(fees.fee_sup_reduced, fees.fee, task.fee) AS fee_sup_reduced'),
             'task.trigger_id',
             'matter.category_code AS category',
             'matter.caseref',
@@ -189,7 +190,8 @@ class Task extends Model
             'task.step',
             'task.grace_period',
             'task.invoice_step',
-            'matter.expire_date'
+            'matter.expire_date',
+            'fees.fee AS table_fee'
         )
         ->leftJoin(
             DB::raw("matter_actor_lnk lappl

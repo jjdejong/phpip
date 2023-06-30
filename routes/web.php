@@ -123,11 +123,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('actor/autocomplete/{create_option?}', function (Request $request, $create_option = null) {
         $term = $request->input('term');
-        $list = App\Actor::select('name as value', 'id as key')
+        $list = App\Actor::select(DB::raw('coalesce(display_name, name) as value'), 'id as key')
             ->where('name', 'like', "$term%")
+            ->orWhere('display_name', 'like', "$term")
             ->take(10)->get();
         if ($list->count() < 5 && $create_option) {
-            $list->push(['label' => 'Unknown. Create?', 'key' => 'create']);
+            $list->push(['label' => "Create $term?", 'key' => 'create', 'value' => $term]);
         }
         return $list;
     });

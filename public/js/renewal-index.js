@@ -87,7 +87,7 @@ renewalsExport.onclick = e => {
     // if (tids.length === 0) {
     //     alert("No renewals selected");
     //     return;
-    // } 
+    // }
     // var task_ids = encodeURIComponent(JSON.stringify(tids));
     let exportUrl = '/renewal/export';
     e.preventDefault(); //stop the browser from following
@@ -145,16 +145,21 @@ async function actionRenewals(button, msgAction, action_url) {
     var tids = getSelected();
     if (tids.length === 0) {
         var end = document.getElementById('Untildate').value;
-        if(!end) {
+        if (!end) {
             alert("No renewals selected for " + msgAction);
             // withdraw spinner and restore button
             button.removeChild(document.getElementsByClassName('spinner-border')[0]);
             return;
         }
         var begin = document.getElementById('Fromdate').value;
-        var string = JSON.stringify({'begin':begin, 'end':end});
+        var string = JSON.stringify({
+            'begin': begin,
+            'end': end
+        });
     } else {
-        var string = JSON.stringify({task_ids: tids});
+        var string = JSON.stringify({
+            task_ids: tids
+        });
     }
     context_url = new URL(window.location.href);
     await submitUpdate(string, action_url).catch(err => alert(err));
@@ -193,25 +198,32 @@ xmlRenewals.addEventListener("click", function () {
         alert("No renewals selected for order");
         return;
     }
-    var string = JSON.stringify({task_ids: tids, clear: false});
+    var string = JSON.stringify({
+        task_ids: tids,
+        clear: false
+    });
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/renewal/order', true);
     xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-    xhr.setRequestHeader('X-CSRF-TOKEN', document.head.querySelector("[name=csrf-token]").content);
+    xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'));
     xhr.send(string);
-    xhr.onload = function(e) {
+    xhr.onload = function (e) {
         if (this.status == 200) {
             // Find file name
             var filename = xhr.getResponseHeader('Content-Disposition').split("filename=")[1];
 
             // The actual download by creating a link and clicking it programmatically
-            var f = new File([xhr.response], filename, { type: xhr.getResponseHeader('Content-Disposition') });
+            var f = new File([xhr.response], filename, {
+                type: xhr.getResponseHeader('Content-Disposition')
+            });
             var link = document.createElement('a');
             link.href = window.URL.createObjectURL(f);
             link.download = filename;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        } else if (this.status == 501) {
+            alert(JSON.parse(this.responseText).error)
         }
     }
 });

@@ -40,48 +40,27 @@ app.addEventListener('shown.bs.popover', e => {
     roleName.focus();
   }
 
-  $('#actorName').autocomplete({
-    minLength: 2,
-    source: "/actor/autocomplete/1",
-    select: function(event, ui) {
-      if (ui.item.key === 'create') { // Creates actor on the fly
-        fetchREST('/actor', 'POST', new URLSearchParams('name=' + this.value.toUpperCase() + '&default_role=' + addActorForm.role.value))
-        .then( response => {
+  actorName.addEventListener('acCompleted', (event) => {
+    console.log(event);
+    if (event.detail.key === 'create') { // Creates actor on the fly
+      fetchREST('/actor', 'POST', new URLSearchParams('name=' + event.target.value.toUpperCase() + '&default_role=' + addActorForm.role.value))
+        .then(response => {
           addActorForm.actor_id.value = response.id;
           actorName.classList.add('is-valid');
           actorName.value = response.name;
         });
-      } else {
-        addActorForm.actor_id.value = ui.item.key;
-      }
-    },
-    change: function(event, ui) {
-      if (!ui.item) {
-        this.value = "";
-      }
+    } else {
+      addActorForm.actor_id.value = event.detail.key;
     }
   });
-
-  $('input#roleName').autocomplete({
-    minLength: 0,
-    source: "/role/autocomplete",
-    change: function(event, ui) {
-      if (!ui.item) {
-        // Removes the entered value if it does not correspond to a suggestion
-        this.value = "";
-      } else {
-        addActorForm.role.value = ui.item.key;
-        addActorForm.shared.value = ui.item.shareable;
-        if (ui.item.shareable) {
-          addActorForm.elements.actorShared.checked = true;
-        } else {
-          addActorForm.elements.actorNotShared.checked = true;
-        }
-      }
+  
+  roleName.addEventListener('acCompleted', (event) => {
+    addActorForm.shared.value = event.detail.shareable;
+    if (event.detail.shareable) {
+      addActorForm.elements.actorShared.checked = true;
+    } else {
+      addActorForm.elements.actorNotShared.checked = true;
     }
-  }).focus(function() {
-    // Triggers autocomplete search with 0 characters upon focus
-    $(this).autocomplete("search", "");
   });
 
   actorShared.onclick = () => {
@@ -96,15 +75,15 @@ app.addEventListener('shown.bs.popover', e => {
     formData = new FormData(addActorForm);
     params = new URLSearchParams(formData);
     fetchREST('/actor-pivot', 'POST', params)
-    .then(data => {
-      if (data.errors) {
-        processSubmitErrors(data.errors, addActorForm);
-      } else {
-        addActorForm.reset();
-        $('.popover').popover('dispose');
-        reloadPart("/matter/{{ $matter->id }}", 'actorPanel');
-      }
-    });
+      .then(data => {
+        if (data.errors) {
+          processSubmitErrors(data.errors, addActorForm);
+        } else {
+          addActorForm.reset();
+          $('.popover').popover('dispose');
+          reloadPart(window.location.href, 'actorPanel');
+        }
+      });
   };
 
   // Close popover by clicking the cancel button
@@ -201,32 +180,32 @@ dropZone.ondrop = function (event) {
   fetch(this.dataset.url, {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
-        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content
       },
       method: 'POST',
       body: formData
-  })
-  .then(response => {
-    if (!response.ok) {
-      if (response.status == 422) {
-        alert('Only DOCX files can be processed for the moment');
+    })
+    .then(response => {
+      if (!response.ok) {
+        if (response.status == 422) {
+          alert('Only DOCX files can be processed for the moment');
+        }
+        throw new Error('Response status ' + response.status);
       }
-      throw new Error('Response status ' + response.status);
-    }
-    return response.blob();
-  })
-  .then(blob => {
-    // Simulate click on a temporary link to perform download
-    var tempLink = document.createElement('a');
-    tempLink.style.display = 'none';
-    tempLink.href = URL.createObjectURL(blob);
-    tempLink.download = "{{ $matter->uid }}-" + file.name;
-    document.body.appendChild(tempLink);
-    tempLink.click();
-    document.body.removeChild(tempLink);
-  })
-  .catch(error => {
-    console.error(error);
-  });
+      return response.blob();
+    })
+    .then(blob => {
+      // Simulate click on a temporary link to perform download
+      var tempLink = document.createElement('a');
+      tempLink.style.display = 'none';
+      tempLink.href = URL.createObjectURL(blob);
+      tempLink.download = document.body.querySelector("[title='See family']").innerHTML + '-' + file.name;
+      document.body.appendChild(tempLink);
+      tempLink.click();
+      document.body.removeChild(tempLink);
+    })
+    .catch(error => {
+      console.error(error);
+    });
   return false;
 };

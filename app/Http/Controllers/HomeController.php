@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Task;
 use App\Matter;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -41,7 +42,7 @@ class HomeController extends Controller
             'done_date' => 'bail|required',
         ]);
         $tids = $request->task_ids;
-        $done_date = $request->done_date;
+        $done_date = Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->done_date);
         $updated = 0;
         foreach ($tids as $id) {
             $task = Task::find($id);

@@ -62,7 +62,5 @@
 @endsection
 
 @section('script')
-
-@include('tables.table-js')
-
+<script src="{{ asset('js/tables.js') }}"></script>
 @endsection

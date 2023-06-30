@@ -12,7 +12,7 @@ function base64UrlEncode($data)
 $jwt_signature = base64UrlEncode(hash_hmac('sha256', $aqs['jwt_header_encoded'] . '.' . base64UrlEncode($jwt_payload), $aqs['jwt_secret'], true));
 
 $bearer_token = $aqs['jwt_header_encoded'] . '.' . base64UrlEncode($jwt_payload) . '.' . $jwt_signature;
-echo "Token: ". $bearer_token. PHP_EOL;
+//echo "Token: ". $bearer_token. PHP_EOL;
 //exit;
 
 $headers = [
@@ -47,8 +47,6 @@ if (curl_errno($ch)) {
 }
 curl_close($ch);
 
-//$json = json_decode($data);
-// Or XML
 $xml = new SimpleXMLElement($data);
 
 $db = new mysqli($aqs['mysql_host'], $aqs['mysql_user'], $aqs['mysql_pwd'], $aqs['mysql_db'], null, $aqs['mysql_socket']); // Connect to database
@@ -82,9 +80,8 @@ $patsprocessed = 0; // total patents processed
 $annsprocessed = 0; // total annuities processed
 $ambiguous = 0;     // counts patents that have multiple matches
 
-$mandateOn = $xml->xpath('/response/item[mandate="ON"]');
+$mandateOn = $xml->xpath('/response/item[mandate!="OFF"]');
 foreach ($mandateOn as $AQSpatent) {
-//foreach ($json as $AQSpatent) {
   if (!$AQSpatent->events) {
     // Patent has no renewals - skip
     continue;
@@ -302,7 +299,7 @@ foreach ($mandateOn as $AQSpatent) {
         } else {
           $somethingupdated = "invoiced cost $renewal->invoicedFees->total";
         }
-      } elseif (isset($renewal->estimatedFees->total) && !$renewal->paymentDate) {
+      } elseif (isset($renewal->estimatedFees->total) && strlen($renewal->paymentDate) == 0) {
         // Estimate provided
         $q = "INSERT INTO task (code, detail, due_date, cost, fee, notes, trigger_id, created_at, creator, updated_at)
 				    VALUES ('REN', '$renewal->year', '$renewal->dueDate', $cost, $fee, 'Estimated', '$trigger_id', Now(), 'AQS', Now())";
@@ -312,7 +309,7 @@ foreach ($mandateOn as $AQSpatent) {
         } else {
           $somethingupdated = "estimated cost $cost";
         }
-      } elseif (!$renewal->invoicedFees->total && strlen($renewal->paymentDate) > 0) {
+      } elseif (strlen($renewal->invoicedFees->total) == 0 && strlen($renewal->paymentDate) > 0) {
         // No costs provided but paid
         $q = "INSERT INTO task (code, detail, done_date, due_date, trigger_id, step, invoice_step, created_at, creator, updated_at)
 				    VALUES ('REN', '$renewal->year', '$renewal->paymentDate', '$renewal->dueDate', '$trigger_id', -1, 1, Now(), 'AQS', Now())";
@@ -322,7 +319,7 @@ foreach ($mandateOn as $AQSpatent) {
         } else {
           $somethingupdated = "paid on $renewal->paymentDate but not invoiced";
         }
-      } elseif (isset($renewal->invoicedFees->total) && !$renewal->paymentDate) {
+      } elseif (isset($renewal->invoicedFees->total) && strlen($renewal->paymentDate) == 0) {
         // Invoiced but no payment date
         $q = "INSERT INTO task (code, detail, due_date, currency, cost, fee, notes, trigger_id, created_at, creator, updated_at)
 				    VALUES ('REN', '$renewal->year', '$renewal->dueDate', '$renewal->clientCurrency', $cost, $fee, 'Invoiced by AQS', '$trigger_id', Now(), 'AQS', Now())";

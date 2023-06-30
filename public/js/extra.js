@@ -1,21 +1,21 @@
-var contentSrc, // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
+let contentSrc, // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
     ceInitialContent, // Used for detecting changes of content-editable elements
     cTypeCode; // Used for toggling image file input in matter.classifiers
-
+   
 // Ajax fill an element from a url returning HTML
-var fetchInto = async (url, element) => {
+let fetchInto = async (url, element) => {
     response = await fetch(url);
     element.innerHTML = await response.text();
 }
 
-var reloadPart = async (url, partId) => {
+let reloadPart = async (url, partId) => {
     response = await fetch(url);
     let doc = new DOMParser().parseFromString(await response.text(), "text/html");
     document.getElementById(partId).innerHTML = doc.getElementById(partId).innerHTML;
 }
 
 // Perform REST operations with native JS
-var fetchREST = async (url, method, body) => {
+let fetchREST = async (url, method, body) => {
     response = await fetch(url, {
         headers: {
             "X-Requested-With": "XMLHttpRequest",
@@ -66,7 +66,6 @@ ajaxModal.addEventListener('show.bs.modal', event => {
 });
 
 // Display actor dependencies in corresponding tab
-// $(app).on("show.bs.tab", "#actorUsedInToggle", function (e) {
 app.addEventListener('show.bs.tab', e => {
     fetchInto(e.target.href, actorUsedIn);
 });
@@ -74,7 +73,7 @@ app.addEventListener('show.bs.tab', e => {
 // Process click events
 
 app.addEventListener('click', (e) => {
-    if(e.target.matches('.sendDocument')) {
+    if (e.target.matches('.sendDocument')) {
         formData = new FormData(sendDocumentForm);
         fetchREST(e.target.closest('[data-resource]').dataset.resource, 'POST', formData)
             .then(data => {
@@ -87,7 +86,7 @@ app.addEventListener('click', (e) => {
             });
     }
 
-    if(e.target.matches('.chooseTemplate')) {
+    if (e.target.matches('.chooseTemplate')) {
         var form_tr = document.getElementById('selectTrForm');
         if (form_tr == null) {
             var select = document.createElement('tr');
@@ -108,19 +107,19 @@ app.addEventListener('click', (e) => {
 
     switch (e.target.id) {
         case 'createMatterSubmit':
-            submitModalForm('/matter', createMatterForm);
+            submitModalForm('/matter', createMatterForm, null, e.target);
             break;
 
         case 'deleteMatter':
             if (confirm("Deleting the matter. Continue anyway?")) {
-            fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
-                .then(data => {
-                    if (data.message) {
-                        alert(data.message);
-                    } else {
-                        location.href = document.referrer;
-                    }
-                });
+                fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
+                    .then(data => {
+                        if (data.message) {
+                            alert(data.message);
+                        } else {
+                            location.href = document.referrer;
+                        }
+                    });
             }
             break;
 
@@ -131,7 +130,7 @@ app.addEventListener('click', (e) => {
             break;
 
         case 'addTaskSubmit':
-            submitModalForm('/task', addTaskForm, 'reloadModal');
+            submitModalForm('/task', addTaskForm, 'reloadModal', e.target);
             break;
 
         case 'deleteEvent':
@@ -143,12 +142,12 @@ app.addEventListener('click', (e) => {
 
             // Specific processing of the event list modal
         case 'addEventSubmit':
-            submitModalForm('/event', addEventForm, 'reloadModal');
+            submitModalForm('/event', addEventForm, 'reloadModal', e.target);
             break;
 
             // Classifier list modal
         case 'addClassifierSubmit':
-            submitModalForm('/classifier', addClassifierForm, 'reloadModal');
+            submitModalForm('/classifier', addClassifierForm, 'reloadModal', e.target);
             break;
 
             // Generic processing of deletions
@@ -165,71 +164,71 @@ app.addEventListener('click', (e) => {
             break;
 
         case 'nationalizeSubmit':
-            submitModalForm('/matter/storeN', natMatterForm);
+            submitModalForm('/matter/storeN', natMatterForm, null, e.target);
             break;
 
         case 'createFamilySubmit':
-            submitModalForm('/matter/storeFamily', createMatterForm);
+            submitModalForm('/matter/storeFamily', createMatterForm, null, e.target);
             break;
 
         case 'createActorSubmit':
-            submitModalForm('/actor', createActorForm);
+            submitModalForm('/actor', createActorForm, null, e.target);
             break;
 
         case 'createUserSubmit':
-            submitModalForm('/user', createUserForm);
+            submitModalForm('/user', createUserForm, null, e.target);
             break;
 
         case 'createDActorSubmit':
-            submitModalForm('/default_actor', createDActorForm);
+            submitModalForm('/default_actor', createDActorForm, null, e.target);
             break;
 
         case 'createEventNameSubmit':
-            submitModalForm('/eventname', createEventForm);
+            submitModalForm('/eventname', createEventForm, null, e.target);
             break;
 
         case 'createCategorySubmit':
-            submitModalForm('/category', createCategoryForm);
+            submitModalForm('/category', createCategoryForm, null, e.target);
             break;
 
         case 'createRoleSubmit':
-            submitModalForm('/role', createRoleForm);
+            submitModalForm('/role', createRoleForm, null, e.target);
             break;
 
         case 'createTypeSubmit':
-            submitModalForm('/type', createTypeForm);
+            submitModalForm('/type', createTypeForm, null, e.target);
             break;
 
         case 'createRuleSubmit':
-            submitModalForm('/rule', createRuleForm);
+            submitModalForm('/rule', createRuleForm, null, e.target);
             break;
 
         case 'createFeeSubmit':
-            submitModalForm('/fee', createFeeForm);
+            submitModalForm('/fee', createFeeForm, null, e.target);
             break;
 
         case 'createClassSubmit':
-            submitModalForm('/document', createClassForm);
+            submitModalForm('/document', createClassForm, null, e.target);
             break;
 
         case 'createMemberSubmit':
-            submitModalForm('/template-member', createMemberForm);
+            submitModalForm('/template-member', createMemberForm, null, e.target);
             break;
 
         case 'createClassifierTypeSubmit':
-            submitModalForm('/classifier_type', createClassifierTypeForm);
+            submitModalForm('/classifier_type', createClassifierTypeForm, null, e.target);
             break;
 
         case 'sendDocument':
-            submitModalForm('/document', sendDocumentForm);
+            submitModalForm('/document', sendDocumentForm, null, e.target);
             break;
 
         case 'addEventTemplateSubmit':
-            submitModalForm('/event-class', addTemplateForm,'reloadPartial');
+            submitModalForm('/event-class', addTemplateForm, 'reloadPartial', e.target);
             break;
 
         case 'addRuleTemplateSubmit':
-            submitModalForm('/rule-class', addTemplateForm,'reloadPartial');
+            submitModalForm('/rule-class', addTemplateForm, 'reloadPartial', e.target);
             break;
 
         case 'deleteActor':
@@ -242,11 +241,11 @@ app.addEventListener('click', (e) => {
         case 'deleteCategory':
         case 'deleteClass':
         case 'deleteMember':
-            if (confirm("Deleting  "+   e.target.dataset.message + ". Continue anyway?")) {
+            if (confirm("Deleting  " + e.target.dataset.message + ". Continue anyway?")) {
                 fetchREST(e.target.dataset.url, 'DELETE')
                     .then(data => {
                         if (data.message) {
-                            alert("Couldn't delete " + e.target.dataset.message+ ". Check the dependencies. Database said: " + data.message);
+                            alert("Couldn't delete " + e.target.dataset.message + ". Check the dependencies. Database said: " + data.message);
                             return false;
                         } else {
                             location.reload();
@@ -286,56 +285,58 @@ app.addEventListener('click', (e) => {
 
 app.addEventListener("change", e => {
     if (e.target.matches(".noformat")) {
-        // Generic in-place edition of input fields
-        if (e.target.hasAttribute('data-ac')) {
-            // Destroy autocomplete widget
-            $(e.target).autocomplete('destroy');
-        }
-        let params = new URLSearchParams();
-        if (e.target.type === 'checkbox') {
-            if (e.target.checked) {
-                e.target.value = 1;
-            } else {
-                e.target.value = 0;
-            }
-        }
-        params.append(e.target.name, e.target.value);
-        let resource = e.target.closest('[data-resource]').dataset.resource;
-        fetchREST(resource, 'PUT', params)
-            .then(data => {
-                if (data.errors) {
-                    if (ajaxModal.matches('.show')) {
-                        footerAlert.innerHTML = Object.values(data.errors)[0];
-                        footerAlert.classList.add('alert-danger');
-                    } else {
-                        e.target.classList.remove('border-info', 'is-valid');
-                        e.target.classList.add('border-danger');
-                        e.target.value = Object.values(data.errors)[0];
-                    }
-                } else if (data.message) {
-                    if (ajaxModal.matches('.show')) {
-                        footerAlert.innerHTML = data.message;
-                        footerAlert.classList.add('alert-danger');
-                    } else {
-                        e.target.classList.remove('border-info', 'is-valid');
-                        e.target.classList.add('border-danger');
-                        e.target.value = 'Invalid';
-                        console.log(data.message);
-                    }
+        // Delay to finish potential autocompletion process
+        setTimeout(() => {
+            // Generic in-place edition of input fields
+            let params = new URLSearchParams();
+            if (e.target.type === 'checkbox') {
+                if (e.target.checked) {
+                    e.target.value = 1;
                 } else {
-                    if (!window.ajaxPanel && contentSrc.length !== 0 && !e.target.closest('.tab-content')) {
-                        // Reload modal with updated content
-                        fetchInto(contentSrc, ajaxModal.querySelector(".modal-body"));
-                    } else {
-                        // Don't reload but set border back to normal
-                        e.target.classList.remove('border-info', 'border-danger');
-                        e.target.classList.add('is-valid');
-                    }
-                    footerAlert.classList.remove("alert-danger");
-                    footerAlert.innerHTML = "";
+                    e.target.value = 0;
                 }
-            })
-            .catch(error => console.log(error));
+            }
+            params.append(e.target.name, e.target.value);
+            let resource = e.target.closest('[data-resource]').dataset.resource;
+            fetchREST(resource, 'PUT', params)
+                .then(data => {
+                    if (data.errors) {
+                        if (ajaxModal.matches('.show')) {
+                            footerAlert.innerHTML = Object.values(data.errors)[0];
+                            footerAlert.classList.add('alert-danger');
+                        } else {
+                            e.target.classList.remove('border-info', 'is-valid');
+                            e.target.classList.add('border-danger');
+                            e.target.value = Object.values(data.errors)[0];
+                        }
+                    } else if (data.message) {
+                        if (ajaxModal.matches('.show')) {
+                            footerAlert.innerHTML = data.message;
+                            footerAlert.classList.add('alert-danger');
+                        } else {
+                            e.target.classList.remove('border-info', 'is-valid');
+                            e.target.classList.add('border-danger');
+                            e.target.value = 'Invalid';
+                            console.log(data.message);
+                        }
+                    } else {
+                        if (!window.ajaxPanel && contentSrc.length !== 0 && !e.target.closest('.tab-content')) {
+                            // Reload modal with updated content
+                            fetchInto(contentSrc, ajaxModal.querySelector(".modal-body"));
+                        } else {
+                            // Don't reload but set border back to normal
+                            e.target.classList.remove('border-info', 'border-danger');
+                            e.target.classList.add('is-valid');
+                            // Trigger a xhrsent event for whoever wants to refresh a list
+                            var event = new Event('xhrsent', { bubbles: true });
+                            e.target.dispatchEvent(event);
+                        }
+                        footerAlert.classList.remove("alert-danger");
+                        footerAlert.innerHTML = "";
+                    }
+                })
+                .catch(error => console.log(error));
+        });
     }
     // matter.classifiers addClassifierForm - replace input fields with file upload field when selecting an image type
     if (e.target.dataset.actarget === 'type_code' && e.target.value === 'Image') {
@@ -367,17 +368,172 @@ app.addEventListener("input", e => {
     // Mark the field
     if (e.target.matches(".noformat, textarea, [contenteditable]")) {
         e.target.classList.add("border", "border-info");
-    } else if (e.target.matches('.filter')) {
-        // Manage filters input fields in Email template selection box
-        var url = new URL(window.location.origin + e.target.closest('[data-resource]').dataset.resource);
-        if (e.target.value.length === 0) {
-            url.searchParams.delete(e.target.name);
-        } else {
-            url.searchParams.set(e.target.name, e.target.value);
+    } else {
+        if (e.target.classList.contains('is-invalid')) {
+            e.target.classList.remove('is-invalid');
         }
-        reloadPart(url, 'tableList');
     }
 });
+
+// New autocomplete
+const autocomplete = AutocompleteWidget();
+document.body.addEventListener('focusin', event => {
+    // Attach autocompletion widget to a corresponding element
+    if (event.target.hasAttribute('data-ac')) {
+        autocomplete.attachWidget(event.target);
+    }
+    // Store the initial value of a content editable element
+    if (event.target.matches("[contenteditable]")) {
+        ceInitialContent = event.target.innerText;
+    }
+});
+
+function AutocompleteWidget() {
+    let minLength = 1;
+    let sourceUrl = '';
+    let itemSelected = false;
+    let suggestionList = document.createElement('div');
+    suggestionList.classList.add('autocomplete-list');
+  
+    function attachWidget(input) {
+        const inputRect = input.getBoundingClientRect();
+        const modal = input.closest('.modal');
+        const modalRect = modal ? modal.getBoundingClientRect() : { top: 0, left: 0 };
+        suggestionList.style.left = inputRect.left + 'px';
+        suggestionList.style.top = modalRect.top + inputRect.bottom + 'px';
+        suggestionList.style.width = inputRect.width + 'px';
+        document.body.appendChild(suggestionList);
+        minLength = parseInt(input.getAttribute('data-aclength')) || 1;
+        sourceUrl = input.getAttribute('data-ac');
+
+        input.addEventListener('input', inputHandler);
+        input.addEventListener('change', changeHandler);
+    }
+  
+    const inputHandler = (event) => {
+        const term = event.target.value;
+        itemSelected = false;
+        suggestionList.innerHTML = '';
+        //document.body.removeChild(suggestionList);
+
+        if (term.length >= minLength) {
+            fetchSuggestions(sourceUrl, term)
+            .then(suggestions => displaySuggestions(suggestions, event.target));
+        }
+    }
+
+    async function fetchSuggestions(url, term) {
+        const separator = url.includes('?') ? '&' : '?';
+        const fetchUrl = url + separator + 'term=' + encodeURIComponent(term);
+    
+        try {
+            const response = await fetch(fetchUrl);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching suggestions:', error);
+            return [];
+        }
+    }
+  
+    function displaySuggestions(suggestions, input) {
+        let listWidth = 100;
+        suggestions.forEach(suggestion => {
+            const listItem = document.createElement('div');
+            listItem.classList.add('autocomplete-item');
+            // Handle situation where the ajax data returns a label that should be displayed instead of the value
+            if (suggestion.label) {
+                listItem.textContent = suggestion.label;
+            } else {
+                listItem.textContent = suggestion.value;
+            }
+            listItem.dataset.key = suggestion.key;
+
+            // Use "mousedown" rather than "click" to obtain immediate action when an item is selected
+            listItem.addEventListener('mousedown', (event) => handleSelectedItem(event, suggestion, input), true);
+            
+            // Calculate an approximate width based on the number of characters
+            const listItemWidth = suggestion.value.length * 8;
+            listWidth = Math.max(listWidth, listItemWidth);
+            suggestionList.appendChild(listItem);
+        });
+        suggestionList.style.width = listWidth + 'px';
+        //document.body.appendChild(suggestionList);
+    }
+
+    const changeHandler = (event) => {
+        // Delay to first handle a potential item selection that sets the itemSelected flag
+        setTimeout(() => {
+            // Clear the input if nothing is selected and the value was changed manually
+            if (!itemSelected) {
+                event.target.value = '';
+                const targetName = event.target.getAttribute('data-actarget');
+                if (targetName) {
+                    const acTarget = event.target.parentNode.querySelector(`input[name="${targetName}"]`);
+                    acTarget.value = '';
+                }
+            }
+        });
+    }
+
+    function handleSelectedItem(event, selectedItem, input) {
+        itemSelected = true;
+        suggestionList.innerHTML = '';
+        if (input.id == 'addCountry') {
+            let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
+            newCountry.id = 'country-' + selectedItem.key;
+            newCountry.children[0].value = selectedItem.key;
+            newCountry.children[1].value = selectedItem.value;
+            ncountries.appendChild(newCountry);
+            // Wait for the new country entry to be added to the DOM before resetting the input field
+            setTimeout(() => {
+                addCountry.value = "";
+            }, 0);
+        } else if (input.hasAttribute('data-actarget')) {
+            // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
+            input.value = selectedItem.value;
+            const targetName = input.getAttribute('data-actarget');
+            if (targetName) {
+                const acTarget = input.parentNode.querySelector(`input[name="${targetName}"]`);
+                acTarget.value = selectedItem.key;
+            }
+            if (window.createMatterForm && input.dataset.actarget == 'category_code') {
+                // We're in a matter creation form - fill caseref with corresponding suggested value
+                fetchREST('/matter/new-caseref?term=' + selectedItem.prefix, 'GET')
+                    .then(data => {
+                        createMatterForm.caseref.value = data[0].value;
+                    });
+            }
+        } else {
+            // Used for content editable fields where the same field is used for sending the id to the server
+            input.value = selectedItem.key;
+        }
+
+        event.preventDefault() // Prevent other click events from being triggered
+
+        // Send event for further processing 
+        const acCompleted = new CustomEvent('acCompleted', { detail: selectedItem });
+        input.dispatchEvent(acCompleted);
+
+        // Remove the suggestion list
+        document.body.removeChild(suggestionList);
+        
+        // Set focus on next input by simulating a "Tab" press
+        if (input.form) {
+            const inputs = Array.from(input.form.querySelectorAll('input:not([type="hidden"])'));
+            const currentIndex = inputs.indexOf(input);
+            const nextIndex = (currentIndex + 1) % inputs.length;
+            inputs[nextIndex].focus();
+        } else {
+            input.blur();
+        }
+    }
+  
+    return {
+        attachWidget
+    };
+}
+// End new autocomplete
 
 app.addEventListener("focusout", e => {
     if (e.target.matches("[contenteditable]") && e.target.innerText !== ceInitialContent) {
@@ -385,100 +541,51 @@ app.addEventListener("focusout", e => {
         params.append(e.target.dataset.name, e.target.innerText);
         let resource = e.target.closest('[data-resource]').dataset.resource;
         fetchREST(resource, 'PUT', params)
-        .then(data => {
-            e.target.classList.remove('border-info');
-        })
+            .then(data => {
+                e.target.classList.remove('border-info');
+            })
     }
 });
 
-app.addEventListener("focusin", e => {
-    if (e.target.matches("[contenteditable]")) {
-        ceInitialContent = e.target.innerText;
-    }
-
-    if (e.target.hasAttribute('data-ac')) {
-        // Process autocomplete fields
-        var aclength = 1;
-        if ( e.target.hasAttribute('data-aclength') ) {
-            aclength = e.target.dataset.aclength;
-        }
-        if (e.target.closest('tr')) {
-            e.target.closest('tr').classList.add('ui-front');
-        }
-        $(e.target).autocomplete({
-            autoFocus: true,
-            minLength: aclength,
-            source: e.target.dataset.ac,
-            // create: function(event, ui) {
-            //   // Fires search immediately (but selection does not trigger blur or change)
-            //   if ( aclength == 0 ) {
-            //     $(this).autocomplete("search", "");
-            //   }
-            // },
-            select: (event, ui) => {
-                if (e.target.id == 'addCountry') {
-                    let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
-                    newCountry.id = 'country-' + ui.item.key;
-                    newCountry.children[0].value = ui.item.key;
-                    newCountry.children[1].value = ui.item.value;
-                    ncountries.appendChild(newCountry);
-                    // Wait for the new country entry to be added to the DOM before resetting the input field
-                    setTimeout(() => { addCountry.value = ""; }, 0);
-                } else if ( e.target.hasAttribute('data-actarget') ) {
-                    // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
-                    e.target.value = ui.item.value;
-                    e.target.form[e.target.dataset.actarget].value = ui.item.key;
-                    if (window.createMatterForm && e.target.dataset.actarget == 'category_code') {
-                        // We're in a matter creation form - fill caseref with corresponding new value
-                        fetchREST('/matter/new-caseref?term=' + ui.item.prefix, 'GET')
-                        .then(data => {
-                            createMatterForm.caseref.value = data[0].value;
-                        });
-                    }
-                } else {
-                    // Used for content editable fields where the same field is used for sending the id to the server
-                    e.target.value = ui.item.key;
-                    e.target.blur();
-                }
-            },
-            change: function(event, ui) {
-                if (!ui.item) {
-                    // User has not selected anything
-                    e.target.value = "";
-                    if (e.target.form && e.target.hasAttribute('data-actarget')) {
-                        e.target.form[e.target.dataset.actarget].value = "";
-                    }
-                }
-            }
-        });
-    }
-});
-
-var submitModalForm = (target, Form, after) => {
+// target: the URL to submit to, Form: the form element, after: optional further action, submitbutton: the button elemlent (optional)
+var submitModalForm = (target, Form, after, submitbutton) => {
+    submitbutton.insertAdjacentHTML('afterbegin', '<i class="spinner-border spinner-border-sm" role="status" />');
     formData = new FormData(Form);
     params = new URLSearchParams(formData);
+    footerAlert.classList.remove("alert-danger");
+    footerAlert.innerHTML = "";
     fetchREST(target, 'POST', formData)
-    .then(data => {
-        if (data.errors) {
-            footerAlert.innerHTML = data.message;
-            footerAlert.classList.add('alert-danger');
-            processSubmitErrors(data.errors, Form);
-        } else if (data.redirect) {
-            // Redirect to the created model (link returned by the controller store() function)
-            location.href = data.redirect;
-        } else {
-            if (after === 'reloadModal') {
-                fetchInto(contentSrc, ajaxModal.querySelector('.modal-body'));
-            } else if (after === 'reloadPartial') {
-                fetchInto(contentSrc, app.querySelector('.reload-part'));
-            } else { // reloadPage
-                location.reload();
+        .then(data => {
+            if (data.errors) {
+                // Remove spinner if present
+                if (spinner = submitbutton.getElementsByTagName('i')[0]) {
+                    spinner.remove();
+                }
+                footerAlert.innerHTML = data.message;
+                footerAlert.classList.add('alert-danger');
+                processSubmitErrors(data.errors, Form);
+            } else if (data.exception) {
+                if (spinner = submitbutton.getElementsByTagName('i')[0]) {
+                    spinner.remove();
+                }
+                footerAlert.innerHTML = data.message;
+                footerAlert.classList.add('alert-danger');
+            } else if (data.redirect) {
+                // Redirect to the created model (link returned by the controller store() function)
+                location.href = data.redirect;
+            } else {
+                if (after === 'reloadModal') {
+                    fetchInto(contentSrc, ajaxModal.querySelector('.modal-body'));
+                } else if (after === 'reloadPartial') {
+                    fetchInto(contentSrc, app.querySelector('.reload-part'));
+                } else { // reloadPage
+                    location.reload();
+                }
             }
-        }
-    })
-    .catch(error => {
-        console.log(error);
-    });
+        })
+        .catch(error => {
+            console.log(error);
+        });
 }
 
 var processSubmitErrors = (errors, Form) => {
@@ -490,6 +597,7 @@ var processSubmitErrors = (errors, Form) => {
         if (inputElt.type === 'file') {
             footerAlert.append(' ' + value[0]);
         } else {
+            inputElt.value = '';
             inputElt.placeholder = key + ' is required';
         }
         inputElt.classList.add('is-invalid');

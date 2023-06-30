@@ -10,14 +10,11 @@ import * as bootstrap from 'bootstrap';
 // import jQuery from 'jquery';
 // window.$ = window.jQuery = jQuery;
 
-import 'jquery-ui/ui/widgets/autocomplete';
-
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
  * code may be modified to fit the specific needs of your application.
  */
-
 
   // Registering the CSRF Token as a common header with jQuery Ajax so that all
   // outgoing HTTP requests automatically have it attached.
@@ -29,22 +26,6 @@ import 'jquery-ui/ui/widgets/autocomplete';
     }
   });
   */
-
-  // Adapt jquery-ui to use Bootstrap
-(function( $, undefined ) {
-	// Conversion of menu classes to Bootstrap
-  $.ui.menu.prototype.options.classes[ "ui-widget" ] = "";
-  $.ui.menu.prototype.options.classes[ "ui-widget-content" ] = "";
-  $.ui.menu.prototype.options.classes[ "ui-autocomplete" ] = "dropdown";
-  $.ui.menu.prototype.options.classes[ "ui-autocomplete-input" ] = "form-control";
-	$.ui.menu.prototype.options.classes[ "ui-menu" ] = "dropdown-menu";
-	$.ui.menu.prototype.options.classes[ "ui-menu-icons" ] = "";
-	$.ui.menu.prototype.options.classes[ "ui-menu-icon" ] = "";
-	$.ui.menu.prototype.options.classes[ "ui-menu-item" ] = "dropdown-item";
-	$.ui.menu.prototype.options.classes[ "ui-menu-divider" ] = "";
-	$.ui.menu.prototype.options.classes[ "ui-menu-item-wrapper" ] = "";
-})(jQuery);
-
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

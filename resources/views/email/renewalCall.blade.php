@@ -41,7 +41,7 @@
                 <td style="text-align: right;">{{ $ren['fee'] }}</td>
                 <td style="text-align: right;">{{ $ren['total_ht']  }}</td>
                 @if (config('renewal.general.vat_column'))
-                <td style="text-align: right;">{{ $ren['tx_tva'] }}</td>
+                <td style="text-align: right;">{{ $ren['vat_rate'] }}</td>
                 <td style="text-align: right;">{{ $ren['total']  }}</td>
                 @endif
                 <td style="text-align: center;"></td>

@@ -1,4 +1,4 @@
-<form id="createMatterForm" autocomplete="off" class="ui-front">
+<form id="createMatterForm" autocomplete="off">
   <input type="hidden" name="operation" value="{{ $operation ?? "new" }}">
   <div class="row">
     <label for="category" class="col-4 col-form-label fw-bold">Category</label>

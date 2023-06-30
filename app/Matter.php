@@ -12,8 +12,8 @@ class Matter extends Model
     protected $table = 'matter';
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    /*protected $dates = [
-        'expire_date'
+    /*protected $casts = [
+        'expire_date' => 'date:Y-m-d'
     ];*/
 
     public function family()
@@ -229,10 +229,10 @@ class Matter extends Model
             DB::raw("GROUP_CONCAT(DISTINCT COALESCE(cli.display_name, clic.display_name, cli.name, clic.name) SEPARATOR '; ') AS Client"),
             DB::raw("GROUP_CONCAT(DISTINCT COALESCE(clilnk.actor_ref, cliclnk.actor_ref) SEPARATOR '; ') AS ClRef"),
             DB::raw("GROUP_CONCAT(DISTINCT COALESCE(app.display_name, app.name) SEPARATOR '; ') AS Applicant"),
-            DB::raw("COALESCE(agt.display_name, agt.name) AS Agent"),
-            'agtlnk.actor_ref AS AgtRef',
+            DB::raw("GROUP_CONCAT(DISTINCT COALESCE(agt.display_name, agtc.display_name, agt.name, agtc.name) SEPARATOR '; ') AS Agent"),
+            DB::raw("GROUP_CONCAT(DISTINCT COALESCE(agtlnk.actor_ref, agtclnk.actor_ref) SEPARATOR '; ') AS AgtRef"),
             'tit1.value AS Title',
-            'tit2.value AS Title2',
+            DB::raw("COALESCE(tit2.value, tit1.value) AS Title2"),
             'tit3.value AS Title3',
             DB::raw("CONCAT_WS(' ', inv.name, inv.first_name) as Inventor1"),
             'fil.event_date AS Filed',
@@ -275,6 +275,13 @@ class Matter extends Model
                 ]);
             }
         )
+        ->leftJoin(DB::raw('matter_actor_lnk agtclnk
+            JOIN actor agtc ON agtc.id = agtclnk.actor_id'), function ($join) {
+                $join->on('matter.container_id', 'agtclnk.matter_id')->where([
+                    ['agtclnk.role', 'AGT'],
+                    ['agtclnk.shared', 1]
+                ]);
+        })
         ->leftJoin(
             DB::raw('matter_actor_lnk applnk
             JOIN actor app ON app.id = applnk.actor_id'),
@@ -390,10 +397,10 @@ class Matter extends Model
                             $query->where('app.name', 'LIKE', "$value%");
                             break;
                         case 'Agent':
-                            $query->where('agt.name', 'LIKE', "$value%");
+                            $query->where(DB::raw('IFNULL(agt.name, agtc.name)'), 'LIKE', "$value%");
                             break;
                         case 'AgtRef':
-                            $query->where('agtlnk.actor_ref', 'LIKE', "$value%");
+                            $query->where(DB::raw('IFNULL(agtlnk.actor_ref, agtclnk.actor_ref)'), 'LIKE', "$value%");
                             break;
                         case 'Title':
                             $query->where(DB::Raw('concat_ws(" ", tit1.value, tit2.value, tit3.value)'), 'LIKE', "%$value%");

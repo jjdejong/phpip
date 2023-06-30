@@ -11,8 +11,8 @@ class ActorPivot extends Pivot
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $touches = ['matter'];
-    /*protected $dates = [
-        'date'
+    /*protected $casts = [
+        'date' => 'date:Y-m-d'
     ];*/
 
     // use \Venturecraft\Revisionable\RevisionableTrait;

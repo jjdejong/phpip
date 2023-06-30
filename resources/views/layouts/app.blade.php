@@ -15,6 +15,29 @@
   <script src="{{ asset('js/extra.js') }}" defer></script>
 
   <!-- Styles -->
+  <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  <style>
+    .autocomplete-list {
+      position: absolute;
+      border: 1px solid #ddd;
+      border-top: none;
+      z-index: 9999;
+      top: 100%;
+      left: 0;
+      right: 0;
+    }
+
+    .autocomplete-list .autocomplete-item {
+      padding: 4px;
+      background-color: #f9f9f9;
+      cursor: pointer;
+    }
+
+    .autocomplete-list .autocomplete-item:hover {
+      background-color: #e9e9e9;
+    }
+
+  </style>
   @yield('style')
   @canany(['client', 'readonly'])
     <style>
@@ -167,6 +190,7 @@
       </div>
     </main>
   </div>
+  <script src="{{ asset('js/extra.js') }}"></script>
   @yield('script')
 </body>
 

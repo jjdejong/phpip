@@ -43,14 +43,13 @@
     });
     params.append('done_date', renewalcleardate.value);
     fetchREST('/matter/clear-tasks', 'POST', params)
-    .then((response) => {
+      .then((response) => {
         if (response.errors === '') {
           refreshTasks(lastTasksFlag);
         } else {
           alert(response.errors.done_date);
         }
-      }
-    );
+      });
   }
 
   clearOpenTasks.onclick = (e) => {
@@ -65,12 +64,11 @@
     });
     params.append('done_date', taskcleardate.value);
     fetchREST('/matter/clear-tasks', 'POST', params)
-    .then((response) => {
+      .then((response) => {
         if (response.errors === '') {
           refreshTasks(lastTasksFlag);
         } else {
           alert(response.errors.done_date);
         }
-      }
-    );
+      });
   }

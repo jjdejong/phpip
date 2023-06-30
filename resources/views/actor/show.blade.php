@@ -104,8 +104,13 @@
           <td><input type="text" class="noformat form-control" name="default_role" data-ac="/role/autocomplete" value="{{ empty($actorInfo->droleInfo) ? '' : $actorInfo->droleInfo->name }}" {{ $actorInfo->login ? 'disabled' : 'autocomplete=off' }} placeholder="-"></td>
         </tr>
         <tr>
-          <th><label title="{{ $actorComments['ren_discount'] }}">Discount for renewals</label></th>
-          <td><input type="text" class="noformat form-control" name="ren_discount" value="{{ $actorInfo->ren_discount ? $actorInfo->ren_discount : '' }}" placeholder="0.00 to 1.00"></td>
+          <th>
+            <label class="mb-0" title="{{ $actorComments['ren_discount'] }}">Discount for renewals</label>
+            <small class="form-text text-muted">
+              Enter a multiplier rate (e.g. 0.5) <br>or a fixed fee (e.g. 150)
+            </small>
+          </th>
+          <td><input type="text" class="noformat form-control" name="ren_discount" value="{{ $actorInfo->ren_discount ? $actorInfo->ren_discount : '' }}" placeholder="Fixed fee or rate"></td>
         </tr>
         <tr>
           <th><label title="{{ $actorComments['warn'] }}">Warn</label></th>
