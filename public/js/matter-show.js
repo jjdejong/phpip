@@ -1,16 +1,19 @@
 // Actor processing
 
 // Initialize popovers with custom template
-var popoverTemplate = '<div class="popover border-info" role="tooltip"><div class="tooltip-arrow"></div><h3 class="popover-header bg-info text-white"></h3><div class="popover-body"></div></div>';
+const popoverTemplate = '<div class="popover border-info" role="tooltip"><div class="tooltip-arrow"></div><h3 class="popover-header bg-info text-white"></h3><div class="popover-body"></div></div>';
 
 // const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
 // const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
 
-$('body').popover({
+// Initialize the popovers
+let popover = null;
+let popoverList = new bootstrap.Popover(document.body, {
   selector: '[data-bs-toggle="popover"]',
   boundary: 'viewport',
   template: popoverTemplate,
   content: actorPopoverTemplate.content.firstElementChild,
+  container: 'body',
   html: true,
   sanitize: false
 });
@@ -18,7 +21,11 @@ $('body').popover({
 // Process actor addition popovers
 app.addEventListener('shown.bs.popover', e => {
   // First destroy existing popover when a new popover is opened
-  $('.popover').siblings('.popover').first().popover('dispose');
+  if (popover) {
+    addActorForm.reset();
+    popover.hide();
+  }
+  popover = bootstrap.Popover.getInstance(e.target);
 
   if (e.target.hasAttribute('data-role_code')) {
     // Change form based on role information
@@ -41,7 +48,6 @@ app.addEventListener('shown.bs.popover', e => {
   }
 
   actorName.addEventListener('acCompleted', (event) => {
-    console.log(event);
     if (event.detail.key === 'create') { // Creates actor on the fly
       fetchREST('/actor', 'POST', new URLSearchParams('name=' + event.target.value.toUpperCase() + '&default_role=' + addActorForm.role.value))
         .then(response => {
@@ -80,7 +86,7 @@ app.addEventListener('shown.bs.popover', e => {
           processSubmitErrors(data.errors, addActorForm);
         } else {
           addActorForm.reset();
-          $('.popover').popover('dispose');
+          popover.hide();
           reloadPart(window.location.href, 'actorPanel');
         }
       });
@@ -89,7 +95,7 @@ app.addEventListener('shown.bs.popover', e => {
   // Close popover by clicking the cancel button
   popoverCancel.onclick = () => {
     addActorForm.reset();
-    $('.popover').popover('dispose');
+    popover.hide();
   };
 }); // End popover processing
 
@@ -98,7 +104,7 @@ app.addEventListener('shown.bs.popover', e => {
 
 // Show the title creation form when the title panel is empty
 if (!titlePanel.querySelector('dt')) {
-  $("#addTitleCollapse").collapse("show");
+  titlePanel.querySelector('[href="#addTitleCollapse"]').click();
 }
 
 titlePanel.onclick = e => {

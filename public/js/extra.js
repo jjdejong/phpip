@@ -38,7 +38,7 @@ let fetchREST = async (url, method, body) => {
     }
 }
 
-// Simple debouce
+// Simple debounce
 function debounce(func, wait, immediate) {
 	var timeout;
 	return function() {

@@ -8,7 +8,7 @@
 @import 'variables';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';
 
 // Show/hide elements upon hovering
 .hidden-action {
@@ -36,4 +36,24 @@ a:not(.nav-link):not(.btn):hover {
     height: inherit;
     display: inline;
     box-shadow: none;
+}
+
+.autocomplete-list {
+  position: absolute;
+  border: 1px solid #ddd;
+  border-top: none;
+  z-index: 9999;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.autocomplete-list .autocomplete-item {
+  padding: 4px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.autocomplete-list .autocomplete-item:hover {
+  background-color: #e9e9e9;
 }

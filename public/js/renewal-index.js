@@ -205,7 +205,7 @@ xmlRenewals.addEventListener("click", function () {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/renewal/order', true);
     xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-    xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'));
+    xhr.setRequestHeader('X-CSRF-TOKEN', document.head.querySelector("[name=csrf-token]").content);
     xhr.send(string);
     xhr.onload = function (e) {
         if (this.status == 200) {

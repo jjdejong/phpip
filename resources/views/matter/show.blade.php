@@ -407,5 +407,5 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 @endsection
 
 @section('script')
-<script src="{{ asset('js/matter-show.js') }}"></script>
+<script src="{{ asset('js/matter-show.js') }}" defer></script>
 @endsection

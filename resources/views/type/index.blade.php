@@ -47,5 +47,5 @@
 @endsection
 
 @section('script')
-<script src="{{ asset('js/tables.js') }}"></script>
+<script src="{{ asset('js/tables.js') }}" defer></script>
 @endsection

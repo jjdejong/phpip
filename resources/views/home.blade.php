@@ -200,5 +200,5 @@
 @endsection
 
 @section('script')
-<script src="{{ asset('js/home.js') }}" defer></script>
+<script src="{{ asset('js/home.js') }}"></script>
 @endsection

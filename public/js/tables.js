@@ -16,7 +16,7 @@ filter.addEventListener('input', debounce(e => {
 }, 300));
 
 // Reload the list when closing the creation modal
-$("#ajaxModal").on("hidden.bs.modal", function (event) {
+ajaxModal.addEventListener("hidden.bs.modal", function (event) {
   refreshList();
 });
 

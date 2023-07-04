@@ -5,27 +5,8 @@
 //window.Popper = Popper
 
 import * as bootstrap from 'bootstrap';
-//window.bootstrap = bootstrap;
-
-// import jQuery from 'jquery';
-// window.$ = window.jQuery = jQuery;
-
-/**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
- */
-
-  // Registering the CSRF Token as a common header with jQuery Ajax so that all
-  // outgoing HTTP requests automatically have it attached.
-  /*
-  let token = document.head.querySelector('meta[name="csrf-token"]');
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': token.content
-    }
-  });
-  */
+// This makes the bootstrap methods available outside the app.js module compiled by Vite
+window.bootstrap = bootstrap;
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
