@@ -136,16 +136,13 @@
                             <input type="text" class="form-control form-control-sm" name="Qt" value="{{ Request::get('Qt') }}" placeholder="Qt">
                         </div>
                         <div class="col-2">
-                            <div class="btn-group-toggle" data-bs-toggle="buttons" title="In grace period">
-                                <label class="btn btn-outline-primary btn-sm">
-                                    <input id="grace" name="grace_period" type="checkbox">Grace
-                                </label>
-                            </div>
+                            <input id="grace" name="grace_period" type="checkbox" class="btn-check">
+                            <label class="btn btn-outline-primary btn-sm" title="In grace period" for="grace">Grace</label>
                         </div>
-                        <div class="col-3 py-2">
+                        <div class="col-3 py-1">
                             Cost
                         </div>
-                        <div class="col-3 py-2">
+                        <div class="col-3 py-1">
                             Fee
                         </div>
                     </div>
@@ -157,11 +154,8 @@
                     </div>
                 </div>
                 <div class="col-1 px-2">
-                    <div class="btn-group-toggle" data-bs-toggle="buttons" title="Select/unselect all">
-                        <label class="btn btn-outline-primary btn-sm">
-                            <input id="selectAll" type="checkbox">&check;
-                        </label>
-                    </div>
+                    <input id="selectAll" type="checkbox" class="btn-check">
+                    <label class="btn btn-outline-primary btn-sm" title="Select/unselect all" for="selectAll">&check;</label>
                 </div>
             </div>
         </div>
@@ -228,7 +222,7 @@
 @endsection
 
 @section('script')
-<script src="{{ asset('js/renewal-index.js') }}"></script>
+<script src="{{ asset('js/renewal-index.js') }}" defer></script>
 {{-- TODO: put this in the renewal-index.js file avoiding the blade directives --}}
 <script>
     @if(config('renewal.invoice.backend') == 'dolibarr')

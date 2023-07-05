@@ -67,7 +67,9 @@ ajaxModal.addEventListener('show.bs.modal', event => {
 
 // Display actor dependencies in corresponding tab
 app.addEventListener('show.bs.tab', e => {
-    fetchInto(e.target.href, actorUsedIn);
+    if (e.target.id === 'actorUsedInToggle') {
+        fetchInto(e.target.href, actorUsedIn);
+    }
 });
 
 // Process click events
