@@ -70,7 +70,7 @@
   </div>
 
   @if ( $operation == 'child' )
-  <fieldset class="form-group">
+  <fieldset>
     <legend>Use current {{ $parent_matter->category->category ?? 'matter' }} as:</legend>
     <div class="form-check my-1">
       <input class="form-check-input mt-0" type="radio" name="priority" value="1" checked>

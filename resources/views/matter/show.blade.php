@@ -86,7 +86,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       </div>
       <div id="addTitleCollapse" class="collapse">
         <form id="addTitleForm" autocomplete="off">
-          <div class="form-row">
+          <div class="row">
             <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
             <div class="col-2">
               <input type="hidden" name="type_code">
@@ -141,7 +141,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         <div class="card-body p-1" style="max-height: 80px; overflow: auto;">
           <ul class="list-unstyled mb-0">
             @foreach ( $role_group as $actor )
-            <li class="text-truncate {{ $actor->inherited ? 'font-italic' : '' }}">
+            <li class="text-truncate {{ $actor->inherited ? 'fst-italic' : '' }}">
               @if ( $actor->warn )
               <span title="Special instructions">&#9888;</span>
               @endif
@@ -386,21 +386,19 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <input type="text" class="form-control form-control-sm" id="roleName" data-ac="/role/autocomplete" data-actarget="role" placeholder="Role">
       <input type="text" class="form-control form-control-sm" id="actorName" data-ac="/actor/autocomplete/1" data-actarget="actor_id" placeholder="Name">
       <input type="text" class="form-control form-control-sm" name="actor_ref" placeholder="Reference">
-     <div class="form-group">
-       <div class="form-check my-1">
-         <input class="form-check-input mt-0" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
-         <label class="form-check-label" for="actorShared">Add to container and share</label>
-       </div>
-       <div class="form-check my-1">
-         <input class="form-check-input mt-0" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
-         <label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
-       </div>
-     </div>
-     <div class="btn-group" role="group">
-       <button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
-       <button type="button" class="btn btn-outline-info btn-sm" id="popoverCancel">&times;</button>
-     </div>
-     <div class="alert alert-danger d-none" role="alert"></div>
+      <div class="form-check my-1">
+          <input class="form-check-input mt-0" type="radio" id="actorShared" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
+          <label class="form-check-label" for="actorShared">Add to container and share</label>
+      </div>
+      <div class="form-check my-1">
+          <input class="form-check-input mt-0" type="radio" id="actorNotShared" name="matter_id" value="{{ $matter->id }}">
+          <label class="form-check-label" for="actorNotShared">Add to this matter only (not shared)</label>
+      </div>
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-info btn-sm" id="addActorSubmit">&check;</button>
+        <button type="button" class="btn btn-outline-info btn-sm" id="popoverCancel">&times;</button>
+      </div>
+      <div class="alert alert-danger d-none" role="alert"></div>
    </form>
 </template>
 

@@ -1,8 +1,6 @@
 // Actor processing
 
-// Initialize popovers with custom template
-const popoverTemplate = '<div class="popover border-info" role="tooltip"><div class="tooltip-arrow"></div><h3 class="popover-header bg-info text-white"></h3><div class="popover-body"></div></div>';
-
+// // Bootstrap doc example
 // const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
 // const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
 
@@ -11,7 +9,6 @@ let popover = null;
 let popoverList = new bootstrap.Popover(document.body, {
   selector: '[data-bs-toggle="popover"]',
   boundary: 'viewport',
-  template: popoverTemplate,
   content: actorPopoverTemplate.content.firstElementChild,
   container: 'body',
   html: true,
@@ -146,21 +143,32 @@ ajaxModal.addEventListener('hide.bs.modal', e => {
 //  Generate summary and copy
 
 ajaxModal.onclick = e => {
-  if (e.target.id == 'sumButton') {
-    /* write to the clipboard now */
-    //var text = document.getElementById("tocopy").textContent;
-    var node = document.getElementById("tocopy")
+  switch (e.target.id) {
+    case 'sumButton':
+      /* write to the clipboard now */
+      //var text = document.getElementById("tocopy").textContent;
+      var node = document.getElementById("tocopy")
 
-    var selection = getSelection();
-    selection.removeAllRanges();
+      var selection = getSelection();
+      selection.removeAllRanges();
 
-    var range = document.createRange();
-    range.selectNodeContents(node);
-    selection.addRange(range);
+      var range = document.createRange();
+      range.selectNodeContents(node);
+      selection.addRange(range);
 
-    var success = document.execCommand('copy');
-    selection.removeAllRanges();
-    return success;
+      var success = document.execCommand('copy');
+      selection.removeAllRanges();
+      return success;
+      break;
+
+    case 'addTaskReset': 
+      e.target.closest('tr').innerHTML = '';
+      break;
+
+    // case 'addClassifierReset':
+    //   // Doesn't work, probably not necessary
+    //   bootstrap.Collapse.getOrCreateInstance(addClassifierRow).hide();
+    //   break;
   }
 }
 

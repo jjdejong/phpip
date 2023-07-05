@@ -19,7 +19,7 @@
     </tr>
     <tr id="addEventRow" class="collapse">
       <td colspan="5">
-        <form id="addEventForm" class="form-inline">
+        <form id="addEventForm">
           <input type="hidden" name="matter_id" value="{{ $matter->id }}">
           <div class="input-group">
             <input type="hidden" name="code">

@@ -43,7 +43,7 @@ $classifiers = $matter->classifiers->groupBy('type_name');
       <td colspan="4">
         <form id="addClassifierForm">
           <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
-          <div class="form-row form-row-sm">
+          <div class="row">
             <div class="col p-1">
               <input type="hidden" name="type_code" value="">
               <input type="text" class="form-control form-control-sm" size="16" placeholder="Type" data-ac="/classifier-type/autocomplete/0" data-actarget="type_code" data-aclength="0">
@@ -63,7 +63,7 @@ $classifiers = $matter->classifiers->groupBy('type_name');
             </div>
             <div class="col-2 p-1 btn-group btn-group-sm">
               <button type="button" class="btn btn-primary" id="addClassifierSubmit">&check;</button>
-              <button type="reset" class="btn btn-outline-primary" onClick="$('#addClassifierRow').collapse('hide')">&times;</button>
+              <button type="reset" class="btn btn-outline-primary" id="addClassifierReset">&times;</button>
             </div>
           </div>
         </form>

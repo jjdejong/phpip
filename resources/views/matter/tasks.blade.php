@@ -116,7 +116,7 @@
           <input type="text" class="form-control form-control-sm" placeholder="Assigned to" data-ac="/user/autocomplete" data-actarget="assigned_to">
           <input type="text" class="form-control form-control-sm" name="notes" placeholder="Notes">
           <button type="button" class="btn btn-primary btn-sm" id="addTaskSubmit">&check;</button>
-          <button type="reset" class="btn btn-outline-primary btn-sm" onClick="$(this).parents('tr').html('')">&times;</button>
+          <button type="reset" class="btn btn-outline-primary btn-sm" id="addTaskReset">&times;</button>
         </div>
       </form>
     </td>
