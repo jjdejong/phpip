@@ -26,7 +26,7 @@
   @endcanany
 </head>
 
-<body>
+<body style="background-color: #99a">
   <div id="app">
     <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm mb-1">
       <div class="container">
