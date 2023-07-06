@@ -509,6 +509,9 @@ function AutocompleteWidget() {
         } else {
             // Used for content editable fields where the same field is used for sending the id to the server
             input.value = selectedItem.key;
+            input.addEventListener('xhrsent', e => {
+                input.value = selectedItem.value;
+            });
         }
 
         event.preventDefault() // Prevent other click events from being triggered
