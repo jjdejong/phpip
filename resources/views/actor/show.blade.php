@@ -106,7 +106,7 @@
           <td><input type="text" class="noformat form-control" name="login" value="{{ $actorInfo->login }}" placeholder="-"></td>
         </tr>
         <tr>
-          <th title="{{ $actorComments['default_role'] }}" title="Login needs to be null for changing the role">Default role</th>
+          <th title="{{ $actorComments['default_role'] }} Login needs to be null for changing the role">Default role</th>
           <td><input type="text" class="noformat form-control" name="default_role" data-ac="/role/autocomplete" value="{{ empty($actorInfo->droleInfo) ? '' : $actorInfo->droleInfo->name }}" {{ $actorInfo->login ? 'disabled' : 'autocomplete=off' }} placeholder="-"></td>
         </tr>
         <tr>
