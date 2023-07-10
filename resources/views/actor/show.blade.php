@@ -91,6 +91,12 @@
           <th>Phone</th>
           <td><input type='text' class="noformat form-control" name="phone" value="{{ $actorInfo->phone }}" placeholder="-"></td>
         </tr>
+        <tr>
+          <td colspan="2">
+            <label class="font-weight-bolder" title="{{ $actorComments['notes'] }}">Notes</label>
+            <textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea>
+          </td>
+        </tr>
       </table>
     </fieldset>
     <fieldset class="tab-pane fade" id="actorOther">
@@ -100,7 +106,7 @@
           <td><input type="text" class="noformat form-control" name="login" value="{{ $actorInfo->login }}" placeholder="-"></td>
         </tr>
         <tr>
-          <th title="{{ $actorComments['default_role'] }} Login needs to be null for changing the role">Default role</label></th>
+          <th title="{{ $actorComments['default_role'] }} Login needs to be null for changing the role">Default role</th>
           <td><input type="text" class="noformat form-control" name="default_role" data-ac="/role/autocomplete" value="{{ empty($actorInfo->droleInfo) ? '' : $actorInfo->droleInfo->name }}" {{ $actorInfo->login ? 'disabled' : 'autocomplete=off' }} placeholder="-"></td>
         </tr>
         <tr>
@@ -135,6 +141,12 @@
         <tr>
           <th title="{{ $actorComments['site_id'] }}">Work site</th>
           <td><input type="text" class="noformat form-control" name="site_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->site) ? '' : $actorInfo->site->name }}" placeholder="-" autocomplete="off"></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <label class="font-weight-bolder" title="{{ $actorComments['notes'] }}">Notes</label>
+            <textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea>
+          </td>
         </tr>
       </table>
     </fieldset>
