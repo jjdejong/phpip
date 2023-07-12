@@ -19,7 +19,9 @@
 		<input type="text" class="form-control" placeholder="Add country" data-ac="/country/autocomplete" id="addCountry">
 		<span class="input-group-text">&plus;</span>
 	</div>
-	<button type="button" class="btn btn-primary mt-2" id="nationalizeSubmit">Submit</button>
+	<div class="d-grid">
+		<button type="button" class="btn btn-primary mt-2" id="nationalizeSubmit">Submit</button>
+	</div>
 </form>
 
 <template id="appendCountryTemplate">

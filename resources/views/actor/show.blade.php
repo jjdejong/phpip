@@ -1,15 +1,15 @@
 <div class="card overflow-auto" style="height: 480px;">
-  <div class="nav nav-pills" role="tablist">
-    <a class="nav-item nav-link active" data-bs-toggle="tab" href="#actorMain" role="tab">Main</a>
-    <a class="nav-item nav-link" data-bs-toggle="tab" href="#actorContact" role="tab">Contact</a>
-    <a class="nav-item nav-link" data-bs-toggle="tab" href="#actorOther" role="tab">Other</a>
-    <a class="nav-item nav-link" data-bs-toggle="tab" id="actorUsedInToggle" href="/actor/{{ $actorInfo->id }}/usedin" data-bs-target="#actorUsedIn" role="tab">Used in</a>
+  <nav class="nav nav-tabs nav-fill">
+    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#actorMain">Main</button>
+    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#actorContact">Contact</button>
+    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#actorOther">Other</button>
+    <a class="nav-link" data-bs-toggle="tab" id="actorUsedInToggle" href="/actor/{{ $actorInfo->id }}/usedin" data-bs-target="#actorUsedIn">Used in</a>
     @canany(['admin', 'readwrite'])
-    <button id="deleteActor" title="Delete actor" class="nav-item nav-link btn btn-outline-danger"  data-url='/actor/{{ $actorInfo->id }}' data-message="the actor {{ $actorInfo->name }}">
+    <button id="deleteActor" title="Delete actor" class="nav-link btn btn-outline-danger"  data-url='/actor/{{ $actorInfo->id }}' data-message="the actor {{ $actorInfo->name }}">
       Delete
     </button>
     @endcanany
-  </div>
+  </nav>
   <div class="tab-content p-1" data-resource="/actor/{{ $actorInfo->id }}">
     <fieldset class="tab-pane fade show active" id="actorMain">
       <table class="table table-striped table-sm">
