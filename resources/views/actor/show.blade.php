@@ -57,12 +57,6 @@
           <th title="{{ $actorComments['small_entity'] }}">Small Entity</th>
           <td><input type="checkbox" class="noformat" name="small_entity" {{ $actorInfo->small_entity ? 'checked' : '' }}></td>
         </tr>
-        <tr>
-          <td colspan="2">
-            <label class="fw-bolder" title="{{ $actorComments['notes'] }}">Notes</label>
-            <textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea>
-          </td>
-        </tr>
       </table>
     </fieldset>
     <fieldset class="tab-pane fade" id="actorContact">
@@ -90,12 +84,6 @@
         <tr>
           <th>Phone</th>
           <td><input type='text' class="noformat form-control" name="phone" value="{{ $actorInfo->phone }}" placeholder="-"></td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <label class="font-weight-bolder" title="{{ $actorComments['notes'] }}">Notes</label>
-            <textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea>
-          </td>
         </tr>
       </table>
     </fieldset>
@@ -142,16 +130,14 @@
           <th title="{{ $actorComments['site_id'] }}">Work site</th>
           <td><input type="text" class="noformat form-control" name="site_id" data-ac="/actor/autocomplete" value="{{ empty($actorInfo->site) ? '' : $actorInfo->site->name }}" placeholder="-" autocomplete="off"></td>
         </tr>
-        <tr>
-          <td colspan="2">
-            <label class="font-weight-bolder" title="{{ $actorComments['notes'] }}">Notes</label>
-            <textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea>
-          </td>
-        </tr>
       </table>
     </fieldset>
     <div class="tab-pane fade" id="actorUsedIn">
       <div class="spinner-border" role="status"></div>
+    </div>
+    <div>
+      <label class="form-label fw-bolder" title="{{ $actorComments['notes'] }}">Notes</label>
+      <textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea>
     </div>
   </div>
 </div>

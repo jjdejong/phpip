@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-primary">
+<legend class="alert alert-dark d-flex justify-content-between py-2">
   Event Names
   <a href="eventname/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Event name" data-resource="/eventname/">Create a new event name</a>
 </legend>
@@ -10,9 +10,9 @@
     <div class="card border-primary overflow-auto" style="max-height: 640px;">
       <table class="table table-striped table-hover table-sm">
         <thead>
-          <tr id="filter" class="bg-primary text-light">
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/eventname" name="Code" placeholder="Code"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/eventname" name="Name" placeholder="Name"></th>
+          <tr id="filter" class="table-primary align-middle">
+            <th class="border-top-0"><input class="filter-input form-control" data-source="/eventname" name="Code" placeholder="Code"></th>
+            <th class="border-top-0"><input class="filter-input form-control" data-source="/eventname" name="Name" placeholder="Name"></th>
             <th class="align-middle text-center border-top-0" colspan="2">Notes</th>
           </tr>
         </thead>

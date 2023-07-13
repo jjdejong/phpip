@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-primary">
+<legend class="alert alert-dark d-flex justify-content-between py-2">
     Users
     <a href="user/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Create User">Create user</a>
 </legend>
@@ -10,11 +10,11 @@
     <div class="card border-primary">
       <table class="table table-striped table-hover table-sm col">
         <thead class="card-header">
-          <tr id="filter" class="bg-primary text-light">
-            <th class="border-top-0"><input class="form-control form-control-sm" name="Name" placeholder="Name" value="{{ Request::get('Name') }}"></th>
-            <th class="align-middle border-top-0">Role</th>
-            <th class="align-middle border-top-0">Login</th>
-            <th class="align-middle border-top-0">Company</th>
+          <tr id="filter" class="table-primary align-middle">
+            <th><input class="form-control" name="Name" placeholder="Name" value="{{ Request::get('Name') }}"></th>
+            <th>Role</th>
+            <th>Login</th>
+            <th>Company</th>
           </tr>
         </thead>
         <tbody id="tableList" class="card-body">
