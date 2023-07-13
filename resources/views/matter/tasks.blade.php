@@ -6,7 +6,7 @@
     <tr>
       <th>Tasks by event</th>
       <th>Due date</th>
-      <th>OK</th>
+      <th>Ack</th>
       <th>Date</th>
       @cannot('client')
       @if($is_renewals)
@@ -65,14 +65,14 @@
     </tr>
   
     @foreach ($event->tasks as $task)
-    <tr class="reveal-hidden {{ $task->done ? 'text-success' : 'text-danger' }}" data-resource="/task/{{ $task->id }}">
+    <tr class="reveal-hidden" data-resource="/task/{{ $task->id }}">
       <td nowrap>
         <span class="ms-2">{{ $task->info->name }}</span>
         <span data-name="detail" contenteditable>{{ $task->detail ?? '--' }}</span>
       </td>
-      <td><input type="text" class="form-control noformat" name="due_date" value="{{ $task->due_date->isoFormat('L') }}"></td>
-      <td><input type="checkbox" class="form-control noformat" name="done" {{ $task->done ? 'checked' : '' }}></td>
-      <td><input type="text" class="form-control noformat" name="done_date" value="{{ empty($task->done_date) ? '' : $task->done_date->isoFormat('L') }}"></td>
+      <td><input type="text" class="form-control noformat  {{ $task->done ? 'text-success' : 'text-danger' }}" name="due_date" value="{{ $task->due_date->isoFormat('L') }}"></td>
+      <td><input type="checkbox" class="noformat" name="done" {{ $task->done ? 'checked' : '' }}></td>
+      <td><input type="text" class="form-control noformat text-success" name="done_date" value="{{ empty($task->done_date) ? '' : $task->done_date->isoFormat('L') }}"></td>
       @cannot('client')
       @if($is_renewals)
       <td><input type="text" class="form-control noformat" name="cost" value="{{ $task->cost }}"></td>
