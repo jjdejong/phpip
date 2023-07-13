@@ -1,4 +1,4 @@
-<div class="card overflow-auto" style="height: 480px;">
+<div class="card" style="height: 480px;">
   <nav class="nav nav-tabs nav-fill">
     <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#actorMain">Main</button>
     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#actorContact">Contact</button>

@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="alert alert-dark d-flex justify-content-between py-2">
+<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
     Actors
     <a href="actor/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Create Actor">Create actor</a>
 </legend>
 <div class="row">
   <div class="col">
     <div class="card border-primary p-1">
-      <table class="table table-striped table-hover table-sm col">
+      <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="table-primary align-middle">
             <th><input class="form-control" name="Name" placeholder="Name" value="{{ Request::get('Name') }}"></th>
@@ -35,7 +35,7 @@
             </td>
             <td>{{ $actor->first_name }}</td>
             <td>{{ $actor->display_name }}</td>
-            <td>{{ empty($actor->company) ? '' : $actor->company->name }}</td>
+            <td nowrap>{{ empty($actor->company) ? '' : $actor->company->name }}</td>
             <td>
               @if ($actor->phy_person)
               Physical

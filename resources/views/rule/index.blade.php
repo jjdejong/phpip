@@ -1,24 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-primary">
-  Rules
-  <a class="badge rounded-pill text-bg-primary" href="https://github.com/jjdejong/phpip/wiki/Tables#task_rules" target="_blank">?</a>
-  <a href="rule/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Rule data" data-source="/rule" data-resource="/rule/create/">Create rule</a>
+<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
+  <span>
+    Rules
+    <a class="badge rounded-pill text-bg-primary fs-6" href="https://github.com/jjdejong/phpip/wiki/Tables#task_rules" target="_blank">?</a>
+  </span>
+  <a href="rule/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Rule data" data-source="/rule" data-resource="/rule/create/">Create Rule</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card border-primary">
+    <div class="card border-primary p-1">
       <table class="table table-striped table-hover table-sm">
         <thead>
-          <tr id="filter" class="bg-primary text-light">
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/rule" name="Task" placeholder="Task"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/rule" name="Detail" placeholder="Detail"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/rule" name="Trigger" placeholder="Trigger event" /></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/rule" name="Category" placeholder="Category"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/rule" name="Country" placeholder="Country"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/rule" name="Origin" placeholder="Origin"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/rule" name="Type" placeholder="Type"></th>
+          <tr id="filter" class="table-primary align-middle">
+            <th class="border-top-0"><input class="form-control form-control-sm" data-source="/rule" name="Task" placeholder="Task"></th>
+            <th class="border-top-0"><input class="form-control form-control-sm" data-source="/rule" name="Detail" placeholder="Detail"></th>
+            <th class="border-top-0"><input class="form-control form-control-sm" data-source="/rule" name="Trigger" placeholder="Trigger event" /></th>
+            <th class="border-top-0"><input class="form-control form-control-sm" data-source="/rule" name="Category" placeholder="Category"></th>
+            <th class="border-top-0"><input class="form-control form-control-sm" data-source="/rule" name="Country" placeholder="Country"></th>
+            <th class="border-top-0"><input class="form-control form-control-sm" data-source="/rule" name="Origin" placeholder="Origin"></th>
+            <th class="border-top-0"><input class="form-control form-control-sm" data-source="/rule" name="Type" placeholder="Type"></th>
           </tr>
         </thead>
         <tbody id="tableList">
@@ -62,5 +64,5 @@
 @endsection
 
 @section('script')
-<script src="{{ asset('js/tables.js') }}"></script>
+<script src="{{ asset('js/tables.js') }}" defer></script>
 @endsection

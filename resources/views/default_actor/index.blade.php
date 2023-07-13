@@ -1,21 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-primary">
+<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
   Default Actors
-  <a href="default_actor/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Default actors" data-resource="/default_actor/">Add a new default actor</a>
+  <a href="default_actor/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Default actors" data-resource="/default_actor/">Create Default Actor</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card overflow-auto border-primary" style="max-height: 640px;">
+    <div class="card border-primary p-1" style="max-height: 640px; overflow: auto;">
       <table class="table table-striped table-hover table-sm">
         <thead>
-          <tr id="filter" class="bg-primary text-light">
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Actor" placeholder="Actor"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Role" placeholder="Role"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Country" placeholder="Country"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Category" placeholder="Category"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/default_actor" name="Client" placeholder="Client"></th>
+          <tr id="filter" class="table-primary align-middle">
+            <th><input class="form-control" data-source="/default_actor" name="Actor" placeholder="Actor"></th>
+            <th><input class="form-control" data-source="/default_actor" name="Role" placeholder="Role"></th>
+            <th><input class="form-control" data-source="/default_actor" name="Country" placeholder="Country"></th>
+            <th><input class="form-control" data-source="/default_actor" name="Category" placeholder="Category"></th>
+            <th><input class="form-control" data-source="/default_actor" name="Client" placeholder="Client"></th>
           </tr>
         </thead>
         <tbody id="tableList">

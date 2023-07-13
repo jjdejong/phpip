@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="alert alert-dark d-flex justify-content-between py-2">
+<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
   Event Names
-  <a href="eventname/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Event name" data-resource="/eventname/">Create a new event name</a>
+  <a href="eventname/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Event name" data-resource="/eventname/">Create Event Name</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card border-primary overflow-auto" style="max-height: 640px;">
+    <div class="card border-primary p-1" style="max-height: 640px; overflow: auto;">
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="table-primary align-middle">
-            <th class="border-top-0"><input class="filter-input form-control" data-source="/eventname" name="Code" placeholder="Code"></th>
-            <th class="border-top-0"><input class="filter-input form-control" data-source="/eventname" name="Name" placeholder="Name"></th>
-            <th class="align-middle text-center border-top-0" colspan="2">Notes</th>
+            <th><input class="form-control" data-source="/eventname" name="Code" placeholder="Code"></th>
+            <th><input class="form-control" data-source="/eventname" name="Name" placeholder="Name"></th>
+            <th class="text-center" colspan="2">Notes</th>
           </tr>
         </thead>
         <tbody id="tableList">

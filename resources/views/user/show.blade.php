@@ -1,4 +1,4 @@
-<div class="card overflow-auto">
+<div class="card">
   <table class="table table-striped" data-resource="/user/{{ $userInfo->id }}">
     <tr>
       <th title="{{ $userComments['name'] }}">Name</th>

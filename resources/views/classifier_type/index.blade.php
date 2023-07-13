@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-primary">
+<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
   Classifier Types
-  <a href="classifier_type/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Type" data-resource="/classifier_type/">Create a new Classifier Type</a>
+  <a href="classifier_type/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Type" data-resource="/classifier_type/">Create Classifier Type</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card border-primary overflow-auto" style="max-height: 640px;">
+    <div class="card border-primary p-1" style="max-height: 640px;">
       <table class="table table-striped table-hover table-sm">
         <thead>
-          <tr id="filter" class="bg-primary text-light">
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/classifier_type" name="Code" placeholder="Code"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/classifier_type" name="Type" placeholder="Type"></th>
-            <th class="align-middle border-top-0">Category</th>
+          <tr id="filter" class="table-primary align-middle">
+            <th><input class="form-control" data-source="/classifier_type" name="Code" placeholder="Code"></th>
+            <th><input class="form-control" data-source="/classifier_type" name="Type" placeholder="Type"></th>
+            <th>Category</th>
           </tr>
         </thead>
         <tbody id="tableList">

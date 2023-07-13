@@ -3,12 +3,12 @@
 @section('content')
 <legend class="alert alert-dark d-flex justify-content-between py-2">
     Users
-    <a href="user/create" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Create User">Create user</a>
+    <a href="user/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Create User">Create user</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card border-primary">
-      <table class="table table-striped table-hover table-sm col">
+    <div class="card border-primary p-1">
+      <table class="table table-striped table-hover table-sm">
         <thead class="card-header">
           <tr id="filter" class="table-primary align-middle">
             <th><input class="form-control" name="Name" placeholder="Name" value="{{ Request::get('Name') }}"></th>

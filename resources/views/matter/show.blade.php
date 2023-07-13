@@ -117,11 +117,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
 
 <div class="row g-1">
   <div class="col-3">
-    <div id="actorPanel" class="card border-secondary p-0 h-100" style="max-height: 600px">
-      <div class="card-header reveal-hidden text-white bg-secondary p-1">
+    <div id="actorPanel" class="card border-secondary h-100" style="max-height: 600px">
+      <div class="card-header reveal-hidden text-white bg-secondary">
         Actors
         @canany(['admin', 'readwrite'])
-        <a class="badge rounded-pill fw-normal text-bg-light hidden-action float-end" data-bs-toggle="popover" href="javascript:void(0)" title="Add Actor">
+        <a class="hidden-action text-light fw-bold float-end" data-bs-toggle="popover" href="javascript:void(0)" title="Add Actor">
           &plus;
         </a>
         @endcanany
