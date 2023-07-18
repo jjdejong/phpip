@@ -17,7 +17,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         @canany(['admin', 'readwrite'])
         <a class="bg-primary text-white float-end hidden-action"
           data-bs-toggle="modal" data-bs-target="#ajaxModal" href="/matter/{{ $matter->id }}/edit" title="Advanced matter edition">
-          &#9998;
+          <svg width="14" height="14" fill="currentColor"><use xlink:href="#pencil-square"/></svg>
         </a>
         @endcanany
       </div>
@@ -57,13 +57,13 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         @canany(['admin', 'readwrite'])
         <div class="btn-group">
           <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=child" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-sm" title="Create child {{ $matter->category->category }}">
-            &oplus; New Child
+            <svg width="14" height="14" fill="currentColor"><use xlink:href="#node-plus-fill"/></svg> New Child
           </a>
           <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=clone" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-sm" title="Clone {{ $matter->category->category }}">
             &boxbox; Clone
           </a>
           <a class="btn btn-info btn-sm {{ $matter->countryInfo->goesnational ? '' : 'disabled' }}" href="/matter/{{ $matter->id }}/createN" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-sm" title="Enter {{ $matter->category->category }} in national phase">
-            &#9872; Nat. Phase
+            <svg width="14" height="14" fill="currentColor"><use xlink:href="#flag-fill"/></svg> Nat. Phase
           </a>
         </div>
         @endcanany
@@ -122,7 +122,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         Actors
         @canany(['admin', 'readwrite'])
         <a class="hidden-action text-light fw-bold float-end" data-bs-toggle="popover" href="javascript:void(0)" title="Add Actor">
-          &plus;
+          <svg width="14" height="14" fill="currentColor"><use xlink:href="#person-plus-fill"/></svg>
         </a>
         @endcanany
       </div>
@@ -137,10 +137,10 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               data-role_code="{{ $role_group->first()->role_code }}"
               data-shareable="{{ $role_group->first()->shareable }}"
               href="javascript:void(0)">
-              &oplus;
+              <svg width="12" height="12" fill="currentColor"><use xlink:href="#person-plus-fill"/></svg>
             </a>
-            <a class="hidden-action float-end text-light fw-bold" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group->first()->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
-              &#9998;
+            <a class="hidden-action float-end text-light" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group->first()->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
+              <svg width="12" height="12" fill="currentColor"><use xlink:href="#pencil-square"/></svg>
             </a>
             @endcanany
           </div>
@@ -149,7 +149,9 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               @foreach ( $role_group as $actor )
               <li class="text-truncate {{ $actor->inherited ? 'fst-italic' : '' }}">
                 @if ( $actor->warn )
-                <span title="Special instructions">&#9888;</span>
+                <span class="text-danger" title="Special instructions">
+                  <svg width="12" height="12" fill="currentColor"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                </span>
                 @endif
                 <a @if ($actor->warn) class="text-danger" @endif
                   href="/actor/{{ $actor->actor_id }}"
@@ -386,14 +388,14 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           </div>
         </div>
         <div class="col-2">
-          <div class="card border-info p-1 h-100">
-            <div id="dropZone" class="card-body bg-info text-light text-center align-middle" data-url="/matter/{{ $matter->id }}/mergeFile">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-intersect" viewBox="0 0 16 16">
-                <path d="M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2V2zm5 10v2a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2v5a2 2 0 0 1-2 2H5zm6-8V2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h2V6a2 2 0 0 1 2-2h5z"/>
-              </svg>
-              <p>File merge<br>Drop Zone</p>
+          <div class="card h-100">
+            <div id="dropZone" class="card-body bg-info text-light text-center align-center" data-url="/matter/{{ $matter->id }}/mergeFile">
+              <svg width="18" height="18" class="my-1" fill="currentColor"><use xlink:href="#intersect"/></svg>
+              <div class="mb-3">Drop File to Merge</div>
+              <a class="text-primary" href="https://github.com/jjdejong/phpip/wiki/Templates-(email-and-documents)#document-template-usage" target="_blank">
+                <svg width="16" height="16" fill="currentColor"><use xlink:href="#question-circle-fill"/></svg>
+              </a>
             </div>
-            <div class="bg-info align-bottom text-end"><a class="badge text-bg-primary" href="https://github.com/jjdejong/phpip/wiki/Templates-(email-and-documents)#document-template-usage" target="_blank">?</a></div>
           </div>
         </div>
       </div>

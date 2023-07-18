@@ -12,32 +12,15 @@
 
 <div class="card">
     <div class="card-header py-1">
-        <span class="lead">
+        <legend>
             Manage renewals
-        </span>
-        <a href="https://github.com/jjdejong/phpip/wiki/Renewal-Management" target="_blank" title="Help" class="btn btn-outline-primary btn-sm">?</a>
-        <a href="/logs" class="btn btn-info">View logs</a>
-        <button id="clearFilters" type="button" class="btn btn-info float-right">&larrpl; Clear filters</button>
-    </div>
-    <div class="card-header py-1">
-        <nav class="mt-1">
-            <div class="nav nav-pills justify-content-center" id="tabsGroup">
-                <a class="nav-item nav-link {{ !$step && !$invoice_step ? 'active' : '' }}" href="#p1" data-bs-toggle="tab" data-step="0">First call</a>
-                <a class="nav-item nav-link {{ $step == 2 ? 'active' : '' }}" href="#p2" data-bs-toggle="tab" data-step="2">Reminder</a>
-                <a class="nav-item nav-link {{ $step == 4 ? 'active' : '' }}" href="#p3" data-bs-toggle="tab" data-step="4">Payment</a>
-                @if (config('renewal.general.receipt_tabs'))
-                <a class="nav-item nav-link {{ $step == 6 ? 'active' : '' }}" href="#p4" data-bs-toggle="tab" data-step="6">Receipts</a>
-                <a class="nav-item nav-link {{ $step == 8 ? 'active' : '' }}" href="#p5" data-bs-toggle="tab" data-step="8">Receipts received</a>
-                @endif
-                <a class="nav-item nav-link {{ $step == 12 ? 'active' : '' }}" href="#p6" data-bs-toggle="tab" data-step="12">Abandoned</a>
-                <a class="nav-item nav-link {{ $step == 14 ? 'active' : '' }}" href="#p9" data-bs-toggle="tab" data-step="14">Lapsed</a>
-                <a class="nav-item nav-link {{ $step == 10 ? 'active' : '' }}" href="#p10" data-bs-toggle="tab" data-step="10">Closed</a>
-                <a class="nav-item nav-link {{ $invoice_step == 1 ? 'active' : '' }}" href="#p7" data-bs-toggle="tab" data-invoice_step="1">Invoicing</a>
-                <a class="nav-item nav-link {{ $invoice_step == 2 ? 'active' : '' }}" href="#p8" data-bs-toggle="tab" data-invoice_step="2">Invoiced</a>
-                <a class="nav-item nav-link {{ $invoice_step == 3 ? 'active' : '' }}" href="#p11" data-bs-toggle="tab" data-invoice_step="3">Invoices paid</a>
-            </div>
-        </nav>
-        <div class="tab-content mt-1">
+            <a href="https://github.com/jjdejong/phpip/wiki/Renewal-Management" class="text-primary" target="_blank" title="Help">
+                <svg width="16" height="16" fill="currentColor"><use xlink:href="#question-circle-fill"/></svg>
+            </a>
+            <a href="/logs" class="btn btn-info">View logs</a>
+            <button id="clearFilters" type="button" class="btn btn-info float-right">&larrpl; Clear filters</button>
+        </legend>
+        <div class="tab-content">
             <div class="tab-pane {{ !$step && !$invoice_step ? 'active' : '' }}" id="p1">
                 <div class="container text-end">
                     <div class="btn-group">
@@ -114,109 +97,136 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="card-header py-1">
-        <div class="row fw-bold">
-            <div class="input-group"  id="filterFields">
-                <div class="col-2">
-                    <input type="text" class="form-control form-control-sm" name="Name" value="{{ Request::get('Name') }}" placeholder="Client">
-                </div>
-                <div class="col-3">
-                    <input type="text" class="form-control form-control-sm" name="Title" value="{{ Request::get('Title') }}" placeholder="Title">
-                </div>
-                <div class="col-1">
-                    <input type="text" class="form-control form-control-sm" name="Case" value="{{ Request::get('Case') }}" placeholder="Matter">
-                </div>
-                <div class="col-3">
-                    <div class="row">
-                        <div class="col-2">
-                            <input type="text" class="form-control form-control-sm" name="Country" value="{{ Request::get('Country') }}" placeholder="Ctry">
-                        </div>
-                        <div class="col-2">
-                            <input type="text" class="form-control form-control-sm" name="Qt" value="{{ Request::get('Qt') }}" placeholder="Qt">
-                        </div>
-                        <div class="col-2">
-                            <input id="grace" name="grace_period" type="checkbox" class="btn-check">
-                            <label class="btn btn-outline-primary btn-sm" title="In grace period" for="grace">Grace</label>
-                        </div>
-                        <div class="col-3 py-1">
-                            Cost
-                        </div>
-                        <div class="col-3 py-1">
-                            Fee
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="input-group">
-                        <input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">
-                        <input type="date" class="form-control form-control-sm" name="Untildate" id="Untildate" title="Until selected date" value="{{ Request::get('Untildate') }}">
-                    </div>
-                </div>
-                <div class="col-1 px-2">
-                    <input id="selectAll" type="checkbox" class="btn-check">
-                    <label class="btn btn-outline-primary btn-sm" title="Select/unselect all" for="selectAll">&check;</label>
-                </div>
+        <nav class="mt-1">
+            <div class="nav nav-tabs nav-fill" id="tabsGroup">
+                <a class="nav-item nav-link {{ !$step && !$invoice_step ? 'active' : '' }}" href="#p1" data-bs-toggle="tab" data-step="0">First call</a>
+                <a class="nav-item nav-link {{ $step == 2 ? 'active' : '' }}" href="#p2" data-bs-toggle="tab" data-step="2">Reminder</a>
+                <a class="nav-item nav-link {{ $step == 4 ? 'active' : '' }}" href="#p3" data-bs-toggle="tab" data-step="4">Payment</a>
+                @if (config('renewal.general.receipt_tabs'))
+                <a class="nav-item nav-link {{ $step == 6 ? 'active' : '' }}" href="#p4" data-bs-toggle="tab" data-step="6">Receipts</a>
+                <a class="nav-item nav-link {{ $step == 8 ? 'active' : '' }}" href="#p5" data-bs-toggle="tab" data-step="8">Receipts received</a>
+                @endif
+                <a class="nav-item nav-link {{ $step == 12 ? 'active' : '' }}" href="#p6" data-bs-toggle="tab" data-step="12">Abandoned</a>
+                <a class="nav-item nav-link {{ $step == 14 ? 'active' : '' }}" href="#p9" data-bs-toggle="tab" data-step="14">Lapsed</a>
+                <a class="nav-item nav-link {{ $step == 10 ? 'active' : '' }}" href="#p10" data-bs-toggle="tab" data-step="10">Closed</a>
+                <a class="nav-item nav-link {{ $invoice_step == 1 ? 'active' : '' }}" href="#p7" data-bs-toggle="tab" data-invoice_step="1">Invoicing</a>
+                <a class="nav-item nav-link {{ $invoice_step == 2 ? 'active' : '' }}" href="#p8" data-bs-toggle="tab" data-invoice_step="2">Invoiced</a>
+                <a class="nav-item nav-link {{ $invoice_step == 3 ? 'active' : '' }}" href="#p11" data-bs-toggle="tab" data-invoice_step="3">Invoices paid</a>
             </div>
-        </div>
+        </nav>
     </div>
-    <div class="card-body pt-2" id="renewalList">
-        @if (count($renewals) == 0)
-        <div class="row text-danger">
-            The list is empty
-        </div>
-        @else
-        <table class="table table-striped table-sm mb-1">
-            @foreach ($renewals as $task)
-            <tr class="row overlay" data-resource="/task/{{ $task->id }}">
-                <td class="col-2">
-                    {{ $task->client_name }}
-                </td>
-                <td class="col-3">
-                    {{ $task->short_title }}
-                </td>
-                <td class="col-1">
-                    <a href="/matter/{{ $task->matter_id }}">
-                    {{ $task->uid }}
-                    </a>
-                </td>
-                <td class="col-3">
-                    <div class="row">
-                        <div class="col-2">
-                            {{ $task->country }}
+    <div class="card-body pt-0">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr class="row table-primary" id="filterFields">
+                    <td class="col-2">
+                        <input class="form-control form-control-sm" name="Name" value="{{ Request::get('Name') }}" placeholder="Client">
+                    </td>
+                    <td class="col-3">
+                        <input class="form-control form-control-sm" name="Title" value="{{ Request::get('Title') }}" placeholder="Title">
+                    </td>
+                    <td class="col-1">
+                        <input class="form-control form-control-sm" name="Case" value="{{ Request::get('Case') }}" placeholder="Matter">
+                    </td>
+                    <th class="col-3 text-center">
+                        <div class="row">
+                            <div class="col-2">
+                                <input class="form-control form-control-sm px-0" name="Country" value="{{ Request::get('Country') }}" placeholder="Ctry">
+                            </div>
+                            <div class="col-2">
+                                <input class="form-control form-control-sm px-0" name="Qt" value="{{ Request::get('Qt') }}" placeholder="Qt">
+                            </div>
+                            <div class="col-2">
+                                <input id="grace" name="grace_period" type="checkbox" class="btn-check">
+                                <label class="btn btn-outline-primary btn-sm" title="In grace period" for="grace">Grace</label>
+                            </div>
+                            <div class="col-3 p-1">
+                                Cost
+                            </div>
+                            <div class="col-3 p-1">
+                                Fee
+                            </div>
                         </div>
-                        <div class="col-2">
-                            {{ $task->detail }}
+                    </th>
+                    <td class="col-2">
+                        <div class="input-group">
+                            <input type="date" class="form-control form-control-sm px-0" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">
+                            <input type="date" class="form-control form-control-sm px-0" name="Untildate" id="Untildate" title="Until selected date" value="{{ Request::get('Untildate') }}">
                         </div>
-                        <div class="col-2">
-                            {!! $task->grace_period ? "&#9888;" : "" !!}
-                        </div>
-                        <div class="col-3">
-                            {{ $task->cost }}
-                        </div>
-                        <div class="col-3">
-                            {{ $task->fee }}
-                        </div>
-                    </div>
-                </td>
-                <td class="col-2 text-center">
-                    {{ Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}
-                    @if ($task->done)
-                    <div class="badge text-bg-success" title="Done">&check;</div>
-                    @elseif ($task->due_date < now())
-                    <div class="badge text-bg-danger" title="Overdue">&nbsp;!&nbsp;</div>
-                    @elseif ($task->due_date < now()->addWeeks(1))
-                    <div class="badge text-bg-warning" title="Urgent">&nbsp;!&nbsp;</div>
-                    @endif
-                </td>
-                <td class="col-1 px-3">
-                    <input id="{{ $task->id }}" class="clear-ren-task" type="checkbox">
-                </td>
-            </tr>
-            @endforeach
+                    </td>
+                    <td class="col-1 text-center">
+                        <input id="selectAll" type="checkbox" class="btn-check">
+                        <label class="btn btn-outline-primary btn-sm" title="Select/unselect all" for="selectAll">&check;</label>
+                    </td>
+                </tr>
+            </thead>
+            <tbody id="renewalList">
+                @if (count($renewals) == 0)
+                <tr class="row text-danger">
+                    The list is empty
+                </tr>
+                @else
+                @foreach ($renewals as $task)
+                    <tr class="row" data-resource="/task/{{ $task->id }}">
+                        <td class="col-2">
+                            {{ $task->client_name }}
+                        </td>
+                        <td class="col-3" nowrap>
+                            {{ $task->short_title }}
+                        </td>
+                        <td class="col-1">
+                            <a href="/matter/{{ $task->matter_id }}">
+                                {{ $task->uid }}
+                            </a>
+                        </td>
+                        <td class="col-3">
+                            <div class="row">
+                                <div class="col-2 text-center">
+                                    {{ $task->country }}
+                                </div>
+                                <div class="col-2 text-center">
+                                    {{ $task->detail }}
+                                </div>
+                                <div class="col-2 text-center">
+                                    @if ($task->grace_period)
+                                    <svg width="12" height="12" fill="currentColor"><use xlink:href="#hourglass-split"/></svg>
+                                    @endif
+                                </div>
+                                <div class="col-3 text-end">
+                                    {{ $task->cost }}
+                                </div>
+                                <div class="col-3 text-end">
+                                    {{ $task->fee }}
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-2 text-center">
+                            {{ Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}
+                            @if ($task->done)
+                            <span class="text-success" title="Done">
+                                <svg width="14" height="14" fill="currentColor"><use xlink:href="#check-circle-fill"/></svg>
+                            </span>
+                            @elseif ($task->due_date < now())
+                            <span class="text-danger" title="Overdue">
+                                <svg width="14" height="14" fill="currentColor"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                            </span>
+                            @elseif ($task->due_date < now()->addWeeks(1))
+                            <span class="text-warning" title="Urgent">
+                                <svg width="14" height="14" fill="currentColor"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                            </span>
+                            @endif
+                        </td>
+                        <td class="col-1 text-center">
+                            <input id="{{ $task->id }}" class="clear-ren-task" type="checkbox">
+                        </td>
+                    </tr>
+                @endforeach
+                <tr>
+                    <td>{{ $renewals->links() }}</td>
+                </tr>
+                @endif
+            </tbody>
         </table>
-        {{ $renewals->links() }}
-        @endif
     </div>
 </div>
 @endsection

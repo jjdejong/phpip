@@ -16,7 +16,7 @@
             <th><input class="form-control" data-source="/template-member" name="language" placeholder="Language"></th>
             <th><input class="form-control" data-source="/template-member" name="style" placeholder="Style"></th>
             <th><input class="form-control" data-source="/template-member" name="format" placeholder="Format"></th>
-            <th><input class="form-control" data-source="/template-member" name="category" placeholder="category"></th>
+            <th><input class="form-control" data-source="/template-member" name="category" placeholder="Category"></th>
           </tr>
         </thead>
         <tbody id="tableList">

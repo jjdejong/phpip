@@ -4,16 +4,11 @@
       <label for="code" title="{{ $tableComments['code'] }}"><b>Code</b></label>
       <input type="text" class="form-control" name="code">
     </div>
-    <div class="col">
-      <label title="{{ $tableComments['is_task'] }}">Is task</label>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="is_task" value="1">
-        <label class="form-check-label">Yes</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="is_task" value="0" checked>
-        <label class="form-check-label">No</label>
-      </div>
+    <div class="col p-2 btn-group">
+      <input class="btn-check" type="radio" id="btn-notask" name="is_task" value="0" checked>
+      <label class="btn btn-outline-primary w-25" for="btn-notask">Not Task</label>
+      <input class="btn-check" type="radio" id="btn-istask" name="is_task" value="1">
+      <label class="btn btn-outline-primary" for="btn-istask" title="{{ $tableComments['is_task'] }}">Task</label>
     </div>
   </div>
   <div class="row mb-2">
@@ -21,16 +16,11 @@
       <label for="name" title="{{ $tableComments['name'] }}"><b>Name</b></label>
       <input type="text" class="form-control" name="name">
     </div>
-    <div class="col">
-      <label title="{{ $tableComments['status_event'] }}">Is status event</label>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="status_event" value="1">
-        <label class="form-check-label">Yes</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="status_event" value="0" checked>
-        <label class="form-check-label">No</label>
-      </div>
+    <div class="col p-2 btn-group">
+      <input class="btn-check" type="radio" id="btn-nostatus" name="status_event" value="0" checked>
+      <label class="btn btn-outline-primary" for="btn-nostatus">Normal</label>
+      <input class="btn-check" type="radio" id="btn-isstatus" name="status_event" value="1">
+      <label class="btn btn-outline-primary" for="btn-isstatus" title="{{ $tableComments['status_event'] }}">Status</label>
     </div>
   </div>
   <div class="row mb-2">
