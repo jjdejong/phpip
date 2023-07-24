@@ -3,7 +3,12 @@
 @section('content')
 <div class="container-fluid">
   <legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
-    Fees
+    <span>
+      Fees
+      <a class="text-primary" href="https://github.com/jjdejong/phpip/wiki/Renewal-Management#costs-and-fees" target="_blank">
+        <svg width="16" height="16" fill="currentColor"><use xlink:href="#question-circle-fill"/></svg>
+      </a>
+    </span>
     <a href="fee/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="New line" data-resource="/fee/">Add a new line</a>
   </legend>
   <div class="card border-primary">
@@ -68,21 +73,21 @@
           </td>
           <td class="col-4">
             <div class="row">
-              <div class="col bg-light pe-3"><input type="text" class="form-control noformat text-end" name="cost" value="{{ $fee->cost }}"></div>
-              <div class="col bg-light pe-3"><input type="text" class="form-control noformat text-end" name="fee" value="{{ $fee->fee }}"></div>
-              <div class="col pe-3"><input type="text" class="form-control noformat text-end" name="cost_reduced" value="{{ $fee->cost_reduced }}"></div>
-              <div class="col pe-3"><input type="text" class="form-control noformat text-end" name="fee_reduced" value="{{ $fee->fee_reduced }}"></div>
+              <div class="col pe-3"><input class="form-control noformat text-end" name="cost" value="{{ $fee->cost }}"></div>
+              <div class="col pe-3"><input class="form-control noformat text-end" name="fee" value="{{ $fee->fee }}"></div>
+              <div class="col pe-3" title="Leave empty if not used"><input class="form-control noformat text-end" name="cost_reduced" value="{{ $fee->cost_reduced }}"></div>
+              <div class="col pe-3" title="Leave empty if not used"><input class="form-control noformat text-end" name="fee_reduced" value="{{ $fee->fee_reduced }}"></div>
             </div>
           </td>
           <td class="col-4">
-            <div class="row">
-              <div class="col bg-light pe-3"><input type="text" class="form-control noformat text-end" name="cost_sup" value="{{ $fee->cost_sup }}"></div>
-              <div class="col bg-light pe-3"><input type="text" class="form-control noformat text-end" name="fee_sup" value="{{ $fee->fee_sup }}"></div>
-              <div class="col pe-3"><input type="text" class="form-control noformat text-end" name="cost_sup_reduced" value="{{ $fee->cost_sup_reduced }}"></div>
-              <div class="col pe-3"><input type="text" class="form-control noformat text-end" name="fee_sup_reduced" value="{{ $fee->fee_sup_reduced }}"></div>
+            <div class="row" title="Leave empty if not used">
+              <div class="col pe-3"><input class="form-control noformat text-end" name="cost_sup" value="{{ $fee->cost_sup }}"></div>
+              <div class="col pe-3"><input class="form-control noformat text-end" name="fee_sup" value="{{ $fee->fee_sup }}"></div>
+              <div class="col pe-3"><input class="form-control noformat text-end" name="cost_sup_reduced" value="{{ $fee->cost_sup_reduced }}"></div>
+              <div class="col pe-3"><input class="form-control noformat text-end" name="fee_sup_reduced" value="{{ $fee->fee_sup_reduced }}"></div>
             </div>
           </td>
-          <td class="col-1"><input type="text" class="form-control noformat text-center" name="currency" value="{{ $fee->currency }}"></td>
+          <td class="col-1 bg-transparent"><input class="form-control noformat text-center" name="currency" value="{{ $fee->currency }}"></td>
           {{-- <div class="col-1">{{ $fee->use_after }}</div>
           <div class="col-1">{{ $fee->use_before }}</div> --}}
         </tr>
