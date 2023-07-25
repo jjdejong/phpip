@@ -5,7 +5,7 @@
     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#actorOther">Other</button>
     <a class="nav-link" data-bs-toggle="tab" id="actorUsedInToggle" href="/actor/{{ $actorInfo->id }}/usedin" data-bs-target="#actorUsedIn">Used in</a>
     @canany(['admin', 'readwrite'])
-    <button id="deleteActor" title="Delete actor" class="nav-link btn btn-outline-danger"  data-url='/actor/{{ $actorInfo->id }}' data-message="the actor {{ $actorInfo->name }}">
+    <button id="deleteActor" title="Delete actor" class="nav-link btn btn-outline-danger" data-url='/actor/{{ $actorInfo->id }}' data-message="the actor {{ $actorInfo->name }}">
       Delete
     </button>
     @endcanany

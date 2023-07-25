@@ -226,7 +226,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           <div class="card p-0 border-primary reveal-hidden h-100">
             <div class="card-header {{ $matter->tasksPending->count() ? 'text-warning' : 'text-light' }} p-1 bg-primary">
               Open Tasks Due
-              <a class="text-warning text-decoration-none hidden-action float-end stretched-link" href="/matter/{{ $matter->id }}/tasks" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-lg" title="All tasks"><span class="">
+              <a class="text-warning text-decoration-none hidden-action float-end stretched-link" href="/matter/{{ $matter->id }}/tasks" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-lg" title="History"><span class="">
                 &equiv;
               </a>
             </div>
@@ -373,7 +373,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                   data-bs-toggle="modal"
                   data-bs-target="#ajaxModal"
                   data-size="modal-lg"
-                  title="Prepare an email">
+                  title="Send email">
                   &#9993; EN
               </a>
               <a class="badge text-bg-primary align-middle"
@@ -381,7 +381,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                   data-bs-toggle="modal"
                   data-bs-target="#ajaxModal"
                   data-size="modal-lg"
-                  title="Prepare an email">
+                  title="Envoyer un courriel">
                   &#9993; FR
               </a>
             </div>

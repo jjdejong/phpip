@@ -176,8 +176,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('template-category/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\TemplateMember::select('category as value', 'category as key')
-                        ->where('category', 'like', "$term%")->distinct()->get();
+        $list = App\TemplateMember::select('category as value', 'category as key')
+            ->where('category', 'like', "$term%")->distinct()->get();
+        if ($list->count() == 0) {
+            $list->push(['label' => "Create $term", 'key' => $term, 'value' => $term]);
+        }
+        return $list;
     });
 
     Route::get('template-class/autocomplete', function (Request $request) {
@@ -188,8 +192,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('template-style/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        return App\TemplateMember::select('style as value', 'style as key')
-                        ->where('style', 'like', "$term%")->distinct()->get();
+        $list = App\TemplateMember::select('style as value', 'style as key')
+            ->where('style', 'like', "$term%")->distinct()->get();
+        if ($list->count() == 0) {
+            $list->push(['label' => "Create $term", 'key' => $term, 'value' => $term]);
+        }
+        return $list;
     });
 
     Route::post('event/{event}/recreateTasks', function (App\Event $event) {

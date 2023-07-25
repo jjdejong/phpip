@@ -16,13 +16,13 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="table-primary align-middle">
-            <th class="border-top-0"><input class="form-control form-control-sm" data-source="/rule" name="Task" placeholder="Task"></th>
-            <th class="border-top-0"><input class="form-control form-control-sm" data-source="/rule" name="Detail" placeholder="Detail"></th>
-            <th class="border-top-0"><input class="form-control form-control-sm" data-source="/rule" name="Trigger" placeholder="Trigger event" /></th>
-            <th class="border-top-0"><input class="form-control form-control-sm" data-source="/rule" name="Category" placeholder="Category"></th>
-            <th class="border-top-0"><input class="form-control form-control-sm" data-source="/rule" name="Country" placeholder="Country"></th>
-            <th class="border-top-0"><input class="form-control form-control-sm" data-source="/rule" name="Origin" placeholder="Origin"></th>
-            <th class="border-top-0"><input class="form-control form-control-sm" data-source="/rule" name="Type" placeholder="Type"></th>
+            <th><input class="form-control form-control-sm" data-source="/rule" name="Task" placeholder="Task"></th>
+            <th><input class="form-control form-control-sm" data-source="/rule" name="Detail" placeholder="Detail"></th>
+            <th><input class="form-control form-control-sm" data-source="/rule" name="Trigger" placeholder="Trigger event" /></th>
+            <th><input class="form-control form-control-sm" data-source="/rule" name="Category" placeholder="Category"></th>
+            <th><input class="form-control form-control-sm" data-source="/rule" name="Country" placeholder="Country"></th>
+            <th><input class="form-control form-control-sm" data-source="/rule" name="Origin" placeholder="Origin"></th>
+            <th><input class="form-control form-control-sm" data-source="/rule" name="Type" placeholder="Type"></th>
           </tr>
         </thead>
         <tbody id="tableList">

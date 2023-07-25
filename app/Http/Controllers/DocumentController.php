@@ -138,9 +138,10 @@ class DocumentController extends Controller
   public function select(Matter $matter, Request $request) {
     $template_id = $request->input('template_id');
     //limit to actors with email
-    $contacts = MatterActors::where([['matter_id',$matter->id],['role_code','CNT']])->whereNotNull('email');
+    $contacts = MatterActors::where([['matter_id', $matter->id], ['role_code', 'CNT']])->whereNotNull('email');
     if($contacts->count() === 0) {
-      $contacts =  MatterActors::where([['matter_id',$matter->id]])->whereNotNull('email');
+      $contacts =  MatterActors::select('actor_id', 'name', 'display_name', 'first_name')
+        ->where([['matter_id', $matter->id]])->whereNotNull('email')->distinct();
     }
     $contacts = $contacts->get();
     $table = new Actor;
@@ -211,7 +212,7 @@ class DocumentController extends Controller
           });
     }
     $members = $members->get();
-    return view($view,compact('matter','members', 'contacts', 'tableComments','oldfilters','event','task'));
+    return view($view, compact('matter', 'members', 'contacts', 'tableComments', 'oldfilters', 'event', 'task'));
   }
 
   /*

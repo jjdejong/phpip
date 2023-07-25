@@ -38,17 +38,17 @@
           <span class="hidden-action float-end">
             <li class="list-inline-item">
               <a href="#" class="text-primary" id="addTaskToEvent" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
-                &CirclePlus;
+                <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#plus-circle-fill"/></svg>
               </a>
             </li>
             <li class="list-inline-item">
               <a href="#" class="text-danger" id="deleteEvent" data-event_id="{{ $event->id }}" title="Delete event (with tasks)">
-                &CircleTimes;
+                <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#trash-fill"/></svg>
               </a>
             </li>
             <li class="list-inline-item" style="font-size:1rem">
-              <a href="#" class="text-danger" id="regenerateTasks" data-event_id="{{ $event->id }}" title="Regenerate Tasks">
-                &#8623;
+              <a href="#" class="text-secondary" id="regenerateTasks" data-event_id="{{ $event->id }}" title="Regenerate Tasks">
+                <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#arrow-repeat"/></svg>
               </a>
             </li>
           </span>
@@ -56,9 +56,11 @@
         </ul>
       </td>
       @cannot('client')
-      <td class="text-center align-middle lead">
+      <td class="text-center align-middle">
         @if (count(App\EventName::where('code', $event->code)->first()->templates) != 0)
-          <a href="#" class="chooseTemplate text-info" data-url="/document/select/{{ $matter->id }}?EventName={{ $event->code }}&Event={{ $event->id }}">&#9993;</a>
+          <a href="#" class="chooseTemplate text-info" data-url="/document/select/{{ $matter->id }}?EventName={{ $event->code }}&Event={{ $event->id }}">
+            <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#envelope"/></svg>
+          </a>
         @endif
       </td>
       @endcannot
@@ -85,7 +87,9 @@
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"></td>
       <td>
         @canany(['admin', 'readwrite'])
-        <a href="#" class="hidden-action text-danger" id="deleteTask" title="Delete task">&CircleTimes;</a>
+        <a href="#" class="hidden-action text-danger" id="deleteTask" title="Delete task">
+          <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#trash"/></svg>
+        </a>
         @endcanany
       </td>
       @cannot('client')
@@ -100,7 +104,9 @@
   </tbody>
   @endforeach
 </table>
-<a class="badge text-bg-primary float-end" href="https://github.com/jjdejong/phpip/wiki/Events,-Deadlines-and-Tasks" target="_blank">?</a>
+<a class="float-end" href="https://github.com/jjdejong/phpip/wiki/Events,-Deadlines-and-Tasks" target="_blank">
+  <svg width="16" height="16" fill="currentColor" style="pointer-events: none"><use xlink:href="#question-circle-fill"/></svg>
+</a>
 
 <template id="addTaskFormTemplate">
   <tr>
