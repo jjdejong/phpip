@@ -268,7 +268,7 @@ app.addEventListener('click', (e) => {
 
     // Nationalize modal
     if (e.target.matches('#ncountries .btn-outline-danger')) {
-        e.target.parentNode.parentNode.remove();
+        e.target.parentNode.remove();
     }
 
     // Highlight the selected list item and load panel
