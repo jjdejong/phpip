@@ -23,17 +23,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Gate::define('client', function ($user) {
-            return $user->default_role === 'CLI';
-        });
-        Gate::define('admin', function ($user) {
-            return $user->default_role === 'DBA';
-        });
-        Gate::define('readonly', function ($user) {
-            return $user->default_role === 'DBRO' || !$user->default_role;
-        });
-        Gate::define('readwrite', function ($user) {
-            return $user->default_role === 'DBRW';
-        });
+        Gate::define('client', fn($user) => $user->default_role === 'CLI');
+        Gate::define('admin', fn($user) => $user->default_role === 'DBA');
+        Gate::define('readonly', fn($user) => $user->default_role === 'DBRO' || !$user->default_role);
+        Gate::define('readwrite', fn($user) => $user->default_role === 'DBRW');
     }
 }

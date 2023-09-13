@@ -998,13 +998,9 @@ class MatterController extends Controller
         $members = data_get($ops_response, 'ops:world-patent-data.ops:patent-family.ops:family-member');
         if (Arr::isList($members)) {
             // Sort members by increasing filing date and doc-id, so that the first is the priority application
-            $members = collect($members)->sortBy(function ($member) {
-                return $member['application-reference']['document-id']['date']['$'] .$member['application-reference']['@doc-id'];
-            });
+            $members = collect($members)->sortBy(fn($member) => $member['application-reference']['document-id']['date']['$'] .$member['application-reference']['@doc-id']);
             // Group all members by doc-id, so that publications and grants appear in a same record (yet as two arrays)
-            $members = collect($members)->groupBy(function ($member) {
-                return $member['application-reference']['@doc-id'];
-            });
+            $members = collect($members)->groupBy(fn($member) => $member['application-reference']['@doc-id']);
         } else {
             // Turn single element into a list of one element
             $members = [$members['application-reference']['@doc-id'] => [0 => $members]];

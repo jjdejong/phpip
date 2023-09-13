@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', fn() => view('welcome'));
 
 Auth::routes(['register' => false]);
 
@@ -41,9 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('matter/{matter}/roleActors/{role}', 'MatterController@actors');
     Route::get('matter/{matter}/description/{lang}', 'MatterController@description');
     Route::get('matter/{matter}/info', 'MatterController@info');
-    Route::get('matter/{parent_matter}/createN', function (Matter $parent_matter) {
-        return view('matter.createN', compact('parent_matter'));
-    });
+    Route::get('matter/{parent_matter}/createN', fn(Matter $parent_matter) => view('matter.createN', compact('parent_matter')));
     Route::post('matter/storeN', 'MatterController@storeN');
     Route::get('matter/getOPSfamily/{docnum}', 'MatterController@getOPSfamily');
     Route::post('matter/storeFamily', 'MatterController@storeFamily');
@@ -169,10 +165,8 @@ Route::group(['middleware' => 'auth'], function () {
             ->orWhere('code', 'like', "$term%")->get();
     });
 
-    Route::get('classifier/{classifier}/img', function (App\Classifier $classifier) {
-        return response($classifier->img)
-            ->header('Content-Type', $classifier->value);
-    });
+    Route::get('classifier/{classifier}/img', fn(App\Classifier $classifier) => response($classifier->img)
+        ->header('Content-Type', $classifier->value));
 
     Route::get('template-category/autocomplete', function (Request $request) {
         $term = $request->input('term');
@@ -200,9 +194,7 @@ Route::group(['middleware' => 'auth'], function () {
         return $list;
     });
 
-    Route::post('event/{event}/recreateTasks', function (App\Event $event) {
-        return DB::statement('CALL recreate_tasks(?, ?)', [$event->id, Auth::user()->login]);
-    });
+    Route::post('event/{event}/recreateTasks', fn(App\Event $event) => DB::statement('CALL recreate_tasks(?, ?)', [$event->id, Auth::user()->login]));
 
     Route::resource('matter', 'MatterController');
     Route::apiResource('task', 'TaskController');
