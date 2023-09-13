@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class EventNameTableSeeder extends Seeder
@@ -9,7 +10,7 @@ class EventNameTableSeeder extends Seeder
 
     public function run()
     {
-        \DB::table('event_name')->insertOrIgnore(array (
+        DB::table('event_name')->insertOrIgnore(array (
 
             array (
                 'code' => 'ABA',

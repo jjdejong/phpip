@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class TaskSampleSeeder extends Seeder
@@ -9,6 +10,6 @@ class TaskSampleSeeder extends Seeder
     public function run()
     {
       require 'task-sample.php';
-      \DB::table('task')->insertOrIgnore($task);
+      DB::table('task')->insertOrIgnore($task);
     }
 }

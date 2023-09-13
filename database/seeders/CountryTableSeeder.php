@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class CountryTableSeeder extends Seeder
@@ -10,7 +11,7 @@ class CountryTableSeeder extends Seeder
     public function run()
     {
 
-        \DB::table('country')->insertOrIgnore(array (
+        DB::table('country')->insertOrIgnore(array (
 
             array (
                 'numcode' => 20,

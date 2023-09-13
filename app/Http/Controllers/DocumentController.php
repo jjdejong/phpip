@@ -11,8 +11,8 @@ use App\MatterActors;
 use App\TemplateClass;
 use App\Event;
 use App\Task;
-use Log;
-use DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Illuminate\Support\Facades\Blade;
 

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class ActorTableSeeder extends Seeder
@@ -9,7 +10,7 @@ class ActorTableSeeder extends Seeder
 
     public function run()
     {
-        \DB::table('actor')->insertOrIgnore([
+        DB::table('actor')->insertOrIgnore([
 
             [
                 'id' => 1,

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class ActorRoleTableSeeder extends Seeder
@@ -9,7 +10,7 @@ class ActorRoleTableSeeder extends Seeder
 
     public function run()
     {
-        \DB::table('actor_role')->insertOrIgnore([
+        DB::table('actor_role')->insertOrIgnore([
 
             [
                 'code' => 'AGT',

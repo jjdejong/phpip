@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class TaskRulesTableSeeder extends Seeder
@@ -9,7 +10,7 @@ class TaskRulesTableSeeder extends Seeder
 
     public function run()
     {
-        \DB::table('task_rules')->insertOrIgnore([
+        DB::table('task_rules')->insertOrIgnore([
 
             [
                 'id' => 1,

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class MatterCategoryTableSeeder extends Seeder
@@ -9,7 +10,7 @@ class MatterCategoryTableSeeder extends Seeder
 
     public function run()
     {
-        \DB::table('matter_category')->insertOrIgnore([
+        DB::table('matter_category')->insertOrIgnore([
 
             [
                 'code' => 'AGR',

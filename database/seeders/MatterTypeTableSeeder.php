@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class MatterTypeTableSeeder extends Seeder
@@ -9,7 +10,7 @@ class MatterTypeTableSeeder extends Seeder
 
     public function run()
     {
-        \DB::table('matter_type')->insertOrIgnore([
+        DB::table('matter_type')->insertOrIgnore([
 
             [
                 'code' => 'CIP',

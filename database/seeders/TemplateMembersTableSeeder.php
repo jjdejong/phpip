@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class TemplateMembersTableSeeder extends Seeder
@@ -9,7 +10,7 @@ class TemplateMembersTableSeeder extends Seeder
 
     public function run()
     {
-        \DB::table('template_members')->insertOrIgnore([
+        DB::table('template_members')->insertOrIgnore([
 
             [
                 'id' => 1,

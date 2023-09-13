@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class ClassifierTypeTableSeeder extends Seeder
@@ -9,7 +10,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
     public function run()
     {
-        \DB::table('classifier_type')->insertOrIgnore([
+        DB::table('classifier_type')->insertOrIgnore([
 
             [
                 'code' => 'ABS',

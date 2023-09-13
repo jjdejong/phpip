@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class FeesTableSeeder extends Seeder
@@ -9,7 +10,7 @@ class FeesTableSeeder extends Seeder
 
     public function run()
     {
-        \DB::table('fees')->insertOrIgnore([
+        DB::table('fees')->insertOrIgnore([
 
             [
                 'id' => 1,
