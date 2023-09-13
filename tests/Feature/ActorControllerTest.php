@@ -43,7 +43,7 @@ class ActorControllerTest extends TestCase
         // Autocompletion
         $response = $this->call('GET','/actor/autocomplete?term=Tes');
         $response->assertStatus(200)
-          ->assertJson( [0 => array(
-            'value' => 'Tesla Motors Inc.')]);
+          ->assertJson( [0 => [
+            'value' => 'Tesla Motors Inc.']]);
     }
 }

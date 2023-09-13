@@ -45,8 +45,8 @@ class RuleControllerTest extends TestCase
         // Autocompletion
         $response = $this->call('GET','/task-name/autocomplete/1?term=national');
         $response->assertStatus(200)
-          ->assertJson( [0 => array(
+          ->assertJson( [0 => [
             'value' => 'NPH',
-            'label' => 'National Phase')]);
+            'label' => 'National Phase']]);
     }
 }

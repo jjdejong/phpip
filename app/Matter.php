@@ -565,7 +565,7 @@ class Matter extends Model
             JOIN classifier_type ct2 ON tit2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit2.matter_id')
         ->where('matter.id', $id);
         $info = $query->first();
-        $description = array();
+        $description = [];
         $filed_date = Carbon::parse($info['Filed']);
         $granted_date = Carbon::parse($info['Granted']);
         $published_date = Carbon::parse($info['Published']);

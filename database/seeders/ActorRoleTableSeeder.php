@@ -14,9 +14,9 @@ class ActorRoleTableSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('actor_role')->insertOrIgnore(array(
+        \DB::table('actor_role')->insertOrIgnore([
 
-            array(
+            [
                 'code' => 'AGT',
                 'name' => 'Primary Agent',
                 'display_order' => 20,
@@ -30,9 +30,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'AGT2',
                 'name' => 'Secondary Agent',
                 'display_order' => 22,
@@ -46,9 +46,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'ANN',
                 'name' => 'Annuity Agent',
                 'display_order' => 21,
@@ -62,9 +62,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'APP',
                 'name' => 'Applicant',
                 'display_order' => 3,
@@ -78,9 +78,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'CLI',
                 'name' => 'Client',
                 'display_order' => 1,
@@ -94,9 +94,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'CNT',
                 'name' => 'Contact',
                 'display_order' => 30,
@@ -110,9 +110,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'DBA',
                 'name' => 'DB Administrator',
                 'display_order' => 127,
@@ -126,9 +126,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'DBRO',
                 'name' => 'DB Read-Only',
                 'display_order' => 127,
@@ -142,9 +142,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'DBRW',
                 'name' => 'DB Read/Write',
                 'display_order' => 127,
@@ -158,9 +158,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'DEL',
                 'name' => 'Delegate',
                 'display_order' => 31,
@@ -174,9 +174,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'FAGT',
                 'name' => 'Former Agent',
                 'display_order' => 23,
@@ -190,9 +190,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'FOWN',
                 'name' => 'Former Owner',
                 'display_order' => 5,
@@ -206,9 +206,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'INV',
                 'name' => 'Inventor',
                 'display_order' => 10,
@@ -222,9 +222,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'LCN',
                 'name' => 'Licensee',
                 'display_order' => 127,
@@ -238,9 +238,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'OFF',
                 'name' => 'Patent Office',
                 'display_order' => 127,
@@ -254,9 +254,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'OPP',
                 'name' => 'Opposing Party',
                 'display_order' => 127,
@@ -270,9 +270,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'OWN',
                 'name' => 'Owner',
                 'display_order' => 4,
@@ -286,9 +286,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'PAY',
                 'name' => 'Payor',
                 'display_order' => 2,
@@ -302,9 +302,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'PTNR',
                 'name' => 'Partner',
                 'display_order' => 127,
@@ -318,9 +318,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'TRA',
                 'name' => 'Translator',
                 'display_order' => 127,
@@ -334,9 +334,9 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'WRI',
                 'name' => 'Writer',
                 'display_order' => 127,
@@ -350,7 +350,7 @@ class ActorRoleTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
-        ));
+            ],
+        ]);
     }
 }

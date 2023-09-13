@@ -14,9 +14,9 @@ class MatterCategoryTableSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('matter_category')->insertOrIgnore(array(
+        \DB::table('matter_category')->insertOrIgnore([
 
-            array(
+            [
                 'code' => 'AGR',
                 'ref_prefix' => 'AGR',
                 'category' => 'Agreement',
@@ -25,9 +25,9 @@ class MatterCategoryTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'DSG',
                 'ref_prefix' => 'DSG',
                 'category' => 'Design',
@@ -36,9 +36,9 @@ class MatterCategoryTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'FTO',
                 'ref_prefix' => 'OPI',
                 'category' => 'Freedom to Operate',
@@ -47,9 +47,9 @@ class MatterCategoryTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'LTG',
                 'ref_prefix' => 'LTG',
                 'category' => 'Litigation',
@@ -58,9 +58,9 @@ class MatterCategoryTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'code' => 'OP',
                 'ref_prefix' => 'OPP',
                 'category' => 'Opposition (patent]',
@@ -69,9 +69,9 @@ class MatterCategoryTableSeeder extends Seeder
                     'updater' => null,
                     'created_at' => now(),
                     'updated_at' => now(),
-                ),
+                ],
 
-                array(
+                [
                     'code' => 'OPI',
                     'ref_prefix' => 'OPI',
                     'category' => 'Opinion',
@@ -80,9 +80,9 @@ class MatterCategoryTableSeeder extends Seeder
                     'updater' => null,
                     'created_at' => now(),
                     'updated_at' => now(),
-                ),
+                ],
 
-                array(
+                [
                     'code' => 'OTH',
                     'ref_prefix' => 'OTH',
                     'category' => 'Others',
@@ -91,9 +91,9 @@ class MatterCategoryTableSeeder extends Seeder
                     'updater' => null,
                     'created_at' => now(),
                     'updated_at' => now(),
-                ),
+                ],
 
-                array(
+                [
                     'code' => 'PAT',
                     'ref_prefix' => 'PAT',
                     'category' => 'Patent',
@@ -102,9 +102,9 @@ class MatterCategoryTableSeeder extends Seeder
                     'updater' => null,
                     'created_at' => now(),
                     'updated_at' => now(),
-                ),
+                ],
 
-                array(
+                [
                     'code' => 'SO',
                     'ref_prefix' => 'PAT',
                     'category' => 'Soleau Envelop',
@@ -113,9 +113,9 @@ class MatterCategoryTableSeeder extends Seeder
                     'updater' => null,
                     'created_at' => now(),
                     'updated_at' => now(),
-                ),
+                ],
 
-                array(
+                [
                     'code' => 'SR',
                     'ref_prefix' => 'SR-',
                     'category' => 'Search',
@@ -124,9 +124,9 @@ class MatterCategoryTableSeeder extends Seeder
                     'updater' => null,
                     'created_at' => now(),
                     'updated_at' => now(),
-                ),
+                ],
 
-                array(
+                [
                     'code' => 'TM',
                     'ref_prefix' => 'TM-',
                     'category' => 'Trademark',
@@ -135,9 +135,9 @@ class MatterCategoryTableSeeder extends Seeder
                     'updater' => null,
                     'created_at' => now(),
                     'updated_at' => now(),
-                ),
+                ],
 
-                array(
+                [
                     'code' => 'TMOP',
                     'ref_prefix' => 'TOP',
                     'category' => 'Opposition (TM]',
@@ -146,9 +146,9 @@ class MatterCategoryTableSeeder extends Seeder
                         'updater' => null,
                         'created_at' => now(),
                         'updated_at' => now(),
-                    ),
+                    ],
 
-                    array(
+                    [
                         'code' => 'TS',
                         'ref_prefix' => 'TS-',
                         'category' => 'Trade Secret',
@@ -157,9 +157,9 @@ class MatterCategoryTableSeeder extends Seeder
                         'updater' => null,
                         'created_at' => now(),
                         'updated_at' => now(),
-                    ),
+                    ],
 
-                    array(
+                    [
                         'code' => 'UC',
                         'ref_prefix' => 'PAT',
                         'category' => 'Utility Certificate',
@@ -168,9 +168,9 @@ class MatterCategoryTableSeeder extends Seeder
                         'updater' => null,
                         'created_at' => now(),
                         'updated_at' => now(),
-                    ),
+                    ],
 
-                    array(
+                    [
                         'code' => 'UM',
                         'ref_prefix' => 'PAT',
                         'category' => 'Utility Model',
@@ -179,9 +179,9 @@ class MatterCategoryTableSeeder extends Seeder
                         'updater' => null,
                         'created_at' => now(),
                         'updated_at' => now(),
-                    ),
+                    ],
 
-                    array(
+                    [
                         'code' => 'WAT',
                         'ref_prefix' => 'WAT',
                         'category' => 'Watch',
@@ -190,7 +190,7 @@ class MatterCategoryTableSeeder extends Seeder
                         'updater' => null,
                         'created_at' => now(),
                         'updated_at' => now(),
-                    ),
-                ));
+                    ],
+                ]);
     }
 }

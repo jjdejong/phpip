@@ -1,6 +1,6 @@
 <?php
-$actor = array(
-  array('id' => '124',
+$actor = [
+  ['id' => '124',
   'name' => 'Tesla Motors Inc.',
   'first_name' => NULL,
   'display_name' => 'Tesla',
@@ -28,9 +28,9 @@ $actor = array(
   'warn' => '0',
   'notes' => 'TEST DATA',
   'VAT_number' => NULL,
-  'remember_token' => NULL),
+  'remember_token' => NULL],
 
-  array('id' => '125',
+  ['id' => '125',
   'name' => 'BAGLINO Andrew D.',
   'first_name' => NULL,
   'display_name' => NULL,
@@ -58,9 +58,9 @@ $actor = array(
   'warn' => '0',
   'notes' => 'TEST DATA',
   'VAT_number' => NULL,
-  'remember_token' => NULL),
+  'remember_token' => NULL],
 
-  array('id' => '126',
+  ['id' => '126',
   'name' => 'HAYER',
   'first_name' => 'Thorsten',
   'display_name' => 'HAYER Thorsten',
@@ -88,9 +88,9 @@ $actor = array(
   'warn' => '0',
   'notes' => 'TEST DATA',
   'VAT_number' => NULL,
-  'remember_token' => NULL),
+  'remember_token' => NULL],
 
-  array('id' => '127',
+  ['id' => '127',
   'name' => 'BOBLETT Brennan',
   'first_name' => NULL,
   'display_name' => 'BOBLET',
@@ -118,9 +118,9 @@ $actor = array(
   'warn' => '0',
   'notes' => 'TEST DATA',
   'VAT_number' => NULL,
-  'remember_token' => NULL),
+  'remember_token' => NULL],
 
-  array('id' => '128',
+  ['id' => '128',
   'name' => 'Boehmert & Boehmert',
   'first_name' => NULL,
   'display_name' => 'Boehmert',
@@ -148,9 +148,9 @@ $actor = array(
   'warn' => '0',
   'notes' => 'Blabla',
   'VAT_number' => 'Vat no.',
-  'remember_token' => NULL),
+  'remember_token' => NULL],
 
-  array('id' => '129',
+  ['id' => '129',
   'name' => 'SODERBERG Richard',
   'first_name' => NULL,
   'display_name' => NULL,
@@ -178,9 +178,9 @@ $actor = array(
   'warn' => '0',
   'notes' => NULL,
   'VAT_number' => NULL,
-  'remember_token' => NULL),
+  'remember_token' => NULL],
 
-  array('id' => '130',
+  ['id' => '130',
   'name' => 'Texas Patents',
   'first_name' => NULL,
   'display_name' => NULL,
@@ -208,5 +208,5 @@ $actor = array(
   'warn' => '0',
   'notes' => NULL,
   'VAT_number' => NULL,
-  'remember_token' => NULL)
-);
+  'remember_token' => NULL]
+];

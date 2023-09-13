@@ -14,9 +14,9 @@ class TaskRulesTableSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('task_rules')->insertOrIgnore(array(
+        \DB::table('task_rules')->insertOrIgnore([
 
-            array(
+            [
                 'id' => 1,
                 'active' => 1,
                 'task' => 'PRID',
@@ -47,9 +47,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 2,
                 'active' => 1,
                 'task' => 'PRID',
@@ -80,9 +80,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 3,
                 'active' => 1,
                 'task' => 'FBY',
@@ -113,9 +113,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 5,
                 'active' => 1,
                 'task' => 'DBY',
@@ -146,9 +146,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 6,
                 'active' => 1,
                 'task' => 'REQ',
@@ -179,9 +179,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 7,
                 'active' => 1,
                 'task' => 'REQ',
@@ -212,9 +212,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 8,
                 'active' => 1,
                 'task' => 'EXP',
@@ -245,9 +245,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 9,
                 'active' => 1,
                 'task' => 'REP',
@@ -278,9 +278,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 10,
                 'active' => 1,
                 'task' => 'REP',
@@ -311,9 +311,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 11,
                 'active' => 1,
                 'task' => 'REP',
@@ -344,9 +344,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 12,
                 'active' => 1,
                 'task' => 'EXP',
@@ -377,9 +377,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 13,
                 'active' => 1,
                 'task' => 'REP',
@@ -410,9 +410,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 14,
                 'active' => 1,
                 'task' => 'PAY',
@@ -443,9 +443,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 15,
                 'active' => 1,
                 'task' => 'PROD',
@@ -476,9 +476,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 16,
                 'active' => 1,
                 'task' => 'VAL',
@@ -509,9 +509,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 18,
                 'active' => 1,
                 'task' => 'REP',
@@ -542,9 +542,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 19,
                 'active' => 1,
                 'task' => 'PAY',
@@ -575,9 +575,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 20,
                 'active' => 1,
                 'task' => 'PROD',
@@ -608,9 +608,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 21,
                 'active' => 1,
                 'task' => 'FBY',
@@ -641,9 +641,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 22,
                 'active' => 1,
                 'task' => 'NPH',
@@ -674,9 +674,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 23,
                 'active' => 1,
                 'task' => 'REQ',
@@ -707,9 +707,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 24,
                 'active' => 1,
                 'task' => 'DBY',
@@ -740,9 +740,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 25,
                 'active' => 1,
                 'task' => 'PRID',
@@ -773,9 +773,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 26,
                 'active' => 1,
                 'task' => 'EHK',
@@ -806,9 +806,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 27,
                 'active' => 1,
                 'task' => 'FOP',
@@ -839,9 +839,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 29,
                 'active' => 1,
                 'task' => 'DBY',
@@ -872,9 +872,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 30,
                 'active' => 1,
                 'task' => 'PROD',
@@ -905,9 +905,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 33,
                 'active' => 1,
                 'task' => 'EXP',
@@ -938,9 +938,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 34,
                 'active' => 1,
                 'task' => 'REM',
@@ -971,9 +971,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 35,
                 'active' => 1,
                 'task' => 'PROD',
@@ -1004,9 +1004,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 36,
                 'active' => 1,
                 'task' => 'PAY',
@@ -1037,9 +1037,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 37,
                 'active' => 1,
                 'task' => 'REP',
@@ -1070,9 +1070,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 38,
                 'active' => 1,
                 'task' => 'FOP',
@@ -1103,9 +1103,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 39,
                 'active' => 1,
                 'task' => 'PAY',
@@ -1136,9 +1136,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 40,
                 'active' => 1,
                 'task' => 'FPR',
@@ -1169,9 +1169,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 41,
                 'active' => 1,
                 'task' => 'REP',
@@ -1202,9 +1202,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 42,
                 'active' => 1,
                 'task' => 'NPH',
@@ -1235,9 +1235,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 43,
                 'active' => 1,
                 'task' => 'PAY',
@@ -1268,9 +1268,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 44,
                 'active' => 1,
                 'task' => 'PAY',
@@ -1301,9 +1301,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 45,
                 'active' => 1,
                 'task' => 'VAL',
@@ -1334,9 +1334,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 46,
                 'active' => 1,
                 'task' => 'REP',
@@ -1367,9 +1367,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 47,
                 'active' => 1,
                 'task' => 'REP',
@@ -1400,9 +1400,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 48,
                 'active' => 1,
                 'task' => 'FAP',
@@ -1433,9 +1433,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 49,
                 'active' => 1,
                 'task' => 'PROD',
@@ -1466,9 +1466,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 52,
                 'active' => 1,
                 'task' => 'REP',
@@ -1499,9 +1499,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 53,
                 'active' => 1,
                 'task' => 'REQ',
@@ -1532,9 +1532,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 54,
                 'active' => 1,
                 'task' => 'REQ',
@@ -1565,9 +1565,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 55,
                 'active' => 1,
                 'task' => 'REQ',
@@ -1598,9 +1598,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 56,
                 'active' => 1,
                 'task' => 'PAY',
@@ -1631,9 +1631,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 57,
                 'active' => 1,
                 'task' => 'PROD',
@@ -1664,9 +1664,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 58,
                 'active' => 1,
                 'task' => 'PAY',
@@ -1697,9 +1697,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 60,
                 'active' => 1,
                 'task' => 'REM',
@@ -1730,9 +1730,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 61,
                 'active' => 1,
                 'task' => 'REP',
@@ -1763,9 +1763,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 62,
                 'active' => 1,
                 'task' => 'REP',
@@ -1796,9 +1796,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 63,
                 'active' => 1,
                 'task' => 'REM',
@@ -1829,9 +1829,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 64,
                 'active' => 1,
                 'task' => 'REM',
@@ -1862,9 +1862,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 65,
                 'active' => 1,
                 'task' => 'FBY',
@@ -1895,9 +1895,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 66,
                 'active' => 1,
                 'task' => 'PAY',
@@ -1928,9 +1928,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 67,
                 'active' => 1,
                 'task' => 'REQ',
@@ -1961,9 +1961,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 68,
                 'active' => 1,
                 'task' => 'PAY',
@@ -1994,9 +1994,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 69,
                 'active' => 1,
                 'task' => 'REP',
@@ -2027,9 +2027,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 70,
                 'active' => 1,
                 'task' => 'REQ',
@@ -2060,9 +2060,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 80,
                 'active' => 1,
                 'task' => 'REN',
@@ -2093,9 +2093,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 81,
                 'active' => 1,
                 'task' => 'REN',
@@ -2126,9 +2126,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 102,
                 'active' => 1,
                 'task' => 'REN',
@@ -2159,9 +2159,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 103,
                 'active' => 1,
                 'task' => 'REN',
@@ -2192,9 +2192,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 104,
                 'active' => 1,
                 'task' => 'REN',
@@ -2225,9 +2225,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 105,
                 'active' => 1,
                 'task' => 'REN',
@@ -2258,9 +2258,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 106,
                 'active' => 1,
                 'task' => 'REN',
@@ -2291,9 +2291,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 107,
                 'active' => 1,
                 'task' => 'REN',
@@ -2324,9 +2324,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 108,
                 'active' => 1,
                 'task' => 'REN',
@@ -2357,9 +2357,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 109,
                 'active' => 1,
                 'task' => 'REN',
@@ -2390,9 +2390,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 110,
                 'active' => 1,
                 'task' => 'REN',
@@ -2423,9 +2423,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 111,
                 'active' => 1,
                 'task' => 'REN',
@@ -2456,9 +2456,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 112,
                 'active' => 1,
                 'task' => 'REN',
@@ -2489,9 +2489,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 113,
                 'active' => 1,
                 'task' => 'REN',
@@ -2522,9 +2522,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 114,
                 'active' => 1,
                 'task' => 'REN',
@@ -2555,9 +2555,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 115,
                 'active' => 1,
                 'task' => 'REN',
@@ -2588,9 +2588,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 116,
                 'active' => 1,
                 'task' => 'REN',
@@ -2621,9 +2621,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 117,
                 'active' => 1,
                 'task' => 'REN',
@@ -2654,9 +2654,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 118,
                 'active' => 1,
                 'task' => 'REN',
@@ -2687,9 +2687,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 119,
                 'active' => 1,
                 'task' => 'REN',
@@ -2720,9 +2720,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 120,
                 'active' => 1,
                 'task' => 'REN',
@@ -2753,9 +2753,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 203,
                 'active' => 1,
                 'task' => 'REN',
@@ -2786,9 +2786,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 204,
                 'active' => 1,
                 'task' => 'REN',
@@ -2819,9 +2819,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 205,
                 'active' => 1,
                 'task' => 'REN',
@@ -2852,9 +2852,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 206,
                 'active' => 1,
                 'task' => 'REN',
@@ -2885,9 +2885,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 207,
                 'active' => 1,
                 'task' => 'REN',
@@ -2918,9 +2918,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 208,
                 'active' => 1,
                 'task' => 'REN',
@@ -2951,9 +2951,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 209,
                 'active' => 1,
                 'task' => 'REN',
@@ -2984,9 +2984,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 210,
                 'active' => 1,
                 'task' => 'REN',
@@ -3017,9 +3017,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 211,
                 'active' => 1,
                 'task' => 'REN',
@@ -3050,9 +3050,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 212,
                 'active' => 1,
                 'task' => 'REN',
@@ -3083,9 +3083,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 213,
                 'active' => 1,
                 'task' => 'REN',
@@ -3116,9 +3116,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 214,
                 'active' => 1,
                 'task' => 'REN',
@@ -3149,9 +3149,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 215,
                 'active' => 1,
                 'task' => 'REN',
@@ -3182,9 +3182,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 216,
                 'active' => 1,
                 'task' => 'REN',
@@ -3215,9 +3215,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 217,
                 'active' => 1,
                 'task' => 'REN',
@@ -3248,9 +3248,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 218,
                 'active' => 1,
                 'task' => 'REN',
@@ -3281,9 +3281,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 219,
                 'active' => 1,
                 'task' => 'REN',
@@ -3314,9 +3314,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 220,
                 'active' => 1,
                 'task' => 'REN',
@@ -3347,9 +3347,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 234,
                 'active' => 1,
                 'task' => 'PAY',
@@ -3380,9 +3380,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 235,
                 'active' => 1,
                 'task' => 'REP',
@@ -3413,9 +3413,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 236,
                 'active' => 1,
                 'task' => 'PAY',
@@ -3446,9 +3446,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 237,
                 'active' => 1,
                 'task' => 'PROD',
@@ -3479,9 +3479,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 238,
                 'active' => 1,
                 'task' => 'WAT',
@@ -3512,9 +3512,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 239,
                 'active' => 1,
                 'task' => 'WAT',
@@ -3545,9 +3545,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 240,
                 'active' => 1,
                 'task' => 'WAT',
@@ -3578,9 +3578,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 242,
                 'active' => 1,
                 'task' => 'PROD',
@@ -3611,9 +3611,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 300,
                 'active' => 1,
                 'task' => 'REN',
@@ -3644,9 +3644,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 301,
                 'active' => 1,
                 'task' => 'REN',
@@ -3677,9 +3677,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 302,
                 'active' => 1,
                 'task' => 'REN',
@@ -3710,9 +3710,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 303,
                 'active' => 1,
                 'task' => 'REN',
@@ -3743,9 +3743,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 304,
                 'active' => 1,
                 'task' => 'REN',
@@ -3776,9 +3776,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 305,
                 'active' => 1,
                 'task' => 'REN',
@@ -3809,9 +3809,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 306,
                 'active' => 1,
                 'task' => 'REN',
@@ -3842,9 +3842,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 307,
                 'active' => 1,
                 'task' => 'REN',
@@ -3875,9 +3875,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 308,
                 'active' => 1,
                 'task' => 'REN',
@@ -3908,9 +3908,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 310,
                 'active' => 1,
                 'task' => 'REN',
@@ -3941,9 +3941,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 311,
                 'active' => 1,
                 'task' => 'REN',
@@ -3974,9 +3974,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 312,
                 'active' => 1,
                 'task' => 'REN',
@@ -4007,9 +4007,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
  
-            array(
+            [
                 'id' => 1001,
                 'active' => 1,
                 'task' => 'REN',
@@ -4040,9 +4040,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1002,
                 'active' => 1,
                 'task' => 'REN',
@@ -4073,9 +4073,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1003,
                 'active' => 1,
                 'task' => 'REN',
@@ -4106,9 +4106,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1004,
                 'active' => 1,
                 'task' => 'REN',
@@ -4139,9 +4139,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1005,
                 'active' => 1,
                 'task' => 'REN',
@@ -4172,9 +4172,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1011,
                 'active' => 1,
                 'task' => 'REN',
@@ -4205,9 +4205,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1012,
                 'active' => 1,
                 'task' => 'REN',
@@ -4238,9 +4238,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1013,
                 'active' => 1,
                 'task' => 'REN',
@@ -4271,9 +4271,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1081,
                 'active' => 1,
                 'task' => 'REN',
@@ -4304,9 +4304,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1082,
                 'active' => 1,
                 'task' => 'REN',
@@ -4337,9 +4337,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1083,
                 'active' => 1,
                 'task' => 'REN',
@@ -4370,9 +4370,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1084,
                 'active' => 1,
                 'task' => 'REN',
@@ -4403,9 +4403,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1085,
                 'active' => 1,
                 'task' => 'REN',
@@ -4436,9 +4436,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1091,
                 'active' => 1,
                 'task' => 'REN',
@@ -4469,9 +4469,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1092,
                 'active' => 1,
                 'task' => 'REN',
@@ -4502,9 +4502,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1093,
                 'active' => 1,
                 'task' => 'REN',
@@ -4535,9 +4535,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1094,
                 'active' => 1,
                 'task' => 'REN',
@@ -4568,9 +4568,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1101,
                 'active' => 1,
                 'task' => 'REN',
@@ -4601,9 +4601,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1102,
                 'active' => 1,
                 'task' => 'REN',
@@ -4634,9 +4634,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1103,
                 'active' => 1,
                 'task' => 'REN',
@@ -4667,9 +4667,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1104,
                 'active' => 1,
                 'task' => 'REN',
@@ -4700,9 +4700,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1121,
                 'active' => 1,
                 'task' => 'REN',
@@ -4733,9 +4733,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1122,
                 'active' => 1,
                 'task' => 'REN',
@@ -4766,9 +4766,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1123,
                 'active' => 1,
                 'task' => 'REN',
@@ -4799,9 +4799,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1124,
                 'active' => 1,
                 'task' => 'REN',
@@ -4832,9 +4832,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1131,
                 'active' => 1,
                 'task' => 'REN',
@@ -4865,9 +4865,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1132,
                 'active' => 1,
                 'task' => 'REN',
@@ -4898,9 +4898,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1133,
                 'active' => 1,
                 'task' => 'REN',
@@ -4931,9 +4931,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1134,
                 'active' => 1,
                 'task' => 'REN',
@@ -4964,9 +4964,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1181,
                 'active' => 1,
                 'task' => 'PROD',
@@ -4997,9 +4997,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1182,
                 'active' => 1,
                 'task' => 'PROD',
@@ -5030,9 +5030,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1183,
                 'active' => 1,
                 'task' => 'PROD',
@@ -5063,9 +5063,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1184,
                 'active' => 1,
                 'task' => 'PAY',
@@ -5096,9 +5096,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1185,
                 'active' => 1,
                 'task' => 'PAY',
@@ -5129,9 +5129,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1186,
                 'active' => 1,
                 'task' => 'REP',
@@ -5162,9 +5162,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1187,
                 'active' => 1,
                 'task' => 'REP',
@@ -5195,9 +5195,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1188,
                 'active' => 1,
                 'task' => 'REP',
@@ -5228,9 +5228,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1189,
                 'active' => 1,
                 'task' => 'REN',
@@ -5261,9 +5261,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1190,
                 'active' => 1,
                 'task' => 'REN',
@@ -5294,9 +5294,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1191,
                 'active' => 1,
                 'task' => 'REN',
@@ -5327,9 +5327,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1192,
                 'active' => 1,
                 'task' => 'REN',
@@ -5360,9 +5360,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1193,
                 'active' => 1,
                 'task' => 'REN',
@@ -5393,9 +5393,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1194,
                 'active' => 1,
                 'task' => 'REN',
@@ -5426,9 +5426,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1195,
                 'active' => 1,
                 'task' => 'REN',
@@ -5459,9 +5459,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1196,
                 'active' => 1,
                 'task' => 'REN',
@@ -5492,9 +5492,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1197,
                 'active' => 1,
                 'task' => 'REN',
@@ -5525,9 +5525,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1198,
                 'active' => 1,
                 'task' => 'REN',
@@ -5558,9 +5558,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1211,
                 'active' => 1,
                 'task' => 'REN',
@@ -5591,9 +5591,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1212,
                 'active' => 1,
                 'task' => 'REN',
@@ -5624,9 +5624,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1213,
                 'active' => 1,
                 'task' => 'REN',
@@ -5657,9 +5657,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1214,
                 'active' => 1,
                 'task' => 'REN',
@@ -5690,9 +5690,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1215,
                 'active' => 1,
                 'task' => 'REN',
@@ -5723,9 +5723,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1216,
                 'active' => 1,
                 'task' => 'REN',
@@ -5756,9 +5756,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1217,
                 'active' => 1,
                 'task' => 'REN',
@@ -5789,9 +5789,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1218,
                 'active' => 1,
                 'task' => 'REN',
@@ -5822,9 +5822,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1219,
                 'active' => 1,
                 'task' => 'REN',
@@ -5855,9 +5855,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1220,
                 'active' => 1,
                 'task' => 'REN',
@@ -5888,9 +5888,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1221,
                 'active' => 1,
                 'task' => 'REN',
@@ -5921,9 +5921,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1222,
                 'active' => 1,
                 'task' => 'REN',
@@ -5954,9 +5954,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1223,
                 'active' => 1,
                 'task' => 'REN',
@@ -5987,9 +5987,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1224,
                 'active' => 1,
                 'task' => 'REN',
@@ -6020,9 +6020,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1225,
                 'active' => 1,
                 'task' => 'REN',
@@ -6053,9 +6053,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1230,
                 'active' => 1,
                 'task' => 'REN',
@@ -6086,9 +6086,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1231,
                 'active' => 1,
                 'task' => 'REN',
@@ -6119,9 +6119,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1232,
                 'active' => 1,
                 'task' => 'REN',
@@ -6152,9 +6152,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1233,
                 'active' => 1,
                 'task' => 'REN',
@@ -6185,9 +6185,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1234,
                 'active' => 1,
                 'task' => 'REN',
@@ -6218,9 +6218,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1235,
                 'active' => 1,
                 'task' => 'REN',
@@ -6251,9 +6251,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1237,
                 'active' => 1,
                 'task' => 'REP',
@@ -6284,9 +6284,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1238,
                 'active' => 1,
                 'task' => 'REP',
@@ -6317,9 +6317,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1239,
                 'active' => 1,
                 'task' => 'REP',
@@ -6350,9 +6350,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1240,
                 'active' => 1,
                 'task' => 'REP',
@@ -6383,9 +6383,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1241,
                 'active' => 1,
                 'task' => 'PAY',
@@ -6416,9 +6416,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1242,
                 'active' => 1,
                 'task' => 'PROD',
@@ -6449,9 +6449,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1243,
                 'active' => 1,
                 'task' => 'WAT',
@@ -6482,9 +6482,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1244,
                 'active' => 1,
                 'task' => 'PROD',
@@ -6515,9 +6515,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1245,
                 'active' => 1,
                 'task' => 'PROD',
@@ -6548,9 +6548,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1246,
                 'active' => 1,
                 'task' => 'REP',
@@ -6581,9 +6581,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1247,
                 'active' => 1,
                 'task' => 'PROD',
@@ -6614,9 +6614,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1248,
                 'active' => 1,
                 'task' => 'PROD',
@@ -6647,9 +6647,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1249,
                 'active' => 1,
                 'task' => 'PROD',
@@ -6680,9 +6680,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1250,
                 'active' => 1,
                 'task' => 'PROD',
@@ -6713,9 +6713,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1251,
                 'active' => 1,
                 'task' => 'PROD',
@@ -6746,9 +6746,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1252,
                 'active' => 1,
                 'task' => 'PROD',
@@ -6779,9 +6779,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1253,
                 'active' => 1,
                 'task' => 'REP',
@@ -6812,9 +6812,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1254,
                 'active' => 1,
                 'task' => 'REP',
@@ -6845,9 +6845,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1258,
                 'active' => 1,
                 'task' => 'REP',
@@ -6878,9 +6878,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1259,
                 'active' => 1,
                 'task' => 'PROD',
@@ -6911,9 +6911,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1260,
                 'active' => 1,
                 'task' => 'REP',
@@ -6944,9 +6944,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1262,
                 'active' => 1,
                 'task' => 'PROD',
@@ -6977,9 +6977,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1263,
                 'active' => 1,
                 'task' => 'REN',
@@ -7011,9 +7011,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1267,
                 'active' => 1,
                 'task' => 'REN',
@@ -7045,9 +7045,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1268,
                 'active' => 1,
                 'task' => 'REN',
@@ -7079,9 +7079,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1269,
                 'active' => 1,
                 'task' => 'REN',
@@ -7113,9 +7113,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1270,
                 'active' => 1,
                 'task' => 'REN',
@@ -7147,9 +7147,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1271,
                 'active' => 1,
                 'task' => 'REP',
@@ -7180,9 +7180,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1272,
                 'active' => 1,
                 'task' => 'REN',
@@ -7213,9 +7213,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1273,
                 'active' => 1,
                 'task' => 'REN',
@@ -7246,9 +7246,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1274,
                 'active' => 1,
                 'task' => 'REN',
@@ -7279,9 +7279,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1275,
                 'active' => 1,
                 'task' => 'REN',
@@ -7312,9 +7312,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1277,
                 'active' => 1,
                 'task' => 'REN',
@@ -7345,9 +7345,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1278,
                 'active' => 1,
                 'task' => 'REN',
@@ -7378,9 +7378,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1280,
                 'active' => 1,
                 'task' => 'PROD',
@@ -7411,9 +7411,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1281,
                 'active' => 1,
                 'task' => 'OPR',
@@ -7444,9 +7444,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1282,
                 'active' => 1,
                 'task' => 'PAY',
@@ -7477,9 +7477,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1290,
                 'active' => 1,
                 'task' => 'REN',
@@ -7510,9 +7510,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1291,
                 'active' => 1,
                 'task' => 'WAT',
@@ -7543,9 +7543,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1292,
                 'active' => 1,
                 'task' => 'EXP',
@@ -7576,9 +7576,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1299,
                 'active' => 1,
                 'task' => 'OPR',
@@ -7609,9 +7609,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1300,
                 'active' => 1,
                 'task' => 'PROD',
@@ -7642,9 +7642,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1301,
                 'active' => 1,
                 'task' => 'PROD',
@@ -7675,9 +7675,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1302,
                 'active' => 1,
                 'task' => 'REQ',
@@ -7708,9 +7708,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1303,
                 'active' => 1,
                 'task' => 'FAP',
@@ -7741,9 +7741,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1305,
                 'active' => 1,
                 'task' => 'PRID',
@@ -7774,9 +7774,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1306,
                 'active' => 1,
                 'task' => 'PRID',
@@ -7808,9 +7808,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1307,
                 'active' => 1,
                 'task' => 'PRID',
@@ -7842,9 +7842,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1308,
                 'active' => 1,
                 'task' => 'REN',
@@ -7875,9 +7875,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1309,
                 'active' => 1,
                 'task' => 'REN',
@@ -7908,9 +7908,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1310,
                 'active' => 1,
                 'task' => 'PROD',
@@ -7941,9 +7941,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1311,
                 'active' => 1,
                 'task' => 'PROD',
@@ -7974,9 +7974,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1315,
                 'active' => 1,
                 'task' => 'REP',
@@ -8007,9 +8007,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1316,
                 'active' => 1,
                 'task' => 'PROD',
@@ -8040,9 +8040,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1321,
                 'active' => 1,
                 'task' => 'PROD',
@@ -8073,9 +8073,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1322,
                 'active' => 1,
                 'task' => 'PROD',
@@ -8106,9 +8106,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1323,
                 'active' => 1,
                 'task' => 'FRCE',
@@ -8139,9 +8139,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1326,
                 'active' => 1,
                 'task' => 'FAP',
@@ -8172,9 +8172,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1327,
                 'active' => 1,
                 'task' => 'FAP',
@@ -8205,9 +8205,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1328,
                 'active' => 1,
                 'task' => 'PROD',
@@ -8238,9 +8238,9 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 1329,
                 'active' => 1,
                 'task' => 'PROD',
@@ -8272,7 +8272,7 @@ class TaskRulesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
-        ));
+            ],
+        ]);
     }
 }

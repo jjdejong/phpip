@@ -15,9 +15,9 @@ class TemplateMemberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public $languages = array('fr' => 'Français',
+    public $languages = ['fr' => 'Français',
                               'en' => 'English',
-                              'de' => 'Deutsch');
+                              'de' => 'Deutsch'];
 
     public function index(Request $request)
     {

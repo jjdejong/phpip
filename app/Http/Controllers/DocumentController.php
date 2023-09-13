@@ -224,13 +224,13 @@ class DocumentController extends Controller
   */
     public function mailto(TemplateMember $member, Request $request) {
       // Todo Add field for maually add an address
-      $data =  array();
+      $data =  [];
       $subject = Blade::compileString($member->subject);
       $blade = Blade::compileString($member->body);
 
       // Get contacts list
-      $sendto_ids = array();
-      $cc_ids = array();
+      $sendto_ids = [];
+      $cc_ids = [];
       foreach($request->except(['page']) as $attribute => $value) {
         if (strpos($attribute, 'sendto') === 0) {
           $sendto_ids[] = substr($attribute, 7);
