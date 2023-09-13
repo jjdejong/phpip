@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class MatterClassifiers extends Model
 {
-    protected $table = 'matter_classifiers';
     public $timestamps = false;
 
     public function linkedMatter()
