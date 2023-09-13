@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Task;
 use App\Matter;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class HomeController extends Controller
 {
