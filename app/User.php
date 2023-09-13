@@ -23,21 +23,21 @@ class User extends Authenticatable
 
     public function roleInfo()
     {
-        return $this->belongsTo('App\Role', 'default_role');
+        return $this->belongsTo(\App\Role::class, 'default_role');
     }
 
     public function company()
     {
-        return $this->belongsTo('App\Actor', 'company_id');
+        return $this->belongsTo(\App\Actor::class, 'company_id');
     }
 
     public function parent()
     {
-        return $this->belongsTo('App\Actor', 'parent_id');
+        return $this->belongsTo(\App\Actor::class, 'parent_id');
     }
 
     public function matters() {
-        return $this->hasMany('App\Matter', 'responsible', 'login');
+        return $this->hasMany(\App\Matter::class, 'responsible', 'login');
     }
 
     public function tasks() {

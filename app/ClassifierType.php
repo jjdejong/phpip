@@ -15,6 +15,6 @@ class ClassifierType extends Model {
     protected $guarded = ['created_at', 'updated_at'];
     
     public function category() {
-        return $this->belongsTo('App\Category', 'for_category', 'code');
+        return $this->belongsTo(\App\Category::class, 'for_category', 'code');
     }
 }

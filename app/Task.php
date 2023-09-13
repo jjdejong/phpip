@@ -33,22 +33,22 @@ class Task extends Model
 
     public function info()
     {
-        return $this->belongsTo('App\EventName', 'code');
+        return $this->belongsTo(\App\EventName::class, 'code');
     }
 
     public function trigger()
     {
-        return $this->belongsTo('App\Event', 'trigger_id');
+        return $this->belongsTo(\App\Event::class, 'trigger_id');
     }
 
     public function matter()
     {
-        return $this->hasOneThrough('App\Matter', 'App\Event', 'id', 'id', 'trigger_id', 'matter_id');
+        return $this->hasOneThrough(\App\Matter::class, \App\Event::class, 'id', 'id', 'trigger_id', 'matter_id');
     }
 
     public function rule()
     {
-        return $this->hasMany('App\Rule', 'id', 'rule_used');
+        return $this->hasMany(\App\Rule::class, 'id', 'rule_used');
     }
 
     public static function getUsersOpenTaskCount()

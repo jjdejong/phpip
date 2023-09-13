@@ -12,7 +12,7 @@ class RenewalsLog extends Model
    */
   public function matter()
   {
-      return $this->belongsTo('App\Matter');
+      return $this->belongsTo(\App\Matter::class);
   }
 
   /**
@@ -20,7 +20,7 @@ class RenewalsLog extends Model
    */
   public function creatorInfo()
   {
-      return $this->belongsTo('App\User', 'creator','login');
+      return $this->belongsTo(\App\User::class, 'creator','login');
   }
 
   /**
@@ -28,6 +28,6 @@ class RenewalsLog extends Model
    */
   public function task()
   {
-      return $this->belongsTo('App\Task');
+      return $this->belongsTo(\App\Task::class);
   }
 }

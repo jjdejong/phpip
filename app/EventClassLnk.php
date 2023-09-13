@@ -10,6 +10,6 @@ class EventClassLnk extends Model
     protected $guarded = [];
 
     public function class() {
-      return $this->belongsTo('App\TemplateClass','template_class_id');
+      return $this->belongsTo(\App\TemplateClass::class,'template_class_id');
     }
 }

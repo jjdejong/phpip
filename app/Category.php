@@ -14,10 +14,10 @@ class Category extends Model
     protected $guarded = ['created_at', 'updated_at'];
 
     public function matter() {
-        return $this->hasMany('App\Matter');
+        return $this->hasMany(\App\Matter::class);
     }
 
     public function displayWithInfo() {
-        return $this->belongsTo('App\Category', 'display_with', 'code');
+        return $this->belongsTo(\App\Category::class, 'display_with', 'code');
     }
 }

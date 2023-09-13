@@ -13,52 +13,52 @@ class Rule extends Model
 
     public function country()
     {
-        return $this->belongsTo('App\Country', 'for_country', 'iso');
+        return $this->belongsTo(\App\Country::class, 'for_country', 'iso');
     }
 
     public function origin()
     {
-        return $this->belongsTo('App\Country', 'for_origin', 'iso');
+        return $this->belongsTo(\App\Country::class, 'for_origin', 'iso');
     }
 
     public function category()
     {
-        return $this->belongsTo('App\Category', 'for_category', 'code');
+        return $this->belongsTo(\App\Category::class, 'for_category', 'code');
     }
 
     public function trigger()
     {
-        return $this->belongsTo('App\EventName', 'trigger_event');
+        return $this->belongsTo(\App\EventName::class, 'trigger_event');
     }
 
     public function taskInfo()
     {
-        return $this->belongsTo('App\EventName', 'task');
+        return $this->belongsTo(\App\EventName::class, 'task');
     }
 
     public function type()
     {
-        return $this->belongsTo('App\Type', 'for_type', 'code');
+        return $this->belongsTo(\App\Type::class, 'for_type', 'code');
     }
 
     public function condition_eventInfo()
     {
-        return $this->belongsTo('App\EventName', 'condition_event');
+        return $this->belongsTo(\App\EventName::class, 'condition_event');
     }
 
     public function abort_onInfo()
     {
-        return $this->belongsTo('App\EventName', 'abort_on');
+        return $this->belongsTo(\App\EventName::class, 'abort_on');
     }
 
     public function responsibleInfo()
     {
-        return $this->belongsTo('App\Actor', 'responsible', 'login');
+        return $this->belongsTo(\App\Actor::class, 'responsible', 'login');
     }
 
     public function templates()
     {
-        return $this->belongsToMany('App\TemplateClass', 'rule_class_lnk', 'task_rule_id', 'template_class_id');
+        return $this->belongsToMany(\App\TemplateClass::class, 'rule_class_lnk', 'task_rule_id', 'template_class_id');
     }
 
     public function getTableComments($table_name = null)

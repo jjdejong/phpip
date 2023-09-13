@@ -11,16 +11,16 @@ class Fee extends Model
 
     public function country()
     {
-        return $this->belongsTo('App\Country', 'for_country');
+        return $this->belongsTo(\App\Country::class, 'for_country');
     }
 
     public function category()
     {
-        return $this->belongsTo('App\Category', 'for_category', 'code');
+        return $this->belongsTo(\App\Category::class, 'for_category', 'code');
     }
 
     public function origin()
     {
-        return $this->belongsTo('App\Country', 'for_origin', 'iso');
+        return $this->belongsTo(\App\Country::class, 'for_origin', 'iso');
     }
 }

@@ -19,16 +19,16 @@ class Classifier extends Model
 
     public function type()
     {
-        return $this->belongsTo('App\ClassifierType', 'type_code');
+        return $this->belongsTo(\App\ClassifierType::class, 'type_code');
     }
 
     public function linkedMatter()
     {
-        return $this->belongsTo('App\Matter', 'lnk_matter_id');
+        return $this->belongsTo(\App\Matter::class, 'lnk_matter_id');
     }
 
     public function matter()
     {
-        return $this->belongsTo('App\Matter');
+        return $this->belongsTo(\App\Matter::class);
     }
 }

@@ -14,26 +14,26 @@ class EventName extends Model
     protected $guarded = ['created_at', 'updated_at'];
 
     public function events() {
-        return $this->hasMany('App\Event', 'code');
+        return $this->hasMany(\App\Event::class, 'code');
     }
 
     public function tasks() {
-        return $this->hasMany('App\Task', 'code');
+        return $this->hasMany(\App\Task::class, 'code');
     }
 
     public function countryInfo() {
-        return $this->belongsTo('App\Country', 'country', 'iso');
+        return $this->belongsTo(\App\Country::class, 'country', 'iso');
     }
 
     public function categoryInfo() {
-        return $this->belongsTo('App\Category', 'category', 'code');
+        return $this->belongsTo(\App\Category::class, 'category', 'code');
     }
 
     public function default_responsibleInfo() {
-        return $this->belongsTo('App\User', 'default_responsible', 'login');
+        return $this->belongsTo(\App\User::class, 'default_responsible', 'login');
     }
 
     public function templates() {
-        return $this->belongsToMany('App\TemplateClass','event_class_lnk','event_name_code','template_class_id');
+        return $this->belongsToMany(\App\TemplateClass::class,'event_class_lnk','event_name_code','template_class_id');
     }
 }

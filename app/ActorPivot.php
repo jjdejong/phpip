@@ -23,21 +23,21 @@ class ActorPivot extends Pivot
 
     public function matter()
     {
-        return $this->belongsTo('App\Matter');
+        return $this->belongsTo(\App\Matter::class);
     }
 
     public function actor()
     {
-        return $this->belongsTo('App\Actor');
+        return $this->belongsTo(\App\Actor::class);
     }
 
     public function role()
     {
-        return $this->belongsTo('App\Role', 'role');
+        return $this->belongsTo(\App\Role::class, 'role');
     }
 
     public function company()
     {
-        return $this->belongsTo('App\Actor', 'company_id');
+        return $this->belongsTo(\App\Actor::class, 'company_id');
     }
 }
