@@ -5,11 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CreateMatterTypeTable extends Migration {
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
 	public function up()
 	{
 		Schema::create('matter_type', function(Blueprint $table)
@@ -24,11 +19,6 @@ class CreateMatterTypeTable extends Migration {
 	}
 
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
 	public function down()
 	{
 		Schema::dropIfExists('matter_type');

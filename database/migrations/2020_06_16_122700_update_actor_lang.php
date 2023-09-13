@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class UpdateActorLang extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('actor', function (Blueprint $table) {
@@ -59,11 +54,6 @@ class UpdateActorLang extends Migration
         ]);
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('actor', function (Blueprint $table) {

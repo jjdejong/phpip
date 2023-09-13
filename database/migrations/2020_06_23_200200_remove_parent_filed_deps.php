@@ -7,11 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class RemoveParentFiledDeps extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::unprepared("DROP TRIGGER IF EXISTS `event_after_insert`");
@@ -523,11 +518,6 @@ and parent.country = matter.origin");
 
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         //

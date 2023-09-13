@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\DB;
 
 class AlterTaskTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('task', function (Blueprint $table) {
@@ -43,11 +38,6 @@ BEGIN
   END IF;
 END");
     }
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         DB::unprepared("DROP TRIGGER IF EXISTS `task_before_update`");

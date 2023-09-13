@@ -5,11 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CreateActorTable extends Migration {
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
 	public function up()
 	{
 		Schema::create('actor', function(Blueprint $table)
@@ -52,11 +47,6 @@ class CreateActorTable extends Migration {
 	}
 
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
 	public function down()
 	{
 		Schema::dropIfExists('actor');

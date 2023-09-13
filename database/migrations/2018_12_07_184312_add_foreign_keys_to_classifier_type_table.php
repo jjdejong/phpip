@@ -5,11 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 
 class AddForeignKeysToClassifierTypeTable extends Migration {
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
 	public function up()
 	{
 		Schema::table('classifier_type', function(Blueprint $table)
@@ -19,11 +14,6 @@ class AddForeignKeysToClassifierTypeTable extends Migration {
 	}
 
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
 	public function down()
 	{
 		Schema::table('classifier_type', function(Blueprint $table)

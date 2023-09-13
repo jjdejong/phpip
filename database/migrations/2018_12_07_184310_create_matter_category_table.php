@@ -5,11 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CreateMatterCategoryTable extends Migration {
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
 	public function up()
 	{
 		Schema::create('matter_category', function(Blueprint $table)
@@ -26,11 +21,6 @@ class CreateMatterCategoryTable extends Migration {
 	}
 
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
 	public function down()
 	{
 		Schema::dropIfExists('matter_category');

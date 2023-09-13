@@ -8,22 +8,11 @@ use Illuminate\Http\Request;
 
 class ClassifierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -41,24 +30,11 @@ class ClassifierController extends Controller
         return Classifier::create($request->except(['_token', '_method', 'image']))->id;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Classifier  $classifier
-     * @return \Illuminate\Http\Response
-     */
     public function show(Classifier $classifier)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Classifier  $classifier
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Classifier $classifier)
     {
         if ($classifier->type->main_display && !$request->filled('value')) {
@@ -70,12 +46,6 @@ class ClassifierController extends Controller
         return $classifier;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Classifier  $classifier
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Classifier $classifier)
     {
         $classifier->delete();

@@ -5,11 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CreateClassifierTypeTable extends Migration {
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
 	public function up()
 	{
 		Schema::create('classifier_type', function(Blueprint $table)
@@ -29,11 +24,6 @@ class CreateClassifierTypeTable extends Migration {
 	}
 
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
 	public function down()
 	{
 		Schema::dropIfExists('classifier_type');

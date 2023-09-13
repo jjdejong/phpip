@@ -8,11 +8,6 @@ use App\Actor;
 
 class ActorSampleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         require 'actor-sample.php';

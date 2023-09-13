@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateTables3 extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
       DB::unprepared("DROP TRIGGER IF EXISTS `actor_creator_log`");
@@ -119,11 +114,6 @@ class UpdateTables3 extends Migration
       );
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
       // Doesn't matter - creator and updater logs were not compatible with Laravel

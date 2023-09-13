@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CountryMxRenewals extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::table('country')->where('iso', 'MX')->update([
@@ -126,11 +121,6 @@ class CountryMxRenewals extends Migration
         ]);
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         //

@@ -5,11 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 
 class AddForeignKeysToEventNameTable extends Migration {
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
 	public function up()
 	{
 		Schema::table('event_name', function(Blueprint $table)
@@ -19,11 +14,6 @@ class AddForeignKeysToEventNameTable extends Migration {
 	}
 
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
 	public function down()
 	{
 		Schema::table('event_name', function(Blueprint $table)

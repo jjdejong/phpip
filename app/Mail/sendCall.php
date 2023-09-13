@@ -14,11 +14,6 @@ class sendCall extends Mailable
     
     public $renewals;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
     public function __construct(public $step, $renewals, public $validity_date, public $instruction_date, public $total, public $total_ht, public $subject, public $dest)
     {
         $this->renewals = collect($renewals)->sortBy(['caseref', 'asc'], ['country', 'asc']);
@@ -29,11 +24,6 @@ class sendCall extends Mailable
         });
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
         $templates = \App\TemplateMember::whereHas('class', function (Builder $q) {

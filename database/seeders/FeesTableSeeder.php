@@ -7,11 +7,6 @@ use Illuminate\Database\Seeder;
 class FeesTableSeeder extends Seeder
 {
 
-    /**
-     * Auto generated seed file
-     *
-     * @return void
-     */
     public function run()
     {
         \DB::table('fees')->insertOrIgnore([

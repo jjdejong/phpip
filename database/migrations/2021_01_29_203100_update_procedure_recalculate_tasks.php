@@ -5,11 +5,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class UpdateProcedureRecalculateTasks extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::unprepared('DROP PROCEDURE IF EXISTS `recalculate_tasks`');
@@ -84,11 +79,6 @@ proc: BEGIN
 END proc");
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         //

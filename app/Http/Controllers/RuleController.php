@@ -78,11 +78,6 @@ class RuleController extends Controller
         return view('rule.show', compact('ruleInfo', 'ruleComments'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $this->authorize('create', Rule::class);
@@ -91,13 +86,6 @@ class RuleController extends Controller
         return view('rule.create', compact('ruleComments'));
     }
 
-    /**
-    * Update the specified resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @param  \App\Rule  $rule
-    * @return \Illuminate\Http\Response
-    */
     public function update(Request $request, Rule $rule)
     {
         $this->authorize('update', $rule);
@@ -138,12 +126,6 @@ class RuleController extends Controller
         return response()->json(['redirect' => route('rule.index')]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Rule  $task
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Rule $rule)
     {
         $this->authorize('delete', $rule);

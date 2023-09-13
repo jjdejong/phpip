@@ -5,11 +5,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateProcedureRecreateTasks extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::unprepared("CREATE PROCEDURE `recreate_tasks`(IN Ptrigger_id INT)
@@ -151,11 +146,6 @@ END proc"
         );
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         DB::unprepared('DROP PROCEDURE IF EXISTS `recreate_tasks`');

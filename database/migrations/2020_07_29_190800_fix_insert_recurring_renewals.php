@@ -7,11 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class FixInsertRecurringRenewals extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
       DB::unprepared('DROP PROCEDURE IF EXISTS `insert_recurring_renewals`');
@@ -61,11 +56,6 @@ proc: BEGIN
 END proc");
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         //

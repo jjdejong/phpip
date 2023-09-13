@@ -36,12 +36,6 @@ use Illuminate\Support\Facades\Blade;
 
 class DocumentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $Notes  = $request->input('Notes');
@@ -60,11 +54,6 @@ class DocumentController extends Controller
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $table = new Actor ;
@@ -72,12 +61,6 @@ class DocumentController extends Controller
         return view('documents.create', compact('tableComments'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -87,12 +70,6 @@ class DocumentController extends Controller
         return TemplateClass::create($request->except(['_token', '_method']));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  TemplateClass $class
-     * @return \Illuminate\Http\Response
-     */
     public function show(TemplateClass $class)
     {
         $table = new Actor;
@@ -101,13 +78,6 @@ class DocumentController extends Controller
         return view('documents.show', compact('class', 'tableComments'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\TemplateClass $class
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, TemplateClass $class)
     {
         $request->merge([ 'updater' => Auth::user()->login ]);
@@ -115,27 +85,13 @@ class DocumentController extends Controller
         return response()->json(['success' => 'Template class updated']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int  Role $role
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(TemplateClass $class)
     {
         $class->delete();
         return response()->json(['success' => 'Template class deleted']);
     }
 
-        /**
-         * Return view to select a template.
-         *
-         * @param  \Illuminate\Http\Request  $request
-         * @param  \App\Matter $matter
-         * @return \Illuminate\Http\Response
-         */
-
-  public function select(Matter $matter, Request $request) {
+        public function select(Matter $matter, Request $request) {
     $template_id = $request->input('template_id');
     //limit to actors with email
     $contacts = MatterActors::where([['matter_id', $matter->id], ['role_code', 'CNT']])->whereNotNull('email');

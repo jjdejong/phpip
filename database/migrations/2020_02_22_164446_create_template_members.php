@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateTemplateMembers extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('template_members', function (Blueprint $table) {
@@ -29,11 +24,6 @@ class CreateTemplateMembers extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('template_members');

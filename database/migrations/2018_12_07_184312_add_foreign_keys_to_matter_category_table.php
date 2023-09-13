@@ -5,11 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 
 class AddForeignKeysToMatterCategoryTable extends Migration {
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
 	public function up()
 	{
 		Schema::table('matter_category', function(Blueprint $table)
@@ -19,11 +14,6 @@ class AddForeignKeysToMatterCategoryTable extends Migration {
 	}
 
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
 	public function down()
 	{
 		Schema::table('matter_category', function(Blueprint $table)

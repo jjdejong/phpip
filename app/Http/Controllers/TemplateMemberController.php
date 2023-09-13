@@ -10,11 +10,6 @@ use App\Actor;
 
 class TemplateMemberController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public $languages = ['fr' => 'Français',
                               'en' => 'English',
                               'de' => 'Deutsch'];
@@ -54,11 +49,6 @@ class TemplateMemberController extends Controller
         return view('template-members.index', compact('template_members'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $table = new Actor ;
@@ -67,12 +57,6 @@ class TemplateMemberController extends Controller
         return view('template-members.create', compact('tableComments', 'languages'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -84,12 +68,6 @@ class TemplateMemberController extends Controller
         return $a;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\TemplateMember  $templateMember
-     * @return \Illuminate\Http\Response
-     */
     public function show(TemplateMember $templateMember)
     {
         $table = new Actor;
@@ -99,24 +77,11 @@ class TemplateMemberController extends Controller
         return view('template-members.show', compact('templateMember', 'languages', 'tableComments'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\TemplateMember  $templateMember
-     * @return \Illuminate\Http\Response
-     */
     public function edit(TemplateMember $templateMember)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\TemplateMember  $templateMember
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, TemplateMember $templateMember)
     {
         $request->merge([ 'updater' => Auth::user()->login ]);
@@ -124,12 +89,6 @@ class TemplateMemberController extends Controller
         return $templateMember;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\TemplateMember  $templateMember
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(TemplateMember $templateMember)
     {
         $templateMember->delete();

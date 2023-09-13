@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateCountry extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::table('country')->where('iso', 'BE')->update(['renewal_first' => 3]);
@@ -46,11 +41,6 @@ class UpdateCountry extends Migration
         );
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         // Not worth rolling back

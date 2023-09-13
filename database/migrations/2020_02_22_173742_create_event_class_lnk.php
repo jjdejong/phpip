@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateEventClassLnk extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('event_class_lnk', function (Blueprint $table) {
@@ -21,11 +16,6 @@ class CreateEventClassLnk extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('event_class_lnk');

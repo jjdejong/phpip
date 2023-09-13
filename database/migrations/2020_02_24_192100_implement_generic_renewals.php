@@ -703,11 +703,6 @@ END proc");
 	}
 
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
 	public function down()
 	{
 		Schema::table('country', function (Blueprint $table) {

@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class AddForeignkeysToTemplateClasses extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('template_classes', function (Blueprint $table) {
@@ -18,11 +13,6 @@ class AddForeignkeysToTemplateClasses extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('template_classes', function (Blueprint $table) {

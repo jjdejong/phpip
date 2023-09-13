@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateTemplateClasses extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('template_classes', function(Blueprint $table)
@@ -27,11 +22,6 @@ class CreateTemplateClasses extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
   		Schema::dropIfExists('template_classes');

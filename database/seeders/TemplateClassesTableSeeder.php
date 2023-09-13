@@ -7,11 +7,6 @@ use Illuminate\Database\Seeder;
 class TemplateClassesTableSeeder extends Seeder
 {
 
-    /**
-     * Auto generated seed file
-     *
-     * @return void
-     */
     public function run()
     {
         \DB::table('template_classes')->insertOrIgnore(array (

@@ -22,11 +22,6 @@ class UpdateTables extends Migration
       'task_rules'
     ];
 
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
       foreach ($this->tables as $t) {
@@ -332,11 +327,6 @@ class UpdateTables extends Migration
       DB::unprepared("DROP TRIGGER IF EXISTS `matter_actor_lnk_AFTER_DELETE`");
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
       foreach ($this->tables as $t) {

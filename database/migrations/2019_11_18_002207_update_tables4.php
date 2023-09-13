@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateTables4 extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
       DB::unprepared("DROP TRIGGER IF EXISTS `task_before_update`");
@@ -31,11 +26,6 @@ BEGIN
 END");
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         // Better not rollback this one

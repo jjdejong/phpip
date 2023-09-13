@@ -46,11 +46,6 @@ END"
 
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('matter', function (Blueprint $table) {

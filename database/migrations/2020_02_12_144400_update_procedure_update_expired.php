@@ -5,11 +5,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class UpdateProcedureUpdateExpired extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::unprepared('DROP PROCEDURE IF EXISTS `update_expired`');
@@ -35,11 +30,6 @@ class UpdateProcedureUpdateExpired extends Migration
         );
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         DB::unprepared('DROP PROCEDURE IF EXISTS `update_expired`');

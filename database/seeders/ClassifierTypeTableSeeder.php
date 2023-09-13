@@ -7,11 +7,6 @@ use Illuminate\Database\Seeder;
 class ClassifierTypeTableSeeder extends Seeder
 {
 
-    /**
-     * Auto generated seed file
-     *
-     * @return void
-     */
     public function run()
     {
         \DB::table('classifier_type')->insertOrIgnore([

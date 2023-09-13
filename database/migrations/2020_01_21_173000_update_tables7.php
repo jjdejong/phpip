@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class UpdateTables7 extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
       // Not supported
@@ -21,11 +16,6 @@ class UpdateTables7 extends Migration
       DB::table('classifier_type')->insertOrIgnore(['code' => 'IMG', 'type' => 'Image']);
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
       Schema::table('classifier', function (Blueprint $table) {

@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ActorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $this->authorize('viewAny', Actor::class);
@@ -36,11 +31,6 @@ class ActorController extends Controller
         return view('actor.index', compact('actorslist'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $this->authorize('create', Actor::class);
@@ -50,12 +40,6 @@ class ActorController extends Controller
         return view('actor.create', compact('actorComments'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $this->authorize('create', Actor::class);
@@ -67,12 +51,6 @@ class ActorController extends Controller
         return Actor::create($request->except(['_token', '_method']));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Actor  $actor
-     * @return \Illuminate\Http\Response
-     */
     public function show(Actor $actor)
     {
         $this->authorize('view', $actor);
@@ -81,24 +59,11 @@ class ActorController extends Controller
         return view('actor.show', compact('actorInfo', 'actorComments'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Actor  $actor
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Actor $actor)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Actor  $actor
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Actor $actor)
     {
         $this->authorize('update', $actor);
@@ -111,12 +76,6 @@ class ActorController extends Controller
         return $actor;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Actor  $actor
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Actor $actor)
     {
         $this->authorize('delete', $actor);

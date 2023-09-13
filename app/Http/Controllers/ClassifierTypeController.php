@@ -9,11 +9,6 @@ use Illuminate\Http\Request;
 
 class ClassifierTypeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $Code  = $request->input('Code');
@@ -31,11 +26,6 @@ class ClassifierTypeController extends Controller
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $table = new Actor ;
@@ -43,12 +33,6 @@ class ClassifierTypeController extends Controller
         return view('classifier_type.create', compact('tableComments'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -59,12 +43,6 @@ class ClassifierTypeController extends Controller
         return ClassifierType::create($request->except(['_token', '_method']));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  ClassifierType $classifierType
-     * @return \Illuminate\Http\Response
-     */
     public function show(ClassifierType $classifier_type)
     {
         $table = new Actor;
@@ -73,13 +51,6 @@ class ClassifierTypeController extends Controller
         return view('classifier_type.show', compact('classifier_type', 'tableComments'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string $code
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, ClassifierType $classifierType)
     {
         $request->merge([ 'updater' => Auth::user()->login ]);
@@ -87,12 +58,6 @@ class ClassifierTypeController extends Controller
         return $classifierType;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int  ClassifierType $classifierType
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(ClassifierType $classifierType)
     {
         $classifierType->delete();

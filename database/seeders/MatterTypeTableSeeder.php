@@ -7,11 +7,6 @@ use Illuminate\Database\Seeder;
 class MatterTypeTableSeeder extends Seeder
 {
 
-    /**
-     * Auto generated seed file
-     *
-     * @return void
-     */
     public function run()
     {
         \DB::table('matter_type')->insertOrIgnore([

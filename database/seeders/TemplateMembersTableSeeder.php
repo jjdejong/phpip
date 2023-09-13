@@ -7,11 +7,6 @@ use Illuminate\Database\Seeder;
 class TemplateMembersTableSeeder extends Seeder
 {
 
-    /**
-     * Auto generated seed file
-     *
-     * @return void
-     */
     public function run()
     {
         \DB::table('template_members')->insertOrIgnore([

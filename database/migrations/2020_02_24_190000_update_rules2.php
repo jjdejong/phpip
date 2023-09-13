@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateRules2 extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::table('task_rules')->where('id', 3)->update(['detail' => 'Clear']);
@@ -24,11 +19,6 @@ class UpdateRules2 extends Migration
         DB::table('task_rules')->where('id', 1327)->update(['detail' => 'Clear']);
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         // Not worth rolling back

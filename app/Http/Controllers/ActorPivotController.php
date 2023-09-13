@@ -10,12 +10,6 @@ use Illuminate\Http\Request;
 
 class ActorPivotController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -52,13 +46,6 @@ class ActorPivotController extends Controller
         return ActorPivot::create($request->except(['_token', '_method']));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ActorPivot  $actorPivot
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, ActorPivot $actorPivot)
     {
         $request->validate([
@@ -69,12 +56,6 @@ class ActorPivotController extends Controller
         return $actorPivot;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\ActorPivot  $actorPivot
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(ActorPivot $actorPivot)
     {
         $matter_id = $actorPivot->matter_id;
@@ -94,10 +75,6 @@ class ActorPivotController extends Controller
         return $actorPivot;
     }
 
-    /**
-     * show Matters where actor is used
-     *
-     */
     public function usedIn(int $actor)
     {
         $actorpivot = new ActorPivot();

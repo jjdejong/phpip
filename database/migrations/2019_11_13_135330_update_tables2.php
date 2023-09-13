@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class UpdateTables2 extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
       Schema::table('matter', function (Blueprint $table) {
@@ -24,11 +19,6 @@ class UpdateTables2 extends Migration
       });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
       Schema::table('matter', function (Blueprint $table) {

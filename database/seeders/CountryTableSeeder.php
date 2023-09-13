@@ -7,11 +7,6 @@ use Illuminate\Database\Seeder;
 class CountryTableSeeder extends Seeder
 {
 
-    /**
-     * Auto generated seed file
-     *
-     * @return void
-     */
     public function run()
     {
 

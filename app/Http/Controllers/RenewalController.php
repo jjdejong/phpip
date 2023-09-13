@@ -941,13 +941,6 @@ class RenewalController extends Controller
         );
     }
 
-    /**
-    * Update the specified resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @param  \App\Renewal  $renewal
-    * @return \Illuminate\Http\Response
-    */
     public function update(Request $request, Task $renewal)
     {
         $this->validate($request, [
@@ -959,13 +952,6 @@ class RenewalController extends Controller
         return response()->json(['success' => 'Renewal updated']);
     }
 
-    /**
-    * Update the specified resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @param  \App\Renewal  $renewal
-    * @return \Illuminate\Http\Response
-    */
     public function logs(Request $request)
     {
         // Get list of logs

@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\DB;
 
 class UpdateTables9c extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::unprepared("DROP VIEW IF EXISTS `matter_actors`");
@@ -52,11 +47,6 @@ class UpdateTables9c extends Migration
         );
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         //

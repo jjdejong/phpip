@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateMatterAltRef extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('matter', function (Blueprint $table) {
@@ -19,11 +14,6 @@ class UpdateMatterAltRef extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('matter', function (Blueprint $table) {

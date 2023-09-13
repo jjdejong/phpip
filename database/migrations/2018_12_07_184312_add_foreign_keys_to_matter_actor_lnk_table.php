@@ -5,11 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 
 class AddForeignKeysToMatterActorLnkTable extends Migration {
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
 	public function up()
 	{
 		Schema::table('matter_actor_lnk', function(Blueprint $table)
@@ -22,11 +17,6 @@ class AddForeignKeysToMatterActorLnkTable extends Migration {
 	}
 
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
 	public function down()
 	{
 		Schema::table('matter_actor_lnk', function(Blueprint $table)

@@ -5,11 +5,6 @@ use Illuminate\Support\Facades\DB;
 
 class AddTrigger extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {   // For actor
         DB::unprepared("CREATE TRIGGER `actor_creator_log` BEFORE INSERT ON `actor` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
@@ -503,11 +498,6 @@ END"
         );
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         // For actor

@@ -58,12 +58,6 @@ class MatterController extends Controller
             ->find($id);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request)
     {
         $this->authorize('create', Matter::class);
@@ -93,12 +87,6 @@ class MatterController extends Controller
         return view('matter.create', compact('parent_matter', 'operation', 'category'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $this->authorize('create', Matter::class);
@@ -186,12 +174,6 @@ class MatterController extends Controller
         return response()->json(['redirect' => route('matter.show', [$new_matter])]);
     }
 
-    /**
-     * Store multiple newly created resources in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function storeN(Request $request)
     {
         $this->authorize('create', Matter::class);
@@ -475,12 +457,6 @@ class MatterController extends Controller
         return response()->json(['redirect' => "/matter?Ref=$request->caseref&tab=1"]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Matter  $matter
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Matter $matter)
     {
         $this->authorize('update', $matter);
@@ -502,13 +478,6 @@ class MatterController extends Controller
         return view("matter.edit", compact(['matter', 'cat_edit', 'country_edit']));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Matter  $matter
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Matter $matter)
     {
         $this->authorize('update', $matter);
@@ -522,12 +491,6 @@ class MatterController extends Controller
         return $matter;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Matter  $matter
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Matter $matter)
     {
         $this->authorize('delete', $matter);

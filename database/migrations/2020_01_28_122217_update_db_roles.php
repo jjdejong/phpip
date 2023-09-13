@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateDbRoles extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::table('actor_role')->insertOrIgnore([
@@ -23,11 +18,6 @@ class UpdateDbRoles extends Migration
 
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         // Not worth rolling back

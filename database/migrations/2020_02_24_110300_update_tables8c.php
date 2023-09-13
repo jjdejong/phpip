@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\DB;
 
 class UpdateTables8c extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::unprepared("DROP TRIGGER IF EXISTS `matter_after_insert`");
@@ -38,11 +33,6 @@ BEGIN
 END");
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         //

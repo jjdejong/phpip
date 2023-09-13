@@ -32,11 +32,6 @@ class FeeController extends Controller
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $table = new Actor ;
@@ -45,12 +40,6 @@ class FeeController extends Controller
     }
 
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -74,24 +63,11 @@ class FeeController extends Controller
         return response()->json(['success' => 'Fee created']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Fee  $fee
-     * @return \Illuminate\Http\Response
-     */
     public function show(Fee $fee)
     {
         return $fee;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Fee  $fee
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Fee $fee)
     {
         $this->validate($request, [
@@ -112,12 +88,6 @@ class FeeController extends Controller
         return response()->json(['success' => 'Fee updated']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Fee  $fee
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Fee $fee)
     {
         $fee->delete();

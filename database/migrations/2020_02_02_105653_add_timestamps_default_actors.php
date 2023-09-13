@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddTimestampsDefaultActors extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('default_actor', function (Blueprint $table) {
@@ -20,11 +15,6 @@ class AddTimestampsDefaultActors extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('default_actor', function (Blueprint $table) {

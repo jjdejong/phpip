@@ -4,11 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateRenewalListView extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::statement("CREATE VIEW `renewal_list`  AS select
@@ -64,11 +59,6 @@ class CreateRenewalListView extends Migration
         );
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         DB::unprepared("DROP VIEW IF EXISTS `renewal_list`");

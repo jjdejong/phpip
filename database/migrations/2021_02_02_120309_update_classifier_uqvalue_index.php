@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateClassifierUqvalueIndex extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('classifier', function (Blueprint $table) {
@@ -23,11 +18,6 @@ class UpdateClassifierUqvalueIndex extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         //

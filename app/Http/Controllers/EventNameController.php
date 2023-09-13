@@ -10,11 +10,6 @@ use Illuminate\Http\Request;
 
 class EventNameController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $Code  = $request->input('Code');
@@ -32,11 +27,6 @@ class EventNameController extends Controller
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $table = new Actor ;
@@ -44,12 +34,6 @@ class EventNameController extends Controller
         return view('eventname.create', compact('tableComments'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -62,12 +46,6 @@ class EventNameController extends Controller
         return response()->json(['redirect' => route('eventname.index')]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\EventName  $eventname
-     * @return \Illuminate\Http\Response
-     */
     public function show(EventName $eventname)
     {
         $table = new Actor;
@@ -77,13 +55,6 @@ class EventNameController extends Controller
         return view('eventname.show', compact('eventname', 'tableComments', 'links'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\EventName  $eventname
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, EventName $eventname)
     {
         $request->merge([ 'updater' => Auth::user()->login ]);
@@ -91,12 +62,6 @@ class EventNameController extends Controller
         return $eventname;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\EventName  $eventname
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(EventName  $eventname)
     {
         $eventname->delete();

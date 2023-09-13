@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateTables5 extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::unprepared("DROP TRIGGER IF EXISTS `event_after_insert`");
@@ -367,11 +362,6 @@ proc: BEGIN
 END proc");
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         DB::unprepared("DROP TRIGGER IF EXISTS `event_after_insert`");

@@ -9,11 +9,6 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $Code  = $request->input('Code');
@@ -31,11 +26,6 @@ class CategoryController extends Controller
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $table = new Actor ;
@@ -43,12 +33,6 @@ class CategoryController extends Controller
         return view('category.create', compact('tableComments'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -60,12 +44,6 @@ class CategoryController extends Controller
         return Category::create($request->except(['_token', '_method']));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  Category $category
-     * @return \Illuminate\Http\Response
-     */
     public function show(Category $category)
     {
         $table = new Actor;
@@ -74,13 +52,6 @@ class CategoryController extends Controller
         return view('category.show', compact('category', 'tableComments'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string $code
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Category $category)
     {
         $request->merge([ 'updater' => Auth::user()->login ]);
@@ -88,12 +59,6 @@ class CategoryController extends Controller
         return $category;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int  Category $category
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Category $category)
     {
         $category->delete();
