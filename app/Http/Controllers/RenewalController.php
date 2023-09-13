@@ -88,7 +88,7 @@ class RenewalController extends Controller
         }
         // Order by most recent renewals first in the "Closed" and "Invoice paid" steps
         if ($step == 10 || $invoice_step == 3) {
-            $renewals->orderBy('due_date', 'DESC');
+            $renewals->orderByDesc('due_date');
         }
         $renewals = $renewals->simplePaginate(config('renewal.general.paginate', 25));
         // Adjust the cost and fee of each renewal based un customized settings
@@ -385,7 +385,7 @@ class RenewalController extends Controller
         }
         $num = 0;
         if (config('renewal.invoice.backend') == "dolibarr" && $toinvoice) {
-            $resql = $query->orderBy('client_name', "ASC")->get();
+            $resql = $query->orderBy('client_name')->get();
             $previousClient = "ZZZZZZZZZZZZZZZZZZZZZZZZ";
             $firstPass = true;
             // get from config/renewal.php

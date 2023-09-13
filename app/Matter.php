@@ -451,7 +451,7 @@ class Matter extends Model
         if ($sortkey == 'caseref') {
             $query->groupBy('matter.caseref', 'matter.container_id', 'matter.suffix', 'fil.event_date');
             if ($sortdir == 'desc') {
-                $query->orderBy('matter.caseref', 'DESC');
+                $query->orderByDesc('matter.caseref');
             }
         } else {
             $query->groupBy($sortkey, 'matter.caseref', 'matter.container_id', 'matter.suffix', 'fil.event_date')
