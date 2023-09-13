@@ -232,10 +232,10 @@ class DocumentController extends Controller
       $sendto_ids = [];
       $cc_ids = [];
       foreach($request->except(['page']) as $attribute => $value) {
-        if (strpos($attribute, 'sendto') === 0) {
+        if (str_starts_with($attribute, 'sendto')) {
           $sendto_ids[] = substr($attribute, 7);
         }
-        if (strpos($attribute, 'ccto') === 0 ) {
+        if (str_starts_with($attribute, 'ccto') ) {
           $cc_ids[] = substr($attribute, 5);
         }
       }
