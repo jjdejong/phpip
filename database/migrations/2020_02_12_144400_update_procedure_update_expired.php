@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateProcedureUpdateExpired extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -34,4 +34,4 @@ class UpdateProcedureUpdateExpired extends Migration
     {
         DB::unprepared('DROP PROCEDURE IF EXISTS `update_expired`');
     }
-}
+};

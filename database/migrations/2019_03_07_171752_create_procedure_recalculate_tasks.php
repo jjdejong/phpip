@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProcedureRecalculateTasks extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -81,4 +81,4 @@ END proc");
     {
         DB::unprepared('DROP PROCEDURE IF EXISTS `recalculate_tasks`');
     }
-}
+};

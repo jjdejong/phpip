@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProcedureRecreateTasks extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -150,4 +150,4 @@ END proc"
     {
         DB::unprepared('DROP PROCEDURE IF EXISTS `recreate_tasks`');
     }
-}
+};

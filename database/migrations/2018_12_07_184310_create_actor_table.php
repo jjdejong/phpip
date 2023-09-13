@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateActorTable extends Migration {
+return new class extends Migration {
 
 	public function up()
 	{
@@ -52,4 +52,4 @@ class CreateActorTable extends Migration {
 		Schema::dropIfExists('actor');
 	}
 
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateTables5 extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -717,4 +717,4 @@ proc: BEGIN
   END IF;
 END proc");
     }
-}
+};

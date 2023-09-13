@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTables2 extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -30,4 +30,4 @@ class UpdateTables2 extends Migration
         $table->dateTime('last_login')->after('password_salt')->nullable();
       });
     }
-}
+};

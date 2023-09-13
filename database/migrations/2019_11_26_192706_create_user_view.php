@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserView extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -33,4 +33,4 @@ WHERE
     {
         DB::statement("DROP VIEW IF EXISTS `users`");
     }
-}
+};

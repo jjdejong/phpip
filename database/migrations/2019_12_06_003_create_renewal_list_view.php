@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRenewalListView extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -63,4 +63,4 @@ class CreateRenewalListView extends Migration
     {
         DB::unprepared("DROP VIEW IF EXISTS `renewal_list`");
     }
-}
+};

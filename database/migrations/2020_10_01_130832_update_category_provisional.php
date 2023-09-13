@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateCategoryProvisional extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -17,4 +17,4 @@ class UpdateCategoryProvisional extends Migration
     {
         //
     }
-}
+};

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateMatterActorLnkTable extends Migration {
+return new class extends Migration {
 
 	public function up()
 	{
@@ -33,4 +33,4 @@ class CreateMatterActorLnkTable extends Migration {
 		Schema::dropIfExists('matter_actor_lnk');
 	}
 
-}
+};

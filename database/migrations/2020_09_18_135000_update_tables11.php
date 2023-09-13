@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTables11 extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -31,4 +31,4 @@ class UpdateTables11 extends Migration
         $table->boolean('use_parent')->after('condition_event')->default(0);
       });
     }
-}
+};

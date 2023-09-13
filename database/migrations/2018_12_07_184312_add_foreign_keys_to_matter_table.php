@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddForeignKeysToMatterTable extends Migration {
+return new class extends Migration {
 
 	public function up()
 	{
@@ -34,4 +34,4 @@ class AddForeignKeysToMatterTable extends Migration {
 		});
 	}
 
-}
+};

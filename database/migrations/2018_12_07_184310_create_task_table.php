@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateTaskTable extends Migration {
+return new class extends Migration {
 
 	public function up()
 	{
@@ -36,4 +36,4 @@ class CreateTaskTable extends Migration {
 		Schema::dropIfExists('task');
 	}
 
-}
+};

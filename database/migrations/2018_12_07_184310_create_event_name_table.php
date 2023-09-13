@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateEventNameTable extends Migration {
+return new class extends Migration {
 
 	public function up()
 	{
@@ -34,4 +34,4 @@ class CreateEventNameTable extends Migration {
 		Schema::dropIfExists('event_name');
 	}
 
-}
+};

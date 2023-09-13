@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateViewsAndFunctions extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -202,4 +202,4 @@ class CreateViewsAndFunctions extends Migration
         DB::unprepared("DROP VIEW IF EXISTS `matter_classifiers`");
         DB::unprepared("DROP VIEW IF EXISTS `matter_actors`");
     }
-}
+};

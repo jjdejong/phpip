@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTables7 extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -24,4 +24,4 @@ class UpdateTables7 extends Migration
       DB::table('classifier')->where('type_code', 'IMG')->delete();
       DB::table('classifier_type')->where('code', 'IMG')->delete();
     }
-}
+};

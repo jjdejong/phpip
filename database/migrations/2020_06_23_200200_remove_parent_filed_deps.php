@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
-class RemoveParentFiledDeps extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -522,4 +522,4 @@ and parent.country = matter.origin");
     {
         //
     }
-}
+};

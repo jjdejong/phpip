@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddForeignKeysToActorTable extends Migration {
+return new class extends Migration {
 
 	public function up()
 	{
@@ -36,4 +36,4 @@ class AddForeignKeysToActorTable extends Migration {
 		});
 	}
 
-}
+};

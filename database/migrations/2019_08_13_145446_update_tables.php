@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTables extends Migration
+return new class extends Migration
 {
     protected $tables = [
       'actor',
@@ -338,4 +338,4 @@ class UpdateTables extends Migration
         }
       }
     }
-}
+};

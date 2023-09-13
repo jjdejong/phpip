@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateTaskRulesTable extends Migration {
+return new class extends Migration {
 
 	public function up()
 	{
@@ -51,4 +51,4 @@ class CreateTaskRulesTable extends Migration {
 		Schema::dropIfExists('task_rules');
 	}
 
-}
+};

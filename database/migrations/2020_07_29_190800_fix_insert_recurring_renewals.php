@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
-class FixInsertRecurringRenewals extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -60,4 +60,4 @@ END proc");
     {
         //
     }
-}
+};

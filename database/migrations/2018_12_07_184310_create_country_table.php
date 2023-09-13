@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateCountryTable extends Migration {
+return new class extends Migration {
 
 	public function up()
 	{
@@ -29,4 +29,4 @@ class CreateCountryTable extends Migration {
 		Schema::dropIfExists('country');
 	}
 
-}
+};

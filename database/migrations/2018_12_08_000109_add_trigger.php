@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class AddTrigger extends Migration
+return new class extends Migration
 {
     public function up()
     {   // For actor
@@ -547,4 +547,4 @@ END"
         DB::unprepared("DROP TRIGGER IF EXISTS `trules_before_update`");
         DB::unprepared("DROP TRIGGER IF EXISTS `trules_after_update`");
     }
-}
+};

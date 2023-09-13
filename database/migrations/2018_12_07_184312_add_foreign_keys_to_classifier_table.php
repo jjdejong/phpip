@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddForeignKeysToClassifierTable extends Migration {
+return new class extends Migration {
 
 	public function up()
 	{
@@ -28,4 +28,4 @@ class AddForeignKeysToClassifierTable extends Migration {
 		});
 	}
 
-}
+};

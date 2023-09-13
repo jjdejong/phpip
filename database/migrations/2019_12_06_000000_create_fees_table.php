@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateFeesTable extends Migration {
+return new class extends Migration {
 
 	public function up()
 	{
@@ -38,4 +38,4 @@ class CreateFeesTable extends Migration {
 		Schema::dropIfExists('fees');
 	}
 
-}
+};

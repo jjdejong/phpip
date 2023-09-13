@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateMatterTable extends Migration {
+return new class extends Migration {
 
 	public function up()
 	{
@@ -39,4 +39,4 @@ class CreateMatterTable extends Migration {
 		Schema::dropIfExists('matter');
 	}
 
-}
+};

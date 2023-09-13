@@ -4,7 +4,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class AlterTaskTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -74,4 +74,4 @@ END");
             });
         }
     }
-}
+};

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateClassifierTypeTable extends Migration {
+return new class extends Migration {
 
 	public function up()
 	{
@@ -29,4 +29,4 @@ class CreateClassifierTypeTable extends Migration {
 		Schema::dropIfExists('classifier_type');
 	}
 
-}
+};

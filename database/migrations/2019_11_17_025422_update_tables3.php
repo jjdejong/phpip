@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateTables3 extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -118,4 +118,4 @@ class UpdateTables3 extends Migration
     {
       // Doesn't matter - creator and updater logs were not compatible with Laravel
     }
-}
+};
