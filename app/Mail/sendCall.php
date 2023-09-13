@@ -13,29 +13,15 @@ class sendCall extends Mailable
     use Queueable, SerializesModels;
     
     public $renewals;
-    public $validity_date;
-    public $instruction_date;
-    public $total;
-    public $total_ht;
-    public $subject;
-    public $dest;
-    public $step;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($step, $renewals, $validity_date, $instruction_date, $total, $total_ht, $subject, $dest)
+    public function __construct(public $step, $renewals, public $validity_date, public $instruction_date, public $total, public $total_ht, public $subject, public $dest)
     {
-        $this->step = $step;
         $this->renewals = collect($renewals)->sortBy(['caseref', 'asc'], ['country', 'asc']);
-        $this->validity_date = $validity_date;
-        $this->instruction_date = $instruction_date;
-        $this->total = $total;
-        $this->total_ht = $total_ht;
-        $this->subject = $subject;
-        $this->dest = $dest;
         // Added to ask for receipt confirmation
         $this->callbacks[]=(function ($message) {
             $message->getHeaders()->addTextHeader('X-Confirm-Reading-To', '<' . Auth::user()->email . '>');
