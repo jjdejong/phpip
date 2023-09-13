@@ -15,10 +15,11 @@ class UserController extends Controller
         $this->authorize('viewAny', User::class);
         $user = new User;
         if ($request->filled('Name')) {
-            $user = $user->where('name', 'like', $request->Name . '%');
+            $user = $user->where('name', 'like', $request->Name.'%');
         }
         $userslist = $user->with('company')->orderby('name')->paginate(21);
         $userslist->appends($request->input())->links();
+
         return view('user.index', compact('userslist'));
     }
 
@@ -27,6 +28,7 @@ class UserController extends Controller
         $this->authorize('create', User::class);
         $table = new \App\Actor;
         $userComments = $table->getTableComments('actor');
+
         return view('user.create', compact('userComments'));
     }
 
@@ -38,9 +40,10 @@ class UserController extends Controller
             'login' => 'required|unique:users',
             'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()],
             'email' => 'required|email',
-            'default_role' => 'required'
+            'default_role' => 'required',
         ]);
-        $request->merge([ 'creator' => Auth::user()->login ]);
+        $request->merge(['creator' => Auth::user()->login]);
+
         return User::create($request->except(['_token', '_method', 'password_confirmation']));
     }
 
@@ -50,6 +53,7 @@ class UserController extends Controller
         $userInfo = $user->load(['company:id,name', 'roleInfo']);
         $table = new \App\Actor;
         $userComments = $table->getTableComments('actor');
+
         return view('user.show', compact('userInfo', 'userComments'));
     }
 
@@ -65,13 +69,14 @@ class UserController extends Controller
             'login' => 'sometimes|required|unique:users',
             'password' => 'sometimes|required|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[^a-zA-Z0-9]/',
             'email' => 'sometimes|required|email',
-            'default_role' => 'sometimes|required'
+            'default_role' => 'sometimes|required',
         ]);
-        $request->merge([ 'updater' => Auth::user()->login ]);
+        $request->merge(['updater' => Auth::user()->login]);
         if ($request->filled('password')) {
-            $request->merge([ 'password' => Hash::make($request->password) ]);
+            $request->merge(['password' => Hash::make($request->password)]);
         }
         $user->update($request->except(['_token', '_method']));
+
         return $user;
     }
 
@@ -79,6 +84,7 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
         $user->delete();
+
         return $user;
     }
 }

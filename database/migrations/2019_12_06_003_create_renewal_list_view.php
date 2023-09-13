@@ -61,6 +61,6 @@ return new class extends Migration
 
     public function down()
     {
-        DB::unprepared("DROP VIEW IF EXISTS `renewal_list`");
+        DB::unprepared('DROP VIEW IF EXISTS `renewal_list`');
     }
 };

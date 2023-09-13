@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\DefaultActor;
 use App\Actor;
+use App\DefaultActor;
 use Illuminate\Http\Request;
 
 class DefaultActorController extends Controller
 {
     public function index(Request $request)
     {
-        $Actor  = $request->input('Actor');
+        $Actor = $request->input('Actor');
         $Role = $request->input('Role');
         $Country = $request->input('Country');
         $Category = $request->input('Category');
@@ -42,15 +42,16 @@ class DefaultActorController extends Controller
                 $q->where('name', 'like', $Client.'%');
             });
         }
-        $default_actors = $default_actor->with(['roleInfo:code,name','actor:id,name','client:id,name','category:code,category','country:iso,name'])->get();
+        $default_actors = $default_actor->with(['roleInfo:code,name', 'actor:id,name', 'client:id,name', 'category:code,category', 'country:iso,name'])->get();
+
         return view('default_actor.index', compact('default_actors'));
     }
 
-
     public function create()
     {
-        $table = new Actor ;
+        $table = new Actor;
         $tableComments = $table->getTableComments('default_actor');
+
         return view('default_actor.create', compact('tableComments'));
     }
 
@@ -58,8 +59,9 @@ class DefaultActorController extends Controller
     {
         $request->validate([
             'actor_id' => 'required',
-            'role' => 'required'
+            'role' => 'required',
         ]);
+
         return DefaultActor::create($request->except(['_token', '_method']));
     }
 
@@ -68,6 +70,7 @@ class DefaultActorController extends Controller
         $table = new Actor;
         $tableComments = $table->getTableComments('default_actor');
         $default_actor->with(['roleInfo:code,name', 'actor:id,name', 'client:id,name', 'category:code,category', 'country:iso,name'])->get();
+
         return view('default_actor.show', compact('default_actor', 'tableComments'));
     }
 
@@ -75,15 +78,17 @@ class DefaultActorController extends Controller
     {
         $request->validate([
             'actor_id' => 'sometimes|required',
-            'role' => 'sometimes|required'
+            'role' => 'sometimes|required',
         ]);
         $default_actor->update($request->except(['_token', '_method']));
+
         return $default_actor;
     }
 
     public function destroy(DefaultActor $default_actor)
     {
         $default_actor->delete();
+
         return $default_actor;
     }
 }

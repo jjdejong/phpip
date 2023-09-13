@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class TaskRulesTableSeeder extends Seeder
 {
-
     public function run()
     {
         DB::table('task_rules')->insertOrIgnore([
@@ -386,7 +385,7 @@ class TaskRulesTableSeeder extends Seeder
                 'for_country' => 'EP',
                 'for_origin' => null,
                 'for_type' => null,
-            'detail' => 'R71(3)',
+                'detail' => 'R71(3)',
                 'days' => 0,
                 'months' => 4,
                 'years' => 0,
@@ -1178,7 +1177,7 @@ class TaskRulesTableSeeder extends Seeder
                 'for_country' => 'EP',
                 'for_origin' => null,
                 'for_type' => null,
-            'detail' => 'R70(2)',
+                'detail' => 'R70(2)',
                 'days' => 0,
                 'months' => 6,
                 'years' => 0,
@@ -4004,7 +4003,7 @@ class TaskRulesTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
- 
+
             [
                 'id' => 1001,
                 'active' => 1,

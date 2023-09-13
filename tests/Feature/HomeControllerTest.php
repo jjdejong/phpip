@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class HomeControllerTest extends TestCase
 {
@@ -15,7 +13,7 @@ class HomeControllerTest extends TestCase
      */
     public function testHome()
     {
-        $response = $this->call('GET','/');
+        $response = $this->call('GET', '/');
 
         $response->assertStatus(200);
     }

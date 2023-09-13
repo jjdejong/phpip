@@ -2,10 +2,8 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -36,15 +34,18 @@ class User extends Authenticatable
         return $this->belongsTo(\App\Actor::class, 'parent_id');
     }
 
-    public function matters() {
+    public function matters()
+    {
         return $this->hasMany(\App\Matter::class, 'responsible', 'login');
     }
 
-    public function tasks() {
+    public function tasks()
+    {
         return $this->matters()->has('tasksPending')->with('tasksPending');
     }
 
-    public function renewals() {
+    public function renewals()
+    {
         return $this->matters()->has('renewalsPending')->with('renewalsPending');
     }
 }

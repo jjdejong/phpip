@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Fee;
 use App\Actor;
-use Illuminate\Support\Facades\Auth;
+use App\Fee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FeeController extends Controller
 {
-
     public function index(Request $request)
     {
         $fees = new Fee;
         $filters = $request->except(['page']);
-        if (!empty($filters)) {
+        if (! empty($filters)) {
             foreach ($filters as $key => $value) {
                 if ($value != '') {
                     $fees = match ($key) {
@@ -27,18 +26,18 @@ class FeeController extends Controller
                 }
             }
         }
-        $fees = $fees->orderBy('for_category')->orderBy('for_country')->orderBy('qt')->simplePaginate( config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')) );
+        $fees = $fees->orderBy('for_category')->orderBy('for_country')->orderBy('qt')->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
+
         return view('fee.index', compact('fees'));
     }
 
-
     public function create()
     {
-        $table = new Actor ;
+        $table = new Actor;
         $tableComments = $table->getTableComments('fees');
+
         return view('fee.create', compact('tableComments'));
     }
-
 
     public function store(Request $request)
     {
@@ -49,17 +48,17 @@ class FeeController extends Controller
             'use_after' => 'nullable|date',
             'use_before' => 'nullable|date',
         ]);
-        $request->merge([ 'creator' => Auth::user()->login ]);
-        if(is_null($request->input('to_qt'))) {
-          $request->merge([ 'qt' =>   $request->input('from_qt') ]);
-          Fee::create($request->except(['from_qt','to_qt','_token', '_method']));
+        $request->merge(['creator' => Auth::user()->login]);
+        if (is_null($request->input('to_qt'))) {
+            $request->merge(['qt' => $request->input('from_qt')]);
+            Fee::create($request->except(['from_qt', 'to_qt', '_token', '_method']));
+        } else {
+            for ($i = intval($request->input('from_qt')); $i <= intval($request->input('to_qt')); $i++) {
+                $request->merge(['qt' => $i]);
+                Fee::create($request->except(['from_qt', 'to_qt', '_token', '_method']));
+            }
         }
-        else {
-          for ($i= intval($request->input('from_qt')); $i <=  intval($request->input('to_qt')); $i++) {
-              $request->merge([ 'qt' =>   $i ]);
-              Fee::create($request->except(['from_qt','to_qt','_token', '_method']));
-          }
-        }
+
         return response()->json(['success' => 'Fee created']);
     }
 
@@ -82,15 +81,17 @@ class FeeController extends Controller
             'cost_sup_reduced' => 'nullable|numeric',
             'fee_sup_reduced' => 'nullable|numeric',
         ]);
-        $request->merge([ 'updater' => Auth::user()->login ]);
+        $request->merge(['updater' => Auth::user()->login]);
 
         $fee->update($request->except(['_token', '_method']));
+
         return response()->json(['success' => 'Fee updated']);
     }
 
     public function destroy(Fee $fee)
     {
         $fee->delete();
+
         return response()->json(['success' => 'Fee deleted']);
     }
 }

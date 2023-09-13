@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Carbon;
-use App\Task;
+use App\Mail\sendCall;
 use App\MatterActors;
 use App\RenewalsLog;
-use App\Mail\sendCall;
+use App\Task;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class RenewalController extends Controller
 {
     public function index(Request $request)
     {
-     // Filters
+        // Filters
         $MyRenewals = $request->input('my_renewals');
         $filters = $request->except([
             'my_renewals',
-            'page'
+            'page',
         ]);
         $step = $request->step;
         $invoice_step = $request->invoice_step;
@@ -35,7 +35,7 @@ class RenewalController extends Controller
         }
         $with_step = false;
         $with_invoice = false;
-        if (!empty($filters)) {
+        if (! empty($filters)) {
             foreach ($filters as $key => $value) {
                 if ($value != '') {
                     switch ($key) {
@@ -96,9 +96,11 @@ class RenewalController extends Controller
             $this->adjustFees($ren, $cost, $fee);
             $ren->cost = $cost;
             $ren->fee = $fee;
+
             return $ren;
         });
         $renewals->appends($request->input())->links(); // Keep URL parameters in the paginator links
+
         return view('renewals.index', compact('renewals', 'step', 'invoice_step'));
     }
 
@@ -112,7 +114,8 @@ class RenewalController extends Controller
         if (is_numeric($rep)) {
             // Move the renewal task to step 2 : reminder
             Task::whereIn('id', $request->task_ids)->update(['step' => 2]);
-            return response()->json(['success' => 'Calls created for ' . $rep . ' renewals']);
+
+            return response()->json(['success' => 'Calls created for '.$rep.' renewals']);
         } else {
             return response()->json(['error' => $rep], 501);
         }
@@ -124,7 +127,7 @@ class RenewalController extends Controller
         $notify_type[1] = 'warn';
         $rep = $this->_call($request->task_ids, $notify_type, true);
         if (is_numeric($rep)) {
-            return response()->json(['success' => 'Calls sent for ' . $rep . ' renewals']);
+            return response()->json(['success' => 'Calls sent for '.$rep.' renewals']);
         } else {
             return response()->json(['error' => $rep], 501);
         }
@@ -137,13 +140,14 @@ class RenewalController extends Controller
         if (is_numeric($rep)) {
             // Move the renewal task to grace_period 1
             Task::whereIn('id', $request->task_ids)->update(['grace_period' => 1]);
-            return response()->json(['success' => 'Calls sent for ' . $rep . ' renewals']);
+
+            return response()->json(['success' => 'Calls sent for '.$rep.' renewals']);
         } else {
             return response()->json(['error' => $rep], 501);
         }
     }
 
-    private function adjustFees ($ren, &$cost, &$fee)
+    private function adjustFees($ren, &$cost, &$fee)
     {
         if ($ren->grace_period && strtotime($ren->done_date) < $ren->due_date) {
             // Urgent timely payment, apply fee_factor
@@ -182,23 +186,23 @@ class RenewalController extends Controller
         }
         $fee *= $fee_factor;
     }
-    
+
     private function _call($ids, $notify_type, $reminder)
     {
         // TODO Manage languages of the calls
         // TODO Check first that each client has email
 
         if (empty($ids)) {
-            return "No renewal selected.";
+            return 'No renewal selected.';
         }
-        $previousClient = "ZZZZZZZZZZZZZZZZZZZZZZZZ";
+        $previousClient = 'ZZZZZZZZZZZZZZZZZZZZZZZZ';
         $firstPass = true;
         $sum = 0;
         // For logs
         $newjob = RenewalsLog::max('job_id') + 1;
         for ($grace = 0; $grace < count($notify_type); $grace++) {
-            $from_grace =  ($notify_type[$grace] == 'last') ? 0 : null ;
-            $to_grace =  ($notify_type[$grace] == 'last') ? 1 : null ;
+            $from_grace = ($notify_type[$grace] == 'last') ? 0 : null;
+            $to_grace = ($notify_type[$grace] == 'last') ? 1 : null;
             $resql = Task::renewals()
                 ->whereIn('task.id', $ids)
                 ->where('grace_period', $grace)
@@ -215,14 +219,14 @@ class RenewalController extends Controller
                 $data = [];
                 foreach ($resql as $ren) {
                     if (empty($ren->language)) {
-                        $ren->language = "fr";
+                        $ren->language = 'fr';
                     }
-                    $config_prefix = 'renewal.description.' . $ren->language;
+                    $config_prefix = 'renewal.description.'.$ren->language;
                     $client = $ren->client_name;
                     $due_date = Carbon::parse($ren->due_date)->locale($ren->language);
                     if ($grace) {
-                    //  Add six months as grace grace_period
-                    // TODO Get the grace period from a rule according to country
+                        //  Add six months as grace grace_period
+                        // TODO Get the grace period from a rule according to country
                         $due_date->addMonths(6);
                     }
                     if ($firstPass) {
@@ -233,19 +237,19 @@ class RenewalController extends Controller
                     }
                     $renewal = [];
                     $renewal['caseref'] = $ren->caseref;
-                    $desc = sprintf(config($config_prefix . '.line1'), $ren->uid, $ren->number);
+                    $desc = sprintf(config($config_prefix.'.line1'), $ren->uid, $ren->number);
                     if ($ren->event_name == 'FIL') {
-                        $desc .= config($config_prefix . '.filed');
+                        $desc .= config($config_prefix.'.filed');
                     }
                     if ($ren->event_name == 'GRT' || $ren->event_name == 'PR') {
-                        $desc .= config($config_prefix . '.granted');
+                        $desc .= config($config_prefix.'.granted');
                     }
                     $desc .= Carbon::parse($ren->event_date)->locale($ren->language)->isoFormat('LL');
                     if ($ren->client_ref != '') {
-                        $desc .= "<BR>" . sprintf(config($config_prefix . '.line2'), $ren->client_ref);
+                        $desc .= '<BR>'.sprintf(config($config_prefix.'.line2'), $ren->client_ref);
                     }
                     if ($ren->title != '') {
-                        $desc .= "<BR>" . sprintf(config($config_prefix . '.line3'), $ren->title == "" ?  $ren->short_title : $ren->title);
+                        $desc .= '<BR>'.sprintf(config($config_prefix.'.line3'), $ren->title == '' ? $ren->short_title : $ren->title);
                     }
                     $renewal['language'] = $ren->language;
                     $renewal['due_date'] = $due_date->isoFormat('L');
@@ -260,10 +264,10 @@ class RenewalController extends Controller
                     $renewal['vat_rate'] = $vat_rate * 100;
 
                     $this->adjustFees($ren, $cost, $fee);
-                    
-                    $renewal['cost'] =  number_format($cost, 2, ',', ' ');
-                    $renewal['fee'] =  number_format($fee, 2, ',', ' ');
-                    $renewal['tva'] =  $fee * $vat_rate;
+
+                    $renewal['cost'] = number_format($cost, 2, ',', ' ');
+                    $renewal['fee'] = number_format($fee, 2, ',', ' ');
+                    $renewal['tva'] = $fee * $vat_rate;
                     $renewal['total_ht'] = number_format($fee + $cost, 2, ',', ' ');
                     $renewal['total'] = number_format($fee * (1 + $vat_rate) + $cost, 2, ',', ' ');
                     $total = $total + $fee * (1 + $vat_rate) + $cost;
@@ -276,7 +280,7 @@ class RenewalController extends Controller
                         'from_step' => $ren->step,
                         'to_step' => 2,
                         'creator' => Auth::user()->login,
-                        'created_at' => now()
+                        'created_at' => now(),
                     ];
                     if (! is_null($from_grace)) {
                         $log_line = array_merge($log_line, ['from_grace' => $from_grace]);
@@ -308,15 +312,15 @@ class RenewalController extends Controller
                             $contact = $contact->where('id', $ren->client_id)->first();
                             if ($contact->email == '') {
                                 if (config('renewal.general.mail_recipient') == 'client') {
-                                    return "No email address for " . $ren->client_name;
+                                    return 'No email address for '.$ren->client_name;
                                 } else {
                                     $contact->email = "<< $contact->name does not have email address in database >>";
                                 }
                             }
-                            array_push($email_list, ['email' => $contact->email, 'name' => $contact->first_name . ' ' . $contact->name]);
+                            array_push($email_list, ['email' => $contact->email, 'name' => $contact->first_name.' '.$contact->name]);
                         } else {
                             foreach ($contacts as $contact) {
-                                array_push($email_list, ['email' => $contact->email, 'name' => $contact->first_name . ' ' . $contact->name]);
+                                array_push($email_list, ['email' => $contact->email, 'name' => $contact->first_name.' '.$contact->name]);
                             }
                         }
                         if (config('renewal.general.mail_recipient') == 'client') {
@@ -344,6 +348,7 @@ class RenewalController extends Controller
                 RenewalsLog::insert($data);
             }
         }
+
         return $sum;
     }
 
@@ -364,7 +369,7 @@ class RenewalController extends Controller
                     'from_invoice' => 0,
                     'to_invoice' => 1,
                     'creator' => Auth::user()->login,
-                    'created_at' => $date_now
+                    'created_at' => $date_now,
                 ];
                 $data[] = $log_line;
             }
@@ -372,7 +377,7 @@ class RenewalController extends Controller
 
             return response()->json(['success' => 'Marked as to pay']);
         } else {
-            return response()->json(['error' => "No renewal selected."]);
+            return response()->json(['error' => 'No renewal selected.']);
         }
     }
 
@@ -381,33 +386,33 @@ class RenewalController extends Controller
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
-            return response()->json(['error' => "No renewal selected."]);
+            return response()->json(['error' => 'No renewal selected.']);
         }
         $num = 0;
-        if (config('renewal.invoice.backend') == "dolibarr" && $toinvoice) {
+        if (config('renewal.invoice.backend') == 'dolibarr' && $toinvoice) {
             $resql = $query->orderBy('client_name')->get();
-            $previousClient = "ZZZZZZZZZZZZZZZZZZZZZZZZ";
+            $previousClient = 'ZZZZZZZZZZZZZZZZZZZZZZZZ';
             $firstPass = true;
             // get from config/renewal.php
-            $apikey =  config('renewal.api.DOLAPIKEY');
+            $apikey = config('renewal.api.DOLAPIKEY');
             if ($apikey == null) {
-                return response()->json(['error' => "Api is not configured"]);
+                return response()->json(['error' => 'Api is not configured']);
             }
-            logger("Facturation dans Dolibarr");
+            logger('Facturation dans Dolibarr');
             if ($resql) {
                 $num = $resql->count();
                 if ($num == 0) {
-                    return response()->json(['error' => "No renewal selected."]);
+                    return response()->json(['error' => 'No renewal selected.']);
                 } else {
                     $i = 0;
                     $earlier = '';
                     foreach ($resql as $ren) {
                         $client = $ren->client_name;
-                        logger("Ligne ".$i);
+                        logger('Ligne '.$i);
                         if ($firstPass) {
                             // retrouve la correspondance de société
                             $result = $this->_client($client, $apikey);
-                            if (isset($result["error"]) && $result["error"]["code"] >= "404") {
+                            if (isset($result['error']) && $result['error']['code'] >= '404') {
                                 return response()->json(['error' => "$client not found in Dolibarr.\n"]);
                             }
                             $firstPass = false;
@@ -418,23 +423,23 @@ class RenewalController extends Controller
                         }
                         $desc = "$ren->uid : Annuité pour l'année $ren->detail du titre $ren->number";
                         if ($ren->event_name == 'FIL') {
-                            $desc .= " déposé le ";
+                            $desc .= ' déposé le ';
                         }
                         if ($ren->event_name == 'GRT' || $ren->event_name == 'PR') {
-                            $desc .= " délivré le ";
+                            $desc .= ' délivré le ';
                         }
                         $desc .= Carbon::parse($ren->event_date)->isoFormat('LL');
                         // TODO select preposition 'en, au, aux' according to country
-                        $desc .= ' en ' . $ren->country_FR;
+                        $desc .= ' en '.$ren->country_FR;
                         if ($ren->title != '') {
                             $desc .= "\nSujet : $ren->title";
                         }
                         if ($ren->client_ref != '') {
                             $desc .= " ($ren->client_ref)";
                         }
-                        $desc .= "\nÉchéance le " . Carbon::parse($ren->due_date)->isoFormat('LL');
+                        $desc .= "\nÉchéance le ".Carbon::parse($ren->due_date)->isoFormat('LL');
                         // Détermine le taux de tva
-                        if ($soc_res['tva_intra'] == "" || substr($soc_res['tva_intra'], 2) == "FR") {
+                        if ($soc_res['tva_intra'] == '' || substr($soc_res['tva_intra'], 2) == 'FR') {
                             $vat_rate = 0.2;
                         } else {
                             $vat_rate = 0.0;
@@ -447,27 +452,27 @@ class RenewalController extends Controller
                             $desc .= "\nHonoraires et taxe";
                         }
                         $newlines[] = [
-                            "desc" => $desc,
-                            "product_type" => 1,
-                            "tva_tx" => ($vat_rate * 100),
-                            "remise_percent" => 0,
-                            "qty" => 1,
-                            "subprice" => $fee,
-                            "total_tva" => $fee * $vat_rate,
-                            "total_ttc" => $fee  * (1.0 +  $vat_rate)
+                            'desc' => $desc,
+                            'product_type' => 1,
+                            'tva_tx' => ($vat_rate * 100),
+                            'remise_percent' => 0,
+                            'qty' => 1,
+                            'subprice' => $fee,
+                            'total_tva' => $fee * $vat_rate,
+                            'total_ttc' => $fee * (1.0 + $vat_rate),
                         ];
-                        logger("Ajout ligne ".$desc);
+                        logger('Ajout ligne '.$desc);
                         if ($cost != 0) {
                             // Ajout d'une deuxième ligne
                             $newlines[] = [
-                                "product_type" => 1,
-                                "desc" => "Taxe",
-                                "tva_tx" => 0.0,
-                                "remise_percent" => 0,
-                                "qty" => 1,
-                                "subprice" => $cost,
-                                "total_tva" => 0,
-                                "total_ttc" => $cost
+                                'product_type' => 1,
+                                'desc' => 'Taxe',
+                                'tva_tx' => 0.0,
+                                'remise_percent' => 0,
+                                'qty' => 1,
+                                'subprice' => $cost,
+                                'total_tva' => 0,
+                                'total_ttc' => $cost,
                             ];
                         }
                         $previousClient = $client;
@@ -475,21 +480,21 @@ class RenewalController extends Controller
                         if ($i < $num) {
                             $client = $resql[$i]->client_name;
                         }
-                        if ($client != $previousClient || $i == $num ) {
+                        if ($client != $previousClient || $i == $num) {
                             // Create invoice
                             $newprop = [
-                                "socid" => $soc_res['id'],
-                                "date" => time(),
-                                "cond_reglement_id" => 1,
-                                "mode_reglement_id" => 2,
-                                "lines" => $newlines,
-                                "fk_account" => config('renewal.api.fk_account')
+                                'socid' => $soc_res['id'],
+                                'date' => time(),
+                                'cond_reglement_id' => 1,
+                                'mode_reglement_id' => 2,
+                                'lines' => $newlines,
+                                'fk_account' => config('renewal.api.fk_account'),
                             ];
                             $rc = $this->createInvoice($newprop, $apikey); // invoice creation
                             if ($rc[0] != 0) {
-                                return response()->json(['error' => $rc[1] ]);
+                                return response()->json(['error' => $rc[1]]);
                             }
-                            $newlines = [] ;
+                            $newlines = [];
                             $firstPass = true;
                         }
                     }
@@ -498,16 +503,18 @@ class RenewalController extends Controller
         }
         // Move the renewal task to step: invoiced
         Task::whereIn('id', $request->task_ids)->update(['invoice_step' => 2]);
+
         return response()->json(['success' => "Invoices created for $num renewals"]);
     }
 
     public function paid(Request $request)
     {
-        if (!isset($request->task_ids)) {
-            return response()->json(['error' => "No renewal selected."]);
+        if (! isset($request->task_ids)) {
+            return response()->json(['error' => 'No renewal selected.']);
         }
         // Move the renewal task to step: invoice paid
         $num = Task::whereIn('id', $request->task_ids)->update(['invoice_step' => 3]);
+
         return response()->json(['success' => "$num invoices paid"]);
     }
 
@@ -519,6 +526,7 @@ class RenewalController extends Controller
             $this->adjustFees($ren, $cost, $fee);
             $ren->cost = $cost;
             $ren->fee = $fee;
+
             return $ren;
         });
         $captions = config('renewal.invoice.captions');
@@ -526,16 +534,17 @@ class RenewalController extends Controller
         $export_csv = fopen('php://memory', 'w');
         fputcsv($export_csv, $captions, ';');
         foreach ($export->toArray() as $row) {
-            fputcsv($export_csv, array_map("utf8_decode", $row), ';');
+            fputcsv($export_csv, array_map('utf8_decode', $row), ';');
         }
         rewind($export_csv);
-        $filename = Now()->isoFormat('YMMDDHHmmss') . '_invoicing.csv';
+        $filename = Now()->isoFormat('YMMDDHHmmss').'_invoicing.csv';
+
         return response()->stream(
             function () use ($export_csv) {
                 fpassthru($export_csv);
             },
             200,
-            [ 'Content-Type' => 'application/csv', 'Content-disposition' => 'attachment; filename=' . $filename ]
+            ['Content-Type' => 'application/csv', 'Content-disposition' => 'attachment; filename='.$filename]
         );
     }
 
@@ -543,16 +552,17 @@ class RenewalController extends Controller
     {
         // Search for client correspondence in Dolibarr
         $curl = curl_init();
-        $httpheader = ['DOLAPIKEY: ' . $apikey];
-        $data = ['sqlfilters' => '(t.nom like "' . $client . '%")'];
+        $httpheader = ['DOLAPIKEY: '.$apikey];
+        $data = ['sqlfilters' => '(t.nom like "'.$client.'%")'];
 
         // Get from config/renewal.php
-        $url = config('renewal.api.dolibarr_url') . "/thirdparties?" . http_build_query($data);
+        $url = config('renewal.api.dolibarr_url').'/thirdparties?'.http_build_query($data);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $httpheader);
         $result = curl_exec($curl);
         curl_close($curl);
+
         return json_decode($result, true);
     }
 
@@ -560,10 +570,10 @@ class RenewalController extends Controller
     {
         // Create invoice
         $curl = curl_init();
-        $url = config('renewal.api.dolibarr_url') . "/invoices";
+        $url = config('renewal.api.dolibarr_url').'/invoices';
         curl_setopt($curl, CURLOPT_POST, 1);
-        $httpheader = ['DOLAPIKEY: ' . $apikey];
-        $httpheader[] = "Content-Type:application/json";
+        $httpheader = ['DOLAPIKEY: '.$apikey];
+        $httpheader[] = 'Content-Type:application/json';
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($newprop));
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -573,11 +583,11 @@ class RenewalController extends Controller
         curl_close($curl);
         $result = json_decode($result, true);
 
-        if (isset($result["error"])) {
+        if (isset($result['error'])) {
             // "Error creating the invoice.\n";
-            return [-1, $result["error"]];
+            return [-1, $result['error']];
         } elseif ($status = 0) {
-            return [-1, "Invoice API is not reachable"];
+            return [-1, 'Invoice API is not reachable'];
         } else {
             return [0, $result];
         }
@@ -585,14 +595,13 @@ class RenewalController extends Controller
 
     /**
      * clear selected renewals.
-     *
      */
     public function done(Request $request)
     {
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
-            return response()->json(['error' => "No renewal selected."]);
+            return response()->json(['error' => 'No renewal selected.']);
         }
         $resql = $query->get();
 
@@ -611,7 +620,7 @@ class RenewalController extends Controller
                 'from_step' => $ren->step,
                 'to_step' => 6,
                 'creator' => Auth::user()->login,
-                'created_at' => $date_now
+                'created_at' => $date_now,
             ];
             $task->step = 6;
             $returncode = $task->save();
@@ -621,19 +630,19 @@ class RenewalController extends Controller
             $data_log[] = $log_line;
         }
         RenewalsLog::insert($data_log);
-        return response()->json(['success' => strval($updated) . ' renewals cleared']);
+
+        return response()->json(['success' => strval($updated).' renewals cleared']);
     }
 
     /**
      * register receipts.
-     *
      */
     public function receipt(Request $request)
     {
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
-            return response()->json(['error' => "No renewal selected."]);
+            return response()->json(['error' => 'No renewal selected.']);
         }
         $resql = $query->get();
 
@@ -656,25 +665,24 @@ class RenewalController extends Controller
                 'from_step' => $task->step,
                 'to_step' => 8,
                 'creator' => Auth::user()->login,
-                'created_at' => now()
+                'created_at' => now(),
             ];
             $data_log[] = $log_line;
         }
         RenewalsLog::insert($data_log);
+
         return response()->json(['success' => strval($updated).' receipts registered']);
     }
 
-
     /**
      * closing the task.
-     *
      */
     public function closing(Request $request)
     {
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
-            return response()->json(['error' => "No renewal selected."]);
+            return response()->json(['error' => 'No renewal selected.']);
         }
         $resql = $query->get();
 
@@ -693,7 +701,7 @@ class RenewalController extends Controller
                 'from_done' => $task->done,
                 'to_done' => 1,
                 'creator' => Auth::user()->login,
-                'created_at' => now()
+                'created_at' => now(),
             ];
             if ($task->done) {
                 $task->step = -1;
@@ -707,19 +715,19 @@ class RenewalController extends Controller
             }
         }
         RenewalsLog::insert($data_log);
-        return response()->json(['success' => strval($updated) . ' closed']);
+
+        return response()->json(['success' => strval($updated).' closed']);
     }
 
     /**
      * Abandon. Now, we wait for lapse.
-     *
      */
     public function abandon(Request $request)
     {
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
-            return response()->json(['error' => "No renewal selected."]);
+            return response()->json(['error' => 'No renewal selected.']);
         }
         $renewals = $query->get();
         // For logs
@@ -738,7 +746,7 @@ class RenewalController extends Controller
                 'from_done' => $task->done,
                 'to_done' => 1,
                 'creator' => Auth::user()->login,
-                'created_at' => now()
+                'created_at' => now(),
             ];
             $task->step = 12;
             $returncode = $task->save();
@@ -750,19 +758,19 @@ class RenewalController extends Controller
             }
         }
         RenewalsLog::insert($data_log);
-        return response()->json(['success' => strval($updated) . ' abandons registered']);
+
+        return response()->json(['success' => strval($updated).' abandons registered']);
     }
 
     /**
      * Lapse communication received. We will send it soon.
-     *
      */
     public function lapsing(Request $request)
     {
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
-            return response()->json(['error' => "No renewal selected."]);
+            return response()->json(['error' => 'No renewal selected.']);
         }
         $resql = $query->get();
 
@@ -788,23 +796,23 @@ class RenewalController extends Controller
                 'from_step' => $task->step,
                 'to_step' => 14,
                 'creator' => Auth::user()->login,
-                'created_at' => now()
+                'created_at' => now(),
             ];
             $data_log[] = $log_line;
         }
         RenewalsLog::insert($data_log);
-        return response()->json(['success' => strval($updated) . ' communications registered']);
+
+        return response()->json(['success' => strval($updated).' communications registered']);
     }
 
     /**
      * Generate order.
-     *
      */
     public function renewalOrder(Request $request)
     {
         $tids = $request->task_ids;
         $procedure = '';
-        $prev_procedure ='';
+        $prev_procedure = '';
         // For logs
         $newjob = RenewalsLog::max('job_id');
         $newjob++;
@@ -816,7 +824,7 @@ class RenewalController extends Controller
         if ($xml->header->sender->name == 'NAME') {
             $xml->header->sender->name = Auth::user()->name;
         }
-        $xml->header->{"payment-reference-id"} = 'ANNUITY ' . date('Ymd');
+        $xml->header->{'payment-reference-id'} = 'ANNUITY '.date('Ymd');
         $total = 0;
         $first = true;
         $renewals = Task::renewals()->whereIn('task.id', $tids)->get();
@@ -834,7 +842,7 @@ class RenewalController extends Controller
             $country = $renewal->country;
             if ($country == 'EP') {
                 // Use fee code from EPO
-                $fee_code = "0" . strval(intval($renewal->detail) + 30);
+                $fee_code = '0'.strval(intval($renewal->detail) + 30);
             } else {
                 $fee_code = $renewal->detail;
             }
@@ -845,10 +853,10 @@ class RenewalController extends Controller
             }
             $total += $cost;
             if ($renewal->origin == 'EP') {
-                    $number = preg_replace("/[^0-9]/", "", $renewal->pub_num);
-                    $country = 'EP';
+                $number = preg_replace('/[^0-9]/', '', $renewal->pub_num);
+                $country = 'EP';
             } else {
-                $number = preg_replace("/[^0-9]/", "", $renewal->fil_num);
+                $number = preg_replace('/[^0-9]/', '', $renewal->fil_num);
             }
             $fees = $xml->detail->addChild('fees');
             $fees->addAttribute('procedure', $procedure);
@@ -865,39 +873,39 @@ class RenewalController extends Controller
             $fee->addChild('fee-factor', '1');
             $fee->addChild('fee-total-amount', $renewal->cost);
             // $fee->addChild('fee-date-due', Carbon::parse($renewal->due_date)->isoFormat('YMMDD'));
-        /* Produced XML:
-        <fees procedure="$procedure">
-            <document-id>
-                <country>$country</country>
-                <doc-number>$number</doc-number>
-                <date>' . $fmt->format(strtotime($renewal->event_date)) . '</date>
-                <kind>application</kind>
-            </document-id>
-            <file-reference-id>$renewal->uid</file-reference-id>
-            <owner>$renewal->applicant_name</owner>
-            <fee>
-                <type-of-fee>$fee_code</type-of-fee>
-                <fee-sub-amount>$renewal->cost</fee-sub-amount>
-                <fee-factor>1</fee-factor>
-                <fee-total-amount>$renewal->cost</fee-total-amount>
-            </fee>
-        </fees>'
-        */
+            /* Produced XML:
+            <fees procedure="$procedure">
+                <document-id>
+                    <country>$country</country>
+                    <doc-number>$number</doc-number>
+                    <date>' . $fmt->format(strtotime($renewal->event_date)) . '</date>
+                    <kind>application</kind>
+                </document-id>
+                <file-reference-id>$renewal->uid</file-reference-id>
+                <owner>$renewal->applicant_name</owner>
+                <fee>
+                    <type-of-fee>$fee_code</type-of-fee>
+                    <fee-sub-amount>$renewal->cost</fee-sub-amount>
+                    <fee-factor>1</fee-factor>
+                    <fee-total-amount>$renewal->cost</fee-total-amount>
+                </fee>
+            </fees>'
+            */
         }
 
         //$header = config('renewal.xml.header');
         if ($procedure == 'EP') {
             //$header = str_replace('DEPOSIT', config('renewal.xml.EP_deposit'), $header);
-            $xml->header->{"mode-of-payment"}->{"deposit-account"}->{"account-no"} = config('renewal.xml.EP_deposit');
+            $xml->header->{'mode-of-payment'}->{'deposit-account'}->{'account-no'} = config('renewal.xml.EP_deposit');
         }
         if ($procedure == 'FR') {
             //$header = str_replace('DEPOSIT', config('renewal.xml.FR_deposit'), $header);
-            $xml->header->{"mode-of-payment"}->{"deposit-account"}->{"account-no"} = config('renewal.xml.FR_deposit');
+            $xml->header->{'mode-of-payment'}->{'deposit-account'}->{'account-no'} = config('renewal.xml.FR_deposit');
         }
         //$footer = str_replace('TOTAL', $total, config('renewal.xml.footer'));
-        $xml->trailer->{"batch-pay-total-amount"} = $total;
+        $xml->trailer->{'batch-pay-total-amount'} = $total;
         //$footer = str_replace('COUNT', count($tids), $footer);
-        $xml->trailer->{"total-records"} = count($tids);
+        $xml->trailer->{'total-records'} = count($tids);
         //$xml .= $footer;
         // This indents the produced xml
         $dom = new \DOMDocument('1.0');
@@ -905,7 +913,7 @@ class RenewalController extends Controller
         $dom->formatOutput = true;
         $dom->loadXML($xml->asXML());
         $fd = fopen('php://memory', 'w');
-        fputs($fd, $dom->saveXML());
+        fwrite($fd, $dom->saveXML());
         rewind($fd);
         if ($clear) {
             $updated = 0;
@@ -918,7 +926,7 @@ class RenewalController extends Controller
                     'from_done' => $renewal->done,
                     'to_done' => 1,
                     'creator' => Auth::user()->login,
-                    'created_at' => now()
+                    'created_at' => now(),
                 ];
                 $data_log[] = $log_line;
                 $task = Task::find($renewal->id);
@@ -931,13 +939,14 @@ class RenewalController extends Controller
             }
             RenewalsLog::insert($data_log);
         }
-        $filename = Now()->isoFormat('YMMDDHHmmss') . '_payment_order.xml';
+        $filename = Now()->isoFormat('YMMDDHHmmss').'_payment_order.xml';
+
         return response()->stream(
             function () use ($fd) {
                 fpassthru($fd);
             },
             200,
-            [ 'Content-Type' => 'application/xml', 'Content-Disposition' => 'attachment; filename=' . $filename ]
+            ['Content-Type' => 'application/xml', 'Content-Disposition' => 'attachment; filename='.$filename]
         );
     }
 
@@ -945,10 +954,11 @@ class RenewalController extends Controller
     {
         $this->validate($request, [
             'cost' => 'nullable|numeric',
-            'fee' => 'nullable|numeric'
+            'fee' => 'nullable|numeric',
         ]);
 
         $renewal->update($request->except(['_token', '_method']));
+
         return response()->json(['success' => 'Renewal updated']);
     }
 
@@ -956,7 +966,7 @@ class RenewalController extends Controller
     {
         // Get list of logs
         $logs = new RenewalsLog();
-        if (!empty($filters)) {
+        if (! empty($filters)) {
             foreach ($filters as $key => $value) {
                 if ($value != '') {
                     switch ($key) {
@@ -995,6 +1005,7 @@ class RenewalController extends Controller
             }
         }
         $logs = $logs->orderby('job_id')->simplePaginate(config('renewal.general.paginate', 25));
+
         return view('renewals.logs', compact('logs'));
     }
 }

@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class MatterTypeTableSeeder extends Seeder
 {
-
     public function run()
     {
         DB::table('matter_type')->insertOrIgnore([
@@ -47,7 +46,7 @@ class MatterTypeTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            
+
             [
                 'code' => 'REI',
                 'type' => 'Reissue',

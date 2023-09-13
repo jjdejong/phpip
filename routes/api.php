@@ -14,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', fn(Request $request) => $request->user());
+Route::middleware('auth:api')->get('/user', fn (Request $request) => $request->user());

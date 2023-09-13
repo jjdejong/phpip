@@ -1,14 +1,12 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
     public function up()
     {
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_insert`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_insert`');
         DB::unprepared("CREATE TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW
 trig: BEGIN
   DECLARE vdue_date, vbase_date, vexpiry, tmp_date DATE DEFAULT NULL;
@@ -117,7 +115,7 @@ trig: BEGIN
   END IF;
 END trig");
 
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_update`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_update`');
         DB::unprepared("CREATE TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW
 trig: BEGIN
   DECLARE vdue_date, vbase_date DATE DEFAULT NULL;
@@ -183,7 +181,7 @@ trig: BEGIN
   END IF;
 END trig");
 
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_delete`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_delete`');
         DB::unprepared("CREATE TRIGGER `event_after_delete` AFTER DELETE ON `event` FOR EACH ROW
 BEGIN
   IF OLD.code IN ('PRI','PFIL') THEN
@@ -199,7 +197,7 @@ BEGIN
    AND NOT EXISTS (SELECT 1 FROM event JOIN event_name en ON (event.code=en.code) WHERE event.matter_id=OLD.matter_id AND en.killer=1);
 END");
 
-        DB::unprepared("DROP PROCEDURE IF EXISTS `recalculate_tasks`");
+        DB::unprepared('DROP PROCEDURE IF EXISTS `recalculate_tasks`');
         DB::unprepared("CREATE PROCEDURE `recalculate_tasks`(IN Pmatter_id int, IN Ptrig_code char(5), IN Puser char(16))
 proc: BEGIN
 	DECLARE vtrigevent_date, vdue_date, vbase_date DATE DEFAULT NULL;
@@ -250,7 +248,7 @@ proc: BEGIN
 	END IF;
 END proc");
 
-        DB::unprepared("DROP PROCEDURE IF EXISTS `recreate_tasks`");
+        DB::unprepared('DROP PROCEDURE IF EXISTS `recreate_tasks`');
         DB::unprepared("CREATE PROCEDURE `recreate_tasks`(IN Ptrigger_id INT, Puser char(16))
 proc: BEGIN
   DECLARE vevent_date, vdue_date, vbase_date, vexpiry, tmp_date DATE DEFAULT NULL;
@@ -364,7 +362,7 @@ END proc");
 
     public function down()
     {
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_insert`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_insert`');
         DB::unprepared("CREATE TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW
 trig: BEGIN
   DECLARE vdue_date, vbase_date, vexpiry, tmp_date DATE DEFAULT NULL;
@@ -473,7 +471,7 @@ trig: BEGIN
   END IF;
 END trig");
 
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_update`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_update`');
         DB::unprepared("CREATE TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW
 trig: BEGIN
   DECLARE vdue_date, vbase_date DATE DEFAULT NULL;
@@ -539,7 +537,7 @@ trig: BEGIN
   END IF;
 END trig");
 
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_delete`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_delete`');
         DB::unprepared("CREATE TRIGGER `event_after_delete` AFTER DELETE ON `event` FOR EACH ROW
 BEGIN
   IF OLD.code IN ('PRI','PFIL') THEN
@@ -555,7 +553,7 @@ BEGIN
     AND NOT EXISTS (SELECT 1 FROM event JOIN event_name en ON (event.code=en.code) WHERE event.matter_id=OLD.matter_id AND en.killer=1);
 END");
 
-        DB::unprepared("DROP PROCEDURE IF EXISTS `recalculate_tasks`");
+        DB::unprepared('DROP PROCEDURE IF EXISTS `recalculate_tasks`');
         DB::unprepared("CREATE PROCEDURE `recalculate_tasks`(IN Pmatter_id int, IN Ptrig_code char(5))
 proc: BEGIN
   DECLARE vtrigevent_date, vdue_date, vbase_date DATE DEFAULT NULL;
@@ -606,7 +604,7 @@ proc: BEGIN
   END IF;
 END proc");
 
-        DB::unprepared("DROP PROCEDURE IF EXISTS `recreate_tasks`");
+        DB::unprepared('DROP PROCEDURE IF EXISTS `recreate_tasks`');
         DB::unprepared("CREATE PROCEDURE `recreate_tasks`(IN Ptrigger_id INT)
 proc: BEGIN
   DECLARE vevent_date, vdue_date, vbase_date, vexpiry, tmp_date DATE DEFAULT NULL;

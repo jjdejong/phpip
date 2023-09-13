@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\DB;
 class Rule extends Model
 {
     protected $table = 'task_rules';
+
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     public function country()
@@ -67,10 +69,11 @@ class Rule extends Model
             return false;
         }
         $tableInfo = DB::connection()->getDoctrineSchemaManager()->introspectTable($table_name);
-        $comments = array ();
+        $comments = [];
         foreach ($tableInfo->getColumns() as $column) {
             $comments[$column->getName()] = $column->getComment();
         }
+
         return $comments;
     }
 }

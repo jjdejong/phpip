@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Actor;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
-use App\Actor;
 
 class ActorSampleSeeder extends Seeder
 {

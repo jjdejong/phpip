@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ActorRoleTableSeeder extends Seeder
 {
-
     public function run()
     {
         DB::table('actor_role')->insertOrIgnore([

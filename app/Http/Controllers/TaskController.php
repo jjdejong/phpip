@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Task;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-
     public function index(Request $request)
     {
         $task = new Task;
         $isrenewals = $request->isrenewals;
         $tasks = $task->openTasks($isrenewals, $request->what_tasks, $request->user_dashboard)->simplePaginate(18);
         $tasks->appends($request->input())->links(); // Keep URL parameters in the paginator links
+
         return view('task.index', compact('tasks', 'isrenewals'));
     }
 
@@ -25,13 +25,14 @@ class TaskController extends Controller
             'trigger_id' => 'required|numeric',
             'due_date' => 'required',
             'cost' => 'nullable|numeric',
-            'fee' => 'nullable|numeric'
+            'fee' => 'nullable|numeric',
         ]);
         $request->merge(['due_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->due_date)]);
         if ($request->filled('done_date')) {
             $request->merge(['done_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->done_date)]);
         }
-        $request->merge([ 'creator' => Auth::user()->login ]);
+        $request->merge(['creator' => Auth::user()->login]);
+
         return Task::create($request->except(['_token', '_method']));
     }
 
@@ -45,9 +46,9 @@ class TaskController extends Controller
         $this->validate($request, [
             'due_date' => 'sometimes|filled',
             'cost' => 'nullable|numeric',
-            'fee' => 'nullable|numeric'
+            'fee' => 'nullable|numeric',
         ]);
-        $request->merge([ 'updater' => Auth::user()->login ]);
+        $request->merge(['updater' => Auth::user()->login]);
         if ($request->filled('done_date')) {
             $request->merge(['done_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->done_date)]);
         }
@@ -61,12 +62,14 @@ class TaskController extends Controller
             $request->merge(['step' => -1]);
         }
         $task->update($request->except(['_token', '_method']));
+
         return $task;
     }
 
     public function destroy(Task $task)
     {
         $task->delete();
+
         return $task;
     }
 }

@@ -4,154 +4,154 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * IMPORTANT this migration will generate unique key constraint violation errors if the tasks the task_rules table are not unique.
+     * If you get such errors, the task will be identified in the error message and you then need to fix it and run the migration again.
+     * Probably you simply need to delete the task, because it is redundant.
+     * Run the migration as many times as necessary until successful.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        // Fix glitches from original seeder
+        DB::table('task_rules')->where('responsible', 'phpip_user')->update(['responsible' => null]);
+        DB::table('task_rules')->where([['task', 'REM'], ['trigger_event', 'DRA']])->delete();
+        DB::table('task_rules')->where([['for_country', 'IN'], ['for_origin', 'WO']])->delete();
+        DB::table('task_rules')->where([['for_country', 'IN'], ['detail', 'like', 'Veri%']])->delete();
+        DB::table('matter_category')->where('category', 'Trade Mark')->update(['category' => 'Trademark']);
 
-	/**
-	 * Run the migrations.
-	 *
-	 * IMPORTANT this migration will generate unique key constraint violation errors if the tasks the task_rules table are not unique.
-	 * If you get such errors, the task will be identified in the error message and you then need to fix it and run the migration again.
-	 * Probably you simply need to delete the task, because it is redundant.
-	 * Run the migration as many times as necessary until successful.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-		// Fix glitches from original seeder
-		DB::table('task_rules')->where('responsible', 'phpip_user')->update(['responsible' => NULL]);
-		DB::table('task_rules')->where([['task', 'REM'], ['trigger_event', 'DRA']])->delete();
-		DB::table('task_rules')->where([['for_country', 'IN'], ['for_origin', 'WO']])->delete();
-		DB::table('task_rules')->where([['for_country', 'IN'], ['detail', 'like', 'Veri%']])->delete();
-		DB::table('matter_category')->where('category', 'Trade Mark')->update(['category' => 'Trademark']);
+        if (Schema::hasColumn('event_name', 'uqtrigger')) {
+            Schema::table('event_name', function (Blueprint $table) {
+                $table->dropColumn('uqtrigger');
+            });
+        }
 
-		if (Schema::hasColumn('event_name', 'uqtrigger')) {
-			Schema::table('event_name', function (Blueprint $table) {
-				$table->dropColumn('uqtrigger');
-			});
-		}
+        Schema::table('task_rules', function (Blueprint $table) {
+            if (! Schema::hasColumn('task_rules', 'uid')) {
+                $table->string('uid', 32)->unique()->virtualAs("md5(concat(task, trigger_event, clear_task, delete_task, for_category, ifnull(for_country, 'c'), ifnull(for_origin, 'o'), ifnull(for_type, 't'), days, months, years, recurring, ifnull(abort_on, 'a'), ifnull(condition_event, 'c'), use_parent, use_priority, ifnull(detail, 'd')))");
+            }
+        });
 
-		Schema::table('task_rules', function (Blueprint $table) {
-			if (!Schema::hasColumn('task_rules', 'uid')) {
-				$table->string('uid', 32)->unique()->virtualAs("md5(concat(task, trigger_event, clear_task, delete_task, for_category, ifnull(for_country, 'c'), ifnull(for_origin, 'o'), ifnull(for_type, 't'), days, months, years, recurring, ifnull(abort_on, 'a'), ifnull(condition_event, 'c'), use_parent, use_priority, ifnull(detail, 'd')))");
-			}
-		});
+        Schema::table('country', function (Blueprint $table) {
+            $table->tinyInteger('renewal_first')->unsigned()->nullable()->default(2)->comment('The first year a renewal is due in this country');
+            $table->char('renewal_base', 5)->nullable()->default('FIL')->comment('The base event for calculating renewal deadlines');
+            $table->char('renewal_start', 5)->nullable()->default('FIL')->comment('The event from which renewals become due');
+            $table->date('checked_on')->nullable()->default(null);
+        });
 
-		Schema::table('country', function (Blueprint $table) {
-			$table->tinyInteger('renewal_first')->unsigned()->nullable()->default(2)->comment('The first year a renewal is due in this country');
-			$table->char('renewal_base', 5)->nullable()->default('FIL')->comment('The base event for calculating renewal deadlines');
-			$table->char('renewal_start', 5)->nullable()->default('FIL')->comment('The event from which renewals become due');
-			$table->date('checked_on')->nullable()->default(NULL);
-		});
+        DB::table('country')->where('iso', 'AE')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'AO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // Up to 15
+        DB::table('country')->where('iso', 'AP')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'AR')->update(['renewal_first' => 1, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'AT')->update(['renewal_first' => 6, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'AU')->update(['renewal_first' => 5, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'BE')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
+        DB::table('country')->where('iso', 'BG')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'BH')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'BO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'BR')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'CA')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'CH')->update(['renewal_first' => 4, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'CL')->update(['renewal_first' => null, 'renewal_base' => null, 'renewal_start' => null, 'checked_on' => Now()]); // Exception: renewals per decade after grant
+        DB::table('country')->where('iso', 'CN')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'CO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'CR')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'CU')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'CY')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
+        DB::table('country')->where('iso', 'CZ')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'DE')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'DK')->update(['renewal_first' => 4, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'DO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'DZ')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'EA')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'EC')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'EE')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'EG')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'EP')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'ES')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'FI')->update(['renewal_first' => 4, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'FR')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'GB')->update(['renewal_first' => 5, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'GC')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // Unknown
+        DB::table('country')->where('iso', 'GR')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
+        DB::table('country')->where('iso', 'GT')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'HK')->update(['renewal_first' => 6, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // Complicated: stage 1 fees due from 6 after filing and stage 2 (via GB or CN) from 4 after grant
+        DB::table('country')->where('iso', 'HN')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'HR')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'HU')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'PUB', 'checked_on' => Now()]); // Past renewals due at publication of tranlated patent
+        DB::table('country')->where('iso', 'ID')->update(['renewal_first' => 1, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'IE')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'IL')->update(['renewal_first' => null, 'renewal_base' => null, 'renewal_start' => null, 'checked_on' => Now()]); // Exception: 3m after grant, then 6, 10, 14, 18y after filing
+        DB::table('country')->where('iso', 'IN')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'IR')->update(['renewal_first' => 2, 'renewal_base' => 'ENT', 'renewal_start' => 'ENT', 'checked_on' => Now()]); // National phase entry anniversary!
+        DB::table('country')->where('iso', 'IS')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'IT')->update(['renewal_first' => 5, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'JO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'JP')->update(['renewal_first' => 4, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'KR')->update(['renewal_first' => 4, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'LB')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'LI')->update(['renewal_first' => 4, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'LT')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
+        DB::table('country')->where('iso', 'LU')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'LY')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'MA')->update(['renewal_first' => 2, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'MC')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
+        DB::table('country')->where('iso', 'ME')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
+        DB::table('country')->where('iso', 'MG')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'MT')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
+        DB::table('country')->where('iso', 'MX')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'MY')->update(['renewal_first' => 2, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'NG')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'NI')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'NL')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
+        DB::table('country')->where('iso', 'NO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'NZ')->update(['renewal_first' => 5, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'OA')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'PH')->update(['renewal_first' => 5, 'renewal_base' => 'PUB', 'renewal_start' => 'PUB', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'PK')->update(['renewal_first' => 5, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'PL')->update(['renewal_first' => 4, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'PT')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'PY')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'QA')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'RO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'RS')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'RU')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'SA')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'SE')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'SG')->update(['renewal_first' => 5, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'SI')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
+        DB::table('country')->where('iso', 'SK')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'SV')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'SY')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'TH')->update(['renewal_first' => 5, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'TN')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'TR')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'TT')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'TW')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'UA')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'US')->update(['renewal_first' => null, 'renewal_base' => null, 'renewal_start' => null, 'checked_on' => Now()]); // Exception
+        DB::table('country')->where('iso', 'UY')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'VE')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'VN')->update(['renewal_first' => 2, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'WO')->update(['renewal_first' => null, 'renewal_base' => null, 'renewal_start' => null, 'checked_on' => Now()]);
+        DB::table('country')->where('iso', 'YE')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
+        DB::table('country')->where('iso', 'ZA')->update(['renewal_first' => 4, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
 
-		DB::table('country')->where('iso', 'AE')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'AO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // Up to 15
-		DB::table('country')->where('iso', 'AP')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'AR')->update(['renewal_first' => 1, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'AT')->update(['renewal_first' => 6, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'AU')->update(['renewal_first' => 5, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'BE')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
-		DB::table('country')->where('iso', 'BG')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'BH')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'BO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'BR')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'CA')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'CH')->update(['renewal_first' => 4, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'CL')->update(['renewal_first' => NULL, 'renewal_base' => NULL, 'renewal_start' => NULL, 'checked_on' => Now()]); // Exception: renewals per decade after grant
-		DB::table('country')->where('iso', 'CN')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'CO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'CR')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'CU')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'CY')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
-		DB::table('country')->where('iso', 'CZ')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'DE')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'DK')->update(['renewal_first' => 4, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'DO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'DZ')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'EA')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'EC')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'EE')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'EG')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'EP')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'ES')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'FI')->update(['renewal_first' => 4, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'FR')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'GB')->update(['renewal_first' => 5, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'GC')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // Unknown
-		DB::table('country')->where('iso', 'GR')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
-		DB::table('country')->where('iso', 'GT')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'HK')->update(['renewal_first' => 6, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // Complicated: stage 1 fees due from 6 after filing and stage 2 (via GB or CN) from 4 after grant
-		DB::table('country')->where('iso', 'HN')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'HR')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'HU')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'PUB', 'checked_on' => Now()]); // Past renewals due at publication of tranlated patent
-		DB::table('country')->where('iso', 'ID')->update(['renewal_first' => 1, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'IE')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'IL')->update(['renewal_first' => NULL, 'renewal_base' => NULL, 'renewal_start' => NULL, 'checked_on' => Now()]); // Exception: 3m after grant, then 6, 10, 14, 18y after filing
-		DB::table('country')->where('iso', 'IN')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'IR')->update(['renewal_first' => 2, 'renewal_base' => 'ENT', 'renewal_start' => 'ENT', 'checked_on' => Now()]); // National phase entry anniversary!
-		DB::table('country')->where('iso', 'IS')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'IT')->update(['renewal_first' => 5, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'JO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'JP')->update(['renewal_first' => 4, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'KR')->update(['renewal_first' => 4, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'LB')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'LI')->update(['renewal_first' => 4, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'LT')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
-		DB::table('country')->where('iso', 'LU')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'LY')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'MA')->update(['renewal_first' => 2, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'MC')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
-		DB::table('country')->where('iso', 'ME')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
-		DB::table('country')->where('iso', 'MG')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'MT')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
-		DB::table('country')->where('iso', 'MX')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'MY')->update(['renewal_first' => 2, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'NG')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'NI')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'NL')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
-		DB::table('country')->where('iso', 'NO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'NZ')->update(['renewal_first' => 5, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'OA')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'PH')->update(['renewal_first' => 5, 'renewal_base' => 'PUB', 'renewal_start' => 'PUB', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'PK')->update(['renewal_first' => 5, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'PL')->update(['renewal_first' => 4, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'PT')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'PY')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'QA')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'RO')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'RS')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'RU')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'SA')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'SE')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'SG')->update(['renewal_first' => 5, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'SI')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // EP
-		DB::table('country')->where('iso', 'SK')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'SV')->update(['renewal_first' => 3, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'SY')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'TH')->update(['renewal_first' => 5, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'TN')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'TR')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'TT')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'TW')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'UA')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'US')->update(['renewal_first' => NULL, 'renewal_base' => NULL, 'renewal_start' => NULL, 'checked_on' => Now()]); // Exception
-		DB::table('country')->where('iso', 'UY')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'GRT', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'VE')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'VN')->update(['renewal_first' => 2, 'renewal_base' => 'GRT', 'renewal_start' => 'GRT', 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'WO')->update(['renewal_first' => NULL, 'renewal_base' => NULL, 'renewal_start' => NULL, 'checked_on' => Now()]);
-		DB::table('country')->where('iso', 'YE')->update(['renewal_first' => 2, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]); // OK
-		DB::table('country')->where('iso', 'ZA')->update(['renewal_first' => 4, 'renewal_base' => 'FIL', 'renewal_start' => 'FIL', 'checked_on' => Now()]);
+        // tr_task rule for handling renewals from the country table above
+        DB::table('task_rules')->insertOrIgnore([
+            ['task' => 'REN', 'trigger_event' => 'FIL', 'for_category' => 'PAT', 'recurring' => 1, 'years' => 19, 'creator' => 'script', 'created_at' => Now(), 'updated_at' => Now(),
+                'detail' => 'Recurring', 'notes' => 'Uses the country table information by setting "recurring = 1"'],
+            ['task' => 'REN', 'trigger_event' => 'GRT', 'for_category' => 'PAT', 'recurring' => 1, 'years' => 19, 'creator' => 'script', 'created_at' => Now(), 'updated_at' => Now(),
+                'detail' => 'Recurring', 'notes' => 'Uses the country table information by setting "recurring = 1"'],
+        ]);
 
-		// tr_task rule for handling renewals from the country table above
-		DB::table('task_rules')->insertOrIgnore([
-			['task' => 'REN', 'trigger_event' => 'FIL', 'for_category' => 'PAT', 'recurring' => 1, 'years' => 19, 'creator' => 'script', 'created_at' => Now(), 'updated_at' => Now(),
-			'detail' => 'Recurring', 'notes' => 'Uses the country table information by setting "recurring = 1"'],
-			['task' => 'REN', 'trigger_event' => 'GRT', 'for_category' => 'PAT', 'recurring' => 1, 'years' => 19, 'creator' => 'script', 'created_at' => Now(), 'updated_at' => Now(),
-			'detail' => 'Recurring', 'notes' => 'Uses the country table information by setting "recurring = 1"']
-		]);
-
-		// tr_task rules for the exceptions
-		DB::statement("INSERT IGNORE INTO task_rules (id, task, trigger_event, for_category, for_country, detail, months, years, creator, created_at, updated_at)
+        // tr_task rules for the exceptions
+        DB::statement("INSERT IGNORE INTO task_rules (id, task, trigger_event, for_category, for_country, detail, months, years, creator, created_at, updated_at)
 			VALUES (300, 'REN', 'GRT', 'PAT', 'US', '3.5', 6, 3, 'script', Now(), Now()),
 			(301, 'REN', 'GRT', 'PAT', 'US', '7.5', 6, 7, 'script', Now(), Now()),
 			(302, 'REN', 'GRT', 'PAT', 'US', '11.5', 6, 11, 'script', Now(), Now()),
@@ -161,10 +161,10 @@ return new class extends Migration {
 			(306, 'REN', 'FIL', 'PAT', 'IL', '11', 0, 10, 'script', Now(), Now()),
 			(307, 'REN', 'FIL', 'PAT', 'IL', '15', 0, 14, 'script', Now(), Now()),
 			(308, 'REN', 'FIL', 'PAT', 'IL', '19', 0, 18, 'script', Now(), Now())"
-		);
+        );
 
-		DB::unprepared("DROP TRIGGER IF EXISTS `event_after_insert`");
-		DB::unprepared("CREATE TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_insert`');
+        DB::unprepared("CREATE TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW
 trig: BEGIN
 	DECLARE DueDate, BaseDate, m_expiry DATE DEFAULT NULL;
 	DECLARE tr_id, tr_days, tr_months, tr_years, m_pta, lnk_matter_id, CliAnnAgt INT DEFAULT NULL;
@@ -315,8 +315,8 @@ trig: BEGIN
 	END IF;
 END trig");
 
-		DB::unprepared("DROP TRIGGER IF EXISTS `event_after_update`");
-		DB::unprepared("CREATE TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_update`');
+        DB::unprepared("CREATE TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW
 trig: BEGIN
 
 	-- CALL recalculate_tasks(NEW.matter_id, NEW.code, NEW.updater);
@@ -413,8 +413,8 @@ trig: BEGIN
   END IF;
 END trig");
 
-		DB::unprepared('DROP PROCEDURE IF EXISTS `recalculate_tasks`');
-		DB::unprepared("CREATE PROCEDURE `recalculate_tasks`(
+        DB::unprepared('DROP PROCEDURE IF EXISTS `recalculate_tasks`');
+        DB::unprepared("CREATE PROCEDURE `recalculate_tasks`(
 			IN P_matter_id INT,
 			IN P_event_code CHAR(5),
 			IN P_user CHAR(16)
@@ -490,8 +490,8 @@ proc: BEGIN
 	END IF;
 END proc");
 
-		DB::unprepared('DROP PROCEDURE IF EXISTS `recreate_tasks`');
-		DB::unprepared("CREATE PROCEDURE `recreate_tasks`(
+        DB::unprepared('DROP PROCEDURE IF EXISTS `recreate_tasks`');
+        DB::unprepared("CREATE PROCEDURE `recreate_tasks`(
 			IN P_trigger_id INT,
 			IN P_user CHAR(16)
 		)
@@ -653,8 +653,8 @@ proc: BEGIN
   END IF;
 END proc");
 
-		DB::unprepared('DROP PROCEDURE IF EXISTS `insert_recurring_renewals`');
-		DB::unprepared("CREATE PROCEDURE `insert_recurring_renewals`(
+        DB::unprepared('DROP PROCEDURE IF EXISTS `insert_recurring_renewals`');
+        DB::unprepared("CREATE PROCEDURE `insert_recurring_renewals`(
 			IN P_trigger_id INT,
     	IN P_rule_id INT,
     	IN P_base_date DATE,
@@ -700,27 +700,25 @@ proc: BEGIN
   END WHILE;
 END proc");
 
-	}
+    }
 
+    public function down()
+    {
+        Schema::table('country', function (Blueprint $table) {
+            $table->dropColumn('renewal_start');
+            $table->dropColumn('renewal_base');
+            $table->dropColumn('renewal_first');
+            $table->dropColumn('checked_on');
+        });
 
-	public function down()
-	{
-		Schema::table('country', function (Blueprint $table) {
-			$table->dropColumn('renewal_start');
-			$table->dropColumn('renewal_base');
-			$table->dropColumn('renewal_first');
-			$table->dropColumn('checked_on');
-		});
+        Schema::table('task_rules', function (Blueprint $table) {
+            $table->dropColumn('uid');
+        });
 
-		Schema::table('task_rules', function (Blueprint $table) {
-			$table->dropColumn('uid');
-		});
+        Schema::table('event_name', function (Blueprint $table) {
+            $table->boolean('uqtrigger')->default(0)->comment('Can only be triggered by one event');
+        });
 
-		Schema::table('event_name', function(Blueprint $table)
-		{
-			$table->boolean('uqtrigger')->default(0)->comment('Can only be triggered by one event');
-		});
-
-		DB::unprepared('DROP PROCEDURE IF EXISTS `insert_recurring_renewals`');
-	}
+        DB::unprepared('DROP PROCEDURE IF EXISTS `insert_recurring_renewals`');
+    }
 };

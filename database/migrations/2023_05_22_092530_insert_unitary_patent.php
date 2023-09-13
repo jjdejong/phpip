@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -24,7 +24,7 @@ return new class extends Migration
                 'renewal_base' => 'FIL',
                 'renewal_start' => 'GRT',
                 'checked_on' => '2023-05-22',
-            ]
+            ],
         ]);
     }
 };

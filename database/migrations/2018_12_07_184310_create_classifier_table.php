@@ -5,7 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 
 return new class extends Migration
 {
-
     public function up()
     {
         Schema::create('classifier', function (Blueprint $table) {
@@ -34,7 +33,6 @@ return new class extends Migration
             DB::statement('ALTER TABLE classifier MODIFY id INT UNSIGNED AUTO_INCREMENT'); // add auto increment
         });
     }
-
 
     public function down()
     {

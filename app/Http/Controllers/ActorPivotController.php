@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\ActorPivot;
 use App\Actor;
+use App\ActorPivot;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 
 class ActorPivotController extends Controller
 {
     public function store(Request $request)
     {
         $request->validate([
-          'matter_id' => 'required|numeric',
-          'actor_id' => 'required|numeric',
-          'role' => 'required',
-          'date' => 'date'
+            'matter_id' => 'required|numeric',
+            'actor_id' => 'required|numeric',
+            'role' => 'required',
+            'date' => 'date',
         ]);
 
-      // Fix display order indexes if wrong
+        // Fix display order indexes if wrong
         $roleGroup = ActorPivot::where('matter_id', $request->matter_id)->where('role', $request->role);
         $max = $roleGroup->max('display_order');
         $count = $roleGroup->count();
@@ -37,10 +37,10 @@ class ActorPivotController extends Controller
         $addedActor = Actor::find($request->actor_id);
 
         $request->merge([
-          'display_order' => $max + 1,
-          'creator' => Auth::user()->login,
-          'company_id' => $addedActor->company_id,
-          'date' => Now()
+            'display_order' => $max + 1,
+            'creator' => Auth::user()->login,
+            'company_id' => $addedActor->company_id,
+            'date' => Now(),
         ]);
 
         return ActorPivot::create($request->except(['_token', '_method']));
@@ -49,10 +49,11 @@ class ActorPivotController extends Controller
     public function update(Request $request, ActorPivot $actorPivot)
     {
         $request->validate([
-          'date' => 'date'
+            'date' => 'date',
         ]);
-        $request->merge([ 'updater' => Auth::user()->login ]);
+        $request->merge(['updater' => Auth::user()->login]);
         $actorPivot->update($request->except(['_token', '_method']));
+
         return $actorPivot;
     }
 
@@ -81,11 +82,12 @@ class ActorPivotController extends Controller
         $matter_dependencies = $actorpivot->with('matter', 'role')->where('actor_id', $actor)->get()->take(50);
         $actor_model = new Actor();
         $other_dependencies = $actor_model->select('id', DB::Raw("concat_ws(' ', name, first_name) as Actor"), DB::Raw("(
-          case " . $actor . "
+          case $actor
             when parent_id then 'Parent'
             when company_id then 'Company'
             when site_id then 'Site'
           end) as Dependency"))->where('parent_id', $actor)->orWhere('company_id', $actor)->orWhere('site_id', $actor)->get()->take(30);
-        return view('actor.usedin', compact(['matter_dependencies','other_dependencies']));
+
+        return view('actor.usedin', compact(['matter_dependencies', 'other_dependencies']));
     }
 }

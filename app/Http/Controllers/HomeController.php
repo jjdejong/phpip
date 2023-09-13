@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Task;
 use App\Matter;
+use App\Task;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 class HomeController extends Controller
@@ -29,12 +29,12 @@ class HomeController extends Controller
         // Count matters per categories
         $categories = Matter::getCategoryMatterCount();
         $taskscount = Task::getUsersOpenTaskCount();
+
         return view('home', compact('categories', 'taskscount'));
     }
 
     /**
      * Clear selected tasks.
-     *
      */
     public function clearTasks(Request $request)
     {
@@ -52,6 +52,7 @@ class HomeController extends Controller
                 $updated++;
             }
         }
-        return response()->json(['not_updated' => (count($tids) - $updated), 'errors' =>'']);
+
+        return response()->json(['not_updated' => (count($tids) - $updated), 'errors' => '']);
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Rule;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RuleController extends Controller
@@ -11,7 +11,7 @@ class RuleController extends Controller
     public function index(Request $request)
     {
         $this->authorize('viewAny', Rule::class);
-        $Task  = $request->input('Task');
+        $Task = $request->input('Task');
         $Trigger = $request->input('Trigger');
         $Country = $request->input('Country');
         $Origin = $request->input('Origin');
@@ -55,6 +55,7 @@ class RuleController extends Controller
         $ruleslist = $rule->with(['country:iso,name', 'trigger:code,name', 'category:code,category', 'origin:iso,name', 'type:code,type', 'taskInfo:code,name'])
             ->orderby('task')->paginate(21);
         $ruleslist->appends($request->input())->links();
+
         return view('rule.index', compact('ruleslist'));
     }
 
@@ -62,15 +63,15 @@ class RuleController extends Controller
     {
         $this->authorize('view', $rule);
         $ruleInfo = $rule->load([
-          'trigger:code,name',
-          'country:iso,name',
-          'category:code,category',
-          'origin:iso,name',
-          'type:code,type',
-          'taskInfo:code,name',
-          'condition_eventInfo:code,name',
-          'abort_onInfo:code,name',
-          'responsibleInfo:login,name'
+            'trigger:code,name',
+            'country:iso,name',
+            'category:code,category',
+            'origin:iso,name',
+            'type:code,type',
+            'taskInfo:code,name',
+            'condition_eventInfo:code,name',
+            'abort_onInfo:code,name',
+            'responsibleInfo:login,name',
         ]);
 
         $ruleComments = $rule->getTableComments('task_rules');
@@ -81,8 +82,9 @@ class RuleController extends Controller
     public function create()
     {
         $this->authorize('create', Rule::class);
-        $rule = new Rule ;
+        $rule = new Rule;
         $ruleComments = $rule->getTableComments('task_rules');
+
         return view('rule.create', compact('ruleComments'));
     }
 
@@ -99,10 +101,11 @@ class RuleController extends Controller
             'days' => 'nullable|numeric',
             'fee' => 'nullable|numeric',
             'use_before' => 'nullable|date',
-            'use_after' => 'nullable|date'
+            'use_after' => 'nullable|date',
         ]);
-        $request->merge([ 'updater' => Auth::user()->login ]);
+        $request->merge(['updater' => Auth::user()->login]);
         $rule->update($request->except(['_token', '_method']));
+
         return $rule;
     }
 
@@ -119,10 +122,11 @@ class RuleController extends Controller
             'days' => 'numeric',
             'fee' => 'nullable|numeric',
             'use_before' => 'nullable|date',
-            'use_after' => 'nullable|date'
+            'use_after' => 'nullable|date',
         ]);
-        $request->merge([ 'creator' => Auth::user()->login ]);
+        $request->merge(['creator' => Auth::user()->login]);
         Rule::create($request->except(['_token', '_method']));
+
         return response()->json(['redirect' => route('rule.index')]);
     }
 
@@ -130,6 +134,7 @@ class RuleController extends Controller
     {
         $this->authorize('delete', $rule);
         $rule->delete();
+
         return $rule;
     }
 }

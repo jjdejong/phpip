@@ -1,15 +1,13 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Model;
 
 return new class extends Migration
 {
     public function up()
     {
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_insert`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_insert`');
         DB::unprepared("CREATE TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW trig: BEGIN
 	DECLARE DueDate, BaseDate, m_expiry DATE DEFAULT NULL;
 	DECLARE tr_id, tr_days, tr_months, tr_years, m_pta, lnk_matter_id, CliAnnAgt, m_parent_id INT DEFAULT NULL;
@@ -155,7 +153,7 @@ return new class extends Migration
 	END IF;
 END trig");
 
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_update`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_update`');
         DB::unprepared("CREATE TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW trig: BEGIN
   DECLARE DueDate, BaseDate DATE DEFAULT NULL;
   DECLARE t_id, tr_days, tr_months, tr_years, tr_recurring, m_pta, lnk_matter_id INT DEFAULT NULL;
@@ -244,8 +242,8 @@ END trig");
   END IF;
 END trig");
 
-    DB::unprepared('DROP PROCEDURE IF EXISTS `recalculate_tasks`');
-    DB::unprepared("CREATE PROCEDURE `recalculate_tasks`(
+        DB::unprepared('DROP PROCEDURE IF EXISTS `recalculate_tasks`');
+        DB::unprepared("CREATE PROCEDURE `recalculate_tasks`(
 			IN P_matter_id INT,
 			IN P_event_code CHAR(5),
 			IN P_user CHAR(16)
@@ -315,8 +313,8 @@ proc: BEGIN
 	END IF;
 END proc");
 
-    DB::unprepared('DROP PROCEDURE IF EXISTS `recreate_tasks`');
-    DB::unprepared("CREATE PROCEDURE `recreate_tasks`(
+        DB::unprepared('DROP PROCEDURE IF EXISTS `recreate_tasks`');
+        DB::unprepared("CREATE PROCEDURE `recreate_tasks`(
 			IN P_trigger_id INT,
 			IN P_user CHAR(16)
 		)
@@ -473,48 +471,48 @@ proc: BEGIN
   END IF;
 END proc");
 
-      DB::table('task_rules')->where([['for_country', 'BR'], ['task', 'EXP'], ['for_category', 'PAT']])->delete();
-      DB::unprepared("create temporary table pfilings like event;
+        DB::table('task_rules')->where([['for_country', 'BR'], ['task', 'EXP'], ['for_category', 'PAT']])->delete();
+        DB::unprepared("create temporary table pfilings like event;
 insert into pfilings (id, code, matter_id, event_date)
 select id, code, matter_id, min(event_date) from event
 where code = 'PFIL'
 group by matter_id, code
 order by matter_id");
-      DB::unprepared("create temporary table filings like event;
+        DB::unprepared("create temporary table filings like event;
 insert into filings
 select event.* from event join pfilings using (matter_id)
 where event.code = 'FIL'");
-      DB::unprepared("update event join filings using (matter_id)
+        DB::unprepared("update event join filings using (matter_id)
 set event.event_date = filings.event_date, event.detail = 'Child filing date'
 where event.code = 'ENT'");
-      DB::unprepared("insert into event (matter_id, code, event_date, detail)
+        DB::unprepared("insert into event (matter_id, code, event_date, detail)
 select filings.matter_id, 'ENT', filings.event_date, 'Child filing date'
 from filings
 where not exists (select 1 from event ent where ent.matter_id = filings.matter_id and ent.code = 'ENT')");
-      DB::unprepared("update event join pfilings using (matter_id)
+        DB::unprepared("update event join pfilings using (matter_id)
 set event.event_date = pfilings.event_date
 where event.code = 'FIL'
 and event.event_date != pfilings.event_date");
-      DB::unprepared("delete from event where code = 'PFIL'");
-      DB::unprepared("insert ignore into event (code, matter_id, alt_matter_id)
+        DB::unprepared("delete from event where code = 'PFIL'");
+        DB::unprepared("insert ignore into event (code, matter_id, alt_matter_id)
 select 'PFIL', matter.id, matter.parent_id
 from matter join matter parent on parent.id = matter.parent_id
 where matter.origin in ('EP', 'WO')
 and parent.country = matter.origin");
-      DB::table('event_name')->where('code', 'ENT')->update(['status_event' => 1, 'notes' => 'Actual filing date of a child matter']);
+        DB::table('event_name')->where('code', 'ENT')->update(['status_event' => 1, 'notes' => 'Actual filing date of a child matter']);
 
-      /* Doesnt run
-      $matters = App\Matter::has('parentFiling')->has('filing')->with('parentFiling', 'filing', 'entered');
-      foreach ($matters as $matter) {
-        $matter->entered()->updateOrCreate(
-          ['code' => 'ENT'],
-          ['event_date' => $matter->filing->event_date,
-          'detail' => 'Child filing date']
-        );
+        /* Doesnt run
+        $matters = App\Matter::has('parentFiling')->has('filing')->with('parentFiling', 'filing', 'entered');
+        foreach ($matters as $matter) {
+          $matter->entered()->updateOrCreate(
+            ['code' => 'ENT'],
+            ['event_date' => $matter->filing->event_date,
+            'detail' => 'Child filing date']
+          );
 
-        $matter->filing->event_date = $matter->parentFiling()->min('event_date');
-        $matter->filing->save();
-      }*/
+          $matter->filing->event_date = $matter->parentFiling()->min('event_date');
+          $matter->filing->save();
+        }*/
 
     }
 

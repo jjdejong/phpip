@@ -1,16 +1,14 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Model;
 
 return new class extends Migration
 {
     public function up()
     {
-      DB::unprepared('DROP PROCEDURE IF EXISTS `insert_recurring_renewals`');
-      DB::unprepared("CREATE PROCEDURE `insert_recurring_renewals`(
+        DB::unprepared('DROP PROCEDURE IF EXISTS `insert_recurring_renewals`');
+        DB::unprepared("CREATE PROCEDURE `insert_recurring_renewals`(
 	IN P_trigger_id INT,
 	IN P_rule_id INT,
 	IN P_base_date DATE,

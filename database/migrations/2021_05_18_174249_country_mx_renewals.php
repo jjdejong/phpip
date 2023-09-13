@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -12,16 +10,16 @@ return new class extends Migration
             'renewal_first' => null,
             'renewal_base' => null,
             'renewal_start' => null,
-            'checked_on' => '2021-05-18'
+            'checked_on' => '2021-05-18',
         ]);
 
         DB::table('country')->where('iso', 'IR')->update([
             'renewal_first' => 2,
             'renewal_base' => 'FIL',
             'renewal_start' => 'FIL',
-            'checked_on' => '2021-05-18'
+            'checked_on' => '2021-05-18',
         ]);
-        
+
         DB::table('task_rules')->insertOrIgnore([
             [
                 'active' => 1,

@@ -7,11 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     protected $table = 'event';
+
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
     protected $touches = ['matter'];
+
     protected $casts = [
-      'event_date' => 'date:Y-m-d'
+        'event_date' => 'date:Y-m-d',
     ];
 
     public function info()
@@ -53,11 +57,11 @@ class Event extends Model
         return preg_replace(["/^{$this->matter->country}/", '/ /', '/,/', '/-/', '/\//', '/\.[0-9]/'], '', $this->detail);
     }
 
-// Produces a link to official published information
+    // Produces a link to official published information
 
     public function publicUrl()
     {
-        if (!in_array($this->code, ['FIL', 'PUB', 'GRT'])) {
+        if (! in_array($this->code, ['FIL', 'PUB', 'GRT'])) {
             return false;
         }
         if ($this->matter->origin == 'EP') {
@@ -72,10 +76,10 @@ class Event extends Model
         if ($this->code == 'PUB' || $this->code == 'GRT') {
             // Fix US pub number for Espacenet by keeping the last 6 digits after the year
             if ($CC == 'US' && $this->code == 'PUB') {
-                $cleanednumber = substr($cleanednumber, 0, 4) . substr($cleanednumber, - 6);
+                $cleanednumber = substr($cleanednumber, 0, 4).substr($cleanednumber, -6);
             }
             $href = "http://worldwide.espacenet.com/publicationDetails/biblio?DB=EPODOC&CC=$CC&NR=$cleanednumber";
-        } else if ($this->code == 'FIL') {
+        } elseif ($this->code == 'FIL') {
             switch ($this->matter->country) {
                 case 'EP':
                     $href = "https://register.epo.org/espacenet/application?number=EP$cleanednumber";
@@ -84,17 +88,18 @@ class Event extends Model
                     $pubno = $this->matter->publication->cleanNumber();
                     if ($category == 'PAT' && $pubno) {
                         $href = "https://data.inpi.fr/brevets/$CC$pubno";
-                    } else if ( $category == 'TM' ) {
-                        if ($this->event_date->isoFormat('YYYY') >= '2000')
+                    } elseif ($category == 'TM') {
+                        if ($this->event_date->isoFormat('YYYY') >= '2000') {
                             $cleanednumber = substr($cleanednumber, -7);
-                            $href = "https://data.inpi.fr/marques/$CC$cleanednumber";
                         }
+                        $href = "https://data.inpi.fr/marques/$CC$cleanednumber";
+                    }
                     break;
                 case 'US':
                     if (substr($cleanednumber, 0, 2) < 13) {
-                        $cleanednumber = substr($cleanednumber, 2) . $this->event_date->isoFormat('YY');
+                        $cleanednumber = substr($cleanednumber, 2).$this->event_date->isoFormat('YY');
                     } else {
-                        $cleanednumber = $this->event_date->isoFormat('YYYY') . $cleanednumber;
+                        $cleanednumber = $this->event_date->isoFormat('YYYY').$cleanednumber;
                     }
                     $href = "https://register.epo.org/ipfwretrieve?apn=US.$cleanednumber.A";
                     break;
@@ -106,6 +111,7 @@ class Event extends Model
                     break;
             }
         }
+
         return $href;
     }
 }

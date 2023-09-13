@@ -2,34 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
 use App\Actor;
-use Illuminate\Support\Facades\Auth;
+use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $Code  = $request->input('Code');
+        $Code = $request->input('Code');
         $Category = $request->input('Category');
-        $category = Category::query() ;
-        if (!is_null($Code)) {
+        $category = Category::query();
+        if (! is_null($Code)) {
             $category = $category->where('code', 'like', $Code.'%');
         }
-        if (!is_null($Category)) {
+        if (! is_null($Category)) {
             $category = $category->where('category', 'like', $Category.'%');
         }
 
         $categories = $category->get();
+
         return view('category.index', compact('categories'));
     }
 
-
     public function create()
     {
-        $table = new Actor ;
+        $table = new Actor;
         $tableComments = $table->getTableComments('matter_category');
+
         return view('category.create', compact('tableComments'));
     }
 
@@ -38,9 +39,10 @@ class CategoryController extends Controller
         $request->validate([
             'code' => 'required|unique:matter_category|max:5',
             'category' => 'required|max:45',
-            'display_with' => 'required'
+            'display_with' => 'required',
         ]);
-        $request->merge([ 'creator' => Auth::user()->login ]);
+        $request->merge(['creator' => Auth::user()->login]);
+
         return Category::create($request->except(['_token', '_method']));
     }
 
@@ -49,19 +51,22 @@ class CategoryController extends Controller
         $table = new Actor;
         $tableComments = $table->getTableComments('matter_category');
         $category->load(['displayWithInfo:code,category']);
+
         return view('category.show', compact('category', 'tableComments'));
     }
 
     public function update(Request $request, Category $category)
     {
-        $request->merge([ 'updater' => Auth::user()->login ]);
+        $request->merge(['updater' => Auth::user()->login]);
         $category->update($request->except(['_token', '_method']));
+
         return $category;
     }
 
     public function destroy(Category $category)
     {
         $category->delete();
+
         return $category;
     }
 }

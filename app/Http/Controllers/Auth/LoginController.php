@@ -37,10 +37,10 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
-    
+
     // Use the 'login' column of the actor table for logging in
     public function username()
     {
-    	return 'login';
+        return 'login';
     }
 }

@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Fee extends Model
 {
-    protected $hidden = [ 'creator', 'created_at', 'updated_at', 'updater'];
+    protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     public function country()

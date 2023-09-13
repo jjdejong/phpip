@@ -1,62 +1,62 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
     protected $tables = [
-      'actor',
-      'actor_role',
-      'classifier',
-      'classifier_type',
-      'classifier_value',
-      'event',
-      'event_name',
-      'matter',
-      'matter_actor_lnk',
-      'matter_category',
-      'matter_type',
-      'task',
-      'task_rules'
+        'actor',
+        'actor_role',
+        'classifier',
+        'classifier_type',
+        'classifier_value',
+        'event',
+        'event_name',
+        'matter',
+        'matter_actor_lnk',
+        'matter_category',
+        'matter_type',
+        'task',
+        'task_rules',
     ];
 
     public function up()
     {
-      foreach ($this->tables as $t) {
-        if (Schema::hasColumn($t, 'updated')) {
-          Schema::table($t, function (Blueprint $table) use ($t) {
-            $table->dateTime('created_at')->after('creator')->nullable();
-            $table->dateTime('updated')->nullable()->change();
-            $table->renameColumn('updated', 'updated_at');
-            if ($t == 'actor_role') {
-              if (Schema::hasColumn($t, 'box')) {
-                $table->dropColumn(['box', 'box_color']);
-              }
-        			$table->boolean('shareable')->default(0)->comment('Indicates whether actors with this role are shareable by default with all matters of the same family')->change();
-        			$table->boolean('show_ref')->default(0)->change();
-        			$table->boolean('show_company')->default(0)->change();
-        			$table->boolean('show_rate')->default(0)->change();
-        			$table->boolean('show_date')->default(0)->change();
+        foreach ($this->tables as $t) {
+            if (Schema::hasColumn($t, 'updated')) {
+                Schema::table($t, function (Blueprint $table) use ($t) {
+                    $table->dateTime('created_at')->after('creator')->nullable();
+                    $table->dateTime('updated')->nullable()->change();
+                    $table->renameColumn('updated', 'updated_at');
+                    if ($t == 'actor_role') {
+                        if (Schema::hasColumn($t, 'box')) {
+                            $table->dropColumn(['box', 'box_color']);
+                        }
+                        $table->boolean('shareable')->default(0)->comment('Indicates whether actors with this role are shareable by default with all matters of the same family')->change();
+                        $table->boolean('show_ref')->default(0)->change();
+                        $table->boolean('show_company')->default(0)->change();
+                        $table->boolean('show_rate')->default(0)->change();
+                        $table->boolean('show_date')->default(0)->change();
+                    }
+                    if ($t == 'actor') {
+                        $table->boolean('phy_person')->default(1)->comment('Physical person or not')->change();
+                        $table->boolean('small_entity')->default(0)->comment('Small entity status used in a few countries (FR, US)')->change();
+                        $table->string('address', 256)->comment('Main address: street, zip and city')->nullable()->change();
+                        $table->string('address_mailing', 256)->comment('Mailing address: street, zip and city')->nullable()->change();
+                        $table->string('address_billing', 256)->comment('Billing address: street, zip and city')->nullable()->change();
+                        $table->boolean('warn')->default(0)->comment('The actor will be displayed in red in the matter view when set')->change();
+                    }
+                    if ($t == 'matter') {
+                        $table->boolean('dead')->default(0)->comment('Indicates that the case is no longer supervised. Automatically set by "killer events" like "Abandoned"')->change();
+                    }
+                });
             }
-            if ($t == 'actor') {
-              $table->boolean('phy_person')->default(1)->comment('Physical person or not')->change();
-              $table->boolean('small_entity')->default(0)->comment('Small entity status used in a few countries (FR, US)')->change();
-              $table->string('address', 256)->comment('Main address: street, zip and city')->nullable()->change();
-              $table->string('address_mailing', 256)->comment('Mailing address: street, zip and city')->nullable()->change();
-              $table->string('address_billing', 256)->comment('Billing address: street, zip and city')->nullable()->change();
-              $table->boolean('warn')->default(0)->comment('The actor will be displayed in red in the matter view when set')->change();
-            }
-            if ($t == 'matter') {
-              $table->boolean('dead')->default(0)->comment('Indicates that the case is no longer supervised. Automatically set by "killer events" like "Abandoned"')->change();
-            }
-          });
         }
-      }
 
-      DB::unprepared("DROP TRIGGER IF EXISTS `event_after_insert`");
-      DB::unprepared("CREATE TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_insert`');
+        DB::unprepared("CREATE TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW
         trig: BEGIN
           DECLARE vdue_date, vbase_date, vexpiry, tmp_date DATE DEFAULT NULL;
           DECLARE vcontainer_id, vid_uqtask, vrule_id, vdays, vmonths, vyears, vpta, vid, vcli_ann_agt INT DEFAULT NULL;
@@ -201,10 +201,10 @@ return new class extends Migration
             UPDATE matter SET dead = 1 WHERE matter.id=NEW.matter_id;
           END IF;
         END trig"
-      );
+        );
 
-      DB::unprepared("DROP TRIGGER IF EXISTS `event_after_update`");
-      DB::unprepared("CREATE TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_update`');
+        DB::unprepared("CREATE TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW
         trig: BEGIN
           DECLARE vdue_date, vbase_date DATE DEFAULT NULL;
           DECLARE vtask_id, vdays, vmonths, vyears, vrecurring, vpta, vid INT DEFAULT NULL;
@@ -285,10 +285,10 @@ return new class extends Migration
             UPDATE matter SET expire_date=vdue_date WHERE matter.id=NEW.matter_id;
           END IF;
         END trig"
-      );
+        );
 
-      DB::unprepared("DROP TRIGGER IF EXISTS `event_after_delete`");
-      DB::unprepared("CREATE TRIGGER `event_after_delete` AFTER DELETE ON `event` FOR EACH ROW
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_delete`');
+        DB::unprepared("CREATE TRIGGER `event_after_delete` AFTER DELETE ON `event` FOR EACH ROW
         BEGIN
           IF OLD.code IN ('PRI','PFIL') THEN
             CALL recalculate_tasks(OLD.matter_id, 'FIL');
@@ -304,10 +304,10 @@ return new class extends Migration
             WHERE matter.id=OLD.matter_id
             AND NOT EXISTS (SELECT 1 FROM event JOIN event_name en ON (event.code=en.code) WHERE event.matter_id=OLD.matter_id AND en.killer=1);
         END"
-      );
+        );
 
-      DB::unprepared("DROP TRIGGER IF EXISTS `malnk_after_insert`");
-      DB::unprepared("CREATE TRIGGER `malnk_after_insert` AFTER INSERT ON `matter_actor_lnk` FOR EACH ROW
+        DB::unprepared('DROP TRIGGER IF EXISTS `malnk_after_insert`');
+        DB::unprepared("CREATE TRIGGER `malnk_after_insert` AFTER INSERT ON `matter_actor_lnk` FOR EACH ROW
         BEGIN
           DECLARE vcli_ann_agt INT DEFAULT NULL;
 
@@ -320,22 +320,22 @@ return new class extends Migration
             END IF;
           END IF;
         END"
-      );
+        );
 
-      DB::unprepared("DROP TRIGGER IF EXISTS `matter_actor_lnk_AFTER_UPDATE`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `matter_actor_lnk_AFTER_UPDATE`');
 
-      DB::unprepared("DROP TRIGGER IF EXISTS `matter_actor_lnk_AFTER_DELETE`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `matter_actor_lnk_AFTER_DELETE`');
     }
 
     public function down()
     {
-      foreach ($this->tables as $t) {
-        if (Schema::hasColumn($t, 'updated_at')) {
-          Schema::table($t, function (Blueprint $table) {
-            $table->renameColumn('updated_at', 'updated');
-            $table->dropColumn('created_at');
-          });
+        foreach ($this->tables as $t) {
+            if (Schema::hasColumn($t, 'updated_at')) {
+                Schema::table($t, function (Blueprint $table) {
+                    $table->renameColumn('updated_at', 'updated');
+                    $table->dropColumn('created_at');
+                });
+            }
         }
-      }
     }
 };

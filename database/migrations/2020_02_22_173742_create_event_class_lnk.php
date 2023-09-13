@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('event_class_lnk', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('event_name_code',5);
+            $table->string('event_name_code', 5);
             $table->unsignedInteger('template_class_id');
             $table->timestamps();
         });

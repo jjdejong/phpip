@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -10,7 +8,7 @@ return new class extends Migration
     {
         DB::table('country')->where('iso', 'MA')->update([
             'renewal_base' => 'FIL',
-            'checked_on' => '2021-08-16'
+            'checked_on' => '2021-08-16',
         ]);
     }
 

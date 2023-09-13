@@ -16,7 +16,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('template_classes', function (Blueprint $table) {
-        		$table->dropForeign(['default_role']);
+            $table->dropForeign(['default_role']);
         });
     }
 };

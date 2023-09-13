@@ -13,7 +13,7 @@ class ActorController extends Controller
         $this->authorize('viewAny', Actor::class);
         $actor = new Actor;
         if ($request->filled('Name')) {
-            $actor = $actor->where('name', 'like', $request->Name . '%');
+            $actor = $actor->where('name', 'like', $request->Name.'%');
         }
         switch ($request->selector) {
             case 'phy_p':
@@ -28,6 +28,7 @@ class ActorController extends Controller
         }
         $actorslist = $actor->with('company')->orderby('name')->paginate(21);
         $actorslist->appends($request->input())->links();
+
         return view('actor.index', compact('actorslist'));
     }
 
@@ -37,6 +38,7 @@ class ActorController extends Controller
         $table = new Actor;
         //TODO getTableComments is the same as in Rule.php. To render common
         $actorComments = $table->getTableComments('actor');
+
         return view('actor.create', compact('actorComments'));
     }
 
@@ -45,9 +47,10 @@ class ActorController extends Controller
         $this->authorize('create', Actor::class);
         $request->validate([
             'name' => 'required|max:100',
-            'email' => 'email|nullable'
+            'email' => 'email|nullable',
         ]);
-        $request->merge([ 'creator' => Auth::user()->login ]);
+        $request->merge(['creator' => Auth::user()->login]);
+
         return Actor::create($request->except(['_token', '_method']));
     }
 
@@ -56,6 +59,7 @@ class ActorController extends Controller
         $this->authorize('view', $actor);
         $actorInfo = $actor->load(['company:id,name', 'parent:id,name', 'site:id,name', 'droleInfo', 'countryInfo:iso,name', 'country_mailingInfo:iso,name', 'country_billingInfo:iso,name', 'nationalityInfo:iso,name']);
         $actorComments = $actor->getTableComments('actor');
+
         return view('actor.show', compact('actorInfo', 'actorComments'));
     }
 
@@ -69,10 +73,11 @@ class ActorController extends Controller
         $this->authorize('update', $actor);
         $request->validate([
             'email' => 'email|nullable',
-            'ren_discount' => 'numeric'
+            'ren_discount' => 'numeric',
         ]);
-        $request->merge([ 'updater' => Auth::user()->login ]);
+        $request->merge(['updater' => Auth::user()->login]);
         $actor->update($request->except(['_token', '_method']));
+
         return $actor;
     }
 
@@ -80,6 +85,7 @@ class ActorController extends Controller
     {
         $this->authorize('delete', $actor);
         $actor->delete();
+
         return $actor;
     }
 }

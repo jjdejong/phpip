@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Classifier extends Model
 {
     protected $table = 'classifier';
+
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
     protected $touches = ['matter'];
 
     // use \Venturecraft\Revisionable\RevisionableTrait;
