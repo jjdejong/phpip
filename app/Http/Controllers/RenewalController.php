@@ -249,16 +249,11 @@ class RenewalController extends Controller
                     }
                     $renewal['language'] = $ren->language;
                     $renewal['due_date'] = $due_date->isoFormat('L');
-                    switch ($renewal['language']) {
-                        case 'fr':
-                            $renewal['country'] = $ren->country_FR;
-                            break;
-                        case 'de':
-                            $renewal['country'] = $ren->country_DE;
-                            break;
-                        default:
-                            $renewal['country'] = $ren->country_EN;
-                    }
+                    $renewal['country'] = match ($renewal['language']) {
+                        'fr' => $ren->country_FR,
+                        'de' => $ren->country_DE,
+                        default => $ren->country_EN,
+                    };
                     $renewal['desc'] = $desc;
                     $renewal['annuity'] = intval($ren->detail);
                     $vat_rate = config('renewal.invoice.vat_rate', 0.2);

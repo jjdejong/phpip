@@ -17,23 +17,13 @@ class FeeController extends Controller
         if (!empty($filters)) {
             foreach ($filters as $key => $value) {
                 if ($value != '') {
-                    switch($key) {
-                        case 'Origin':
-                            $fees = $fees->where('for_origin', 'LIKE', "$value%");
-                            break;
-                        case 'Category':
-                            $fees = $fees->where('for_category', 'LIKE', "$value%");
-                            break;
-                        case 'Qt':
-                            $fees = $fees->where('qt', "$value%");
-                            break;
-                        case 'Country':
-                            $fees = $fees->where('for_country', 'LIKE', "$value%");
-                            break;
-                        default:
-                            $fees = $fees->where($key, 'LIKE', "$value%");
-                            break;
-                    }
+                    $fees = match ($key) {
+                        'Origin' => $fees->where('for_origin', 'LIKE', "$value%"),
+                        'Category' => $fees->where('for_category', 'LIKE', "$value%"),
+                        'Qt' => $fees->where('qt', "$value%"),
+                        'Country' => $fees->where('for_country', 'LIKE', "$value%"),
+                        default => $fees->where($key, 'LIKE', "$value%"),
+                    };
                 }
             }
         }
