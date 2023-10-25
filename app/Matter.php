@@ -14,6 +14,7 @@ class Matter extends Model
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
+    
     /*protected $casts = [
         'expire_date' => 'date:Y-m-d'
     ];*/
@@ -566,7 +567,7 @@ class Matter extends Model
             ->leftJoin(DB::raw('classifier tit2
             JOIN classifier_type ct2 ON tit2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit2.matter_id')
             ->where('matter.id', $id);
-            
+
         $info = $query->first();
         $description = [];
         $filed_date = Carbon::parse($info['Filed']);
