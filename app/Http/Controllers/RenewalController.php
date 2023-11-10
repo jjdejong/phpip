@@ -553,8 +553,7 @@ class RenewalController extends Controller
         // Search for client correspondence in Dolibarr
         $curl = curl_init();
         $httpheader = ['DOLAPIKEY: '.$apikey];
-        $data = ['sqlfilters' => '(t.nom like "'.$client.'%")'];
-
+        $data = ['sqlfilters' => '(t.nom:like:"'.$client.'%")'];
         // Get from config/renewal.php
         $url = config('renewal.api.dolibarr_url').'/thirdparties?'.http_build_query($data);
         curl_setopt($curl, CURLOPT_URL, $url);
