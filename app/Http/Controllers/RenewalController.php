@@ -439,7 +439,7 @@ class RenewalController extends Controller
                         }
                         $desc .= "\nÉchéance le ".Carbon::parse($ren->due_date)->isoFormat('LL');
                         // Détermine le taux de tva
-                        if ($soc_res['tva_intra'] == '' || substr($soc_res['tva_intra'], 2) == 'FR') {
+                        if ($soc_res['tva_intra'] == '' || substr($soc_res['tva_intra'], 0, 2) == 'FR') {
                             $vat_rate = 0.2;
                         } else {
                             $vat_rate = 0.0;
