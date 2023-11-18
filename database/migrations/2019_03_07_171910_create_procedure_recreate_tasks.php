@@ -1,15 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
-class CreateProcedureRecreateTasks extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::unprepared("CREATE PROCEDURE `recreate_tasks`(IN Ptrigger_id INT)
@@ -151,13 +146,8 @@ END proc"
         );
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         DB::unprepared('DROP PROCEDURE IF EXISTS `recreate_tasks`');
     }
-}
+};

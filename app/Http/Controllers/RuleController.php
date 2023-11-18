@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Rule;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use LaravelGettext;
 
@@ -13,7 +13,7 @@ class RuleController extends Controller
     {
         LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('viewAny', Rule::class);
-        $Task  = $request->input('Task');
+        $Task = $request->input('Task');
         $Trigger = $request->input('Trigger');
         $Country = $request->input('Country');
         $Origin = $request->input('Origin');
@@ -57,6 +57,7 @@ class RuleController extends Controller
         $ruleslist = $rule->with(['country:iso,name', 'trigger:code,name', 'category:code,category', 'origin:iso,name', 'type:code,type', 'taskInfo:code,name'])
             ->orderby('task')->paginate(21);
         $ruleslist->appends($request->input())->links();
+
         return view('rule.index', compact('ruleslist'));
     }
 
@@ -65,15 +66,15 @@ class RuleController extends Controller
         LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('view', $rule);
         $ruleInfo = $rule->load([
-          'trigger:code,name',
-          'country:iso,name',
-          'category:code,category',
-          'origin:iso,name',
-          'type:code,type',
-          'taskInfo:code,name',
-          'condition_eventInfo:code,name',
-          'abort_onInfo:code,name',
-          'responsibleInfo:login,name'
+            'trigger:code,name',
+            'country:iso,name',
+            'category:code,category',
+            'origin:iso,name',
+            'type:code,type',
+            'taskInfo:code,name',
+            'condition_eventInfo:code,name',
+            'abort_onInfo:code,name',
+            'responsibleInfo:login,name',
         ]);
 
         $ruleComments = $rule->getTableComments('task_rules');
@@ -81,27 +82,16 @@ class RuleController extends Controller
         return view('rule.show', compact('ruleInfo', 'ruleComments'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('create', Rule::class);
-        $rule = new Rule ;
+        $rule = new Rule;
         $ruleComments = $rule->getTableComments('task_rules');
+
         return view('rule.create', compact('ruleComments'));
     }
 
-    /**
-    * Update the specified resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @param  \App\Rule  $rule
-    * @return \Illuminate\Http\Response
-    */
     public function update(Request $request, Rule $rule)
     {
         LaravelGettext::setLocale(Auth::user()->language);
@@ -116,10 +106,11 @@ class RuleController extends Controller
             'days' => 'nullable|numeric',
             'fee' => 'nullable|numeric',
             'use_before' => 'nullable|date',
-            'use_after' => 'nullable|date'
+            'use_after' => 'nullable|date',
         ]);
-        $request->merge([ 'updater' => Auth::user()->login ]);
+        $request->merge(['updater' => Auth::user()->login]);
         $rule->update($request->except(['_token', '_method']));
+
         return $rule;
     }
 
@@ -137,23 +128,19 @@ class RuleController extends Controller
             'days' => 'numeric',
             'fee' => 'nullable|numeric',
             'use_before' => 'nullable|date',
-            'use_after' => 'nullable|date'
+            'use_after' => 'nullable|date',
         ]);
-        $request->merge([ 'creator' => Auth::user()->login ]);
+        $request->merge(['creator' => Auth::user()->login]);
         Rule::create($request->except(['_token', '_method']));
+
         return response()->json(['redirect' => route('rule.index')]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Rule  $task
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Rule $rule)
     {
         $this->authorize('delete', $rule);
         $rule->delete();
+
         return $rule;
     }
 }

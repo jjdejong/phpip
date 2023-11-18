@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Classifier extends Model
 {
     protected $table = 'classifier';
+
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
     protected $touches = ['matter'];
 
     // use \Venturecraft\Revisionable\RevisionableTrait;
@@ -19,16 +22,16 @@ class Classifier extends Model
 
     public function type()
     {
-        return $this->belongsTo('App\ClassifierType', 'type_code');
+        return $this->belongsTo(\App\ClassifierType::class, 'type_code');
     }
 
     public function linkedMatter()
     {
-        return $this->belongsTo('App\Matter', 'lnk_matter_id');
+        return $this->belongsTo(\App\Matter::class, 'lnk_matter_id');
     }
 
     public function matter()
     {
-        return $this->belongsTo('App\Matter');
+        return $this->belongsTo(\App\Matter::class);
     }
 }

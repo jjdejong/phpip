@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\DB;
 class Actor extends Model
 {
     protected $table = 'actor';
+
     protected $hidden = ['login', 'last_login', 'password', 'remember_token', 'creator', 'created_at', 'updated_at', 'updater'];
+
     protected $guarded = ['id', 'password', 'created_at', 'updated_at'];
 
     // use \Venturecraft\Revisionable\RevisionableTrait;
@@ -19,47 +21,47 @@ class Actor extends Model
 
     public function company()
     {
-        return $this->belongsTo('App\Actor', 'company_id');
+        return $this->belongsTo(\App\Actor::class, 'company_id');
     }
 
     public function parent()
     {
-        return $this->belongsTo('App\Actor', 'parent_id');
+        return $this->belongsTo(\App\Actor::class, 'parent_id');
     }
 
     public function site()
     {
-        return $this->belongsTo('App\Actor', 'site_id');
+        return $this->belongsTo(\App\Actor::class, 'site_id');
     }
 
     public function matters()
     {
-        return $this->belongsToMany('App\Matter', 'matter_actor_lnk');
+        return $this->belongsToMany(\App\Matter::class, 'matter_actor_lnk');
     }
 
     public function droleInfo()
     {
-        return $this->belongsTo('App\Role', 'default_role');
+        return $this->belongsTo(\App\Role::class, 'default_role');
     }
 
     public function countryInfo()
     {
-        return $this->belongsTo('App\Country', 'country');
+        return $this->belongsTo(\App\Country::class, 'country');
     }
 
     public function country_mailingInfo()
     {
-        return $this->belongsTo('App\Country', 'country_mailing');
+        return $this->belongsTo(\App\Country::class, 'country_mailing');
     }
 
     public function country_billingInfo()
     {
-        return $this->belongsTo('App\Country', 'country_billing');
+        return $this->belongsTo(\App\Country::class, 'country_billing');
     }
 
     public function nationalityInfo()
     {
-        return $this->belongsTo('App\Country', 'nationality');
+        return $this->belongsTo(\App\Country::class, 'nationality');
     }
 
     public function getTableComments($table_name = null)
@@ -67,15 +69,14 @@ class Actor extends Model
         if (! isset($table_name)) {
             return false;
         }
-        // To fix: table_schema is hardcoded, it is to retreive
-        $tableInfo = DB::connection()->getDoctrineSchemaManager()->listTableDetails($table_name);
-        //$select =  DB::select("select column_name, column_comment from information_schema.columns WHERE `TABLE_SCHEMA` = 'phpipv2'  AND `TABLE_NAME` = ?",[$table_name])	;
-        //$result = $select->get();
+
+        $tableInfo = DB::connection()->getDoctrineSchemaManager()->introspectTable($table_name);
         $comments = [];
         foreach ($tableInfo->getColumns() as $column) {
             $col_name = $column->getName();
             $comments[$col_name] = $column->getComment();
         }
+
         return $comments;
     }
 }

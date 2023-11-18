@@ -1,4 +1,4 @@
-<form id="natMatterForm" class="ui-front">
+<form id="natMatterForm">
 	<input type="hidden" name="caseref" value="{{ $parent_matter->caseref }}" />
 	<input type="hidden" name="category_code" value="{{ $parent_matter->category_code }}" />
 	<input type="hidden" name="origin" value="{{ $parent_matter->country }}" />
@@ -11,27 +11,23 @@
 		<div class="input-group" id="country-{{ $iso }}">
 			<input type="hidden" name="ncountry[]" value="{{ $iso }}" />
 			<input type="text" class="form-control" readonly value="{{ $name }}" />
-			<div class="input-group-append">
-				<button class="btn btn-outline-danger" type="button" id="{{ $iso }}" title="{{ _i('Remove'). ' ' . $iso }}">&times;</button>
-			</div>
+			<button class="btn btn-outline-danger" type="button" id="{{ $iso }}" title="Remove {{ $iso }}">&times;</button>
 		</div>
 		@endforeach
 	</div>
 	<div class="input-group">
-		<input type="text" class="form-control" placeholder="{{ _i('Add country') }}" data-ac="/country/autocomplete" id="addCountry">
-		<div class="input-group-append">
-			<span class="input-group-text">&plus;</span>
-		</div>
+		<input type="text" class="form-control" placeholder="Add country" data-ac="/country/autocomplete" id="addCountry">
+		<span class="input-group-text">&plus;</span>
 	</div>
-	<button type="button" class="btn btn-primary btn-block mt-2" id="nationalizeSubmit">{{ _i("Submit") }}</button>
+	<div class="d-grid">
+		<button type="button" class="btn btn-primary mt-2" id="nationalizeSubmit">Submit</button>
+	</div>
 </form>
 
 <template id="appendCountryTemplate">
 	<div class="input-group">
 		<input type="hidden" name="ncountry[]">
 		<input type="text" class="form-control" value="" readonly>
-		<div class="input-group-append">
-			<button class="btn btn-outline-danger" type="button">&times;</button>
-		</div>
+		<button class="btn btn-outline-danger" type="button">&times;</button>
 	</div>
 </template>

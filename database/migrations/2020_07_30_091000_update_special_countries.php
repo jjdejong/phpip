@@ -4,13 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateSpecialCountries extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         // This does not work in Laravel - "tinyInteger" cannot be changed
@@ -75,13 +70,8 @@ class UpdateSpecialCountries extends Migration
   END proc");
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         // Not worth rolling back
     }
-}
+};

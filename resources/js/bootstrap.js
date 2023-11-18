@@ -1,42 +1,12 @@
+//import { debounce } from 'lodash-es';
+//window.debounce = debounce;
 
-window.debounce = require('lodash.debounce');
+//import '@popperjs/core';
+//window.Popper = Popper
 
-/**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
- */
-
-try {
-  window.Popper = require('popper.js').default;
-  window.$ = window.jQuery = require('jquery');
-  require('bootstrap');
-  require('jquery-ui/ui/widgets/autocomplete')
-  // Registering the CSRF Token as a common header with jQuery Ajax so that all
-  // outgoing HTTP requests automatically have it attached.
-  /*let token = document.head.querySelector('meta[name="csrf-token"]');
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': token.content
-    }
-  });*/
-} catch (e) {}
-
-// Adapt jquery-ui to use Bootstrap
-(function( $, undefined ) {
-	// Conversion of menu classes to Bootstrap
-  $.ui.menu.prototype.options.classes[ "ui-widget" ] = "";
-  $.ui.menu.prototype.options.classes[ "ui-widget-content" ] = "";
-  $.ui.menu.prototype.options.classes[ "ui-autocomplete" ] = "dropdown";
-  $.ui.menu.prototype.options.classes[ "ui-autocomplete-input" ] = "form-control";
-	$.ui.menu.prototype.options.classes[ "ui-menu" ] = "dropdown-menu";
-	$.ui.menu.prototype.options.classes[ "ui-menu-icons" ] = "";
-	$.ui.menu.prototype.options.classes[ "ui-menu-icon" ] = "";
-	$.ui.menu.prototype.options.classes[ "ui-menu-item" ] = "dropdown-item";
-	$.ui.menu.prototype.options.classes[ "ui-menu-divider" ] = "";
-	$.ui.menu.prototype.options.classes[ "ui-menu-item-wrapper" ] = "";
-})(jQuery);
-
+import * as bootstrap from 'bootstrap';
+// This makes the bootstrap methods available outside the app.js module compiled by Vite
+window.bootstrap = bootstrap;
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -45,7 +15,8 @@ try {
  */
 
 /*
-window.axios = require('axios');
+import axios from 'axios';
+window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 */

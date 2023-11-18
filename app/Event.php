@@ -7,39 +7,40 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     protected $table = 'event';
+
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
     protected $touches = ['matter'];
-    protected $dates = [
-      'event_date'
-    ];
+
     protected $casts = [
-      'event_date' => 'date:Y-m-d'
+        'event_date' => 'date:Y-m-d',
     ];
 
     public function info()
     {
-        return $this->hasOne('App\EventName', 'code', 'code');
+        return $this->hasOne(\App\EventName::class, 'code', 'code');
     }
 
     public function matter()
     {
-        return $this->belongsTo('App\Matter');
+        return $this->belongsTo(\App\Matter::class);
     }
 
     public function altMatter()
     {
-        return $this->belongsTo('App\Matter', 'alt_matter_id')->withDefault();
+        return $this->belongsTo(\App\Matter::class, 'alt_matter_id')->withDefault();
     }
 
     public function link()
     {
-        return $this->hasOne('App\Event', 'matter_id', 'alt_matter_id')->whereCode('FIL')->withDefault();
+        return $this->hasOne(\App\Event::class, 'matter_id', 'alt_matter_id')->whereCode('FIL')->withDefault();
     }
 
     public function retroLink()
     {
-        return $this->belongsTo('App\Event', 'matter_id', 'alt_matter_id')->withDefault();
+        return $this->belongsTo(\App\Event::class, 'matter_id', 'alt_matter_id')->withDefault();
     }
 
     public function tasks()
@@ -48,7 +49,7 @@ class Event extends Model
           var_dump($query->sql);
           var_dump($query->bindings);
           }); */
-        return $this->hasMany('App\Task', 'trigger_id')->orderBy('due_date');
+        return $this->hasMany(\App\Task::class, 'trigger_id')->orderBy('due_date');
     }
 
     public function cleanNumber()
@@ -56,11 +57,11 @@ class Event extends Model
         return preg_replace(["/^{$this->matter->country}/", '/ /', '/,/', '/-/', '/\//', '/\.[0-9]/'], '', $this->detail);
     }
 
-// Produces a link to official published information
+    // Produces a link to official published information
 
     public function publicUrl()
     {
-        if (!in_array($this->code, ['FIL', 'PUB', 'GRT'])) {
+        if (! in_array($this->code, ['FIL', 'PUB', 'GRT'])) {
             return false;
         }
         if ($this->matter->origin == 'EP') {
@@ -75,10 +76,10 @@ class Event extends Model
         if ($this->code == 'PUB' || $this->code == 'GRT') {
             // Fix US pub number for Espacenet by keeping the last 6 digits after the year
             if ($CC == 'US' && $this->code == 'PUB') {
-                $cleanednumber = substr($cleanednumber, 0, 4) . substr($cleanednumber, - 6);
+                $cleanednumber = substr($cleanednumber, 0, 4).substr($cleanednumber, -6);
             }
             $href = "http://worldwide.espacenet.com/publicationDetails/biblio?DB=EPODOC&CC=$CC&NR=$cleanednumber";
-        } else if ($this->code == 'FIL') {
+        } elseif ($this->code == 'FIL') {
             switch ($this->matter->country) {
                 case 'EP':
                     $href = "https://register.epo.org/espacenet/application?number=EP$cleanednumber";
@@ -87,17 +88,18 @@ class Event extends Model
                     $pubno = $this->matter->publication->cleanNumber();
                     if ($category == 'PAT' && $pubno) {
                         $href = "https://data.inpi.fr/brevets/$CC$pubno";
-                    } else if ( $category == 'TM' ) {
-                        if ($this->event_date->isoFormat('YYYY') >= '2000')
+                    } elseif ($category == 'TM') {
+                        if ($this->event_date->isoFormat('YYYY') >= '2000') {
                             $cleanednumber = substr($cleanednumber, -7);
-                            $href = "https://data.inpi.fr/marques/$CC$cleanednumber";
                         }
+                        $href = "https://data.inpi.fr/marques/$CC$cleanednumber";
+                    }
                     break;
                 case 'US':
                     if (substr($cleanednumber, 0, 2) < 13) {
-                        $cleanednumber = substr($cleanednumber, 2) . $this->event_date->isoFormat('YY');
+                        $cleanednumber = substr($cleanednumber, 2).$this->event_date->isoFormat('YY');
                     } else {
-                        $cleanednumber = $this->event_date->isoFormat('YYYY') . $cleanednumber;
+                        $cleanednumber = $this->event_date->isoFormat('YYYY').$cleanednumber;
                     }
                     $href = "https://register.epo.org/ipfwretrieve?apn=US.$cleanednumber.A";
                     break;
@@ -109,6 +111,7 @@ class Event extends Model
                     break;
             }
         }
+
         return $href;
     }
 }

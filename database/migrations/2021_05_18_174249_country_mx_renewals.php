@@ -1,32 +1,25 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class CountryMxRenewals extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::table('country')->where('iso', 'MX')->update([
             'renewal_first' => null,
             'renewal_base' => null,
             'renewal_start' => null,
-            'checked_on' => '2021-05-18'
+            'checked_on' => '2021-05-18',
         ]);
 
         DB::table('country')->where('iso', 'IR')->update([
             'renewal_first' => 2,
             'renewal_base' => 'FIL',
             'renewal_start' => 'FIL',
-            'checked_on' => '2021-05-18'
+            'checked_on' => '2021-05-18',
         ]);
-        
+
         DB::table('task_rules')->insertOrIgnore([
             [
                 'active' => 1,
@@ -126,13 +119,8 @@ class CountryMxRenewals extends Migration
         ]);
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         //
     }
-}
+};

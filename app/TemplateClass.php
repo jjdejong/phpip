@@ -10,16 +10,16 @@ class TemplateClass extends Model
 
     public function role()
     {
-        return $this->belongsTo('App\Role', 'default_role', 'code');
+        return $this->belongsTo(\App\Role::class, 'default_role', 'code');
     }
 
     public function rules()
     {
-        return $this->belongsToMany('App\Rule', 'rule_class_lnk', 'template_class_id', 'task_rule_id');
+        return $this->belongsToMany(\App\Rule::class, 'rule_class_lnk', 'template_class_id', 'task_rule_id');
     }
 
     public function eventNames()
     {
-        return $this->belongsToMany('App\EventName', 'event_class_lnk', 'template_class_id', 'event_name_code');
+        return $this->belongsToMany(\App\EventName::class, 'event_class_lnk', 'template_class_id', 'event_name_code');
     }
 }

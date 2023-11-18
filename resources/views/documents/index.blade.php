@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-primary">
-  {{ _i("Document Classes") }}
-  <a href="document/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Document class" data-source="/document" data-resource="/document/create/">{{ _i("Create a new class of templates") }}</a>
+<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
+  Email Template Classes
+  <a href="document/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Document class" data-source="/document" data-resource="/document/create/">Create Email Template Class</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card border-primary">
+    <div class="card border-primar p-1">
       <table class="table table-striped table-hover table-sm">
         <thead>
-          <tr id="filter" class="bg-primary text-light">
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/document" name="Name" placeholder="{{ _i('Name') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/document" name="Notes" placeholder="{{ _i('Notes') }}"></th>
+          <tr id="filter" class="table-primary align-middle">
+            <th><input class="form-control" data-source="/document" name="Name" placeholder="Name"></th>
+            <th><input class="form-control" data-source="/document" name="Notes" placeholder="Notes"></th>
           </tr>
         </thead>
         <tbody id="tableList">
@@ -51,7 +51,5 @@
 @endsection
 
 @section('script')
-
-@include('tables.table-js')
-
+<script src="{{ asset('js/tables.js') }}" defer></script>
 @endsection

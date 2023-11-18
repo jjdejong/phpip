@@ -12,8 +12,8 @@
         <td><input id="detail" class="form-control form-control-sm" name="detail"></td>
       </tr>
       <tr>
-        <td><label for="for_country_new" title="{{ $ruleComments['for_country'] }}">{{ _i('Country') }}</label></td>
-        <td class="ui-front">
+        <td><label for="for_country_new" title="{{ $ruleComments['for_country'] }}">Country</label></td>
+        <td>
           <input type='hidden' name='for_country'>
           <input type="text" class="form-control form-control-sm" data-ac="/country/autocomplete" data-actarget="for_country" autocomplete="off">
         </td>
@@ -153,5 +153,5 @@
       </tr>
     </table>
   </fieldset>
-  <button type="button" class="btn btn-primary btn-block" id="createRuleSubmit" data-redirect="/rule">{{ _i('Create rule') }}</button><br>
+  <button type="button" class="btn btn-primary" id="createRuleSubmit" data-redirect="/rule">Create rule</button><br>
 </form>

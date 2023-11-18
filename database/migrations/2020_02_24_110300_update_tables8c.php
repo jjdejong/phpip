@@ -1,19 +1,13 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 
-class UpdateTables8c extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        DB::unprepared("DROP TRIGGER IF EXISTS `matter_after_insert`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `matter_after_insert`');
         DB::unprepared("CREATE TRIGGER `matter_after_insert` AFTER INSERT ON `matter` FOR EACH ROW
 BEGIN
 	DECLARE vactorid, vshared INT DEFAULT NULL;
@@ -28,23 +22,18 @@ BEGIN
 	END IF;
 END");
 
-        DB::unprepared("DROP TRIGGER IF EXISTS `matter_after_update`");
-        DB::unprepared("CREATE TRIGGER `matter_after_update` AFTER UPDATE ON `matter` FOR EACH ROW
+        DB::unprepared('DROP TRIGGER IF EXISTS `matter_after_update`');
+        DB::unprepared('CREATE TRIGGER `matter_after_update` AFTER UPDATE ON `matter` FOR EACH ROW
 BEGIN
 	IF NEW.responsible != OLD.responsible THEN
 		UPDATE task JOIN event ON (task.trigger_id = event.id AND event.matter_id = NEW.id) SET task.assigned_to = NEW.responsible, task.updated_at = Now(), task.updater = NEW.updater
 		WHERE task.done = 0 AND task.assigned_to = OLD.responsible;
 	END IF;
-END");
+END');
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         //
     }
-}
+};

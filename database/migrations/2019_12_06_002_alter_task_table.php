@@ -1,33 +1,28 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 
-class AlterTaskTable extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('task', function (Blueprint $table) {
             $t = 'task';
-            if ( !Schema::hasColumn($t, 'step')) {
+            if (! Schema::hasColumn($t, 'step')) {
                 $table->tinyinteger('step')->after('currency')->default(0);
             }
-            if ( !Schema::hasColumn($t, 'grace_period')) {
+            if (! Schema::hasColumn($t, 'grace_period')) {
                 $table->tinyinteger('grace_period')->after('step')->default(0);
             }
-            if ( !Schema::hasColumn($t, 'invoice_step')) {
+            if (! Schema::hasColumn($t, 'invoice_step')) {
                 $table->tinyinteger('invoice_step')->after('step')->default(0);
             }
         });
 
-        DB::unprepared("DROP TRIGGER IF EXISTS `task_before_update`");
-        DB::unprepared("CREATE TRIGGER `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW
+        DB::unprepared('DROP TRIGGER IF EXISTS `task_before_update`');
+        DB::unprepared('CREATE TRIGGER `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW
 BEGIN
   IF NEW.done_date IS NOT NULL AND OLD.done_date IS NULL AND OLD.done = 0 THEN
     SET NEW.done = 1;
@@ -41,17 +36,13 @@ BEGIN
   IF NEW.done = 0 AND OLD.done = 1 AND OLD.done_date IS NOT NULL THEN
     SET NEW.done_date = NULL, NEW.step = 0, NEW.invoice_step = 0, NEW.grace_period = 0;
   END IF;
-END");
+END');
     }
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+
     public function down()
     {
-        DB::unprepared("DROP TRIGGER IF EXISTS `task_before_update`");
-        DB::unprepared("CREATE TRIGGER `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW
+        DB::unprepared('DROP TRIGGER IF EXISTS `task_before_update`');
+        DB::unprepared('CREATE TRIGGER `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW
 BEGIN
   IF NEW.done_date IS NOT NULL AND OLD.done_date IS NULL AND OLD.done = 0 THEN
     SET NEW.done = 1;
@@ -65,7 +56,7 @@ BEGIN
   IF NEW.done = 0 AND OLD.done = 1 AND OLD.done_date IS NOT NULL THEN
     SET NEW.done_date = NULL;
   END IF;
-END");
+END');
 
         $t = 'task';
         if (Schema::hasColumn($t, 'step')) {
@@ -84,4 +75,4 @@ END");
             });
         }
     }
-}
+};

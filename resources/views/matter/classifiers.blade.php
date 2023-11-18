@@ -2,14 +2,14 @@
 $classifiers = $matter->classifiers->groupBy('type_name');
 @endphp
 <table class="table table-sm table-borderless">
-  <thead class="thead-light">
+  <thead class="table-light">
     <tr>
       <th class="border-top-0">{{ _i("Type/Value") }}</th>
       <th class="border-top-0">{{ _i("URL") }}</th>
       <th class="border-top-0">{{ _i("Link to matter") }}</th>
       <th class="border-top-0">
-        <a href="#addClassifierRow" data-toggle="collapse">
-          <span class="float-right" title="{{ _i('Add classifier') }}">&oplus;</span>
+        <a href="#addClassifierRow" data-bs-toggle="collapse">
+          <span class="float-end" title="Add classifier">&oplus;</span>
         </a>
       </th>
     </tr>
@@ -25,7 +25,7 @@ $classifiers = $matter->classifiers->groupBy('type_name');
   <tbody class="sortable">
     @foreach($classifier_group as $classifier)
     <tr class="reveal-hidden" data-resource="/classifier/{{ $classifier->id }}">
-      <td class="pl-2"><input type="text" class="form-control noformat" name="value" value="{{ $classifier->value }}" {{ $type == 'Image' ? 'disabled' : '' }}></td>
+      <td class="ps-2"><input type="text" class="form-control noformat" name="value" value="{{ $classifier->value }}" {{ $type == 'Image' ? 'disabled' : '' }}></td>
       <td><input type="text" class="form-control noformat" name="url" value="{{ $classifier->url }}"></td>
       <td><input type="text" class="form-control noformat" name="lnk_matter_id" data-ac="/matter/autocomplete" value="{{ $classifier->lnk_matter_id ? $classifier->linkedMatter->uid : '' }}"></td>
       <td>
@@ -43,7 +43,7 @@ $classifiers = $matter->classifiers->groupBy('type_name');
       <td colspan="4">
         <form id="addClassifierForm">
           <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
-          <div class="form-row form-row-sm">
+          <div class="row">
             <div class="col p-1">
               <input type="hidden" name="type_code" value="">
               <input type="text" class="form-control form-control-sm" size="16" placeholder="{{ _i('Type') }}" data-ac="/classifier-type/autocomplete/0" data-actarget="type_code" data-aclength="0">
@@ -63,7 +63,7 @@ $classifiers = $matter->classifiers->groupBy('type_name');
             </div>
             <div class="col-2 p-1 btn-group btn-group-sm">
               <button type="button" class="btn btn-primary" id="addClassifierSubmit">&check;</button>
-              <button type="reset" class="btn btn-outline-primary" onClick="$('#addClassifierRow').collapse('hide')">&times;</button>
+              <button type="reset" class="btn btn-outline-primary" id="addClassifierReset">&times;</button>
             </div>
           </div>
         </form>

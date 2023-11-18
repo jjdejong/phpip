@@ -4,13 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddForeignkeysToEventClassLnk extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('event_class_lnk', function (Blueprint $table) {
@@ -19,11 +14,6 @@ class AddForeignkeysToEventClassLnk extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('event_class_lnk', function (Blueprint $table) {
@@ -31,4 +21,4 @@ class AddForeignkeysToEventClassLnk extends Migration
             $table->dropForeign(['event_name_code']);
         });
     }
-}
+};

@@ -1,71 +1,73 @@
 <form id="sendDocumentForm">
   <input type='hidden' value="{{ $matter->id }}" name="matter_id">
-  <fieldset>
-    <legend>{{ _i("Documents for ") . $matter->uid}}</legend>
-    <table>
+  <table>
     <tr>
-      <td class="col-6">
-        Contact
+      <th>Correspondent</th>
+      <th class="text-center">To</th>
+      <th class="text-center">CC</th>
+    </tr>
+    @foreach($contacts as $contact)
+    <tr>
+      <td>
+        {{ $contact->display_name ?? $contact->name }} {{ $contact->first_name }}
       </td>
-      <td class="col-3">
-        Send to:
+      <td class="px-2">
+        <input name="sendto-{{ $contact->actor_id }}" type="checkbox">
       </td>
-      <td class="col-3">
-        CC:
+      <td class="px-2">
+        <input name="ccto-{{ $contact->actor_id }}" type="checkbox">
       </td>
     </tr>
-    @foreach ($contacts as $contact)
-      <tr >
-        <td class="col-6">
-          {{ $contact->first_name}} {{ is_null($contact->name) ? $contact->display_name : $contact->name  }}
-        </td>
-        <td class="col-3">
-          <input id="" class="contact" name="sendto-{{ $contact->actor_id }}" type="checkbox">
-        </td>
-        <td class="col-3">
-          <input id="" class="contact" name="ccto-{{ $contact->actor_id }}" type="checkbox">
-        </td>
-      </tr>
-    @endforeach
+  @endforeach
   </table>
-  </fieldset>
-  <table data-resource="/document/select/{{ $matter->id }}">
-      <thead  class="thead-light">
-        <tr>
-          <th class="col-4">
-            <input class="form-control filter" name="Summary" value="{{ array_key_exists('Summary', $oldfilters) ? $oldfilters['Summary'] : "" }}" placeholder="{{ _i('Summary') }}">
-          </th>
-          <th class="col-2">
-            <input class="form-control filter" name="Language" value="{{ array_key_exists('Language', $oldfilters) ? $oldfilters['Language'] : "" }}" placeholder="{{ _i('Language') }}">
-          </th>
-          <th class="col-2">
-            <input class="form-control filter" name="Category" value="{{ array_key_exists('Category', $oldfilters) ? $oldfilters['Category'] : "" }}" placeholder="{{ _i('Category') }}">
-          </th>
-          <th class="col-2">
-            <input class="form-control filter" title="{{ $tableComments['style'] }}" name="Style" value="{{ array_key_exists('Style', $oldfilters) ? $oldfilters['Style'] : "" }}" placeholder="{{ _i('Style') }}">
-          </th>
-          <th class="col-1">
-              {{ _i("Action") }}
-          </th>
-        </tr>
-      </thead>
-      <tbody id="tableList" >
-      @foreach ($members as $member)
-        <tr class="reveal-hidden" data-resource="/document/mailto/{{ $member->id }}">
-          <td class = "col-4">
+  <table class="table table-sm" data-resource="/document/select/{{ $matter->id }}">
+    <thead>
+      <tr class="row table-primary">
+        <th class="col-5">
+          <input class="form-control form-control-sm filter" name="Summary"
+            value="{{ array_key_exists('Summary', $oldfilters) ? $oldfilters['Summary'] : "" }}"
+            placeholder="Summary">
+        </th>
+        <th class="col-2">
+          <input class="form-control form-control-sm filter" name="Language"
+            value="{{ array_key_exists('Language', $oldfilters) ? $oldfilters['Language'] : "" }}"
+            placeholder="Language">
+        </th>
+        <th class="col-2">
+          <input class="form-control form-control-sm filter" name="Category"
+            value="{{ array_key_exists('Category', $oldfilters) ? $oldfilters['Category'] : "" }}"
+            placeholder="Category">
+        </th>
+        <th class="col-2">
+          <input class="form-control form-control-sm filter"
+            title="{{ $tableComments['style'] }}" name="Style"
+            value="{{ array_key_exists('Style', $oldfilters) ? $oldfilters['Style'] : "" }}"
+            placeholder="Style">
+        </th>
+        <th class="col-1 text-center">
+          Send
+        </th>
+      </tr>
+    </thead>
+    <tbody id="tableList">
+      @foreach($members as $member)
+        <tr class="row" data-resource="/document/mailto/{{ $member->id }}">
+          <td class="col-5">
             {{ $member->summary }}
           </td>
-          <td class = "col-2">
+          <td class="col-2">
             {{ $member->language }}
           </td>
-          <td class = "col-2">
+          <td class="col-2">
             {{ $member->category }}
           </td>
-          <td class = "col-2">
+          <td class="col-2">
             {{ $member->style }}
           </td>
-          <td class = "col-1">
-            <a class="sendDocument btn btn-info py-1">{{ _i("Prepare") }}</a>
+          <td class="col-1 text-center">
+            <a class="sendDocument text-primary" href="#">
+              <svg width="16" height="16" fill="currentColor" style="pointer-events: none"><use xlink:href="#envelope-fill"/></svg>
+            </a>
           </td>
         </tr>
       @endforeach

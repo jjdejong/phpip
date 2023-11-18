@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 
-class UpdateTables6 extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,16 +19,16 @@ class UpdateTables6 extends Migration
     public function up()
     {
         Schema::table('matter', function (Blueprint $table) {
-          $sm = Schema::getConnection()->getDoctrineSchemaManager();
-          $indexes = $sm->listTableIndexes('matter');
-          if (array_key_exists('uid', $indexes)) {
-            $table->dropIndex('uid');
-          }
-          $table->unique('uid', 'uid_uq');
+            $sm = Schema::getConnection()->getDoctrineSchemaManager();
+            $indexes = $sm->listTableIndexes('matter');
+            if (array_key_exists('uid', $indexes)) {
+                $table->dropIndex('uid');
+            }
+            $table->unique('uid', 'uid_uq');
         });
 
         // For matter_actor_lnk
-        DB::unprepared("DROP TRIGGER IF EXISTS `matter_actor_lnk_AFTER_UPDATE`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `matter_actor_lnk_AFTER_UPDATE`');
         DB::unprepared("CREATE TRIGGER `matter_actor_lnk_AFTER_UPDATE` AFTER UPDATE ON `matter_actor_lnk` FOR EACH ROW
 BEGIN
   DECLARE vcli_ann_agt INT DEFAULT NULL;
@@ -42,26 +42,21 @@ BEGIN
   	END IF;
   END IF;
 END"
-);
+        );
 
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('matter', function (Blueprint $table) {
-          $sm = Schema::getConnection()->getDoctrineSchemaManager();
-          $indexes = $sm->listTableIndexes('matter');
-          if (array_key_exists('uid_uq', $indexes)) {
-            $table->dropUnique('uid_uq');
-          }
-          $table->index('uid', 'uid');
+            $sm = Schema::getConnection()->getDoctrineSchemaManager();
+            $indexes = $sm->listTableIndexes('matter');
+            if (array_key_exists('uid_uq', $indexes)) {
+                $table->dropUnique('uid_uq');
+            }
+            $table->index('uid', 'uid');
         });
 
-        DB::unprepared("DROP TRIGGER IF EXISTS `matter_actor_lnk_AFTER_UPDATE`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `matter_actor_lnk_AFTER_UPDATE`');
     }
-}
+};

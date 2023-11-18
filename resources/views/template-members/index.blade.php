@@ -1,22 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-primary">
-  {{ _i('Email Templates') }}
-  <a href="template-member/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Document member" data-source="/template-member" data-resource="/template-member/create/">{{ _i('Create a new member of templates') }}</a>
+<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
+  Email Templates
+  <a href="template-member/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Document member" data-source="/template-member" data-resource="/template-member/create/">Create a new member of templates</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card border-primary">
+    <div class="card border-primary p-1">
       <table class="table table-striped table-hover table-sm">
         <thead>
-          <tr id="filter" class="bg-primary text-light">
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="summary" placeholder="{{ _i('Summary') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="class" placeholder="{{ _i('Class') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="language" placeholder="{{ _i('Language') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="style" placeholder="{{ _i('Style') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="format" placeholder="{{ _i('Format') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/template-member" name="category" placeholder="{{ _i('category') }}"></th>
+          <tr id="filter" class="table-primary align-middle">
+            <th><input class="form-control" data-source="/template-member" name="summary" placeholder="Summary"></th>
+            <th><input class="form-control" data-source="/template-member" name="class" placeholder="Class"></th>
+            <th><input class="form-control" data-source="/template-member" name="language" placeholder="Language"></th>
+            <th><input class="form-control" data-source="/template-member" name="style" placeholder="Style"></th>
+            <th><input class="form-control" data-source="/template-member" name="format" placeholder="Format"></th>
+            <th><input class="form-control" data-source="/template-member" name="category" placeholder="Category"></th>
           </tr>
         </thead>
         <tbody id="tableList">
@@ -57,5 +57,5 @@
 @endsection
 
 @section('script')
-@include('tables.table-js')
+<script src="{{ asset('js/tables.js') }}" defer></script>
 @endsection

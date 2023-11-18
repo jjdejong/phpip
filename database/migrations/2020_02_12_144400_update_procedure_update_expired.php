@@ -1,15 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
-class UpdateProcedureUpdateExpired extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::unprepared('DROP PROCEDURE IF EXISTS `update_expired`');
@@ -35,13 +30,8 @@ class UpdateProcedureUpdateExpired extends Migration
         );
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         DB::unprepared('DROP PROCEDURE IF EXISTS `update_expired`');
     }
-}
+};

@@ -1,5 +1,5 @@
 <table class="table table-hover table-sm">
-  <thead class="thead-light">
+  <thead class="table-light">
     <tr>
       <th></th>
       <th>{{ _i("Name") }}</th>

@@ -3,27 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Actor;
-use App\Matter;
-use App\Event;
 use App\ActorPivot;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Event;
+use App\Matter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use SimpleXMLElement;
-use Illuminate\Support\Arr;
-use ExcelReport;
-use PdfReport;
-use Session;
-use Log;
-use LaravelGettext;
-// $locale = "fr_FR.UTF-8";
-//         putenv("LANG=" . $locale);
-//         setlocale(LC_ALL, $locale);
-/*
-        putenv("LANG=". Session::get('locale'));
-        setlocale(LC_MESSAGES, Session::get('locale'));*/
 
 class MatterController extends Controller
 {
@@ -40,9 +29,8 @@ class MatterController extends Controller
             'sortdir',
             'tab',
             'include_dead',
-            'report_list'
         ]);
-        
+
         $matters = Matter::filter(
             $request->input('sortkey', 'id'),
             $request->input('sortdir', 'desc'),
@@ -51,6 +39,7 @@ class MatterController extends Controller
             $request->include_dead
         )->simplePaginate(25);
         $matters->withQueryString()->links(); // Keep URL parameters in the paginator links
+
         return view('matter.index', compact('matters'));
     }
 
@@ -59,14 +48,16 @@ class MatterController extends Controller
         LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('view', $matter);
         $matter->load(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers']);
+
         return view('matter.show', compact('matter'));
     }
 
     /**
      * Return a JSON array with info of a matter. For use with API REST.
+     *
      * @param  int  $id
      * @return Json
-    **/
+     **/
     public function info($id)
     {
         LaravelGettext::setLocale(Auth::user()->language);
@@ -74,12 +65,6 @@ class MatterController extends Controller
             ->find($id);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request)
     {
         LaravelGettext::setLocale(Auth::user()->language);
@@ -92,30 +77,25 @@ class MatterController extends Controller
                 ->find($request->matter_id);
             if ($operation == 'clone') {
                 // Generate the next available caseref based on the prefix
-                $parent_matter->caseref = Matter::where('caseref', 'like', $parent_matter->category->ref_prefix . '%')
+                $parent_matter->caseref = Matter::where('caseref', 'like', $parent_matter->category->ref_prefix.'%')
                     ->max('caseref');
-                ++$parent_matter->caseref;
+                $parent_matter->caseref++;
             }
         } else {
             $parent_matter = new Matter; // Create empty matter object to avoid undefined errors in view
             $ref_prefix = \App\Category::find($category_code)['ref_prefix'];
             $category = [
                 'code' => $category_code,
-                'next_caseref' =>  Matter::where('caseref', 'like', $ref_prefix . '%')
+                'next_caseref' => Matter::where('caseref', 'like', $ref_prefix.'%')
                     ->max('caseref'),
-                'name' => \App\Category::find($category_code)['category']
+                'name' => \App\Category::find($category_code)['category'],
             ];
-            ++$category['next_caseref'];
+            $category['next_caseref']++;
         }
+
         return view('matter.create', compact('parent_matter', 'operation', 'category'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         LaravelGettext::setLocale(Auth::user()->language);
@@ -125,7 +105,7 @@ class MatterController extends Controller
             'caseref' => 'required',
             'country' => 'required',
             'responsible' => 'required',
-            'expire_date' => 'date'
+            'expire_date' => 'date',
         ]);
 
         // Unique UID handling
@@ -134,10 +114,10 @@ class MatterController extends Controller
             ['country', $request->country],
             ['category_code', $request->category_code],
             ['origin', $request->origin],
-            ['type_code', $request->type_code]
+            ['type_code', $request->type_code],
         ]);
 
-        $request->merge([ 'creator' => Auth::user()->login ]);
+        $request->merge(['creator' => Auth::user()->login]);
 
         $idx = $matters->count();
 
@@ -162,7 +142,7 @@ class MatterController extends Controller
                     $new_matter->events()->create([
                         'code' => 'ENT',
                         'event_date' => now(),
-                        'detail' => 'Child filing date'
+                        'detail' => 'Child filing date',
                     ]);
                 }
                 $new_matter->save();
@@ -201,21 +181,16 @@ class MatterController extends Controller
                 $new_matter->events()->create(['code' => 'REC', 'event_date' => now()]);
                 break;
         }
+
         return response()->json(['redirect' => route('matter.show', [$new_matter])]);
     }
 
-    /**
-     * Store multiple newly created resources in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function storeN(Request $request)
     {
         LaravelGettext::setLocale(Auth::user()->language);
         $this->authorize('create', Matter::class);
         $this->validate($request, [
-            'ncountry' => 'required:array'
+            'ncountry' => 'required|array',
         ]);
 
         $parent_id = $request->parent_id;
@@ -224,8 +199,8 @@ class MatterController extends Controller
 
         foreach ($request->ncountry as $country) {
             $request->merge([
-              'country' => $country,
-              'creator' => Auth::user()->login
+                'country' => $country,
+                'creator' => Auth::user()->login,
             ]);
 
             $new_matter = Matter::create($request->except(['_token', '_method', 'ncountry', 'parent_id']));
@@ -242,7 +217,7 @@ class MatterController extends Controller
             }
 
             // Insert "entered" event tracing the actual date of the step
-            $new_matter->events()->create(["code" => 'ENT', "event_date" => now()]);
+            $new_matter->events()->create(['code' => 'ENT', 'event_date' => now()]);
             // Insert "Parent filed" event tracing the filing number of the parent PCT or EP
             $new_matter->events()->create(['code' => 'PFIL', 'alt_matter_id' => $request->parent_id]);
 
@@ -261,7 +236,7 @@ class MatterController extends Controller
             'docnum' => 'required',
             'caseref' => 'required',
             'category_code' => 'required',
-            'client_id' => 'required'
+            'client_id' => 'required',
         ]);
 
         $apps = collect($this->getOPSfamily($request->docnum));
@@ -277,16 +252,16 @@ class MatterController extends Controller
             $container_id = $container->id;
             foreach ($existing_fam as $existing_app) {
                 $matter_id_num[$existing_app->filing->cleanNumber()] = $existing_app->id;
-            } 
+            }
         }
-        foreach ($apps as $key => $app) {
+        foreach ($apps as $key => &$app) {
             if (array_key_exists($app['app']['number'], $matter_id_num)) {
                 // Member exists, do not create
                 continue;
             }
             $request->merge([
-              'country' => $app['app']['country'],
-              'creator' => Auth::user()->login
+                'country' => $app['app']['country'],
+                'creator' => Auth::user()->login,
             ]);
             // Remove if set from a previous iteration
             $request->request->remove('type_code');
@@ -314,9 +289,9 @@ class MatterController extends Controller
                 ['country', $request->country],
                 ['category_code', $request->category_code],
                 ['origin', $request->origin],
-                ['type_code', $request->type_code]
+                ['type_code', $request->type_code],
             ]);
-            
+
             $idx = $matters->count();
 
             if ($idx > 0) {
@@ -325,16 +300,16 @@ class MatterController extends Controller
 
             $new_matter = Matter::create($request->except(['_token', '_method', 'docnum', 'client_id']));
             $matter_id_num[$app['app']['number']] = $new_matter->id;
-                   
+
             if ($key == 0) {
                 $container_id = $new_matter->id;
                 foreach ($app['pri'] as $pri) {
                     // Create priority filings that refer to applications not returned by OPS (US provisionals)
-                    if ($pri['number'] != $app['app']['number']){
+                    if ($pri['number'] != $app['app']['number']) {
                         $new_matter->events()->create([
                             'code' => 'PRI',
-                            'detail' => $pri['country'] . $pri['number'],
-                            'event_date' => $pri['date']
+                            'detail' => $pri['country'].$pri['number'],
+                            'event_date' => $pri['date'],
                         ]);
                     }
                 }
@@ -342,9 +317,9 @@ class MatterController extends Controller
                 $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'CLI', 'shared' => 1]);
                 if (strtolower($app['applicants'][0]) == strtolower(Actor::find($request->client_id)->name)) {
                     $new_matter->actorPivot()->create([
-                        'actor_id' => $request->client_id, 
+                        'actor_id' => $request->client_id,
                         'role' => 'APP',
-                        'shared' => 1
+                        'shared' => 1,
                     ]);
                 }
                 foreach ($app['applicants'] as $applicant) {
@@ -358,19 +333,19 @@ class MatterController extends Controller
                         $new_matter->actorPivot()->firstOrCreate([
                             'actor_id' => $actor->id,
                             'role' => 'APP',
-                            'shared' => 1
+                            'shared' => 1,
                         ]);
                     } else {
                         $new_actor = Actor::create([
-                            'name' => $applicant, 
+                            'name' => $applicant,
                             'default_role' => 'APP',
                             'phy_person' => 0,
-                            'notes' => "Inserted by OPS family create tool for matter ID $new_matter->id"
+                            'notes' => "Inserted by OPS family create tool for matter ID $new_matter->id",
                         ]);
                         $new_matter->actorPivot()->firstOrCreate([
                             'actor_id' => $new_actor->id,
                             'role' => 'APP',
-                            'shared' => 1
+                            'shared' => 1,
                         ]);
                     }
                 }
@@ -385,40 +360,40 @@ class MatterController extends Controller
                         $new_matter->actorPivot()->firstOrCreate([
                             'actor_id' => $actor->id,
                             'role' => 'INV',
-                            'shared' => 1
+                            'shared' => 1,
                         ]);
                     } else {
                         $new_actor = Actor::create([
-                            'name' => $inventor, 
+                            'name' => $inventor,
                             'default_role' => 'INV',
                             'phy_person' => 1,
-                            'notes' => _("Inserted by OPS family create tool for matter ID $new_matter->id")
+                            'notes' => "Inserted by OPS family create tool for matter ID $new_matter->id",
                         ]);
                         $new_matter->actorPivot()->firstOrCreate([
                             'actor_id' => $new_actor->id,
                             'role' => 'INV',
-                            'shared' => 1
+                            'shared' => 1,
                         ]);
                     }
                 }
-                $new_matter->notes = _("Applicants"). ': ' .collect($app['applicants'])->implode('; ') ."\n". _("Inventors") .": " .collect($app['inventors'])->implode(' - ');
+                $new_matter->notes = 'Applicants: '.collect($app['applicants'])->implode('; ')."\nInventors: ".collect($app['inventors'])->implode(' - ');
             } else {
                 $new_matter->container_id = $container_id;
                 foreach ($app['pri'] as $pri) {
                     // Create priority filings, excluding "auto" priority claim
-                    if ($pri['number'] != $app['app']['number']){
+                    if ($pri['number'] != $app['app']['number']) {
                         if (array_key_exists($pri['number'], $matter_id_num)) {
                             // The priority application is in the family
                             $new_matter->events()->create(['code' => 'PRI', 'alt_matter_id' => $matter_id_num[$pri['number']]]);
                         } else {
                             $new_matter->events()->create([
                                 'code' => 'PRI',
-                                'detail' => $pri['country'] . $pri['number'],
-                                'event_date' => $pri['date']
+                                'detail' => $pri['country'].$pri['number'],
+                                'event_date' => $pri['date'],
                             ]);
                         }
                     }
-                } 
+                }
             }
             if ($app['pct'] != null) {
                 $new_matter->parent_id = $matter_id_num[$app['pct']];
@@ -426,56 +401,56 @@ class MatterController extends Controller
             }
             if ($parent_num) {
                 //return response()->json(['errors' => ['message' => $matter_id_num]]);
-                $new_matter->events()->create(["code" => 'ENT', "event_date" => $app['app']['date'], 'detail' => _('Child filing date')]);
+                $new_matter->events()->create(['code' => 'ENT', 'event_date' => $app['app']['date'], 'detail' => 'Child filing date']);
                 $parent = $apps->where('app.number', $parent_num)->first();
-                $new_matter->events()->create(["code" => 'FIL', "event_date" => $parent['app']['date'], 'detail' => $app['app']['number']]);
+                // Change this app's filing date to the parent's filing date for potentiel children of this app
+                $app->merge(['app.date' => $parent['app']['date']]);
                 $new_matter->parent_id = $matter_id_num["$parent_num"];
-            } else {
-                $new_matter->events()->create(["code" => 'FIL', "event_date" => $app['app']['date'], 'detail' => $app['app']['number']]);
             }
+            $new_matter->events()->create(['code' => 'FIL', 'event_date' => $app['app']['date'], 'detail' => $app['app']['number']]);
             if (array_key_exists('pub', $app)) {
-                $new_matter->events()->create(["code" => 'PUB', "event_date" => $app['pub']['date'], 'detail' => $app['pub']['number']]);
+                $new_matter->events()->create(['code' => 'PUB', 'event_date' => $app['pub']['date'], 'detail' => $app['pub']['number']]);
             }
             if (array_key_exists('grt', $app)) {
-                $new_matter->events()->create(["code" => 'GRT', "event_date" => $app['grt']['date'], 'detail' => $app['grt']['number']]);
+                $new_matter->events()->create(['code' => 'GRT', 'event_date' => $app['grt']['date'], 'detail' => $app['grt']['number']]);
             }
             if (array_key_exists('procedure', $app)) {
                 foreach ($app['procedure'] as $step) {
                     switch ($step['code']) {
                         case 'EXRE':
                             // Exam report
-                            $exa = $new_matter->events()->create(["code" => 'EXA', "event_date" => $step['dispatched']]);
+                            $exa = $new_matter->events()->create(['code' => 'EXA', 'event_date' => $step['dispatched']]);
                             if (array_key_exists('replied', $step) && $exa->event_date < now()->subMonths(4)) {
                                 $exa->tasks()->create([
-                                    "code" => 'REP', 
-                                    "due_date" => $exa->event_date->addMonths(4), 
-                                    "done_date" => $step['replied'],
-                                    "done" => 1,
-                                    "detail" => _('Exam Report')]);
+                                    'code' => 'REP',
+                                    'due_date' => $exa->event_date->addMonths(4),
+                                    'done_date' => $step['replied'],
+                                    'done' => 1,
+                                    'detail' => 'Exam Report']);
                             }
                             break;
                         case 'RFEE':
                             // Renewals
                             $new_matter->filing->tasks()->updateOrCreate(
-                                ["code" => 'REN', "detail" => $step['ren_year']],
-                                ["due_date" => $new_matter->filing->event_date->addYears($step['ren_year'] - 1)->lastOfMonth(),
-                                "done_date" => $step['ren_paid'],
-                                "done" => 1]
+                                ['code' => 'REN', 'detail' => $step['ren_year']],
+                                ['due_date' => $new_matter->filing->event_date->addYears($step['ren_year'] - 1)->lastOfMonth(),
+                                    'done_date' => $step['ren_paid'],
+                                    'done' => 1]
                             );
                             break;
                         case 'IGRA':
                             // Intention to grant
                             if (array_key_exists('dispatched', $step)) {
                                 // Sometimes the dispatch and the payment are in different steps
-                                $grt = $new_matter->events()->create(["code" => 'ALL', "event_date" => $step['dispatched']]);
+                                $grt = $new_matter->events()->create(['code' => 'ALL', 'event_date' => $step['dispatched']]);
                             }
                             if (array_key_exists('grt_paid', $step) && $grt->event_date < now()->subMonths(4)) {
                                 $grt->tasks()->create([
-                                    "code" => 'PAY', 
-                                    "due_date" => $grt->event_date->addMonths(4), 
-                                    "done_date" => $step['grt_paid'],
-                                    "done" => 1,
-                                    "detail" => _('Grant Fee')]);
+                                    'code' => 'PAY',
+                                    'due_date' => $grt->event_date->addMonths(4),
+                                    'done_date' => $step['grt_paid'],
+                                    'done' => 1,
+                                    'detail' => 'Grant Fee']);
                             }
                             break;
                         case 'EXAM52':
@@ -494,12 +469,6 @@ class MatterController extends Controller
         return response()->json(['redirect' => "/matter?Ref=$request->caseref&tab=1"]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Matter  $matter
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Matter $matter)
     {
         LaravelGettext::setLocale(Auth::user()->language);
@@ -519,16 +488,10 @@ class MatterController extends Controller
         $cat_edit = $matter->tasks()->whereHas('rule', function (Builder $q) {
             $q->whereNull('for_category');
         })->count();
-        return view("matter.edit", compact(['matter', 'cat_edit', 'country_edit']));
+
+        return view('matter.edit', compact(['matter', 'cat_edit', 'country_edit']));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Matter  $matter
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Matter $matter)
     {
         LaravelGettext::setLocale(Auth::user()->language);
@@ -536,23 +499,19 @@ class MatterController extends Controller
         $request->validate([
             'term_adjust' => 'numeric',
             'idx' => 'numeric|nullable',
-            'expire_date' => 'date'
+            'expire_date' => 'date',
         ]);
-        $request->merge([ 'updater' => Auth::user()->login ]);
+        $request->merge(['updater' => Auth::user()->login]);
         $matter->update($request->except(['_token', '_method']));
+
         return $matter;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Matter  $matter
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Matter $matter)
     {
         $this->authorize('delete', $matter);
         $matter->delete();
+
         return $matter;
     }
 
@@ -572,7 +531,6 @@ class MatterController extends Controller
             'sortdir',
             'tab',
             'include_dead',
-            'report_list'
         ]);
 
         $export = Matter::filter(
@@ -584,54 +542,51 @@ class MatterController extends Controller
         )->get()->toArray();
 
         $captions = [
-            _('Our Ref'),
-            _('Country'),
-            _('Cat'),
-            _('Origin'),
-            _('Status'),
-            _('Status date'),
-            _('Client'),
-            _('Client Ref'),
-            _('Applicant'),
-            _('Agent'),
-            _('Agent Ref'),
-            _('Title'),
-            _('Title2'),
-            _('Title3'),
-            _('Inventor 1'),
-            _('Filed'),
-            _('FilNo'),
-            _('Published'),
-            _('Pub. No'),
-            _('Granted'),
-            _('Grt No'),
-            _('ID'),
-            _('container_ID'),
-            _('parent_ID'),
-            _('Type'),
-            _('Responsible'),
-            _('Delegate'),
-            _('Dead'),
-            _('Expiration date'),
-            _('Next renewal'),
-            _('Next renewal date'),
-            'Ctnr'
+            'Our Ref',
+            'Country',
+            'Cat',
+            'Origin',
+            'Status',
+            'Status date',
+            'Client',
+            'Client Ref',
+            'Applicant',
+            'Agent',
+            'Agent Ref',
+            'Title',
+            'Title2',
+            'Title3',
+            'Inventor 1',
+            'Filed',
+            'FilNo',
+            'Published',
+            'Pub. No',
+            'Granted',
+            'Grt No',
+            'ID',
+            'container_ID',
+            'parent_ID',
+            'Type',
+            'Responsible',
+            'Delegate',
+            'Dead',
+            'Ctnr',
         ];
 
         $export_csv = fopen('php://memory', 'w');
         fputcsv($export_csv, $captions, ';');
         foreach ($export as $row) {
-            fputcsv($export_csv, array_map("utf8_decode", $row), ';');
+            fputcsv($export_csv, array_map('utf8_decode', $row), ';');
         }
         rewind($export_csv);
-        $filename = Now()->isoFormat('YMMDDHHmmss') . '_matters.csv';
+        $filename = Now()->isoFormat('YMMDDHHmmss').'_matters.csv';
 
         return response()->stream(
             function () use ($export_csv) {
                 fpassthru($export_csv);
             },
             200,
-            [ 'Content-Type' => 'application/csv', 'Content-Disposition' => 'attachment; filename=' . $filename ]
+            ['Content-Type' => 'application/csv', 'Content-Disposition' => 'attachment; filename='.$filename]
         );
     }
 
@@ -674,9 +629,9 @@ class MatterController extends Controller
     public function mergeFile(Matter $matter, Request $request)
     {
         // No dedicated "form request" class being defined, this validation will silently terminate the operation when unsuccessful
-//         $this->validate($request, [
-//             'file'  => 'required|file|mimes:docx,dotx'
-//         ]);
+        $this->validate($request, [
+            'file' => 'required|file|mimes:docx,dotx',
+        ]);
         $file = $request->file('file');
 
         // Attempt for a cleaner creation method of the data collection using relationships
@@ -734,7 +689,6 @@ class MatterController extends Controller
         // 'wri.name AS Writer',
         // 'ann.name AS Annuity_Agent'
 
-        
         $data = Matter::select(
             'matter.id',
             'matter.uid AS File_Ref',
@@ -754,19 +708,19 @@ class MatterController extends Controller
             'pr.detail AS Pub_Reg_Number',
             DB::raw("DATE_FORMAT(allow.event_date, '%d/%m/%Y') AS Allowance_Date"),
             'matter.expire_date AS Expiration_Date',
-            DB::raw("COALESCE(cli.name, clic.name) AS Client"),
-            DB::raw("COALESCE(cli.address, clic.address) AS Client_Address"),
-            DB::raw("COALESCE(cli.country, clic.country) AS Client_Country"),
+            DB::raw('COALESCE(cli.name, clic.name) AS Client'),
+            DB::raw('COALESCE(cli.address, clic.address) AS Client_Address'),
+            DB::raw('COALESCE(cli.country, clic.country) AS Client_Country'),
             'cnt.name AS Contact',
             DB::raw("IF(COALESCE(cli.address_billing, clic.address_billing) IS NULL,
                 CONCAT_WS('\n', COALESCE(pay.name, payc.name, cli.name, clic.name), COALESCE(pay.address, payc.address, cli.address, clic.address), COALESCE(pay.country, payc.country, cli.country, clic.country)),
                 CONCAT_WS('\n', COALESCE(pay.name, payc.name), COALESCE(pay.address, payc.address, cli.address_billing, clic.address_billing), COALESCE(pay.country, payc.country, cli.country_billing, clic.country_billing))
             ) AS Billing_Address"),
-            DB::raw("COALESCE(lcli.actor_ref, lclic.actor_ref) AS Client_Ref"),
-            DB::raw("COALESCE(cli.email, clic.email) AS Email"),
-            DB::raw("COALESCE(cli.VAT_number, clic.VAT_number) AS VAT"),
-            DB::raw("COALESCE(titof.value, tit.value) AS Official_Title"),
-            DB::raw("COALESCE(titen.value, titof.value, tit.value) AS English_Title"),
+            DB::raw('COALESCE(lcli.actor_ref, lclic.actor_ref) AS Client_Ref'),
+            DB::raw('COALESCE(cli.email, clic.email) AS Email'),
+            DB::raw('COALESCE(cli.VAT_number, clic.VAT_number) AS VAT'),
+            DB::raw('COALESCE(titof.value, tit.value) AS Official_Title'),
+            DB::raw('COALESCE(titen.value, titof.value, tit.value) AS English_Title'),
             'tit.value AS Title',
             'tm.value AS Trademark',
             DB::raw("GROUP_CONCAT(DISTINCT class.value SEPARATOR '.') AS Classes"),
@@ -786,145 +740,145 @@ class MatterController extends Controller
             'wri.name AS Writer',
             'ann.name AS Annuity_Agent'
         )
-        ->leftJoin(
-            DB::raw("matter_actor_lnk linv
+            ->leftJoin(
+                DB::raw("matter_actor_lnk linv
             JOIN actor inv ON inv.id = linv.actor_id AND linv.role = 'INV'"),
-            DB::raw('IFNULL(matter.container_id, matter.id)'),
-            'linv.matter_id'
-        )
-        ->leftJoin(
-            DB::raw("matter_actor_lnk lcli
+                DB::raw('IFNULL(matter.container_id, matter.id)'),
+                'linv.matter_id'
+            )
+            ->leftJoin(
+                DB::raw("matter_actor_lnk lcli
             JOIN actor cli ON cli.id = lcli.actor_id
             AND lcli.role = 'CLI' AND lcli.display_order = 1"),
-            'matter.id',
-            'lcli.matter_id'
-        )
-        ->leftJoin(
-            DB::raw("matter_actor_lnk lclic
+                'matter.id',
+                'lcli.matter_id'
+            )
+            ->leftJoin(
+                DB::raw("matter_actor_lnk lclic
             JOIN actor clic ON clic.id = lclic.actor_id
             AND lclic.role = 'CLI'
             AND lclic.display_order = 1
             AND lclic.shared = 1"),
-            'matter.container_id',
-            'lclic.matter_id'
-        )
-        ->leftJoin(
-            DB::raw("matter_actor_lnk lpay
+                'matter.container_id',
+                'lclic.matter_id'
+            )
+            ->leftJoin(
+                DB::raw("matter_actor_lnk lpay
             JOIN actor pay ON pay.id = lpay.actor_id
             AND lpay.role = 'PAY' AND lpay.display_order = 1"),
-            'matter.id',
-            'lpay.matter_id'
-        )
-        ->leftJoin(
-            DB::raw("matter_actor_lnk lpayc
+                'matter.id',
+                'lpay.matter_id'
+            )
+            ->leftJoin(
+                DB::raw("matter_actor_lnk lpayc
             JOIN actor payc ON payc.id = lpayc.actor_id
             AND lpayc.role = 'PAY'
             AND lpayc.display_order = 1
             AND lpayc.shared = 1"),
-            'matter.container_id',
-            'lpayc.matter_id'
-        )
-        ->leftJoin(
-            DB::raw("matter_actor_lnk lappl
+                'matter.container_id',
+                'lpayc.matter_id'
+            )
+            ->leftJoin(
+                DB::raw("matter_actor_lnk lappl
             JOIN actor appl ON appl.id = lappl.actor_id
             AND lappl.role = 'APP'"),
-            'matter.id',
-            'lappl.matter_id'
-        )
-        ->leftJoin(
-            DB::raw("matter_actor_lnk lapplc
+                'matter.id',
+                'lappl.matter_id'
+            )
+            ->leftJoin(
+                DB::raw("matter_actor_lnk lapplc
             JOIN actor applc ON applc.id = lapplc.actor_id
             AND lapplc.role = 'APP'
             AND lapplc.shared = 1"),
-            'matter.container_id',
-            'lapplc.matter_id'
-        )
-        ->leftJoin(
-            DB::raw("matter_actor_lnk lown
+                'matter.container_id',
+                'lapplc.matter_id'
+            )
+            ->leftJoin(
+                DB::raw("matter_actor_lnk lown
             JOIN actor own ON own.id = lown.actor_id
             AND lown.role = 'OWN'"),
-            'matter.id',
-            'lown.matter_id'
-        )
-        ->leftJoin(
-            DB::raw("matter_actor_lnk lownc
+                'matter.id',
+                'lown.matter_id'
+            )
+            ->leftJoin(
+                DB::raw("matter_actor_lnk lownc
             JOIN actor ownc ON ownc.id = lownc.actor_id
             AND lownc.role = 'OWN'
             AND lownc.shared = 1"),
-            'matter.container_id',
-            'lownc.matter_id'
-        )
-        ->leftJoin(
-            DB::raw("matter_actor_lnk lann
+                'matter.container_id',
+                'lownc.matter_id'
+            )
+            ->leftJoin(
+                DB::raw("matter_actor_lnk lann
             JOIN actor ann ON ann.id = lann.actor_id
             AND lann.role = 'ANN'"),
-            'matter.id',
-            'lann.matter_id'
-        )
-        ->leftJoin(
-            DB::raw("matter_actor_lnk lcnt
+                'matter.id',
+                'lann.matter_id'
+            )
+            ->leftJoin(
+                DB::raw("matter_actor_lnk lcnt
             JOIN actor cnt ON cnt.id = lcnt.actor_id
             AND lcnt.role = 'CNT'"),
-            DB::raw('IFNULL(matter.container_id, matter.id)'),
-            'lcnt.matter_id'
-        )
-        ->leftJoin(
-            DB::raw("matter_actor_lnk lagt
+                DB::raw('IFNULL(matter.container_id, matter.id)'),
+                'lcnt.matter_id'
+            )
+            ->leftJoin(
+                DB::raw("matter_actor_lnk lagt
             JOIN actor agt ON agt.id = lagt.actor_id
             AND lagt.role = 'AGT'"),
-            'matter.id',
-            'lagt.matter_id'
-        )
-        ->leftJoin(
-            DB::raw("matter_actor_lnk lwri
+                'matter.id',
+                'lagt.matter_id'
+            )
+            ->leftJoin(
+                DB::raw("matter_actor_lnk lwri
             JOIN actor wri ON wri.id = lwri.actor_id
             AND lwri.role = 'WRI'"),
-            'matter.id',
-            'lwri.matter_id'
-        )
-        ->leftJoin('event AS fil', function ($join) {
-            $join->on('matter.id', 'fil.matter_id')->where('fil.code', 'FIL');
-        })
-        ->leftJoin('event AS pub', function ($join) {
-            $join->on('matter.id', 'pub.matter_id')->where('pub.code', 'PUB');
-        })
-        ->leftJoin('event AS grt', function ($join) {
-            $join->on('matter.id', 'grt.matter_id')->where('grt.code', 'GRT');
-        })
-        ->leftJoin('event AS reg', function ($join) {
-            $join->on('matter.id', 'reg.matter_id')->where('reg.code', 'REG');
-        })
-        ->leftJoin('event AS pr', function ($join) {
-            $join->on('matter.id', 'pr.matter_id')->where('pr.code', 'PR');
-        })
-        ->leftJoin('event_lnk_list AS pri', function ($join) {
-            $join->on('matter.id', 'pri.matter_id')->where('pri.code', 'PRI');
-        })
-        ->leftJoin('event AS allow', function ($join) {
-            $join->on('matter.id', 'allow.matter_id')->where('allow.code', 'ALL');
-        })
-        ->leftJoin('classifier AS titof', function ($join) {
-            $join->on('titof.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
-            ->where('titof.type_code', 'TITOF');
-        })
-        ->leftJoin('classifier AS titen', function ($join) {
-            $join->on('titen.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
-            ->where('titen.type_code', 'TITEN');
-        })
-        ->leftJoin('classifier AS tit', function ($join) {
-            $join->on('tit.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
-            ->where('tit.type_code', 'TIT');
-        })
-        ->leftJoin('classifier AS tm', function ($join) {
-            $join->on('tm.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
-            ->where('tm.type_code', 'TM');
-        })
-        ->leftJoin('classifier AS class', function ($join) {
-            $join->on('class.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
-            ->where('class.type_code', 'TMCL');
-        })
-        ->join('actor AS resp', 'resp.login', 'matter.responsible')
-        ->find($matter->id);
+                'matter.id',
+                'lwri.matter_id'
+            )
+            ->leftJoin('event AS fil', function ($join) {
+                $join->on('matter.id', 'fil.matter_id')->where('fil.code', 'FIL');
+            })
+            ->leftJoin('event AS pub', function ($join) {
+                $join->on('matter.id', 'pub.matter_id')->where('pub.code', 'PUB');
+            })
+            ->leftJoin('event AS grt', function ($join) {
+                $join->on('matter.id', 'grt.matter_id')->where('grt.code', 'GRT');
+            })
+            ->leftJoin('event AS reg', function ($join) {
+                $join->on('matter.id', 'reg.matter_id')->where('reg.code', 'REG');
+            })
+            ->leftJoin('event AS pr', function ($join) {
+                $join->on('matter.id', 'pr.matter_id')->where('pr.code', 'PR');
+            })
+            ->leftJoin('event_lnk_list AS pri', function ($join) {
+                $join->on('matter.id', 'pri.matter_id')->where('pri.code', 'PRI');
+            })
+            ->leftJoin('event AS allow', function ($join) {
+                $join->on('matter.id', 'allow.matter_id')->where('allow.code', 'ALL');
+            })
+            ->leftJoin('classifier AS titof', function ($join) {
+                $join->on('titof.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
+                    ->where('titof.type_code', 'TITOF');
+            })
+            ->leftJoin('classifier AS titen', function ($join) {
+                $join->on('titen.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
+                    ->where('titen.type_code', 'TITEN');
+            })
+            ->leftJoin('classifier AS tit', function ($join) {
+                $join->on('tit.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
+                    ->where('tit.type_code', 'TIT');
+            })
+            ->leftJoin('classifier AS tm', function ($join) {
+                $join->on('tm.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
+                    ->where('tm.type_code', 'TM');
+            })
+            ->leftJoin('classifier AS class', function ($join) {
+                $join->on('class.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
+                    ->where('class.type_code', 'TMCL');
+            })
+            ->join('actor AS resp', 'resp.login', 'matter.responsible')
+            ->find($matter->id);
 
         // Exclude the data having line breaks
         $simpledata = collect($data)->except([
@@ -933,7 +887,7 @@ class MatterController extends Controller
             'Billing_Address',
             'Inventor_Addresses',
             'Owner',
-            'Agent'
+            'Agent',
         ])->toArray();
         // Data having line breaks
         $complexdata = collect($data)->only([
@@ -942,7 +896,7 @@ class MatterController extends Controller
             'Billing_Address',
             'Inventor_Addresses',
             'Owner',
-            'Agent'
+            'Agent',
         ]);
 
         $template = new \PhpOffice\PhpWord\TemplateProcessor($file->path());
@@ -950,7 +904,7 @@ class MatterController extends Controller
         $template->setValues($simpledata);
         // Process the data having line breaks and replace the line breaks with ${nl} macros
         foreach ($complexdata as $key => $item) {
-            $item = str_replace("\n", "\${nl}", $item);
+            $item = str_replace("\n", '${nl}', $item);
             $template->setValue($key, $item);
 
             /*
@@ -971,9 +925,9 @@ class MatterController extends Controller
         \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(false);
         // Set the ${nl} macros to line break tags (replacing "\n" directly with "<w:br/>" causes escaping issues)
         $template->setValue('nl', '<w:br/>');
-        
-        header("Content-Description: File Transfer");
-        header('Content-Disposition: attachment; filename="merged-' . $file->getClientOriginalName()) . '"';
+
+        header('Content-Description: File Transfer');
+        header('Content-Disposition: attachment; filename="merged-'.$file->getClientOriginalName()).'"';
         header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
         header('Content-Transfer-Encoding: binary');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
@@ -984,6 +938,7 @@ class MatterController extends Controller
     public function events(Matter $matter)
     {
         $events = $matter->events->load('info');
+
         return view('matter.events', compact('events', 'matter'));
     }
 
@@ -993,8 +948,9 @@ class MatterController extends Controller
         $events = Event::with(['tasks' => function ($query) {
             $query->where('code', '!=', 'REN');
         }, 'info:code,name', 'tasks.info:code,name'])->where('matter_id', $matter->id)
-        ->orderBy('event_date')->get();
+            ->orderBy('event_date')->get();
         $is_renewals = 0;
+
         return view('matter.tasks', compact('events', 'matter', 'is_renewals'));
     }
 
@@ -1007,12 +963,14 @@ class MatterController extends Controller
             $query->where('code', 'REN');
         })->where('matter_id', $matter->id)->get();
         $is_renewals = 1;
+
         return view('matter.tasks', compact('events', 'matter', 'is_renewals'));
     }
 
     public function actors(Matter $matter, $role)
     {
         $role_group = $matter->actors->where('role_code', $role);
+
         return view('matter.roleActors', compact('role_group', 'matter'));
     }
 
@@ -1020,24 +978,26 @@ class MatterController extends Controller
     {
         LaravelGettext::setLocale(Auth::user()->language);
         $matter->load(['classifiers']);
+
         return view('matter.classifiers', compact('matter'));
     }
 
     public function description(Matter $matter, $lang)
     {
         $description = $matter->getDescription($matter->id, $lang);
+
         return view('matter.summary', compact('description'));
     }
 
     public static function getOPSfamily($docnum)
     {
         $ops_key = env('OPS_APP_KEY');
-		$ops_secret = env('OPS_SECRET');
+        $ops_secret = env('OPS_SECRET');
         $token_url = 'https://ops.epo.org/3.2/auth/accesstoken';
         $token_response = Http::withHeaders([
-            'Authorization' => 'Basic ' .base64_encode($ops_key.':'.$ops_secret)
+            'Authorization' => 'Basic '.base64_encode($ops_key.':'.$ops_secret),
         ])->asForm()->post($token_url, ['grant_type' => 'client_credentials']);
-        
+
         //$ops_legal = "http://ops.epo.org/3.2/rest-services/family/application/docdb/$docnum/legal.json";
         // Using application number
         //$ops_biblio = "https://ops.epo.org/3.2/rest-services/family/application/docdb/$docnum/biblio.json";
@@ -1057,24 +1017,20 @@ class MatterController extends Controller
         $members = data_get($ops_response, 'ops:world-patent-data.ops:patent-family.ops:family-member');
         if (Arr::isList($members)) {
             // Sort members by increasing filing date and doc-id, so that the first is the priority application
-            $members = collect($members)->sortBy(function ($member) {
-                return $member['application-reference']['document-id']['date']['$'] .$member['application-reference']['@doc-id'];
-            });
+            $members = collect($members)->sortBy(fn ($member) => $member['application-reference']['document-id']['date']['$'].$member['application-reference']['@doc-id']);
             // Group all members by doc-id, so that publications and grants appear in a same record (yet as two arrays)
-            $members = collect($members)->groupBy(function ($member) {
-                return $member['application-reference']['@doc-id'];
-            });
+            $members = collect($members)->groupBy(fn ($member) => $member['application-reference']['@doc-id']);
         } else {
             // Turn single element into a list of one element
             $members = [$members['application-reference']['@doc-id'] => [0 => $members]];
         }
-        $apps = [];      
+        $apps = [];
         $i = 0;
         foreach ($members as $key => $member) {
             // [0] is the item referring to the publication and [1] is the item referring to the grant
             $app = $member[0]['application-reference']['document-id'];
             // Don't want filings of EP translations
-            if ( $app['kind']['$'] == 'T') {
+            if ($app['kind']['$'] == 'T') {
                 continue;
             }
             // $key is the @doc-id
@@ -1091,14 +1047,14 @@ class MatterController extends Controller
                 $apps[$i]['pri'][$k]['country'] = $p['document-id']['country']['$'];
                 $apps[$i]['pri'][$k]['number'] = $p['document-id']['doc-number']['$'];
                 $apps[$i]['pri'][$k]['kind'] = $p['document-id']['kind']['$'];
-                $apps[$i]['pri'][$k]['date'] = date("Y-m-d", strtotime($p['document-id']['date']['$']));
+                $apps[$i]['pri'][$k]['date'] = date('Y-m-d', strtotime($p['document-id']['date']['$']));
             }
-            
-            $apps[$i]['app']['date'] = date("Y-m-d", strtotime($app['date']['$']));
+
+            $apps[$i]['app']['date'] = date('Y-m-d', strtotime($app['date']['$']));
             $apps[$i]['app']['kind'] = $app['kind']['$'];
             if ($app['kind']['$'] == 'W') {
                 $country = 'WO';
-                $app_number = $app['country']['$'] . $app['doc-number']['$'];
+                $app_number = $app['country']['$'].$app['doc-number']['$'];
             } else {
                 $country = $app['country']['$'];
                 $app_number = $app['doc-number']['$'];
@@ -1116,7 +1072,7 @@ class MatterController extends Controller
             $apps[$i]['app']['number'] = $app_number;
 
             // Data taken from EP or PCT case
-            if ((in_array($apps[$i]['app']['country'], ['EP', 'WO'])) && !data_get($apps, '0.pri.title')) {
+            if ((in_array($apps[$i]['app']['country'], ['EP', 'WO'])) && ! data_get($apps, '0.pri.title')) {
                 // Title (the last is the English title)
                 $apps[0]['title'] = collect($member[0]['exchange-document']['bibliographic-data']['invention-title'])->last()['$'];
 
@@ -1141,27 +1097,27 @@ class MatterController extends Controller
                 if ($ops_response->successful()) {
                     $xml = new SimpleXMLElement($ops_response);
                     $steps = $xml->xpath('//reg:procedural-step');
-                    $proc =[];
-                    foreach ($steps as $k => $step){
+                    $proc = [];
+                    foreach ($steps as $k => $step) {
                         $proc[$k]['code'] = (string) $step->xpath('reg:procedural-step-code')[0];
                         if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_REQUEST"]/reg:date')) {
-                            $proc[$k]['request'] = date("Y-m-d", strtotime($date[0]));
+                            $proc[$k]['request'] = date('Y-m-d', strtotime($date[0]));
                         }
                         if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_DISPATCH"]/reg:date')) {
-                            $proc[$k]['dispatched'] = date("Y-m-d", strtotime($date[0]));
-                        };
+                            $proc[$k]['dispatched'] = date('Y-m-d', strtotime($date[0]));
+                        }
                         if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_REPLY"]/reg:date')) {
-                            $proc[$k]['replied'] = date("Y-m-d", strtotime($date[0]));
-                        };
+                            $proc[$k]['replied'] = date('Y-m-d', strtotime($date[0]));
+                        }
                         if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_PAYMENT"]/reg:date')) {
-                            $proc[$k]['ren_paid'] = date("Y-m-d", strtotime($date[0]));
-                        };
+                            $proc[$k]['ren_paid'] = date('Y-m-d', strtotime($date[0]));
+                        }
                         if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="GRANT_FEE_PAID"]/reg:date')) {
-                            $proc[$k]['grt_paid'] = date("Y-m-d", strtotime($date[0]));
-                        };
+                            $proc[$k]['grt_paid'] = date('Y-m-d', strtotime($date[0]));
+                        }
                         if ($year = $step->xpath('reg:procedural-step-text[@step-text-type="YEAR"]')) {
                             $proc[$k]['ren_year'] = (int) $year[0];
-                        };
+                        }
                     }
                     $apps[$i]['procedure'] = $proc;
                 }
@@ -1185,16 +1141,16 @@ class MatterController extends Controller
                     $xml = new SimpleXMLElement($ops_response);
                     // Get renewals. Code RFEE for FR and MAFP for US
                     $steps = $xml->xpath('//ops:legal[@code="PLFP"] | //ops:legal[@code="MAFP"]');
-                    $proc =[];
+                    $proc = [];
                     foreach ($steps as $k => $step) {
                         // Code compatible with EP procedural steps
                         $proc[$k]['code'] = 'RFEE';
                         if ($date = $step->xpath('ops:L007EP')) {
-                            $proc[$k]['ren_paid'] = date("Y-m-d", strtotime($date[0]));
-                        };
+                            $proc[$k]['ren_paid'] = date('Y-m-d', strtotime($date[0]));
+                        }
                         if ($year = $step->xpath('ops:L500EP/ops:L520EP')) {
                             $proc[$k]['ren_year'] = (int) $year[0];
-                        };
+                        }
                     }
                     $apps[$i]['procedure'] = $proc;
                 }
@@ -1210,20 +1166,20 @@ class MatterController extends Controller
                     case 'A2':
                         $apps[$i]['pub']['country'] = $pub['country']['$'];
                         $apps[$i]['pub']['number'] = $pub['doc-number']['$'];
-                        $apps[$i]['pub']['date'] = date("Y-m-d", strtotime($pub['date']['$']));
+                        $apps[$i]['pub']['date'] = date('Y-m-d', strtotime($pub['date']['$']));
                         break;
                     case 'B':
                     case 'B1':
                     case 'B2':
                         $apps[$i]['grt']['country'] = $pub['country']['$'];
                         $apps[$i]['grt']['number'] = $pub['doc-number']['$'];
-                        $apps[$i]['grt']['date'] = date("Y-m-d", strtotime($pub['date']['$']));
+                        $apps[$i]['grt']['date'] = date('Y-m-d', strtotime($pub['date']['$']));
                         // Find EP validations (doesn't always work)
                         // if ($pub['country']['$'] == 'EP') {
                         //     $ops = Http::withToken($token_response['access_token'])
                         //         ->asForm()->get("https://ops.epo.org/3.2/rest-services/legal/publication/docdb/EP{$pub['doc-number']['$']}.json")
                         //         ->json()['ops:world-patent-data']['ops:patent-family']['ops:family-member'];
-                            
+
                         //     // Create list of validation countries identified by the EPO and remove null array elements
                         //     $ep_val = @collect($ops[0]['ops:legal'])->pluck('ops:L500EP.ops:L501EP.$')->reject(function ($item, $key) {
                         //         return $item == null;
@@ -1232,10 +1188,10 @@ class MatterController extends Controller
                         // }
                         break;
                 }
-                
+
                 // PCT origin
                 if ($pct_nat = collect($event['priority-claim'])->where('priority-linkage-type.$', 'W')->first()) {
-                    $apps[$i]['pct'] = $pct_nat['document-id']['country']['$'] . $pct_nat['document-id']['doc-number']['$'];
+                    $apps[$i]['pct'] = $pct_nat['document-id']['country']['$'].$pct_nat['document-id']['doc-number']['$'];
                 } else {
                     $apps[$i]['pct'] = null;
                 }
@@ -1256,7 +1212,7 @@ class MatterController extends Controller
                 } else {
                     $apps[$i]['div'] = null;
                 }
-                
+
                 // Possible continuation
                 if ($div = collect($event['priority-claim'])->whereIn('priority-linkage-type.$', ['1', '2', 'C'])->first()) {
                     $app_number = $div['document-id']['doc-number']['$'];
@@ -1276,6 +1232,7 @@ class MatterController extends Controller
             }
             $i++;
         }
+
         return $apps;
     }
 }

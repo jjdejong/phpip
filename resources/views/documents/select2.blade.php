@@ -1,79 +1,44 @@
 <td colspan="8">
-<form id="sendDocumentForm">
-  <input type='hidden' value="{{ $matter->id }}" name="matter_id">
-  @if (isset($event))
-  <input type='hidden' value="{{ $event->id }}" name="event_id">
-  @endif
-  @if (isset($task))
-  <input type='hidden' value="{{ $task->id }}" name="task_id">
-  @endif
-    <div class='container'>
-    <div class='row font-weight-bold'>
-      <div class="col-3 bg-light">
-        Contact
-      </div>
-      <div class="col-1 bg-light">
-        {{ _i("Send to:") }}
-      </div>
-      <div class="col-1 bg-light">
-        {{ _i('CC:') }}
-      </div>
-      <div class="col-7">
-      </div>
-    </div>
-    @foreach ($contacts as $contact)
-      <div class='row' >
-        <div class="col-3">
-          {{ $contact->first_name}} {{ is_null($contact->name) ? $contact->display_name : $contact->name  }}
-        </div>
-        <div class="col-1">
-          <input id="" class="contact" name="sendto-{{ $contact->actor_id }}" type="checkbox">
-        </div>
-        <div class="col-1">
-          <input id="" class="contact" name="ccto-{{ $contact->actor_id }}" type="checkbox">
-        </div>
-        <div class="col-7">
-        </div>
-      </div>
-    @endforeach
-  </div>
-  <div class='container' data-resource="/document/select/{{ $matter->id }}">
-      <div class="row bg-light font-weight-bold">
-          <div class="col-lg-4">
-            {{ _i("Summary") }}
-          </div>
-          <div class="col-lg-2">
-            {{ _i("Language") }}
-          </div>
-          <div class="col-lg-2">
-            {{ _i("Category") }}
-          </div>
-          <div class="col-lg-3">
-            {{ _i("Style") }}
-          </div>
-          <div class="col-lg-1">
-          </div>
-      </div>
-      @foreach ($members as $member)
-        <div class="row reveal-hidden" data-resource="/document/mailto/{{ $member->id }}">
-          <div class = "col-lg-4">
-            {{ $member->summary }}
-          </div>
-          <div class = "col-lg-2">
-            {{ $member->language }}
-          </div>
-          <div class = "col-lg-2">
-            {{ $member->category }}
-          </div>
-
-          <div class = "co-lgl-3">
-            {{ $member->style }}
-          </div>
-          <div class = "col-lg-1">
-            <a class="sendDocument btn btn-info px-1 py-0">{{ _i('Prepare') }}</a>
-          </div>
-        </div>
+  <form id="sendDocumentForm" class="alert alert-info">
+    <input type='hidden' value="{{ $matter->id }}" name="matter_id">
+    @if(isset($event))
+      <input type='hidden' value="{{ $event->id }}" name="event_id">
+    @endif
+    @if(isset($task))
+      <input type='hidden' value="{{ $task->id }}" name="task_id">
+    @endif
+    <table>
+      <tr>
+        <th>Correspondent</th>
+        <th class="text-center">To</th>
+        <th class="text-center">CC</th>
+      </tr>
+      @foreach($contacts as $contact)
+        <tr>
+          <td>
+            {{ $contact->display_name ?? $contact->name }} {{ $contact->first_name }}
+          </td>
+          <td>
+            <input name="sendto-{{ $contact->actor_id }}" type="checkbox">
+          </td>
+          <td>
+            <input name="ccto-{{ $contact->actor_id }}" type="checkbox">
+          </td>
+        </tr>
       @endforeach
-  </div>
-</form>
+    </table>
+    <ul class="list-group" data-resource="/document/select/{{ $matter->id }}">
+      @foreach($members as $member)
+        <li class="list-group-item d-flex justify-content-between" data-resource="/document/mailto/{{ $member->id }}">
+            <div>{{ $member->summary }} ({{ $member->language }})</div>
+            <em>{{ $member->category ?? 'no category' }}</em>
+            <em>{{ $member->style ?? 'no style'}}</em>
+            <a class="sendDocument text-primary" href="#">
+              <svg width="16" height="16" fill="currentColor" style="pointer-events: none">
+                <use xlink:href="#envelope-fill" /></svg>
+            </a>
+        </li>
+      @endforeach
+    </ul>
+  </form>
 </td>

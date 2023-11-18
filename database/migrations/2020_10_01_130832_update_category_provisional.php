@@ -2,13 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateCategoryProvisional extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::table('matter_type')->insertOrIgnore(['code' => 'PRO', 'type' => 'Provisional']);
@@ -18,13 +13,8 @@ class UpdateCategoryProvisional extends Migration
         DB::table('matter_category')->where('code', 'PRO')->delete();
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         //
     }
-}
+};

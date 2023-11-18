@@ -1,17 +1,13 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        \DB::table('country')->insertOrIgnore([
+        DB::table('country')->insertOrIgnore([
 
             [
                 'numcode' => 0,
@@ -44,7 +40,7 @@ return new class extends Migration
                 'renewal_base' => 'FIL',
                 'renewal_start' => 'GRT',
                 'checked_on' => '2023-02-16',
-            ]
+            ],
         ]);
     }
 };

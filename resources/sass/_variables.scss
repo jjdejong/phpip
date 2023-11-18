@@ -1,51 +1,15 @@
+$primary: #0c3f70;
+$info: #618faa;
 
 // Body
-$body-bg: #99a;
-$card-bg: #f5f5f5;
+$body-bg: #f8fafc;
 
 // Typography
-$font-family-sans-serif: "Roboto", sans-serif;
+$font-family-sans-serif: 'Nunito', sans-serif;
 $font-size-base: 0.8rem;
 $line-height-base: 1.1;
-$enable-responsive-font-sizes: true;
 
+// Switching between light and dark text depending on the background. Lower switches faster
+$min-contrast-ratio: 3;
 
-// Spacing
-$grid-gutter-width: 6px;
-
-// Colors
-$primary: #0c3f70;
-//$primary: #013C80; // Keep-IP
-$info: #618faa;
-$warning: #FFD37F;
-$blue: #3490dc;
-$indigo: #6574cd;
-$purple: #9561e2;
-$pink: #f66D9b;
-$red: #e3342f;
-$orange: #f6993f;
-$yellow: #ffed4a;
-$green: #38c172;
-$teal: #4dc0b5;
-$cyan: #6cb2eb;
-
-$enable-gradients: true;
-$enable-shadows: true;
-
-// Various
-
-// $table-cell-padding:          .5rem !default;
-// $table-cell-padding-sm:       .25rem !default;
-$table-cell-padding:         .4rem;
-$table-cell-padding-sm:      .15rem;
-
-// $list-group-item-padding-y: .75rem !default;
-$list-group-item-padding-y: .25rem;
-// $list-group-item-padding-x: 1.25rem;
-$list-group-item-padding-x: .5rem;
-
-// $dropdown-item-padding-x: 1.5rem !default;
-$dropdown-item-padding-x: .5rem;
-
-// $badge-font-weight: $font-weight-bold !default;
-$badge-font-weight: font-weight-normal;
+$popover-header-bg: $info;

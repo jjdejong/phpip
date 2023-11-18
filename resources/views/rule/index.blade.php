@@ -1,24 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-primary">
-  {{ _i('Rules') }}
-  <a class="badge badge-pill badge-primary" href="https://github.com/jjdejong/phpip/wiki/Tables#task_rules" target="_blank">?</a>
-  <a href="rule/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="Rule data" data-source="/rule" data-resource="/rule/create/">{{ _i('Create rule') }}</a>
+<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
+  <span>
+    Rules
+    <a class="text-primary" href="https://github.com/jjdejong/phpip/wiki/Tables#task_rules" target="_blank">
+      <svg width="16" height="16" fill="currentColor"><use xlink:href="#question-circle-fill"/></svg>
+    </a>
+  </span>
+  <a href="rule/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Rule data" data-source="/rule" data-resource="/rule/create/">Create Rule</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card border-primary">
+    <div class="card border-primary p-1">
       <table class="table table-striped table-hover table-sm">
         <thead>
-          <tr id="filter" class="bg-primary text-light">
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/rule" name="Task" placeholder="{{ _i('Task') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/rule" name="Detail" placeholder="{{ _i('Detail') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/rule" name="Trigger" placeholder="{{ _i('Trigger event') }}" /></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/rule" name="Category" placeholder="{{ _i('Category') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/rule" name="Country" placeholder="{{ _i('Country') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/rule" name="Origin" placeholder="{{ _i('Origin') }}"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/rule" name="Type" placeholder="{{ _i('Type') }}"></th>
+          <tr id="filter" class="table-primary align-middle">
+            <th><input class="form-control form-control-sm" data-source="/rule" name="Task" placeholder="Task"></th>
+            <th><input class="form-control form-control-sm" data-source="/rule" name="Detail" placeholder="Detail"></th>
+            <th><input class="form-control form-control-sm" data-source="/rule" name="Trigger" placeholder="Trigger event" /></th>
+            <th><input class="form-control form-control-sm" data-source="/rule" name="Category" placeholder="Category"></th>
+            <th><input class="form-control form-control-sm" data-source="/rule" name="Country" placeholder="Country"></th>
+            <th><input class="form-control form-control-sm" data-source="/rule" name="Origin" placeholder="Origin"></th>
+            <th><input class="form-control form-control-sm" data-source="/rule" name="Type" placeholder="Type"></th>
           </tr>
         </thead>
         <tbody id="tableList">
@@ -62,7 +66,5 @@
 @endsection
 
 @section('script')
-
-@include('tables.table-js')
-
+<script src="{{ asset('js/tables.js') }}" defer></script>
 @endsection

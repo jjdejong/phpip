@@ -2,17 +2,19 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ActorPivot extends Pivot
 {
     protected $table = 'matter_actor_lnk';
+
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
     protected $touches = ['matter'];
-    /*protected $dates = [
-        'date'
+    /*protected $casts = [
+        'date' => 'date:Y-m-d'
     ];*/
 
     // use \Venturecraft\Revisionable\RevisionableTrait;
@@ -23,21 +25,21 @@ class ActorPivot extends Pivot
 
     public function matter()
     {
-        return $this->belongsTo('App\Matter');
+        return $this->belongsTo(\App\Matter::class);
     }
 
     public function actor()
     {
-        return $this->belongsTo('App\Actor');
+        return $this->belongsTo(\App\Actor::class);
     }
 
     public function role()
     {
-        return $this->belongsTo('App\Role', 'role');
+        return $this->belongsTo(\App\Role::class, 'role');
     }
 
     public function company()
     {
-        return $this->belongsTo('App\Actor', 'company_id');
+        return $this->belongsTo(\App\Actor::class, 'company_id');
     }
 }

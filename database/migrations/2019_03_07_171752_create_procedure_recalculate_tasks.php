@@ -1,15 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
-class CreateProcedureRecalculateTasks extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::unprepared("CREATE PROCEDURE `recalculate_tasks`(
@@ -82,13 +77,8 @@ proc: BEGIN
 END proc");
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         DB::unprepared('DROP PROCEDURE IF EXISTS `recalculate_tasks`');
     }
-}
+};

@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-primary">
-  {{ _i('Categories') }}
-  <a href="category/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="{{ _i('Category') }}" data-resource="/category/">{{ _i("Create a new Category") }}</a>
+<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
+  Categories
+  <a href="category/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Category" data-resource="/category/">Create Category</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card overflow-auto border-primary" style="max-height: 640px;">
+    <div class="card border-primary p-1" style="max-height: 640px;">
       <table class="table table-striped table-hover table-sm">
         <thead>
-          <tr id="filter" class="bg-primary text-light">
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/category" name="Code" placeholder="Code"></th>
-            <th class="border-top-0"><input class="filter-input form-control form-control-sm" data-source="/category" name="Category" placeholder="{{ _i('Category') }}"></th>
-            <th class="align-middle border-top-0" colspan="2">{{ _i("Display with") }}</th>
+          <tr id="filter" class="table-primary align-middle">
+            <th><input class="form-control" data-source="/category" name="Code" placeholder="Code""></th>
+            <th><input class="form-control" data-source="/category" name="Category" placeholder="Category"></th>
+            <th colspan="2">Display with</th>
           </tr>
         </thead>
         <tbody id="tableList">
@@ -49,7 +49,5 @@
 @endsection
 
 @section('script')
-
-@include('tables.table-js')
-
+<script src="{{ asset('js/tables.js') }}" defer></script>
 @endsection

@@ -2,13 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateViewsAndFunctions extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         DB::statement("CREATE
@@ -55,7 +50,7 @@ class CreateViewsAndFunctions extends Migration
 
         DB::unprepared("CREATE EVENT `kill_expired` ON SCHEDULE EVERY 1 WEEK ON COMPLETION PRESERVE DISABLE ON SLAVE COMMENT 'Updates the expired status of matters' DO CALL update_expired()");
 
-        DB::unprepared("CREATE
+        DB::unprepared('CREATE
           FUNCTION `actor_list`(mid INT, arole TEXT) RETURNS text CHARSET utf8
           BEGIN
           	DECLARE alist TEXT;
@@ -63,7 +58,7 @@ class CreateViewsAndFunctions extends Migration
             JOIN actor ON actor.ID = mal.actor_ID
             WHERE mal.matter_ID = mid AND mal.role = arole;
             RETURN alist;
-          END"
+          END'
         );
 
         DB::unprepared("CREATE
@@ -139,7 +134,7 @@ class CreateViewsAndFunctions extends Migration
           END"
         );
 
-        DB::unprepared("CREATE
+        DB::unprepared('CREATE
           VIEW `matter_actors` AS
           SELECT
             `pivot`.`id` AS `id`,
@@ -171,10 +166,10 @@ class CreateViewsAndFunctions extends Migration
             JOIN `actor` ON ((`pivot`.`actor_id` = `actor`.`id`)))
             LEFT JOIN `actor` `co` ON ((`co`.`id` = `pivot`.`company_id`)))
             JOIN `actor_role` ON ((`pivot`.`role` = `actor_role`.`code`)))
-          ORDER BY `actor_role`.`display_order` , `pivot`.`display_order`;"
+          ORDER BY `actor_role`.`display_order` , `pivot`.`display_order`;'
         );
 
-        DB::unprepared("CREATE
+        DB::unprepared('CREATE
           VIEW `matter_classifiers` AS
           SELECT
             `classifier`.`id` AS `id`,
@@ -191,25 +186,20 @@ class CreateViewsAndFunctions extends Migration
             JOIN `classifier_type` ON ((`classifier`.`type_code` = `classifier_type`.`code`)))
             JOIN `matter` ON ((IFNULL(`matter`.`container_id`, `matter`.`id`) = `classifier`.`matter_id`)))
             LEFT JOIN `classifier_value` ON ((`classifier_value`.`id` = `classifier`.`value_id`)))
-          ORDER BY `classifier_type`.`display_order` , `classifier`.`display_order`;"
+          ORDER BY `classifier_type`.`display_order` , `classifier`.`display_order`;'
         );
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        DB::unprepared("DROP VIEW IF EXISTS `task_list`");
-        DB::unprepared("DROP VIEW IF EXISTS `event_lnk_list`");
-        DB::unprepared("DROP FUNCTION IF EXISTS `actor_list`");
-        DB::unprepared("DROP FUNCTION IF EXISTS `lowerword`");
-        DB::unprepared("DROP FUNCTION IF EXISTS `matter_status`");
-        DB::unprepared("DROP FUNCTION IF EXISTS `tcase`");
-        DB::unprepared("DROP EVENT IF EXISTS `kill_expired`");
-        DB::unprepared("DROP VIEW IF EXISTS `matter_classifiers`");
-        DB::unprepared("DROP VIEW IF EXISTS `matter_actors`");
+        DB::unprepared('DROP VIEW IF EXISTS `task_list`');
+        DB::unprepared('DROP VIEW IF EXISTS `event_lnk_list`');
+        DB::unprepared('DROP FUNCTION IF EXISTS `actor_list`');
+        DB::unprepared('DROP FUNCTION IF EXISTS `lowerword`');
+        DB::unprepared('DROP FUNCTION IF EXISTS `matter_status`');
+        DB::unprepared('DROP FUNCTION IF EXISTS `tcase`');
+        DB::unprepared('DROP EVENT IF EXISTS `kill_expired`');
+        DB::unprepared('DROP VIEW IF EXISTS `matter_classifiers`');
+        DB::unprepared('DROP VIEW IF EXISTS `matter_actors`');
     }
-}
+};

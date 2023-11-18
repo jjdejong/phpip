@@ -3,20 +3,15 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class FeesTableSeeder extends Seeder
 {
-
-    /**
-     * Auto generated seed file
-     *
-     * @return void
-     */
     public function run()
     {
-        \DB::table('fees')->insertOrIgnore(array(
+        DB::table('fees')->insertOrIgnore([
 
-            array(
+            [
                 'id' => 1,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -37,9 +32,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 2,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -60,9 +55,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 3,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -83,9 +78,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 4,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -106,9 +101,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 5,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -129,9 +124,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 6,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -152,9 +147,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 7,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -175,9 +170,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 8,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -198,9 +193,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 9,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -221,9 +216,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 10,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -244,9 +239,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 11,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -267,9 +262,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 12,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -290,9 +285,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 13,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -313,9 +308,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 14,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -336,9 +331,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 15,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -359,9 +354,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 16,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -382,9 +377,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 17,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -405,9 +400,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 18,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -428,9 +423,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 19,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -451,9 +446,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 20,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -474,9 +469,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 21,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -497,9 +492,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 22,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -520,9 +515,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 23,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -543,9 +538,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 24,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -566,9 +561,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 25,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -589,9 +584,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 26,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -612,9 +607,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 27,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -635,9 +630,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 28,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -658,9 +653,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 29,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -681,9 +676,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 30,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -704,9 +699,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 31,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -727,9 +722,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 32,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -750,9 +745,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 33,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -773,9 +768,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 34,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -796,9 +791,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 35,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -819,9 +814,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 36,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -842,9 +837,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 37,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -865,9 +860,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 38,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -888,9 +883,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 39,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -911,9 +906,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 40,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -934,9 +929,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 41,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -957,9 +952,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 42,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -980,9 +975,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 43,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -1003,9 +998,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 44,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -1026,9 +1021,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 45,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -1049,9 +1044,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 46,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -1072,9 +1067,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 47,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -1095,9 +1090,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 48,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -1118,9 +1113,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 49,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -1141,9 +1136,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 50,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -1164,9 +1159,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 51,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -1187,9 +1182,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 52,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -1210,9 +1205,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 53,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -1233,9 +1228,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 54,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -1256,9 +1251,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 55,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -1279,9 +1274,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 56,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1302,9 +1297,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 57,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1325,9 +1320,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 58,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1348,9 +1343,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 59,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1371,9 +1366,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 60,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1394,9 +1389,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 61,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1417,9 +1412,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 62,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1440,9 +1435,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 63,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1463,9 +1458,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 64,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1486,9 +1481,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 65,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1509,9 +1504,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 66,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1532,9 +1527,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 67,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1555,9 +1550,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 68,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1578,9 +1573,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 69,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1601,9 +1596,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 70,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1624,9 +1619,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 71,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1647,9 +1642,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 72,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1670,9 +1665,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 73,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -1693,9 +1688,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 74,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -1716,9 +1711,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 75,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -1739,9 +1734,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 76,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -1762,9 +1757,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 77,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -1785,9 +1780,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 78,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -1808,9 +1803,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 79,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -1831,9 +1826,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 80,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -1854,9 +1849,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 81,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -1877,9 +1872,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 82,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -1900,9 +1895,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 83,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -1923,9 +1918,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 84,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -1946,9 +1941,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 85,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -1969,9 +1964,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 86,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -1992,9 +1987,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 87,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -2015,9 +2010,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 88,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -2038,9 +2033,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 89,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -2061,9 +2056,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 90,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -2084,9 +2079,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 91,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -2107,9 +2102,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 92,
                 'for_category' => 'PAT',
                 'for_country' => 'FR',
@@ -2130,9 +2125,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 93,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2153,9 +2148,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 94,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2176,9 +2171,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 95,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2199,9 +2194,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 96,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2222,9 +2217,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 97,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2245,9 +2240,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 98,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2268,9 +2263,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 99,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2291,9 +2286,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 100,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2314,9 +2309,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 101,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2337,9 +2332,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 102,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2360,9 +2355,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 103,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2383,9 +2378,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 104,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2406,9 +2401,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 105,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2429,9 +2424,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 106,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2452,9 +2447,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 107,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2475,9 +2470,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 108,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2498,9 +2493,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 109,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2521,9 +2516,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 110,
                 'for_category' => 'PAT',
                 'for_country' => 'EP',
@@ -2544,9 +2539,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 111,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2567,9 +2562,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 112,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2590,9 +2585,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 113,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2613,9 +2608,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 114,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2636,9 +2631,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 115,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2659,9 +2654,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 116,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2682,9 +2677,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 117,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2705,9 +2700,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 118,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2728,9 +2723,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 119,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2751,9 +2746,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 120,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2774,9 +2769,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 121,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2797,9 +2792,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 122,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2820,9 +2815,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 123,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2843,9 +2838,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 124,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2866,9 +2861,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 125,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2889,9 +2884,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 126,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2912,9 +2907,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 127,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2935,9 +2930,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 128,
                 'for_category' => 'PAT',
                 'for_country' => 'BE',
@@ -2958,9 +2953,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 129,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -2981,9 +2976,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 130,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3004,9 +2999,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 131,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3027,9 +3022,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 132,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3050,9 +3045,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 133,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3073,9 +3068,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 134,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3096,9 +3091,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 135,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3119,9 +3114,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 136,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3142,9 +3137,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 137,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3165,9 +3160,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 138,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3188,9 +3183,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 139,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3211,9 +3206,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 140,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3234,9 +3229,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 141,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3257,9 +3252,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 142,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3280,9 +3275,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 143,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3303,9 +3298,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 144,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3326,9 +3321,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 145,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3349,9 +3344,9 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 146,
                 'for_category' => 'PAT',
                 'for_country' => 'DE',
@@ -3372,7 +3367,7 @@ class FeesTableSeeder extends Seeder
                 'updater' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
-        ));
+            ],
+        ]);
     }
 }

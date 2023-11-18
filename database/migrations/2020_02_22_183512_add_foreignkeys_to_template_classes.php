@@ -4,13 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddForeignkeysToTemplateClasses extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('template_classes', function (Blueprint $table) {
@@ -18,15 +13,10 @@ class AddForeignkeysToTemplateClasses extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('template_classes', function (Blueprint $table) {
-        		$table->dropForeign(['default_role']);
+            $table->dropForeign(['default_role']);
         });
     }
-}
+};

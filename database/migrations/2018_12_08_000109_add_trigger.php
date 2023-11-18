@@ -3,13 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class AddTrigger extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {   // For actor
         DB::unprepared("CREATE TRIGGER `actor_creator_log` BEFORE INSERT ON `actor` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
@@ -33,7 +28,7 @@ BEGIN
 END;"
         );
 
-        DB::unprepared( "CREATE TRIGGER `classifier_updater_log` BEFORE UPDATE ON `classifier` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1);");
+        DB::unprepared("CREATE TRIGGER `classifier_updater_log` BEFORE UPDATE ON `classifier` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1);");
 
         // For classifier_type
         DB::unprepared("CREATE TRIGGER `ctype_creator_log` BEFORE INSERT ON `classifier_type` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
@@ -350,13 +345,13 @@ END"
 
         DB::unprepared("CREATE TRIGGER `ename_before_update` BEFORE UPDATE ON `event_name` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE TRIGGER `ename_after_update` AFTER UPDATE ON `event_name` FOR EACH ROW
+        DB::unprepared('CREATE TRIGGER `ename_after_update` AFTER UPDATE ON `event_name` FOR EACH ROW
 BEGIN
 	IF IFNULL(NEW.default_responsible,0) != IFNULL(OLD.default_responsible,0) THEN
 		UPDATE task SET assigned_to=NEW.default_responsible
 		WHERE code=NEW.code AND assigned_to <=> OLD.default_responsible;
 	END IF;
-END"
+END'
         );
 
         // For matter
@@ -390,13 +385,13 @@ BEGIN
 END"
         );
 
-        DB::unprepared("CREATE TRIGGER `matter_after_update` AFTER UPDATE ON `matter` FOR EACH ROW
+        DB::unprepared('CREATE TRIGGER `matter_after_update` AFTER UPDATE ON `matter` FOR EACH ROW
 BEGIN
   IF NEW.responsible != OLD.responsible THEN
   	UPDATE task JOIN event ON (task.trigger_id=event.id AND event.matter_id=NEW.id) SET task.assigned_to=NEW.responsible
   	WHERE task.done=0 AND task.assigned_to=OLD.responsible;
   END IF;
-END"
+END'
         );
 
         // For matter_actor_lnk
@@ -420,21 +415,21 @@ BEGIN
 		UPDATE matter SET updated = Now(), updater = SUBSTRING_INDEX(USER(),'@',1) WHERE matter.id=NEW.matter_id;
 	END IF;
 END"
-);
+        );
 
-        DB::unprepared("CREATE TRIGGER `malnk_before_update` BEFORE UPDATE ON `matter_actor_lnk` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)" );
+        DB::unprepared("CREATE TRIGGER `malnk_before_update` BEFORE UPDATE ON `matter_actor_lnk` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
 
         DB::unprepared("CREATE TRIGGER `matter_actor_lnk_AFTER_UPDATE` AFTER UPDATE ON `matter_actor_lnk` FOR EACH ROW
 BEGIN
 	UPDATE matter SET updated = Now(), updater = SUBSTRING_INDEX(USER(),'@',1) WHERE matter.id=NEW.matter_id;
 END"
-);
+        );
 
         DB::unprepared("CREATE TRIGGER `matter_actor_lnk_AFTER_DELETE` AFTER DELETE ON `matter_actor_lnk` FOR EACH ROW
 BEGIN
 	UPDATE matter SET updated = Now(), updater = SUBSTRING_INDEX(USER(),'@',1) WHERE matter.id=OLD.matter_id;
 END"
-);
+        );
 
         // For matter_category
         DB::unprepared("CREATE TRIGGER `mcateg_creator_log` BEFORE INSERT ON `matter_category` FOR EACH ROW set new.creator=SUBSTRING_INDEX(USER(),'@',1)");
@@ -466,7 +461,7 @@ BEGIN
 		SET NEW.assigned_to = vresp;
 	END IF;
 END"
-);
+        );
 
         DB::unprepared("CREATE TRIGGER `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW
 BEGIN
@@ -494,67 +489,62 @@ END"
 
         DB::unprepared("CREATE TRIGGER `trules_before_update` BEFORE UPDATE ON `task_rules` FOR EACH ROW set new.updater=SUBSTRING_INDEX(USER(),'@',1)");
 
-        DB::unprepared("CREATE TRIGGER `trules_after_update` AFTER UPDATE ON `task_rules` FOR EACH ROW
+        DB::unprepared('CREATE TRIGGER `trules_after_update` AFTER UPDATE ON `task_rules` FOR EACH ROW
 BEGIN
 	IF (NEW.fee != OLD.fee OR NEW.cost != OLD.cost) THEN
 		UPDATE task SET fee=NEW.fee, cost=NEW.cost WHERE rule_used=NEW.id AND done=0;
 	END IF;
-END"
+END'
         );
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         // For actor
-        DB::unprepared("DROP TRIGGER IF EXISTS `actor_creator_log`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `actor_updater_log`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `actor_creator_log`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `actor_updater_log`');
         // For actor_role
-        DB::unprepared("DROP TRIGGER IF EXISTS `arole_create_log`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `arole_modify_log`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `arole_create_log`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `arole_modify_log`');
         // For classifier
-        DB::unprepared("DROP TRIGGER IF EXISTS `classifier_BEFORE_INSERT`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `classifier_updater_log`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `classifier_BEFORE_INSERT`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `classifier_updater_log`');
         // For classifier_type
-        DB::unprepared("DROP TRIGGER IF EXISTS `ctype_creator_log`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `ctype_updater_log`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `ctype_creator_log`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `ctype_updater_log`');
         // For classifier value
-        DB::unprepared("DROP TRIGGER IF EXISTS `cvalue_creator_log`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `cvalue_updater_log`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `cvalue_creator_log`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `cvalue_updater_log`');
         // For event
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_before_insert`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_insert`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_update`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `event_after_delete`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_before_insert`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_insert`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_update`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `event_after_delete`');
         // For event_name
-        DB::unprepared("DROP TRIGGER IF EXISTS `ename_before_insert`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `ename_before_update`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `ename_after_update`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `ename_before_insert`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `ename_before_update`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `ename_after_update`');
         // For matter
-        DB::unprepared("DROP TRIGGER IF EXISTS `matter_before_insert`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `matter_after_insert`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `matter_before_update`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `matter_after_update`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `matter_before_insert`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `matter_after_insert`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `matter_before_update`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `matter_after_update`');
         // For matter_actor_lnk
-        DB::unprepared("DROP TRIGGER IF EXISTS `malnk_before_insert`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `malnk_after_insert`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `malnk_before_update`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `matter_actor_lnk_AFTER_DELETE`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `malnk_before_insert`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `malnk_after_insert`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `malnk_before_update`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `matter_actor_lnk_AFTER_DELETE`');
         // For matter_category
-        DB::unprepared("DROP TRIGGER IF EXISTS `mcateg_creator_log`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `mcateg_updater_log`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `mtype_creator_log`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `mtype_updater_log`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `mcateg_creator_log`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `mcateg_updater_log`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `mtype_creator_log`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `mtype_updater_log`');
         // For tasks
-        DB::unprepared("DROP TRIGGER IF EXISTS `task_before_insert`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `task_before_update`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `task_before_insert`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `task_before_update`');
         // For task_rules
-        DB::unprepared("DROP TRIGGER IF EXISTS `trules_before_insert`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `trules_before_update`");
-        DB::unprepared("DROP TRIGGER IF EXISTS `trules_after_update`");
+        DB::unprepared('DROP TRIGGER IF EXISTS `trules_before_insert`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `trules_before_update`');
+        DB::unprepared('DROP TRIGGER IF EXISTS `trules_after_update`');
     }
-}
+};

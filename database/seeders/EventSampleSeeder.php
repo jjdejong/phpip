@@ -2,16 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Event;
+use Illuminate\Database\Seeder;
 
 class EventSampleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         require 'event-sample.php';

@@ -4,20 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 
-class UpdateTables10 extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('actor', function (Blueprint $table) {
-          $table->integer('pref_language')->after('warn')->unsigned();
-          $table->float('ren_discount')->after('pref_language');
+            $table->integer('pref_language')->after('warn')->unsigned();
+            $table->float('ren_discount')->after('pref_language');
         });
-        DB::unprepared("DROP VIEW IF EXISTS `renewal_list`");
+        DB::unprepared('DROP VIEW IF EXISTS `renewal_list`');
 
         DB::statement("CREATE VIEW `renewal_list`  AS select
             `task`.`id` AS `id`,
@@ -71,23 +66,18 @@ class UpdateTables10 extends Migration
             left join `fees` on(`fees`.`for_country` = `matter`.`country` and `fees`.`for_category` = `matter`.`category_code` and `fees`.`qt` = `task`.`detail`))
             where `task`.`code` = 'REN' and `matter`.`dead` = 0
             group by `task`.`id`"
-            );
+        );
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('actor', function (Blueprint $table) {
-          if (Schema::hasColumn('actor', 'pref_language')) {
-            $table->dropColumn('pref_language');
-          }
-          if (Schema::hasColumn('actor', 'ren_discount')) {
-            $table->dropColumn('ren_discount');
-          }
+            if (Schema::hasColumn('actor', 'pref_language')) {
+                $table->dropColumn('pref_language');
+            }
+            if (Schema::hasColumn('actor', 'ren_discount')) {
+                $table->dropColumn('ren_discount');
+            }
         });
     }
-}
+};

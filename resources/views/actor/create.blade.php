@@ -47,5 +47,5 @@
       </tr>
     </table>
   </fieldset>
-	<button type="button" id="createActorSubmit" class="btn btn-primary btn-block">{{ _i("Create") }}</button>
+	<button type="button" id="createActorSubmit" class="btn btn-primary">Create</button>
 </form>

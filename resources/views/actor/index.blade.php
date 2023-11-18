@@ -1,31 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="text-primary">
-    {{ _i('Actors') }}
-    <a href="actor/create" class="btn btn-primary float-right" data-toggle="modal" data-target="#ajaxModal" title="{{ _i('Create Actor') }}">{{ _i("Create actor") }}</a>
+<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
+    Actors
+    <a href="actor/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Create Actor">Create actor</a>
 </legend>
 <div class="row">
   <div class="col">
-    <div class="card border-primary">
-      <table class="table table-striped table-hover table-sm col">
+    <div class="card border-primary p-1">
+      <table class="table table-striped table-hover table-sm">
         <thead>
-          <tr id="filterFields" class="bg-primary text-light">
-            <th class="border-top-0"><input class="form-control form-control-sm" name="Name" placeholder="{{ _i('Name') }}" value="{{ Request::get('Name') }}"></th>
-            <th class="align-middle border-top-0">{{ _i("First name") }}</th>
-            <th class="align-middle border-top-0">{{ _i("Display name") }}</th>
-            <th class="align-middle text-center border-top-0">{{ _i('Company') }} <span class="float-right">{{ _i("Person") }}</span></th>
-            <th class="border-top-0">
-              <select id="person" class="custom-select custom-select-sm px-0" name="selector">
-                <option value="" selected>{{ _i("All") }}</option>
-                <option value="phy_p">{{ _i("Physical") }}</option>
-                <option value="leg_p">{{ _i("Legal") }}</option>
-                <option value="warn">{{ _i("Warn") }}</option>
+          <tr id="filter" class="table-primary align-middle">
+            <th><input class="form-control" name="Name" placeholder="Name" value="{{ Request::get('Name') }}"></th>
+            <th>First name</th>
+            <th>Display name</th>
+            <th class="text-center">Company <span class="float-end">Person</span></th>
+            <th>
+              <select id="person" class="form-select form-select-sm px-0" name="selector">
+                <option value="" selected>All</option>
+                <option value="phy_p">Physical</option>
+                <option value="leg_p">Legal</option>
+                <option value="warn">Warn</option>
               </select>
             </th>
           </tr>
         </thead>
-        <tbody id="actorList">
+        <tbody id="tableList">
           @foreach ($actorslist as $actor)
           <tr class="reveal-hidden" data-id="{{ $actor->id }}">
             <td>
@@ -35,7 +35,7 @@
             </td>
             <td>{{ $actor->first_name }}</td>
             <td>{{ $actor->display_name }}</td>
-            <td>{{ empty($actor->company) ? '' : $actor->company->name }}</td>
+            <td nowrap>{{ empty($actor->company) ? '' : $actor->company->name }}</td>
             <td>
               @if ($actor->phy_person)
               {{ _i("Physical") }}
@@ -71,32 +71,15 @@
 @endsection
 
 @section('script')
+<script src="{{ asset('js/tables.js') }}" defer></script>
 <script>
-
-  var url = new URL(window.location.href);
-
-  function refreshActorList() {
-    window.history.pushState('', 'phpIP', url)
-    reloadPart(url, 'actorList');
-  }
-
   person.onchange = (e) => {
     if (e.target.value.length === 0) {
       url.searchParams.delete(e.target.name);
     } else {
       url.searchParams.set(e.target.name, e.target.value);
     }
-    refreshActorList();
+    refreshList();
   }
-
-  filterFields.addEventListener('input', debounce( e => {
-    if (e.target.value.length === 0) {
-      url.searchParams.delete(e.target.name);
-    } else {
-      url.searchParams.set(e.target.name, e.target.value);
-    }
-    refreshActorList();
-  }, 300));
-
 </script>
 @endsection

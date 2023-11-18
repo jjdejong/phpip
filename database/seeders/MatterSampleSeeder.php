@@ -2,18 +2,12 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use App\Matter;
 use App\ActorPivot;
+use App\Matter;
+use Illuminate\Database\Seeder;
 
 class MatterSampleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         require 'matter-sample.php';

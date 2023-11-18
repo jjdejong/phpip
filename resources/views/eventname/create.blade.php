@@ -1,85 +1,79 @@
 <form id="createEventForm">
-  <fieldset>
-    <table class="table table-sm">
-      <tr>
-        <td><label for="code" title="{{ $tableComments['code'] }}"><b>{{ _i("Code") }}</b></label></td>
-        <td><input type="text" class="form-control form-control-sm" name="code"></td>
-        <td><label title="{{ $tableComments['is_task'] }}">{{ _i("Is task") }}</label></td>
-        <td>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="is_task" value="1">
-            <label class="form-check-label">{{ _i("Yes") }}</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="is_task" value="0" checked>
-            <label class="form-check-label">{{ _i('No') }}</label>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td><label for="name" title="{{ $tableComments['name'] }}"><b>{{ _i("Name") }}</b></label></td>
-        <td><input type="text" class="form-control form-control-sm" name="name"></td>
-        <td><label title="{{ $tableComments['status_event'] }}">{{ _i("Is status event") }}</label></td>
-        <td>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="status_event" value="1">
-            <label class="form-check-label">{{ _i("Yes") }}</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="status_event" value="0" checked>
-            <label class="form-check-label">{{ _i("No") }}</label>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td><label title="{{ $tableComments['default_responsible'] }}">{{ _i("Default responsible") }}</label>
-        </td>
-        <td>
-          <input type='hidden' name='default_responsible'>
-          <input type="text" class="form-control form-control-sm" data-ac="/user/autocomplete" data-actarget="default_responsible" autocomplete="off">
-        </td>
-        <td><label title="{{ $tableComments['use_matter_resp'] }}">{{ _i("Use matter responsible") }}</label></td>
-        <td>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="use_matter_resp" value="1">
-            <label class="form-check-label">{{ _i("Yes") }}</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="use_matter_resp" value="0" checked>
-            <label class="form-check-label">{{ _i("No") }}</label>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td><label for="country" title="{{ $tableComments['country'] }}">{{ _i("Country") }}</label></td>
-        <td>
-          <input type='hidden' name='country'>
-          <input type="text" class="form-control form-control-sm" data-ac="/country/autocomplete" data-actarget="country" autocomplete="off">
-        </td>
-        <td colspan="2"></td>
-      <tr>
-        <td><label for="category" title="{{ $tableComments['category'] }}">{{ _i("Category") }}</label></td><td>
-          <input type='hidden' name='category'>
-          <input type="text" class="form-control form-control-sm" data-ac="/category/autocomplete" data-actarget="category" autocomplete="off">
-        </td>
-        <td colspan="2"></td>
-      </tr>
-      <tr>
-        <td><label for="notes" title="{{ $tableComments['notes'] }}">{{ _i("Notes") }}</label></td>
-        <td><textarea class="form-control form-control-sm" name="notes"></textarea></td>
-        <td><label title="{{ $tableComments['killer'] }}">{{ _i("Is killer") }}</label></td>
-        <td>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="killer" value="1">
-            <label class="form-check-label">{{ _i('Yes') }}</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="killer" value="0" checked>
-            <label class="form-check-label">{{ _i('No') }}</label>
-          </div>
-        </td>
-      </tr>
-    </table>
-  </fieldset>
-  <button type="button" id="createEventNameSubmit" class="btn btn-primary">{{ _i("Create event name") }}</button><br>
+  <div class="row mb-2">
+    <div class="col">
+      <label for="code" title="{{ $tableComments['code'] }}"><b>Code</b></label>
+      <input type="text" class="form-control" name="code">
+    </div>
+    <div class="col p-2 btn-group">
+      <input class="btn-check" type="radio" id="btn-notask" name="is_task" value="0" checked>
+      <label class="btn btn-outline-primary w-25" for="btn-notask">Not Task</label>
+      <input class="btn-check" type="radio" id="btn-istask" name="is_task" value="1">
+      <label class="btn btn-outline-primary" for="btn-istask" title="{{ $tableComments['is_task'] }}">Task</label>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col">
+      <label for="name" title="{{ $tableComments['name'] }}"><b>Name</b></label>
+      <input type="text" class="form-control" name="name">
+    </div>
+    <div class="col p-2 btn-group">
+      <input class="btn-check" type="radio" id="btn-nostatus" name="status_event" value="0" checked>
+      <label class="btn btn-outline-primary" for="btn-nostatus">Normal</label>
+      <input class="btn-check" type="radio" id="btn-isstatus" name="status_event" value="1">
+      <label class="btn btn-outline-primary" for="btn-isstatus" title="{{ $tableComments['status_event'] }}">Status</label>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col">
+      <label title="{{ $tableComments['default_responsible'] }}">Default responsible</label>
+      <input type='hidden' name='default_responsible'>
+      <input type="text" class="form-control" data-ac="/user/autocomplete" data-actarget="default_responsible"
+        autocomplete="off">
+    </div>
+    <div class="col">
+      <label title="{{ $tableComments['use_matter_resp'] }}">Use matter responsible</label>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="use_matter_resp" value="1">
+        <label class="form-check-label">Yes</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="use_matter_resp" value="0" checked>
+        <label class="form-check-label">No</label>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col">
+      <label for="country" title="{{ $tableComments['country'] }}">Country</label>
+      <input type='hidden' name='country'>
+      <input type="text" class="form-control" data-ac="/country/autocomplete" data-actarget="country"
+        autocomplete="off">
+    </div>
+    <div class="col">
+      <label for="category" title="{{ $tableComments['category'] }}">Category</label>
+      <input type='hidden' name='category'>
+      <input type="text" class="form-control" data-ac="/category/autocomplete" data-actarget="category"
+        autocomplete="off">
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col">
+      <label for="notes" title="{{ $tableComments['notes'] }}">Notes</label>
+      <textarea class="form-control" name="notes"></textarea>
+    </div>
+    <div class="col">
+      <label title="{{ $tableComments['killer'] }}">Is killer</label>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="killer" value="1">
+        <label class="form-check-label">Yes</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="killer" value="0" checked>
+        <label class="form-check-label">No</label>
+      </div>
+    </div>
+  </div>
+  <div class="d-grid">
+    <button type="button" id="createEventNameSubmit" class="btn btn-primary">Create event name</button>
+  </div>
 </form>

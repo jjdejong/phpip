@@ -3,20 +3,15 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class TemplateMembersTableSeeder extends Seeder
 {
-
-    /**
-     * Auto generated seed file
-     *
-     * @return void
-     */
     public function run()
     {
-        \DB::table('template_members')->insertOrIgnore(array(
+        DB::table('template_members')->insertOrIgnore([
 
-            array(
+            [
                 'id' => 1,
                 'class_id' => 1,
                 'language' => 'fr',
@@ -30,9 +25,9 @@ class TemplateMembersTableSeeder extends Seeder
                 'updater' => 'system',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 2,
                 'class_id' => 1,
                 'language' => 'fr',
@@ -46,9 +41,9 @@ class TemplateMembersTableSeeder extends Seeder
                 'updater' => 'system',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
+            ],
 
-            array(
+            [
                 'id' => 3,
                 'class_id' => 1,
                 'language' => 'fr',
@@ -62,7 +57,7 @@ class TemplateMembersTableSeeder extends Seeder
                 'updater' => 'system',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ),
-        ));
+            ],
+        ]);
     }
 }

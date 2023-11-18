@@ -2,16 +2,11 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserView extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        DB::statement("CREATE OR REPLACE VIEW `users` AS
+        DB::statement('CREATE OR REPLACE VIEW `users` AS
 SELECT
     `actor`.`id` AS `id`,
     `actor`.`name` AS `name`,
@@ -31,16 +26,11 @@ FROM
     `actor`
 WHERE
     (`actor`.`login` IS NOT NULL)
-        ");
+        ');
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        DB::statement("DROP VIEW IF EXISTS `users`");
+        DB::statement('DROP VIEW IF EXISTS `users`');
     }
-}
+};

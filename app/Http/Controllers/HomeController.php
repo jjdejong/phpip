@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Task;
 use App\Matter;
-use LaravelGettext;
+use App\Task;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class HomeController extends Controller
 {
@@ -31,12 +30,12 @@ class HomeController extends Controller
         // Count matters per categories
         $categories = Matter::getCategoryMatterCount();
         $taskscount = Task::getUsersOpenTaskCount();
+
         return view('home', compact('categories', 'taskscount'));
     }
 
     /**
      * Clear selected tasks.
-     *
      */
     public function clearTasks(Request $request)
     {
@@ -44,7 +43,7 @@ class HomeController extends Controller
             'done_date' => 'bail|required',
         ]);
         $tids = $request->task_ids;
-        $done_date = $request->done_date;
+        $done_date = Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->done_date);
         $updated = 0;
         foreach ($tids as $id) {
             $task = Task::find($id);
@@ -54,6 +53,7 @@ class HomeController extends Controller
                 $updated++;
             }
         }
-        return response()->json(['not_updated' => (count($tids) - $updated), 'errors' =>'']);
+
+        return response()->json(['not_updated' => (count($tids) - $updated), 'errors' => '']);
     }
 }

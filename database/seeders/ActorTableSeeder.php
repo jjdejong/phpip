@@ -3,20 +3,15 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ActorTableSeeder extends Seeder
 {
-
-    /**
-     * Auto generated seed file
-     *
-     * @return void
-     */
     public function run()
     {
-        \DB::table('actor')->insertOrIgnore(array(
+        DB::table('actor')->insertOrIgnore([
 
-            array(
+            [
                 'id' => 1,
                 'name' => 'Client handled',
                 'first_name' => null,
@@ -51,9 +46,9 @@ class ActorTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
                 'remember_token' => null,
-            ),
+            ],
 
-            array(
+            [
                 'id' => 2,
                 'name' => 'phpIP User',
                 'first_name' => null,
@@ -88,7 +83,7 @@ class ActorTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
                 'remember_token' => null,
-            ),
-        ));
+            ],
+        ]);
     }
 }
