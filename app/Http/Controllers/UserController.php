@@ -7,13 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
-use LaravelGettext;
+use Illuminate\Support\Facades\App;
 
 class UserController extends Controller
 {
     public function index(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $this->authorize('viewAny', User::class);
         $user = new User;
         if ($request->filled('Name')) {
@@ -27,7 +27,7 @@ class UserController extends Controller
 
     public function create()
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $this->authorize('create', User::class);
         $table = new \App\Actor;
         $userComments = $table->getTableComments('actor');
@@ -37,7 +37,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $this->authorize('create', User::class);
         $request->validate([
             'name' => 'required|unique:actor|max:100',
@@ -53,7 +53,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $this->authorize('view', $user);
         $userInfo = $user->load(['company:id,name', 'roleInfo']);
         $table = new \App\Actor;
@@ -69,7 +69,7 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $this->authorize('update', $user);
         $request->validate([
             'login' => 'sometimes|required|unique:users',

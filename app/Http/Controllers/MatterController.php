@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use SimpleXMLElement;
@@ -19,7 +21,7 @@ class MatterController extends Controller
 
     public function index(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $filters = $request->except([
             'display_with',
             'page',
@@ -45,7 +47,7 @@ class MatterController extends Controller
 
     public function show(Matter $matter)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $this->authorize('view', $matter);
         $matter->load(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers']);
 
@@ -60,14 +62,14 @@ class MatterController extends Controller
      **/
     public function info($id)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         return Matter::with(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers'])
             ->find($id);
     }
 
     public function create(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $this->authorize('create', Matter::class);
         $operation = $request->input('operation', 'new'); // new, clone, child, ops
         $category = [];
@@ -98,7 +100,7 @@ class MatterController extends Controller
 
     public function store(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $this->authorize('create', Matter::class);
         $this->validate($request, [
             'category_code' => 'required',
@@ -187,7 +189,7 @@ class MatterController extends Controller
 
     public function storeN(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $this->authorize('create', Matter::class);
         $this->validate($request, [
             'ncountry' => 'required|array',
@@ -471,7 +473,7 @@ class MatterController extends Controller
 
     public function edit(Matter $matter)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $this->authorize('update', $matter);
         $matter->load(
             'container',
@@ -494,7 +496,7 @@ class MatterController extends Controller
 
     public function update(Request $request, Matter $matter)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $this->authorize('update', $matter);
         $request->validate([
             'term_adjust' => 'numeric',
@@ -521,7 +523,7 @@ class MatterController extends Controller
      */
     public function export(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $filters = $request->except([
             'display_with',
             'page',
@@ -597,7 +599,7 @@ class MatterController extends Controller
      */
     public function report(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $filters = $request->except([
             'display_with',
             'page',
@@ -976,7 +978,7 @@ class MatterController extends Controller
 
     public function classifiers(Matter $matter)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $matter->load(['classifiers']);
 
         return view('matter.classifiers', compact('matter'));

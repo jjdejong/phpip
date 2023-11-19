@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Actor;
 use App\Fee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 class FeeController extends Controller
 {
     public function index(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $fees = new Fee;
         $filters = $request->except(['page']);
         if (! empty($filters)) {

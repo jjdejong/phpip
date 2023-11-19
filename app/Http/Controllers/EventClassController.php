@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\EventClassLnk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class EventClassController extends Controller
 {
@@ -14,7 +15,7 @@ class EventClassController extends Controller
 
     public function destroy(int $lnk)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         if (EventClassLnk::destroy($lnk) == 1) {
             return response()->json(['success' => 'Link deleted']);
         } else {

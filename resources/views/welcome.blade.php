@@ -68,12 +68,12 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">{{ _i("Home") }}</a>
+                        <a href="{{ url('/home') }}">{{ __("Home") }}</a>
                     @else
-                        <a href="{{ route('login') }}">{{ _i("Login") }}</a>
+                        <a href="{{ route('login') }}">{{ __("Login") }}</a>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}">{{ _i("Register") }}</a>
+                            <a href="{{ route('register') }}">{{ __("Register") }}</a>
                         @endif
                     @endauth
                 </div>
@@ -84,13 +84,13 @@
                     PhpIP
                 </div>
                 <div class="subtitle m-b-md">
-                    {{ _i("IP rights portfolio manager and docketing system") }}
+                    {{ __("IP rights portfolio manager and docketing system") }}
                 </div>
 
                 <div class="links">
-                    <a href="https://github.com/jjdejong/phpip/wiki">{{ _i("Documentation") }}</a>
-                    <a href="https://github.com/jjdejong/phpip/issues">{{ _i("Submit bugs") }}</a>
-                    <a href="https://github.com/jjdejong/phpip">{{ _i("Retreive sources on GitHub") }}</a>
+                    <a href="https://github.com/jjdejong/phpip/wiki">{{ __("Documentation") }}</a>
+                    <a href="https://github.com/jjdejong/phpip/issues">{{ __("Submit bugs") }}</a>
+                    <a href="https://github.com/jjdejong/phpip">{{ __("Retreive sources on GitHub") }}</a>
                 </div>
             </div>
         </div>

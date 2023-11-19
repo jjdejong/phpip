@@ -1,0 +1,4711 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the messages package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: messages 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-25 16:42+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: app/Http/Controllers/MatterController.php:394
+#: app/Http/Controllers/MatterController.php:404
+#: app/Http/Controllers/MatterController.php:405
+msgid "Applicants"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:394
+#: app/Http/Controllers/MatterController.php:404
+#: app/Http/Controllers/MatterController.php:405
+msgid "Inventors"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:419
+#: app/Http/Controllers/MatterController.php:429
+#: app/Http/Controllers/MatterController.php:430
+msgid "Child filing date"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:444
+#: app/Http/Controllers/MatterController.php:454
+#: app/Http/Controllers/MatterController.php:455
+#: lang/blade-translations/seeder.php:872
+msgid "Exam Report"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:468
+#: app/Http/Controllers/MatterController.php:478
+#: app/Http/Controllers/MatterController.php:479
+#: lang/blade-translations/seeder.php:884
+msgid "Grant Fee"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:574
+#: app/Http/Controllers/MatterController.php:587
+#: app/Http/Controllers/MatterController.php:588
+msgid "Our Ref"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:575
+#: app/Http/Controllers/MatterController.php:588
+#: app/Http/Controllers/MatterController.php:589
+#: lang/blade-translations/actor/static.php:28
+#: lang/blade-translations/default_actor/static.php:30
+#: lang/blade-translations/fee/static.php:34
+#: lang/blade-translations/matter/static.php:41
+#: lang/blade-translations/matter/static.php:70
+#: lang/blade-translations/rule/static.php:25
+#: resources/views/actor/create.blade.php:36
+#: resources/views/actor/show.blade.php:33
+#: resources/views/default_actor/create.blade.php:13
+#: resources/views/default_actor/show.blade.php:10
+#: resources/views/eventname/create.blade.php:47
+#: resources/views/eventname/create.blade.php:54
+#: resources/views/eventname/show.blade.php:22
+#: resources/views/fee/create.blade.php:5
+#: resources/views/matter/create.blade.php:32
+#: resources/views/matter/edit.blade.php:30
+#: resources/views/rule/create.blade.php:15
+#: resources/views/rule/show.blade.php:30
+msgid "Country"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:576
+#: app/Http/Controllers/MatterController.php:589
+#: app/Http/Controllers/MatterController.php:590
+#: lang/blade-translations/matter/static.php:144
+msgid "Cat"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:577
+#: app/Http/Controllers/MatterController.php:590
+#: app/Http/Controllers/MatterController.php:591
+#: lang/blade-translations/fee/static.php:38
+#: lang/blade-translations/matter/static.php:43
+#: lang/blade-translations/matter/static.php:74
+#: lang/blade-translations/rule/static.php:42
+#: resources/views/fee/create.blade.php:16
+#: resources/views/matter/create.blade.php:39
+#: resources/views/matter/edit.blade.php:42
+#: resources/views/rule/create.blade.php:33
+#: resources/views/rule/show.blade.php:34
+msgid "Origin"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:578
+#: app/Http/Controllers/MatterController.php:591
+#: app/Http/Controllers/MatterController.php:592
+#: lang/blade-translations/matter/static.php:147
+#: resources/views/eventname/create.blade.php:23
+#: resources/views/matter/show.blade.php:182
+#: resources/views/matter/show.blade.php:191
+msgid "Status"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:579
+#: app/Http/Controllers/MatterController.php:592
+#: app/Http/Controllers/MatterController.php:593
+msgid "Status date"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:580
+#: app/Http/Controllers/MatterController.php:593
+#: app/Http/Controllers/MatterController.php:594
+#: lang/blade-translations/default_actor/static.php:39
+#: lang/blade-translations/layouts/static.php:24
+#: lang/blade-translations/matter/static.php:39
+#: lang/blade-translations/renewals/static.php:93
+#: lang/blade-translations/seeder.php:30
+#: resources/views/default_actor/create.blade.php:21
+#: resources/views/home.blade.php:113 resources/views/home.blade.php:114
+#: resources/views/layouts/app.blade.php:45
+#: resources/views/layouts/app.blade.php:108
+#: resources/views/matter/create.blade.php:23
+msgid "Client"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:581
+#: app/Http/Controllers/MatterController.php:594
+#: app/Http/Controllers/MatterController.php:595
+msgid "Client Ref"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:582
+#: app/Http/Controllers/MatterController.php:595
+#: app/Http/Controllers/MatterController.php:596
+#: lang/blade-translations/layouts/static.php:26
+#: lang/blade-translations/matter/static.php:151
+#: lang/blade-translations/seeder.php:26
+#: resources/views/layouts/app.blade.php:46
+#: resources/views/layouts/app.blade.php:109
+msgid "Applicant"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:583
+#: app/Http/Controllers/MatterController.php:596
+#: app/Http/Controllers/MatterController.php:597
+#: lang/blade-translations/matter/static.php:153
+msgid "Agent"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:584
+#: app/Http/Controllers/MatterController.php:597
+#: app/Http/Controllers/MatterController.php:598
+msgid "Agent Ref"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:585
+#: app/Http/Controllers/MatterController.php:598
+#: app/Http/Controllers/MatterController.php:599
+#: lang/blade-translations/layouts/static.php:22
+#: lang/blade-translations/matter/static.php:157
+#: lang/blade-translations/renewals/static.php:95
+#: lang/blade-translations/seeder.php:111
+#: resources/views/layouts/app.blade.php:44
+#: resources/views/layouts/app.blade.php:107
+msgid "Title"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:586
+#: app/Http/Controllers/MatterController.php:599
+#: app/Http/Controllers/MatterController.php:600
+msgid "Title2"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:587
+#: app/Http/Controllers/MatterController.php:600
+#: app/Http/Controllers/MatterController.php:601
+msgid "Title3"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:588
+#: app/Http/Controllers/MatterController.php:601
+#: app/Http/Controllers/MatterController.php:602
+msgid "Inventor 1"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:589
+#: app/Http/Controllers/MatterController.php:602
+#: app/Http/Controllers/MatterController.php:603
+#: lang/blade-translations/matter/static.php:165
+#: lang/blade-translations/seeder.php:699
+msgid "Filed"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:590
+#: app/Http/Controllers/MatterController.php:603
+#: app/Http/Controllers/MatterController.php:604
+msgid "FilNo"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:591
+#: app/Http/Controllers/MatterController.php:604
+#: app/Http/Controllers/MatterController.php:605
+#: lang/blade-translations/matter/static.php:171
+#: lang/blade-translations/seeder.php:753
+msgid "Published"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:592
+#: app/Http/Controllers/MatterController.php:605
+#: app/Http/Controllers/MatterController.php:606
+msgid "Pub. No"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:593
+#: app/Http/Controllers/MatterController.php:606
+#: app/Http/Controllers/MatterController.php:607
+#: lang/blade-translations/matter/static.php:175
+#: lang/blade-translations/seeder.php:707
+msgid "Granted"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:594
+#: app/Http/Controllers/MatterController.php:607
+#: app/Http/Controllers/MatterController.php:608
+msgid "Grt No"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:595
+#: app/Http/Controllers/MatterController.php:608
+#: app/Http/Controllers/MatterController.php:609
+msgid "ID"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:596
+#: app/Http/Controllers/MatterController.php:609
+#: app/Http/Controllers/MatterController.php:610
+msgid "container_ID"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:597
+#: app/Http/Controllers/MatterController.php:610
+#: app/Http/Controllers/MatterController.php:611
+msgid "parent_ID"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:598
+#: app/Http/Controllers/MatterController.php:611
+#: app/Http/Controllers/MatterController.php:612
+#: lang/blade-translations/classifier_type/static.php:22
+#: lang/blade-translations/matter/static.php:25
+#: lang/blade-translations/matter/static.php:76
+#: lang/blade-translations/rule/static.php:51
+#: lang/blade-translations/type/static.php:27
+#: resources/views/classifier_type/create.blade.php:7
+#: resources/views/matter/create.blade.php:46
+#: resources/views/matter/edit.blade.php:48
+#: resources/views/rule/create.blade.php:47
+#: resources/views/rule/show.blade.php:38
+msgid "Type"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:599
+#: app/Http/Controllers/MatterController.php:612
+#: app/Http/Controllers/MatterController.php:613
+#: lang/blade-translations/layouts/static.php:20
+#: lang/blade-translations/matter/static.php:47
+#: lang/blade-translations/matter/static.php:78
+#: lang/blade-translations/rule/static.php:74
+#: resources/views/layouts/app.blade.php:43
+#: resources/views/layouts/app.blade.php:106
+#: resources/views/matter/create.blade.php:64
+#: resources/views/matter/edit.blade.php:54
+#: resources/views/rule/create.blade.php:130
+#: resources/views/rule/show.blade.php:94
+msgid "Responsible"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:600
+#: app/Http/Controllers/MatterController.php:613
+#: app/Http/Controllers/MatterController.php:614
+#: lang/blade-translations/seeder.php:44
+msgid "Delegate"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:601
+#: app/Http/Controllers/MatterController.php:614
+#: app/Http/Controllers/MatterController.php:615
+#: lang/blade-translations/report/static.php:16
+#: resources/views/report/report1.blade.php:124
+msgid "Dead"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:602
+#: app/Http/Controllers/MatterController.php:615
+#: app/Http/Controllers/MatterController.php:616
+msgid "Expiration date"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:603
+#: app/Http/Controllers/MatterController.php:616
+#: app/Http/Controllers/MatterController.php:617
+msgid "Next renewal"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:604
+#: app/Http/Controllers/MatterController.php:617
+#: app/Http/Controllers/MatterController.php:618
+msgid "Next renewal date"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:1013
+#: app/Http/Controllers/MatterController.php:1036
+#: app/Http/Controllers/MatterController.php:1051
+#: app/Http/Controllers/MatterController.php:1052
+msgid "Number not found"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:1013
+#: app/Http/Controllers/MatterController.php:1036
+#: app/Http/Controllers/MatterController.php:1051
+#: app/Http/Controllers/MatterController.php:1052
+msgid "Number not found in OPS Family"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:1016
+#: app/Http/Controllers/MatterController.php:1039
+#: app/Http/Controllers/MatterController.php:1054
+#: app/Http/Controllers/MatterController.php:1055
+msgid "OPS server error"
+msgstr ""
+
+#: app/Http/Controllers/MatterController.php:1016
+#: app/Http/Controllers/MatterController.php:1039
+#: app/Http/Controllers/MatterController.php:1054
+#: app/Http/Controllers/MatterController.php:1055
+msgid "OPS server error, try again"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:16
+msgid "NAME Firstname"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:18
+msgid "Optional"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:20
+#: lang/blade-translations/actor/static.php:48
+#: resources/views/actor/create.blade.php:11
+#: resources/views/actor/index.blade.php:16
+msgid "Display name"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:22
+#: resources/views/actor/create.blade.php:31
+msgid "Contact details"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:25
+#: resources/views/actor/create.blade.php:34
+#: resources/views/actor/show.blade.php:29
+msgid "Address"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:31
+#: lang/blade-translations/matter/static.php:107
+#: lang/blade-translations/user/static.php:34
+#: resources/views/actor/create.blade.php:43
+#: resources/views/actor/show.blade.php:81
+#: resources/views/actor/show.blade.php:87
+#: resources/views/matter/events.blade.php:17
+#: resources/views/matter/tasks.blade.php:26
+#: resources/views/user/create.blade.php:40
+#: resources/views/user/create.blade.php:41
+#: resources/views/user/show.blade.php:20
+msgid "Email"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:34
+#: lang/blade-translations/user/static.php:37
+#: resources/views/actor/create.blade.php:45
+#: resources/views/actor/show.blade.php:85
+#: resources/views/actor/show.blade.php:91
+#: resources/views/user/create.blade.php:44
+#: resources/views/user/create.blade.php:45
+#: resources/views/user/show.blade.php:28
+msgid "Phone"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:36
+#: lang/blade-translations/layouts/static.php:48
+#: lang/blade-translations/matter/static.php:56
+#: lang/blade-translations/user/static.php:39
+#: resources/views/actor/create.blade.php:50
+#: resources/views/layouts/app.blade.php:78
+#: resources/views/layouts/app.blade.php:150
+#: resources/views/matter/create.blade.php:87
+#: resources/views/matter/create.blade.php:89
+#: resources/views/user/create.blade.php:49
+#: resources/views/user/create.blade.php:50
+msgid "Create"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:38
+#: lang/blade-translations/layouts/static.php:66
+#: lang/blade-translations/matter/static.php:219
+#: resources/views/actor/index.blade.php:5
+#: resources/views/layouts/app.blade.php:105
+#: resources/views/layouts/app.blade.php:177
+#: resources/views/matter/show.blade.php:122
+msgid "Actors"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:41
+#: resources/views/actor/index.blade.php:6
+msgid "Create actor"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:44
+#: lang/blade-translations/category/static.php:37
+#: lang/blade-translations/documents/static.php:49
+#: lang/blade-translations/eventname/static.php:37
+#: lang/blade-translations/matter/static.php:179
+#: lang/blade-translations/matter/static.php:267
+#: lang/blade-translations/role/static.php:51
+#: lang/blade-translations/type/static.php:37
+#: lang/blade-translations/user/static.php:47
+#: resources/views/actor/show.blade.php:17
+#: resources/views/category/show.blade.php:6
+#: resources/views/classifier_type/show.blade.php:6
+#: resources/views/documents/create.blade.php:6
+#: resources/views/documents/show.blade.php:4
+#: resources/views/eventname/create.blade.php:16
+#: resources/views/eventname/create.blade.php:20
+#: resources/views/eventname/show.blade.php:10
+#: resources/views/matter/roleActors.blade.php:5
+#: resources/views/role/show.blade.php:6 resources/views/type/show.blade.php:6
+#: resources/views/user/create.blade.php:4
+#: resources/views/user/create.blade.php:5
+#: resources/views/user/show.blade.php:4
+msgid "Name"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:46
+#: resources/views/actor/create.blade.php:7
+#: resources/views/actor/index.blade.php:15
+#: resources/views/actor/show.blade.php:21
+msgid "First name"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:50
+#: lang/blade-translations/matter/static.php:183
+#: lang/blade-translations/user/static.php:51
+#: resources/views/actor/index.blade.php:17
+#: resources/views/matter/roleActors.blade.php:7
+#: resources/views/user/create.blade.php:33
+#: resources/views/user/index.blade.php:17
+#: resources/views/user/show.blade.php:24
+msgid "Company"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:52
+#: resources/views/actor/index.blade.php:17
+msgid "Person"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:54
+#: lang/blade-translations/layouts/static.php:40
+#: resources/views/actor/index.blade.php:20
+#: resources/views/layouts/app.blade.php:74
+#: resources/views/layouts/app.blade.php:146
+msgid "All"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:56
+#: lang/blade-translations/actor/static.php:65
+#: resources/views/actor/index.blade.php:21
+#: resources/views/actor/index.blade.php:41
+msgid "Physical"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:58
+#: lang/blade-translations/actor/static.php:67
+#: resources/views/actor/index.blade.php:22
+#: resources/views/actor/index.blade.php:43
+msgid "Legal"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:61
+#: resources/views/actor/index.blade.php:23
+#: resources/views/actor/show.blade.php:110
+#: resources/views/actor/show.blade.php:116
+msgid "Warn"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:63
+#: lang/blade-translations/matter/static.php:229
+msgid "Actor data"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:69
+#: resources/views/actor/index.blade.php:60
+msgid "Actor information"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:71
+#: resources/views/actor/index.blade.php:64
+msgid "Click on actor name to view and edit details"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:73
+#: lang/blade-translations/rule/static.php:102
+#: resources/views/actor/show.blade.php:3 resources/views/rule/show.blade.php:3
+msgid "Main"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:75
+#: lang/blade-translations/seeder.php:34 resources/views/actor/show.blade.php:4
+msgid "Contact"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:77
+#: resources/views/actor/show.blade.php:5
+msgid "Other"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:79
+#: resources/views/actor/show.blade.php:6
+msgid "Used in"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:81
+msgid "Delete actor"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:83
+msgid "the actor"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:85
+#: lang/blade-translations/category/static.php:43
+#: lang/blade-translations/classifier_type/static.php:47
+#: lang/blade-translations/default_actor/static.php:59
+#: lang/blade-translations/documents/static.php:55
+#: lang/blade-translations/eventname/static.php:60
+#: lang/blade-translations/role/static.php:65
+#: lang/blade-translations/rule/static.php:110
+#: lang/blade-translations/seeder.php:902
+#: lang/blade-translations/template-members/static.php:67
+#: lang/blade-translations/type/static.php:43
+#: resources/views/actor/show.blade.php:9
+#: resources/views/category/show.blade.php:17
+#: resources/views/classifier_type/show.blade.php:23
+#: resources/views/default_actor/show.blade.php:23
+#: resources/views/documents/show.blade.php:25
+#: resources/views/eventname/show.blade.php:70
+#: resources/views/eventname/show.blade.php:72
+#: resources/views/role/show.blade.php:33 resources/views/rule/show.blade.php:7
+#: resources/views/template-members/show.blade.php:39
+#: resources/views/type/show.blade.php:11
+msgid "Delete"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:87
+#: resources/views/actor/show.blade.php:37
+msgid "Nationality"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:89
+#: lang/blade-translations/documents/static.php:43
+#: lang/blade-translations/template-members/static.php:24
+#: resources/views/actor/show.blade.php:41
+#: resources/views/documents/select2.blade.php:46
+#: resources/views/template-members/create.blade.php:11
+#: resources/views/template-members/show.blade.php:6
+msgid "Language"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:91
+#: resources/views/actor/create.blade.php:25
+#: resources/views/actor/show.blade.php:45
+msgid "Function"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:93
+#: resources/views/actor/create.blade.php:13
+#: resources/views/actor/show.blade.php:49
+msgid "Employer"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:95
+#: resources/views/actor/show.blade.php:53
+msgid "Physical Person"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:97
+#: lang/blade-translations/seeder.php:910
+#: resources/views/actor/show.blade.php:57
+msgid "Small Entity"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:99
+#: resources/views/actor/show.blade.php:65
+#: resources/views/actor/show.blade.php:71
+msgid "Address mailing"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:101
+#: resources/views/actor/show.blade.php:69
+#: resources/views/actor/show.blade.php:75
+msgid "Country mailing"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:103
+#: resources/views/actor/show.blade.php:73
+#: resources/views/actor/show.blade.php:79
+msgid "Address billing"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:105
+#: resources/views/actor/show.blade.php:77
+#: resources/views/actor/show.blade.php:83
+msgid "Country billing"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:107
+#: resources/views/actor/show.blade.php:102
+#: resources/views/actor/show.blade.php:108
+msgid "Discount for renewals"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:109
+#: resources/views/actor/show.blade.php:104
+#: resources/views/actor/show.blade.php:110
+msgid "Enter a multiplier rate (e.g. 0.5) <br>or a fixed fee (e.g. 150)"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:111
+msgid "Fixed fee or rate"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:113
+#: resources/views/actor/show.blade.php:114
+#: resources/views/actor/show.blade.php:120
+msgid "Legal form"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:115
+#: resources/views/actor/show.blade.php:118
+#: resources/views/actor/show.blade.php:124
+msgid "Registration no."
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:117
+#: resources/views/actor/show.blade.php:122
+#: resources/views/actor/show.blade.php:128
+msgid "VAT no."
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:119
+#: resources/views/actor/show.blade.php:126
+#: resources/views/actor/show.blade.php:132
+msgid "Parent company"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:121
+#: resources/views/actor/show.blade.php:130
+#: resources/views/actor/show.blade.php:136
+msgid "Work site"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:123
+#: lang/blade-translations/classifier_type/static.php:31
+#: lang/blade-translations/documents/static.php:18
+#: lang/blade-translations/eventname/static.php:40
+#: lang/blade-translations/matter/static.php:102
+#: lang/blade-translations/matter/static.php:118
+#: lang/blade-translations/role/static.php:42
+#: lang/blade-translations/rule/static.php:48
+#: lang/blade-translations/user/static.php:59
+#: resources/views/actor/show.blade.php:62
+#: resources/views/actor/show.blade.php:139
+#: resources/views/classifier_type/create.blade.php:20
+#: resources/views/classifier_type/show.blade.php:18
+#: resources/views/documents/create.blade.php:10
+#: resources/views/documents/show.blade.php:8
+#: resources/views/eventname/create.blade.php:61
+#: resources/views/eventname/create.blade.php:68
+#: resources/views/eventname/index.blade.php:16
+#: resources/views/eventname/show.blade.php:33
+#: resources/views/matter/events.blade.php:14
+#: resources/views/matter/show.blade.php:328
+#: resources/views/matter/show.blade.php:347
+#: resources/views/matter/tasks.blade.php:23
+#: resources/views/role/create.blade.php:29
+#: resources/views/role/index.blade.php:16
+#: resources/views/role/show.blade.php:28
+#: resources/views/rule/create.blade.php:45
+#: resources/views/rule/show.blade.php:55
+#: resources/views/user/show.blade.php:32
+msgid "Notes"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:125
+#: resources/views/actor/usedin.blade.php:6
+msgid "Matter Dependencies (only the first few are shown)"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:128
+#: resources/views/actor/usedin.blade.php:19
+#: resources/views/actor/usedin.blade.php:34
+msgid "No dependencies"
+msgstr ""
+
+#: lang/blade-translations/actor/static.php:130
+#: resources/views/actor/usedin.blade.php:21
+msgid "Inter-Actor Dependencies"
+msgstr ""
+
+#: lang/blade-translations/auth/static.php:17
+#: lang/blade-translations/layouts/static.php:32
+#: lang/blade-translations/user/static.php:49
+#: resources/views/actor/show.blade.php:99
+#: resources/views/auth/login.blade.php:8
+#: resources/views/auth/login.blade.php:57
+#: resources/views/layouts/app.blade.php:66
+#: resources/views/layouts/app.blade.php:130
+#: resources/views/user/create.blade.php:12
+#: resources/views/user/index.blade.php:16
+#: resources/views/user/show.blade.php:8 resources/views/welcome.blade.php:73
+msgid "Login"
+msgstr ""
+
+#: lang/blade-translations/auth/static.php:20
+#: lang/blade-translations/user/static.php:22
+#: resources/views/auth/login.blade.php:29
+#: resources/views/auth/passwords/reset.blade.php:31
+#: resources/views/user/create.blade.php:18
+#: resources/views/user/show.blade.php:12
+msgid "Password"
+msgstr ""
+
+#: lang/blade-translations/auth/static.php:22
+#: resources/views/auth/login.blade.php:48
+msgid "Remember Me"
+msgstr ""
+
+#: lang/blade-translations/auth/static.php:24
+#: resources/views/auth/login.blade.php:62
+msgid "Forgot Your Password?"
+msgstr ""
+
+#: lang/blade-translations/auth/static.php:28
+#: resources/views/auth/passwords/email.blade.php:8
+#: resources/views/auth/passwords/reset.blade.php:8
+#: resources/views/auth/passwords/reset.blade.php:55
+msgid "Reset Password"
+msgstr ""
+
+#: lang/blade-translations/auth/static.php:31
+#: resources/views/auth/passwords/email.blade.php:21
+#: resources/views/auth/passwords/reset.blade.php:17
+msgid "E-Mail Address"
+msgstr ""
+
+#: lang/blade-translations/auth/static.php:33
+#: resources/views/auth/passwords/email.blade.php:37
+msgid "Send Password Reset Link"
+msgstr ""
+
+#: lang/blade-translations/auth/static.php:35
+#: lang/blade-translations/user/static.php:24
+#: resources/views/auth/passwords/reset.blade.php:45
+#: resources/views/user/create.blade.php:22
+msgid "Confirm Password"
+msgstr ""
+
+#: lang/blade-translations/auth/static.php:37
+#: resources/views/auth/verify.blade.php:8
+msgid "Verify Your Email Address"
+msgstr ""
+
+#: lang/blade-translations/auth/static.php:39
+#: resources/views/auth/verify.blade.php:13
+msgid "A fresh verification link has been sent to your email address."
+msgstr ""
+
+#: lang/blade-translations/auth/static.php:41
+#: resources/views/auth/verify.blade.php:17
+msgid "Before proceeding, please check your email for a verification link."
+msgstr ""
+
+#: lang/blade-translations/auth/static.php:43
+#: resources/views/auth/verify.blade.php:18
+msgid "If you did not receive the email"
+msgstr ""
+
+#: lang/blade-translations/auth/static.php:45
+#: resources/views/auth/verify.blade.php:21
+msgid "click here to request another"
+msgstr ""
+
+#: lang/blade-translations/category/static.php:16
+#: resources/views/category/create.blade.php:20
+msgid "Create category"
+msgstr ""
+
+#: lang/blade-translations/category/static.php:18
+#: lang/blade-translations/layouts/static.php:72
+#: resources/views/category/index.blade.php:5 resources/views/home.blade.php:19
+#: resources/views/layouts/app.blade.php:109
+#: resources/views/layouts/app.blade.php:181
+msgid "Categories"
+msgstr ""
+
+#: lang/blade-translations/category/static.php:21
+#: lang/blade-translations/classifier_type/static.php:27
+#: lang/blade-translations/default_actor/static.php:35
+#: lang/blade-translations/documents/static.php:45
+#: lang/blade-translations/fee/static.php:36
+#: lang/blade-translations/matter/static.php:32
+#: lang/blade-translations/rule/static.php:45
+#: lang/blade-translations/template-members/static.php:43
+#: resources/views/classifier_type/create.blade.php:13
+#: resources/views/classifier_type/index.blade.php:16
+#: resources/views/classifier_type/show.blade.php:12
+#: resources/views/default_actor/create.blade.php:16
+#: resources/views/default_actor/show.blade.php:12
+#: resources/views/documents/select2.blade.php:49
+#: resources/views/eventname/create.blade.php:53
+#: resources/views/eventname/create.blade.php:61
+#: resources/views/eventname/show.blade.php:16
+#: resources/views/fee/create.blade.php:9
+#: resources/views/matter/create.blade.php:4
+#: resources/views/rule/create.blade.php:38
+#: resources/views/rule/show.blade.php:26
+#: resources/views/template-members/create.blade.php:36
+#: resources/views/template-members/show.blade.php:15
+msgid "Category"
+msgstr ""
+
+#: lang/blade-translations/category/static.php:23
+#: resources/views/category/index.blade.php:6
+msgid "Create Category"
+msgstr ""
+
+#: lang/blade-translations/category/static.php:25
+#: lang/blade-translations/category/static.php:35
+#: lang/blade-translations/classifier_type/static.php:18
+#: lang/blade-translations/eventname/static.php:34
+#: lang/blade-translations/eventname/static.php:48
+#: lang/blade-translations/role/static.php:18
+#: lang/blade-translations/type/static.php:18
+#: resources/views/category/create.blade.php:5
+#: resources/views/category/show.blade.php:4
+#: resources/views/classifier_type/create.blade.php:5
+#: resources/views/classifier_type/show.blade.php:4
+#: resources/views/eventname/create.blade.php:4
+#: resources/views/eventname/create.blade.php:5
+#: resources/views/eventname/show.blade.php:4
+#: resources/views/role/create.blade.php:5
+#: resources/views/role/show.blade.php:4
+#: resources/views/type/create.blade.php:5
+#: resources/views/type/show.blade.php:4
+msgid "Code"
+msgstr ""
+
+#: lang/blade-translations/category/static.php:27
+#: lang/blade-translations/category/static.php:41
+#: resources/views/category/create.blade.php:13
+#: resources/views/category/index.blade.php:16
+#: resources/views/category/show.blade.php:12
+msgid "Display with"
+msgstr ""
+
+#: lang/blade-translations/category/static.php:29
+msgid "Category info"
+msgstr ""
+
+#: lang/blade-translations/category/static.php:31
+#: resources/views/category/index.blade.php:38
+msgid "Category information"
+msgstr ""
+
+#: lang/blade-translations/category/static.php:33
+#: resources/views/category/index.blade.php:42
+msgid "Click on category to view and edit details"
+msgstr ""
+
+#: lang/blade-translations/category/static.php:39
+#: resources/views/category/show.blade.php:10
+msgid "Prefix"
+msgstr ""
+
+#: lang/blade-translations/classifier_type/static.php:24
+#: lang/blade-translations/role/static.php:24
+#: resources/views/classifier_type/create.blade.php:11
+#: resources/views/classifier_type/show.blade.php:10
+#: resources/views/role/create.blade.php:11
+#: resources/views/role/show.blade.php:10
+msgid "Display order"
+msgstr ""
+
+#: lang/blade-translations/classifier_type/static.php:29
+#: resources/views/classifier_type/create.blade.php:18
+#: resources/views/classifier_type/show.blade.php:16
+msgid "Main display"
+msgstr ""
+
+#: lang/blade-translations/classifier_type/static.php:33
+#: lang/blade-translations/type/static.php:22
+#: resources/views/classifier_type/create.blade.php:25
+#: resources/views/type/create.blade.php:12
+msgid "Create type"
+msgstr ""
+
+#: lang/blade-translations/classifier_type/static.php:35
+#: resources/views/classifier_type/index.blade.php:5
+msgid "Classifier Types"
+msgstr ""
+
+#: lang/blade-translations/classifier_type/static.php:37
+#: resources/views/classifier_type/index.blade.php:6
+msgid "Create Classifier Type"
+msgstr ""
+
+#: lang/blade-translations/classifier_type/static.php:39
+#: lang/blade-translations/type/static.php:31
+msgid "Type info"
+msgstr ""
+
+#: lang/blade-translations/classifier_type/static.php:41
+#: resources/views/classifier_type/index.blade.php:38
+msgid "Type information"
+msgstr ""
+
+#: lang/blade-translations/classifier_type/static.php:43
+#: lang/blade-translations/type/static.php:35
+#: resources/views/classifier_type/index.blade.php:42
+#: resources/views/type/index.blade.php:40
+msgid "Click on type to view and edit details"
+msgstr ""
+
+#: lang/blade-translations/classifier_type/static.php:45
+#: lang/blade-translations/type/static.php:39
+msgid "Delete type"
+msgstr ""
+
+#: lang/blade-translations/default_actor/static.php:20
+#: resources/views/default_actor/create.blade.php:5
+#: resources/views/default_actor/show.blade.php:4
+msgid "Actor"
+msgstr ""
+
+#: lang/blade-translations/default_actor/static.php:25
+#: lang/blade-translations/matter/static.php:189
+#: lang/blade-translations/matter/static.php:265
+#: lang/blade-translations/role/static.php:21
+#: lang/blade-translations/user/static.php:29
+#: resources/views/default_actor/create.blade.php:8
+#: resources/views/default_actor/show.blade.php:6
+#: resources/views/documents/show.blade.php:12
+#: resources/views/matter/roleActors.blade.php:12
+#: resources/views/role/create.blade.php:7
+#: resources/views/user/create.blade.php:28
+#: resources/views/user/index.blade.php:15
+#: resources/views/user/show.blade.php:16
+msgid "Role"
+msgstr ""
+
+#: lang/blade-translations/default_actor/static.php:41
+#: resources/views/default_actor/create.blade.php:24
+msgid "Is shared"
+msgstr ""
+
+#: lang/blade-translations/default_actor/static.php:43
+#: resources/views/default_actor/create.blade.php:29
+msgid "Create entry"
+msgstr ""
+
+#: lang/blade-translations/default_actor/static.php:45
+#: resources/views/default_actor/index.blade.php:5
+msgid "Default Actors"
+msgstr ""
+
+#: lang/blade-translations/default_actor/static.php:47
+#: lang/blade-translations/layouts/static.php:76
+#: resources/views/layouts/app.blade.php:111
+#: resources/views/layouts/app.blade.php:183
+msgid "Default actors"
+msgstr ""
+
+#: lang/blade-translations/default_actor/static.php:49
+#: resources/views/default_actor/index.blade.php:6
+msgid "Create Default Actor"
+msgstr ""
+
+#: lang/blade-translations/default_actor/static.php:51
+#: resources/views/default_actor/index.blade.php:42
+msgid "Default actor information"
+msgstr ""
+
+#: lang/blade-translations/default_actor/static.php:53
+#: resources/views/default_actor/index.blade.php:46
+msgid "Click on line to view and edit details"
+msgstr ""
+
+#: lang/blade-translations/default_actor/static.php:55
+#: lang/blade-translations/matter/static.php:187
+#: resources/views/default_actor/show.blade.php:18
+#: resources/views/matter/roleActors.blade.php:10
+msgid "Shared"
+msgstr ""
+
+#: lang/blade-translations/default_actor/static.php:57
+msgid "Delete entry"
+msgstr ""
+
+#: lang/blade-translations/documents/static.php:16
+#: resources/views/documents/create.blade.php:3
+msgid "New class"
+msgstr ""
+
+#: lang/blade-translations/documents/static.php:20
+#: resources/views/documents/create.blade.php:23
+msgid "Create class"
+msgstr ""
+
+#: lang/blade-translations/documents/static.php:22
+#: resources/views/documents/index.blade.php:5
+msgid "Email Template Classes"
+msgstr ""
+
+#: lang/blade-translations/documents/static.php:24
+#: resources/views/documents/index.blade.php:6
+msgid "Create Email Template Class"
+msgstr ""
+
+#: lang/blade-translations/documents/static.php:26
+#: lang/blade-translations/template-members/static.php:59
+msgid "Class data"
+msgstr ""
+
+#: lang/blade-translations/documents/static.php:28
+#: resources/views/documents/index.blade.php:41
+msgid "Class information"
+msgstr ""
+
+#: lang/blade-translations/documents/static.php:30
+#: resources/views/documents/index.blade.php:45
+msgid "Click on class to view and edit details"
+msgstr ""
+
+#: lang/blade-translations/documents/static.php:33
+#: resources/views/documents/select.blade.php:5
+#: resources/views/documents/select2.blade.php:12
+msgid "Correspondent"
+msgstr ""
+
+#: lang/blade-translations/documents/static.php:36
+#: resources/views/documents/select.blade.php:6
+#: resources/views/documents/select2.blade.php:13
+msgid "To"
+msgstr ""
+
+#: lang/blade-translations/documents/static.php:39
+#: resources/views/documents/select.blade.php:7
+#: resources/views/documents/select2.blade.php:14
+msgid "CC"
+msgstr ""
+
+#: lang/blade-translations/documents/static.php:41
+#: lang/blade-translations/template-members/static.php:39
+#: resources/views/documents/select2.blade.php:43
+#: resources/views/template-members/create.blade.php:34
+#: resources/views/template-members/show.blade.php:26
+msgid "Summary"
+msgstr ""
+
+#: lang/blade-translations/documents/static.php:47
+#: lang/blade-translations/template-members/static.php:28
+#: resources/views/documents/select2.blade.php:52
+#: resources/views/template-members/create.blade.php:21
+#: resources/views/template-members/show.blade.php:13
+msgid "Style"
+msgstr ""
+
+#: lang/blade-translations/documents/static.php:51
+#: resources/views/documents/show.blade.php:17
+msgid "Event names linked to this class"
+msgstr ""
+
+#: lang/blade-translations/documents/static.php:53
+msgid "Delete class"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:16
+#: resources/views/eventname/create.blade.php:9
+msgid "Not Task"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:19
+#: lang/blade-translations/rule/static.php:33
+#: resources/views/eventname/create.blade.php:11
+#: resources/views/eventname/create.blade.php:26
+#: resources/views/eventname/create.blade.php:37
+#: resources/views/eventname/create.blade.php:45
+#: resources/views/eventname/create.blade.php:68
+#: resources/views/eventname/create.blade.php:74
+#: resources/views/rule/create.blade.php:24
+#: resources/views/rule/create.blade.php:68
+#: resources/views/rule/create.blade.php:83
+#: resources/views/rule/create.blade.php:98
+#: resources/views/rule/create.blade.php:116
+msgid "Yes"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:22
+#: lang/blade-translations/rule/static.php:39
+#: resources/views/eventname/create.blade.php:15
+#: resources/views/eventname/create.blade.php:30
+#: resources/views/eventname/create.blade.php:41
+#: resources/views/eventname/create.blade.php:49
+#: resources/views/eventname/create.blade.php:72
+#: resources/views/eventname/create.blade.php:78
+#: resources/views/rule/create.blade.php:28
+#: resources/views/rule/create.blade.php:72
+#: resources/views/rule/create.blade.php:87
+#: resources/views/rule/create.blade.php:102
+#: resources/views/rule/create.blade.php:120
+msgid "No"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:24
+#: resources/views/eventname/create.blade.php:65
+#: resources/views/eventname/create.blade.php:70
+msgid "Is killer"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:26
+#: resources/views/eventname/create.blade.php:77
+#: resources/views/eventname/create.blade.php:84
+msgid "Create event name"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:28
+#: resources/views/eventname/index.blade.php:5
+msgid "Event Names"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:30
+msgid "Event name"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:32
+#: resources/views/eventname/index.blade.php:6
+msgid "Create Event Name"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:42
+msgid "Event name info"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:44
+#: resources/views/eventname/index.blade.php:38
+msgid "Event name information"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:46
+#: resources/views/eventname/index.blade.php:42
+msgid "Click on event name to view and edit details"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:50
+#: resources/views/eventname/show.blade.php:37
+msgid "Linked templates"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:52
+msgid "Add template"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:54
+msgid "Delete template link"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:56
+msgid "Delete event name"
+msgstr ""
+
+#: lang/blade-translations/eventname/static.php:58
+msgid "event name "
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:16
+#: resources/views/fee/create.blade.php:30
+msgid "to:"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:18
+#: resources/views/fee/create.blade.php:35
+msgid "Create lines"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:20
+#: resources/views/fee/index.blade.php:7
+msgid "Fees"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:22
+msgid "New line"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:24
+#: resources/views/fee/index.blade.php:7 resources/views/fee/index.blade.php:12
+msgid "Add a new line"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:26
+#: resources/views/fee/index.blade.php:20
+#: resources/views/fee/index.blade.php:28
+#: resources/views/fee/index.blade.php:34
+msgid "Standard"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:28
+#: resources/views/fee/index.blade.php:21
+#: resources/views/fee/index.blade.php:29
+#: resources/views/fee/index.blade.php:35
+msgid "Reduced"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:30
+#: resources/views/fee/index.blade.php:26
+msgid "Grace Standard"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:32
+#: resources/views/fee/index.blade.php:27
+msgid "Grace Reduced"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:40
+msgid "Yr"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:45
+#: lang/blade-translations/matter/static.php:283
+#: lang/blade-translations/rule/static.php:79
+#: resources/views/fee/index.blade.php:43
+#: resources/views/fee/index.blade.php:44
+#: resources/views/fee/index.blade.php:45
+#: resources/views/fee/index.blade.php:46
+#: resources/views/fee/index.blade.php:51
+#: resources/views/fee/index.blade.php:52
+#: resources/views/fee/index.blade.php:53
+#: resources/views/fee/index.blade.php:54
+#: resources/views/matter/tasks.blade.php:16
+#: resources/views/renewals/index.blade.php:401
+#: resources/views/rule/create.blade.php:139
+#: resources/views/rule/show.blade.php:5
+#: resources/views/rule/show.blade.php:110
+msgid "Cost"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:50
+#: lang/blade-translations/matter/static.php:285
+#: lang/blade-translations/rule/static.php:83
+#: resources/views/fee/index.blade.php:44
+#: resources/views/fee/index.blade.php:45
+#: resources/views/fee/index.blade.php:46
+#: resources/views/fee/index.blade.php:47
+#: resources/views/fee/index.blade.php:52
+#: resources/views/fee/index.blade.php:53
+#: resources/views/fee/index.blade.php:54
+#: resources/views/fee/index.blade.php:55
+#: resources/views/matter/tasks.blade.php:17
+#: resources/views/renewals/index.blade.php:404
+#: resources/views/rule/create.blade.php:145
+#: resources/views/rule/show.blade.php:114
+msgid "Fee"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:52
+#: lang/blade-translations/rule/static.php:87
+#: resources/views/fee/index.blade.php:57
+#: resources/views/fee/index.blade.php:58
+#: resources/views/rule/create.blade.php:151
+#: resources/views/rule/show.blade.php:118
+msgid "Currency"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:54
+#: lang/blade-translations/rule/static.php:64
+#: resources/views/fee/create.blade.php:24
+#: resources/views/fee/index.blade.php:58
+#: resources/views/fee/index.blade.php:59
+#: resources/views/rule/create.blade.php:92
+#: resources/views/rule/show.blade.php:102
+msgid "Use after"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:56
+#: lang/blade-translations/rule/static.php:60
+#: resources/views/fee/create.blade.php:22
+#: resources/views/fee/index.blade.php:59
+#: resources/views/fee/index.blade.php:60
+#: resources/views/rule/create.blade.php:77
+#: resources/views/rule/show.blade.php:98
+msgid "Use before"
+msgstr ""
+
+#: lang/blade-translations/fee/static.php:60
+msgid "Leave empty if not used"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:16
+#: lang/blade-translations/seeder.php:823
+msgid "Search"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:18
+#: resources/views/layouts/app.blade.php:42
+#: resources/views/layouts/app.blade.php:105
+msgid "Case reference"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:28
+#: resources/views/layouts/app.blade.php:48
+#: resources/views/layouts/app.blade.php:111
+msgid "Go"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:30
+msgid "Toggle navigation"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:34
+#: resources/views/layouts/app.blade.php:136
+#: resources/views/welcome.blade.php:76
+msgid "Register"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:36
+#: resources/views/layouts/app.blade.php:68
+#: resources/views/layouts/app.blade.php:140
+msgid "Dashboard"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:38
+#: resources/views/layouts/app.blade.php:71
+#: resources/views/layouts/app.blade.php:143
+msgid "Matters"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:42
+#: resources/views/layouts/app.blade.php:75
+#: resources/views/layouts/app.blade.php:147
+msgid "Patents"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:44
+#: resources/views/layouts/app.blade.php:76
+#: resources/views/layouts/app.blade.php:148
+msgid "Trademarks"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:46
+msgid "Create Matter"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:50
+#: resources/views/layouts/app.blade.php:79
+#: resources/views/layouts/app.blade.php:151
+msgid "Create family from OPS"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:52
+#: resources/views/layouts/app.blade.php:87
+#: resources/views/layouts/app.blade.php:159
+msgid "Tools"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:54
+#: lang/blade-translations/renewals/static.php:16
+#: resources/views/layouts/app.blade.php:90
+#: resources/views/layouts/app.blade.php:162
+#: resources/views/renewals/index.blade.php:16
+#: resources/views/renewals/index.blade.php:271
+msgid "Manage renewals"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:56
+#: resources/views/layouts/app.blade.php:91
+#: resources/views/layouts/app.blade.php:163
+msgid "Renewal fees"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:58
+#: lang/blade-translations/rule/static.php:91
+#: resources/views/layouts/app.blade.php:93
+#: resources/views/layouts/app.blade.php:165
+#: resources/views/rule/index.blade.php:5
+#: resources/views/rule/index.blade.php:6
+msgid "Rules"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:60
+#: resources/views/layouts/app.blade.php:94
+#: resources/views/layouts/app.blade.php:166
+msgid "Email template classes"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:62
+#: resources/views/layouts/app.blade.php:95
+#: resources/views/layouts/app.blade.php:167
+msgid "Email templates"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:64
+#: resources/views/layouts/app.blade.php:102
+#: resources/views/layouts/app.blade.php:174
+msgid "Tables"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:68
+#: resources/views/layouts/app.blade.php:107
+#: resources/views/layouts/app.blade.php:179
+msgid "DB Users"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:70
+#: resources/views/layouts/app.blade.php:108
+#: resources/views/layouts/app.blade.php:180
+msgid "Event names"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:74
+#: resources/views/layouts/app.blade.php:110
+#: resources/views/layouts/app.blade.php:182
+msgid "Actor roles"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:78
+#: resources/views/layouts/app.blade.php:112
+#: resources/views/layouts/app.blade.php:184
+msgid "Matter types"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:80
+#: resources/views/layouts/app.blade.php:113
+#: resources/views/layouts/app.blade.php:185
+msgid "Classifier types"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:82
+#: resources/views/layouts/app.blade.php:197
+msgid "Logout"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:84
+#: resources/views/layouts/app.blade.php:150
+#: resources/views/layouts/app.blade.php:222
+msgid "Loading"
+msgstr ""
+
+#: lang/blade-translations/layouts/static.php:86
+#: resources/views/layouts/app.blade.php:155
+#: resources/views/layouts/app.blade.php:227
+msgid "Close"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:16
+#: resources/views/matter/classifiers.blade.php:7
+msgid "Type/Value"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:18
+#: resources/views/matter/classifiers.blade.php:8
+msgid "URL"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:20
+#: resources/views/matter/classifiers.blade.php:9
+msgid "Link to matter"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:22
+msgid "Delete classifier"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:28
+msgid "Value"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:30
+msgid "Linked to"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:34
+#: resources/views/matter/create.blade.php:12
+msgid "Pub Number"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:36
+#: resources/views/matter/create.blade.php:17
+msgid ""
+"Publication number prefixed with the country code and optionally suffixed "
+"with the kind code. No spaces nor non-alphanumeric characters."
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:45
+#: resources/views/matter/create.blade.php:54
+msgid "Caseref"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:49
+#: resources/views/matter/create.blade.php:73
+msgid "Use current :category as:"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:51
+#: resources/views/matter/create.blade.php:76
+msgid "Priority application"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:53
+#: resources/views/matter/create.blade.php:80
+msgid "Parent application"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:58
+msgid "Remove"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:60
+msgid "Add country"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:62
+#: resources/views/matter/createN.blade.php:23
+#: resources/views/matter/createN.blade.php:26
+msgid "Submit"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:64
+#: resources/views/matter/edit.blade.php:1
+msgid ""
+"Some fields cannot be changed once the matter is filed, because this would "
+"affect the deadline calculations"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:66
+msgid "Cannot be changed because the matter has tasks based on the category"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:68
+msgid ""
+"This value is changed automatically by inserting or deleting killer events, "
+"such as 'Abandoned', in the Status"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:72
+msgid "Cannot be changed because the matter has tasks based on the country"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:80
+#: resources/views/matter/edit.blade.php:60
+msgid "Parent"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:82
+#: resources/views/matter/edit.blade.php:66
+msgid "Container"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:84
+#: resources/views/matter/edit.blade.php:72
+msgid "Index"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:86
+#: resources/views/matter/edit.blade.php:78
+msgid "Alt. ref"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:88
+#: resources/views/matter/edit.blade.php:84
+msgid "Term adjust (days)"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:90
+#: resources/views/matter/edit.blade.php:91
+msgid "Delete Matter"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:92
+#: lang/blade-translations/matter/static.php:109
+#: resources/views/matter/events.blade.php:5
+msgid "Event"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:94
+msgid "Add event"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:97
+#: lang/blade-translations/matter/static.php:163
+#: resources/views/matter/events.blade.php:12
+#: resources/views/matter/roleActors.blade.php:8
+#: resources/views/matter/show.blade.php:183
+#: resources/views/matter/show.blade.php:192
+#: resources/views/matter/tasks.blade.php:10
+msgid "Date"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:99
+#: lang/blade-translations/matter/static.php:169
+#: resources/views/matter/events.blade.php:13
+#: resources/views/matter/show.blade.php:185
+#: resources/views/matter/show.blade.php:194
+msgid "Number"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:104
+#: resources/views/matter/events.blade.php:15
+msgid "Refers to"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:111
+msgid "Date (xx/xx/yyyy)"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:114
+#: lang/blade-translations/rule/static.php:22
+#: resources/views/rule/create.blade.php:11
+#: resources/views/rule/show.blade.php:22
+msgid "Detail"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:120
+#: resources/views/matter/index.blade.php:30
+#: resources/views/matter/index.blade.php:140
+msgid "Show Containers"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:122
+#: resources/views/matter/index.blade.php:34
+#: resources/views/matter/index.blade.php:145
+msgid "Actor View"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:124
+#: resources/views/matter/index.blade.php:36
+#: resources/views/matter/index.blade.php:148
+msgid "Status View"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:126
+#: resources/views/matter/index.blade.php:40
+#: resources/views/matter/index.blade.php:153
+msgid "Show Mine"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:128
+#: resources/views/matter/index.blade.php:44
+#: resources/views/matter/index.blade.php:158
+msgid "Include Dead"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:130
+#: resources/views/matter/index.blade.php:48
+#: resources/views/matter/index.blade.php:163
+msgid "Export"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:132
+#: resources/views/matter/index.blade.php:53
+#: resources/views/matter/index.blade.php:168
+msgid "By family, only alive (fr)"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:134
+#: resources/views/matter/index.blade.php:54
+#: resources/views/matter/index.blade.php:169
+msgid "By family, with dead (fr)"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:136
+#: resources/views/matter/index.blade.php:55
+#: resources/views/matter/index.blade.php:170
+msgid "By family, with dead (en)"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:138
+#: lang/blade-translations/seeder.php:1003
+#: resources/views/matter/index.blade.php:59
+#: resources/views/matter/index.blade.php:174
+msgid "Report"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:140
+#: lang/blade-translations/renewals/static.php:22
+#: resources/views/matter/index.blade.php:63
+#: resources/views/matter/index.blade.php:178
+#: resources/views/renewals/index.blade.php:21
+#: resources/views/renewals/index.blade.php:275
+msgid "Clear filters"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:142
+msgid "Ref"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:149
+msgid "Cl. Ref"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:155
+msgid "Agt. Ref"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:159
+#: lang/blade-translations/seeder.php:54
+msgid "Inventor"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:173
+msgid "PubNo"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:177
+msgid "Open in Espacenet"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:181
+#: lang/blade-translations/matter/static.php:269
+#: resources/views/matter/roleActors.blade.php:6
+msgid "Reference"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:185
+#: resources/views/matter/roleActors.blade.php:9
+msgid "Rate"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:191
+msgid "Change"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:193
+msgid "Remove actor"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:195
+msgid "See family"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:197
+msgid "Advanced matter edition"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:199
+#: resources/views/matter/show.blade.php:26
+#: resources/views/matter/show.blade.php:27
+msgid "Container:"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:201
+msgid "See container"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:203
+#: resources/views/matter/show.blade.php:34
+#: resources/views/matter/show.blade.php:35
+msgid "Parent:"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:205
+msgid "See parent"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:207
+#: resources/views/matter/show.blade.php:42
+#: resources/views/matter/show.blade.php:43
+msgid "Alt. ref:"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:209
+msgid "Create child :category"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:211
+#: resources/views/matter/show.blade.php:59
+#: resources/views/matter/show.blade.php:60
+msgid "New Child"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:213
+#: resources/views/matter/show.blade.php:62
+#: resources/views/matter/show.blade.php:63
+msgid "Clone"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:215
+msgid "Enter :category in national phase"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:217
+#: resources/views/matter/show.blade.php:66
+msgid "Nat. Phase"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:221
+msgid "Add Actor"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:223
+msgid "Add :role"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:225
+msgid "Edit actors in :role group"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:227
+msgid "Special instructions"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:231
+msgid "All events"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:233
+#: resources/views/matter/show.blade.php:217
+#: resources/views/matter/show.blade.php:228
+msgid "Open Tasks Due"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:235
+msgid "History"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:237
+#: resources/views/matter/show.blade.php:235
+#: resources/views/matter/show.blade.php:248
+msgid "Renewals Due"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:239
+msgid "All renewals"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:241
+msgid "Classifier detail"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:243
+#: resources/views/matter/show.blade.php:253
+#: resources/views/matter/show.blade.php:268
+msgid "Classifiers"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:245
+#: lang/blade-translations/seeder.php:97
+#: resources/views/matter/show.blade.php:287
+#: resources/views/matter/show.blade.php:302
+msgid "Link"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:247
+#: resources/views/matter/show.blade.php:298
+#: resources/views/matter/show.blade.php:315
+msgid "Related Matters"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:249
+#: resources/views/matter/show.blade.php:304
+#: resources/views/matter/show.blade.php:321
+msgid "Fam"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:251
+#: resources/views/matter/show.blade.php:334
+#: resources/views/matter/show.blade.php:353
+msgid "Summaries:"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:253
+msgid "Copy a summary in English"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:255
+msgid "Copy a summary in French"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:257
+#: resources/views/matter/show.blade.php:351
+#: resources/views/matter/show.blade.php:370
+msgid "Email:"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:259
+msgid "Send email"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:261
+msgid "Envoyer un courriel"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:263
+#: resources/views/matter/show.blade.php:394
+msgid "Drop File to Merge"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:271
+#: resources/views/matter/show.blade.php:396
+#: resources/views/matter/show.blade.php:416
+msgid "Add to container and share"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:273
+#: resources/views/matter/show.blade.php:400
+#: resources/views/matter/show.blade.php:420
+msgid "Add to this matter only (not shared)"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:275
+#: resources/views/matter/summary.blade.php:7
+msgid "Copy"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:277
+#: resources/views/matter/tasks.blade.php:7
+msgid "Tasks by event"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:279
+#: resources/views/home.blade.php:139 resources/views/home.blade.php:143
+#: resources/views/home.blade.php:177 resources/views/home.blade.php:183
+#: resources/views/matter/tasks.blade.php:8
+msgid "Due date"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:281
+#: resources/views/matter/tasks.blade.php:9
+msgid "Ack"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:287
+#: resources/views/matter/tasks.blade.php:18
+msgid "Cur."
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:289
+#: resources/views/matter/tasks.blade.php:19
+msgid "Time"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:291
+#: resources/views/matter/tasks.blade.php:22
+msgid "By"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:293
+msgid "Add task to :event"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:295
+msgid "Delete event (with tasks)"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:297
+msgid "Regenerate Tasks"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:299
+#: lang/blade-translations/rule/static.php:19
+#: resources/views/eventname/create.blade.php:11
+#: resources/views/rule/create.blade.php:6
+#: resources/views/rule/show.blade.php:14
+msgid "Task"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:301
+msgid "Due date (xx/xx/yyyy)"
+msgstr ""
+
+#: lang/blade-translations/matter/static.php:303
+msgid "Assigned to"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:18
+msgid "Help"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:20
+#: resources/views/renewals/index.blade.php:20
+#: resources/views/renewals/index.blade.php:274
+msgid "View logs"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:24
+#: resources/views/renewals/index.blade.php:27
+#: resources/views/renewals/index.blade.php:299
+msgid "Send call email"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:26
+#: resources/views/renewals/index.blade.php:28
+#: resources/views/renewals/index.blade.php:300
+msgid "Call sent manually"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:28
+#: resources/views/renewals/index.blade.php:35
+#: resources/views/renewals/index.blade.php:307
+msgid "Send reminder email"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:30
+msgid "Send reminder and enter grace period"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:32
+#: resources/views/renewals/index.blade.php:36
+#: resources/views/renewals/index.blade.php:308
+msgid "Send last reminder email"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:34
+msgid "Instructions received to pay"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:36
+#: resources/views/renewals/index.blade.php:37
+#: resources/views/renewals/index.blade.php:309
+msgid "Payment order received"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:38
+msgid "Abandon instructions received"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:40
+#: resources/views/renewals/index.blade.php:38
+#: resources/views/renewals/index.blade.php:310
+msgid "Abandon"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:42
+msgid "Office lapse communication received"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:45
+#: lang/blade-translations/seeder.php:711
+#: resources/views/renewals/index.blade.php:39
+#: resources/views/renewals/index.blade.php:110
+#: resources/views/renewals/index.blade.php:288
+#: resources/views/renewals/index.blade.php:311
+msgid "Lapsed"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:47
+msgid "Generate xml files for EP or FR"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:49
+#: resources/views/renewals/index.blade.php:46
+#: resources/views/renewals/index.blade.php:318
+msgid "Download XML order to pay"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:52
+#: resources/views/renewals/index.blade.php:47
+#: resources/views/renewals/index.blade.php:81
+#: resources/views/renewals/index.blade.php:319
+#: resources/views/renewals/index.blade.php:353
+msgid "Paid"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:54
+#: resources/views/renewals/index.blade.php:54
+#: resources/views/renewals/index.blade.php:326
+msgid "Official receipts received"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:56
+#: resources/views/renewals/index.blade.php:59
+#: resources/views/renewals/index.blade.php:331
+msgid "Receipts sent"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:58
+#: resources/views/renewals/index.blade.php:65
+#: resources/views/renewals/index.blade.php:337
+msgid "Lapse"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:60
+#: resources/views/renewals/index.blade.php:72
+#: resources/views/renewals/index.blade.php:344
+msgid "Generate invoice"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:62
+#: resources/views/renewals/index.blade.php:74
+#: resources/views/renewals/index.blade.php:346
+msgid "Export all"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:65
+#: resources/views/renewals/index.blade.php:75
+#: resources/views/renewals/index.blade.php:113
+#: resources/views/renewals/index.blade.php:291
+#: resources/views/renewals/index.blade.php:347
+msgid "Invoiced"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:67
+#: resources/views/renewals/index.blade.php:86
+#: resources/views/renewals/index.blade.php:358
+msgid "Lapse communication sent"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:69
+#: resources/views/renewals/index.blade.php:91
+#: resources/views/renewals/index.blade.php:363
+msgid "Closed renewals"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:71
+#: resources/views/renewals/index.blade.php:96
+#: resources/views/renewals/index.blade.php:368
+msgid "Paid invoices"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:73
+#: resources/views/renewals/index.blade.php:102
+#: resources/views/renewals/index.blade.php:280
+msgid "First call"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:75
+#: lang/blade-translations/seeder.php:769
+#: resources/views/renewals/index.blade.php:103
+#: resources/views/renewals/index.blade.php:281
+msgid "Reminder"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:77
+#: resources/views/renewals/index.blade.php:104
+#: resources/views/renewals/index.blade.php:282
+msgid "Payment"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:79
+#: resources/views/renewals/index.blade.php:106
+#: resources/views/renewals/index.blade.php:284
+msgid "Receipts"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:81
+#: resources/views/renewals/index.blade.php:107
+#: resources/views/renewals/index.blade.php:285
+msgid "Receipts received"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:83
+#: lang/blade-translations/seeder.php:626
+#: resources/views/renewals/index.blade.php:109
+#: resources/views/renewals/index.blade.php:287
+msgid "Abandoned"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:85
+#: lang/blade-translations/seeder.php:644
+#: resources/views/renewals/index.blade.php:111
+#: resources/views/renewals/index.blade.php:289
+msgid "Closed"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:88
+#: resources/views/renewals/index.blade.php:112
+#: resources/views/renewals/index.blade.php:290
+#: resources/views/renewals/logs.blade.php:24
+#: resources/views/renewals/logs.blade.php:26
+msgid "Invoicing"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:90
+#: resources/views/renewals/index.blade.php:114
+#: resources/views/renewals/index.blade.php:292
+msgid "Invoices paid"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:98
+#: resources/views/home.blade.php:133 resources/views/home.blade.php:137
+#: resources/views/home.blade.php:171 resources/views/home.blade.php:177
+msgid "Matter"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:100
+msgid "Ctry"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:103
+#: resources/views/fee/create.blade.php:28
+#: resources/views/renewals/logs.blade.php:21
+#: resources/views/renewals/logs.blade.php:23
+msgid "Qt"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:106
+#: resources/views/renewals/index.blade.php:141
+#: resources/views/renewals/index.blade.php:396
+#: resources/views/renewals/logs.blade.php:23
+#: resources/views/renewals/logs.blade.php:25
+msgid "Grace"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:109
+msgid "From selected date"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:112
+msgid "Until selected date"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:114
+msgid "Select/unselect all"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:116
+msgid "Done"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:118
+#: lang/blade-translations/task/static.php:18
+msgid "Overdue"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:120
+#: lang/blade-translations/task/static.php:20
+msgid "Urgent"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:122
+msgid "Job"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:124
+msgid "User"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:126
+#: resources/views/renewals/logs.blade.php:22
+#: resources/views/renewals/logs.blade.php:24
+msgid "Steps"
+msgstr ""
+
+#: lang/blade-translations/renewals/static.php:129
+#: resources/views/renewals/logs.blade.php:32
+#: resources/views/renewals/logs.blade.php:34
+#: resources/views/renewals/logs.blade.php:37
+#: resources/views/renewals/logs.blade.php:40
+msgid "Task deleted"
+msgstr ""
+
+#: lang/blade-translations/role/static.php:26
+#: resources/views/role/create.blade.php:13
+msgid "Is shareable"
+msgstr ""
+
+#: lang/blade-translations/role/static.php:29
+#: resources/views/role/create.blade.php:17
+#: resources/views/role/show.blade.php:16
+msgid "Show reference"
+msgstr ""
+
+#: lang/blade-translations/role/static.php:32
+#: resources/views/role/create.blade.php:19
+#: resources/views/role/show.blade.php:18
+msgid "Show company"
+msgstr ""
+
+#: lang/blade-translations/role/static.php:35
+#: resources/views/role/create.blade.php:23
+#: resources/views/role/show.blade.php:22
+msgid "Show rate"
+msgstr ""
+
+#: lang/blade-translations/role/static.php:38
+#: resources/views/role/create.blade.php:25
+#: resources/views/role/show.blade.php:24
+msgid "Show date"
+msgstr ""
+
+#: lang/blade-translations/role/static.php:44
+#: resources/views/role/create.blade.php:34
+msgid "Create role"
+msgstr ""
+
+#: lang/blade-translations/role/static.php:46
+#: resources/views/role/index.blade.php:5
+msgid "Actor Roles"
+msgstr ""
+
+#: lang/blade-translations/role/static.php:48
+#: resources/views/role/index.blade.php:6
+msgid "Create Role"
+msgstr ""
+
+#: lang/blade-translations/role/static.php:53
+msgid "Role info"
+msgstr ""
+
+#: lang/blade-translations/role/static.php:55
+#: resources/views/role/index.blade.php:38
+msgid "Role information"
+msgstr ""
+
+#: lang/blade-translations/role/static.php:57
+#: resources/views/role/index.blade.php:42
+msgid "Click on role to view and edit details"
+msgstr ""
+
+#: lang/blade-translations/role/static.php:59
+#: resources/views/role/show.blade.php:12
+msgid "Shareable"
+msgstr ""
+
+#: lang/blade-translations/role/static.php:61
+msgid "Delete role"
+msgstr ""
+
+#: lang/blade-translations/role/static.php:63
+msgid "the role "
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:16
+#: resources/views/rule/create.blade.php:3
+msgid "New task rule"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:27
+#: resources/views/rule/create.blade.php:20
+msgid "Is active"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:53
+#: resources/views/rule/create.blade.php:56
+msgid "Rule details"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:56
+#: resources/views/rule/create.blade.php:59
+msgid "Trigger event"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:58
+#: resources/views/rule/create.blade.php:64
+#: resources/views/rule/show.blade.php:76
+msgid "End of month"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:62
+#: resources/views/rule/create.blade.php:79
+msgid "Clear task"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:66
+#: resources/views/rule/create.blade.php:94
+msgid "Delete task"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:68
+#: resources/views/rule/create.blade.php:107
+msgid "Condition event"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:70
+#: resources/views/rule/create.blade.php:112
+#: resources/views/rule/show.blade.php:80
+msgid "Use priority"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:72
+#: resources/views/rule/create.blade.php:125
+msgid "Abort on"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:76
+#: resources/views/rule/create.blade.php:137
+#: resources/views/rule/show.blade.php:68
+msgid "Days"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:81
+#: resources/views/rule/create.blade.php:143
+#: resources/views/rule/show.blade.php:70
+msgid "Months"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:85
+#: resources/views/rule/create.blade.php:149
+#: resources/views/rule/show.blade.php:74
+msgid "Years"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:89
+#: resources/views/rule/create.blade.php:156
+#: resources/views/rule/index.blade.php:7
+msgid "Create rule"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:94
+msgid "Rule data"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:96
+#: resources/views/rule/index.blade.php:11
+msgid "Create Rule"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:98
+#: resources/views/rule/index.blade.php:52
+#: resources/views/rule/index.blade.php:56
+msgid "Rule information"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:100
+#: resources/views/rule/index.blade.php:56
+#: resources/views/rule/index.blade.php:60
+msgid "Click on rule to view and edit details"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:104
+#: resources/views/rule/show.blade.php:4
+msgid "Conditions"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:106
+msgid "Delete rule"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:108
+msgid "the rule"
+msgstr ""
+
+#: lang/blade-translations/rule/static.php:112
+#: lang/blade-translations/template-members/static.php:20
+#: resources/views/template-members/create.blade.php:6
+#: resources/views/template-members/show.blade.php:4
+msgid "Class"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:16
+msgid "Primary Agent"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:18
+msgid "Secondary Agent"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:20
+msgid "Usually the primary agent's agent"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:22
+msgid "Annuity Agent"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:24
+msgid ""
+"Agent in charge of renewals. -Client handled- is a special agent who, when "
+"added, will delete any renewals in the matter"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:28
+msgid "Assignee in the US, i.e. the owner upon filing"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:32
+msgid ""
+"The client we take instructions from and who we invoice. DO NOT CHANGE OR "
+"DELETE: this is also a database user role"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:36
+msgid "Client's contact person"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:38
+msgid "DB Administrator"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:40
+msgid "DB Read-Only"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:42
+msgid "DB Read/Write"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:46
+msgid "Another user allowed to manage the case"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:48
+msgid "Former Agent"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:50
+msgid "Former Owner"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:52
+msgid "To keep track of ownership history"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:56
+msgid "Licensee"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:58
+msgid "Patent Office"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:60
+msgid "Opposing Party"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:62
+msgid "Owner"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:64
+msgid "Use if different than applicant"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:66
+msgid "Payor"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:68
+msgid "The actor who pays"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:70
+msgid "Partner"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:72
+msgid "Translator"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:74
+msgid "Writer"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:76
+msgid "Person who follows the case"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:78
+msgid ""
+"DO NOT DELETE - Special actor used for removing renewal tasks that are "
+"handled by the client"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:80
+msgid "Abstract"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:83
+msgid "Agreement"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:85
+msgid "Business Unit"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:87 resources/views/home.blade.php:136
+#: resources/views/home.blade.php:140 resources/views/home.blade.php:174
+#: resources/views/home.blade.php:180
+msgid "Description"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:89
+msgid "Evaluation"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:91
+msgid "Image"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:93
+msgid "IPC"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:95
+msgid "Keyword"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:99
+msgid "Location"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:101
+msgid "Organization"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:103
+msgid "Prior Art"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:105
+msgid "Product"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:107
+msgid "Project"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:109
+msgid "Technology"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:113
+msgid "Alt. Title"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:115
+msgid "English Title"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:117
+msgid "Official Title"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:120
+msgid "Trademark"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:122
+msgid "Class (TM)"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:124
+msgid "Type (TM)"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:126
+msgid "Andorra"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:128
+msgid "United Arab Emirates"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:130
+msgid "Afghanistan"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:132
+msgid "Antigua and Barbuda"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:134
+msgid "Anguilla"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:136
+msgid "Albania"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:138
+msgid "Armenia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:140
+msgid "Netherlands Antilles"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:142
+msgid "Angola"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:144
+msgid "Antarctica"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:146
+msgid "Argentina"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:148
+msgid "American Samoa"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:150
+msgid "Austria"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:152
+msgid "Australia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:154
+msgid "Aruba"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:156
+msgid "Åland Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:158
+msgid "Azerbaijan"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:160
+msgid "Bosnia and Herzegovina"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:162
+msgid "Barbados"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:164
+msgid "Bangladesh"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:166
+msgid "Belgium"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:168
+msgid "Burkina Faso"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:170
+msgid "Bulgaria"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:172
+msgid "Bahrain"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:174
+msgid "Burundi"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:176
+msgid "Benin"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:178
+msgid "Bermuda"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:180
+msgid "Brunei Darussalam"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:182
+msgid "Bolivia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:184
+msgid "Brazil"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:186
+msgid "Bahamas"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:188
+msgid "Bhutan"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:190
+msgid "Bouvet Island"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:192
+msgid "Botswana"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:194
+msgid "Benelux"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:196
+msgid "Belarus"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:198
+msgid "Belize"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:200
+msgid "Canada"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:202
+msgid "Cocos (Keeling) Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:204
+msgid "The Democratic Republic Of The Congo"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:206
+msgid "Central African"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:208
+msgid "Republic of the Congo"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:210
+msgid "Switzerland"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:212
+msgid "Cote d'Ivoire"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:214
+msgid "Cook Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:216
+msgid "Chile"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:218
+msgid "Cameroon"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:220
+msgid "China"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:222
+msgid "Colombia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:224
+msgid "Costa Rica"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:226
+msgid "Serbia and Montenegro"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:228
+msgid "Cuba"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:230
+msgid "Cape Verde"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:232
+msgid "Christmas Island"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:234
+msgid "Cyprus"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:236
+msgid "Czechia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:238
+msgid "Germany"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:240
+msgid "Djibouti"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:242
+msgid "Denmark"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:244
+msgid "Dominica"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:246
+msgid "Dominican Republic"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:248
+msgid "Algeria"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:250
+msgid "Eurasian Patent Organization"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:252
+msgid "Ecuador"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:254
+msgid "Estonia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:256
+msgid "Egypt"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:258
+msgid "Western Sahara"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:260
+msgid "EUIPO"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:262
+msgid "European Patent Organization"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:264
+msgid "Eritrea"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:266
+msgid "Spain"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:268
+msgid "Ethiopia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:270
+msgid "Finland"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:272
+msgid "Fiji"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:274
+msgid "Falkland Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:276
+msgid "Federated States of Micronesia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:278
+msgid "Faroe Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:280
+msgid "France"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:282
+msgid "Gabon"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:284
+msgid "United Kingdom"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:286
+msgid "Grenada"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:288
+msgid "Georgia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:290
+msgid "French Guiana"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:292
+msgid "Ghana"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:294
+msgid "Gibraltar"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:296
+msgid "Greenland"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:298
+msgid "Gambia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:300
+msgid "Guinea"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:302
+msgid "Guadeloupe"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:304
+msgid "Equatorial Guinea"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:306
+msgid "Greece"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:308
+msgid "South Georgia and the South Sandwich Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:310
+msgid "Guatemala"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:312
+msgid "Guam"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:314
+msgid "Guinea-Bissau"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:316
+msgid "Guyana"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:318
+msgid "Hong Kong"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:320
+msgid "Heard Island and McDonald Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:322
+msgid "Honduras"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:324
+msgid "Croatia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:326
+msgid "Haiti"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:328
+msgid "Hungary"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:330
+msgid "International Bureau"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:332
+msgid "Indonesia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:334
+msgid "Ireland"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:336
+msgid "Israel"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:338
+msgid "Isle of Man"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:340
+msgid "India"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:342
+msgid "British Indian Ocean Territory"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:344
+msgid "Iraq"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:346
+msgid "Islamic Republic of Iran"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:348
+msgid "Iceland"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:350
+msgid "Italy"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:352
+msgid "Jamaica"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:354
+msgid "Jordan"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:356
+msgid "Japan"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:358
+msgid "Kenya"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:360
+msgid "Kyrgyzstan"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:362
+msgid "Cambodia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:364
+msgid "Kiribati"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:366
+msgid "Comoros"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:368
+msgid "Saint Kitts and Nevis"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:370
+msgid "Democratic People's Republic of Korea"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:372
+msgid "Republic of Korea"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:374
+msgid "Kuwait"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:376
+msgid "Cayman Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:378
+msgid "Kazakhstan"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:380
+msgid "Lao People's Democratic Republic"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:382
+msgid "Lebanon"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:384
+msgid "Saint Lucia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:386
+msgid "Liechtenstein"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:388
+msgid "Sri Lanka"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:390
+msgid "Liberia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:392
+msgid "Lesotho"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:394
+msgid "Lithuania"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:396
+msgid "Luxembourg"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:398
+msgid "Latvia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:400
+msgid "Libyan Arab Jamahiriya"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:402
+msgid "Morocco"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:404
+msgid "Monaco"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:406
+msgid "Republic of Moldova"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:408
+msgid "Montenegro"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:410
+msgid "Madagascar"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:412
+msgid "Marshall Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:414
+msgid "North Macedonia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:416
+msgid "Mali"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:418
+msgid "Myanmar"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:420
+msgid "Mongolia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:422
+msgid "Macao"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:424
+msgid "Northern Mariana Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:426
+msgid "Martinique"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:428
+msgid "Mauritania"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:430
+msgid "Montserrat"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:432
+msgid "Malta"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:434
+msgid "Mauritius"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:436
+msgid "Maldives"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:438
+msgid "Malawi"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:440
+msgid "Mexico"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:442
+msgid "Malaysia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:444
+msgid "Mozambique"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:446
+msgid "Namibia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:448
+msgid "New Caledonia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:450
+msgid "Niger"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:452
+msgid "Norfolk Island"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:454
+msgid "Nigeria"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:456
+msgid "Nicaragua"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:458
+msgid "Netherlands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:460
+msgid "Norway"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:462
+msgid "Nepal"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:464
+msgid "Nauru"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:466
+msgid "Niue"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:468
+msgid "New Zealand"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:470
+msgid "African Intellectual Property Organization"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:472
+msgid "Oman"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:474
+msgid "Panama"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:476
+msgid "Peru"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:478
+msgid "French Polynesia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:480
+msgid "Papua New Guinea"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:482
+msgid "Philippines"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:484
+msgid "Pakistan"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:486
+msgid "Poland"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:488
+msgid "Saint-Pierre and Miquelon"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:490
+msgid "Pitcairn"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:492
+msgid "Puerto Rico"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:494
+msgid "Occupied Palestinian Territory"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:496
+msgid "Portugal"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:498
+msgid "Palau"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:500
+msgid "Paraguay"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:502
+msgid "Qatar"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:504
+msgid "Réunion"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:506
+msgid "Romania"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:508
+msgid "Serbia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:510
+msgid "Russian Federation"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:512
+msgid "Rwanda"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:514
+msgid "Saudi Arabia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:516
+msgid "Solomon Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:518
+msgid "Seychelles"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:520
+msgid "Sudan"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:522
+msgid "Sweden"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:524
+msgid "Singapore"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:526
+msgid "Saint Helena"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:528
+msgid "Slovenia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:530
+msgid "Svalbard and Jan Mayen"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:532
+msgid "Slovakia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:534
+msgid "Sierra Leone"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:536
+msgid "San Marino"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:538
+msgid "Senegal"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:540
+msgid "Somalia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:542
+msgid "Suriname"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:544
+msgid "Sao Tome and Principe"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:546
+msgid "El Salvador"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:548
+msgid "Syrian Arab Republic"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:550
+msgid "Swaziland"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:552
+msgid "Turks and Caicos Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:554
+msgid "Chad"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:556
+msgid "French Southern Territories"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:558
+msgid "Togo"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:560
+msgid "Thailand"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:562
+msgid "Tajikistan"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:564
+msgid "Tokelau"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:566
+msgid "Timor-Leste"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:568
+msgid "Turkmenistan"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:570
+msgid "Tunisia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:572
+msgid "Tonga"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:574
+msgid "Turkey"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:576
+msgid "Trinidad and Tobago"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:578
+msgid "Tuvalu"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:580
+msgid "Taiwan"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:582
+msgid "United Republic Of Tanzania"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:584
+msgid "Ukraine"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:586
+msgid "Uganda"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:588
+msgid "United States Minor Outlying Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:590
+msgid "United States"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:592
+msgid "Uruguay"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:594
+msgid "Uzbekistan"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:596
+msgid "Vatican City State"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:598
+msgid "Saint Vincent and the Grenadines"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:600
+msgid "Venezuela"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:602
+msgid "British Virgin Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:604
+msgid "U.S. Virgin Islands"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:606
+msgid "Vietnam"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:608
+msgid "Vanuatu"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:610
+msgid "Wallis and Futuna"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:612
+msgid "World Intellectual Property Organization"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:614
+msgid "Samoa"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:616
+msgid "Yemen"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:618
+msgid "Mayotte"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:620
+msgid "South Africa"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:622
+msgid "Zambia"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:624
+msgid "Zimbabwe"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:628
+msgid "Abandon Original"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:630
+msgid "Abandon the originating patent that was re-designated in EP"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:632
+msgid "Advisory Action"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:634
+msgid "Allowance"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:636
+msgid "Use also for R71.3 in EP"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:638
+msgid "Appeal"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:640
+msgid "Appeal or other remedy filed"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:642
+msgid "Cancelled"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:647
+msgid "Communication"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:649
+msgid ""
+"Communication regarding administrative or formal matters (missing parts, "
+"irregularities...)"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:651
+msgid "Created"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:653
+msgid ""
+"Creation date of matter - for attaching tasks necessary before anything else"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:655
+msgid "Decision on Appeal"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:657
+msgid "State outcome in detail field"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:659
+msgid "Draft By"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:661
+msgid "Deadline Extended"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:663
+msgid "Deadline extension requested"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:665
+msgid "Decision on Pre-Appeal"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:667
+msgid "Drafted"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:669
+msgid "Deemed withrawn"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:671
+msgid "Decision needing a reply, such as further processing"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:673
+msgid "Extend to Hong Kong"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:675
+msgid "Entered"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:677
+msgid "National entry date from PCT phase"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:679
+msgid "End of Procedure"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:681
+msgid ""
+"Indicates the end of a regional procedure, such as when the EP patent is "
+"granted"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:683
+msgid "Examiner Action"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:685
+msgid "AKA Office Action, i.e. anything related to substantive examination"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:687
+msgid "Examiner Action (Final)"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:689
+msgid "Expiry"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:691
+msgid "Do not use nor change - present for internal functionality"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:693
+msgid "File Notice of Appeal"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:695
+msgid "File by"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:697
+msgid "File Divisional"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:701
+msgid "File Opposition"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:703
+msgid "Further Processing"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:705
+msgid "File RCE"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:709
+msgid "Invalidated"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:714
+msgid "National Phase"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:716
+msgid "Opposition"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:718
+msgid "Oral Proceedings"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:720
+msgid "Opposition rejected"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:722
+msgid "Pay"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:724
+msgid "Use for any fees to be paid"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:726
+msgid "Post designation"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:728
+msgid "Parent Filed"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:730
+msgid ""
+"Filing date of the parent (use only when the matter type is defined). Use as "
+"link to the parent matter."
+msgstr ""
+
+#: lang/blade-translations/seeder.php:732
+msgid "Publication of Reg."
+msgstr ""
+
+#: lang/blade-translations/seeder.php:734
+#: resources/views/documents/select.blade.php:68
+#: resources/views/documents/select2.blade.php:73
+msgid "Prepare"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:736
+msgid ""
+"Any further action to be done by the responsible (comments, pre-"
+"handling, ...)"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:738
+msgid "Priority Claim"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:740
+msgid "Use as link to the priority matter"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:743
+msgid "Priority Deadline"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:745
+msgid "Produce"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:747
+msgid ""
+"Any further documents to be filed (inventor designation, priority document, "
+"missing parts...)"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:749
+msgid "Publication of SR"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:751
+msgid "A3 publication"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:755
+msgid "For EP, this means publication WITH the search report (A1 publ.)"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:757
+msgid "Request Continued Examination"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:759
+msgid "Received"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:761
+msgid "Date the case was received from the client"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:763
+msgid "Refused"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:765
+msgid ""
+"This is the final decision, that can only be appealed - do not mistake with "
+"an exam report"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:767
+msgid "Registration"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:771
+msgid "Renewal"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:773
+msgid "AKA Annuity"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:775
+msgid "Respond"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:777
+msgid "Use for any response"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:779
+msgid "Request Examination"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:782
+msgid "Restriction Req."
+msgstr ""
+
+#: lang/blade-translations/seeder.php:784
+msgid "Sold"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:786
+msgid "Summons to Oral Proc."
+msgstr ""
+
+#: lang/blade-translations/seeder.php:789
+msgid "Search Report"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:791
+msgid "Suspended"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:793
+msgid "Transferred"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:795
+msgid "Case no longer followed"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:797
+msgid "Validate"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:799
+msgid "Validate granted EP in designated countries"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:802
+msgid "Watch"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:804
+msgid "Withdrawal"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:806
+msgid "Design"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:808
+msgid "Freedom to Operate"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:810
+msgid "Litigation"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:812
+msgid "Opposition (patent]"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:815
+msgid "Opinion"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:817
+msgid "Others"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:819
+msgid "Patent"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:821
+msgid "Soleau Envelop"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:825
+msgid "Opposition (TM]"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:827
+msgid "Trade Secret"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:829
+msgid "Utility Certificate"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:831
+msgid "Utility Model"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:833
+msgid "Continuation in Part"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:835
+msgid "Continuation"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:837
+msgid "Divisional"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:839
+msgid "Provisional"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:841
+msgid "Reissue"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:843
+msgid "Re-examination"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:847
+msgid "Priority deadline is inserted only if no priority event exists"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:853 resources/views/home.blade.php:143
+#: resources/views/home.blade.php:147 resources/views/home.blade.php:181
+#: resources/views/home.blade.php:187
+msgid "Clear"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:855
+msgid "Clear \"File by\" task when \"Filed\" event is created"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:857
+msgid "Clear \"Draft by\" task when \"Drafted\" event is created"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:874
+msgid "R71(3)"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:886
+msgid "Claim Translation"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:888
+msgid "Translate where necessary"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:892
+msgid "Written Opinion"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:895
+msgid "Designation Fees"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:898
+msgid "Decl. and Assignment"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:906
+msgid "Deletes priority deadline when a priority event is inserted"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:908
+msgid "IDS"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:912
+msgid "HK Grant Fee"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:914
+msgid "Clear \"File Opposition\" task when \"Opposition\" event is created"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:916
+msgid "R70(2)"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:920
+msgid "Filing Fee"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:922
+msgid "R161"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:927
+msgid "Appeal Brief"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:932
+msgid "Observations"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:934
+msgid "Priority Docs"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:936
+msgid "File divisional"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:939
+msgid "Request extension"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:942
+#: resources/views/rule/show.blade.php:82
+msgid "Recurring"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:945
+msgid "Uses the country table information by setting \"recurring = 1\""
+msgstr ""
+
+#: lang/blade-translations/seeder.php:947
+msgid "Working Report"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:949
+msgid "Change date to end of March"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:954
+msgid "Opposition deadline"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:958
+msgid "Declaration of use"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:960
+msgid "délai à 5 ans et demi"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:962
+msgid "1-10"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:964
+msgid "11-20"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:966
+msgid "6-10"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:968
+msgid "11-15"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:970
+msgid "16-20"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:972
+msgid "Annexure to Form 3"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:974
+msgid "Declaration"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:976
+msgid "Power"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:978
+msgid "10 ans Hegira"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:982
+msgid "Irregularity"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:984
+msgid "Statement of use"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:991
+msgid "POA"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:993
+msgid "Final OA"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:995
+msgid "délai à 9 ans et demi"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:997
+msgid "2nd part of individual fee"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:999
+msgid "Soleau"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:1001
+msgid "End of protection"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:1005
+msgid "Analysis of SR"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:1007
+msgid "Analyse CompuMark"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:1009
+msgid "Libellé P/S"
+msgstr ""
+
+#: lang/blade-translations/seeder.php:1011
+msgid "Templates used for the renewal management tool"
+msgstr ""
+
+#: lang/blade-translations/task/static.php:16
+msgid "All tasks"
+msgstr ""
+
+#: lang/blade-translations/template-members/static.php:16
+#: resources/views/template-members/create.blade.php:3
+msgid "New template"
+msgstr ""
+
+#: lang/blade-translations/template-members/static.php:32
+#: resources/views/template-members/create.blade.php:25
+#: resources/views/template-members/show.blade.php:17
+msgid "Format"
+msgstr ""
+
+#: lang/blade-translations/template-members/static.php:35
+#: resources/views/template-members/create.blade.php:28
+#: resources/views/template-members/show.blade.php:20
+msgid "Text"
+msgstr ""
+
+#: lang/blade-translations/template-members/static.php:46
+#: resources/views/template-members/create.blade.php:42
+#: resources/views/template-members/show.blade.php:30
+msgid "Subject"
+msgstr ""
+
+#: lang/blade-translations/template-members/static.php:49
+#: resources/views/template-members/create.blade.php:46
+#: resources/views/template-members/show.blade.php:34
+msgid "Body"
+msgstr ""
+
+#: lang/blade-translations/template-members/static.php:51
+#: resources/views/template-members/create.blade.php:52
+msgid "Create template"
+msgstr ""
+
+#: lang/blade-translations/template-members/static.php:53
+#: resources/views/template-members/index.blade.php:5
+msgid "Email Templates"
+msgstr ""
+
+#: lang/blade-translations/template-members/static.php:55
+msgid "Document member"
+msgstr ""
+
+#: lang/blade-translations/template-members/static.php:57
+#: resources/views/template-members/index.blade.php:6
+msgid "Create a new member of templates"
+msgstr ""
+
+#: lang/blade-translations/template-members/static.php:61
+#: resources/views/template-members/index.blade.php:47
+msgid "Template member information"
+msgstr ""
+
+#: lang/blade-translations/template-members/static.php:63
+#: resources/views/template-members/index.blade.php:51
+msgid "Click on member to view and edit details"
+msgstr ""
+
+#: lang/blade-translations/template-members/static.php:65
+msgid "Delete template"
+msgstr ""
+
+#: lang/blade-translations/type/static.php:20
+#: resources/views/type/create.blade.php:7
+msgid "Type name"
+msgstr ""
+
+#: lang/blade-translations/type/static.php:24
+#: resources/views/type/index.blade.php:5
+msgid "Matter Types"
+msgstr ""
+
+#: lang/blade-translations/type/static.php:29
+#: resources/views/type/index.blade.php:6
+msgid "Create Matter Type"
+msgstr ""
+
+#: lang/blade-translations/type/static.php:33
+#: resources/views/type/index.blade.php:36
+msgid "Type Information"
+msgstr ""
+
+#: lang/blade-translations/type/static.php:41
+msgid "the matter type"
+msgstr ""
+
+#: lang/blade-translations/user/static.php:16
+#: resources/views/user/create.blade.php:7
+#: resources/views/user/create.blade.php:8
+msgid ""
+"If the user exists in the actor table, first convert the actor to a user by "
+"supplying a login"
+msgstr ""
+
+#: lang/blade-translations/user/static.php:18
+#: resources/views/user/create.blade.php:8
+msgid "here"
+msgstr ""
+
+#: lang/blade-translations/user/static.php:20
+msgid "Min 8 characters with a-z, A-Z, 0-9 and special"
+msgstr ""
+
+#: lang/blade-translations/user/static.php:26
+msgid "Select a DB role with the desired permissions"
+msgstr ""
+
+#: lang/blade-translations/user/static.php:31
+msgid "Select user's company"
+msgstr ""
+
+#: lang/blade-translations/user/static.php:41
+#: resources/views/user/index.blade.php:5
+msgid "Users"
+msgstr ""
+
+#: lang/blade-translations/user/static.php:43
+msgid "Create User"
+msgstr ""
+
+#: lang/blade-translations/user/static.php:45
+#: resources/views/user/index.blade.php:6
+msgid "Create user"
+msgstr ""
+
+#: lang/blade-translations/user/static.php:53
+msgid "User data"
+msgstr ""
+
+#: lang/blade-translations/user/static.php:55
+#: resources/views/user/index.blade.php:45
+msgid "User information"
+msgstr ""
+
+#: lang/blade-translations/user/static.php:57
+#: resources/views/user/index.blade.php:49
+msgid "Click on user name to view and edit details"
+msgstr ""
+
+#: resources/views/actor/create.blade.php:5
+msgid "Name *"
+msgstr ""
+
+#: resources/views/actor/create.blade.php:20
+#: resources/views/actor/show.blade.php:103
+#: resources/views/documents/create.blade.php:14
+msgid "Default role"
+msgstr ""
+
+#: resources/views/actor/show.blade.php:122
+msgid ">VAT no."
+msgstr ""
+
+#: resources/views/category/create.blade.php:7
+msgid "Category name"
+msgstr ""
+
+#: resources/views/category/create.blade.php:11
+msgid "Reference prefix"
+msgstr ""
+
+#: resources/views/category/index.blade.php:6
+msgid "Create a new Category"
+msgstr ""
+
+#: resources/views/classifier_type/index.blade.php:6
+msgid "Create a new Classifier Type"
+msgstr ""
+
+#: resources/views/default_actor/index.blade.php:6
+msgid "Add a new default actor"
+msgstr ""
+
+#: resources/views/documents/index.blade.php:5
+msgid "Document Classes"
+msgstr ""
+
+#: resources/views/documents/index.blade.php:6
+msgid "Create a new class of templates"
+msgstr ""
+
+#: resources/views/documents/select.blade.php:4
+msgid "Documents for "
+msgstr ""
+
+#: resources/views/documents/select.blade.php:48
+msgid "Action"
+msgstr ""
+
+#: resources/views/documents/select2.blade.php:16
+msgid "Send to:"
+msgstr ""
+
+#: resources/views/documents/select2.blade.php:19
+msgid "CC:"
+msgstr ""
+
+#: resources/views/email/renewalCall.blade.php:61
+#, python-format
+msgid "Offre valide jusqu'au %s."
+msgstr ""
+
+#: resources/views/eventname/create.blade.php:7
+msgid "Is task"
+msgstr ""
+
+#: resources/views/eventname/create.blade.php:21
+#: resources/views/fee/index.blade.php:13
+msgid "Normal"
+msgstr ""
+
+#: resources/views/eventname/create.blade.php:22
+msgid "Is status event"
+msgstr ""
+
+#: resources/views/eventname/create.blade.php:28
+#: resources/views/eventname/create.blade.php:35
+msgid "Default responsible"
+msgstr ""
+
+#: resources/views/eventname/create.blade.php:34
+#: resources/views/eventname/create.blade.php:41
+msgid "Use matter responsible"
+msgstr ""
+
+#: resources/views/eventname/index.blade.php:6
+msgid "Create a new event name"
+msgstr ""
+
+#: resources/views/eventname/show.blade.php:7
+msgid "Is Task"
+msgstr ""
+
+#: resources/views/eventname/show.blade.php:13
+msgid "Is Status"
+msgstr ""
+
+#: resources/views/eventname/show.blade.php:19
+msgid "Is Killer"
+msgstr ""
+
+#: resources/views/eventname/show.blade.php:27
+msgid "Default Responsible"
+msgstr ""
+
+#: resources/views/eventname/show.blade.php:30
+msgid "Use Matter Responsible"
+msgstr ""
+
+#: resources/views/fee/create.blade.php:28
+msgid "From:"
+msgstr ""
+
+#: resources/views/fee/index.blade.php:14
+msgid "Grace period"
+msgstr ""
+
+#: resources/views/home-js.blade.php:37
+msgid "No renewals selected for clearing!"
+msgstr ""
+
+#: resources/views/home-js.blade.php:59
+msgid "No tasks selected for clearing!"
+msgstr ""
+
+#: resources/views/home.blade.php:21
+msgid "Create matter"
+msgstr ""
+
+#: resources/views/home.blade.php:28
+msgid "Count"
+msgstr ""
+
+#: resources/views/home.blade.php:31
+msgid "New"
+msgstr ""
+
+#: resources/views/home.blade.php:57
+msgid "Users tasks"
+msgstr ""
+
+#: resources/views/home.blade.php:66
+msgid "Open"
+msgstr ""
+
+#: resources/views/home.blade.php:67
+msgid "Hottest"
+msgstr ""
+
+#: resources/views/home.blade.php:99
+msgid "Open tasks"
+msgstr ""
+
+#: resources/views/home.blade.php:105 resources/views/home.blade.php:106
+msgid "Everyone"
+msgstr ""
+
+#: resources/views/home.blade.php:122 resources/views/home.blade.php:125
+#: resources/views/home.blade.php:161 resources/views/home.blade.php:166
+msgid "Clear selected on"
+msgstr ""
+
+#: resources/views/home.blade.php:156 resources/views/home.blade.php:160
+msgid "Open renewals"
+msgstr ""
+
+#: resources/views/layouts/app.blade.php:196
+msgid "Token expired. Refresh the page"
+msgstr ""
+
+#: resources/views/layouts/app.blade.php:261
+msgid "Deleting the matter. Continue anyway?"
+msgstr ""
+
+#: resources/views/layouts/app.blade.php:284
+msgid "Deleting the event will also delete the linked tasks. Continue anyway?"
+msgstr ""
+
+#: resources/views/layouts/app.blade.php:391
+msgid "Continue anyway?"
+msgstr ""
+
+#: resources/views/layouts/app.blade.php:391
+msgid "Deleting  "
+msgstr ""
+
+#: resources/views/layouts/app.blade.php:395
+msgid "Check the dependencies. Database said: "
+msgstr ""
+
+#: resources/views/layouts/app.blade.php:395
+msgid "Couldn't delete "
+msgstr ""
+
+#: resources/views/layouts/app.blade.php:405
+msgid ""
+"Regenerating the tasks will delete all the existing automatically created "
+"tasks and renewals for this event.\n"
+"Past tasks will not be recreated - make sure they have been dealt with.\n"
+"Continue anyway?"
+msgstr ""
+
+#: resources/views/matter/create.blade.php:73
+msgid "matter"
+msgstr ""
+
+#: resources/views/matter/show-js.blade.php:211
+msgid "Only DOCX files can be processed for the moment"
+msgstr ""
+
+#: resources/views/matter/show.blade.php:46
+msgid "Expiry:"
+msgstr ""
+
+#: resources/views/matter/show.blade.php:51
+msgid "Responsible:"
+msgstr ""
+
+#: resources/views/matter/show.blade.php:375
+msgid "Drop Zone"
+msgstr ""
+
+#: resources/views/matter/show.blade.php:375
+msgid "File merge"
+msgstr ""
+
+#: resources/views/matter/tasks.blade.php:9
+msgid "OK"
+msgstr ""
+
+#: resources/views/renewals/index.blade.php:318
+msgid "Download XML order to pay<"
+msgstr ""
+
+#: resources/views/renewals/index.blade.php:427
+msgid "The list is empty"
+msgstr ""
+
+#: resources/views/renewals/logs.blade.php:5
+msgid "Renewal logs"
+msgstr ""
+
+#: resources/views/role/index.blade.php:6
+msgid "Create a new Role"
+msgstr ""
+
+#: resources/views/rule/show.blade.php:18
+#: resources/views/rule/show.blade.php:64
+msgid "Triggered by"
+msgstr ""
+
+#: resources/views/rule/show.blade.php:42
+msgid "Clears task"
+msgstr ""
+
+#: resources/views/rule/show.blade.php:46
+msgid "Deletes task"
+msgstr ""
+
+#: resources/views/rule/show.blade.php:50
+msgid "Enabled"
+msgstr ""
+
+#: resources/views/rule/show.blade.php:86
+msgid "Apply if"
+msgstr ""
+
+#: resources/views/rule/show.blade.php:90
+msgid "Abort if"
+msgstr ""
+
+#: resources/views/type/index.blade.php:6
+msgid "Create a new Matter Type"
+msgstr ""
+
+#: resources/views/welcome.blade.php:71
+msgid "Home"
+msgstr ""
+
+#: resources/views/welcome.blade.php:87
+msgid "IP rights portfolio manager and docketing system"
+msgstr ""
+
+#: resources/views/welcome.blade.php:91
+msgid "Documentation"
+msgstr ""
+
+#: resources/views/welcome.blade.php:92
+msgid "Submit bugs"
+msgstr ""
+
+#: resources/views/welcome.blade.php:93
+msgid "Retreive sources on GitHub"
+msgstr ""

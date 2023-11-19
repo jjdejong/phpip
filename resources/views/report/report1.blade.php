@@ -50,13 +50,13 @@
             
             @switch( $matter['Cat'])
                 @case('PAT')     
-                    <h1>Patents</h1><br>
+                    <h1>{{('Patents')}}</h1><br>
                         @break
                 @case('TM')     
-                    <h1>Trademarks</h1><br>
+                    <h1>{{('Trademarks')}}</h1><br>
                         @break
                 @case('DM')     
-                    <h1>Design Patents</h1><br>
+                    <h1>{{('Design Patents')}}</h1><br>
             @endswitch
             
             @php
@@ -86,24 +86,24 @@
                 <h2>{!! $matter['Title3'] !!}</h2><br>
             @endif
             
-            Titulaire: {!! $matter['Applicant'] !!}<br>
+            {{('Owner:')}} {!! $matter['Applicant'] !!}<br>
             
             @if ( $matter['Inventor1'] !== "")
-                Inventeur : {!! $matter['Inventor1'] !!}<br>
+                {{('Inventor:')}} {!! $matter['Inventor1'] !!}<br>
             @endif     
             
             <table class="inner-body" cellpadding="0" cellspacing="0">
                 <!-- Body content -->
                 <thead>
                     <tr>
-                        <th>Your ref.</th>
-                        <th>Country code</th>
-                        <th>Filing</th>
-                        <th>Publication</th>
-                        <th>Grant</th>
-                        <th>Status</th>
-                        <th>Next renewal</th>
-                        <th>Our ref.</th>
+                        <th>{{('Your ref.')}}</th>
+                        <th>{{('Country code')}}</th>
+                        <th>{{('Filing')}}</th>
+                        <th>{{('Publication')}}</th>
+                        <th>{{('Grant')}}</th>
+                        <th>{{('Status')}}</th>
+                        <th>{{('Next renewal')}}</th>
+                        <th>{{('Our ref.')}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -121,7 +121,7 @@
                 <td>{!! $matter['GrtNo'] !!}<br /><span class="tdate">{!! empty($matter['Granted'])? "" : Carbon\Carbon::parse($matter['Granted'])->locale('en_US')->isoFormat('LL') !!}</span></td>
                 <td>
                     @if (  $matter['dead'] == 1 )
-                        Fermé : {!! $matter['Status'] !!}
+                    {{ __('Dead') }} {!! $matter['Status'] !!}
                     @else
                         {!! $matter['Status'] !!}
                     @endif

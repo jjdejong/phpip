@@ -6,6 +6,7 @@ use App\Actor;
 use App\EventClassLnk;
 use App\EventName;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 class EventNameController extends Controller
@@ -50,7 +51,7 @@ class EventNameController extends Controller
 
     public function show(EventName $eventname)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('event_name');
         $eventname->load(['countryInfo:iso,name', 'categoryInfo:code,category', 'default_responsibleInfo:id,name']);

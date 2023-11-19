@@ -1,35 +1,35 @@
 <div class="card">
   <table class="table table-striped" data-resource="/user/{{ $userInfo->id }}">
     <tr>
-      <th title="{{ $userComments['name'] }}">Name</th>
+      <th title="{{ __($userComments['name']) }}">{{ __('Name') }}</th>
       <td><input class="noformat form-control" name="name" value="{{ $userInfo->name }}"></td>
     </tr>
     <tr>
-      <th title="{{ $userComments['login'] }}">Login</th>
+      <th title="{{ __($userComments['login']) }}">{{ __('Login') }}</th>
       <td><input type="text" class="noformat form-control" name="login" value="{{ $userInfo->login }}"></td>
     </tr>
     <tr>
-      <th title="{{ $userComments['password'] }}">Password</th>
+      <th title="{{ __($userComments['password']) }}">{{ __('Password') }}</th>
       <td><input type="password" class="noformat form-control" name="password" placeholder="***"></td>
     </tr>
     <tr>
-      <th title="{{ $userComments['default_role'] }}">Role</th>
+      <th title="{{ __($userComments['default_role']) }}">{{ __('Role') }}</th>
       <td><input type="text" class="noformat form-control" name="default_role" data-ac="/dbrole/autocomplete" data-aclength="0" value="{{ empty($userInfo->roleInfo) ? '' : $userInfo->roleInfo->name }}" autocomplete="off"></td>
     </tr>
     <tr>
-      <th>Email</th>
+      <th>{{ __('Email') }}</th>
       <td><input type='text' class="noformat form-control" name="email" value="{{ $userInfo->email }}" required></td>
     </tr>
     <tr>
-      <th title="{{ $userComments['company_id'] }}">Company</th>
+      <th title="{{ __($userComments['company_id']) }}">{{ __('Company') }}</th>
       <td><input type="text" class="noformat form-control" name="company_id" data-ac="/actor/autocomplete" value="{{ empty($userInfo->company) ? '' : $userInfo->company->name }}" autocomplete="off"></td>
     </tr>
     <tr>
-      <th>{{ _i('Phone') }}</th>
+      <th>{{ __('Phone') }}</th>
       <td><input type='text' class="noformat form-control" name="phone" value="{{ $userInfo->phone }}"></td>
     </tr>
     <tr>
-      <th>{{ _i('Notes') }}</th>
+      <th>{{ __('Notes') }}</th>
       <td><textarea class="noformat form-control" name="notes">{{ $userInfo->notes }}</textarea></td>
     </tr>
   </table>

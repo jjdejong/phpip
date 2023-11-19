@@ -6,6 +6,9 @@ use App\Matter;
 use App\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
+
 
 class HomeController extends Controller
 {
@@ -26,7 +29,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         // Count matters per categories
         $categories = Matter::getCategoryMatterCount();
         $taskscount = Task::getUsersOpenTaskCount();

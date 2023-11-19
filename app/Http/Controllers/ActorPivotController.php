@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actor;
 use App\ActorPivot;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -78,7 +79,7 @@ class ActorPivotController extends Controller
 
     public function usedIn(int $actor)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $actorpivot = new ActorPivot();
         $matter_dependencies = $actorpivot->with('matter', 'role')->where('actor_id', $actor)->get()->take(50);
         $actor_model = new Actor();

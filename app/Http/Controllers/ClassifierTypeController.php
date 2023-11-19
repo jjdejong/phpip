@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actor;
 use App\ClassifierType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 class ClassifierTypeController extends Controller
@@ -47,7 +48,7 @@ class ClassifierTypeController extends Controller
 
     public function show(ClassifierType $classifier_type)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('classifier_type');
         $classifier_type->load(['category:code,category']);

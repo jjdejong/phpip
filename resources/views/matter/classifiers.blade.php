@@ -4,9 +4,9 @@ $classifiers = $matter->classifiers->groupBy('type_name');
 <table class="table table-sm table-borderless">
   <thead class="table-light">
     <tr>
-      <th class="border-top-0">{{ _i("Type/Value") }}</th>
-      <th class="border-top-0">{{ _i("URL") }}</th>
-      <th class="border-top-0">{{ _i("Link to matter") }}</th>
+      <th class="border-top-0">{{ __("Type/Value") }}</th>
+      <th class="border-top-0">{{ __("URL") }}</th>
+      <th class="border-top-0">{{ __("Link to matter") }}</th>
       <th class="border-top-0">
         <a href="#addClassifierRow" data-bs-toggle="collapse">
           <span class="float-end" title="Add classifier">&oplus;</span>
@@ -30,7 +30,7 @@ $classifiers = $matter->classifiers->groupBy('type_name');
       <td><input type="text" class="form-control noformat" name="lnk_matter_id" data-ac="/matter/autocomplete" value="{{ $classifier->lnk_matter_id ? $classifier->linkedMatter->uid : '' }}"></td>
       <td>
         <input type="hidden" name="display_order" value="{{ $classifier->display_order }}" />
-        <a href="#" class="hidden-action text-danger" id="deleteClassifier" title="{{ _i('Delete classifier') }}">
+        <a href="#" class="hidden-action text-danger" id="deleteClassifier" title="{{ __('Delete classifier') }}">
           &CircleMinus;
         </a>
       </td>
@@ -46,17 +46,17 @@ $classifiers = $matter->classifiers->groupBy('type_name');
           <div class="row">
             <div class="col p-1">
               <input type="hidden" name="type_code" value="">
-              <input type="text" class="form-control form-control-sm" size="16" placeholder="{{ _i('Type') }}" data-ac="/classifier-type/autocomplete/0" data-actarget="type_code" data-aclength="0">
+              <input type="text" class="form-control form-control-sm" size="16" placeholder="{{ __('Type') }}" data-ac="/classifier-type/autocomplete/0" data-actarget="type_code" data-aclength="0">
             </div>
             <div class="col p-1 hideForFile">
-              <input type="text" class="form-control form-control-sm px-1" name="value" placeholder="{{ _i('Value') }}">
+              <input type="text" class="form-control form-control-sm px-1" name="value" placeholder="{{ __('Value') }}">
             </div>
             <div class="col p-1 hideForFile">
               <input type="url" class="form-control form-control-sm px-1" name="url" placeholder="URL">
             </div>
             <div class="col p-1 hideForFile">
               <input type="hidden" name="lnk_matter_id" value="">
-              <input type="text" class="form-control form-control-sm px-1" placeholder="{{ _i('Linked to') }}" data-ac="/matter/autocomplete" data-actarget="lnk_matter_id">
+              <input type="text" class="form-control form-control-sm px-1" placeholder="{{ __('Linked to') }}" data-ac="/matter/autocomplete" data-actarget="lnk_matter_id">
             </div>
             <div class="col-7 p-1 d-none" id="forFile">
               <input type="file" class="form-control form-control-sm" name="image">

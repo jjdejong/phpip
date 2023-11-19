@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actor;
 use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
@@ -48,7 +49,7 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('matter_category');
         $category->load(['displayWithInfo:code,category']);
