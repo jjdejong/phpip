@@ -13,17 +13,17 @@
       @php
         $ncols += 3;
       @endphp
-      <th>{{ _i("Cost") }}</th>
-      <th>{{ _i("Fee") }}</th>
-      <th>{{ _i("Cur.") }}</th>
-      {{-- <th>{{ _i("Time") }}</th> --}}
+      <th>{{ __("Cost") }}</th>
+      <th>{{ __("Fee") }}</th>
+      <th>{{ __("Cur.") }}</th>
+      {{-- <th>{{ __("Time") }}</th> --}}
       @endif
       @endcannot
-      <th>{{ _i("By") }}</th>
-      <th>{{ _i("Notes") }}</th>
+      <th>{{ __("By") }}</th>
+      <th>{{ __("Notes") }}</th>
       <th style="width: 24px;">&nbsp;</th>
       @cannot('client')
-      <th>{{ _i("Email") }}</th>
+      <th>{{ __("Email") }}</th>
       @endcannot
     </tr>
   </thead>
@@ -116,8 +116,8 @@
         <div class="input-group">
           <input type="hidden" name="code">
           <input type="text" class="form-control form-control-sm" placeholder="Task" data-ac="/event-name/autocomplete/1?category={{ $matter->category_code }}" data-actarget="code">
-          <input type="text" class="form-control form-control-sm" name="detail" placeholder="{{ _i('Detail') }}">
-          <input type="text" class="form-control form-control-sm" placeholder="{{ _i('Due date (xx/xx/yyyy)') }}" name="due_date">
+          <input type="text" class="form-control form-control-sm" name="detail" placeholder="{{ __('Detail') }}">
+          <input type="text" class="form-control form-control-sm" placeholder="{{ __('Due date (xx/xx/yyyy)') }}" name="due_date">
           <input type="hidden" name="assigned_to">
           <input type="text" class="form-control form-control-sm" placeholder="Assigned to" data-ac="/user/autocomplete" data-actarget="assigned_to">
           <input type="text" class="form-control form-control-sm" name="notes" placeholder="Notes">

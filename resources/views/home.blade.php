@@ -16,7 +16,7 @@
   <div class="col-4">
     <div class="card border-info">
       <div class="card-header text-white bg-info p-1">
-        <span class="lead">{{ _i("Categories") }}</span>
+        <span class="lead">{{ __("Categories") }}</span>
         @canany(['admin', 'readwrite'])
         <a href="/matter/create?operation=new" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" class="btn btn-primary float-end" title="Create Matter">Create matter</a>
         @endcanany
@@ -25,7 +25,7 @@
         <table  class="table table-striped table-sm">
           <tr>
             <th></th>
-            <th>{{ _i("Count") }}</th>
+            <th>{{ __("Count") }}</th>
             <td>
               @canany(['admin', 'readwrite'])
               <span class="float-end text-secondary">New</span>
@@ -35,7 +35,7 @@
           @foreach ($categories as $group)
           <tr class="reveal-hidden">
             <td class="py-0">
-              <a href="/matter?Cat={{ $group->category_code }}">{{ _i($group->category) }}</a>
+              <a href="/matter?Cat={{ $group->category_code }}">{{ __($group->category) }}</a>
             </td>
             <td class="py-0">
               {{ $group->total }}
@@ -54,7 +54,7 @@
     </div>
     <div class="card border-info mt-1">
       <div class="card-header text-white bg-info p-1">
-        <span class="lead">{{ _i("Users tasks") }}</span>
+        <span class="lead">{{ __("Users tasks") }}</span>
         @canany(['admin', 'readwrite'])
         <button class="btn btn-transparent text-info float-end" disabled>I</button> {{--  This invisible button is only for improving the layout! --}}
         @endcanany
@@ -63,8 +63,8 @@
         <table class="table table-striped table-sm">
           <tr>
             <th></th>
-            <th>{{ _i("Open") }}</th>
-            <th>{{ _i("Hottest") }}</th>
+            <th>{{ __("Open") }}</th>
+            <th>{{ __("Hottest") }}</th>
           </tr>
         @foreach ($taskscount as $group)
           @if ($group->no_of_tasks > 0)
@@ -96,7 +96,7 @@
       <div class="card-header text-white bg-primary p-1">
         <form class="row">
           <div class="lead col-2">
-            {{ _i("Open tasks") }}
+            {{ __("Open tasks") }}
           </div>
           @cannot('client')
           <div class="col-6">
@@ -130,17 +130,17 @@
           <div class="col">
           </div>
           <div class="col-2">
-            {{ _i("Matter") }}
+            {{ __("Matter") }}
           </div>
           <div class="col">
-            {{ _i("Description") }}
+            {{ __("Description") }}
           </div>
           <div class="col-2">
-            {{ _i("Due date") }}
+            {{ __("Due date") }}
           </div>
           @canany(['admin', 'readwrite'])
           <div class="col-1">
-            {{ _i("Clear") }}
+            {{ __("Clear") }}
           </div>
           @endcanany
         </div>
@@ -153,7 +153,7 @@
       <div class="card-header text-white bg-primary p-1">
         <div class="row">
           <div class="lead col-8">
-            {{ _i("Open renewals") }}
+            {{ __("Open renewals") }}
           </div>
           @canany(['admin', 'readwrite'])
           <div class="col">
@@ -168,17 +168,17 @@
           <div class="col">
           </div>
           <div class="col-2">
-            {{ _i("Matter") }}
+            {{ __("Matter") }}
           </div>
           <div class="col">
-            {{ _i("Description") }}
+            {{ __("Description") }}
           </div>
           <div class="col-2">
-            {{ _i("Due date") }}
+            {{ __("Due date") }}
           </div>
           @canany(['admin', 'readwrite'])
           <div class="col-1">
-            {{ _i("Clear") }}
+            {{ __("Clear") }}
           </div>
           @endcanany
         </div>

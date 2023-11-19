@@ -26,19 +26,19 @@
           <td><input type="text" class="noformat form-control" name="display_name" value="{{ $actorInfo->display_name }}" placeholder="-"></td>
         </tr>
         <tr>
-          <th>{{ _i("Address") }}</th>
+          <th>{{ __("Address") }}</th>
           <td><textarea class="noformat form-control" name="address">{{ $actorInfo->address }}</textarea></td>
         </tr>
         <tr>
-          <th>{{ _i("Country") }}</th>
+          <th>{{ __("Country") }}</th>
           <td><input type='text' class="noformat form-control" name="country" data-ac="/country/autocomplete" value="{{ empty($actorInfo->countryInfo) ? '' : $actorInfo->countryInfo->name }}" placeholder="-" autocomplete="off"></td>
         </tr>
         <tr>
-          <th>{{ _i("Nationality") }}</th>
+          <th>{{ __("Nationality") }}</th>
           <td><input type="text" class="noformat form-control" name="nationality" data-ac="/country/autocomplete" value="{{ empty($actorInfo->nationalityInfo) ? '' : $actorInfo->nationalityInfo->name }}" placeholder="-" autocomplete="off"></td>
         </tr>
         <tr>
-          <th>{{ _i("Language") }}</th>
+          <th>{{ __("Language") }}</th>
           <td><input type="text" class="noformat form-control" name="language" placeholder="fr/en/de" value="{{ $actorInfo->language }}" autocomplete="off"></td>
         </tr>
         <tr>
@@ -62,27 +62,27 @@
     <fieldset class="tab-pane fade" id="actorContact">
       <table class="table table-striped">
         <tr>
-          <th>{{ _i("Address mailing") }}</th>
+          <th>{{ __("Address mailing") }}</th>
           <td><textarea class="noformat form-control" name="address_mailing">{{ $actorInfo->address_mailing }}</textarea></td>
         </tr>
         <tr>
-          <th>{{ _i("Country mailing") }}</th>
+          <th>{{ __("Country mailing") }}</th>
           <td><input type='text' class="noformat form-control" name="country_mailing" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_mailingInfo ) ? '' : $actorInfo->country_mailingInfo->name }}" placeholder="-" autocomplete="off"></td>
         </tr>
         <tr>
-          <th>{{ _i("Address billing") }}</th>
+          <th>{{ __("Address billing") }}</th>
           <td><textarea class="noformat form-control" name="address_billing">{{ $actorInfo->address_billing }}</textarea></td>
         </tr>
         <tr>
-          <th>{{ _i("Country billing") }}</th>
+          <th>{{ __("Country billing") }}</th>
           <td><input class="noformat form-control" name="country_billing" data-ac="/country/autocomplete" value="{{ empty($actorInfo->country_billingInfo ) ? '' : $actorInfo->country_billingInfo->name }}" placeholder="-" autocomplete="off"></td>
         </tr>
         <tr>
-          <th>{{ _i("Email") }}</th>
+          <th>{{ __("Email") }}</th>
           <td><input type='email' class="noformat form-control" name="email" value="{{ $actorInfo->email }}" placeholder="-"></td>
         </tr>
         <tr>
-          <th>{{ _i("Phone") }}</th>
+          <th>{{ __("Phone") }}</th>
           <td><input type='text' class="noformat form-control" name="phone" value="{{ $actorInfo->phone }}" placeholder="-"></td>
         </tr>
       </table>
@@ -104,7 +104,7 @@
               Enter a multiplier rate (e.g. 0.5) <br>or a fixed fee (e.g. 150)
             </div>
           </th>
-          <td><input type="text" class="noformat form-control" name="ren_discount" value="{{ $actorInfo->ren_discount ? $actorInfo->ren_discount : '' }}" placeholder="{{ _i('Fixed fee or rate') }}"></td>
+          <td><input type="text" class="noformat form-control" name="ren_discount" value="{{ $actorInfo->ren_discount ? $actorInfo->ren_discount : '' }}" placeholder="{{ __('Fixed fee or rate') }}"></td>
         </tr>
         <tr>
           <th title="{{ $actorComments['warn'] }}">Warn</th>

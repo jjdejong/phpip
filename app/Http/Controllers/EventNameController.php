@@ -50,7 +50,7 @@ class EventNameController extends Controller
 
     public function show(EventName $eventname)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('event_name');
         $eventname->load(['countryInfo:iso,name', 'categoryInfo:code,category', 'default_responsibleInfo:id,name']);

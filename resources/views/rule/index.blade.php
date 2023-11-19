@@ -29,7 +29,7 @@
           @foreach ($ruleslist as $rule)
           <tr data-id="{{ $rule->id }}" class="reveal-hidden">
             <td>
-              <a href="/rule/{{ $rule->id }}" data-panel="ajaxPanel" title="{{ _i('Rule data') }}">
+              <a href="/rule/{{ $rule->id }}" data-panel="ajaxPanel" title="{{ __('Rule data') }}">
                 {{ $rule->taskInfo->name }}
               </a>
             </td>
@@ -53,11 +53,11 @@
   <div class="col-4">
     <div class="card border-info">
       <div class="card-header bg-info text-light">
-        {{ _i('Rule information') }}
+        {{ __('Rule information') }}
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          {{ _i('Click on rule to view and edit details') }}
+          {{ __('Click on rule to view and edit details') }}
         </div>
       </div>
     </div>

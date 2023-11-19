@@ -78,7 +78,7 @@ class ActorPivotController extends Controller
 
     public function usedIn(int $actor)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $actorpivot = new ActorPivot();
         $matter_dependencies = $actorpivot->with('matter', 'role')->where('actor_id', $actor)->get()->take(50);
         $actor_model = new Actor();

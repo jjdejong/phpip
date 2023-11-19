@@ -47,7 +47,7 @@ class MatterTypeController extends Controller
 
     public function show(MatterType $type)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('matter_type');
 

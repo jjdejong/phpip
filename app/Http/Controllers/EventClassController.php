@@ -14,7 +14,7 @@ class EventClassController extends Controller
 
     public function destroy(int $lnk)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         if (EventClassLnk::destroy($lnk) == 1) {
             return response()->json(['success' => 'Link deleted']);
         } else {

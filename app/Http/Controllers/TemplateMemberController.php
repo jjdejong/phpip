@@ -60,7 +60,7 @@ class TemplateMemberController extends Controller
 
     public function store(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $request->validate([
             'class_id' => 'required',
             'language' => 'required',
@@ -73,7 +73,7 @@ class TemplateMemberController extends Controller
 
     public function show(TemplateMember $templateMember)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('template_members');
         $templateMember->with(['class', 'style', 'language']);

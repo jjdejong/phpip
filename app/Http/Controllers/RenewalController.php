@@ -354,7 +354,7 @@ class RenewalController extends Controller
 
     public function topay(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         if (isset($request->task_ids)) {
             Task::whereIn('id', $request->task_ids)->update(['step' => 4, 'invoice_step' => 1]);
             // For logs
@@ -384,7 +384,7 @@ class RenewalController extends Controller
 
     public function invoice(Request $request, int $toinvoice)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
@@ -599,7 +599,7 @@ class RenewalController extends Controller
      */
     public function done(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
@@ -641,7 +641,7 @@ class RenewalController extends Controller
      */
     public function receipt(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
@@ -682,7 +682,7 @@ class RenewalController extends Controller
      */
     public function closing(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
@@ -728,7 +728,7 @@ class RenewalController extends Controller
      */
     public function abandon(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
@@ -772,7 +772,7 @@ class RenewalController extends Controller
      */
     public function lapsing(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
@@ -816,7 +816,7 @@ class RenewalController extends Controller
      */
     public function renewalOrder(Request $request)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $tids = $request->task_ids;
         $procedure = '';
         $prev_procedure = '';

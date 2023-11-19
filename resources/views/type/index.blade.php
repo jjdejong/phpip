@@ -19,7 +19,7 @@
           @foreach ($matter_types as $type)
           <tr class="reveal-hidden" data-id="{{ $type->code }}">
             <td>
-              <a href="/type/{{ $type->code }}" data-panel="ajaxPanel" title="{{ _i('Type info') }}">
+              <a href="/type/{{ $type->code }}" data-panel="ajaxPanel" title="{{ __('Type info') }}">
                 {{ $type->code }}
               </a>
             </td>
@@ -37,7 +37,7 @@
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          {{ _i('Click on type to view and edit details') }}
+          {{ __('Click on type to view and edit details') }}
         </div>
       </div>
     </div>

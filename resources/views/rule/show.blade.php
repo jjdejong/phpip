@@ -11,48 +11,48 @@
     <fieldset class="tab-pane fade show active" id="ruleMain">
       <table class="table">
         <tr>
-          <th><label class="required-field" title="{{ $ruleComments['task'] }}">{{ _i('Task') }}</label></th>
+          <th><label class="required-field" title="{{ $ruleComments['task'] }}">{{ __('Task') }}</label></th>
           <td><input type="text" class="form-control noformat" name="task" data-ac="/event-name/autocomplete/1?category={{ $ruleInfo->for_category }}" placeholder="{{ $ruleInfo->taskInfo->name }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['trigger_event'] }}">{{ _i('Triggered by') }}</label></th>
+          <th><label title="{{ $ruleComments['trigger_event'] }}">{{ __('Triggered by') }}</label></th>
           <td><input type="text" class="form-control noformat" name="trigger_event" data-ac="/event-name/autocomplete/0?category={{ $ruleInfo->for_category }}" placeholder="{{ $ruleInfo->trigger->name }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['detail'] }}">{{ _i('Detail') }}</label></th>
+          <th><label title="{{ $ruleComments['detail'] }}">{{ __('Detail') }}</label></th>
           <td><input class="form-control noformat" name="detail" value="{{ $ruleInfo->detail }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['for_category'] }}">{{ _i('Category') }}</label></th>
+          <th><label title="{{ $ruleComments['for_category'] }}">{{ __('Category') }}</label></th>
           <td><input type="text" class="form-control noformat" name="for_category" data-ac="/category/autocomplete" value="{{ $ruleInfo->category->category }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['for_country'] }}">{{ _i('Country') }}</label></th>
+          <th><label title="{{ $ruleComments['for_country'] }}">{{ __('Country') }}</label></th>
           <td><input type="text" class="form-control noformat" name="for_country" data-ac="/country/autocomplete" value="{{ $ruleInfo->country->name ?? '' }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['for_origin'] }}">{{ _i('Origin') }}</label></th>
+          <th><label title="{{ $ruleComments['for_origin'] }}">{{ __('Origin') }}</label></th>
           <td><input type="text" class="form-control noformat" name="for_origin" data-ac="/country/autocomplete" value="{{ $ruleInfo->origin->name ?? '' }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['for_type'] }}">{{ _i('Type') }}</label></th>
+          <th><label title="{{ $ruleComments['for_type'] }}">{{ __('Type') }}</label></th>
           <td><input type="text" class="form-control noformat" name="for_type" data-ac="/type/autocomplete" value="{{ $ruleInfo->type->type ?? '' }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['clear_task'] }}">{{ _i('Clears task') }}</label></th>
+          <th><label title="{{ $ruleComments['clear_task'] }}">{{ __('Clears task') }}</label></th>
           <td><input class="noformat" type="checkbox" name="clear_task" {{ $ruleInfo->clear_task ? 'checked' : '' }}></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['delete_task'] }}">{{ _i('Deletes task') }}</label></th>
+          <th><label title="{{ $ruleComments['delete_task'] }}">{{ __('Deletes task') }}</label></th>
           <td><input class="noformat" type="checkbox" name="delete_task" {{ $ruleInfo->delete_task ? 'checked' : '' }}></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['active'] }}">{{ _i('Enabled') }}</label></th>
+          <th><label title="{{ $ruleComments['active'] }}">{{ __('Enabled') }}</label></th>
           <td><input class="noformat" type="checkbox" name="active" {{ $ruleInfo->active ? 'checked' : '' }}></td>
         </tr>
         <tr>
           <td colspan="4">
-            <label>{{ _i('Notes') }}</label>
+            <label>{{ __('Notes') }}</label>
             <textarea class="form-control noformat" name="notes" rows="4">{{ $ruleInfo->notes }}</textarea>
           </td>
         </tr>
@@ -61,45 +61,45 @@
     <fieldset class="tab-pane fade" id="ruleConditions">
       <table class="table">
         <tr>
-          <th colspan="2"><label title="{{ $ruleComments['trigger_event'] }}">{{ _i('Triggered by') }}</label></th>
+          <th colspan="2"><label title="{{ $ruleComments['trigger_event'] }}">{{ __('Triggered by') }}</label></th>
           <td colspan="2"><input type="text" class="form-control noformat" name="trigger_event" data-ac="/event-name/autocomplete/0?category={{ $ruleInfo->for_category }}" placeholder="{{ $ruleInfo->trigger->name }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['days'] }}">{{ _i('Days') }}</label></th>
+          <th><label title="{{ $ruleComments['days'] }}">{{ __('Days') }}</label></th>
           <td><input class="form-control noformat" name="days" value="{{ $ruleInfo->days }}"></td>
-          <th><label title="{{ $ruleComments['months'] }}">{{ _i('Months') }}</label></th>
+          <th><label title="{{ $ruleComments['months'] }}">{{ __('Months') }}</label></th>
           <td><input class="form-control noformat" name="months" value="{{ $ruleInfo->months }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['years'] }}">{{ _i('Years') }}</label></th>
+          <th><label title="{{ $ruleComments['years'] }}">{{ __('Years') }}</label></th>
           <td><input class="form-control noformat" name="years" value="{{ $ruleInfo->years }}"></td>
-          <th><label title="{{ $ruleComments['end_of_month'] }}">{{ _i('End of month') }}</label></th>
+          <th><label title="{{ $ruleComments['end_of_month'] }}">{{ __('End of month') }}</label></th>
           <td><input class="noformat" type="checkbox" name="end_of_month" {{ $ruleInfo->end_of_month ? 'checked' : '' }}></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['use_priority'] }}">{{ _i('Use priority') }}</label></th>
+          <th><label title="{{ $ruleComments['use_priority'] }}">{{ __('Use priority') }}</label></th>
           <td><input class="noformat" type="checkbox" name="use_priority" {{ $ruleInfo->use_priority ? 'checked' : '' }}></td>
-          <th><label title="{{ $ruleComments['recurring'] }}">{{ _i('Recurring') }}</label></th>
+          <th><label title="{{ $ruleComments['recurring'] }}">{{ __('Recurring') }}</label></th>
           <td><input class="noformat" type="checkbox" name="recurring" {{ $ruleInfo->recurring ? 'checked' : '' }}></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['condition_event'] }}">{{ _i('Apply if') }}</label></th>
+          <th><label title="{{ $ruleComments['condition_event'] }}">{{ __('Apply if') }}</label></th>
           <td colspan="3"><input type="text" class="form-control noformat" name="condition_event" data-ac="/event-name/autocomplete/0?category={{ $ruleInfo->for_category }}" value="{{ $ruleInfo->condition_eventInfo->name ?? '' }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['abort_on'] }}">{{ _i('Abort if') }}</label></th>
+          <th><label title="{{ $ruleComments['abort_on'] }}">{{ __('Abort if') }}</label></th>
           <td colspan="3"><input type="text" class="form-control noformat" name="abort_on" data-ac="/event-name/autocomplete/0?category={{ $ruleInfo->for_category }}" value="{{ $ruleInfo->abort_onInfo->name ?? '' }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['responsible'] }}">{{ _i('Responsible') }}</label></th>
+          <th><label title="{{ $ruleComments['responsible'] }}">{{ __('Responsible') }}</label></th>
           <td colspan="3"><input type="text" class="form-control noformat" name="responsible" data-ac="/user/autocomplete" value="{{ $ruleInfo->responsibleInfo->name ?? '' }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['use_before'] }}">{{ _i('Use before') }}</label></th>
+          <th><label title="{{ $ruleComments['use_before'] }}">{{ __('Use before') }}</label></th>
           <td colspan="3"><input type="date" class="form-control noformat" name="use_before" value="{{ $ruleInfo->use_before }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['use_after'] }}">{{ _i('Use after') }}</label></th>
+          <th><label title="{{ $ruleComments['use_after'] }}">{{ __('Use after') }}</label></th>
           <td colspan="3"><input type="date" class="form-control noformat" name="use_after" value="{{ $ruleInfo->use_after }}"></td>
         </tr>
       </table>
@@ -107,15 +107,15 @@
     <fieldset class="tab-pane fade" id="ruleCost">
       <table class="table">
         <tr>
-          <th><label title="{{ $ruleComments['cost'] }}">{{ _i('Cost') }}</label></th>
+          <th><label title="{{ $ruleComments['cost'] }}">{{ __('Cost') }}</label></th>
           <td><input class="form-control noformat" name="cost" value="{{ $ruleInfo->cost }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['fee'] }}">{{ _i('Fee') }}</label></th>
+          <th><label title="{{ $ruleComments['fee'] }}">{{ __('Fee') }}</label></th>
           <td><input class="form-control noformat" name="fee" value="{{ $ruleInfo->fee }}"></td>
         </tr>
         <tr>
-          <th><label title="{{ $ruleComments['currency'] }}">{{ _i('Currency') }}</label></th>
+          <th><label title="{{ $ruleComments['currency'] }}">{{ __('Currency') }}</label></th>
           <td><input type="text" maxlength="3" class="form-control noformat" name="currency" value="{{ $ruleInfo->currency }}"></td>
         </tr>
       </table>

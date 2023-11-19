@@ -25,11 +25,11 @@
       <td><input type="text" class="noformat form-control" name="company_id" data-ac="/actor/autocomplete" value="{{ empty($userInfo->company) ? '' : $userInfo->company->name }}" autocomplete="off"></td>
     </tr>
     <tr>
-      <th>{{ _i('Phone') }}</th>
+      <th>{{ __('Phone') }}</th>
       <td><input type='text' class="noformat form-control" name="phone" value="{{ $userInfo->phone }}"></td>
     </tr>
     <tr>
-      <th>{{ _i('Notes') }}</th>
+      <th>{{ __('Notes') }}</th>
       <td><textarea class="noformat form-control" name="notes">{{ $userInfo->notes }}</textarea></td>
     </tr>
   </table>

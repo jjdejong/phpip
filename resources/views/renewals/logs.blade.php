@@ -20,10 +20,10 @@
               <input type="date" class="form-control form-control-sm" name="Untildate" id="Untildate"
                 title="Until selected date" value="{{ Request::get('Untildate') }}">
             </th>
-            <th>{{ _i('Qt') }}</th>
-            <th>{{ _i('Steps') }}</th>
-            <th>{{ _i('Grace') }}</th>
-            <th>{{ _i('Invoicing') }}</th>
+            <th>{{ __('Qt') }}</th>
+            <th>{{ __('Steps') }}</th>
+            <th>{{ __('Grace') }}</th>
+            <th>{{ __('Invoicing') }}</th>
           </tr>
         </thead>
         <tbody id="tableList">

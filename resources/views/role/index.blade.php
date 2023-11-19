@@ -20,7 +20,7 @@
           @foreach ($roles as $role)
           <tr class="reveal-hidden" data-id="{{ $role->code }}">
             <td>
-              <a href="/role/{{ $role->code }}" data-panel="ajaxPanel" title="{{ _i('Role info') }}">
+              <a href="/role/{{ $role->code }}" data-panel="ajaxPanel" title="{{ __('Role info') }}">
                 {{ $role->code }}
               </a>
             </td>
@@ -35,11 +35,11 @@
   <div class="col-5">
     <div class="card border-info">
       <div class="card-header bg-info text-light">
-        {{ _i('Role information') }}
+        {{ __('Role information') }}
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          {{ _i('Click on role to view and edit details') }}
+          {{ __('Click on role to view and edit details') }}
         </div>
       </div>
     </div>

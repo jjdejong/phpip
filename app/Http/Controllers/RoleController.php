@@ -48,7 +48,7 @@ class RoleController extends Controller
 
     public function show(Role $role)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('actor_role');
         $role->get();

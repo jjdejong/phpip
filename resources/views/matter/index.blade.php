@@ -50,13 +50,13 @@
       <form method="POST" action="/matter/report">
         <div class="btn-group mr-3">
                 <select class="custom-select" id="report_list" name="report_list">
-                    <option value="report1-fr">{{ _i("By family, only alive (fr)") }}</option>
-                    <option value="report2-fr">{{ _i("By family, with dead (fr)") }}</option>
-                    <option value="report1" selected>{{ _i("By family, with dead (en)") }}</option>
+                    <option value="report1-fr">{{ __("By family, only alive (fr)") }}</option>
+                    <option value="report2-fr">{{ __("By family, with dead (fr)") }}</option>
+                    <option value="report1" selected>{{ __("By family, with dead (en)") }}</option>
                 </select>
         </div>
         <div class="btn-group mr-2">
-            <button id="report" type="button" class="btn btn-secondary"> &DownArrowBar; {{ _i("Report") }}</button>
+            <button id="report" type="button" class="btn btn-secondary"> &DownArrowBar; {{ __("Report") }}</button>
         </div>
       </form>
       <div class="button-group">
@@ -138,7 +138,7 @@
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'grt.event_date' ? 'active' : '' }}" type="button" data-sortkey="grt.event_date" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="GrtNo" placeholder="{{ _i('Number') }}" value="{{ Request::get('GrtNo') }}"></td>
+          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="GrtNo" placeholder="{{ __('Number') }}" value="{{ Request::get('GrtNo') }}"></td>
         </tr>
       </thead>
       <tbody id="matterList">
@@ -170,7 +170,7 @@
           <td>{{ $matter->Cat }}</td>
           <td>
             @if ( $published )
-            <a href="http://worldwide.espacenet.com/publicationDetails/biblio?DB=EPODOC&CC={{ $CC }}&NR={{ $pubno }}" target="_blank" title='{{ _i("Open in Espacenet") }}'>{{ _i($matter->Status) }}</a>
+            <a href="http://worldwide.espacenet.com/publicationDetails/biblio?DB=EPODOC&CC={{ $CC }}&NR={{ $pubno }}" target="_blank" title='{{ __("Open in Espacenet") }}'>{{ _i($matter->Status) }}</a>
             @else
             {{ $matter->Status }}
             @endif

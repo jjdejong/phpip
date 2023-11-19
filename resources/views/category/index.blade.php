@@ -35,11 +35,11 @@
   <div class="col-5">
     <div class="card border-info">
       <div class="card-header bg-info text-light">
-        {{ _i("Category information") }}
+        {{ __("Category information") }}
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          {{ _i("Click on category to view and edit details") }}
+          {{ __("Click on category to view and edit details") }}
         </div>
       </div>
     </div>

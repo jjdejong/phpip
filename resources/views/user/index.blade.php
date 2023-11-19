@@ -21,7 +21,7 @@
           @foreach ($userslist as $user)
           <tr class="reveal-hidden" data-id="{{ $user->id }}">
             <td>
-              <a @if($user->warn) class="text-danger text-decoration-none" @endif href="/user/{{ $user->id }}" data-panel="ajaxPanel" title="{{ _i('User data') }}">
+              <a @if($user->warn) class="text-danger text-decoration-none" @endif href="/user/{{ $user->id }}" data-panel="ajaxPanel" title="{{ __('User data') }}">
                 {{ $user->name }}
               </a>
             </td>
@@ -42,11 +42,11 @@
   <div class="col-4">
     <div class="card border-info">
       <div class="card-header bg-info text-light">
-        {{ _i('User information') }}
+        {{ __('User information') }}
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          {{ _i('Click on user name to view and edit details') }}
+          {{ __('Click on user name to view and edit details') }}
         </div>
       </div>
     </div>

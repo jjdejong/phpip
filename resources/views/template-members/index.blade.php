@@ -23,7 +23,7 @@
           @foreach ($template_members as $member)
           <tr data-id="{{ $member->id }}" class="reveal-hidden">
             <td>
-              <a href="/template-member/{{ $member->id }}" data-panel="ajaxPanel" title="{{ _i('Class data') }}">
+              <a href="/template-member/{{ $member->id }}" data-panel="ajaxPanel" title="{{ __('Class data') }}">
                 {{ $member->summary }}
               </a>
             </td>
@@ -44,11 +44,11 @@
     </div>
     <div class="card border-info">
       <div class="card-header bg-info text-light">
-        {{ _i('Template member information') }}
+        {{ __('Template member information') }}
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          {{ _i('Click on member to view and edit details') }}
+          {{ __('Click on member to view and edit details') }}
         </div>
       </div>
     </div>

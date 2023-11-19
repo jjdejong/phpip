@@ -24,27 +24,27 @@
             <div class="tab-pane {{ !$step && !$invoice_step ? 'active' : '' }}" id="p1">
                 <div class="container text-end">
                     <div class="btn-group">
-                        <button class="btn btn-info" type="button" id="callRenewals">{{ _i('Send call email') }}</button>
-                        <button class="btn btn-info" type="button" id="renewalsSent">{{ _i('Call sent manually') }}</button>
+                        <button class="btn btn-info" type="button" id="callRenewals">{{ __('Send call email') }}</button>
+                        <button class="btn btn-info" type="button" id="renewalsSent">{{ __('Call sent manually') }}</button>
                     </div>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 2 ? 'active' : '' }}" id="p2">
                 <div class="container text-end">
                     <div class="btn-group">
-                        <button class="btn btn-outline-info" type="button" id="reminderRenewals">{{ _i('Send reminder email') }}</button>
-                        <button class="btn btn-outline-info" type="button" id="lastReminderRenewals" title="{{ _i('Send reminder and enter grace period') }}">{{ _i('Send last reminder email') }}</button>
-                        <button class="btn btn-info" type="button" id="instructedRenewals" title="{{ _i('Instructions received to pay') }}">{{ _i('Payment order received') }}</button>
-                        <button class="btn btn-info" type="button" id="abandonRenewals" title="{{ _i('Abandon instructions received') }}">{{ _i('Abandon') }}</button>
-                        <button class="btn btn-info" type="button" id="lapsedRenewals" title="{{ _i('Office lapse communication received') }}">{{ _i('Lapsed') }}</button>
+                        <button class="btn btn-outline-info" type="button" id="reminderRenewals">{{ __('Send reminder email') }}</button>
+                        <button class="btn btn-outline-info" type="button" id="lastReminderRenewals" title="{{ __('Send reminder and enter grace period') }}">{{ _i('Send last reminder email') }}</button>
+                        <button class="btn btn-info" type="button" id="instructedRenewals" title="{{ __('Instructions received to pay') }}">{{ _i('Payment order received') }}</button>
+                        <button class="btn btn-info" type="button" id="abandonRenewals" title="{{ __('Abandon instructions received') }}">{{ _i('Abandon') }}</button>
+                        <button class="btn btn-info" type="button" id="lapsedRenewals" title="{{ __('Office lapse communication received') }}">{{ _i('Lapsed') }}</button>
                     </div>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 4 ? 'active' : ''}}" id="p3">
                 <div class="container text-end">
                     <div class="btn-group">
-                        <button class="btn btn-outline-info" type="button" id="xmlRenewals" title="{{ _i('Generate xml files for EP or FR') }}">{{ _i('Download XML order to pay') }}</button>
-                        <button class="btn btn-info" type="button" id='doneRenewals'>{{ _i('Paid') }}</button>
+                        <button class="btn btn-outline-info" type="button" id="xmlRenewals" title="{{ __('Generate xml files for EP or FR') }}">{{ _i('Download XML order to pay') }}</button>
+                        <button class="btn btn-info" type="button" id='doneRenewals'>{{ __('Paid') }}</button>
                     </div>
                 </div>
             </div>
@@ -69,10 +69,10 @@
                 <div class="container text-end">
                     <div class="btn-group">
                         @if (config('renewal.invoice.backend') == 'dolibarr')
-                        <button class="btn btn-info" type="button" id="invoiceRenewals">{{ _i('Generate invoice') }}</button>
+                        <button class="btn btn-info" type="button" id="invoiceRenewals">{{ __('Generate invoice') }}</button>
                         @endif
-                        <button class="btn btn-outline-info" type="button" id="renewalsExport">{{ _i('Export all') }}</button>
-                        <button class="btn btn-info" type="button" id="renewalsInvoiced">{{ _i('Invoiced') }}</button>
+                        <button class="btn btn-outline-info" type="button" id="renewalsExport">{{ __('Export all') }}</button>
+                        <button class="btn btn-info" type="button" id="renewalsInvoiced">{{ __('Invoiced') }}</button>
                     </div>
                 </div>
             </div>

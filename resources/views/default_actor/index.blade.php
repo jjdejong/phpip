@@ -22,7 +22,7 @@
           @foreach ($default_actors as $default_actor)
           <tr class="reveal-hidden" data-id="{{ $default_actor->id }}">
             <td>
-              <a href="/default_actor/{{ $default_actor->id }}" data-panel="ajaxPanel" title="{{ _i('Actor') }}">
+              <a href="/default_actor/{{ $default_actor->id }}" data-panel="ajaxPanel" title="{{ __('Actor') }}">
                 {{ $default_actor->actor->name }}
               </a>
             </td>
@@ -39,11 +39,11 @@
   <div class="col-5">
     <div class="card border-info">
       <div class="card-header bg-info text-light">
-        {{ _i('Default actor information') }}
+        {{ __('Default actor information') }}
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          {{ _i('Click on line to view and edit details') }}
+          {{ __('Click on line to view and edit details') }}
         </div>
       </div>
     </div>

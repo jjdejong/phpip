@@ -17,8 +17,8 @@
         <div class="col-3 align-bottom"></div>
         <div class="col-4">
           <div class="row">
-            <div class="col-6 py-2">{{ _i('Standard') }}</div>
-            <div class="bg-secondary col-6 py-2">{{ _i('Reduced') }}</div>
+            <div class="col-6 py-2">{{ __('Standard') }}</div>
+            <div class="bg-secondary col-6 py-2">{{ __('Reduced') }}</div>
           </div>
         </div>
         <div class="col-4">
@@ -54,9 +54,9 @@
             <div class="bg-secondary col py-1">Fee</div>
           </div>
         </div>
-        <div class="col-1">{{ _i("Currency") }}</div>
-        {{-- <div class="col-1">{{ _i("Use after") }}</div>
-        <div class="col-1">{{ _i("Use before") }}</div> --}}
+        <div class="col-1">{{ __("Currency") }}</div>
+        {{-- <div class="col-1">{{ __("Use after") }}</div>
+        <div class="col-1">{{ __("Use before") }}</div> --}}
       </div>
     </div>
     <div class="card-body pt-2" id="tableList">

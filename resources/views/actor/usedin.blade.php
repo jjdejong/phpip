@@ -16,7 +16,7 @@ $adeps = $other_dependencies->groupBy('Dependency');
     </div>
   </div>
 @empty
-  {{ _i("No dependencies") }}
+  {{ __("No dependencies") }}
 @endforelse
 <p class="fw-bolder my-2">Inter-Actor Dependencies</p>
 @forelse($adeps as $dep => $aadeps)
@@ -31,5 +31,5 @@ $adeps = $other_dependencies->groupBy('Dependency');
     </div>
   </div>
 @empty
-  {{ _i("No dependencies") }}
+  {{ __("No dependencies") }}
 @endforelse

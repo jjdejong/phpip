@@ -29,7 +29,7 @@
           @foreach ($actorslist as $actor)
           <tr class="reveal-hidden" data-id="{{ $actor->id }}">
             <td>
-              <a @if($actor->warn) class="text-danger text-decoration-none" @endif href="/actor/{{ $actor->id }}" data-panel="ajaxPanel" title="{{ _i('Actor data') }}">
+              <a @if($actor->warn) class="text-danger text-decoration-none" @endif href="/actor/{{ $actor->id }}" data-panel="ajaxPanel" title="{{ __('Actor data') }}">
                 {{ $actor->name }}
               </a>
             </td>
@@ -38,9 +38,9 @@
             <td nowrap>{{ empty($actor->company) ? '' : $actor->company->name }}</td>
             <td>
               @if ($actor->phy_person)
-              {{ _i("Physical") }}
+              {{ __("Physical") }}
               @else
-              {{ _i("Legal") }}
+              {{ __("Legal") }}
               @endif
             </td>
           </tr>
@@ -57,11 +57,11 @@
   <div class="col-4">
     <div class="card border-info">
       <div class="card-header bg-info text-light">
-        {{ _i("Actor information") }}
+        {{ __("Actor information") }}
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          {{ _i("Click on actor name to view and edit details") }}
+          {{ __("Click on actor name to view and edit details") }}
         </div>
       </div>
     </div>

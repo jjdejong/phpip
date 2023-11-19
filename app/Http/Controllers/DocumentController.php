@@ -11,6 +11,7 @@ use App\TemplateClass;
 use App\TemplateMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
@@ -78,7 +79,7 @@ class DocumentController extends Controller
 
     public function show(TemplateClass $class)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('template_classes');
         $class->with(['role']);

@@ -6,7 +6,7 @@ use App\Actor;
 use App\DefaultActor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use LaravelGettext;
+use Illuminate\Support\Facades\App;
 
 class DefaultActorController extends Controller
 {
@@ -69,7 +69,7 @@ class DefaultActorController extends Controller
 
     public function show(DefaultActor $default_actor)
     {
-        LaravelGettext::setLocale(Auth::user()->language);
+        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('default_actor');
         $default_actor->with(['roleInfo:code,name', 'actor:id,name', 'client:id,name', 'category:code,category', 'country:iso,name'])->get();

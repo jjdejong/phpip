@@ -20,7 +20,7 @@
           @foreach ($enameslist as $event)
           <tr class="reveal-hidden" data-id="{{ $event->code }}">
             <td>
-              <a href="/eventname/{{ $event->code }}" data-panel="ajaxPanel" title="{{ _i('Event name info') }}">
+              <a href="/eventname/{{ $event->code }}" data-panel="ajaxPanel" title="{{ __('Event name info') }}">
                 {{ $event->code }}
               </a>
             </td>
@@ -35,11 +35,11 @@
   <div class="col-5">
     <div class="card border-info">
       <div class="card-header bg-info text-light">
-        {{ _i('Event name information') }}
+        {{ __('Event name information') }}
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          {{ _i('Click on event name to view and edit details') }}
+          {{ __('Click on event name to view and edit details') }}
         </div>
       </div>
     </div>

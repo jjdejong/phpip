@@ -19,7 +19,7 @@
           @foreach ($template_classes as $class)
           <tr data-id="{{ $class->id }}" class="reveal-hidden">
             <td>
-              <a href="/document/{{ $class->id }}" data-panel="ajaxPanel" title="{{ _i('Class data') }}">
+              <a href="/document/{{ $class->id }}" data-panel="ajaxPanel" title="{{ __('Class data') }}">
                 {{ $class->name }}
               </a>
             </td>
@@ -38,11 +38,11 @@
   <div class="col-4">
     <div class="card border-info">
       <div class="card-header bg-info text-light">
-        {{ _i("Class information") }}
+        {{ __("Class information") }}
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          {{ _i("Click on class to view and edit details") }}
+          {{ __("Click on class to view and edit details") }}
         </div>
       </div>
     </div>

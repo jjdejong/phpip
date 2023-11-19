@@ -14,7 +14,7 @@
       <input type="text" name="docnum" class="form-control" placeholder="CCNNNNNN">
     </div>
     <small class="form-text text-muted">
-      {{ _i("Publication number prefixed with the country code and optionally suffixed with the kind code. No spaces nor non-alphanumeric characters.") }} 
+      {{ __("Publication number prefixed with the country code and optionally suffixed with the kind code. No spaces nor non-alphanumeric characters.") }} 
       {{-- Application number in DOCDB format: country code followed by the number (only digits, no spaces and without the ending ".n"). 
       For numbers without a two-digit year (like the US), insert YY. For PCTs: CCYYYY012345W. --}}
     </small>
@@ -73,11 +73,11 @@
     <legend>Use current {{ $parent_matter->category->category ?? 'matter' }} as:</legend>
     <div class="form-check my-1">
       <input class="form-check-input mt-0" type="radio" name="priority" value="1" checked>
-      <label class="form-check-label">{{ _i("Priority application") }}</label>
+      <label class="form-check-label">{{ __("Priority application") }}</label>
     </div>
     <div class="form-check my-1">
       <input class="form-check-input mt-0" type="radio" name="priority" value="0">
-      <label class="form-check-label">{{ _i("Parent application") }}</label>
+      <label class="form-check-label">{{ __("Parent application") }}</label>
     </div>
   </fieldset>
   @endif

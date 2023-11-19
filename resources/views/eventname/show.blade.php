@@ -1,13 +1,13 @@
 <div data-resource="/eventname/{{ $eventname->code }}" class="reload-part">
 	<table class="table table-hover table-sm">
 		<tr>
-			<th width="20%">{{ _i("Code") }}</th>
+			<th width="20%">{{ __("Code") }}</th>
 			<td><input class="noformat form-control" name="code" value="{{ $eventname->code }}"></td>
 			<td><input type="checkbox" class="noformat" name="is_task" {{ $eventname->is_task ? 'checked' : '' }}></td>
 			<th title="{{ $tableComments['is_task'] }}">Is Task</th>
 		</tr>
 		<tr>
-			<th>{{ _i('Name') }}</th>
+			<th>{{ __('Name') }}</th>
 			<td><input class="form-control noformat" name="name" value="{{ $eventname->name }}"></td>
 			<td><input type="checkbox" class="noformat" name="status_event" {{ $eventname->status_event ? 'checked' : '' }}></td>
 			<th title="{{ $tableComments['status_event'] }}">Is Status</th>
@@ -30,11 +30,11 @@
 			<th title="{{ $tableComments['use_matter_resp'] }}">Use Matter Responsible</th>
 		</tr>
 		<tr>
-			<th>{{ _i('Notes') }}</th>
+			<th>{{ __('Notes') }}</th>
 			<td colspan="3"><textarea class="form-control form-control-sm noformat" name="notes">{{ $eventname->notes }}</textarea>
 		</tr>
 		<tr>
-			<th colspan="3">{{ _i("Linked templates") }}</th>
+			<th colspan="3">{{ __("Linked templates") }}</th>
 			<td>
 				<a data-bs-toggle="collapse" class="badge rounded-pill text-bg-info fw-normal ms-2" href="#addEventRow" id="addEventTempalte" title="Add template">
 					&plus;
@@ -60,13 +60,13 @@
 				{{ $link->class->name}}
 			</td>
 			<td>
-        <a href="#" class="hidden-action text-danger" id="deleteTemplate" title="{{ _i('Delete template link') }}">&CircleTimes;</a>
+        <a href="#" class="hidden-action text-danger" id="deleteTemplate" title="{{ __('Delete template link') }}">&CircleTimes;</a>
       </td>
 
 		</tr>
 		@endforeach
 	</table>
-	<button type="button" class="btn btn-danger" title="{{ _i('Delete event name') }}" id="deleteEName" data-message="{{ _i('event name ') . $eventname->name  }}" data-url='/eventname/{{ $eventname->code }}'>
-		{{ _i("Delete") }}
+	<button type="button" class="btn btn-danger" title="{{ __('Delete event name') }}" id="deleteEName" data-message="{{ _i('event name ') . $eventname->name  }}" data-url='/eventname/{{ $eventname->code }}'>
+		{{ __("Delete") }}
 	</button>
 </div>
