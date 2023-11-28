@@ -247,7 +247,7 @@ class MatterController extends Controller
                 $matter_id_num[$existing_app->filing->cleanNumber()] = $existing_app->id;
             }
         }
-        foreach ($apps as $key => &$app) {
+        foreach ($apps as $key => $app) {
             if (array_key_exists($app['app']['number'], $matter_id_num)) {
                 // Member exists, do not create
                 continue;
@@ -393,11 +393,11 @@ class MatterController extends Controller
                 $new_matter->events()->create(['code' => 'PFIL', 'alt_matter_id' => $new_matter->parent_id]);
             }
             if ($parent_num) {
-                //return response()->json(['errors' => ['message' => $matter_id_num]]);
+                // This app is a divisional or a continuation
                 $new_matter->events()->create(['code' => 'ENT', 'event_date' => $app['app']['date'], 'detail' => 'Child filing date']);
                 $parent = $apps->where('app.number', $parent_num)->first();
-                // Change this app's filing date to the parent's filing date for potentiel children of this app
-                $app->merge(['app.date' => $parent['app']['date']]);
+                // Change this app's filing date to the parent's filing date for potential children of this app
+                $app['app']['date'] = $parent['app']['date'];
                 $new_matter->parent_id = $matter_id_num["$parent_num"];
             }
             $new_matter->events()->create(['code' => 'FIL', 'event_date' => $app['app']['date'], 'detail' => $app['app']['number']]);
