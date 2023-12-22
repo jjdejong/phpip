@@ -12,7 +12,7 @@
       </tr>
       <tr>
         <th>
-          @if($cat_edit == 1)
+          @if($cat_edit)
           <input type="text" class="form-control noformat" name="category_code" data-ac="/category/autocomplete" data-aclength="0" placeholder="{{ $matter->category->category }}">
           @else
           <span title="Cannot be changed because the matter has tasks based on the category">
@@ -29,7 +29,7 @@
       <tr>
         <th>Country</th>
         <td>
-          @if($country_edit == 1)
+          @if($country_edit)
           <input type="text" class="form-control noformat text-truncate" name="country" data-ac="/country/autocomplete" placeholder="{{ $matter->countryInfo->name }}">
           @else
           <span title="Cannot be changed because the matter has tasks based on the country">

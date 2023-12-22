@@ -475,11 +475,11 @@ class MatterController extends Controller
             'filing'
         );
         $country_edit = $matter->tasks()->whereHas('rule', function (Builder $q) {
-            $q->whereNull('for_country');
-        })->count();
+            $q->whereNotNull('for_country');
+        })->count() == 0;
         $cat_edit = $matter->tasks()->whereHas('rule', function (Builder $q) {
-            $q->whereNull('for_category');
-        })->count();
+            $q->whereNotNull('for_category');
+        })->count() == 0;
 
         return view('matter.edit', compact(['matter', 'cat_edit', 'country_edit']));
     }
