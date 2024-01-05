@@ -2,43 +2,77 @@
 
 phpIP is a web tool for managing an IP rights portfolio, especially patents. It is intended to satisfy most needs of an IP law firm. The tool was designed to be flexible and simple to use. It is based on an Apache-MySQL-PHP framework.
 
-
 There are many IP rights management tools out there. They are all proprietary and pretty expensive. It is not the cost, in fact, that led us to designing our own system, because the design resources we spent could equate to the cost of a couple of years license and maintenance fees of existing systems. We found that existing systems are overkill for our needs, because they are designed to satisfy the needs of a majority – hence they have more features than what each individual user needs, so they are very complex to use, yet not all specific needs of the individual user are satisfied. So the user needs to adapt to the system, whereas it should be the other way round.
 
 Since we are patent attorneys and don't have resources for selling and maintaining our software, yet would like others to benefit from it, and hopefully contribute, we decided to open source it. This is an important step in reaching the goal of creating a tool adapted to the user's specific needs. We also designed phpIP to be extremely flexible, so that, hopefully, most users will be able to configure it (and not redesign it) to fit their needs.
 
 Head for the [Wiki](https://github.com/jjdejong/phpip/wiki) for further information.
 
-# Basic structure of phpIP #
+# New features
 
-## “Micro-kernel” structure ##
+## 2024-01-05 A significant upgrade of the autocompletion functionality
 
-The database is articulated around a central table called _“matter”_ (such as patents, trademarks or designs), that contains minimal information for each matter (essentially a category, a case reference, a country, and an expire date). Information that will be the substance of a matter is freely linked to each matter, in any number, from additional tables: _actors, events, tasks,_ and _classifiers_. We found that anything useful in a matter fits in one of these four tables.
+Navigation and selection in the suggestion lists can now be performed with the keyboard.
 
-**Actors** are any person or company involved in a matter (applicants, inventors, client, agents...). Each actor can be linked to a matter with any of several roles, and a same actor can be linked to a matter with multiple roles, for instance an inventor can also be an applicant. A client (company) can also be an applicant. All variations are possible.
+More foolproof.
 
-The roles are contained in the _actor\_role table_.
+Many bugfixes.
 
-Actors are linked to matters through a link table called _matter\_actor\_lnk_. This link table contains additional information about the specific link, such as the actor's role, his reference (for clients and agents), his company, a date, his order of display among other actors with the same role...
+## 2023-11-16 A significant upgrade of the back-end and front-end infrastructures
 
-**Events** are related to the history of the matter and show how the matter is progressing. They basically have a name and a date. They can be a link to another matter if that other matter is involved in the progress of the current matter (see more details below).
+Upgraded to Laravel 10 for the back-end.
 
-**Tasks** are triggered by specific events. They have a name, a deadline, a “done” flag, and an optional “done date”. For instance, in a patent, an event tracking an “examiner action” issued by a patent office will trigger a “Response” task having a deadline three months after the examiner action date.
+Upgraded to Bootstrap 5 for the front-end.
 
-Tasks can be added manually to events. Some tasks are created automatically based on information in a _task\_rules table_, when corresponding trigger events are entered for the matter.
+Removed all dependencies to jQuery by rewriting many functions that depended on it, especially the autocompletion functionality.
 
-**Classifiers** are other pieces of useful information that do not correspond to the above, such as keywords, business units, patent classification... and also links to related matters, for instance patents around a same invention. They have a type and a value, or a link to another matter. The value can be free-text stored in the _classifier_ table itself (a value that is specific to the matter and not reused in other matters), or an index in a _classifier\_value_ table containing values that can be used multiple times (such as a list of products or business units).
+## 2023-02-09 Automatic family import from Open Patent Services (OPS)
+ 
+OPS provide a REST API for accessing world-wide patent information. We have integrated this service to automatically import a whole patent family into phpIP by just providing one of the publication numbers in the family.
 
-## No duplication of information ##
+The tool is available through the menu `Matters->Create family from OPS`
+ 
+Use with caution, as we have not tested all the possible complex cases. Check in particular the links between multiple filings in the same country (divisions, continuations, internal priorities).
+ 
+Sometimes you need to be patient after pressing "Create", and sometimes a time-out is reached, whereby you need to try again.
+ 
+The format of the publication number must be respected. You can choose any number in the family, so you might as well choose one that is consistent (for instance the EP number if available).
 
-One key feature of phpIP is that any piece of information, even if it is used in multiple matters, say patents, is stored in one place only. We use two mechanisms for that:
+What is actually imported for each family member:
+* Country
+* Filing information (date, number)
+* Publication information
+* Grant information
+* Priority information (earliest priority)
+* The English title
+* Links between patents (PCT national phases, divisionals, continuations...)
+* Applicants and inventors (if they're not present in the actors table, they will be created)
+ 
+European validations are not imported. They are not (consistently) available in OPS (or I have not found how to access them...).
+ 
+Importing _applicants and inventors_ is complicated and may be subject to duplicates, because this requires the management of their presence or their insertion in the actors table, with spellings that may vary. For best results, use the "typical" naming convention of the EPO, i.e., "NAME, FIRST NAME", and use only the "Name" field of the actor table (the "First Name" field is ignored, so leave it blank or use it at your convenience for differentiating similar names). The identified actors are indicated in the "notes" of the first patent for checking. To use more consistent data, these are imported from the EP case in the family - if there is no EP case available, they will be absent.
 
-**Linked events**
+The tool can be used to complete an existing family, sparing you the effort of entering missing applications manually. For this operation, do not select the proposed case reference in the creation form, but force it to the value of the existing family.
+ 
+**To use the tool, you must first create an account and a pair of application keys on the OPS site:**
+ 
+https://developers.epo.org
+ 
+Once your account is created and connected, go to "My Apps" on the top right. Create a "phpip" App and provide the generated keys in the .env file:
 
-For instance, the priority date of a second patent is the filing date of a first patent. In traditional systems, this date is copied into a record related to the second patent. What if the filing date of the first patent is changed? Well, the system or user needs to make sure the date is updated in the second patent. In phpIP, the priority date of the second patent is an event linked to the filing event of the first patent. If the filing date of the first patent is changed, that change is automatically reflected in the priority event of the second patent, and tasks that rely on this date are updated.
+```
+OPS_APP_KEY=<Consumer Key>
+OPS_SECRET=<Consumer Secret Key>
+```
 
-**Containers for shared information**
+## 2021-01-08 Document drag-and-drop merge functionality
 
-In phpIP, the first matter in a series of related matters, for instance the first filed patent in a family, is a container for information common to all patents in the family, for instance client, inventors and applicants. Classifiers are also shared. Each subsequent created matter in the family shares this information from the container without duplication. If the information needs to be changed, it is changed in one place for all family members. The user may configure what type of information is shared by default and he has the option to change that as he adds the information.
+Use your favorite DOCX templates to merge them with the data of a matter displayed in phpIP by simple drag-and-drop.
 
-These features make queries for displaying all data related to a matter more complex, but this is all handled by the user interface, so it is transparent to the end user. You will need to be more careful if you intend to write advanced queries but we have provided some view tables that list all the data related to each matter (and hence make the linked event and container techniques transparent).
+Check the dedicated [Wiki section](https://github.com/jjdejong/phpip/wiki/Templates-(email-and-documents)#document-template-usage)
+
+## 2019-12-08 Renewal process management tool
+
+This tool manages renewal watching, first calls, reminders, payments and invoicing of renewals. Emails are created for each step for a client's portfolio. The emails may be sent automatically or to oneself as a template for resending.
+
+Check the dedicated [Wiki article](https://github.com/jjdejong/phpip/wiki/Renewal-Management).
