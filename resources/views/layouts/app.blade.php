@@ -142,12 +142,13 @@
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
                 Matters
               </a>
-              <ul class="dropdown-menu" role="menu">
+              <ul class="dropdown-menu">
                 <a class="dropdown-item" href="{{ url('/matter') }}">All</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=PAT') }}">Patents</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=TM') }}">Trademarks</a>
                 @canany(['admin', 'readwrite'])
                 <a class="dropdown-item" href="/matter/create?operation=new" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" title="Create Matter">Create</a>
+                <hr class="dropdown-divider">
                 <a class="dropdown-item" href="/matter/create?operation=ops" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" title="Create family from OPS">Create family from OPS</a>
                 @endcanany
               </ul>
@@ -158,7 +159,7 @@
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
                 Tools
               </a>
-              <ul class="dropdown-menu" role="menu">
+              <ul class="dropdown-menu">
                 <a class="dropdown-item" href="{{ url('/renewal') }}">Manage renewals</a>
                 <a class="dropdown-item" href="{{ url('/fee') }}">Renewal fees</a>
                 @can('admin')
@@ -173,7 +174,7 @@
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
                 Tables
               </a>
-              <ul class="dropdown-menu" role="menu">
+              <ul class="dropdown-menu">
                 <a class="dropdown-item" href="{{ url('/actor') }}">Actors</a>
                 @can('admin')
                 <a class="dropdown-item" href="{{ url('/user') }}">DB Users</a>
