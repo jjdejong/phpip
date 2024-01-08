@@ -421,7 +421,10 @@ const handleSelectedItem = function(selectedItem, input) {
         const inputs = Array.from(input.form.querySelectorAll('input:not([type="hidden"])'));
         const currentIndex = inputs.indexOf(input);
         const nextIndex = (currentIndex + 1) % inputs.length;
-        inputs[nextIndex].focus();
+        // Give time for the blur event to fire when using the mouse, otherwise focus() doesn't work
+        setTimeout( () => {
+            inputs[nextIndex].focus();
+        });
     }
 };
 
