@@ -1,5 +1,7 @@
 var url = new URL(window.location.href);
 
+
+
 function refreshMatterList() {
   url.searchParams.delete('page');
   window.history.pushState('', 'phpIP', url);

@@ -5,7 +5,7 @@ function refreshList() {
     reloadPart(url, 'renewalList');
 }
 
-filterFields.addEventListener('input', debounce( e => {
+filterFields.addEventListener('input', debounce(e => {
     if (e.target.matches('.form-control')) {
         if (e.target.value.length === 0) {
             url.searchParams.delete(e.target.name);
@@ -68,17 +68,17 @@ clearFilters.onclick = () => {
 };
 
 doneRenewals.addEventListener("click", function (b) {
-    msgAction = "resetting";
+    msgAction = __("resetting");
     actionRenewals(b.target, msgAction, '/renewal/done');
 });
 
 callRenewals.addEventListener("click", function (b) {
-    msgAction = "call";
+    msgAction = __("call");
     actionRenewals(b.target, msgAction, '/renewal/call/1')
 });
 
 renewalsSent.addEventListener("click", function (b) {
-    msgAction = "call";
+    msgAction = __("call");
     actionRenewals(b.target, msgAction, '/renewal/call/0')
 });
 
@@ -95,47 +95,47 @@ renewalsExport.onclick = e => {
 };
 
 renewalsInvoiced.addEventListener("click", function (b) {
-    msgAction = "invoiced";
+    msgAction = __("invoiced");
     actionRenewals(b.target, msgAction, '/renewal/invoice/0')
 });
 
 invoicesPaid.onclick = (b) => {
-    msgAction = "paid";
+    msgAction = __("paid");
     actionRenewals(b.target, msgAction, '/renewal/paid')
 }
 
 instructedRenewals.addEventListener("click", function (b) {
-    msgAction = "for payment";
+    msgAction = __("payment");
     actionRenewals(b.target, msgAction, '/renewal/topay')
 });
 
 lastReminderRenewals.addEventListener("click", function (b) {
-    msgAction = "last call";
+    msgAction = __("last call");
     actionRenewals(b.target, msgAction, '/renewal/lastcall')
 });
 
 reminderRenewals.addEventListener("click", function (b) {
-    msgAction = "reminder";
+    msgAction = __("reminder");
     actionRenewals(b.target, msgAction, '/renewal/reminder')
 });
 
 abandonRenewals.addEventListener("click", function (b) {
-    msgAction = "abandon renewals";
+    msgAction = __("abandon renewals");
     actionRenewals(b.target, msgAction, '/renewal/abandon')
 });
 
 lapsedRenewals.addEventListener("click", function (b) {
-    msgAction = "lapsed renewals";
+    msgAction = __("lapsed renewals");
     actionRenewals(b.target, msgAction, '/renewal/lapsing')
 });
 
 lapsingRenewals.addEventListener("click", function (b) {
-    msgAction = "lapsed renewals";
+    msgAction = __("lapsed renewals");
     actionRenewals(b.target, msgAction, '/renewal/lapsing')
 });
 
 sendLapsedRenewals.addEventListener("click", function (b) {
-    msgAction = "lapse communications sent";
+    msgAction = __("lapse communications sent");
     actionRenewals(b.target, msgAction, '/renewal/closing')
 });
 
@@ -146,7 +146,7 @@ async function actionRenewals(button, msgAction, action_url) {
     if (tids.length === 0) {
         var end = document.getElementById('Untildate').value;
         if (!end) {
-            alert("No renewals selected for " + msgAction);
+            alert(__("No renewals selected for") + " " + msgAction);
             // withdraw spinner and restore button
             button.removeChild(document.getElementsByClassName('spinner-border')[0]);
             return;
@@ -181,12 +181,12 @@ function submitUpdate(string, url) {
                 resolve(JSON.parse(this.responseText).success);
             }
             if (this.status === 419) {
-                reject("Token expired. Refresh the page");
+                reject(__("Token expired. Refresh the page"));
             }
             if (this.status === 404) {
-                reject("No email template found - check that your templates match your client's language");
+                reject(__("No email template found - check that your templates match your client's language"));
             } else {
-                reject("Something went wrong");
+                reject(__("Something went wrong"));
             }
         }
     });
@@ -195,7 +195,7 @@ function submitUpdate(string, url) {
 xmlRenewals.addEventListener("click", function () {
     var tids = getSelected();
     if (tids.length === 0) {
-        alert("No renewals selected for order");
+        alert(__("No renewals selected for order"));
         return;
     }
     var string = JSON.stringify({

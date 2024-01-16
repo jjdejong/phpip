@@ -37,7 +37,7 @@
           @canany(['admin', 'readwrite'])
           <span class="hidden-action float-end">
             <li class="list-inline-item">
-              <a href="#" class="text-primary" id="addTaskToEvent" data-event_id="{{ $event->id }}" title="{{ __('Add task to :event',['event' => __($event->info->name])) }}">
+              <a href="#" class="text-primary" id="addTaskToEvent" data-event_id="{{ $event->id }}" title="{{ __('Add task to :event',['event' => __($event->info->name)]) }}">
                 <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#plus-circle-fill"/></svg>
               </a>
             </li>

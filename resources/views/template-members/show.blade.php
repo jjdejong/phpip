@@ -35,7 +35,7 @@
       <td colspan="9"><textarea class="form-control noformat" name="body" rows="20">{{ $templateMember->body }}</textarea></td>
     </tr>
   </table>
-  <button type="button" class="btn btn-danger" title="{{ __('Delete template') }}" id="deleteMember" data-message="{{ _i('the template ') . $templateMember->class->name  }}" data-url='/template-member/{{ $templateMember->id }}'>
+  <button type="button" class="btn btn-danger" title="{{ __('Delete template') }}" id="deleteMember" data-message="{{ __('the template ') . $templateMember->class->name  }}" data-url='/template-member/{{ $templateMember->id }}'>
     {{ __('Delete') }}
   </button>
 </div>

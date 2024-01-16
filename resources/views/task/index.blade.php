@@ -3,7 +3,7 @@
   <tr class="row g-0">
     <td class="col text-truncate py-0">
       <a href="/matter/{{ $task->matter_id }}/{{ $isrenewals ? 'renewals' : 'tasks' }}" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-lg" data-resource="/task/" title="{{ __('All tasks') }}">
-        {{ $task->name }} {{ $task->detail }}
+        {{ __($task->name) }} {{ __($task->detail) }}
       </a>
     </td>
     <td class="col-2 py-0">

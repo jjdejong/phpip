@@ -202,6 +202,7 @@
                 </form>
               </div>
             </li>
+            <li class="nav-link" style="text-transform: uppercase;" id="user_lang">{{ Auth::user()->language }}</li>
             @endguest
           </ul>
         </div>

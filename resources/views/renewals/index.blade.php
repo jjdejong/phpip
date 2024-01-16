@@ -237,18 +237,18 @@
 <script>
     @if(config('renewal.invoice.backend') == 'dolibarr')
     invoiceRenewals.addEventListener("click", function (b) {
-        msgAction = "invoicing";
+        msgAction = __("invoicing");
         actionRenewals(b.target, msgAction, '/renewal/invoice/1')
     });
     @endif
     @if(config('renewal.general.receipt_tabs'))
         receiptRenewals.addEventListener("click", function (b) {
-        msgAction = "registering receipt";
+        msgAction = __("registering receipt");
         actionRenewals(b.target, msgAction, '/renewal/receipt')
     });
 
     sendReceiptsRenewals.addEventListener("click", function (b) {
-        msgAction = "closing renewals";
+        msgAction = __("closing renewals");
         actionRenewals(b.target, msgAction, '/renewal/closing')
     });
     @endif

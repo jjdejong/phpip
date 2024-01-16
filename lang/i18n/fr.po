@@ -1,13 +1,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the  package.
 #
-# Yves <yves.brungard_mageia@gadz.org>, 2023.
+# Yves <yves.brungard_mageia@gadz.org>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version:  1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-25 16:42+0100\n"
-"PO-Revision-Date: 2023-11-27 13:54+0100\n"
+"POT-Creation-Date: 2024-01-16 18:12+0100\n"
+"PO-Revision-Date: 2024-01-16 21:16+0100\n"
 "Last-Translator: Yves <yves.brungard_mageia@gadz.org>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_FR\n"
@@ -83,6 +83,7 @@ msgstr "Pays"
 #: app/Http/Controllers/MatterController.php:589
 #: app/Http/Controllers/MatterController.php:590
 #: lang/blade-translations/matter/static.php:144
+#: lang/blade-translations/matter/static.php:146
 msgid "Cat"
 msgstr "Cat"
 
@@ -105,6 +106,7 @@ msgstr "Origine"
 #: app/Http/Controllers/MatterController.php:591
 #: app/Http/Controllers/MatterController.php:592
 #: lang/blade-translations/matter/static.php:147
+#: lang/blade-translations/matter/static.php:149
 #: resources/views/eventname/create.blade.php:23
 #: resources/views/matter/show.blade.php:182
 #: resources/views/matter/show.blade.php:191
@@ -144,6 +146,7 @@ msgstr "Réf. client"
 #: app/Http/Controllers/MatterController.php:596
 #: lang/blade-translations/layouts/static.php:26
 #: lang/blade-translations/matter/static.php:151
+#: lang/blade-translations/matter/static.php:153
 #: lang/blade-translations/seeder.php:26
 #: resources/views/layouts/app.blade.php:46
 #: resources/views/layouts/app.blade.php:109
@@ -154,6 +157,7 @@ msgstr "Déposant"
 #: app/Http/Controllers/MatterController.php:596
 #: app/Http/Controllers/MatterController.php:597
 #: lang/blade-translations/matter/static.php:153
+#: lang/blade-translations/matter/static.php:155
 msgid "Agent"
 msgstr "Agent"
 
@@ -168,6 +172,7 @@ msgstr "Réf. agent"
 #: app/Http/Controllers/MatterController.php:599
 #: lang/blade-translations/layouts/static.php:22
 #: lang/blade-translations/matter/static.php:157
+#: lang/blade-translations/matter/static.php:159
 #: lang/blade-translations/renewals/static.php:95
 #: lang/blade-translations/seeder.php:111
 #: resources/views/layouts/app.blade.php:44
@@ -197,6 +202,7 @@ msgstr "Inventeur 1"
 #: app/Http/Controllers/MatterController.php:602
 #: app/Http/Controllers/MatterController.php:603
 #: lang/blade-translations/matter/static.php:165
+#: lang/blade-translations/matter/static.php:167
 #: lang/blade-translations/seeder.php:699
 msgid "Filed"
 msgstr "Date dépôt"
@@ -211,6 +217,7 @@ msgstr "N° dépôt"
 #: app/Http/Controllers/MatterController.php:604
 #: app/Http/Controllers/MatterController.php:605
 #: lang/blade-translations/matter/static.php:171
+#: lang/blade-translations/matter/static.php:173
 #: lang/blade-translations/seeder.php:753
 msgid "Published"
 msgstr "Date publication"
@@ -225,9 +232,10 @@ msgstr "N° publi."
 #: app/Http/Controllers/MatterController.php:606
 #: app/Http/Controllers/MatterController.php:607
 #: lang/blade-translations/matter/static.php:175
+#: lang/blade-translations/matter/static.php:177
 #: lang/blade-translations/seeder.php:707
 msgid "Granted"
-msgstr "Date délivrance"
+msgstr "Délivrance"
 
 #: app/Http/Controllers/MatterController.php:594
 #: app/Http/Controllers/MatterController.php:607
@@ -323,36 +331,36 @@ msgstr "Date prochain renouv."
 #: app/Http/Controllers/MatterController.php:1051
 #: app/Http/Controllers/MatterController.php:1052
 msgid "Number not found"
-msgstr ""
+msgstr "Numéro non trouvé"
 
 #: app/Http/Controllers/MatterController.php:1013
 #: app/Http/Controllers/MatterController.php:1036
 #: app/Http/Controllers/MatterController.php:1051
 #: app/Http/Controllers/MatterController.php:1052
 msgid "Number not found in OPS Family"
-msgstr ""
+msgstr "Numéro non trouvé dans la famille OPS"
 
 #: app/Http/Controllers/MatterController.php:1016
 #: app/Http/Controllers/MatterController.php:1039
 #: app/Http/Controllers/MatterController.php:1054
 #: app/Http/Controllers/MatterController.php:1055
 msgid "OPS server error"
-msgstr ""
+msgstr "Erreur du serveur OPS"
 
 #: app/Http/Controllers/MatterController.php:1016
 #: app/Http/Controllers/MatterController.php:1039
 #: app/Http/Controllers/MatterController.php:1054
 #: app/Http/Controllers/MatterController.php:1055
 msgid "OPS server error, try again"
-msgstr ""
+msgstr "Erreur du serveur OPS, essayer à nouveau"
 
 #: lang/blade-translations/actor/static.php:16
 msgid "NAME Firstname"
-msgstr ""
+msgstr "NOM Prénom"
 
 #: lang/blade-translations/actor/static.php:18
 msgid "Optional"
-msgstr ""
+msgstr "En option"
 
 #: lang/blade-translations/actor/static.php:20
 #: lang/blade-translations/actor/static.php:48
@@ -414,6 +422,7 @@ msgstr "Créer"
 #: lang/blade-translations/actor/static.php:38
 #: lang/blade-translations/layouts/static.php:66
 #: lang/blade-translations/matter/static.php:219
+#: lang/blade-translations/matter/static.php:223
 #: resources/views/actor/index.blade.php:5
 #: resources/views/layouts/app.blade.php:105
 #: resources/views/layouts/app.blade.php:177
@@ -431,7 +440,9 @@ msgstr "Créer un acteur"
 #: lang/blade-translations/documents/static.php:49
 #: lang/blade-translations/eventname/static.php:37
 #: lang/blade-translations/matter/static.php:179
+#: lang/blade-translations/matter/static.php:181
 #: lang/blade-translations/matter/static.php:267
+#: lang/blade-translations/matter/static.php:271
 #: lang/blade-translations/role/static.php:51
 #: lang/blade-translations/type/static.php:37
 #: lang/blade-translations/user/static.php:47
@@ -460,6 +471,7 @@ msgstr "Prénom"
 
 #: lang/blade-translations/actor/static.php:50
 #: lang/blade-translations/matter/static.php:183
+#: lang/blade-translations/matter/static.php:185
 #: lang/blade-translations/user/static.php:51
 #: resources/views/actor/index.blade.php:17
 #: resources/views/matter/roleActors.blade.php:7
@@ -505,8 +517,9 @@ msgstr "Averti"
 
 #: lang/blade-translations/actor/static.php:63
 #: lang/blade-translations/matter/static.php:229
+#: lang/blade-translations/matter/static.php:233
 msgid "Actor data"
-msgstr ""
+msgstr "Donnée d'acteur"
 
 #: lang/blade-translations/actor/static.php:69
 #: resources/views/actor/index.blade.php:60
@@ -541,11 +554,11 @@ msgstr "Utilisé dans"
 
 #: lang/blade-translations/actor/static.php:81
 msgid "Delete actor"
-msgstr ""
+msgstr "Effacer l'acteur"
 
 #: lang/blade-translations/actor/static.php:83
 msgid "the actor"
-msgstr ""
+msgstr "l'acteur"
 
 #: lang/blade-translations/actor/static.php:85
 #: lang/blade-translations/category/static.php:43
@@ -557,6 +570,7 @@ msgstr ""
 #: lang/blade-translations/rule/static.php:110
 #: lang/blade-translations/seeder.php:902
 #: lang/blade-translations/template-members/static.php:67
+#: lang/blade-translations/template-members/static.php:69
 #: lang/blade-translations/type/static.php:43
 #: resources/views/actor/show.blade.php:9
 #: resources/views/category/show.blade.php:17
@@ -648,7 +662,7 @@ msgstr ""
 
 #: lang/blade-translations/actor/static.php:111
 msgid "Fixed fee or rate"
-msgstr ""
+msgstr "Montant fixe ou taux"
 
 #: lang/blade-translations/actor/static.php:113
 #: resources/views/actor/show.blade.php:114
@@ -854,7 +868,7 @@ msgstr "Catégorie"
 #: lang/blade-translations/category/static.php:23
 #: resources/views/category/index.blade.php:6
 msgid "Create Category"
-msgstr ""
+msgstr "Créer une catégorie"
 
 #: lang/blade-translations/category/static.php:25
 #: lang/blade-translations/category/static.php:35
@@ -887,7 +901,7 @@ msgstr "Affiché avec"
 
 #: lang/blade-translations/category/static.php:29
 msgid "Category info"
-msgstr ""
+msgstr "Information de catégorie"
 
 #: lang/blade-translations/category/static.php:31
 #: resources/views/category/index.blade.php:38
@@ -934,12 +948,12 @@ msgstr "Types de classifieurs"
 #: lang/blade-translations/classifier_type/static.php:37
 #: resources/views/classifier_type/index.blade.php:6
 msgid "Create Classifier Type"
-msgstr ""
+msgstr "Créer un type de classification"
 
 #: lang/blade-translations/classifier_type/static.php:39
 #: lang/blade-translations/type/static.php:31
 msgid "Type info"
-msgstr ""
+msgstr "Info de type"
 
 #: lang/blade-translations/classifier_type/static.php:41
 #: resources/views/classifier_type/index.blade.php:38
@@ -956,7 +970,7 @@ msgstr "Cliquez sur un type pour voir et éditer les détails"
 #: lang/blade-translations/classifier_type/static.php:45
 #: lang/blade-translations/type/static.php:39
 msgid "Delete type"
-msgstr ""
+msgstr "Supprimer le type"
 
 #: lang/blade-translations/default_actor/static.php:20
 #: resources/views/default_actor/create.blade.php:5
@@ -966,7 +980,9 @@ msgstr "Acteur"
 
 #: lang/blade-translations/default_actor/static.php:25
 #: lang/blade-translations/matter/static.php:189
+#: lang/blade-translations/matter/static.php:191
 #: lang/blade-translations/matter/static.php:265
+#: lang/blade-translations/matter/static.php:269
 #: lang/blade-translations/role/static.php:21
 #: lang/blade-translations/user/static.php:29
 #: resources/views/default_actor/create.blade.php:8
@@ -1005,7 +1021,7 @@ msgstr "Acteurs par défaut"
 #: lang/blade-translations/default_actor/static.php:49
 #: resources/views/default_actor/index.blade.php:6
 msgid "Create Default Actor"
-msgstr ""
+msgstr "Créer un acteur par défaut"
 
 #: lang/blade-translations/default_actor/static.php:51
 #: resources/views/default_actor/index.blade.php:42
@@ -1019,6 +1035,7 @@ msgstr "Cliquez sur une ligne pour voir et éditer les détails"
 
 #: lang/blade-translations/default_actor/static.php:55
 #: lang/blade-translations/matter/static.php:187
+#: lang/blade-translations/matter/static.php:189
 #: resources/views/default_actor/show.blade.php:18
 #: resources/views/matter/roleActors.blade.php:10
 msgid "Shared"
@@ -1026,7 +1043,7 @@ msgstr "Partagé"
 
 #: lang/blade-translations/default_actor/static.php:57
 msgid "Delete entry"
-msgstr ""
+msgstr "Supprimer l'entrée"
 
 #: lang/blade-translations/documents/static.php:16
 #: resources/views/documents/create.blade.php:3
@@ -1041,17 +1058,17 @@ msgstr "Créer une classe"
 #: lang/blade-translations/documents/static.php:22
 #: resources/views/documents/index.blade.php:5
 msgid "Email Template Classes"
-msgstr ""
+msgstr "Classes de modèles d'e-mails"
 
 #: lang/blade-translations/documents/static.php:24
 #: resources/views/documents/index.blade.php:6
 msgid "Create Email Template Class"
-msgstr ""
+msgstr "Créer une classe de modèles d'e-mails"
 
 #: lang/blade-translations/documents/static.php:26
 #: lang/blade-translations/template-members/static.php:59
 msgid "Class data"
-msgstr ""
+msgstr "Données de classe"
 
 #: lang/blade-translations/documents/static.php:28
 #: resources/views/documents/index.blade.php:41
@@ -1104,7 +1121,7 @@ msgstr "Noms d'évènement liés à cette classe"
 
 #: lang/blade-translations/documents/static.php:53
 msgid "Delete class"
-msgstr ""
+msgstr "Supprimer la classe"
 
 #: lang/blade-translations/eventname/static.php:16
 #: resources/views/eventname/create.blade.php:9
@@ -1171,7 +1188,7 @@ msgstr "Créer un nom d'évènement"
 
 #: lang/blade-translations/eventname/static.php:42
 msgid "Event name info"
-msgstr ""
+msgstr "Information de nom d'évènement"
 
 #: lang/blade-translations/eventname/static.php:44
 #: resources/views/eventname/index.blade.php:38
@@ -1258,6 +1275,7 @@ msgstr "An"
 
 #: lang/blade-translations/fee/static.php:45
 #: lang/blade-translations/matter/static.php:283
+#: lang/blade-translations/matter/static.php:287
 #: lang/blade-translations/rule/static.php:79
 #: resources/views/fee/index.blade.php:43
 #: resources/views/fee/index.blade.php:44
@@ -1277,6 +1295,7 @@ msgstr "Coût"
 
 #: lang/blade-translations/fee/static.php:50
 #: lang/blade-translations/matter/static.php:285
+#: lang/blade-translations/matter/static.php:289
 #: lang/blade-translations/rule/static.php:83
 #: resources/views/fee/index.blade.php:44
 #: resources/views/fee/index.blade.php:45
@@ -1325,6 +1344,130 @@ msgstr "Utiliser avant"
 #: lang/blade-translations/fee/static.php:60
 msgid "Leave empty if not used"
 msgstr "Laisser vide si non utilisé"
+
+#: lang/blade-translations/js/js.php:16 resources/views/home-js.blade.php:37
+msgid "No renewals selected for clearing!"
+msgstr "Aucun renouvellement n'est sélectionné pour l'acquittement"
+
+#: lang/blade-translations/js/js.php:18 resources/views/home-js.blade.php:59
+msgid "No tasks selected for clearing!"
+msgstr "Aucune tâche sélectionnée pour l'acquittement !"
+
+#: lang/blade-translations/js/js.php:20
+msgid "Unexpected result: "
+msgstr "Résultat inattendu :"
+
+#: lang/blade-translations/js/js.php:23
+#: resources/views/layouts/app.blade.php:196
+msgid "Token expired. Refresh the page"
+msgstr "Jeton expiré. Rafraîchir la page"
+
+#: lang/blade-translations/js/js.php:25
+#: resources/views/layouts/app.blade.php:261
+msgid "Deleting the matter. Continue anyway?"
+msgstr "Suppression du dossier. Continuer ?"
+
+#: lang/blade-translations/js/js.php:27
+#: resources/views/layouts/app.blade.php:284
+msgid "Deleting the event will also delete the linked tasks. Continue anyway?"
+msgstr ""
+"La suppression de l'évènement supprimera également les tâches associées. "
+"Continuer ?"
+
+#: lang/blade-translations/js/js.php:29
+#: resources/views/layouts/app.blade.php:405
+msgid ""
+"Regenerating the tasks will delete all the existing automatically created "
+"tasks and renewals for this event.\n"
+"Past tasks will not be recreated - make sure they have been dealt with.\n"
+"Continue anyway?"
+msgstr ""
+"La régénération des tâches effacera les tâches crées automatiquement et les "
+"renouvellements pour cet évènement.\n"
+"Les tâches passées ne seront recréées - soyez sûr qu'elles ont été "
+"traitées.\n"
+"Continuer ?"
+
+#: lang/blade-translations/js/js.php:31
+msgid "Error fetching suggestions:"
+msgstr "Erreur en rapatriant les suggestions :"
+
+#: lang/blade-translations/js/js.php:33
+#: resources/views/matter/show-js.blade.php:211
+msgid "Only DOCX files can be processed for the moment"
+msgstr "Seuls les fichiers DOCX peuvent être traités pour l'instant"
+
+#: lang/blade-translations/js/js.php:35
+msgid "Response status "
+msgstr "Statut de réponse"
+
+#: lang/blade-translations/js/js.php:37 lang/blade-translations/js/js.php:42
+msgid "invoiced"
+msgstr "passer en facturé"
+
+#: lang/blade-translations/js/js.php:37
+msgid "resetting"
+msgstr "un acquittement"
+
+#: lang/blade-translations/js/js.php:39 lang/blade-translations/js/js.php:44
+msgid "paid"
+msgstr "passer à \"payé\""
+
+#: lang/blade-translations/js/js.php:40
+msgid "call"
+msgstr "un appel"
+
+#: lang/blade-translations/js/js.php:41 lang/blade-translations/js/js.php:46
+msgid "for payment"
+msgstr "pour le paiement"
+
+#: lang/blade-translations/js/js.php:43 lang/blade-translations/js/js.php:48
+msgid "last call"
+msgstr "un dernier rappel"
+
+#: lang/blade-translations/js/js.php:45 lang/blade-translations/js/js.php:50
+msgid "reminder"
+msgstr "un rappel"
+
+#: lang/blade-translations/js/js.php:46
+msgid "payment"
+msgstr "un paiement"
+
+#: lang/blade-translations/js/js.php:47 lang/blade-translations/js/js.php:52
+msgid "abandon renewals"
+msgstr "un abandon de renouvellements"
+
+#: lang/blade-translations/js/js.php:50 lang/blade-translations/js/js.php:55
+msgid "lapsed renewals"
+msgstr "une déchéance reçue"
+
+#: lang/blade-translations/js/js.php:52 lang/blade-translations/js/js.php:57
+msgid "lapse communications sent"
+msgstr "une constatation de déchéance envoyée"
+
+#: lang/blade-translations/js/js.php:54
+msgid "No renewals selected for "
+msgstr "Aucune annuité sélectionnée pour"
+
+#: lang/blade-translations/js/js.php:56 lang/blade-translations/js/js.php:61
+msgid ""
+"No email template found - check that your templates match your client's "
+"language"
+msgstr ""
+"Aucun modèle d'e-mail - vérifiez qu'un modèle correspond à la langue du "
+"client"
+
+#: lang/blade-translations/js/js.php:58 lang/blade-translations/js/js.php:63
+msgid "Something went wrong"
+msgstr "Quelque chose s'est mal passé"
+
+#: lang/blade-translations/js/js.php:59
+msgid "No renewals selected for"
+msgstr "Aucune annuité sélectionnée pour"
+
+#: lang/blade-translations/js/js.php:60 lang/blade-translations/js/js.php:65
+msgid "No renewals selected for order"
+msgstr "Aucune annuité sélectionnée pour un ordre"
 
 #: lang/blade-translations/layouts/static.php:16
 #: lang/blade-translations/seeder.php:823
@@ -1576,8 +1719,8 @@ msgid ""
 "This value is changed automatically by inserting or deleting killer events, "
 "such as 'Abandoned', in the Status"
 msgstr ""
-"Cette valeur est changée automatiquement en insérant ou en supprimant les"
-" évènements tueurs, tels que Abandonné, dans le statut"
+"Cette valeur est changée automatiquement en insérant ou en supprimant les "
+"évènements tueurs, tels que Abandonné, dans le statut"
 
 #: lang/blade-translations/matter/static.php:72
 msgid "Cannot be changed because the matter has tasks based on the country"
@@ -1626,6 +1769,7 @@ msgstr "Ajouter un évènement"
 
 #: lang/blade-translations/matter/static.php:97
 #: lang/blade-translations/matter/static.php:163
+#: lang/blade-translations/matter/static.php:165
 #: resources/views/matter/events.blade.php:12
 #: resources/views/matter/roleActors.blade.php:8
 #: resources/views/matter/show.blade.php:183
@@ -1636,6 +1780,7 @@ msgstr ""
 
 #: lang/blade-translations/matter/static.php:99
 #: lang/blade-translations/matter/static.php:169
+#: lang/blade-translations/matter/static.php:171
 #: resources/views/matter/events.blade.php:13
 #: resources/views/matter/show.blade.php:185
 #: resources/views/matter/show.blade.php:194
@@ -1643,6 +1788,7 @@ msgid "Number"
 msgstr "Numéro"
 
 #: lang/blade-translations/matter/static.php:104
+#: lang/blade-translations/matter/static.php:120
 #: resources/views/matter/events.blade.php:15
 msgid "Refers to"
 msgstr "Se réfère à"
@@ -1659,60 +1805,70 @@ msgid "Detail"
 msgstr "Détail"
 
 #: lang/blade-translations/matter/static.php:120
+#: lang/blade-translations/matter/static.php:122
 #: resources/views/matter/index.blade.php:30
 #: resources/views/matter/index.blade.php:140
 msgid "Show Containers"
 msgstr "Affiche conteneurs"
 
 #: lang/blade-translations/matter/static.php:122
+#: lang/blade-translations/matter/static.php:124
 #: resources/views/matter/index.blade.php:34
 #: resources/views/matter/index.blade.php:145
 msgid "Actor View"
 msgstr "Vue acteurs"
 
 #: lang/blade-translations/matter/static.php:124
+#: lang/blade-translations/matter/static.php:126
 #: resources/views/matter/index.blade.php:36
 #: resources/views/matter/index.blade.php:148
 msgid "Status View"
 msgstr "Vue statut"
 
 #: lang/blade-translations/matter/static.php:126
+#: lang/blade-translations/matter/static.php:128
 #: resources/views/matter/index.blade.php:40
 #: resources/views/matter/index.blade.php:153
 msgid "Show Mine"
 msgstr "Affiche les miens"
 
 #: lang/blade-translations/matter/static.php:128
+#: lang/blade-translations/matter/static.php:130
 #: resources/views/matter/index.blade.php:44
 #: resources/views/matter/index.blade.php:158
 msgid "Include Dead"
 msgstr "Inclus les fermés"
 
 #: lang/blade-translations/matter/static.php:130
+#: lang/blade-translations/matter/static.php:132
 #: resources/views/matter/index.blade.php:48
 #: resources/views/matter/index.blade.php:163
 msgid "Export"
 msgstr ""
 
 #: lang/blade-translations/matter/static.php:132
+#: lang/blade-translations/matter/static.php:134
 #: resources/views/matter/index.blade.php:53
 #: resources/views/matter/index.blade.php:168
 msgid "By family, only alive (fr)"
 msgstr "Par famille, actifs seulement (fr)"
 
 #: lang/blade-translations/matter/static.php:134
+#: lang/blade-translations/matter/static.php:136
 #: resources/views/matter/index.blade.php:54
 #: resources/views/matter/index.blade.php:169
 msgid "By family, with dead (fr)"
 msgstr "Par famille, fermés inclus (fr) "
 
 #: lang/blade-translations/matter/static.php:136
+#: lang/blade-translations/matter/static.php:138
 #: resources/views/matter/index.blade.php:55
 #: resources/views/matter/index.blade.php:170
 msgid "By family, with dead (en)"
 msgstr "Par famille, fermés inclus "
 
 #: lang/blade-translations/matter/static.php:138
+#: lang/blade-translations/matter/static.php:140
 #: lang/blade-translations/seeder.php:1003
 #: resources/views/matter/index.blade.php:59
 #: resources/views/matter/index.blade.php:174
@@ -1720,6 +1876,7 @@ msgid "Report"
 msgstr "Rapport"
 
 #: lang/blade-translations/matter/static.php:140
+#: lang/blade-translations/matter/static.php:142
 #: lang/blade-translations/renewals/static.php:22
 #: resources/views/matter/index.blade.php:63
 #: resources/views/matter/index.blade.php:178
@@ -1729,159 +1886,199 @@ msgid "Clear filters"
 msgstr "RAZ des filtres"
 
 #: lang/blade-translations/matter/static.php:142
+#: lang/blade-translations/matter/static.php:144
 msgid "Ref"
 msgstr "Réf"
 
 #: lang/blade-translations/matter/static.php:149
+#: lang/blade-translations/matter/static.php:151
 msgid "Cl. Ref"
 msgstr "Réf. cl."
 
 #: lang/blade-translations/matter/static.php:155
+#: lang/blade-translations/matter/static.php:157
 msgid "Agt. Ref"
 msgstr "Réf agt"
 
 #: lang/blade-translations/matter/static.php:159
+#: lang/blade-translations/matter/static.php:161
 #: lang/blade-translations/seeder.php:54
 msgid "Inventor"
 msgstr "Inventeur"
 
 #: lang/blade-translations/matter/static.php:173
+#: lang/blade-translations/matter/static.php:175
 msgid "PubNo"
 msgstr "NoPub"
 
 #: lang/blade-translations/matter/static.php:177
+#: lang/blade-translations/matter/static.php:179
 msgid "Open in Espacenet"
 msgstr "Ouvrir dans Espacenet"
 
 #: lang/blade-translations/matter/static.php:181
+#: lang/blade-translations/matter/static.php:183
 #: lang/blade-translations/matter/static.php:269
+#: lang/blade-translations/matter/static.php:273
 #: resources/views/matter/roleActors.blade.php:6
 msgid "Reference"
 msgstr "Référence"
 
 #: lang/blade-translations/matter/static.php:185
+#: lang/blade-translations/matter/static.php:187
 #: resources/views/matter/roleActors.blade.php:9
 msgid "Rate"
 msgstr "Taux"
 
 #: lang/blade-translations/matter/static.php:191
+#: lang/blade-translations/matter/static.php:193
 msgid "Change"
 msgstr "Changer"
 
 #: lang/blade-translations/matter/static.php:193
+#: lang/blade-translations/matter/static.php:195
 msgid "Remove actor"
 msgstr "Supprimer un acteur"
 
 #: lang/blade-translations/matter/static.php:195
+#: lang/blade-translations/matter/static.php:197
 msgid "See family"
 msgstr "Voir la famille"
 
 #: lang/blade-translations/matter/static.php:197
+#: lang/blade-translations/matter/static.php:199
 msgid "Advanced matter edition"
 msgstr "Édition avancée du dossier"
 
 #: lang/blade-translations/matter/static.php:199
+#: lang/blade-translations/matter/static.php:201
 #: resources/views/matter/show.blade.php:26
 #: resources/views/matter/show.blade.php:27
 msgid "Container:"
 msgstr "Conteneur:"
 
 #: lang/blade-translations/matter/static.php:201
+#: lang/blade-translations/matter/static.php:203
 msgid "See container"
 msgstr "Voir le conteneur"
 
 #: lang/blade-translations/matter/static.php:203
+#: lang/blade-translations/matter/static.php:205
 #: resources/views/matter/show.blade.php:34
 #: resources/views/matter/show.blade.php:35
 msgid "Parent:"
 msgstr "Parent :"
 
 #: lang/blade-translations/matter/static.php:205
+#: lang/blade-translations/matter/static.php:207
 msgid "See parent"
 msgstr "Voir le parent"
 
 #: lang/blade-translations/matter/static.php:207
+#: lang/blade-translations/matter/static.php:209
 #: resources/views/matter/show.blade.php:42
 #: resources/views/matter/show.blade.php:43
 msgid "Alt. ref:"
 msgstr "Autre réf. :"
 
 #: lang/blade-translations/matter/static.php:209
+#: lang/blade-translations/matter/static.php:213
 msgid "Create child :category"
 msgstr "Créer un descendant en :category"
 
 #: lang/blade-translations/matter/static.php:211
+#: resources/views/matter/show.blade.php:46
+msgid "Expiry:"
+msgstr "Expiration :"
+
+#: lang/blade-translations/matter/static.php:211
+#: lang/blade-translations/matter/static.php:215
 #: resources/views/matter/show.blade.php:59
 #: resources/views/matter/show.blade.php:60
 msgid "New Child"
 msgstr "Nouveau descendant"
 
 #: lang/blade-translations/matter/static.php:213
+#: lang/blade-translations/matter/static.php:217
 #: resources/views/matter/show.blade.php:62
 #: resources/views/matter/show.blade.php:63
 msgid "Clone"
 msgstr "Dupliquer"
 
 #: lang/blade-translations/matter/static.php:215
+#: lang/blade-translations/matter/static.php:219
 msgid "Enter :category in national phase"
 msgstr ":category : entrée en phase nationale"
 
 #: lang/blade-translations/matter/static.php:217
+#: lang/blade-translations/matter/static.php:221
 #: resources/views/matter/show.blade.php:66
 msgid "Nat. Phase"
 msgstr "Phase nat."
 
 #: lang/blade-translations/matter/static.php:221
+#: lang/blade-translations/matter/static.php:225
 msgid "Add Actor"
 msgstr "Ajouter un acteur"
 
 #: lang/blade-translations/matter/static.php:223
+#: lang/blade-translations/matter/static.php:227
 msgid "Add :role"
 msgstr "Ajouter un :role"
 
 #: lang/blade-translations/matter/static.php:225
+#: lang/blade-translations/matter/static.php:229
 msgid "Edit actors in :role group"
 msgstr "Éditer les acteurs du groupe :role"
 
 #: lang/blade-translations/matter/static.php:227
+#: lang/blade-translations/matter/static.php:231
 msgid "Special instructions"
 msgstr "Instructions spéciales"
 
 #: lang/blade-translations/matter/static.php:231
+#: lang/blade-translations/matter/static.php:235
 msgid "All events"
 msgstr "Tous les évènements"
 
 #: lang/blade-translations/matter/static.php:233
+#: lang/blade-translations/matter/static.php:237
 #: resources/views/matter/show.blade.php:217
 #: resources/views/matter/show.blade.php:228
 msgid "Open Tasks Due"
 msgstr "Échéances de tâches"
 
 #: lang/blade-translations/matter/static.php:235
+#: lang/blade-translations/matter/static.php:239
 msgid "History"
 msgstr "Historique"
 
 #: lang/blade-translations/matter/static.php:237
+#: lang/blade-translations/matter/static.php:241
 #: resources/views/matter/show.blade.php:235
 #: resources/views/matter/show.blade.php:248
 msgid "Renewals Due"
 msgstr "Échéances de renouvellements"
 
 #: lang/blade-translations/matter/static.php:239
+#: lang/blade-translations/matter/static.php:243
 msgid "All renewals"
 msgstr "Tous les renouvellements"
 
 #: lang/blade-translations/matter/static.php:241
+#: lang/blade-translations/matter/static.php:245
 msgid "Classifier detail"
 msgstr "Détail du classifieur"
 
 #: lang/blade-translations/matter/static.php:243
+#: lang/blade-translations/matter/static.php:247
 #: resources/views/matter/show.blade.php:253
 #: resources/views/matter/show.blade.php:268
 msgid "Classifiers"
 msgstr "Classifieurs"
 
 #: lang/blade-translations/matter/static.php:245
+#: lang/blade-translations/matter/static.php:249
 #: lang/blade-translations/seeder.php:97
 #: resources/views/matter/show.blade.php:287
 #: resources/views/matter/show.blade.php:302
@@ -1889,73 +2086,87 @@ msgid "Link"
 msgstr "Lien"
 
 #: lang/blade-translations/matter/static.php:247
+#: lang/blade-translations/matter/static.php:251
 #: resources/views/matter/show.blade.php:298
 #: resources/views/matter/show.blade.php:315
 msgid "Related Matters"
 msgstr "Dossiers liés"
 
 #: lang/blade-translations/matter/static.php:249
+#: lang/blade-translations/matter/static.php:253
 #: resources/views/matter/show.blade.php:304
 #: resources/views/matter/show.blade.php:321
 msgid "Fam"
 msgstr "Famille"
 
 #: lang/blade-translations/matter/static.php:251
+#: lang/blade-translations/matter/static.php:255
 #: resources/views/matter/show.blade.php:334
 #: resources/views/matter/show.blade.php:353
 msgid "Summaries:"
 msgstr "Résumés :"
 
 #: lang/blade-translations/matter/static.php:253
+#: lang/blade-translations/matter/static.php:257
 msgid "Copy a summary in English"
 msgstr "Copier un résumé en anglais"
 
 #: lang/blade-translations/matter/static.php:255
+#: lang/blade-translations/matter/static.php:259
 msgid "Copy a summary in French"
 msgstr "Copier un résumé en français"
 
 #: lang/blade-translations/matter/static.php:257
+#: lang/blade-translations/matter/static.php:261
 #: resources/views/matter/show.blade.php:351
 #: resources/views/matter/show.blade.php:370
 msgid "Email:"
 msgstr "E-mail :"
 
 #: lang/blade-translations/matter/static.php:259
+#: lang/blade-translations/matter/static.php:263
 msgid "Send email"
 msgstr "Envoyer un email"
 
 #: lang/blade-translations/matter/static.php:261
+#: lang/blade-translations/matter/static.php:265
 msgid "Envoyer un courriel"
 msgstr ""
 
 #: lang/blade-translations/matter/static.php:263
+#: lang/blade-translations/matter/static.php:267
 #: resources/views/matter/show.blade.php:394
 msgid "Drop File to Merge"
 msgstr "Déposer le Fichier à Fusionner"
 
 #: lang/blade-translations/matter/static.php:271
+#: lang/blade-translations/matter/static.php:275
 #: resources/views/matter/show.blade.php:396
 #: resources/views/matter/show.blade.php:416
 msgid "Add to container and share"
 msgstr "Ajouter au conteneur et partager"
 
 #: lang/blade-translations/matter/static.php:273
+#: lang/blade-translations/matter/static.php:277
 #: resources/views/matter/show.blade.php:400
 #: resources/views/matter/show.blade.php:420
 msgid "Add to this matter only (not shared)"
 msgstr "Ajouter à ce dossier seulement (non partagé)"
 
 #: lang/blade-translations/matter/static.php:275
+#: lang/blade-translations/matter/static.php:279
 #: resources/views/matter/summary.blade.php:7
 msgid "Copy"
 msgstr "Copier"
 
 #: lang/blade-translations/matter/static.php:277
+#: lang/blade-translations/matter/static.php:281
 #: resources/views/matter/tasks.blade.php:7
 msgid "Tasks by event"
 msgstr "Tâches par évènement"
 
 #: lang/blade-translations/matter/static.php:279
+#: lang/blade-translations/matter/static.php:283
 #: resources/views/home.blade.php:139 resources/views/home.blade.php:143
 #: resources/views/home.blade.php:177 resources/views/home.blade.php:183
 #: resources/views/matter/tasks.blade.php:8
@@ -1963,38 +2174,46 @@ msgid "Due date"
 msgstr "Date d'échéance"
 
 #: lang/blade-translations/matter/static.php:281
+#: lang/blade-translations/matter/static.php:285
 #: resources/views/matter/tasks.blade.php:9
 msgid "Ack"
 msgstr "OK"
 
 #: lang/blade-translations/matter/static.php:287
+#: lang/blade-translations/matter/static.php:291
 #: resources/views/matter/tasks.blade.php:18
 msgid "Cur."
 msgstr "Devise"
 
 #: lang/blade-translations/matter/static.php:289
+#: lang/blade-translations/matter/static.php:293
 #: resources/views/matter/tasks.blade.php:19
 msgid "Time"
 msgstr "Durée"
 
 #: lang/blade-translations/matter/static.php:291
+#: lang/blade-translations/matter/static.php:295
 #: resources/views/matter/tasks.blade.php:22
 msgid "By"
 msgstr "Par"
 
 #: lang/blade-translations/matter/static.php:293
+#: lang/blade-translations/matter/static.php:297
 msgid "Add task to :event"
 msgstr "Ajouter une tâche à un évènement"
 
 #: lang/blade-translations/matter/static.php:295
+#: lang/blade-translations/matter/static.php:299
 msgid "Delete event (with tasks)"
 msgstr "Supprimer l'évènement (et ses tâches)"
 
 #: lang/blade-translations/matter/static.php:297
+#: lang/blade-translations/matter/static.php:301
 msgid "Regenerate Tasks"
 msgstr "Régénérer les tâches"
 
 #: lang/blade-translations/matter/static.php:299
+#: lang/blade-translations/matter/static.php:305
 #: lang/blade-translations/rule/static.php:19
 #: resources/views/eventname/create.blade.php:11
 #: resources/views/rule/create.blade.php:6
@@ -2003,12 +2222,20 @@ msgid "Task"
 msgstr "Tâche"
 
 #: lang/blade-translations/matter/static.php:301
+#: lang/blade-translations/matter/static.php:307
 msgid "Due date (xx/xx/yyyy)"
 msgstr "Date d'échéance (xx/xx/yyyy)"
 
 #: lang/blade-translations/matter/static.php:303
+#: lang/blade-translations/matter/static.php:309
 msgid "Assigned to"
 msgstr "Attribué à"
+
+#: lang/blade-translations/matter/static.php:303
+#: lang/blade-translations/rule/static.php:66
+#: resources/views/rule/create.blade.php:94
+msgid "Delete task"
+msgstr "Effacer la tâche"
 
 #: lang/blade-translations/renewals/static.php:18
 msgid "Help"
@@ -2266,20 +2493,36 @@ msgid "Urgent"
 msgstr ""
 
 #: lang/blade-translations/renewals/static.php:122
+#: lang/blade-translations/renewals/static.php:128
 msgid "Job"
 msgstr ""
 
+#: lang/blade-translations/renewals/static.php:122
+msgid "invoicing"
+msgstr "une facturation"
+
 #: lang/blade-translations/renewals/static.php:124
+#: lang/blade-translations/renewals/static.php:130
 msgid "User"
-msgstr ""
+msgstr "Utilisateur"
+
+#: lang/blade-translations/renewals/static.php:124
+msgid "registering receipt"
+msgstr "une réception de quittance"
 
 #: lang/blade-translations/renewals/static.php:126
+#: lang/blade-translations/renewals/static.php:132
 #: resources/views/renewals/logs.blade.php:22
 #: resources/views/renewals/logs.blade.php:24
 msgid "Steps"
 msgstr "Étapes"
 
+#: lang/blade-translations/renewals/static.php:126
+msgid "closing renewals"
+msgstr "une clôture de renouvellement"
+
 #: lang/blade-translations/renewals/static.php:129
+#: lang/blade-translations/renewals/static.php:135
 #: resources/views/renewals/logs.blade.php:32
 #: resources/views/renewals/logs.blade.php:34
 #: resources/views/renewals/logs.blade.php:37
@@ -2389,11 +2632,6 @@ msgstr "Fin de mois"
 msgid "Clear task"
 msgstr "Acquitter la tâche"
 
-#: lang/blade-translations/rule/static.php:66
-#: resources/views/rule/create.blade.php:94
-msgid "Delete task"
-msgstr "Effacer la tâche"
-
 #: lang/blade-translations/rule/static.php:68
 #: resources/views/rule/create.blade.php:107
 msgid "Condition event"
@@ -2481,7 +2719,7 @@ msgstr "Agent principal"
 
 #: lang/blade-translations/seeder.php:18
 msgid "Secondary Agent"
-msgstr ""
+msgstr "Agent secondaire"
 
 #: lang/blade-translations/seeder.php:20
 msgid "Usually the primary agent's agent"
@@ -2489,63 +2727,67 @@ msgstr "Habituellement l'agent de l'agent principal"
 
 #: lang/blade-translations/seeder.php:22
 msgid "Annuity Agent"
-msgstr ""
+msgstr "Agent d'annuités"
 
 #: lang/blade-translations/seeder.php:24
 msgid ""
 "Agent in charge of renewals. -Client handled- is a special agent who, when "
 "added, will delete any renewals in the matter"
 msgstr ""
+"Agent en charge des annuités. -Client handled- est un agent particulier qui, "
+"lorsqu'il est ajouté, effacera tous les renouvellements dans le dossier"
 
 #: lang/blade-translations/seeder.php:28
 msgid "Assignee in the US, i.e. the owner upon filing"
-msgstr ""
+msgstr "Bénéficiaire pour les US, c'est-à-dire le titulaire au moment du dépôt"
 
 #: lang/blade-translations/seeder.php:32
 msgid ""
 "The client we take instructions from and who we invoice. DO NOT CHANGE OR "
 "DELETE: this is also a database user role"
 msgstr ""
+"Le client qui donne les instructions et que nous facturons. NE PAS CHANGER "
+"NI EFFACER : c'est aussi un rôle d'utilisateur de la base de données"
 
 #: lang/blade-translations/seeder.php:36
 msgid "Client's contact person"
-msgstr ""
+msgstr "Personne contact du client"
 
 #: lang/blade-translations/seeder.php:38
 msgid "DB Administrator"
-msgstr ""
+msgstr "Administrateur de la base"
 
 #: lang/blade-translations/seeder.php:40
 msgid "DB Read-Only"
-msgstr ""
+msgstr "Base en lecture seule"
 
 #: lang/blade-translations/seeder.php:42
 msgid "DB Read/Write"
-msgstr ""
+msgstr "Base en lecture et écriture"
 
 #: lang/blade-translations/seeder.php:46
 msgid "Another user allowed to manage the case"
-msgstr ""
+msgstr "Un autre utilisateur autorisé à gérer le dossier"
 
 #: lang/blade-translations/seeder.php:48
 msgid "Former Agent"
-msgstr ""
+msgstr "Agent précédent"
 
 #: lang/blade-translations/seeder.php:50
 msgid "Former Owner"
-msgstr ""
+msgstr "Propriétaire précédent"
 
 #: lang/blade-translations/seeder.php:52
 msgid "To keep track of ownership history"
-msgstr ""
+msgstr "Pour garder l'historique de la propriété"
 
 #: lang/blade-translations/seeder.php:56
 msgid "Licensee"
-msgstr ""
+msgstr "Licencié"
 
 #: lang/blade-translations/seeder.php:58
 msgid "Patent Office"
-msgstr ""
+msgstr "Office de brevet"
 
 #: lang/blade-translations/seeder.php:60
 msgid "Opposing Party"
@@ -2553,7 +2795,7 @@ msgstr "Opposant"
 
 #: lang/blade-translations/seeder.php:62
 msgid "Owner"
-msgstr ""
+msgstr "Propriétaire"
 
 #: lang/blade-translations/seeder.php:64
 msgid "Use if different than applicant"
@@ -2588,8 +2830,8 @@ msgid ""
 "DO NOT DELETE - Special actor used for removing renewal tasks that are "
 "handled by the client"
 msgstr ""
-"NE PAS EFFACER - Acteur spécial utilisé pour retirer les tâches des"
-" renouvellements qui sont gérées par le client"
+"NE PAS EFFACER - Acteur spécial utilisé pour retirer les tâches des "
+"renouvellements qui sont gérées par le client"
 
 #: lang/blade-translations/seeder.php:80
 msgid "Abstract"
@@ -3714,8 +3956,8 @@ msgid ""
 "Communication regarding administrative or formal matters (missing parts, "
 "irregularities...)"
 msgstr ""
-"Notification concernant les aspects administratifs ou formels (pièces"
-" manquantes, irrégularités...)"
+"Notification concernant les aspects administratifs ou formels (pièces "
+"manquantes, irrégularités...)"
 
 #: lang/blade-translations/seeder.php:651
 msgid "Created"
@@ -3859,7 +4101,7 @@ msgstr "Utilisé pour toutes taxes à payer"
 
 #: lang/blade-translations/seeder.php:726
 msgid "Post designation"
-msgstr ""
+msgstr "Désignation postérieure"
 
 #: lang/blade-translations/seeder.php:728
 msgid "Parent Filed"
@@ -3870,8 +4112,8 @@ msgid ""
 "Filing date of the parent (use only when the matter type is defined). Use as "
 "link to the parent matter."
 msgstr ""
-"Date de dépôt du parent (utiliser uniquement quand le type de dossier est"
-" défini). Utilisé comme lien pour le dossier parent."
+"Date de dépôt du parent (utiliser uniquement quand le type de dossier est "
+"défini). Utilisé comme lien pour le dossier parent."
 
 #: lang/blade-translations/seeder.php:732
 msgid "Publication of Reg."
@@ -3888,7 +4130,8 @@ msgid ""
 "Any further action to be done by the responsible (comments, pre-"
 "handling, ...)"
 msgstr ""
-"Pour toute action à faire par le responsable (commentaires, prétraitement,...)"
+"Pour toute action à faire par le responsable (commentaires, "
+"prétraitement,...)"
 
 #: lang/blade-translations/seeder.php:738
 msgid "Priority Claim"
@@ -3911,8 +4154,8 @@ msgid ""
 "Any further documents to be filed (inventor designation, priority document, "
 "missing parts...)"
 msgstr ""
-"Pour tout document supplémentaire à fournir (désignation d'inventeur,"
-" document de priorité, pièces manquantes...)"
+"Pour tout document supplémentaire à fournir (désignation d'inventeur, "
+"document de priorité, pièces manquantes...)"
 
 #: lang/blade-translations/seeder.php:749
 msgid "Publication of SR"
@@ -3925,8 +4168,8 @@ msgstr "Publication A3"
 #: lang/blade-translations/seeder.php:755
 msgid "For EP, this means publication WITH the search report (A1 publ.)"
 msgstr ""
-"Pour EP, ceci correspond à la publication AVEC le rapport de recherche (pub."
-" A1)"
+"Pour EP, ceci correspond à la publication AVEC le rapport de recherche (pub. "
+"A1)"
 
 #: lang/blade-translations/seeder.php:757
 msgid "Request Continued Examination"
@@ -3949,8 +4192,8 @@ msgid ""
 "This is the final decision, that can only be appealed - do not mistake with "
 "an exam report"
 msgstr ""
-"Correspond à la décision finale, qui peut uniquement être restauré - ne pas"
-" confondre avec une notification d'examen"
+"Correspond à la décision finale, qui peut uniquement être restauré - ne pas "
+"confondre avec une notification d'examen"
 
 #: lang/blade-translations/seeder.php:767
 msgid "Registration"
@@ -4095,8 +4338,8 @@ msgstr ""
 #: lang/blade-translations/seeder.php:847
 msgid "Priority deadline is inserted only if no priority event exists"
 msgstr ""
-"Le délai de priorité n'est inséré que s'il n'existe pas d'évènement de"
-" priorité"
+"Le délai de priorité n'est inséré que s'il n'existe pas d'évènement de "
+"priorité"
 
 #: lang/blade-translations/seeder.php:853 resources/views/home.blade.php:143
 #: resources/views/home.blade.php:147 resources/views/home.blade.php:181
@@ -4154,8 +4397,8 @@ msgstr "Taxe de délivrance à Hong-Kong"
 #: lang/blade-translations/seeder.php:914
 msgid "Clear \"File Opposition\" task when \"Opposition\" event is created"
 msgstr ""
-"Acquitte la tâche \"Déposer une opposition\" lorsque l'évènement"
-" \"Opposition\" est créé"
+"Acquitte la tâche \"Déposer une opposition\" lorsque l'évènement "
+"\"Opposition\" est créé"
 
 #: lang/blade-translations/seeder.php:916
 msgid "R70(2)"
@@ -4369,6 +4612,10 @@ msgstr "Cliquez sur un membre pour voir et éditer les détails"
 msgid "Delete template"
 msgstr "Supprimer le modèle"
 
+#: lang/blade-translations/template-members/static.php:67
+msgid "the template "
+msgstr ""
+
 #: lang/blade-translations/type/static.php:20
 #: resources/views/type/create.blade.php:7
 msgid "Type name"
@@ -4568,14 +4815,6 @@ msgstr "A partir de :"
 msgid "Grace period"
 msgstr "Période de grâce"
 
-#: resources/views/home-js.blade.php:37
-msgid "No renewals selected for clearing!"
-msgstr "Aucun renouvellement n'est sélectionné pour l'acquittement"
-
-#: resources/views/home-js.blade.php:59
-msgid "No tasks selected for clearing!"
-msgstr "Aucune tâche sélectionnée pour l'acquittement !"
-
 #: resources/views/home.blade.php:21
 msgid "Create matter"
 msgstr "Créer un dossier"
@@ -4617,20 +4856,6 @@ msgstr "Acquitter la sélection au"
 msgid "Open renewals"
 msgstr "Renouvellements ouverts"
 
-#: resources/views/layouts/app.blade.php:196
-msgid "Token expired. Refresh the page"
-msgstr "Jeton expiré. Rafraîchir la page"
-
-#: resources/views/layouts/app.blade.php:261
-msgid "Deleting the matter. Continue anyway?"
-msgstr "Suppression du dossier. Continuer ?"
-
-#: resources/views/layouts/app.blade.php:284
-msgid "Deleting the event will also delete the linked tasks. Continue anyway?"
-msgstr ""
-"La suppression de l'évènement supprimera également les tâches associées. "
-"Continuer ?"
-
 #: resources/views/layouts/app.blade.php:391
 msgid "Continue anyway?"
 msgstr "Continuer ?"
@@ -4647,30 +4872,9 @@ msgstr "Vérification des dépendances. La base de données à indiquer :"
 msgid "Couldn't delete "
 msgstr "Suppression impossible"
 
-#: resources/views/layouts/app.blade.php:405
-msgid ""
-"Regenerating the tasks will delete all the existing automatically created "
-"tasks and renewals for this event.\n"
-"Past tasks will not be recreated - make sure they have been dealt with.\n"
-"Continue anyway?"
-msgstr ""
-"La régénération des tâches effacera les tâches crées automatiquement et les "
-"renouvellements pour cet évènement.\n"
-"Les tâches passées ne seront recréées - soyez sûr qu'elles ont été "
-"traitées.\n"
-"Continuer ?"
-
 #: resources/views/matter/create.blade.php:73
 msgid "matter"
-msgstr ""
-
-#: resources/views/matter/show-js.blade.php:211
-msgid "Only DOCX files can be processed for the moment"
-msgstr "Seuls les fichiers DOCX peuvent être traités pour l'instant"
-
-#: resources/views/matter/show.blade.php:46
-msgid "Expiry:"
-msgstr "Expiration :"
+msgstr "dossier"
 
 #: resources/views/matter/show.blade.php:51
 msgid "Responsible:"

@@ -2,14 +2,28 @@
 # -*- coding: utf-8 -*-
 
 # only fr language for now
-# run from tools directory
+# run from lang directory
 
 import polib
 import json
-for lang in ("fr",)
-    pofile = polib.pofile(f'../lang/i18n/{lang}.po')
+for lang in ("fr",):
+    pofile = polib.pofile(f'i18n/{lang}.po', encoding="utf8")
     translations = {}
+    translations_js = {}
     for entry in pofile.translated_entries():
-        translations[polib.escape(entry.msgid)] = polib.escape(entry.msgstr)
-    with open(f"../lang/{lang}.json", "w") as f:
+        js= True
+        main = True
+        for occurrence in entry.occurrences:
+            fichier, ligne = occurrence
+            if "js.php" in fichier and js:
+                translations_js[polib.escape(entry.msgid)] = polib.escape(entry.msgstr)
+                js = False
+            elif main:
+                translations[polib.escape(entry.msgid)] = polib.escape(entry.msgstr)
+                main = False
+    with open(f"../public/lang/{lang}.json", "w") as f:
+        json.dump(translations_js, f, indent=2)
+    print(f"Wrote public/lang/{lang}.json")
+    with open(f"{lang}.json", "w") as f:
         json.dump(translations, f, indent=2)
+    print(f"Wrote lang/{lang}.json")
