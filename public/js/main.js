@@ -320,8 +320,9 @@ app.addEventListener('click', (e) => {
     }
 });
 
-app.addEventListener("change", e => {
-    if (e.target.matches(".noformat")) {
+// Process the changes made in forms and fields throughout the application
+app.addEventListener('change', e => {
+    if (e.target.matches('.noformat')) {
         // Delay to finish potential autocompletion process
         setTimeout(() => {
             // Generic in-place edition of input fields
@@ -357,9 +358,9 @@ app.addEventListener("change", e => {
                             console.log(data.message);
                         }
                     } else {
-                        if (!window.ajaxPanel && contentSrc.length !== 0 && !e.target.closest('.tab-content')) {
+                        if (!window.ajaxPanel && contentSrc && !e.target.closest('.tab-content')) {
                             // Reload modal with updated content
-                            fetchInto(contentSrc, ajaxModal.querySelector(".modal-body"));
+                            fetchInto(contentSrc, ajaxModal.querySelector('.modal-body'));
                         } else {
                             // Don't reload but set border back to normal
                             e.target.classList.remove('border-info', 'border-danger');
@@ -412,169 +413,195 @@ app.addEventListener("input", e => {
     }
 });
 
-// New autocomplete
-const autocomplete = AutocompleteWidget();
-document.body.addEventListener('focusin', event => {
-    // Attach autocompletion widget to a corresponding element
-    if (event.target.hasAttribute('data-ac')) {
-        autocomplete.attachWidget(event.target);
+// Autocompletion functionality
+let suggestionSelected = false;
+const handleSelectedItem = function(selectedItem, input) {
+    input.setAttribute('data-selected', selectedItem.value);
+    const targetName = input.dataset.actarget;
+    if (input.id == 'addCountry') {
+        let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
+        newCountry.id = 'country-' + selectedItem.key;
+        newCountry.children[0].value = selectedItem.key;
+        newCountry.children[1].value = selectedItem.value;
+        ncountries.appendChild(newCountry);
+        // Wait for the new country entry to be added to the DOM before resetting the input field
+        setTimeout(() => {
+            addCountry.value = "";
+        }, 200);
+    } else if (targetName) {
+        // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
+        input.value = selectedItem.value;
+        const acTarget = input.parentNode.querySelector(`input[name="${targetName}"]`);
+        acTarget.value = selectedItem.key;
+
+        if (window.createMatterForm && targetName == 'category_code') {
+            // We're in a matter creation form - fill caseref with corresponding suggested value
+            fetchREST('/matter/new-caseref?term=' + selectedItem.prefix, 'GET')
+                .then(data => {
+                    createMatterForm.caseref.value = data[0].value;
+                });
+        }
+    } else {
+        // Used for content editable fields where the same field is used for sending the id to the server
+        input.value = selectedItem.key;
+        input.addEventListener('xhrsent', e => {
+            input.value = selectedItem.value;
+        });
     }
-    // Store the initial value of a content editable element
-    if (event.target.matches("[contenteditable]")) {
-        ceInitialContent = event.target.innerText;
+
+    const acCompletedEvent = new CustomEvent('acCompleted', { detail: input });
+    document.dispatchEvent(acCompletedEvent);
+
+    if (input.form) {
+        const inputs = Array.from(input.form.querySelectorAll('input:not([type="hidden"])'));
+        const currentIndex = inputs.indexOf(input);
+        const nextIndex = (currentIndex + 1) % inputs.length;
+        // Give time for the blur event to fire when using the mouse, otherwise focus() doesn't work
+        setTimeout( () => {
+            inputs[nextIndex].focus();
+        });
     }
+};
+
+const handleInput = async function(input, dropdown) {
+    const url = new URL(input.getAttribute('data-ac'), window.location.origin);
+    const term = input.value;
+    const minLength = input.getAttribute('data-aclength') || 1;
+    if (term.length < minLength) {
+        return;
+    }
+    url.searchParams.append('term', input.value);
+    const response = await fetch(url);
+    const suggestions = await response.json();
+    dropdown.innerHTML = '';
+    if (suggestions.length === 0) {
+        dropdown.classList.remove('show');
+        return;
+    }
+    suggestions.forEach(suggestion => {
+        const item = document.createElement('a');
+        item.classList.add('dropdown-item');
+        item.href = '#';
+        item.textContent = suggestion.label || suggestion.value;
+        item.addEventListener('mousedown', function(event) {
+            suggestionSelected = true;
+            handleSelectedItem(suggestion, input);
+        });
+        dropdown.appendChild(item);
+    });
+    dropdown.classList.add('show');
+};
+
+const addAutocomplete = function(input) {
+    input.setAttribute('data-oldvalue', input.value);
+    const dropdown = document.createElement('ul');
+    dropdown.classList.add('dropdown-menu');
+    dropdown.classList.add('py-0');
+    dropdown.setAttribute('id', 'ac-' + Math.random().toString(36).slice(2, 10));
+    input.insertAdjacentElement('afterend', dropdown);
+    input.addEventListener('input', function() {
+        handleInput(input, dropdown);
+    });
+
+    // Remove the dropdown when the input loses focus
+    input.addEventListener('blur', function() {
+        // Fired after a "mousedown" event on the dropdown, but before a "click" event
+        dropdown.innerHTML = '';
+        dropdown.classList.remove('show');
+    });
+
+    // Clear/reestablish the input if it has changed without a selection in the dropdown
+    input.addEventListener('change', function(event) {
+        const actarget = input.getAttribute('data-actarget')
+        // Clear the target if the input has been purposely cleared
+        if (actarget && input.value.trim() === '') {
+            const targetInput = document.querySelector(`input[name="${actarget}"]`);
+            targetInput.value = '';
+        }
+        // Reestablish the old value if no selection has been made
+        if (!suggestionSelected) {
+            if (input.value !== '') {
+                input.value = input.dataset.oldvalue || input.dataset.selected || '';
+            }
+            // Do not propagate the change to the  global change event listener
+            event.stopPropagation();
+        }
+        suggestionSelected = false;
+    });
+
+    // Handle the suggestions with the keyboard
+    input.addEventListener('keydown', function(event) {
+        const dropdownItems = dropdown.querySelectorAll('.dropdown-item');
+        const activeItem = dropdown.querySelector('.active');
+        switch (event.key) {
+            case 'Tab':
+            case 'ArrowDown':
+                event.preventDefault();
+                if (activeItem) {
+                    activeItem.classList.remove('active');
+                    if (activeItem.nextElementSibling) {
+                        activeItem.nextElementSibling.classList.add('active');
+                    } else {
+                        dropdownItems[0].classList.add('active');
+                    }
+                } else if (dropdownItems.length > 0) {
+                    dropdownItems[0].classList.add('active');
+                }
+                break;
+            case 'ArrowUp':
+                event.preventDefault();
+                if (activeItem) {
+                    activeItem.classList.remove('active');
+                    if (activeItem.previousElementSibling) {
+                        activeItem.previousElementSibling.classList.add('active');
+                    } else {
+                        dropdownItems[dropdownItems.length - 1].classList.add('active');
+                    }
+                } else if (dropdownItems.length > 0) {
+                    dropdownItems[dropdownItems.length - 1].classList.add('active');
+                }
+                break;
+            case 'Enter':
+                // No "event.preventDefault()" here!
+                if (activeItem) {
+                    activeItem.dispatchEvent(new Event('mousedown'));
+                }
+                break;
+            case 'Escape':
+                dropdown.innerHTML = '';
+                dropdown.classList.remove('show');
+                event.stopPropagation();
+                break;
+        }
+    });
+};
+
+// Initialize existing autocomplete elements
+const acInputs = document.querySelectorAll('[data-ac]');
+acInputs.forEach(input => {
+    addAutocomplete(input);
 });
 
-function AutocompleteWidget() {
-    let minLength = 1;
-    let sourceUrl = '';
-    let itemSelected = false;
-    let suggestionList = document.createElement('div');
-    suggestionList.classList.add('autocomplete-list');
-
-    function attachWidget(input) {
-        const inputRect = input.getBoundingClientRect();
-        const modal = input.closest('.modal');
-        const modalRect = modal ? modal.getBoundingClientRect() : { top: 0, left: 0 };
-        suggestionList.style.left = inputRect.left + 'px';
-        suggestionList.style.top = modalRect.top + inputRect.bottom + 'px';
-        suggestionList.style.width = inputRect.width + 'px';
-        document.body.appendChild(suggestionList);
-        minLength = parseInt(input.getAttribute('data-aclength')) || 1;
-        sourceUrl = input.getAttribute('data-ac');
-
-        input.addEventListener('input', inputHandler);
-        input.addEventListener('change', changeHandler);
-    }
-
-    const inputHandler = (event) => {
-        const term = event.target.value;
-        itemSelected = false;
-        suggestionList.innerHTML = '';
-        //document.body.removeChild(suggestionList);
-
-        if (term.length >= minLength) {
-            fetchSuggestions(sourceUrl, term)
-                .then(suggestions => displaySuggestions(suggestions, event.target));
-        }
-    }
-
-    async function fetchSuggestions(url, term) {
-        const separator = url.includes('?') ? '&' : '?';
-        const fetchUrl = url + separator + 'term=' + encodeURIComponent(term);
-
-        try {
-            const response = await fetch(fetchUrl);
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error(__('Error fetching suggestions:'), error);
-            return [];
-        }
-    }
-
-    function displaySuggestions(suggestions, input) {
-        let listWidth = 100;
-        suggestions.forEach(suggestion => {
-            const listItem = document.createElement('div');
-            listItem.classList.add('autocomplete-item');
-            // Handle situation where the ajax data returns a label that should be displayed instead of the value
-            if (suggestion.label) {
-                listItem.textContent = suggestion.label;
-            } else {
-                listItem.textContent = suggestion.value;
-            }
-            listItem.dataset.key = suggestion.key;
-
-            // Use "mousedown" rather than "click" to obtain immediate action when an item is selected
-            listItem.addEventListener('mousedown', (event) => handleSelectedItem(event, suggestion, input), true);
-
-            // Calculate an approximate width based on the number of characters
-            const listItemWidth = suggestion.value.length * 8;
-            listWidth = Math.max(listWidth, listItemWidth);
-            suggestionList.appendChild(listItem);
-        });
-        suggestionList.style.width = listWidth + 'px';
-        //document.body.appendChild(suggestionList);
-    }
-
-    const changeHandler = (event) => {
-        // Delay to first handle a potential item selection that sets the itemSelected flag
-        setTimeout(() => {
-            // Clear the input if nothing is selected and the value was changed manually
-            if (!itemSelected) {
-                event.target.value = '';
-                const targetName = event.target.getAttribute('data-actarget');
-                if (targetName) {
-                    const acTarget = event.target.parentNode.querySelector(`input[name="${targetName}"]`);
-                    acTarget.value = '';
-                }
+// Initialize dynamically added autocomplete elements
+const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+        mutation.addedNodes.forEach(function(node) {
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                const inputs = node.querySelectorAll('[data-ac]');
+                inputs.forEach(input => {
+                    // Attach only if not previously attached
+                    if (!input.dataset.oldvalue) {
+                        addAutocomplete(input);
+                    }
+                });
             }
         });
-    }
+    });
+});
+observer.observe(document.body, { childList: true, subtree: true });
+// End autocompletion functionality
 
-    function handleSelectedItem(event, selectedItem, input) {
-        itemSelected = true;
-        suggestionList.innerHTML = '';
-        if (input.id == 'addCountry') {
-            let newCountry = appendCountryTemplate.content.children[0].cloneNode(true);
-            newCountry.id = 'country-' + selectedItem.key;
-            newCountry.children[0].value = selectedItem.key;
-            newCountry.children[1].value = selectedItem.value;
-            ncountries.appendChild(newCountry);
-            // Wait for the new country entry to be added to the DOM before resetting the input field
-            setTimeout(() => {
-                addCountry.value = "";
-            }, 0);
-        } else if (input.hasAttribute('data-actarget')) {
-            // Used for static forms where the human readable value is displayed and the id is sent to the server via a hidden input field
-            input.value = selectedItem.value;
-            const targetName = input.getAttribute('data-actarget');
-            if (targetName) {
-                const acTarget = input.parentNode.querySelector(`input[name="${targetName}"]`);
-                acTarget.value = selectedItem.key;
-            }
-            if (window.createMatterForm && input.dataset.actarget == 'category_code') {
-                // We're in a matter creation form - fill caseref with corresponding suggested value
-                fetchREST('/matter/new-caseref?term=' + selectedItem.prefix, 'GET')
-                    .then(data => {
-                        createMatterForm.caseref.value = data[0].value;
-                    });
-            }
-        } else {
-            // Used for content editable fields where the same field is used for sending the id to the server
-            input.value = selectedItem.key;
-            input.addEventListener('xhrsent', e => {
-                input.value = selectedItem.value;
-            });
-        }
-
-        event.preventDefault() // Prevent other click events from being triggered
-
-        // Send event for further processing 
-        const acCompleted = new CustomEvent('acCompleted', { detail: selectedItem });
-        input.dispatchEvent(acCompleted);
-
-        // Remove the suggestion list
-        document.body.removeChild(suggestionList);
-
-        // Set focus on next input by simulating a "Tab" press
-        if (input.form) {
-            const inputs = Array.from(input.form.querySelectorAll('input:not([type="hidden"])'));
-            const currentIndex = inputs.indexOf(input);
-            const nextIndex = (currentIndex + 1) % inputs.length;
-            inputs[nextIndex].focus();
-        } else {
-            input.blur();
-        }
-    }
-
-    return {
-        attachWidget
-    };
-}
-// End new autocomplete
-
+// Process non-input content editable fields
 app.addEventListener("focusout", e => {
     if (e.target.matches("[contenteditable]") && e.target.innerText !== ceInitialContent) {
         let params = new URLSearchParams();
