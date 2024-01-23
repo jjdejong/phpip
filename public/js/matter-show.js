@@ -45,24 +45,26 @@ app.addEventListener('shown.bs.popover', e => {
   }
 
   actorName.addEventListener('acCompleted', (event) => {
-    if (event.detail.key === 'create') { // Creates actor on the fly
-      fetchREST('/actor', 'POST', new URLSearchParams('name=' + event.target.value.toUpperCase() + '&default_role=' + addActorForm.role.value))
+    selectedItem = event.detail;
+    if (selectedItem.key === 'create') { // Creates actor on the fly
+      fetchREST('/actor', 'POST', new URLSearchParams('name=' + selectedItem.value.toUpperCase() + '&default_role=' + addActorForm.role.value))
         .then(response => {
           addActorForm.actor_id.value = response.id;
           actorName.classList.add('is-valid');
           actorName.value = response.name;
         });
     } else {
-      addActorForm.actor_id.value = event.detail.key;
+      addActorForm.actor_id.value = selectedItem.key;
     }
   });
   
   roleName.addEventListener('acCompleted', (event) => {
-    addActorForm.shared.value = event.detail.shareable;
-    if (event.detail.shareable) {
-      addActorForm.elements.actorShared.checked = true;
+    selectedItem = event.detail;
+    addActorForm.shared.value = selectedItem.shareable;
+    if (selectedItem.shareable === "1") {
+      actorShared.checked = true;
     } else {
-      addActorForm.elements.actorNotShared.checked = true;
+      actorNotShared.checked = true;
     }
   });
 
