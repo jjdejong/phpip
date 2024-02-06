@@ -61,7 +61,7 @@ app.addEventListener('shown.bs.popover', e => {
   roleName.addEventListener('acCompleted', (event) => {
     selectedItem = event.detail;
     addActorForm.shared.value = selectedItem.shareable;
-    if (selectedItem.shareable === "1") {
+    if (selectedItem.shareable) {
       actorShared.checked = true;
     } else {
       actorNotShared.checked = true;

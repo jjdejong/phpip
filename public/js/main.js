@@ -487,9 +487,9 @@ const addAutocomplete = function(input) {
         if (!suggestionSelected) {
             if (input.value !== '') {
                 input.value = input.dataset.oldvalue || input.dataset.selected || '';
-            }
-            // Do not propagate the change to the  global change event listener
-            event.stopPropagation();
+                // Do not propagate the change to the  global change event listener
+                event.stopPropagation();
+            } // Else value has been purposely cleared and the global change listenr should handle it
         }
         suggestionSelected = false;
     });
