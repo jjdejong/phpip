@@ -22,7 +22,8 @@ class EventNameController extends Controller
             $ename = $ename->where('name', 'like', $Name.'%');
         }
 
-        $enameslist = $ename->get();
+        $enameslist = $ename->paginate(21);
+        $enameslist->appends($request->input())->links();
 
         return view('eventname.index', compact('enameslist'));
     }

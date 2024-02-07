@@ -28,6 +28,11 @@
             <td>{{ $event->notes }}</td>
           </tr>
           @endforeach
+          <tr>
+            <td colspan="5">
+              {{ $enameslist->links() }}
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
