@@ -112,17 +112,17 @@
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'fil.event_date' ? 'active' : '' }}" type="button" data-sortkey="fil.event_date" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}"><input class="form-control" name="FilNo" placeholder="Number" value="{{ Request::get('FilNo') }}"></td>
+          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="FilNo" placeholder="Number" value="{{ Request::get('FilNo') }}"></td>
           <td class="tab1 {{ $hideTab1 }}">
             <div class="input-group input-group-sm">
               <input class="form-control" name="Published" placeholder="Published" value="{{ Request::get('Published') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'pub.event_date' ? 'active' : '' }}" type="button" data-sortkey="pub.event_date" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}"><input class="form-control" name="PubNo" placeholder="Number" value="{{ Request::get('PubNo') }}"></td>
+          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="PubNo" placeholder="Number" value="{{ Request::get('PubNo') }}"></td>
           <td class="tab1 {{ $hideTab1 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control" name="Granted" placeholder="Granted" value="{{ Request::get('Granted') }}">
+              <input class="form-control" name="Granted" placeholder="Granted/Reg'd" value="{{ Request::get('Granted') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'grt.event_date' ? 'active' : '' }}" type="button" data-sortkey="grt.event_date" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
