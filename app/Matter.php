@@ -124,7 +124,7 @@ class Matter extends Model
     public function grant()
     {
         return $this->hasOne(\App\Event::class)
-            ->whereCode('GRT')->withDefault();
+            ->whereIn('code', ['GRT', 'REG'])->withDefault();
     }
 
     public function registration()
@@ -242,8 +242,8 @@ class Matter extends Model
             'fil.detail AS FilNo',
             'pub.event_date AS Published',
             'pub.detail AS PubNo',
-            'grt.event_date AS Granted',
-            'grt.detail AS GrtNo',
+            DB::raw("COALESCE(grt.event_date, reg.event_date) AS Granted"),
+            DB::raw("COALESCE(grt.detail, reg.detail) AS GrtNo"),
             'matter.id',
             'matter.container_id',
             'matter.parent_id',
@@ -256,13 +256,13 @@ class Matter extends Model
             ->join('matter_category', 'matter.category_code', 'matter_category.code')
             ->leftJoin(
                 DB::raw('matter_actor_lnk clilnk
-            JOIN actor cli ON cli.id = clilnk.actor_id'),
+                JOIN actor cli ON cli.id = clilnk.actor_id'),
                 function ($join) {
                     $join->on('matter.id', 'clilnk.matter_id')->where('clilnk.role', 'CLI');
                 }
             )
             ->leftJoin(DB::raw('matter_actor_lnk cliclnk
-            JOIN actor clic ON clic.id = cliclnk.actor_id'), function ($join) {
+                JOIN actor clic ON clic.id = cliclnk.actor_id'), function ($join) {
                 $join->on('matter.container_id', 'cliclnk.matter_id')->where([
                     ['cliclnk.role', 'CLI'],
                     ['cliclnk.shared', 1],
@@ -270,7 +270,7 @@ class Matter extends Model
             })
             ->leftJoin(
                 DB::raw('matter_actor_lnk agtlnk
-            JOIN actor agt ON agt.id = agtlnk.actor_id'),
+                JOIN actor agt ON agt.id = agtlnk.actor_id'),
                 function ($join) {
                     $join->on('matter.id', 'agtlnk.matter_id')->where([
                         ['agtlnk.role', 'AGT'],
@@ -279,7 +279,7 @@ class Matter extends Model
                 }
             )
             ->leftJoin(DB::raw('matter_actor_lnk agtclnk
-            JOIN actor agtc ON agtc.id = agtclnk.actor_id'), function ($join) {
+                JOIN actor agtc ON agtc.id = agtclnk.actor_id'), function ($join) {
                 $join->on('matter.container_id', 'agtclnk.matter_id')->where([
                     ['agtclnk.role', 'AGT'],
                     ['agtclnk.shared', 1],
@@ -287,14 +287,14 @@ class Matter extends Model
             })
             ->leftJoin(
                 DB::raw('matter_actor_lnk applnk
-            JOIN actor app ON app.id = applnk.actor_id'),
+                JOIN actor app ON app.id = applnk.actor_id'),
                 function ($join) {
                     $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'applnk.matter_id')->where('applnk.role', 'APP');
                 }
             )
             ->leftJoin(
                 DB::raw('matter_actor_lnk dellnk
-            JOIN actor del ON del.id = dellnk.actor_id'),
+                JOIN actor del ON del.id = dellnk.actor_id'),
                 function ($join) {
                     $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'dellnk.matter_id')->where('dellnk.role', 'DEL');
                 }
@@ -308,11 +308,14 @@ class Matter extends Model
             ->leftJoin('event AS grt', function ($join) {
                 $join->on('matter.id', 'grt.matter_id')->where('grt.code', 'GRT');
             })
+            ->leftJoin('event AS reg', function ($join) {
+                $join->on('matter.id', 'reg.matter_id')->where('reg.code', 'REG');
+            })
             ->leftJoin(DB::raw('event status
-            JOIN event_name ON event_name.code = status.code AND event_name.status_event = 1'), 'matter.id', 'status.matter_id')
+                JOIN event_name ON event_name.code = status.code AND event_name.status_event = 1'), 'matter.id', 'status.matter_id')
             ->leftJoin(
                 DB::raw('event e2
-            JOIN event_name en2 ON e2.code=en2.code AND en2.status_event = 1'),
+                JOIN event_name en2 ON e2.code = en2.code AND en2.status_event = 1'),
                 function ($join) {
                     $join->on('status.matter_id', 'e2.matter_id')->whereColumn('status.event_date', '<', 'e2.event_date');
                 }
@@ -423,10 +426,12 @@ class Matter extends Model
                             $query->where('pub.detail', 'LIKE', "$value%");
                             break;
                         case 'Granted':
-                            $query->where('grt.event_date', 'LIKE', "$value%");
+                            $query->where('grt.event_date', 'LIKE', "$value%")
+                                ->orWhere('reg.event_date', 'LIKE', "$value%");
                             break;
                         case 'GrtNo':
-                            $query->where('grt.detail', 'LIKE', "$value%");
+                            $query->where('grt.detail', 'LIKE', "$value%")
+                                ->orWhere('reg.detail', 'LIKE', "$value%");
                             break;
                         case 'responsible':
                             $query->whereRaw("'$value' IN (matter.responsible, del.login)");

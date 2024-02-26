@@ -16,7 +16,7 @@
 		"laminas/laminas-escaper": "^2.7",
 		"laravel/framework": "^10.0",
 		"laravel/ui": "^4.2",
-		"phpoffice/phpword": "^0.18.0"
+		"phpoffice/phpword": "^1.2.0"
 	},
     "require-dev": {
 		"laravel/tinker": "^2.5",

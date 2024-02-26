@@ -32,44 +32,13 @@ OPS provide a REST API for accessing world-wide patent information. We have inte
 
 The tool is available through the menu `Matters->Create family from OPS`
  
-Use with caution, as we have not tested all the possible complex cases. Check in particular the links between multiple filings in the same country (divisions, continuations, internal priorities).
- 
-Sometimes you need to be patient after pressing "Create", and sometimes a time-out is reached, whereby you need to try again.
- 
-The format of the publication number must be respected. You can choose any number in the family, so you might as well choose one that is consistent (for instance the EP number if available).
-
-What is actually imported for each family member:
-* Country
-* Filing information (date, number)
-* Publication information
-* Grant information
-* Priority information (earliest priority)
-* The English title
-* Links between patents (PCT national phases, divisionals, continuations...)
-* Applicants and inventors (if they're not present in the actors table, they will be created)
- 
-European validations are not imported. They are not (consistently) available in OPS (or I have not found how to access them...).
- 
-Importing _applicants and inventors_ is complicated and may be subject to duplicates, because this requires the management of their presence or their insertion in the actors table, with spellings that may vary. For best results, use the "typical" naming convention of the EPO, i.e., "NAME, FIRST NAME", and use only the "Name" field of the actor table (the "First Name" field is ignored, so leave it blank or use it at your convenience for differentiating similar names). The identified actors are indicated in the "notes" of the first patent for checking. To use more consistent data, these are imported from the EP case in the family - if there is no EP case available, they will be absent.
-
-The tool can be used to complete an existing family, sparing you the effort of entering missing applications manually. For this operation, do not select the proposed case reference in the creation form, but force it to the value of the existing family.
- 
-**To use the tool, you must first create an account and a pair of application keys on the OPS site:**
- 
-https://developers.epo.org
- 
-Once your account is created and connected, go to "My Apps" on the top right. Create a "phpip" App and provide the generated keys in the .env file:
-
-```
-OPS_APP_KEY=<Consumer Key>
-OPS_SECRET=<Consumer Secret Key>
-```
+Check the dedicated [Wiki section](https://github.com/jjdejong/phpip/wiki/Automatic-patent-family-import-from-Open-Patent-Services-(OPS)).
 
 ## 2021-01-08 Document drag-and-drop merge functionality
 
 Use your favorite DOCX templates to merge them with the data of a matter displayed in phpIP by simple drag-and-drop.
 
-Check the dedicated [Wiki section](https://github.com/jjdejong/phpip/wiki/Templates-(email-and-documents)#document-template-usage)
+Check the dedicated [Wiki section](https://github.com/jjdejong/phpip/wiki/Templates-(email-and-documents)#document-template-usage).
 
 ## 2019-12-08 Renewal process management tool
 

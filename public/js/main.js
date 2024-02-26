@@ -449,8 +449,8 @@ const handleSelectedItem = function(selectedItem, input) {
         });
     }
 
-    const acCompletedEvent = new CustomEvent('acCompleted', { detail: input });
-    document.dispatchEvent(acCompletedEvent);
+    const acCompletedEvent = new CustomEvent('acCompleted', { detail: selectedItem });
+    input.dispatchEvent(acCompletedEvent);
 
     if (input.form) {
         const inputs = Array.from(input.form.querySelectorAll('input:not([type="hidden"])'));
@@ -497,7 +497,7 @@ const addAutocomplete = function(input) {
     const dropdown = document.createElement('ul');
     dropdown.classList.add('dropdown-menu');
     dropdown.classList.add('py-0');
-    dropdown.setAttribute('id', 'ac-' + Math.random().toString(36).slice(2, 10));
+    //dropdown.setAttribute('id', 'ac-' + Math.random().toString(36).slice(2, 10));
     input.insertAdjacentElement('afterend', dropdown);
     input.addEventListener('input', function() {
         handleInput(input, dropdown);
@@ -522,9 +522,9 @@ const addAutocomplete = function(input) {
         if (!suggestionSelected) {
             if (input.value !== '') {
                 input.value = input.dataset.oldvalue || input.dataset.selected || '';
-            }
-            // Do not propagate the change to the  global change event listener
-            event.stopPropagation();
+                // Do not propagate the change to the global change event listener
+                event.stopPropagation();
+            } // Else value has been purposely cleared and the global change listenr should handle it
         }
         suggestionSelected = false;
     });
@@ -590,7 +590,7 @@ const observer = new MutationObserver(function(mutations) {
                 const inputs = node.querySelectorAll('[data-ac]');
                 inputs.forEach(input => {
                     // Attach only if not previously attached
-                    if (!input.dataset.oldvalue) {
+                    if (!input.hasAttribute('data-oldvalue')) {
                         addAutocomplete(input);
                     }
                 });

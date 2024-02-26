@@ -20,7 +20,7 @@ return new class extends Migration
                 'wo' => 0,
                 'em' => 0,
                 'oa' => 0,
-                'renewal_first' => 1,
+                'renewal_first' => 4,
                 'renewal_base' => 'FIL',
                 'renewal_start' => 'GRT',
                 'checked_on' => '2023-05-22',
