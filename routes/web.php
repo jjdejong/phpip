@@ -95,24 +95,34 @@ Route::group(['middleware' => 'auth'], function () {
         $term = $request->term;
         $results = App\EventName::select('name as value', 'code as key')
             ->where([
-                ['name', 'like', "$term%"],
                 ['is_task', $is_task],
             ]);
         if ($request->filled('category')) {
             $results->whereRaw('ifnull(category, ?) = ?', [$request->category, $request->category]);
         }
-
-        return $results->take(10)->get();
+        $match_list = Array();
+        foreach($results->get() as $item) {
+            if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                $match_item = ["key" => $item["key"], "value" => __($item["value"])];
+                array_push($match_list, $match_item);
+            }
+        }
+        return $match_list;
     });
 
     Route::get('classifier-type/autocomplete/{main_display}', function (Request $request, $main_display) {
         $term = $request->input('term');
         $results = App\ClassifierType::select('type as value', 'code as key')
-            ->where('type', 'like', "$term%")
             ->where('main_display', $main_display)
             ->orderBy('type');
-
-        return $results->take(10)->get();
+        $match_list = Array();
+        foreach($results->get() as $item) {
+            if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                $match_item = ["key" => $item["key"], "value" => __($item["value"])];
+                array_push($match_list, $match_item);
+            }
+        }
+        return $match_list;
     });
 
     Route::get('user/autocomplete', function (Request $request) {
@@ -131,7 +141,7 @@ Route::group(['middleware' => 'auth'], function () {
             ->orWhere('display_name', 'like', "$term")
             ->take(10)->get();
         if ($list->count() < 5 && $create_option) {
-            $list->push(['label' => "Create $term?", 'key' => 'create', 'value' => $term]);
+            $list->push(['label' => __("Create $term?"), 'key' => 'create', 'value' => $term]);
         }
 
         return $list;
@@ -140,42 +150,71 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('role/autocomplete', function (Request $request) {
         $term = $request->input('term');
 
-        return App\Role::select('name as value', 'code as key', 'shareable')
-            ->where('name', 'like', "$term%")
-            ->orWhere('code', 'like', "$term%")->get();
+        $full_list = App\Role::select('name as value', 'code as key', 'shareable')->get();
+        $match_list = Array();
+        foreach($full_list as $item) {
+            if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                $match_item = ["key" => $item["key"], "shareable" => $item["shareable"], "value" => __($item["value"])];
+                array_push($match_list, $match_item);
+            }
+        }
+        return $match_list;
     });
 
     Route::get('dbrole/autocomplete', function (Request $request) {
         $term = $request->input('term');
 
-        return App\Role::select('name as value', 'code as key')
-            ->where('name', 'like', "$term%")
+        $full_list = App\Role::select('name as value', 'code as key')
             ->whereIn('code', ['CLI', 'DBA', 'DBRW', 'DBRO'])->get();
+        $match_list = Array();
+        foreach($full_list as $item) {
+            if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                $match_item = ["key" => $item["key"], "value" => __($item["value"])];
+                array_push($match_list, $match_item);
+            }
+        }
+        return $match_list;
     });
 
     Route::get('country/autocomplete', function (Request $request) {
         $term = $request->input('term');
-        $list = App\Country::select('name as value', 'iso as key')
-            ->where('name', 'like', "$term%")
-            ->orWhere('iso', 'like', "$term%")->get();
-
-        return $list;
+        $full_list = App\Country::select('name as value', 'iso as key')->get();        
+        $match_list = Array();
+        foreach($full_list as $item) {
+            if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                $match_item = ["key" => $item["key"], "value" => __($item["value"])];
+                array_push($match_list, $match_item);
+            }
+        }
+        return $match_list;
     });
 
     Route::get('category/autocomplete', function (Request $request) {
         $term = $request->input('term');
 
-        return App\Category::select('category as value', 'code as key', 'ref_prefix as prefix')
-            ->where('category', 'like', "$term%")
-            ->orWhere('code', 'like', "$term%")->get();
+        $full_list = App\Category::select('category as value', 'code as key', 'ref_prefix as prefix')->get();
+        $match_list = Array();
+        foreach($full_list as $item) {
+            if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                $match_item = ["key" => $item["key"], "prefix" => $item["prefix"], "value" => __($item["value"])];
+                array_push($match_list, $match_item);
+            }
+        }
+        return $match_list;
     });
 
     Route::get('type/autocomplete', function (Request $request) {
         $term = $request->input('term');
 
-        return App\Type::select('type as value', 'code as key')
-            ->where('type', 'like', "$term%")
-            ->orWhere('code', 'like', "$term%")->get();
+        $full_list = App\Type::select('type as value', 'code as key')->get();
+        $match_list = Array();
+        foreach($full_list as $item) {
+            if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                $match_item = ["key" => $item["key"], "value" => __($item["value"])];
+                array_push($match_list, $match_item);
+            }
+        }
+        return $match_list;
     });
 
     Route::get('classifier/{classifier}/img', fn (App\Classifier $classifier) => response($classifier->img)
@@ -186,7 +225,7 @@ Route::group(['middleware' => 'auth'], function () {
         $list = App\TemplateMember::select('category as value', 'category as key')
             ->where('category', 'like', "$term%")->distinct()->get();
         if ($list->count() == 0) {
-            $list->push(['label' => "Create $term", 'key' => $term, 'value' => $term]);
+            $list->push(['label' => __("Create $term"), 'key' => $term, 'value' => $term]);
         }
 
         return $list;
