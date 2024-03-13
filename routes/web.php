@@ -141,7 +141,7 @@ Route::group(['middleware' => 'auth'], function () {
             ->orWhere('display_name', 'like', "$term")
             ->take(10)->get();
         if ($list->count() < 5 && $create_option) {
-            $list->push(['label' => __("Create $term?"), 'key' => 'create', 'value' => $term]);
+            $list->push(['label' => __("Create")." ".$term." ?", 'key' => 'create', 'value' => $term]);
         }
 
         return $list;
@@ -225,7 +225,7 @@ Route::group(['middleware' => 'auth'], function () {
         $list = App\TemplateMember::select('category as value', 'category as key')
             ->where('category', 'like', "$term%")->distinct()->get();
         if ($list->count() == 0) {
-            $list->push(['label' => __("Create $term"), 'key' => $term, 'value' => $term]);
+            $list->push(['label' => __("Create")." ".$term." ?", 'key' => $term, 'value' => $term]);
         }
 
         return $list;
@@ -243,7 +243,7 @@ Route::group(['middleware' => 'auth'], function () {
         $list = App\TemplateMember::select('style as value', 'style as key')
             ->where('style', 'like', "$term%")->distinct()->get();
         if ($list->count() == 0) {
-            $list->push(['label' => "Create $term", 'key' => $term, 'value' => $term]);
+            $list->push(['label' => __("Create")." ".$term." ?", 'key' => $term, 'value' => $term]);
         }
 
         return $list;
