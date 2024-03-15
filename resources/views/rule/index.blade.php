@@ -30,15 +30,15 @@
           <tr data-id="{{ $rule->id }}" class="reveal-hidden">
             <td>
               <a href="/rule/{{ $rule->id }}" data-panel="ajaxPanel" title="{{ __('Rule data') }}">
-                {{ $rule->taskInfo->name }}
+                {{ __($rule->taskInfo->name) }}
               </a>
             </td>
             <td>{{ $rule->detail }}</td>
-            <td>{{ empty($rule->trigger) ? '' : $rule->trigger->name }}</td>
-            <td>{{ empty($rule->category) ? '' : $rule->category->category }}</td>
-            <td>{{ empty($rule->country) ? '' : $rule->country->name }}</td>
-            <td>{{ empty($rule->origin) ? '' : $rule->origin->name }}</td>
-            <td>{{ empty($rule->type) ? '' : $rule->type->type }}</td>
+            <td>{{ empty($rule->trigger) ? '' : __($rule->trigger->name) }}</td>
+            <td>{{ empty($rule->category) ? '' : __($rule->category->category) }}</td>
+            <td>{{ empty($rule->country) ? '' : __($rule->country->iso) }}</td>
+            <td>{{ empty($rule->origin) ? '' : __($rule->origin->iso) }}</td>
+            <td>{{ empty($rule->type) ? '' : __($rule->type->type) }}</td>
           </tr>
           @endforeach
           <tr>
