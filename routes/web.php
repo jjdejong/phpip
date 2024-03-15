@@ -181,8 +181,8 @@ Route::group(['middleware' => 'auth'], function () {
         $full_list = App\Country::select('name as value', 'iso as key')->get();        
         $match_list = Array();
         foreach($full_list as $item) {
-            if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
-                $match_item = ["key" => $item["key"], "value" => __($item["value"])];
+            if(str_starts_with(strtolower(__($item["key"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                $match_item = ["key" => $item["key"], "value" => __($item["key"])];
                 array_push($match_list, $match_item);
             }
         }
