@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PhpIP\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-16 18:12+0100\n"
+"POT-Creation-Date: 2024-03-13 16:54+0100\n"
 "PO-Revision-Date: 2023-06-15 18:50+0200\n"
 "Last-Translator: James Translator <james@translations.colm>\n"
 "Language-Team: James Translator <james@translations.colm>\n"
@@ -329,6 +329,7 @@ msgid "Next renewal date"
 msgstr ""
 
 #: app/Http/Controllers/MatterController.php:1013
+#: app/Http/Controllers/MatterController.php:1014
 #: app/Http/Controllers/MatterController.php:1036
 #: app/Http/Controllers/MatterController.php:1051
 #: app/Http/Controllers/MatterController.php:1052
@@ -336,6 +337,7 @@ msgid "Number not found"
 msgstr ""
 
 #: app/Http/Controllers/MatterController.php:1013
+#: app/Http/Controllers/MatterController.php:1014
 #: app/Http/Controllers/MatterController.php:1036
 #: app/Http/Controllers/MatterController.php:1051
 #: app/Http/Controllers/MatterController.php:1052
@@ -343,6 +345,7 @@ msgid "Number not found in OPS Family"
 msgstr ""
 
 #: app/Http/Controllers/MatterController.php:1016
+#: app/Http/Controllers/MatterController.php:1017
 #: app/Http/Controllers/MatterController.php:1039
 #: app/Http/Controllers/MatterController.php:1054
 #: app/Http/Controllers/MatterController.php:1055
@@ -350,6 +353,7 @@ msgid "OPS server error"
 msgstr ""
 
 #: app/Http/Controllers/MatterController.php:1016
+#: app/Http/Controllers/MatterController.php:1017
 #: app/Http/Controllers/MatterController.php:1039
 #: app/Http/Controllers/MatterController.php:1054
 #: app/Http/Controllers/MatterController.php:1055
@@ -417,7 +421,8 @@ msgstr ""
 #: resources/views/matter/create.blade.php:87
 #: resources/views/matter/create.blade.php:89
 #: resources/views/user/create.blade.php:49
-#: resources/views/user/create.blade.php:50
+#: resources/views/user/create.blade.php:50 routes/web.php:228
+#: routes/web.php:246
 msgid "Create"
 msgstr ""
 
@@ -4908,3 +4913,1004 @@ msgstr ""
 #: resources/views/welcome.blade.php:93
 msgid "Retreive sources on GitHub"
 msgstr ""
+
+#: lang/countries:1
+msgid "AD"
+msgstr "Andorra"
+
+#: lang/countries:2
+msgid "AE"
+msgstr "United Arab Emirates"
+
+#: lang/countries:3
+msgid "AF"
+msgstr "Afghanistan"
+
+#: lang/countries:4
+msgid "AG"
+msgstr "Antigua and Barbuda"
+
+#: lang/countries:5
+msgid "AI"
+msgstr "Anguilla"
+
+#: lang/countries:6
+msgid "AL"
+msgstr "Albania"
+
+#: lang/countries:7
+msgid "AM"
+msgstr "Armenia"
+
+#: lang/countries:8
+msgid "AN"
+msgstr "Netherlands Antilles"
+
+#: lang/countries:9
+msgid "AO"
+msgstr "Angola"
+
+#: lang/countries:10
+msgid "AQ"
+msgstr "Antarctica"
+
+#: lang/countries:11
+msgid "AR"
+msgstr "Argentina"
+
+#: lang/countries:12
+msgid "AS"
+msgstr "American Samoa"
+
+#: lang/countries:13
+msgid "AT"
+msgstr "Austria"
+
+#: lang/countries:14
+msgid "AU"
+msgstr "Australia"
+
+#: lang/countries:15
+msgid "AW"
+msgstr "Aruba"
+
+#: lang/countries:16
+msgid "AX"
+msgstr "Åland Islands"
+
+#: lang/countries:17
+msgid "AZ"
+msgstr "Azerbaijan"
+
+#: lang/countries:18
+msgid "BA"
+msgstr "Bosnia and Herzegovina"
+
+#: lang/countries:19
+msgid "BB"
+msgstr "Barbados"
+
+#: lang/countries:20
+msgid "BD"
+msgstr "Bangladesh"
+
+#: lang/countries:21
+msgid "BE"
+msgstr "Belgium"
+
+#: lang/countries:22
+msgid "BF"
+msgstr "Burkina Faso"
+
+#: lang/countries:23
+msgid "BG"
+msgstr "Bulgaria"
+
+#: lang/countries:24
+msgid "BH"
+msgstr "Bahrain"
+
+#: lang/countries:25
+msgid "BI"
+msgstr "Burundi"
+
+#: lang/countries:26
+msgid "BJ"
+msgstr "Benin"
+
+#: lang/countries:27
+msgid "BM"
+msgstr "Bermuda"
+
+#: lang/countries:28
+msgid "BN"
+msgstr "Brunei Darussalam"
+
+#: lang/countries:29
+msgid "BO"
+msgstr "Bolivia"
+
+#: lang/countries:30
+msgid "BR"
+msgstr "Brazil"
+
+#: lang/countries:31
+msgid "BS"
+msgstr "Bahamas"
+
+#: lang/countries:32
+msgid "BT"
+msgstr "Bhutan"
+
+#: lang/countries:33
+msgid "BV"
+msgstr "Bouvet Island"
+
+#: lang/countries:34
+msgid "BW"
+msgstr "Botswana"
+
+#: lang/countries:35
+msgid "BX"
+msgstr "Benelux"
+
+#: lang/countries:36
+msgid "BY"
+msgstr "Belarus"
+
+#: lang/countries:37
+msgid "BZ"
+msgstr "Belize"
+
+#: lang/countries:38
+msgid "CA"
+msgstr "Canada"
+
+#: lang/countries:39
+msgid "CC"
+msgstr "Cocos (Keeling) Islands"
+
+#: lang/countries:40
+msgid "CD"
+msgstr "The Democratic Republic Of The Congo"
+
+#: lang/countries:41
+msgid "CF"
+msgstr "Central African"
+
+#: lang/countries:42
+msgid "CG"
+msgstr "Republic of the Congo"
+
+#: lang/countries:43
+msgid "CH"
+msgstr "Switzerland"
+
+#: lang/countries:44
+msgid "CI"
+msgstr "Cote d'Ivoire"
+
+#: lang/countries:45
+msgid "CK"
+msgstr "Cook Islands"
+
+#: lang/countries:46
+msgid "CL"
+msgstr "Chile"
+
+#: lang/countries:47
+msgid "CM"
+msgstr "Cameroon"
+
+#: lang/countries:48
+msgid "CN"
+msgstr "China"
+
+#: lang/countries:49
+msgid "CO"
+msgstr "Colombia"
+
+#: lang/countries:50
+msgid "CR"
+msgstr "Costa Rica"
+
+#: lang/countries:51
+msgid "CS"
+msgstr "Serbia and Montenegro"
+
+#: lang/countries:52
+msgid "CU"
+msgstr "Cuba"
+
+#: lang/countries:53
+msgid "CV"
+msgstr "Cape Verde"
+
+#: lang/countries:54
+msgid "CX"
+msgstr "Christmas Island"
+
+#: lang/countries:55
+msgid "CY"
+msgstr "Cyprus"
+
+#: lang/countries:56
+msgid "CZ"
+msgstr "Czechia"
+
+#: lang/countries:57
+msgid "DE"
+msgstr "Germany"
+
+#: lang/countries:58
+msgid "DJ"
+msgstr "Djibouti"
+
+#: lang/countries:59
+msgid "DK"
+msgstr "Denmark"
+
+#: lang/countries:60
+msgid "DM"
+msgstr "Dominica"
+
+#: lang/countries:61
+msgid "DO"
+msgstr "Dominican Republic"
+
+#: lang/countries:62
+msgid "DZ"
+msgstr "Algeria"
+
+#: lang/countries:63
+msgid "EA"
+msgstr "Eurasian Patent Organization"
+
+#: lang/countries:64
+msgid "EC"
+msgstr "Ecuador"
+
+#: lang/countries:65
+msgid "EE"
+msgstr "Estonia"
+
+#: lang/countries:66
+msgid "EG"
+msgstr "Egypt"
+
+#: lang/countries:67
+msgid "EH"
+msgstr "Western Sahara"
+
+#: lang/countries:68
+msgid "EM"
+msgstr "EUIPO"
+
+#: lang/countries:69
+msgid "EP"
+msgstr "European Patent Organization"
+
+#: lang/countries:70
+msgid "ER"
+msgstr "Eritrea"
+
+#: lang/countries:71
+msgid "ES"
+msgstr "Spain"
+
+#: lang/countries:72
+msgid "ET"
+msgstr "Ethiopia"
+
+#: lang/countries:73
+msgid "FI"
+msgstr "Finland"
+
+#: lang/countries:74
+msgid "FJ"
+msgstr "Fiji"
+
+#: lang/countries:75
+msgid "FK"
+msgstr "Falkland Islands"
+
+#: lang/countries:76
+msgid "FM"
+msgstr "Federated States of Micronesia"
+
+#: lang/countries:77
+msgid "FO"
+msgstr "Faroe Islands"
+
+#: lang/countries:78
+msgid "FR"
+msgstr "France"
+
+#: lang/countries:79
+msgid "GA"
+msgstr "Gabon"
+
+#: lang/countries:80
+msgid "GB"
+msgstr "United Kingdom"
+
+#: lang/countries:81
+msgid "GD"
+msgstr "Grenada"
+
+#: lang/countries:82
+msgid "GE"
+msgstr "Georgia"
+
+#: lang/countries:83
+msgid "GF"
+msgstr "French Guiana"
+
+#: lang/countries:84
+msgid "GH"
+msgstr "Ghana"
+
+#: lang/countries:85
+msgid "GI"
+msgstr "Gibraltar"
+
+#: lang/countries:86
+msgid "GL"
+msgstr "Greenland"
+
+#: lang/countries:87
+msgid "GM"
+msgstr "Gambia"
+
+#: lang/countries:88
+msgid "GN"
+msgstr "Guinea"
+
+#: lang/countries:89
+msgid "GP"
+msgstr "Guadeloupe"
+
+#: lang/countries:90
+msgid "GQ"
+msgstr "Equatorial Guinea"
+
+#: lang/countries:91
+msgid "GR"
+msgstr "Greece"
+
+#: lang/countries:92
+msgid "GS"
+msgstr "South Georgia and the South Sandwich Islands"
+
+#: lang/countries:93
+msgid "GT"
+msgstr "Guatemala"
+
+#: lang/countries:94
+msgid "GU"
+msgstr "Guam"
+
+#: lang/countries:95
+msgid "GW"
+msgstr "Guinea-Bissau"
+
+#: lang/countries:96
+msgid "GY"
+msgstr "Guyana"
+
+#: lang/countries:97
+msgid "HK"
+msgstr "Hong Kong"
+
+#: lang/countries:98
+msgid "HM"
+msgstr "Heard Island and McDonald Islands"
+
+#: lang/countries:99
+msgid "HN"
+msgstr "Honduras"
+
+#: lang/countries:100
+msgid "HR"
+msgstr "Croatia"
+
+#: lang/countries:101
+msgid "HT"
+msgstr "Haiti"
+
+#: lang/countries:102
+msgid "HU"
+msgstr "Hungary"
+
+#: lang/countries:103
+msgid "IB"
+msgstr "International Bureau"
+
+#: lang/countries:104
+msgid "ID"
+msgstr "Indonesia"
+
+#: lang/countries:105
+msgid "IE"
+msgstr "Ireland"
+
+#: lang/countries:106
+msgid "IL"
+msgstr "Israel"
+
+#: lang/countries:107
+msgid "IM"
+msgstr "Isle of Man"
+
+#: lang/countries:108
+msgid "IN"
+msgstr "India"
+
+#: lang/countries:109
+msgid "IO"
+msgstr "British Indian Ocean Territory"
+
+#: lang/countries:110
+msgid "IQ"
+msgstr "Iraq"
+
+#: lang/countries:111
+msgid "IR"
+msgstr "Islamic Republic of Iran"
+
+#: lang/countries:112
+msgid "IS"
+msgstr "Iceland"
+
+#: lang/countries:113
+msgid "IT"
+msgstr "Italy"
+
+#: lang/countries:114
+msgid "JM"
+msgstr "Jamaica"
+
+#: lang/countries:115
+msgid "JO"
+msgstr "Jordan"
+
+#: lang/countries:116
+msgid "JP"
+msgstr "Japan"
+
+#: lang/countries:117
+msgid "KE"
+msgstr "Kenya"
+
+#: lang/countries:118
+msgid "KG"
+msgstr "Kyrgyzstan"
+
+#: lang/countries:119
+msgid "KH"
+msgstr "Cambodia"
+
+#: lang/countries:120
+msgid "KI"
+msgstr "Kiribati"
+
+#: lang/countries:121
+msgid "KM"
+msgstr "Comoros"
+
+#: lang/countries:122
+msgid "KN"
+msgstr "Saint Kitts and Nevis"
+
+#: lang/countries:123
+msgid "KP"
+msgstr "Democratic People's Republic of Korea"
+
+#: lang/countries:124
+msgid "KR"
+msgstr "Republic of Korea"
+
+#: lang/countries:125
+msgid "KW"
+msgstr "Kuwait"
+
+#: lang/countries:126
+msgid "KY"
+msgstr "Cayman Islands"
+
+#: lang/countries:127
+msgid "KZ"
+msgstr "Kazakhstan"
+
+#: lang/countries:128
+msgid "LA"
+msgstr "Lao People's Democratic Republic"
+
+#: lang/countries:129
+msgid "LB"
+msgstr "Lebanon"
+
+#: lang/countries:130
+msgid "LC"
+msgstr "Saint Lucia"
+
+#: lang/countries:131
+msgid "LI"
+msgstr "Liechtenstein"
+
+#: lang/countries:132
+msgid "LK"
+msgstr "Sri Lanka"
+
+#: lang/countries:133
+msgid "LR"
+msgstr "Liberia"
+
+#: lang/countries:134
+msgid "LS"
+msgstr "Lesotho"
+
+#: lang/countries:135
+msgid "LT"
+msgstr "Lithuania"
+
+#: lang/countries:136
+msgid "LU"
+msgstr "Luxembourg"
+
+#: lang/countries:137
+msgid "LV"
+msgstr "Latvia"
+
+#: lang/countries:138
+msgid "LY"
+msgstr "Libyan Arab Jamahiriya"
+
+#: lang/countries:139
+msgid "MA"
+msgstr "Morocco"
+
+#: lang/countries:140
+msgid "MC"
+msgstr "Monaco"
+
+#: lang/countries:141
+msgid "MD"
+msgstr "Republic of Moldova"
+
+#: lang/countries:142
+msgid "ME"
+msgstr "Montenegro"
+
+#: lang/countries:143
+msgid "MG"
+msgstr "Madagascar"
+
+#: lang/countries:144
+msgid "MH"
+msgstr "Marshall Islands"
+
+#: lang/countries:145
+msgid "MK"
+msgstr "North Macedonia"
+
+#: lang/countries:146
+msgid "ML"
+msgstr "Mali"
+
+#: lang/countries:147
+msgid "MM"
+msgstr "Myanmar"
+
+#: lang/countries:148
+msgid "MN"
+msgstr "Mongolia"
+
+#: lang/countries:149
+msgid "MO"
+msgstr "Macao"
+
+#: lang/countries:150
+msgid "MP"
+msgstr "Northern Mariana Islands"
+
+#: lang/countries:151
+msgid "MQ"
+msgstr "Martinique"
+
+#: lang/countries:152
+msgid "MR"
+msgstr "Mauritania"
+
+#: lang/countries:153
+msgid "MS"
+msgstr "Montserrat"
+
+#: lang/countries:154
+msgid "MT"
+msgstr "Malta"
+
+#: lang/countries:155
+msgid "MU"
+msgstr "Mauritius"
+
+#: lang/countries:156
+msgid "MV"
+msgstr "Maldives"
+
+#: lang/countries:157
+msgid "MW"
+msgstr "Malawi"
+
+#: lang/countries:158
+msgid "MX"
+msgstr "Mexico"
+
+#: lang/countries:159
+msgid "MY"
+msgstr "Malaysia"
+
+#: lang/countries:160
+msgid "MZ"
+msgstr "Mozambique"
+
+#: lang/countries:161
+msgid "NA"
+msgstr "Namibia"
+
+#: lang/countries:162
+msgid "NC"
+msgstr "New Caledonia"
+
+#: lang/countries:163
+msgid "NE"
+msgstr "Niger"
+
+#: lang/countries:164
+msgid "NF"
+msgstr "Norfolk Island"
+
+#: lang/countries:165
+msgid "NG"
+msgstr "Nigeria"
+
+#: lang/countries:166
+msgid "NI"
+msgstr "Nicaragua"
+
+#: lang/countries:167
+msgid "NL"
+msgstr "Netherlands"
+
+#: lang/countries:168
+msgid "NO"
+msgstr "Norway"
+
+#: lang/countries:169
+msgid "NP"
+msgstr "Nepal"
+
+#: lang/countries:170
+msgid "NR"
+msgstr "Nauru"
+
+#: lang/countries:171
+msgid "NU"
+msgstr "Niue"
+
+#: lang/countries:172
+msgid "NZ"
+msgstr "New Zealand"
+
+#: lang/countries:173
+msgid "OA"
+msgstr "African Intellectual Property Organization"
+
+#: lang/countries:174
+msgid "OM"
+msgstr "Oman"
+
+#: lang/countries:175
+msgid "PA"
+msgstr "Panama"
+
+#: lang/countries:176
+msgid "PE"
+msgstr "Peru"
+
+#: lang/countries:177
+msgid "PF"
+msgstr "French Polynesia"
+
+#: lang/countries:178
+msgid "PG"
+msgstr "Papua New Guinea"
+
+#: lang/countries:179
+msgid "PH"
+msgstr "Philippines"
+
+#: lang/countries:180
+msgid "PK"
+msgstr "Pakistan"
+
+#: lang/countries:181
+msgid "PL"
+msgstr "Poland"
+
+#: lang/countries:182
+msgid "PM"
+msgstr "Saint-Pierre and Miquelon"
+
+#: lang/countries:183
+msgid "PN"
+msgstr "Pitcairn"
+
+#: lang/countries:184
+msgid "PR"
+msgstr "Puerto Rico"
+
+#: lang/countries:185
+msgid "PS"
+msgstr "Occupied Palestinian Territory"
+
+#: lang/countries:186
+msgid "PT"
+msgstr "Portugal"
+
+#: lang/countries:187
+msgid "PW"
+msgstr "Palau"
+
+#: lang/countries:188
+msgid "PY"
+msgstr "Paraguay"
+
+#: lang/countries:189
+msgid "QA"
+msgstr "Qatar"
+
+#: lang/countries:190
+msgid "RE"
+msgstr "Réunion"
+
+#: lang/countries:191
+msgid "RO"
+msgstr "Romania"
+
+#: lang/countries:192
+msgid "RS"
+msgstr "Serbia"
+
+#: lang/countries:193
+msgid "RU"
+msgstr "Russian Federation"
+
+#: lang/countries:194
+msgid "RW"
+msgstr "Rwanda"
+
+#: lang/countries:195
+msgid "SA"
+msgstr "Saudi Arabia"
+
+#: lang/countries:196
+msgid "SB"
+msgstr "Solomon Islands"
+
+#: lang/countries:197
+msgid "SC"
+msgstr "Seychelles"
+
+#: lang/countries:198
+msgid "SD"
+msgstr "Sudan"
+
+#: lang/countries:199
+msgid "SE"
+msgstr "Sweden"
+
+#: lang/countries:200
+msgid "SG"
+msgstr "Singapore"
+
+#: lang/countries:201
+msgid "SH"
+msgstr "Saint Helena"
+
+#: lang/countries:202
+msgid "SI"
+msgstr "Slovenia"
+
+#: lang/countries:203
+msgid "SJ"
+msgstr "Svalbard and Jan Mayen"
+
+#: lang/countries:204
+msgid "SK"
+msgstr "Slovakia"
+
+#: lang/countries:205
+msgid "SL"
+msgstr "Sierra Leone"
+
+#: lang/countries:206
+msgid "SM"
+msgstr "San Marino"
+
+#: lang/countries:207
+msgid "SN"
+msgstr "Senegal"
+
+#: lang/countries:208
+msgid "SO"
+msgstr "Somalia"
+
+#: lang/countries:209
+msgid "SR"
+msgstr "Suriname"
+
+#: lang/countries:210
+msgid "ST"
+msgstr "Sao Tome and Principe"
+
+#: lang/countries:211
+msgid "SV"
+msgstr "El Salvador"
+
+#: lang/countries:212
+msgid "SY"
+msgstr "Syrian Arab Republic"
+
+#: lang/countries:213
+msgid "SZ"
+msgstr "Swaziland"
+
+#: lang/countries:214
+msgid "TC"
+msgstr "Turks and Caicos Islands"
+
+#: lang/countries:215
+msgid "TD"
+msgstr "Chad"
+
+#: lang/countries:216
+msgid "TF"
+msgstr "French Southern Territories"
+
+#: lang/countries:217
+msgid "TG"
+msgstr "Togo"
+
+#: lang/countries:218
+msgid "TH"
+msgstr "Thailand"
+
+#: lang/countries:219
+msgid "TJ"
+msgstr "Tajikistan"
+
+#: lang/countries:220
+msgid "TK"
+msgstr "Tokelau"
+
+#: lang/countries:221
+msgid "TL"
+msgstr "Timor-Leste"
+
+#: lang/countries:222
+msgid "TM"
+msgstr "Turkmenistan"
+
+#: lang/countries:223
+msgid "TN"
+msgstr "Tunisia"
+
+#: lang/countries:224
+msgid "TO"
+msgstr "Tonga"
+
+#: lang/countries:225
+msgid "TR"
+msgstr "Turkey"
+
+#: lang/countries:226
+msgid "TT"
+msgstr "Trinidad and Tobago"
+
+#: lang/countries:227
+msgid "TV"
+msgstr "Tuvalu"
+
+#: lang/countries:228
+msgid "TW"
+msgstr "Taiwan"
+
+#: lang/countries:229
+msgid "TZ"
+msgstr "United Republic Of Tanzania"
+
+#: lang/countries:230
+msgid "UA"
+msgstr "Ukraine"
+
+#: lang/countries:231
+msgid "UG"
+msgstr "Uganda"
+
+#: lang/countries:232
+msgid "UM"
+msgstr "United States Minor Outlying Islands"
+
+#: lang/countries:233
+msgid "US"
+msgstr "United States"
+
+#: lang/countries:234
+msgid "UY"
+msgstr "Uruguay"
+
+#: lang/countries:235
+msgid "UZ"
+msgstr "Uzbekistan"
+
+#: lang/countries:236
+msgid "VA"
+msgstr "Vatican City State"
+
+#: lang/countries:237
+msgid "VC"
+msgstr "Saint Vincent and the Grenadines"
+
+#: lang/countries:238
+msgid "VE"
+msgstr "Venezuela"
+
+#: lang/countries:239
+msgid "VG"
+msgstr "British Virgin Islands"
+
+#: lang/countries:240
+msgid "VI"
+msgstr "U.S. Virgin Islands"
+
+#: lang/countries:241
+msgid "VN"
+msgstr "Vietnam"
+
+#: lang/countries:242
+msgid "VU"
+msgstr "Vanuatu"
+
+#: lang/countries:243
+msgid "WF"
+msgstr "Wallis and Futuna"
+
+#: lang/countries:244
+msgid "WO"
+msgstr "World Intellectual Property Organization"
+
+#: lang/countries:245
+msgid "WS"
+msgstr "Samoa"
+
+#: lang/countries:246
+msgid "YE"
+msgstr "Yemen"
+
+#: lang/countries:247
+msgid "YT"
+msgstr "Mayotte"
+
+#: lang/countries:248
+msgid "ZA"
+msgstr "South Africa"
+
+#: lang/countries:249
+msgid "ZM"
+msgstr "Zambia"
+
+#: lang/countries:250
+msgid "ZW"
+msgstr "Zimbabwe"
+

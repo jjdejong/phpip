@@ -55,6 +55,7 @@ POT_FILE="$POT_DIR/$DOMAIN.pot"
         lang/blade-translations/user/static.php \
         lang/blade-translations/seeder.php \
         lang/blade-translations/js/js.php \
+        routes/web.php \
 
 
 /bin/sed --in-place --expression="s/charset=CHARSET/charset=UTF-8/" "$POT_FILE"

@@ -32,14 +32,14 @@
     <label for="country" class="col-4 col-form-label fw-bold">{{ __('Country') }}</label>
     <div class="col-8">
       <input type="hidden" name="country" value="{{ $parent_matter->country ?? '' }}">
-      <input type="text" class="form-control text-truncate" data-ac="/country/autocomplete" data-actarget="country" placeholder="{{ $parent_matter->countryInfo->name ?? '' }}" autocomplete="off">
+      <input type="text" class="form-control text-truncate" data-ac="/country/autocomplete" data-actarget="country" placeholder="{{ __($parent_matter->country) ?? '' }}" autocomplete="off">
     </div>
   </div>
   <div class="row mb-2">
     <label for="origin" class="col-4 col-form-label">{{ __('Origin') }}</label>
     <div class="col-8">
       <input type="hidden" name="origin" value="{{ $parent_matter->origin ?? '' }}">
-      <input type="text" class="form-control text-truncate" data-ac="/country/autocomplete" data-actarget="origin" placeholder="{{ $parent_matter->originInfo->name ?? '' }}" autocomplete="off">
+      <input type="text" class="form-control text-truncate" data-ac="/country/autocomplete" data-actarget="origin" placeholder="{{ __($parent_matter->origin) ?? '' }}" autocomplete="off">
     </div>
   </div>
   <div class="row mb-2">

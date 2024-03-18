@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: messages 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-16 18:12+0100\n"
+"POT-Creation-Date: 2024-03-13 16:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -327,6 +327,7 @@ msgid "Next renewal date"
 msgstr ""
 
 #: app/Http/Controllers/MatterController.php:1013
+#: app/Http/Controllers/MatterController.php:1014
 #: app/Http/Controllers/MatterController.php:1036
 #: app/Http/Controllers/MatterController.php:1051
 #: app/Http/Controllers/MatterController.php:1052
@@ -334,6 +335,7 @@ msgid "Number not found"
 msgstr ""
 
 #: app/Http/Controllers/MatterController.php:1013
+#: app/Http/Controllers/MatterController.php:1014
 #: app/Http/Controllers/MatterController.php:1036
 #: app/Http/Controllers/MatterController.php:1051
 #: app/Http/Controllers/MatterController.php:1052
@@ -341,6 +343,7 @@ msgid "Number not found in OPS Family"
 msgstr ""
 
 #: app/Http/Controllers/MatterController.php:1016
+#: app/Http/Controllers/MatterController.php:1017
 #: app/Http/Controllers/MatterController.php:1039
 #: app/Http/Controllers/MatterController.php:1054
 #: app/Http/Controllers/MatterController.php:1055
@@ -348,6 +351,7 @@ msgid "OPS server error"
 msgstr ""
 
 #: app/Http/Controllers/MatterController.php:1016
+#: app/Http/Controllers/MatterController.php:1017
 #: app/Http/Controllers/MatterController.php:1039
 #: app/Http/Controllers/MatterController.php:1054
 #: app/Http/Controllers/MatterController.php:1055
@@ -415,7 +419,8 @@ msgstr ""
 #: resources/views/matter/create.blade.php:87
 #: resources/views/matter/create.blade.php:89
 #: resources/views/user/create.blade.php:49
-#: resources/views/user/create.blade.php:50
+#: resources/views/user/create.blade.php:50 routes/web.php:228
+#: routes/web.php:246
 msgid "Create"
 msgstr ""
 
@@ -2890,1006 +2895,6 @@ msgstr ""
 msgid "Type (TM)"
 msgstr ""
 
-#: lang/blade-translations/seeder.php:126
-msgid "Andorra"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:128
-msgid "United Arab Emirates"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:130
-msgid "Afghanistan"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:132
-msgid "Antigua and Barbuda"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:134
-msgid "Anguilla"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:136
-msgid "Albania"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:138
-msgid "Armenia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:140
-msgid "Netherlands Antilles"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:142
-msgid "Angola"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:144
-msgid "Antarctica"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:146
-msgid "Argentina"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:148
-msgid "American Samoa"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:150
-msgid "Austria"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:152
-msgid "Australia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:154
-msgid "Aruba"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:156
-msgid "Åland Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:158
-msgid "Azerbaijan"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:160
-msgid "Bosnia and Herzegovina"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:162
-msgid "Barbados"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:164
-msgid "Bangladesh"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:166
-msgid "Belgium"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:168
-msgid "Burkina Faso"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:170
-msgid "Bulgaria"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:172
-msgid "Bahrain"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:174
-msgid "Burundi"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:176
-msgid "Benin"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:178
-msgid "Bermuda"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:180
-msgid "Brunei Darussalam"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:182
-msgid "Bolivia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:184
-msgid "Brazil"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:186
-msgid "Bahamas"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:188
-msgid "Bhutan"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:190
-msgid "Bouvet Island"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:192
-msgid "Botswana"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:194
-msgid "Benelux"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:196
-msgid "Belarus"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:198
-msgid "Belize"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:200
-msgid "Canada"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:202
-msgid "Cocos (Keeling) Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:204
-msgid "The Democratic Republic Of The Congo"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:206
-msgid "Central African"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:208
-msgid "Republic of the Congo"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:210
-msgid "Switzerland"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:212
-msgid "Cote d'Ivoire"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:214
-msgid "Cook Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:216
-msgid "Chile"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:218
-msgid "Cameroon"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:220
-msgid "China"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:222
-msgid "Colombia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:224
-msgid "Costa Rica"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:226
-msgid "Serbia and Montenegro"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:228
-msgid "Cuba"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:230
-msgid "Cape Verde"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:232
-msgid "Christmas Island"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:234
-msgid "Cyprus"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:236
-msgid "Czechia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:238
-msgid "Germany"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:240
-msgid "Djibouti"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:242
-msgid "Denmark"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:244
-msgid "Dominica"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:246
-msgid "Dominican Republic"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:248
-msgid "Algeria"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:250
-msgid "Eurasian Patent Organization"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:252
-msgid "Ecuador"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:254
-msgid "Estonia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:256
-msgid "Egypt"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:258
-msgid "Western Sahara"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:260
-msgid "EUIPO"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:262
-msgid "European Patent Organization"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:264
-msgid "Eritrea"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:266
-msgid "Spain"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:268
-msgid "Ethiopia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:270
-msgid "Finland"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:272
-msgid "Fiji"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:274
-msgid "Falkland Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:276
-msgid "Federated States of Micronesia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:278
-msgid "Faroe Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:280
-msgid "France"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:282
-msgid "Gabon"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:284
-msgid "United Kingdom"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:286
-msgid "Grenada"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:288
-msgid "Georgia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:290
-msgid "French Guiana"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:292
-msgid "Ghana"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:294
-msgid "Gibraltar"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:296
-msgid "Greenland"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:298
-msgid "Gambia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:300
-msgid "Guinea"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:302
-msgid "Guadeloupe"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:304
-msgid "Equatorial Guinea"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:306
-msgid "Greece"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:308
-msgid "South Georgia and the South Sandwich Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:310
-msgid "Guatemala"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:312
-msgid "Guam"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:314
-msgid "Guinea-Bissau"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:316
-msgid "Guyana"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:318
-msgid "Hong Kong"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:320
-msgid "Heard Island and McDonald Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:322
-msgid "Honduras"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:324
-msgid "Croatia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:326
-msgid "Haiti"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:328
-msgid "Hungary"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:330
-msgid "International Bureau"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:332
-msgid "Indonesia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:334
-msgid "Ireland"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:336
-msgid "Israel"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:338
-msgid "Isle of Man"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:340
-msgid "India"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:342
-msgid "British Indian Ocean Territory"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:344
-msgid "Iraq"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:346
-msgid "Islamic Republic of Iran"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:348
-msgid "Iceland"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:350
-msgid "Italy"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:352
-msgid "Jamaica"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:354
-msgid "Jordan"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:356
-msgid "Japan"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:358
-msgid "Kenya"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:360
-msgid "Kyrgyzstan"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:362
-msgid "Cambodia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:364
-msgid "Kiribati"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:366
-msgid "Comoros"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:368
-msgid "Saint Kitts and Nevis"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:370
-msgid "Democratic People's Republic of Korea"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:372
-msgid "Republic of Korea"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:374
-msgid "Kuwait"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:376
-msgid "Cayman Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:378
-msgid "Kazakhstan"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:380
-msgid "Lao People's Democratic Republic"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:382
-msgid "Lebanon"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:384
-msgid "Saint Lucia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:386
-msgid "Liechtenstein"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:388
-msgid "Sri Lanka"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:390
-msgid "Liberia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:392
-msgid "Lesotho"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:394
-msgid "Lithuania"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:396
-msgid "Luxembourg"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:398
-msgid "Latvia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:400
-msgid "Libyan Arab Jamahiriya"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:402
-msgid "Morocco"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:404
-msgid "Monaco"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:406
-msgid "Republic of Moldova"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:408
-msgid "Montenegro"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:410
-msgid "Madagascar"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:412
-msgid "Marshall Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:414
-msgid "North Macedonia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:416
-msgid "Mali"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:418
-msgid "Myanmar"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:420
-msgid "Mongolia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:422
-msgid "Macao"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:424
-msgid "Northern Mariana Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:426
-msgid "Martinique"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:428
-msgid "Mauritania"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:430
-msgid "Montserrat"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:432
-msgid "Malta"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:434
-msgid "Mauritius"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:436
-msgid "Maldives"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:438
-msgid "Malawi"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:440
-msgid "Mexico"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:442
-msgid "Malaysia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:444
-msgid "Mozambique"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:446
-msgid "Namibia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:448
-msgid "New Caledonia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:450
-msgid "Niger"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:452
-msgid "Norfolk Island"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:454
-msgid "Nigeria"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:456
-msgid "Nicaragua"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:458
-msgid "Netherlands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:460
-msgid "Norway"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:462
-msgid "Nepal"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:464
-msgid "Nauru"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:466
-msgid "Niue"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:468
-msgid "New Zealand"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:470
-msgid "African Intellectual Property Organization"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:472
-msgid "Oman"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:474
-msgid "Panama"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:476
-msgid "Peru"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:478
-msgid "French Polynesia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:480
-msgid "Papua New Guinea"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:482
-msgid "Philippines"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:484
-msgid "Pakistan"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:486
-msgid "Poland"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:488
-msgid "Saint-Pierre and Miquelon"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:490
-msgid "Pitcairn"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:492
-msgid "Puerto Rico"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:494
-msgid "Occupied Palestinian Territory"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:496
-msgid "Portugal"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:498
-msgid "Palau"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:500
-msgid "Paraguay"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:502
-msgid "Qatar"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:504
-msgid "Réunion"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:506
-msgid "Romania"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:508
-msgid "Serbia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:510
-msgid "Russian Federation"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:512
-msgid "Rwanda"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:514
-msgid "Saudi Arabia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:516
-msgid "Solomon Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:518
-msgid "Seychelles"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:520
-msgid "Sudan"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:522
-msgid "Sweden"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:524
-msgid "Singapore"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:526
-msgid "Saint Helena"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:528
-msgid "Slovenia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:530
-msgid "Svalbard and Jan Mayen"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:532
-msgid "Slovakia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:534
-msgid "Sierra Leone"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:536
-msgid "San Marino"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:538
-msgid "Senegal"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:540
-msgid "Somalia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:542
-msgid "Suriname"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:544
-msgid "Sao Tome and Principe"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:546
-msgid "El Salvador"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:548
-msgid "Syrian Arab Republic"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:550
-msgid "Swaziland"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:552
-msgid "Turks and Caicos Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:554
-msgid "Chad"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:556
-msgid "French Southern Territories"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:558
-msgid "Togo"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:560
-msgid "Thailand"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:562
-msgid "Tajikistan"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:564
-msgid "Tokelau"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:566
-msgid "Timor-Leste"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:568
-msgid "Turkmenistan"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:570
-msgid "Tunisia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:572
-msgid "Tonga"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:574
-msgid "Turkey"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:576
-msgid "Trinidad and Tobago"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:578
-msgid "Tuvalu"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:580
-msgid "Taiwan"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:582
-msgid "United Republic Of Tanzania"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:584
-msgid "Ukraine"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:586
-msgid "Uganda"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:588
-msgid "United States Minor Outlying Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:590
-msgid "United States"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:592
-msgid "Uruguay"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:594
-msgid "Uzbekistan"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:596
-msgid "Vatican City State"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:598
-msgid "Saint Vincent and the Grenadines"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:600
-msgid "Venezuela"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:602
-msgid "British Virgin Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:604
-msgid "U.S. Virgin Islands"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:606
-msgid "Vietnam"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:608
-msgid "Vanuatu"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:610
-msgid "Wallis and Futuna"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:612
-msgid "World Intellectual Property Organization"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:614
-msgid "Samoa"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:616
-msgid "Yemen"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:618
-msgid "Mayotte"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:620
-msgid "South Africa"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:622
-msgid "Zambia"
-msgstr ""
-
-#: lang/blade-translations/seeder.php:624
-msgid "Zimbabwe"
-msgstr ""
-
 #: lang/blade-translations/seeder.php:628
 msgid "Abandon Original"
 msgstr ""
@@ -4906,3 +3911,1003 @@ msgstr ""
 #: resources/views/welcome.blade.php:93
 msgid "Retreive sources on GitHub"
 msgstr ""
+#: lang/countries:1
+msgid "AD"
+msgstr ""
+
+#: lang/countries:2
+msgid "AE"
+msgstr ""
+
+#: lang/countries:3
+msgid "AF"
+msgstr ""
+
+#: lang/countries:4
+msgid "AG"
+msgstr ""
+
+#: lang/countries:5
+msgid "AI"
+msgstr ""
+
+#: lang/countries:6
+msgid "AL"
+msgstr ""
+
+#: lang/countries:7
+msgid "AM"
+msgstr ""
+
+#: lang/countries:8
+msgid "AN"
+msgstr ""
+
+#: lang/countries:9
+msgid "AO"
+msgstr ""
+
+#: lang/countries:10
+msgid "AQ"
+msgstr ""
+
+#: lang/countries:11
+msgid "AR"
+msgstr ""
+
+#: lang/countries:12
+msgid "AS"
+msgstr ""
+
+#: lang/countries:13
+msgid "AT"
+msgstr ""
+
+#: lang/countries:14
+msgid "AU"
+msgstr ""
+
+#: lang/countries:15
+msgid "AW"
+msgstr ""
+
+#: lang/countries:16
+msgid "AX"
+msgstr ""
+
+#: lang/countries:17
+msgid "AZ"
+msgstr ""
+
+#: lang/countries:18
+msgid "BA"
+msgstr ""
+
+#: lang/countries:19
+msgid "BB"
+msgstr ""
+
+#: lang/countries:20
+msgid "BD"
+msgstr ""
+
+#: lang/countries:21
+msgid "BE"
+msgstr ""
+
+#: lang/countries:22
+msgid "BF"
+msgstr ""
+
+#: lang/countries:23
+msgid "BG"
+msgstr ""
+
+#: lang/countries:24
+msgid "BH"
+msgstr ""
+
+#: lang/countries:25
+msgid "BI"
+msgstr ""
+
+#: lang/countries:26
+msgid "BJ"
+msgstr ""
+
+#: lang/countries:27
+msgid "BM"
+msgstr ""
+
+#: lang/countries:28
+msgid "BN"
+msgstr ""
+
+#: lang/countries:29
+msgid "BO"
+msgstr ""
+
+#: lang/countries:30
+msgid "BR"
+msgstr ""
+
+#: lang/countries:31
+msgid "BS"
+msgstr ""
+
+#: lang/countries:32
+msgid "BT"
+msgstr ""
+
+#: lang/countries:33
+msgid "BV"
+msgstr ""
+
+#: lang/countries:34
+msgid "BW"
+msgstr ""
+
+#: lang/countries:35
+msgid "BX"
+msgstr ""
+
+#: lang/countries:36
+msgid "BY"
+msgstr ""
+
+#: lang/countries:37
+msgid "BZ"
+msgstr ""
+
+#: lang/countries:38
+msgid "CA"
+msgstr ""
+
+#: lang/countries:39
+msgid "CC"
+msgstr ""
+
+#: lang/countries:40
+msgid "CD"
+msgstr ""
+
+#: lang/countries:41
+msgid "CF"
+msgstr ""
+
+#: lang/countries:42
+msgid "CG"
+msgstr ""
+
+#: lang/countries:43
+msgid "CH"
+msgstr ""
+
+#: lang/countries:44
+msgid "CI"
+msgstr ""
+
+#: lang/countries:45
+msgid "CK"
+msgstr ""
+
+#: lang/countries:46
+msgid "CL"
+msgstr ""
+
+#: lang/countries:47
+msgid "CM"
+msgstr ""
+
+#: lang/countries:48
+msgid "CN"
+msgstr ""
+
+#: lang/countries:49
+msgid "CO"
+msgstr ""
+
+#: lang/countries:50
+msgid "CR"
+msgstr ""
+
+#: lang/countries:51
+msgid "CS"
+msgstr ""
+
+#: lang/countries:52
+msgid "CU"
+msgstr ""
+
+#: lang/countries:53
+msgid "CV"
+msgstr ""
+
+#: lang/countries:54
+msgid "CX"
+msgstr ""
+
+#: lang/countries:55
+msgid "CY"
+msgstr ""
+
+#: lang/countries:56
+msgid "CZ"
+msgstr ""
+
+#: lang/countries:57
+msgid "DE"
+msgstr ""
+
+#: lang/countries:58
+msgid "DJ"
+msgstr ""
+
+#: lang/countries:59
+msgid "DK"
+msgstr ""
+
+#: lang/countries:60
+msgid "DM"
+msgstr ""
+
+#: lang/countries:61
+msgid "DO"
+msgstr ""
+
+#: lang/countries:62
+msgid "DZ"
+msgstr ""
+
+#: lang/countries:63
+msgid "EA"
+msgstr ""
+
+#: lang/countries:64
+msgid "EC"
+msgstr ""
+
+#: lang/countries:65
+msgid "EE"
+msgstr ""
+
+#: lang/countries:66
+msgid "EG"
+msgstr ""
+
+#: lang/countries:67
+msgid "EH"
+msgstr ""
+
+#: lang/countries:68
+msgid "EM"
+msgstr ""
+
+#: lang/countries:69
+msgid "EP"
+msgstr ""
+
+#: lang/countries:70
+msgid "ER"
+msgstr ""
+
+#: lang/countries:71
+msgid "ES"
+msgstr ""
+
+#: lang/countries:72
+msgid "ET"
+msgstr ""
+
+#: lang/countries:73
+msgid "FI"
+msgstr ""
+
+#: lang/countries:74
+msgid "FJ"
+msgstr ""
+
+#: lang/countries:75
+msgid "FK"
+msgstr ""
+
+#: lang/countries:76
+msgid "FM"
+msgstr ""
+
+#: lang/countries:77
+msgid "FO"
+msgstr ""
+
+#: lang/countries:78
+msgid "FR"
+msgstr ""
+
+#: lang/countries:79
+msgid "GA"
+msgstr ""
+
+#: lang/countries:80
+msgid "GB"
+msgstr ""
+
+#: lang/countries:81
+msgid "GD"
+msgstr ""
+
+#: lang/countries:82
+msgid "GE"
+msgstr ""
+
+#: lang/countries:83
+msgid "GF"
+msgstr ""
+
+#: lang/countries:84
+msgid "GH"
+msgstr ""
+
+#: lang/countries:85
+msgid "GI"
+msgstr ""
+
+#: lang/countries:86
+msgid "GL"
+msgstr ""
+
+#: lang/countries:87
+msgid "GM"
+msgstr ""
+
+#: lang/countries:88
+msgid "GN"
+msgstr ""
+
+#: lang/countries:89
+msgid "GP"
+msgstr ""
+
+#: lang/countries:90
+msgid "GQ"
+msgstr ""
+
+#: lang/countries:91
+msgid "GR"
+msgstr ""
+
+#: lang/countries:92
+msgid "GS"
+msgstr ""
+
+#: lang/countries:93
+msgid "GT"
+msgstr ""
+
+#: lang/countries:94
+msgid "GU"
+msgstr ""
+
+#: lang/countries:95
+msgid "GW"
+msgstr ""
+
+#: lang/countries:96
+msgid "GY"
+msgstr ""
+
+#: lang/countries:97
+msgid "HK"
+msgstr ""
+
+#: lang/countries:98
+msgid "HM"
+msgstr ""
+
+#: lang/countries:99
+msgid "HN"
+msgstr ""
+
+#: lang/countries:100
+msgid "HR"
+msgstr ""
+
+#: lang/countries:101
+msgid "HT"
+msgstr ""
+
+#: lang/countries:102
+msgid "HU"
+msgstr ""
+
+#: lang/countries:103
+msgid "IB"
+msgstr ""
+
+#: lang/countries:104
+msgid "ID"
+msgstr ""
+
+#: lang/countries:105
+msgid "IE"
+msgstr ""
+
+#: lang/countries:106
+msgid "IL"
+msgstr ""
+
+#: lang/countries:107
+msgid "IM"
+msgstr ""
+
+#: lang/countries:108
+msgid "IN"
+msgstr ""
+
+#: lang/countries:109
+msgid "IO"
+msgstr ""
+
+#: lang/countries:110
+msgid "IQ"
+msgstr ""
+
+#: lang/countries:111
+msgid "IR"
+msgstr ""
+
+#: lang/countries:112
+msgid "IS"
+msgstr ""
+
+#: lang/countries:113
+msgid "IT"
+msgstr ""
+
+#: lang/countries:114
+msgid "JM"
+msgstr ""
+
+#: lang/countries:115
+msgid "JO"
+msgstr ""
+
+#: lang/countries:116
+msgid "JP"
+msgstr ""
+
+#: lang/countries:117
+msgid "KE"
+msgstr ""
+
+#: lang/countries:118
+msgid "KG"
+msgstr ""
+
+#: lang/countries:119
+msgid "KH"
+msgstr ""
+
+#: lang/countries:120
+msgid "KI"
+msgstr ""
+
+#: lang/countries:121
+msgid "KM"
+msgstr ""
+
+#: lang/countries:122
+msgid "KN"
+msgstr ""
+
+#: lang/countries:123
+msgid "KP"
+msgstr ""
+
+#: lang/countries:124
+msgid "KR"
+msgstr ""
+
+#: lang/countries:125
+msgid "KW"
+msgstr ""
+
+#: lang/countries:126
+msgid "KY"
+msgstr ""
+
+#: lang/countries:127
+msgid "KZ"
+msgstr ""
+
+#: lang/countries:128
+msgid "LA"
+msgstr ""
+
+#: lang/countries:129
+msgid "LB"
+msgstr ""
+
+#: lang/countries:130
+msgid "LC"
+msgstr ""
+
+#: lang/countries:131
+msgid "LI"
+msgstr ""
+
+#: lang/countries:132
+msgid "LK"
+msgstr ""
+
+#: lang/countries:133
+msgid "LR"
+msgstr ""
+
+#: lang/countries:134
+msgid "LS"
+msgstr ""
+
+#: lang/countries:135
+msgid "LT"
+msgstr ""
+
+#: lang/countries:136
+msgid "LU"
+msgstr ""
+
+#: lang/countries:137
+msgid "LV"
+msgstr ""
+
+#: lang/countries:138
+msgid "LY"
+msgstr ""
+
+#: lang/countries:139
+msgid "MA"
+msgstr ""
+
+#: lang/countries:140
+msgid "MC"
+msgstr ""
+
+#: lang/countries:141
+msgid "MD"
+msgstr ""
+
+#: lang/countries:142
+msgid "ME"
+msgstr ""
+
+#: lang/countries:143
+msgid "MG"
+msgstr ""
+
+#: lang/countries:144
+msgid "MH"
+msgstr ""
+
+#: lang/countries:145
+msgid "MK"
+msgstr ""
+
+#: lang/countries:146
+msgid "ML"
+msgstr ""
+
+#: lang/countries:147
+msgid "MM"
+msgstr ""
+
+#: lang/countries:148
+msgid "MN"
+msgstr ""
+
+#: lang/countries:149
+msgid "MO"
+msgstr ""
+
+#: lang/countries:150
+msgid "MP"
+msgstr ""
+
+#: lang/countries:151
+msgid "MQ"
+msgstr ""
+
+#: lang/countries:152
+msgid "MR"
+msgstr ""
+
+#: lang/countries:153
+msgid "MS"
+msgstr ""
+
+#: lang/countries:154
+msgid "MT"
+msgstr ""
+
+#: lang/countries:155
+msgid "MU"
+msgstr ""
+
+#: lang/countries:156
+msgid "MV"
+msgstr ""
+
+#: lang/countries:157
+msgid "MW"
+msgstr ""
+
+#: lang/countries:158
+msgid "MX"
+msgstr ""
+
+#: lang/countries:159
+msgid "MY"
+msgstr ""
+
+#: lang/countries:160
+msgid "MZ"
+msgstr ""
+
+#: lang/countries:161
+msgid "NA"
+msgstr ""
+
+#: lang/countries:162
+msgid "NC"
+msgstr ""
+
+#: lang/countries:163
+msgid "NE"
+msgstr ""
+
+#: lang/countries:164
+msgid "NF"
+msgstr ""
+
+#: lang/countries:165
+msgid "NG"
+msgstr ""
+
+#: lang/countries:166
+msgid "NI"
+msgstr ""
+
+#: lang/countries:167
+msgid "NL"
+msgstr ""
+
+#: lang/countries:168
+msgid "NO"
+msgstr ""
+
+#: lang/countries:169
+msgid "NP"
+msgstr ""
+
+#: lang/countries:170
+msgid "NR"
+msgstr ""
+
+#: lang/countries:171
+msgid "NU"
+msgstr ""
+
+#: lang/countries:172
+msgid "NZ"
+msgstr ""
+
+#: lang/countries:173
+msgid "OA"
+msgstr ""
+
+#: lang/countries:174
+msgid "OM"
+msgstr ""
+
+#: lang/countries:175
+msgid "PA"
+msgstr ""
+
+#: lang/countries:176
+msgid "PE"
+msgstr ""
+
+#: lang/countries:177
+msgid "PF"
+msgstr ""
+
+#: lang/countries:178
+msgid "PG"
+msgstr ""
+
+#: lang/countries:179
+msgid "PH"
+msgstr ""
+
+#: lang/countries:180
+msgid "PK"
+msgstr ""
+
+#: lang/countries:181
+msgid "PL"
+msgstr ""
+
+#: lang/countries:182
+msgid "PM"
+msgstr ""
+
+#: lang/countries:183
+msgid "PN"
+msgstr ""
+
+#: lang/countries:184
+msgid "PR"
+msgstr ""
+
+#: lang/countries:185
+msgid "PS"
+msgstr ""
+
+#: lang/countries:186
+msgid "PT"
+msgstr ""
+
+#: lang/countries:187
+msgid "PW"
+msgstr ""
+
+#: lang/countries:188
+msgid "PY"
+msgstr ""
+
+#: lang/countries:189
+msgid "QA"
+msgstr ""
+
+#: lang/countries:190
+msgid "RE"
+msgstr ""
+
+#: lang/countries:191
+msgid "RO"
+msgstr ""
+
+#: lang/countries:192
+msgid "RS"
+msgstr ""
+
+#: lang/countries:193
+msgid "RU"
+msgstr ""
+
+#: lang/countries:194
+msgid "RW"
+msgstr ""
+
+#: lang/countries:195
+msgid "SA"
+msgstr ""
+
+#: lang/countries:196
+msgid "SB"
+msgstr ""
+
+#: lang/countries:197
+msgid "SC"
+msgstr ""
+
+#: lang/countries:198
+msgid "SD"
+msgstr ""
+
+#: lang/countries:199
+msgid "SE"
+msgstr ""
+
+#: lang/countries:200
+msgid "SG"
+msgstr ""
+
+#: lang/countries:201
+msgid "SH"
+msgstr ""
+
+#: lang/countries:202
+msgid "SI"
+msgstr ""
+
+#: lang/countries:203
+msgid "SJ"
+msgstr ""
+
+#: lang/countries:204
+msgid "SK"
+msgstr ""
+
+#: lang/countries:205
+msgid "SL"
+msgstr ""
+
+#: lang/countries:206
+msgid "SM"
+msgstr ""
+
+#: lang/countries:207
+msgid "SN"
+msgstr ""
+
+#: lang/countries:208
+msgid "SO"
+msgstr ""
+
+#: lang/countries:209
+msgid "SR"
+msgstr ""
+
+#: lang/countries:210
+msgid "ST"
+msgstr ""
+
+#: lang/countries:211
+msgid "SV"
+msgstr ""
+
+#: lang/countries:212
+msgid "SY"
+msgstr ""
+
+#: lang/countries:213
+msgid "SZ"
+msgstr ""
+
+#: lang/countries:214
+msgid "TC"
+msgstr ""
+
+#: lang/countries:215
+msgid "TD"
+msgstr ""
+
+#: lang/countries:216
+msgid "TF"
+msgstr ""
+
+#: lang/countries:217
+msgid "TG"
+msgstr ""
+
+#: lang/countries:218
+msgid "TH"
+msgstr ""
+
+#: lang/countries:219
+msgid "TJ"
+msgstr ""
+
+#: lang/countries:220
+msgid "TK"
+msgstr ""
+
+#: lang/countries:221
+msgid "TL"
+msgstr ""
+
+#: lang/countries:222
+msgid "TM"
+msgstr ""
+
+#: lang/countries:223
+msgid "TN"
+msgstr ""
+
+#: lang/countries:224
+msgid "TO"
+msgstr ""
+
+#: lang/countries:225
+msgid "TR"
+msgstr ""
+
+#: lang/countries:226
+msgid "TT"
+msgstr ""
+
+#: lang/countries:227
+msgid "TV"
+msgstr ""
+
+#: lang/countries:228
+msgid "TW"
+msgstr ""
+
+#: lang/countries:229
+msgid "TZ"
+msgstr ""
+
+#: lang/countries:230
+msgid "UA"
+msgstr ""
+
+#: lang/countries:231
+msgid "UG"
+msgstr ""
+
+#: lang/countries:232
+msgid "UM"
+msgstr ""
+
+#: lang/countries:233
+msgid "US"
+msgstr ""
+
+#: lang/countries:234
+msgid "UY"
+msgstr ""
+
+#: lang/countries:235
+msgid "UZ"
+msgstr ""
+
+#: lang/countries:236
+msgid "VA"
+msgstr ""
+
+#: lang/countries:237
+msgid "VC"
+msgstr ""
+
+#: lang/countries:238
+msgid "VE"
+msgstr ""
+
+#: lang/countries:239
+msgid "VG"
+msgstr ""
+
+#: lang/countries:240
+msgid "VI"
+msgstr ""
+
+#: lang/countries:241
+msgid "VN"
+msgstr ""
+
+#: lang/countries:242
+msgid "VU"
+msgstr ""
+
+#: lang/countries:243
+msgid "WF"
+msgstr ""
+
+#: lang/countries:244
+msgid "WO"
+msgstr ""
+
+#: lang/countries:245
+msgid "WS"
+msgstr ""
+
+#: lang/countries:246
+msgid "YE"
+msgstr ""
+
+#: lang/countries:247
+msgid "YT"
+msgstr ""
+
+#: lang/countries:248
+msgid "ZA"
+msgstr ""
+
+#: lang/countries:249
+msgid "ZM"
+msgstr ""
+
+#: lang/countries:250
+msgid "ZW"
+msgstr ""
+

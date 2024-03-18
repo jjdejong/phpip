@@ -30,10 +30,10 @@
         <th>{{ __("Country") }}</th>
         <td>
           @if($country_edit)
-          <input type="text" class="form-control noformat text-truncate" name="country" data-ac="/country/autocomplete" placeholder="{{ __($matter->countryInfo->name) }}">
+          <input type="text" class="form-control noformat text-truncate" name="country" data-ac="/country/autocomplete" placeholder="{{ __($matter->countryInfo->iso) }}">
           @else
           <span title="{{ __('Cannot be changed because the matter has tasks based on the country') }}">
-            {{ $matter->countryInfo->name }}
+            {{ __($matter->country) }}
           </span>
           @endif
         </td>
@@ -41,7 +41,7 @@
       <tr>
         <th>{{ __("Origin") }}</th>
         <td>
-          <input type="text" class="form-control noformat text-truncate" name="origin" data-ac="/country/autocomplete" value="{{ empty($matter->originInfo) ? '' : $matter->originInfo->name }}">
+          <input type="text" class="form-control noformat text-truncate" name="origin" data-ac="/country/autocomplete" value="{{ empty($matter->origin) ? '' : __($matter->origin) }}">
         </td>
       </tr>
       <tr>

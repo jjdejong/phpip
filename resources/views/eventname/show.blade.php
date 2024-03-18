@@ -20,7 +20,7 @@
 		</tr>
 		<tr>
 			<th title="{{ __($tableComments['country']) }}">{{ __('Country') }}</th>
-			<td><input type="text" class="form-control noformat" name="country" data-ac="/country/autocomplete" value="{{ empty($eventname->countryInfo) ? '' : $eventname->countryInfo->name }}"></td>
+			<td><input type="text" class="form-control noformat" name="country" data-ac="/country/autocomplete" value="{{ empty($eventname->countryInfo) ? '' : __($eventname->countryInfo->iso) }}"></td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>

@@ -40,7 +40,7 @@ class TranslationsParseSeederCommand extends Command
             "ActorRoleTableSeeder.php" => ['name', 'notes'],
             "ActorTableSeeder.php"  => ['notes'],
             "ClassifierTypeTableSeeder.php"  => ['type'],
-            "CountryTableSeeder.php"  => ['name'],
+            "CountryTableSeeder.php"  => ['iso'],
             "EventNameTableSeeder.php"  => ['name', 'notes'],
             "MatterCategoryTableSeeder.php"  => ['category'],
             "MatterTypeTableSeeder.php"  => ['type'],

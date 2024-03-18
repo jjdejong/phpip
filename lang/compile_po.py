@@ -6,7 +6,7 @@
 
 import polib
 import json
-for lang in ("fr",):
+for lang in ("fr", "en"):
     pofile = polib.pofile(f'i18n/{lang}.po', encoding="utf8")
     translations = {}
     translations_js = {}
