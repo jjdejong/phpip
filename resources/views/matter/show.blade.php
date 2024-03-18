@@ -12,7 +12,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
   <div class="col-3">
     <div id="refsPanel" class="card border-primary p-0 h-100">
       <div class="card-header bg-primary text-light reveal-hidden p-1">
-        <a class="bg-primary text-white lead {{ $matter->dead ? 'text-decoration-line-through' : '' }}" href="/matter?Ref={{ $matter->caseref }}" title="{{ __('See family') }}">{{ $matter->uid }}</a>
+        <a id="see_family" class="bg-primary text-white lead {{ $matter->dead ? 'text-decoration-line-through' : '' }}" href="/matter?Ref={{ $matter->caseref }}" title={{ __("See family") }}>{{ $matter->uid }}</a>
         ({{ __($matter->category->category) }})
         @canany(['admin', 'readwrite'])
         <a class="bg-primary text-white float-end hidden-action"

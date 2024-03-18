@@ -215,7 +215,7 @@ dropZone.ondrop = function (event) {
       var tempLink = document.createElement('a');
       tempLink.style.display = 'none';
       tempLink.href = URL.createObjectURL(blob);
-      tempLink.download = document.body.querySelector("[title='See family']").innerHTML + '-' + file.name;
+      tempLink.download = document.body.querySelector("[id='see_family']").innerHTML + '-' + file.name;
       document.body.appendChild(tempLink);
       tempLink.click();
       document.body.removeChild(tempLink);
