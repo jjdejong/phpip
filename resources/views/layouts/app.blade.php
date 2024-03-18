@@ -175,7 +175,6 @@
                 {{ __('Tables') }}
               </a>
               <ul class="dropdown-menu">
-                <a class="dropdown-item" href="{{ url('/actor') }}">Actors</a>
                 <a class="dropdown-item" href="{{ url('/actor') }}">{{ __("Actors") }}</a>
                 @can('admin')
                 <a class="dropdown-item" href="{{ url('/user') }}">{{ __("DB Users") }}</a>
