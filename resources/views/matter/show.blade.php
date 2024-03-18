@@ -211,9 +211,9 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                 <span class="col-3">{{ $event->event_date->isoFormat('L') }}</span>
                 <span class="col">
                   @if ( $event->publicUrl() )
-                  <a href="{{ $event->publicUrl() }}" target="_blank">{{ $event->detail }}</a>
+                  <a href="{{ $event->publicUrl() }}" target="_blank">{{ __($event->detail) }}</a>
                   @else
-                  {{ $event->detail }}
+                  {{ __($event->detail) }}
                   @endif
                 </span>
                 @endif
@@ -233,7 +233,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <div class="card-body p-1" id="opentask-panel" style="overflow: auto;">
               @foreach ( $matter->tasksPending as $task )
               <div class="row">
-                <span class="col-9">{{ __($task->info->name) }}: {{ $task->detail }}</span>
+                <span class="col-9">{{ __($task->info->name) }}: {{ __($task->detail) }}</span>
                 <span class="col-3">{{ $task->due_date->isoFormat('L') }}</span>
               </div>
               @endforeach
