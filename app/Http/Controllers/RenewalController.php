@@ -417,13 +417,12 @@ class RenewalController extends Controller
                         logger('Ligne '.$i);
                         if ($firstPass) {
                             // retrouve la correspondance de société
-                            $result = $this->_client($client, $apikey);
-                            if (isset($result['error']) && $result['error']['code'] >= '404') {
-                                return response()->json(['error' => "$client not found in Dolibarr.\n"]);
+                            $rc = $this->_client($client, $apikey);
+                            if ($rc[0] != 0) {
+                                return response()->json(['error' => $rc[1]], 501);
                             }
+                            $result = $rc[1];
                             $firstPass = false;
-                            logger("Result : " . $result);
-                            logger($ren);
                             $soc_res = $result[0];
                             $earlier = strtotime($ren['due_date']);
                         } else {
@@ -500,7 +499,7 @@ class RenewalController extends Controller
                             ];
                             $rc = $this->createInvoice($newprop, $apikey); // invoice creation
                             if ($rc[0] != 0) {
-                                return response()->json(['error' => $rc[1]]);
+                                return response()->json(['error' => $rc[1]], 501);
                             }
                             $newlines = [];
                             $firstPass = true;
@@ -561,7 +560,7 @@ class RenewalController extends Controller
         // Search for client correspondence in Dolibarr
         $curl = curl_init();
         $httpheader = ['DOLAPIKEY: '.$apikey];
-        $data = ['sqlfilters' => '(t.nom:like:"'.$client.'%")'];
+        $data = ['sqlfilters' => "(t.nom:like:'".$client."%')"];
         // Get from config/renewal.php
         $url = config('renewal.api.dolibarr_url').'/thirdparties?'.http_build_query($data);
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -569,8 +568,17 @@ class RenewalController extends Controller
         curl_setopt($curl, CURLOPT_HTTPHEADER, $httpheader);
         $result = curl_exec($curl);
         curl_close($curl);
+        logger("Client request: ".$result);
+        $json = json_decode($result, true);
 
-        return json_decode($result, true);
+        if (is_null($json)) {
+            return [-1, $result];
+        } elseif (isset($json['error'])) {
+            // "Error creating the invoice.\n";
+            return [-1, $json['error']];
+        } else {
+            return [0, $json];
+        }
     }
 
     public function createInvoice($newprop, $apikey)

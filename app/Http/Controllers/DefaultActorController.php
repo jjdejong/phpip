@@ -69,7 +69,6 @@ class DefaultActorController extends Controller
 
     public function show(DefaultActor $default_actor)
     {
-        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('default_actor');
         $default_actor->with(['roleInfo:code,name', 'actor:id,name', 'client:id,name', 'category:code,category', 'country:iso,name'])->get();

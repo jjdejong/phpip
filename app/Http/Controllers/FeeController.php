@@ -12,7 +12,6 @@ class FeeController extends Controller
 {
     public function index(Request $request)
     {
-        App::setLocale(Auth::user()->language);
         $fees = new Fee;
         $filters = $request->except(['page']);
         if (! empty($filters)) {

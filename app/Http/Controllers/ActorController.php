@@ -11,7 +11,6 @@ class ActorController extends Controller
 {
     public function index(Request $request)
     {
-        App::setLocale(Auth::user()->language);
         $this->authorize('viewAny', Actor::class);
         $actor = new Actor;
         if ($request->filled('Name')) {
@@ -36,7 +35,6 @@ class ActorController extends Controller
 
     public function create()
     {
-        App::setLocale(Auth::user()->language);
         $this->authorize('create', Actor::class);
         $table = new Actor;
         //TODO getTableComments is the same as in Rule.php. To render common
@@ -47,7 +45,6 @@ class ActorController extends Controller
 
     public function store(Request $request)
     {
-        App::setLocale(Auth::user()->language);
         $this->authorize('create', Actor::class);
         $request->validate([
             'name' => 'required|max:100',
@@ -60,7 +57,6 @@ class ActorController extends Controller
 
     public function show(Actor $actor)
     {
-        App::setLocale(Auth::user()->language);
         $this->authorize('view', $actor);
         $actorInfo = $actor->load(['company:id,name', 'parent:id,name', 'site:id,name', 'droleInfo', 'countryInfo:iso,name', 'country_mailingInfo:iso,name', 'country_billingInfo:iso,name', 'nationalityInfo:iso,name']);
         $actorComments = $actor->getTableComments('actor');

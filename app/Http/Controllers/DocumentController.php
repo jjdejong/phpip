@@ -79,7 +79,6 @@ class DocumentController extends Controller
 
     public function show(TemplateClass $class)
     {
-        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('template_classes');
         $class->with(['role']);

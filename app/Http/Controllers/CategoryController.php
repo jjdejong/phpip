@@ -49,7 +49,6 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('matter_category');
         $category->load(['displayWithInfo:code,category']);

@@ -9,7 +9,6 @@ use App\Matter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +20,6 @@ class MatterController extends Controller
 
     public function index(Request $request)
     {
-        App::setLocale(Auth::user()->language);
         $filters = $request->except([
             'display_with',
             'page',
@@ -47,7 +45,6 @@ class MatterController extends Controller
 
     public function show(Matter $matter)
     {
-        App::setLocale(Auth::user()->language);
         $this->authorize('view', $matter);
         $matter->load(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers']);
 
@@ -62,14 +59,12 @@ class MatterController extends Controller
      **/
     public function info($id)
     {
-        App::setLocale(Auth::user()->language);
-        return Matter::with(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers'])
+                return Matter::with(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers'])
             ->find($id);
     }
 
     public function create(Request $request)
     {
-        App::setLocale(Auth::user()->language);
         $this->authorize('create', Matter::class);
         $operation = $request->input('operation', 'new'); // new, clone, child, ops
         $category = [];
@@ -100,7 +95,6 @@ class MatterController extends Controller
 
     public function store(Request $request)
     {
-        App::setLocale(Auth::user()->language);
         $this->authorize('create', Matter::class);
         $this->validate($request, [
             'category_code' => 'required',
@@ -189,7 +183,6 @@ class MatterController extends Controller
 
     public function storeN(Request $request)
     {
-        App::setLocale(Auth::user()->language);
         $this->authorize('create', Matter::class);
         $this->validate($request, [
             'ncountry' => 'required|array',
@@ -473,7 +466,6 @@ class MatterController extends Controller
 
     public function edit(Matter $matter)
     {
-        App::setLocale(Auth::user()->language);
         $this->authorize('update', $matter);
         $matter->load(
             'container',
@@ -496,7 +488,6 @@ class MatterController extends Controller
 
     public function update(Request $request, Matter $matter)
     {
-        App::setLocale(Auth::user()->language);
         $this->authorize('update', $matter);
         $request->validate([
             'term_adjust' => 'numeric',
@@ -523,7 +514,6 @@ class MatterController extends Controller
      */
     public function export(Request $request)
     {
-        App::setLocale(Auth::user()->language);
         $filters = $request->except([
             'display_with',
             'page',
@@ -599,7 +589,6 @@ class MatterController extends Controller
      */
     public function report(Request $request)
     {
-        App::setLocale(Auth::user()->language);
         $filters = $request->except([
             'display_with',
             'page',
@@ -631,9 +620,10 @@ class MatterController extends Controller
     public function mergeFile(Matter $matter, Request $request)
     {
         // No dedicated "form request" class being defined, this validation will silently terminate the operation when unsuccessful
-        $this->validate($request, [
-            'file' => 'required|file|mimes:docx,dotx',
-        ]);
+        // see https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
+        // $this->validate($request, [
+        //     'file' => 'required|file|mimetypes:application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.text-template',
+        // ]);
         $file = $request->file('file');
 
         // Attempt for a cleaner creation method of the data collection using relationships
@@ -978,7 +968,6 @@ class MatterController extends Controller
 
     public function classifiers(Matter $matter)
     {
-        App::setLocale(Auth::user()->language);
         $matter->load(['classifiers']);
 
         return view('matter.classifiers', compact('matter'));

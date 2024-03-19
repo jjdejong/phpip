@@ -29,8 +29,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        App::setLocale(Auth::user()->language);
-        // Count matters per categories
+       // Count matters per categories
         $categories = Matter::getCategoryMatterCount();
         $taskscount = Task::getUsersOpenTaskCount();
 

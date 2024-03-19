@@ -48,7 +48,6 @@ class ClassifierTypeController extends Controller
 
     public function show(ClassifierType $classifier_type)
     {
-        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('classifier_type');
         $classifier_type->load(['category:code,category']);
