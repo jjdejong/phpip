@@ -2063,7 +2063,7 @@ msgstr "Historique"
 #: resources/views/matter/show.blade.php:235
 #: resources/views/matter/show.blade.php:248
 msgid "Renewals Due"
-msgstr "Échéances de renouvellements"
+msgstr "Renouvellements"
 
 #: lang/blade-translations/matter/static.php:239
 #: lang/blade-translations/matter/static.php:243
