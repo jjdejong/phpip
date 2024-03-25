@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actor;
 use App\ClassifierType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 class ClassifierTypeController extends Controller

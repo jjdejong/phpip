@@ -12,6 +12,7 @@
 		"php": "^8.1",
 		"doctrine/dbal": "^3.0",
 		"guzzlehttp/guzzle": "^7.0.1",
+		"jimmyjs/laravel-report-generator": "^2.2",
 		"laminas/laminas-escaper": "^2.7",
 		"laravel/framework": "^10.0",
 		"laravel/ui": "^4.2",

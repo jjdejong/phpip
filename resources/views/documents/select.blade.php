@@ -2,9 +2,9 @@
   <input type='hidden' value="{{ $matter->id }}" name="matter_id">
   <table>
     <tr>
-      <th>Correspondent</th>
-      <th class="text-center">To</th>
-      <th class="text-center">CC</th>
+      <th>{{ __('Correspondent') }}</th>
+      <th class="text-center">{{ __('To') }}</th>
+      <th class="text-center">{{ __('CC') }}</th>
     </tr>
     @foreach($contacts as $contact)
     <tr>
@@ -26,23 +26,23 @@
         <th class="col-5">
           <input class="form-control form-control-sm filter" name="Summary"
             value="{{ array_key_exists('Summary', $oldfilters) ? $oldfilters['Summary'] : "" }}"
-            placeholder="Summary">
+            placeholder="{{ __('Summary') }}">
         </th>
         <th class="col-2">
           <input class="form-control form-control-sm filter" name="Language"
             value="{{ array_key_exists('Language', $oldfilters) ? $oldfilters['Language'] : "" }}"
-            placeholder="Language">
+            placeholder="{{ __('Language') }}">
         </th>
         <th class="col-2">
           <input class="form-control form-control-sm filter" name="Category"
             value="{{ array_key_exists('Category', $oldfilters) ? $oldfilters['Category'] : "" }}"
-            placeholder="Category">
+            placeholder="{{ __('Category') }}">
         </th>
         <th class="col-2">
           <input class="form-control form-control-sm filter"
-            title="{{ $tableComments['style'] }}" name="Style"
+            title="{{ __($tableComments['style']) }}" name="Style"
             value="{{ array_key_exists('Style', $oldfilters) ? $oldfilters['Style'] : "" }}"
-            placeholder="Style">
+            placeholder="{{ __('Style') }}">
         </th>
         <th class="col-1 text-center">
           Send

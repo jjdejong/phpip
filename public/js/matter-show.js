@@ -204,9 +204,9 @@ dropZone.ondrop = function (event) {
     .then(response => {
       if (!response.ok) {
         if (response.status == 422) {
-          alert('Only DOCX files can be processed for the moment');
+          alert(__('Only DOCX files can be processed for the moment'));
         }
-        throw new Error('Response status ' + response.status);
+        throw new Error(__('Response status ') + response.status);
       }
       return response.blob();
     })
@@ -215,7 +215,7 @@ dropZone.ondrop = function (event) {
       var tempLink = document.createElement('a');
       tempLink.style.display = 'none';
       tempLink.href = URL.createObjectURL(blob);
-      tempLink.download = document.body.querySelector("[title='See family']").innerHTML + '-' + file.name;
+      tempLink.download = document.body.querySelector("[id='see_family']").innerHTML + '-' + file.name;
       document.body.appendChild(tempLink);
       tempLink.click();
       document.body.removeChild(tempLink);
