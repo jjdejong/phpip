@@ -172,7 +172,7 @@
             @if ( $published )
             <a href="http://worldwide.espacenet.com/publicationDetails/biblio?DB=EPODOC&CC={{ $CC }}&NR={{ $pubno }}" target="_blank" title='{{ __("Open in Espacenet") }}'>{{ __($matter->Status) }}</a>
             @else
-            {{ $matter->Status }}
+            {{ __($matter->Status) }}
             @endif
           </td>
           @cannot('client')
