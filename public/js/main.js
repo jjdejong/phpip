@@ -5,7 +5,6 @@ let contentSrc, // Identifies what to display in the Ajax-filled modal. Updated 
 const configuredLocale = document.getElementById("user_lang").textContent;
 const navLocale = (navigator.languages && navigator.languages.length) ? navigator.languages[0].substring(0, 2) : navigator.userLanguage.substring(0, 2) || navigator.language.substring(0, 2) || navigator.browserLanguage.substring(0, 2) || 'en';
 const defaultLocale = (configuredLocale !== "") ? configuredLocale : navLocale;
-console.log(configuredLocale, navLocale, defaultLocale);
 // The active locale
 let locale;
 // Gets filled with active locale translations
