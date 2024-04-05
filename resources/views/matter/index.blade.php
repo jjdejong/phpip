@@ -131,7 +131,7 @@
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'pub.event_date' ? 'active' : '' }}" type="button" data-sortkey="pub.event_date" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="{{ __('PubNo') }}" placeholder="{{ __('Number') }}" value="{{ Request::get('PubNo') }}"></td>
+          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="PubNo" placeholder="{{ __('Number') }}" value="{{ Request::get('PubNo') }}"></td>
           <td class="tab1 {{ $hideTab1 }}">
             <div class="input-group input-group-sm">
               <input class="form-control" name="Granted" placeholder="{{ __('Granted/Reg\'d') }}" value="{{ Request::get('Granted') }}">
