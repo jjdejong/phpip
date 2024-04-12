@@ -16,7 +16,10 @@ class sendCall extends Mailable
 
     public function __construct(public $step, $renewals, public $validity_date, public $instruction_date, public $total, public $total_ht, public $subject, public $dest)
     {
-        $this->renewals = collect($renewals)->sortBy(['caseref', 'asc'], ['country', 'asc']);
+        $this->renewals = collect($renewals)->sortBy([
+            ['caseref', 'asc'],
+            ['country', 'asc']
+        ]);
         // Added to ask for receipt confirmation
         $this->callbacks[] = (function ($message) {
             $message->getHeaders()->addTextHeader('X-Confirm-Reading-To', '<'.Auth::user()->email.'>');
