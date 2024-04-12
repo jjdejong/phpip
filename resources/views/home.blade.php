@@ -42,7 +42,7 @@
             </td>
             <td class="py-0">
               @canany(['admin', 'readwrite'])
-              <a class="badge text-bg-primary hidden-action float-end" href="/matter/create?operation=new&category={{$group->category_code}}" data-bs-target="#ajaxModal" title="{{ __('Create :category', ['category' => __($group->category)]) }}" data-bs-toggle="modal" data-size="modal-sm">
+              <a class="badge text-bg-primary hidden-action float-end" style="font-size: 0.6em;" href="/matter/create?operation=new&category={{$group->category_code}}" data-bs-target="#ajaxModal" title="{{ __('Create') . ' ' . __($group->category) }}" data-bs-toggle="modal" data-size="modal-sm">
                 &plus;
               </a>
               @endcanany
