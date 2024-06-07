@@ -23,7 +23,7 @@ apt -y install php php-common libapache2-mod-php php-cli php-mysql php-json php-
 
 apt -y install unzip git-core composer
 
-echo "CREATE DATABASE phpip DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; CREATE USER phpip@localhost IDENTIFIED BY 'phpip'; GRANT ALL PRIVILEGES ON phpip.* TO phpip@localhost; SET GLOBAL log_bin_trust_function_creators = 1;" | mysql
+echo "CREATE DATABASE phpip DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; CREATE USER phpip@localhost IDENTIFIED BY 'phpIP2024!'; GRANT ALL PRIVILEGES ON phpip.* TO phpip@localhost; SET GLOBAL log_bin_trust_function_creators = 1;" | mysql
 
 echo "127.0.0.1    phpip.local" >> /etc/hosts
 
