@@ -3,7 +3,7 @@ echo "
 ********************************
 Updating Ubuntu
 ********************************"
-# Uncomment below for Ubuntu 20.04
+# Uncomment below for Ubuntu 22.04 and before to get the latest PHP version
 #add-apt-repository ppa:ondrej/php -y
 apt update
 apt -y upgrade
@@ -31,14 +31,15 @@ echo "
 ********************************
 Getting phpIP from GitHub
 ********************************"
-cd /var/www/html
+cd /var/www
 git clone https://github.com/jjdejong/phpip.git phpip
 cd phpip
 composer install
 cp .env.example .env
 php artisan key:generate
 php artisan config:clear
-cp doc/phpip.conf /etc/apache2/sites-enabled/
+cp doc/phpip.conf /etc/apache2/sites-available/
+a2ensite phpip
 chmod -R g+rw storage
 chmod -R g+rw bootstrap/cache
 chgrp -R www-data storage
