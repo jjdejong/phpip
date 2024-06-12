@@ -18,7 +18,7 @@ The purpose is to create/update each (renewal) task in phpIP by setting the fiel
   cost (invoiced to us by AQS)
   fee (our fees)
   notes (status from AQS: Estimated, Invoiced, Cancelled)
-  step (indicates advancement of instructions, 10 = closed)
+  step (indicates advancement of instructions, -1 = processed)
   invoice_step (indicates advancement of client invoicing, 1 = to invoice)
 */
 
@@ -233,7 +233,7 @@ foreach ($mandateOn as $AQSpatent) {
       }
       if (strlen($renewal->paymentDate) > 0 && $renewal->paymentDate != $myRenewal->done_date) {
         $set[] = "done_date = '$renewal->paymentDate'";
-        $set[] = "step = 10";
+        $set[] = "step = -1";
         if (!$myRenewal->invoice_step) {
           $set[] = "invoice_step = 1";
         }
