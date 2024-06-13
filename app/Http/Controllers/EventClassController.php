@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\EventClassLnk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class EventClassController extends Controller
 {

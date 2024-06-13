@@ -6,6 +6,7 @@ use App\Actor;
 use App\EventClassLnk;
 use App\EventName;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 class EventNameController extends Controller

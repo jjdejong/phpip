@@ -6,11 +6,13 @@ use App\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
 
 class TaskController extends Controller
 {
     public function index(Request $request)
     {
+        App::setLocale(Auth::user()->language);
         $task = new Task;
         $isrenewals = $request->isrenewals;
         $tasks = $task->openTasks($isrenewals, $request->what_tasks, $request->user_dashboard)->simplePaginate(18);
@@ -21,6 +23,7 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
+        App::setLocale(Auth::user()->language);
         $request->validate([
             'trigger_id' => 'required|numeric',
             'due_date' => 'required',
@@ -43,6 +46,7 @@ class TaskController extends Controller
 
     public function update(Request $request, Task $task)
     {
+        App::setLocale(Auth::user()->language);
         $this->validate($request, [
             'due_date' => 'sometimes|filled',
             'cost' => 'nullable|numeric',

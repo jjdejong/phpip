@@ -1,7 +1,41 @@
 let contentSrc, // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
     ceInitialContent, // Used for detecting changes of content-editable elements
     cTypeCode; // Used for toggling image file input in matter.classifiers
-   
+
+const configuredLocale = document.getElementById("user_lang").textContent;
+const navLocale = (navigator.languages && navigator.languages.length) ? navigator.languages[0].substring(0, 2) : navigator.userLanguage.substring(0, 2) || navigator.language.substring(0, 2) || navigator.browserLanguage.substring(0, 2) || 'en';
+const defaultLocale = (configuredLocale !== "") ? configuredLocale : navLocale;
+// The active locale
+let locale;
+// Gets filled with active locale translations
+let translations = {};
+
+async function fetchTranslationsFor(newLocale) {
+    const response = await fetch(`/lang/${newLocale}.json`);
+    return await response.json();
+}
+// TODO obtenir la locale
+document.addEventListener("DOMContentLoaded", () => {
+    // Translate the page to the locale
+    setLocale(defaultLocale);
+});
+// Load translations for the given locale and translate
+// the page to this locale
+async function setLocale(newLocale) {
+    if (newLocale === locale) return;
+    const newTranslations =
+        await fetchTranslationsFor(newLocale);
+    locale = newLocale;
+    translations = newTranslations;
+}
+
+function __(key) {
+    if (translations[key] === undefined) {
+        return key;
+    }
+    else
+        return translations[key];
+}
 // Ajax fill an element from a url returning HTML
 let fetchInto = async (url, element) => {
     response = await fetch(url);
@@ -25,33 +59,33 @@ let fetchREST = async (url, method, body) => {
         body: body
     });
     switch (response.status) {
-    case 500:
-        response.text().then(function (text) {
-            alert("Unexpected result: " + text)
-        });
-        break;
-    case 419:
-        alert("Token expired. Refresh the page");
-        break;
-    default:
-        return response.json();
+        case 500:
+            response.text().then(function (text) {
+                alert(__("Unexpected result: ") + text)
+            });
+            break;
+        case 419:
+            alert(__("Token expired. Refresh the page"));
+            break;
+        default:
+            return response.json();
     }
 }
 
 // Simple debounce
 function debounce(func, wait, immediate) {
-	var timeout;
-	return function() {
-		var context = this, args = arguments;
-		var later = function() {
-			timeout = null;
-			if (!immediate) func.apply(context, args);
-		};
-		var callNow = immediate && !timeout;
-		clearTimeout(timeout);
-		timeout = setTimeout(later, wait);
-		if (callNow) func.apply(context, args);
-	};
+    var timeout;
+    return function () {
+        var context = this, args = arguments;
+        var later = function () {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+    };
 };
 
 // Ajax fill the opened modal
@@ -113,7 +147,7 @@ app.addEventListener('click', (e) => {
             break;
 
         case 'deleteMatter':
-            if (confirm("Deleting the matter. Continue anyway?")) {
+            if (confirm(__("Deleting the matter. Continue anyway?"))) {
                 fetchREST(e.target.closest('[data-resource]').dataset.resource, 'DELETE')
                     .then(data => {
                         if (data.message) {
@@ -125,7 +159,7 @@ app.addEventListener('click', (e) => {
             }
             break;
 
-            // Specific processing in the task list modal
+        // Specific processing in the task list modal
         case 'addTaskToEvent':
             e.target.closest('tbody').insertAdjacentHTML('beforeend', addTaskFormTemplate.innerHTML);
             addTaskForm['trigger_id'].value = e.target.dataset.event_id;
@@ -136,23 +170,23 @@ app.addEventListener('click', (e) => {
             break;
 
         case 'deleteEvent':
-            if (confirm("Deleting the event will also delete the linked tasks. Continue anyway?")) {
+            if (confirm(__("Deleting the event will also delete the linked tasks. Continue anyway?"))) {
                 fetchREST('/event/' + e.target.dataset.event_id, 'DELETE')
                     .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
             }
             break;
 
-            // Specific processing of the event list modal
+        // Specific processing of the event list modal
         case 'addEventSubmit':
             submitModalForm('/event', addEventForm, 'reloadModal', e.target);
             break;
 
-            // Classifier list modal
+        // Classifier list modal
         case 'addClassifierSubmit':
             submitModalForm('/classifier', addClassifierForm, 'reloadModal', e.target);
             break;
 
-            // Generic processing of deletions
+        // Generic processing of deletions
         case 'deleteTask':
         case 'deleteClassifier':
         case 'removeActor':
@@ -257,7 +291,7 @@ app.addEventListener('click', (e) => {
             break;
 
         case 'regenerateTasks':
-            if (confirm("Regenerating the tasks will delete all the existing automatically created tasks and renewals for this event.\nPast tasks will not be recreated - make sure they have been dealt with.\nContinue anyway?")) {
+            if (confirm(__("Regenerating the tasks will delete all the existing automatically created tasks and renewals for this event.\nPast tasks will not be recreated - make sure they have been dealt with.\nContinue anyway?"))) {
                 fetchREST('/event/' + e.target.dataset.event_id + '/recreateTasks', 'POST')
                     .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
             }

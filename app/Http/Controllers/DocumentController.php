@@ -11,6 +11,7 @@ use App\TemplateClass;
 use App\TemplateMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Debug\Exception\FatalThrowableError;

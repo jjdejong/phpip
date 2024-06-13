@@ -387,7 +387,16 @@ class Matter extends Model
                             $query->where('matter.country', 'LIKE', "$value%");
                             break;
                         case 'Status':
-                            $query->where('event_name.name', 'LIKE', "$value%");
+                            $status_full = EventName::select('name')
+                              ->where('status_event', 1)->get();
+                            $matching = array();
+                            $lower_value = iconv('UTF-8', 'ASCII//TRANSLIT',strtolower($value));
+                            foreach($status_full as $status_name) {
+                                if (str_starts_with(iconv('UTF-8', 'ASCII//TRANSLIT', strtolower(__($status_name->name))), $lower_value) ){
+                                    $matching[] = $status_name->name;
+                                }
+                            }
+                            $query->wherein('event_name.name', $matching);
                             break;
                         case 'Status_date':
                             $query->where('status.event_date', 'LIKE', "$value%");

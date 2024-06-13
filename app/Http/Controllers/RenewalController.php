@@ -8,6 +8,7 @@ use App\RenewalsLog;
 use App\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -193,7 +194,7 @@ class RenewalController extends Controller
         // TODO Check first that each client has email
 
         if (empty($ids)) {
-            return 'No renewal selected.';
+            return __('No renewal selected.');
         }
         $previousClient = 'ZZZZZZZZZZZZZZZZZZZZZZZZ';
         $firstPass = true;
@@ -342,7 +343,10 @@ class RenewalController extends Controller
                                 $dest
                             ));
                         $firstPass = true;
+                        // reset values
                         $renewals = [];
+                        $total = 0;
+                        $total_ht = 0;
                     }
                 }
                 RenewalsLog::insert($data);
@@ -354,6 +358,7 @@ class RenewalController extends Controller
 
     public function topay(Request $request)
     {
+        App::setLocale(Auth::user()->language);
         if (isset($request->task_ids)) {
             Task::whereIn('id', $request->task_ids)->update(['step' => 4, 'invoice_step' => 1]);
             // For logs
@@ -375,18 +380,19 @@ class RenewalController extends Controller
             }
             RenewalsLog::insert($data);
 
-            return response()->json(['success' => 'Marked as to pay']);
+            return response()->json(['success' => __('Marked as to pay')]);
         } else {
-            return response()->json(['error' => 'No renewal selected.']);
+            return response()->json(['error' => __('No renewal selected.')]);
         }
     }
 
     public function invoice(Request $request, int $toinvoice)
     {
+        App::setLocale(Auth::user()->language);
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
-            return response()->json(['error' => 'No renewal selected.']);
+            return response()->json(['error' => __('No renewal selected.')]);
         }
         $num = 0;
         if (config('renewal.invoice.backend') == 'dolibarr' && $toinvoice) {
@@ -402,7 +408,7 @@ class RenewalController extends Controller
             if ($resql) {
                 $num = $resql->count();
                 if ($num == 0) {
-                    return response()->json(['error' => 'No renewal selected.']);
+                    return response()->json(['error' => __('No renewal selected.')]);
                 } else {
                     $i = 0;
                     $earlier = '';
@@ -411,10 +417,11 @@ class RenewalController extends Controller
                         logger('Ligne '.$i);
                         if ($firstPass) {
                             // retrouve la correspondance de société
-                            $result = $this->_client($client, $apikey);
-                            if (isset($result['error']) && $result['error']['code'] >= '404') {
-                                return response()->json(['error' => "$client not found in Dolibarr.\n"]);
+                            $rc = $this->_client($client, $apikey);
+                            if ($rc[0] != 0) {
+                                return response()->json(['error' => $rc[1]], 501);
                             }
+                            $result = $rc[1];
                             $firstPass = false;
                             $soc_res = $result[0];
                             $earlier = strtotime($ren['due_date']);
@@ -492,7 +499,7 @@ class RenewalController extends Controller
                             ];
                             $rc = $this->createInvoice($newprop, $apikey); // invoice creation
                             if ($rc[0] != 0) {
-                                return response()->json(['error' => $rc[1]]);
+                                return response()->json(['error' => $rc[1]], 501);
                             }
                             $newlines = [];
                             $firstPass = true;
@@ -510,7 +517,7 @@ class RenewalController extends Controller
     public function paid(Request $request)
     {
         if (! isset($request->task_ids)) {
-            return response()->json(['error' => 'No renewal selected.']);
+            return response()->json(['error' => __('No renewal selected.')]);
         }
         // Move the renewal task to step: invoice paid
         $num = Task::whereIn('id', $request->task_ids)->update(['invoice_step' => 3]);
@@ -553,7 +560,7 @@ class RenewalController extends Controller
         // Search for client correspondence in Dolibarr
         $curl = curl_init();
         $httpheader = ['DOLAPIKEY: '.$apikey];
-        $data = ['sqlfilters' => '(t.nom:like:"'.$client.'%")'];
+        $data = ['sqlfilters' => "(t.nom:like:'".$client."%')"];
         // Get from config/renewal.php
         $url = config('renewal.api.dolibarr_url').'/thirdparties?'.http_build_query($data);
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -561,8 +568,17 @@ class RenewalController extends Controller
         curl_setopt($curl, CURLOPT_HTTPHEADER, $httpheader);
         $result = curl_exec($curl);
         curl_close($curl);
+        logger("Client request: ".$result);
+        $json = json_decode($result, true);
 
-        return json_decode($result, true);
+        if (is_null($json)) {
+            return [-1, $result];
+        } elseif (isset($json['error'])) {
+            // "Error creating the invoice.\n";
+            return [-1, $json['error']];
+        } else {
+            return [0, $json];
+        }
     }
 
     public function createInvoice($newprop, $apikey)
@@ -597,10 +613,11 @@ class RenewalController extends Controller
      */
     public function done(Request $request)
     {
+        App::setLocale(Auth::user()->language);
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
-            return response()->json(['error' => 'No renewal selected.']);
+            return response()->json(['error' => __('No renewal selected.')]);
         }
         $resql = $query->get();
 
@@ -638,10 +655,11 @@ class RenewalController extends Controller
      */
     public function receipt(Request $request)
     {
+        App::setLocale(Auth::user()->language);
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
-            return response()->json(['error' => 'No renewal selected.']);
+            return response()->json(['error' => __('No renewal selected.')]);
         }
         $resql = $query->get();
 
@@ -678,10 +696,11 @@ class RenewalController extends Controller
      */
     public function closing(Request $request)
     {
+        App::setLocale(Auth::user()->language);
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
-            return response()->json(['error' => 'No renewal selected.']);
+            return response()->json(['error' => __('No renewal selected.')]);
         }
         $resql = $query->get();
 
@@ -723,10 +742,11 @@ class RenewalController extends Controller
      */
     public function abandon(Request $request)
     {
+        App::setLocale(Auth::user()->language);
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
-            return response()->json(['error' => 'No renewal selected.']);
+            return response()->json(['error' => __('No renewal selected.')]);
         }
         $renewals = $query->get();
         // For logs
@@ -766,10 +786,11 @@ class RenewalController extends Controller
      */
     public function lapsing(Request $request)
     {
+        App::setLocale(Auth::user()->language);
         if (isset($request->task_ids)) {
             $query = Task::renewals()->whereIn('task.id', $request->task_ids);
         } else {
-            return response()->json(['error' => 'No renewal selected.']);
+            return response()->json(['error' => __('No renewal selected.')]);
         }
         $resql = $query->get();
 
@@ -809,6 +830,7 @@ class RenewalController extends Controller
      */
     public function renewalOrder(Request $request)
     {
+        App::setLocale(Auth::user()->language);
         $tids = $request->task_ids;
         $procedure = '';
         $prev_procedure = '';
@@ -835,7 +857,7 @@ class RenewalController extends Controller
             } else {
                 if ($prev_procedure != $procedure) {
                     // The order can only be for once juridiction
-                    return response()->json(['error' => 'More than one juridiction is selected'], 501);
+                    return response()->json(['error' => _i('More than one juridiction is selected')], 501);
                 }
             }
             $country = $renewal->country;

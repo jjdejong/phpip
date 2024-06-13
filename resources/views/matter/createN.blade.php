@@ -10,17 +10,17 @@
 		@foreach( $parent_matter->countryInfo->natcountries as $iso => $name )
 		<div class="input-group" id="country-{{ $iso }}">
 			<input type="hidden" name="ncountry[]" value="{{ $iso }}" />
-			<input type="text" class="form-control" readonly value="{{ $name }}" />
-			<button class="btn btn-outline-danger" type="button" id="{{ $iso }}" title="Remove {{ $iso }}">&times;</button>
+			<input type="text" class="form-control" readonly value="{{ __($iso) }}" />
+			<button class="btn btn-outline-danger" type="button" id="{{ $iso }}" title="{{ __('Remove').' '.$iso }}">&times;</button>
 		</div>
 		@endforeach
 	</div>
 	<div class="input-group">
-		<input type="text" class="form-control" placeholder="Add country" data-ac="/country/autocomplete" id="addCountry">
+		<input type="text" class="form-control" placeholder="{{ __('Add country') }}" data-ac="/country/autocomplete" id="addCountry">
 		<span class="input-group-text">&plus;</span>
 	</div>
 	<div class="d-grid">
-		<button type="button" class="btn btn-primary mt-2" id="nationalizeSubmit">Submit</button>
+		<button type="button" class="btn btn-primary mt-2" id="nationalizeSubmit">{{ __('Submit') }}</button>
 	</div>
 </form>
 

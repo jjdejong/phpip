@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
 
 class ActorController extends Controller
 {

@@ -10,12 +10,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use SimpleXMLElement;
 
 class MatterController extends Controller
 {
+
     public function index(Request $request)
     {
         $filters = $request->except([
@@ -57,7 +60,7 @@ class MatterController extends Controller
      **/
     public function info($id)
     {
-        return Matter::with(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers'])
+                return Matter::with(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers'])
             ->find($id);
     }
 
@@ -580,6 +583,37 @@ class MatterController extends Controller
         );
     }
 
+    
+    /**
+     * Report a Matters list
+     * *
+     */
+    public function report(Request $request)
+    {
+        $filters = $request->except([
+            'display_with',
+            'page',
+            'filter',
+            'value',
+            'sortkey',
+            'sortdir',
+            'tab',
+            'include_dead',
+            'report_list'
+        ]);
+        $option = $request->input('report_list');
+        $report_name = "report." . $option;
+
+        $matters = Matter::filter(
+            $request->input('sortkey', 'caseref'),
+            $request->input('sortdir', 'asc'),
+            $filters,
+            $request->display_with,
+            $request->include_dead
+        )->orderBy("Cat")->orderBy('caseref')->get()->toArray();
+        return view($report_name, compact('matters'));
+    }
+
     /**
      * Generate merged document on the fly from uploaded template
      * *
@@ -587,9 +621,10 @@ class MatterController extends Controller
     public function mergeFile(Matter $matter, Request $request)
     {
         // No dedicated "form request" class being defined, this validation will silently terminate the operation when unsuccessful
-        $this->validate($request, [
-            'file' => 'required|file|mimes:docx,dotx',
-        ]);
+        // see https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
+        // $this->validate($request, [
+        //     'file' => 'required|file|mimetypes:application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.text-template',
+        // ]);
         $file = $request->file('file');
 
         // Attempt for a cleaner creation method of the data collection using relationships
@@ -965,10 +1000,10 @@ class MatterController extends Controller
             ->get($ops_biblio);
 
         if ($ops_response->clientError()) {
-            return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS Family'];
+            return ['errors' => ['docnum' => [_('Number not found')]], 'message' => _('Number not found in OPS Family')];
         }
         if ($ops_response->serverError()) {
-            return ['exception' => 'OPS server error', 'message' => 'OPS server error, try again'];
+            return ['exception' => _('OPS server error'), 'message' => _('OPS server error, try again')];
         }
 
         $members = data_get($ops_response, 'ops:world-patent-data.ops:patent-family.ops:family-member');

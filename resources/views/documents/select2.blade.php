@@ -9,8 +9,8 @@
     @endif
     <table>
       <tr>
-        <th>Correspondent</th>
-        <th class="text-center">To</th>
+        <th>{{ __('Correspondent') }}</th>
+        <th class="text-center">{{ __('To') }}</th>
         <th class="text-center">CC</th>
       </tr>
       @foreach($contacts as $contact)
