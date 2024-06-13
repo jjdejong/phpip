@@ -4,7 +4,7 @@
     <tr>
       <th>{{ __('Correspondent') }}</th>
       <th class="text-center">{{ __('To') }}</th>
-      <th class="text-center">{{ __('CC') }}</th>
+      <th class="text-center">CC</th>
     </tr>
     @foreach($contacts as $contact)
     <tr>
