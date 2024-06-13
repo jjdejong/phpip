@@ -21,7 +21,7 @@
     </td></tr>
     @endif
   </table>
-  <button type="button" class="btn btn-danger" title="{{ __('Delete class') }}" id="deleteClass" data-message="{{ _i('the class ') }}{{ $class->name  }}" data-url='/document/{{ $class->id }}'>
+  <button type="button" class="btn btn-danger" title="{{ __('Delete class') }}" id="deleteClass" data-message="{{ __('the class ') }}{{ $class->name  }}" data-url='/document/{{ $class->id }}'>
     {{ __("Delete") }}
   </button>
 </div>
