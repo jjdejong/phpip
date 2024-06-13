@@ -7,7 +7,7 @@
         <td >
           <input type="text" class="form-control form-control-sm" name="name">
         </td>
-        <td><label for="notes" title="( __{{ $tableComments['notes']) }}">{{ __("Notes") }}</label></td>
+        <td><label for="notes" title="( {{ __($tableComments['notes']) }}">{{ __("Notes") }}</label></td>
         <td><input id="notes" class="form-control form-control-sm" name="notes"></td>
       </tr>
       <tr>
