@@ -148,12 +148,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <ul class="list-unstyled mb-0">
               @foreach ( $role_group as $actor )
               <li class="text-truncate {{ $actor->inherited ? 'fst-italic' : '' }}">
-                @if ( $actor->warn )
+                @if ( $actor->warn && $actor->role_code == 'CLI')
                 <span class="text-danger" title="Special instructions">
                   <svg width="12" height="12" fill="currentColor"><use xlink:href="#exclamation-triangle-fill"/></svg>
                 </span>
                 @endif
-                <a @if ($actor->warn) class="text-danger" @endif
+                <a @if ($actor->warn && $actor->role_code == 'CLI') class="text-danger" @endif
                   href="/actor/{{ $actor->actor_id }}"
                   data-bs-toggle="modal"
                   data-bs-target="#ajaxModal"
