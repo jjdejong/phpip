@@ -18,16 +18,18 @@ class MatterController extends Controller
 {
     public function index(Request $request)
     {
-        $filters = $request->except([
-            'display_with',
-            'page',
-            'filter',
-            'value',
-            'sortkey',
-            'sortdir',
-            'tab',
-            'include_dead',
-        ]);
+        $filters = $request->except(
+            [
+                'display_with',
+                'page',
+                'filter',
+                'value',
+                'sortkey',
+                'sortdir',
+                'tab',
+                'include_dead',
+            ]
+        );
 
         $matters = Matter::filter(
             $request->input('sortkey', 'id'),
@@ -57,8 +59,9 @@ class MatterController extends Controller
      **/
     public function info($id)
     {
-        return Matter::with(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers'])
-            ->find($id);
+        return Matter::with(
+            ['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers']
+        )->find($id);
     }
 
     public function create(Request $request)
@@ -68,12 +71,18 @@ class MatterController extends Controller
         $category = [];
         $category_code = $request->input('category', 'PAT');
         if ($operation != 'new' && $operation != 'ops') {
-            $parent_matter = Matter::with('container', 'countryInfo', 'originInfo', 'category', 'type')
-                ->find($request->matter_id);
+            $parent_matter = Matter::with(
+                'container', 
+                'countryInfo', 
+                'originInfo', 
+                'category', 
+                'type'
+            )->find($request->matter_id);
             if ($operation == 'clone') {
                 // Generate the next available caseref based on the prefix
-                $parent_matter->caseref = Matter::where('caseref', 'like', $parent_matter->category->ref_prefix.'%')
-                    ->max('caseref');
+                $parent_matter->caseref = Matter::where(
+                    'caseref', 'like', $parent_matter->category->ref_prefix.'%'
+                )->max('caseref');
                 $parent_matter->caseref++;
             }
         } else {
@@ -94,22 +103,27 @@ class MatterController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', Matter::class);
-        $this->validate($request, [
-            'category_code' => 'required',
-            'caseref' => 'required',
-            'country' => 'required',
-            'responsible' => 'required',
-            'expire_date' => 'date',
-        ]);
+        $this->validate(
+            $request, 
+            [
+                'category_code' => 'required',
+                'caseref' => 'required',
+                'country' => 'required',
+                'responsible' => 'required',
+                'expire_date' => 'date',
+            ]
+        );
 
         // Unique UID handling
-        $matters = Matter::where([
-            ['caseref', $request->caseref],
-            ['country', $request->country],
-            ['category_code', $request->category_code],
-            ['origin', $request->origin],
-            ['type_code', $request->type_code],
-        ]);
+        $matters = Matter::where(
+            [
+                ['caseref', $request->caseref],
+                ['country', $request->country],
+                ['category_code', $request->category_code],
+                ['origin', $request->origin],
+                ['type_code', $request->type_code],
+            ]
+        );
 
         $request->merge(['creator' => Auth::user()->login]);
 
@@ -133,11 +147,13 @@ class MatterController extends Controller
                     // Copy Filing event from original matter
                     $new_matter->filing()->save($parent_matter->filing->replicate(['detail']));
                     $new_matter->parent_id = $request->parent_id;
-                    $new_matter->events()->create([
-                        'code' => 'ENT',
-                        'event_date' => now(),
-                        'detail' => 'Child filing date',
-                    ]);
+                    $new_matter->events()->create(
+                        [
+                            'code' => 'ENT',
+                            'event_date' => now(),
+                            'detail' => 'Child filing date',
+                        ]
+                    );
                 }
                 $new_matter->save();
                 break;
@@ -182,19 +198,22 @@ class MatterController extends Controller
     public function storeN(Request $request)
     {
         $this->authorize('create', Matter::class);
-        $this->validate($request, [
-            'ncountry' => 'required|array',
-        ]);
+        $this->validate(
+            $request, 
+            ['ncountry' => 'required|array']
+        );
 
         $parent_id = $request->parent_id;
         $parent_matter = Matter::with('priority', 'filing', 'publication', 'grant', 'classifiersNative')
             ->find($parent_id);
 
         foreach ($request->ncountry as $country) {
-            $request->merge([
-                'country' => $country,
-                'creator' => Auth::user()->login,
-            ]);
+            $request->merge(
+                [
+                    'country' => $country,
+                    'creator' => Auth::user()->login,
+                ]
+            );
 
             $new_matter = Matter::create($request->except(['_token', '_method', 'ncountry', 'parent_id']));
 
@@ -252,10 +271,12 @@ class MatterController extends Controller
                 // Member exists, do not create
                 continue;
             }
-            $request->merge([
-                'country' => $app['app']['country'],
-                'creator' => Auth::user()->login,
-            ]);
+            $request->merge(
+                [
+                    'country' => $app['app']['country'],
+                    'creator' => Auth::user()->login,
+                ]
+            );
             // Remove if set from a previous iteration
             $request->request->remove('type_code');
             $request->request->remove('origin');
@@ -277,13 +298,15 @@ class MatterController extends Controller
             }
 
             // Unique UID handling
-            $matters = Matter::where([
-                ['caseref', $request->caseref],
-                ['country', $request->country],
-                ['category_code', $request->category_code],
-                ['origin', $request->origin],
-                ['type_code', $request->type_code],
-            ]);
+            $matters = Matter::where(
+                [
+                    ['caseref', $request->caseref],
+                    ['country', $request->country],
+                    ['category_code', $request->category_code],
+                    ['origin', $request->origin],
+                    ['type_code', $request->type_code],
+                ]
+            );
 
             $idx = $matters->count();
 
@@ -299,21 +322,25 @@ class MatterController extends Controller
                 foreach ($app['pri'] as $pri) {
                     // Create priority filings that refer to applications not returned by OPS (US provisionals)
                     if ($pri['number'] != $app['app']['number']) {
-                        $new_matter->events()->create([
-                            'code' => 'PRI',
-                            'detail' => $pri['country'].$pri['number'],
-                            'event_date' => $pri['date'],
-                        ]);
+                        $new_matter->events()->create(
+                            [
+                                'code' => 'PRI',
+                                'detail' => $pri['country'].$pri['number'],
+                                'event_date' => $pri['date'],
+                            ]
+                        );
                     }
                 }
                 $new_matter->classifiersNative()->create(['type_code' => 'TIT', 'value' => $app['title']]);
                 $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'CLI', 'shared' => 1]);
                 if (strtolower($app['applicants'][0]) == strtolower(Actor::find($request->client_id)->name)) {
-                    $new_matter->actorPivot()->create([
-                        'actor_id' => $request->client_id,
-                        'role' => 'APP',
-                        'shared' => 1,
-                    ]);
+                    $new_matter->actorPivot()->create(
+                        [
+                            'actor_id' => $request->client_id,
+                            'role' => 'APP',
+                            'shared' => 1,
+                        ]
+                    );
                 }
                 foreach ($app['applicants'] as $applicant) {
                     // Search for phonetically equivalent in the actor table, and take first
@@ -323,23 +350,29 @@ class MatterController extends Controller
                     }
                     if ($actor = Actor::whereRaw("name SOUNDS LIKE '$applicant'")->first()) {
                         // Some applicants are listed twice, with and without accents, so ignore unique key error for a second attempt
-                        $new_matter->actorPivot()->firstOrCreate([
-                            'actor_id' => $actor->id,
-                            'role' => 'APP',
-                            'shared' => 1,
-                        ]);
+                        $new_matter->actorPivot()->firstOrCreate(
+                            [
+                                'actor_id' => $actor->id,
+                                'role' => 'APP',
+                                'shared' => 1,
+                            ]
+                        );
                     } else {
-                        $new_actor = Actor::create([
-                            'name' => $applicant,
-                            'default_role' => 'APP',
-                            'phy_person' => 0,
-                            'notes' => "Inserted by OPS family create tool for matter ID $new_matter->id",
-                        ]);
-                        $new_matter->actorPivot()->firstOrCreate([
-                            'actor_id' => $new_actor->id,
-                            'role' => 'APP',
-                            'shared' => 1,
-                        ]);
+                        $new_actor = Actor::create(
+                            [
+                                'name' => $applicant,
+                                'default_role' => 'APP',
+                                'phy_person' => 0,
+                                'notes' => "Inserted by OPS family create tool for matter ID $new_matter->id",
+                            ]
+                        );
+                        $new_matter->actorPivot()->firstOrCreate(
+                            [
+                                'actor_id' => $new_actor->id,
+                                'role' => 'APP',
+                                'shared' => 1,
+                            ]
+                        );
                     }
                 }
                 foreach ($app['inventors'] as $inventor) {
@@ -350,23 +383,29 @@ class MatterController extends Controller
                     }
                     if ($actor = Actor::whereRaw("name SOUNDS LIKE '$inventor'")->first()) {
                         // Some inventors are listed twice, with and without accents, so ignore second attempt
-                        $new_matter->actorPivot()->firstOrCreate([
-                            'actor_id' => $actor->id,
-                            'role' => 'INV',
-                            'shared' => 1,
-                        ]);
+                        $new_matter->actorPivot()->firstOrCreate(
+                            [
+                                'actor_id' => $actor->id,
+                                'role' => 'INV',
+                                'shared' => 1,
+                            ]
+                        );
                     } else {
-                        $new_actor = Actor::create([
-                            'name' => $inventor,
-                            'default_role' => 'INV',
-                            'phy_person' => 1,
-                            'notes' => "Inserted by OPS family create tool for matter ID $new_matter->id",
-                        ]);
-                        $new_matter->actorPivot()->firstOrCreate([
-                            'actor_id' => $new_actor->id,
-                            'role' => 'INV',
-                            'shared' => 1,
-                        ]);
+                        $new_actor = Actor::create(
+                            [
+                                'name' => $inventor,
+                                'default_role' => 'INV',
+                                'phy_person' => 1,
+                                'notes' => "Inserted by OPS family create tool for matter ID $new_matter->id",
+                            ]
+                        );
+                        $new_matter->actorPivot()->firstOrCreate(
+                            [
+                                'actor_id' => $new_actor->id,
+                                'role' => 'INV',
+                                'shared' => 1,
+                            ]
+                        );
                     }
                 }
                 $new_matter->notes = 'Applicants: '.collect($app['applicants'])->implode('; ')."\nInventors: ".collect($app['inventors'])->implode(' - ');
@@ -377,24 +416,42 @@ class MatterController extends Controller
                     if ($pri['number'] != $app['app']['number']) {
                         if (array_key_exists($pri['number'], $matter_id_num)) {
                             // The priority application is in the family
-                            $new_matter->events()->create(['code' => 'PRI', 'alt_matter_id' => $matter_id_num[$pri['number']]]);
+                            $new_matter->events()->create(
+                                [
+                                    'code' => 'PRI', 
+                                    'alt_matter_id' => $matter_id_num[$pri['number']]
+                                ]
+                            );
                         } else {
-                            $new_matter->events()->create([
-                                'code' => 'PRI',
-                                'detail' => $pri['country'].$pri['number'],
-                                'event_date' => $pri['date'],
-                            ]);
+                            $new_matter->events()->create(
+                                [
+                                    'code' => 'PRI',
+                                    'detail' => $pri['country'].$pri['number'],
+                                    'event_date' => $pri['date'],
+                                ]
+                            );
                         }
                     }
                 }
             }
             if ($app['pct'] != null) {
                 $new_matter->parent_id = $matter_id_num[$app['pct']];
-                $new_matter->events()->create(['code' => 'PFIL', 'alt_matter_id' => $new_matter->parent_id]);
+                $new_matter->events()->create(
+                    [
+                        'code' => 'PFIL', 
+                        'alt_matter_id' => $new_matter->parent_id
+                    ]
+                );
             }
             if ($parent_num) {
                 // This app is a divisional or a continuation
-                $new_matter->events()->create(['code' => 'ENT', 'event_date' => $app['app']['date'], 'detail' => 'Child filing date']);
+                $new_matter->events()->create(
+                    [
+                        'code' => 'ENT', 
+                        'event_date' => $app['app']['date'], 
+                        'detail' => 'Child filing date'
+                    ]
+                );
                 $parent = $apps->where('app.number', $parent_num)->first();
                 // Change this app's filing date to the parent's filing date for potential children of this app
                 $app['app']['date'] = $parent['app']['date'];
@@ -402,10 +459,22 @@ class MatterController extends Controller
             }
             $new_matter->events()->create(['code' => 'FIL', 'event_date' => $app['app']['date'], 'detail' => $app['app']['number']]);
             if (array_key_exists('pub', $app)) {
-                $new_matter->events()->create(['code' => 'PUB', 'event_date' => $app['pub']['date'], 'detail' => $app['pub']['number']]);
+                $new_matter->events()->create(
+                    [
+                        'code' => 'PUB', 
+                        'event_date' => $app['pub']['date'], 
+                        'detail' => $app['pub']['number']
+                    ]
+                );
             }
             if (array_key_exists('grt', $app)) {
-                $new_matter->events()->create(['code' => 'GRT', 'event_date' => $app['grt']['date'], 'detail' => $app['grt']['number']]);
+                $new_matter->events()->create(
+                    [
+                        'code' => 'GRT', 
+                        'event_date' => $app['grt']['date'], 
+                        'detail' => $app['grt']['number']
+                    ]
+                );
             }
             if (array_key_exists('procedure', $app)) {
                 foreach ($app['procedure'] as $step) {
@@ -414,21 +483,26 @@ class MatterController extends Controller
                             // Exam report
                             $exa = $new_matter->events()->create(['code' => 'EXA', 'event_date' => $step['dispatched']]);
                             if (array_key_exists('replied', $step) && $exa->event_date < now()->subMonths(4)) {
-                                $exa->tasks()->create([
-                                    'code' => 'REP',
-                                    'due_date' => $exa->event_date->addMonths(4),
-                                    'done_date' => $step['replied'],
-                                    'done' => 1,
-                                    'detail' => 'Exam Report']);
+                                $exa->tasks()->create(
+                                    [
+                                        'code' => 'REP',
+                                        'due_date' => $exa->event_date->addMonths(4),
+                                        'done_date' => $step['replied'],
+                                        'done' => 1,
+                                        'detail' => 'Exam Report'
+                                    ]
+                                );
                             }
                             break;
                         case 'RFEE':
                             // Renewals
                             $new_matter->filing->tasks()->updateOrCreate(
                                 ['code' => 'REN', 'detail' => $step['ren_year']],
-                                ['due_date' => $new_matter->filing->event_date->addYears($step['ren_year'] - 1)->lastOfMonth(),
+                                [
+                                    'due_date' => $new_matter->filing->event_date->addYears($step['ren_year'] - 1)->lastOfMonth(),
                                     'done_date' => $step['ren_paid'],
-                                    'done' => 1]
+                                    'done' => 1
+                                ]
                             );
                             break;
                         case 'IGRA':
@@ -438,12 +512,15 @@ class MatterController extends Controller
                                 $grt = $new_matter->events()->create(['code' => 'ALL', 'event_date' => $step['dispatched']]);
                             }
                             if (array_key_exists('grt_paid', $step) && $grt->event_date < now()->subMonths(4)) {
-                                $grt->tasks()->create([
-                                    'code' => 'PAY',
-                                    'due_date' => $grt->event_date->addMonths(4),
-                                    'done_date' => $step['grt_paid'],
-                                    'done' => 1,
-                                    'detail' => 'Grant Fee']);
+                                $grt->tasks()->create(
+                                    [
+                                        'code' => 'PAY',
+                                        'due_date' => $grt->event_date->addMonths(4),
+                                        'done_date' => $step['grt_paid'],
+                                        'done' => 1,
+                                        'detail' => 'Grant Fee'
+                                    ]
+                                );
                             }
                             break;
                         case 'EXAM52':
@@ -474,12 +551,16 @@ class MatterController extends Controller
             'type',
             'filing'
         );
-        $country_edit = $matter->tasks()->whereHas('rule', function (Builder $q) {
-            $q->whereNotNull('for_country');
-        })->count() == 0;
-        $cat_edit = $matter->tasks()->whereHas('rule', function (Builder $q) {
-            $q->whereNotNull('for_category');
-        })->count() == 0;
+        $country_edit = $matter->tasks()->whereHas(
+            'rule', function (Builder $q) {
+                $q->whereNotNull('for_country');
+            }
+        )->count() == 0;
+        $cat_edit = $matter->tasks()->whereHas(
+            'rule', function (Builder $q) {
+                $q->whereNotNull('for_category');
+            }
+        )->count() == 0;
 
         return view('matter.edit', compact(['matter', 'cat_edit', 'country_edit']));
     }
@@ -487,11 +568,13 @@ class MatterController extends Controller
     public function update(Request $request, Matter $matter)
     {
         $this->authorize('update', $matter);
-        $request->validate([
-            'term_adjust' => 'numeric',
-            'idx' => 'numeric|nullable',
-            'expire_date' => 'date',
-        ]);
+        $request->validate(
+            [
+                'term_adjust' => 'numeric',
+                'idx' => 'numeric|nullable',
+                'expire_date' => 'date',
+            ]
+        );
         $request->merge(['updater' => Auth::user()->login]);
         $matter->update($request->except(['_token', '_method']));
 
@@ -512,16 +595,18 @@ class MatterController extends Controller
      */
     public function export(Request $request)
     {
-        $filters = $request->except([
-            'display_with',
-            'page',
-            'filter',
-            'value',
-            'sortkey',
-            'sortdir',
-            'tab',
-            'include_dead',
-        ]);
+        $filters = $request->except(
+            [
+                'display_with',
+                'page',
+                'filter',
+                'value',
+                'sortkey',
+                'sortdir',
+                'tab',
+                'include_dead',
+            ]
+        );
 
         $export = Matter::filter(
             $request->input('sortkey', 'caseref'),
@@ -587,9 +672,10 @@ class MatterController extends Controller
     public function mergeFile(Matter $matter, Request $request)
     {
         // No dedicated "form request" class being defined, this validation will silently terminate the operation when unsuccessful
-        $this->validate($request, [
-            'file' => 'required|file|mimes:docx,dotx',
-        ]);
+        $this->validate(
+            $request, 
+            ['file' => 'required|file|mimes:docx,dotx']
+        );
         $file = $request->file('file');
 
         // Attempt for a cleaner creation method of the data collection using relationships
@@ -656,8 +742,13 @@ class MatterController extends Controller
             'fil.detail AS Filing_Number',
             DB::raw("DATE_FORMAT(pub.event_date, '%d/%m/%Y') AS Pub_Date"),
             'pub.detail AS Pub_Number',
-            DB::raw("GROUP_CONCAT(DISTINCT CONCAT(pri.country, pri.detail, ' - ', DATE_FORMAT(pri.event_date, '%d/%m/%Y'))
-                SEPARATOR '\n') AS Priority"),
+            DB::raw(
+                "GROUP_CONCAT(DISTINCT CONCAT(
+                    pri.country, pri.detail, ' - ', 
+                    DATE_FORMAT(pri.event_date, '%d/%m/%Y')
+                )
+                SEPARATOR '\n') AS Priority"
+            ),
             DB::raw("DATE_FORMAT(grt.event_date, '%d/%m/%Y') AS Grant_Date"),
             'grt.detail AS Grant_Number',
             DB::raw("DATE_FORMAT(reg.event_date, '%d/%m/%Y') AS Registration_Date"),
@@ -670,10 +761,19 @@ class MatterController extends Controller
             DB::raw('COALESCE(cli.address, clic.address) AS Client_Address'),
             DB::raw('COALESCE(cli.country, clic.country) AS Client_Country'),
             'cnt.name AS Contact',
-            DB::raw("IF(COALESCE(cli.address_billing, clic.address_billing) IS NULL,
-                CONCAT_WS('\n', COALESCE(pay.name, payc.name, cli.name, clic.name), COALESCE(pay.address, payc.address, cli.address, clic.address), COALESCE(pay.country, payc.country, cli.country, clic.country)),
-                CONCAT_WS('\n', COALESCE(pay.name, payc.name), COALESCE(pay.address, payc.address, cli.address_billing, clic.address_billing), COALESCE(pay.country, payc.country, cli.country_billing, clic.country_billing))
-            ) AS Billing_Address"),
+            DB::raw(
+                "IF(
+                    COALESCE(cli.address_billing, clic.address_billing) IS NULL,
+                    CONCAT_WS('\n', 
+                        COALESCE(pay.name, payc.name, cli.name, clic.name), 
+                        COALESCE(pay.address, payc.address, cli.address, clic.address), 
+                        COALESCE(pay.country, payc.country, cli.country, clic.country)),
+                    CONCAT_WS('\n', 
+                        COALESCE(pay.name, payc.name), 
+                        COALESCE(pay.address, payc.address, cli.address_billing, clic.address_billing), 
+                        COALESCE(pay.country, payc.country, cli.country_billing, clic.country_billing))
+                ) AS Billing_Address"
+            ),
             DB::raw('COALESCE(lcli.actor_ref, lclic.actor_ref) AS Client_Ref'),
             DB::raw('COALESCE(cli.email, clic.email) AS Email'),
             DB::raw('COALESCE(cli.VAT_number, clic.VAT_number) AS VAT'),
@@ -682,180 +782,253 @@ class MatterController extends Controller
             'tit.value AS Title',
             'tm.value AS Trademark',
             DB::raw("GROUP_CONCAT(DISTINCT class.value SEPARATOR '.') AS Classes"),
-            DB::raw("GROUP_CONCAT(DISTINCT CONCAT_WS(' ', inv.name, inv.first_name)
+            DB::raw(
+                "GROUP_CONCAT(DISTINCT CONCAT_WS(' ', inv.name, inv.first_name)
                 ORDER BY linv.display_order ASC
-                SEPARATOR ' - ') AS Inventors"),
-            DB::raw("GROUP_CONCAT(DISTINCT CONCAT_WS('\n', CONCAT_WS(' ', inv.name, inv.first_name), inv.address, inv.country, inv.nationality)
+                SEPARATOR ' - ') AS Inventors"
+            ),
+            DB::raw(
+                "GROUP_CONCAT(DISTINCT CONCAT_WS('\n', CONCAT_WS(' ', inv.name, inv.first_name), inv.address, inv.country, inv.nationality)
                 ORDER BY linv.display_order ASC
-                SEPARATOR '\n\n') AS Inventor_Addresses"),
-            DB::raw("IF(GROUP_CONCAT(DISTINCT ownc.name) IS NOT NULL OR GROUP_CONCAT(DISTINCT own.name) IS NOT NULL,
-                CONCAT_WS('\n', GROUP_CONCAT(DISTINCT ownc.name SEPARATOR '\n'), GROUP_CONCAT(DISTINCT own.name SEPARATOR '\n')),
-                CONCAT_WS('\n', GROUP_CONCAT(DISTINCT applc.name SEPARATOR '\n'), GROUP_CONCAT(DISTINCT appl.name SEPARATOR '\n'))
-            ) AS Owner"),
+                SEPARATOR '\n\n') AS Inventor_Addresses"
+            ),
+            DB::raw(
+                "IF(
+                    GROUP_CONCAT(DISTINCT ownc.name) IS NOT NULL OR GROUP_CONCAT(DISTINCT own.name) IS NOT NULL,
+                    CONCAT_WS('\n', 
+                        GROUP_CONCAT(DISTINCT ownc.name SEPARATOR '\n'), 
+                        GROUP_CONCAT(DISTINCT own.name SEPARATOR '\n')),
+                    CONCAT_WS('\n', 
+                        GROUP_CONCAT(DISTINCT applc.name SEPARATOR '\n'), 
+                        GROUP_CONCAT(DISTINCT appl.name SEPARATOR '\n'))
+                ) AS Owner"
+            ),
             DB::raw("CONCAT_WS('\n', agt.name, agt.address, agt.country) AS Agent"),
             'lagt.actor_ref AS Agent_Ref',
             'resp.name AS Responsible',
             'wri.name AS Writer',
             'ann.name AS Annuity_Agent'
-        )
-            ->leftJoin(
-                DB::raw("matter_actor_lnk linv
-            JOIN actor inv ON inv.id = linv.actor_id AND linv.role = 'INV'"),
-                DB::raw('IFNULL(matter.container_id, matter.id)'),
-                'linv.matter_id'
-            )
-            ->leftJoin(
-                DB::raw("matter_actor_lnk lcli
-            JOIN actor cli ON cli.id = lcli.actor_id
-            AND lcli.role = 'CLI' AND lcli.display_order = 1"),
-                'matter.id',
-                'lcli.matter_id'
-            )
-            ->leftJoin(
-                DB::raw("matter_actor_lnk lclic
-            JOIN actor clic ON clic.id = lclic.actor_id
-            AND lclic.role = 'CLI'
-            AND lclic.display_order = 1
-            AND lclic.shared = 1"),
-                'matter.container_id',
-                'lclic.matter_id'
-            )
-            ->leftJoin(
-                DB::raw("matter_actor_lnk lpay
-            JOIN actor pay ON pay.id = lpay.actor_id
-            AND lpay.role = 'PAY' AND lpay.display_order = 1"),
-                'matter.id',
-                'lpay.matter_id'
-            )
-            ->leftJoin(
-                DB::raw("matter_actor_lnk lpayc
-            JOIN actor payc ON payc.id = lpayc.actor_id
-            AND lpayc.role = 'PAY'
-            AND lpayc.display_order = 1
-            AND lpayc.shared = 1"),
-                'matter.container_id',
-                'lpayc.matter_id'
-            )
-            ->leftJoin(
-                DB::raw("matter_actor_lnk lappl
-            JOIN actor appl ON appl.id = lappl.actor_id
-            AND lappl.role = 'APP'"),
-                'matter.id',
-                'lappl.matter_id'
-            )
-            ->leftJoin(
-                DB::raw("matter_actor_lnk lapplc
-            JOIN actor applc ON applc.id = lapplc.actor_id
-            AND lapplc.role = 'APP'
-            AND lapplc.shared = 1"),
-                'matter.container_id',
-                'lapplc.matter_id'
-            )
-            ->leftJoin(
-                DB::raw("matter_actor_lnk lown
-            JOIN actor own ON own.id = lown.actor_id
-            AND lown.role = 'OWN'"),
-                'matter.id',
-                'lown.matter_id'
-            )
-            ->leftJoin(
-                DB::raw("matter_actor_lnk lownc
-            JOIN actor ownc ON ownc.id = lownc.actor_id
-            AND lownc.role = 'OWN'
-            AND lownc.shared = 1"),
-                'matter.container_id',
-                'lownc.matter_id'
-            )
-            ->leftJoin(
-                DB::raw("matter_actor_lnk lann
-            JOIN actor ann ON ann.id = lann.actor_id
-            AND lann.role = 'ANN'"),
-                'matter.id',
-                'lann.matter_id'
-            )
-            ->leftJoin(
-                DB::raw("matter_actor_lnk lcnt
-            JOIN actor cnt ON cnt.id = lcnt.actor_id
-            AND lcnt.role = 'CNT'"),
-                DB::raw('IFNULL(matter.container_id, matter.id)'),
-                'lcnt.matter_id'
-            )
-            ->leftJoin(
-                DB::raw("matter_actor_lnk lagt
-            JOIN actor agt ON agt.id = lagt.actor_id
-            AND lagt.role = 'AGT'"),
-                'matter.id',
-                'lagt.matter_id'
-            )
-            ->leftJoin(
-                DB::raw("matter_actor_lnk lwri
-            JOIN actor wri ON wri.id = lwri.actor_id
-            AND lwri.role = 'WRI'"),
-                'matter.id',
-                'lwri.matter_id'
-            )
-            ->leftJoin('event AS fil', function ($join) {
+        )->leftJoin(
+            DB::raw(
+                "matter_actor_lnk linv
+                JOIN actor inv ON inv.id = linv.actor_id AND linv.role = 'INV'"
+            ),
+            DB::raw('IFNULL(matter.container_id, matter.id)'),
+            'linv.matter_id'
+        )->leftJoin(
+            DB::raw(
+                "matter_actor_lnk lcli
+                JOIN actor cli ON cli.id = lcli.actor_id
+                AND lcli.role = 'CLI' AND lcli.display_order = 1"
+            ),
+            'matter.id',
+            'lcli.matter_id'
+        )->leftJoin(
+            DB::raw(
+                "matter_actor_lnk lclic
+                JOIN actor clic 
+                ON clic.id = lclic.actor_id
+                AND lclic.role = 'CLI'
+                AND lclic.display_order = 1
+                AND lclic.shared = 1"
+            ),
+            'matter.container_id',
+            'lclic.matter_id'
+        )->leftJoin(
+            DB::raw(
+                "matter_actor_lnk lpay
+                JOIN actor pay 
+                ON pay.id = lpay.actor_id
+                AND lpay.role = 'PAY' 
+                AND lpay.display_order = 1"
+            ),
+            'matter.id',
+            'lpay.matter_id'
+        )->leftJoin(
+            DB::raw(
+                "matter_actor_lnk lpayc
+                JOIN actor payc 
+                ON payc.id = lpayc.actor_id
+                AND lpayc.role = 'PAY'
+                AND lpayc.display_order = 1
+                AND lpayc.shared = 1"
+            ),
+            'matter.container_id',
+            'lpayc.matter_id'
+        )->leftJoin(
+            DB::raw(
+                "matter_actor_lnk lappl
+                JOIN actor appl 
+                ON appl.id = lappl.actor_id
+                AND lappl.role = 'APP'"
+            ),
+            'matter.id',
+            'lappl.matter_id'
+        )->leftJoin(
+            DB::raw(
+                "matter_actor_lnk lapplc
+                JOIN actor applc 
+                ON applc.id = lapplc.actor_id
+                AND lapplc.role = 'APP'
+                AND lapplc.shared = 1"
+            ),
+            'matter.container_id',
+            'lapplc.matter_id'
+        )->leftJoin(
+            DB::raw(
+                "matter_actor_lnk lown
+                JOIN actor own 
+                ON own.id = lown.actor_id
+                AND lown.role = 'OWN'"
+            ),
+            'matter.id',
+            'lown.matter_id'
+        )->leftJoin(
+            DB::raw(
+                "matter_actor_lnk lownc
+                JOIN actor ownc 
+                ON ownc.id = lownc.actor_id
+                AND lownc.role = 'OWN'
+                AND lownc.shared = 1"
+            ),
+            'matter.container_id',
+            'lownc.matter_id'
+        )->leftJoin(
+            DB::raw(
+                "matter_actor_lnk lann
+                JOIN actor ann 
+                ON ann.id = lann.actor_id
+                AND lann.role = 'ANN'"
+            ),
+            'matter.id',
+            'lann.matter_id'
+        )->leftJoin(
+            DB::raw(
+                "matter_actor_lnk lcnt
+                JOIN actor cnt 
+                ON cnt.id = lcnt.actor_id
+                AND lcnt.role = 'CNT'"
+            ),
+            DB::raw('IFNULL(matter.container_id, matter.id)'),
+            'lcnt.matter_id'
+        )->leftJoin(
+            DB::raw(
+                "matter_actor_lnk lagt
+                JOIN actor agt 
+                ON agt.id = lagt.actor_id
+                AND lagt.role = 'AGT'"
+            ),
+            'matter.id',
+            'lagt.matter_id'
+        )->leftJoin(
+            DB::raw(
+                "matter_actor_lnk lwri
+                JOIN actor wri 
+                ON wri.id = lwri.actor_id
+                AND lwri.role = 'WRI'"
+            ),
+            'matter.id',
+            'lwri.matter_id'
+        )->leftJoin(
+            'event AS fil', 
+            function ($join) {
                 $join->on('matter.id', 'fil.matter_id')->where('fil.code', 'FIL');
-            })
-            ->leftJoin('event AS pub', function ($join) {
+            }
+        )->leftJoin(
+            'event AS pub', 
+            function ($join) {
                 $join->on('matter.id', 'pub.matter_id')->where('pub.code', 'PUB');
-            })
-            ->leftJoin('event AS grt', function ($join) {
+            }
+        )->leftJoin(
+            'event AS grt', 
+            function ($join) {
                 $join->on('matter.id', 'grt.matter_id')->where('grt.code', 'GRT');
-            })
-            ->leftJoin('event AS reg', function ($join) {
+            }
+        )->leftJoin(
+            'event AS reg', 
+            function ($join) {
                 $join->on('matter.id', 'reg.matter_id')->where('reg.code', 'REG');
-            })
-            ->leftJoin('event AS pr', function ($join) {
+            }
+        )->leftJoin(
+            'event AS pr', 
+            function ($join) {
                 $join->on('matter.id', 'pr.matter_id')->where('pr.code', 'PR');
-            })
-            ->leftJoin('event_lnk_list AS pri', function ($join) {
+            }
+        )->leftJoin(
+            'event_lnk_list AS pri', 
+            function ($join) {
                 $join->on('matter.id', 'pri.matter_id')->where('pri.code', 'PRI');
-            })
-            ->leftJoin('event AS allow', function ($join) {
+            }
+        )->leftJoin(
+            'event AS allow', 
+            function ($join) {
                 $join->on('matter.id', 'allow.matter_id')->where('allow.code', 'ALL');
-            })
-            ->leftJoin('classifier AS titof', function ($join) {
-                $join->on('titof.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
-                    ->where('titof.type_code', 'TITOF');
-            })
-            ->leftJoin('classifier AS titen', function ($join) {
-                $join->on('titen.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
-                    ->where('titen.type_code', 'TITEN');
-            })
-            ->leftJoin('classifier AS tit', function ($join) {
-                $join->on('tit.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
-                    ->where('tit.type_code', 'TIT');
-            })
-            ->leftJoin('classifier AS tm', function ($join) {
-                $join->on('tm.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
-                    ->where('tm.type_code', 'TM');
-            })
-            ->leftJoin('classifier AS class', function ($join) {
-                $join->on('class.matter_id', DB::raw('IFNULL(matter.container_id, matter.id)'))
-                    ->where('class.type_code', 'TMCL');
-            })
-            ->join('actor AS resp', 'resp.login', 'matter.responsible')
-            ->find($matter->id);
+            }
+        )->leftJoin(
+            'classifier AS titof', 
+            function ($join) {
+                $join->on(
+                    'titof.matter_id', 
+                    DB::raw('IFNULL(matter.container_id, matter.id)')
+                )->where('titof.type_code', 'TITOF');
+            }
+        )->leftJoin(
+            'classifier AS titen', 
+            function ($join) {
+                $join->on(
+                    'titen.matter_id', 
+                    DB::raw('IFNULL(matter.container_id, matter.id)')
+                )->where('titen.type_code', 'TITEN');
+            }
+        )->leftJoin(
+            'classifier AS tit', 
+            function ($join) {
+                $join->on(
+                    'tit.matter_id', 
+                    DB::raw('IFNULL(matter.container_id, matter.id)')
+                )->where('tit.type_code', 'TIT');
+            }
+        )->leftJoin(
+            'classifier AS tm', 
+            function ($join) {
+                $join->on(
+                    'tm.matter_id', 
+                    DB::raw('IFNULL(matter.container_id, matter.id)')
+                )->where('tm.type_code', 'TM');
+            }
+        )->leftJoin(
+            'classifier AS class', 
+            function ($join) {
+                $join->on(
+                    'class.matter_id', 
+                    DB::raw('IFNULL(matter.container_id, matter.id)')
+                )->where('class.type_code', 'TMCL');
+            }
+        )->join('actor AS resp', 'resp.login', 'matter.responsible')
+        ->find($matter->id);
 
         // Exclude the data having line breaks
-        $simpledata = collect($data)->except([
-            'Priority',
-            'Client_Address',
-            'Billing_Address',
-            'Inventor_Addresses',
-            'Owner',
-            'Agent',
-        ])->toArray();
+        $simpledata = collect($data)->except(
+            [
+                'Priority',
+                'Client_Address',
+                'Billing_Address',
+                'Inventor_Addresses',
+                'Owner',
+                'Agent',
+            ]
+        )->toArray();
         // Data having line breaks
-        $complexdata = collect($data)->only([
-            'Priority',
-            'Client_Address',
-            'Billing_Address',
-            'Inventor_Addresses',
-            'Owner',
-            'Agent',
-        ]);
+        $complexdata = collect($data)->only(
+            [
+                'Priority',
+                'Client_Address',
+                'Billing_Address',
+                'Inventor_Addresses',
+                'Owner',
+                'Agent',
+            ]
+        );
 
         $template = new \PhpOffice\PhpWord\TemplateProcessor($file->path());
         \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
@@ -915,11 +1088,18 @@ class MatterController extends Controller
     public function renewals(Matter $matter)
     {
         // The renewal trigger event and its renewals
-        $events = Event::with(['tasks' => function ($query) {
-            $query->where('code', 'REN');
-        }])->whereHas('tasks', function ($query) {
-            $query->where('code', 'REN');
-        })->where('matter_id', $matter->id)->get();
+        $events = Event::with(
+            [
+                'tasks' => function ($query) {
+                    $query->where('code', 'REN');
+                }
+            ]
+        )->whereHas(
+            'tasks', 
+            function ($query) {
+                $query->where('code', 'REN');
+            }
+        )->where('matter_id', $matter->id)->get();
         $is_renewals = 1;
 
         return view('matter.tasks', compact('events', 'matter', 'is_renewals'));
@@ -951,9 +1131,11 @@ class MatterController extends Controller
         $ops_key = env('OPS_APP_KEY');
         $ops_secret = env('OPS_SECRET');
         $token_url = 'https://ops.epo.org/3.2/auth/accesstoken';
-        $token_response = Http::withHeaders([
-            'Authorization' => 'Basic '.base64_encode($ops_key.':'.$ops_secret),
-        ])->asForm()->post($token_url, ['grant_type' => 'client_credentials']);
+        $token_response = Http::withHeaders(
+            [
+                'Authorization' => 'Basic '.base64_encode($ops_key.':'.$ops_secret)
+            ]
+        )->asForm()->post($token_url, ['grant_type' => 'client_credentials']);
 
         //$ops_legal = "http://ops.epo.org/3.2/rest-services/family/application/docdb/$docnum/legal.json";
         // Using application number
