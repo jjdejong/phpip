@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class Actor extends Model
 {
@@ -70,11 +70,10 @@ class Actor extends Model
             return false;
         }
 
-        $tableInfo = DB::connection()->getDoctrineSchemaManager()->introspectTable($table_name);
         $comments = [];
-        foreach ($tableInfo->getColumns() as $column) {
-            $col_name = $column->getName();
-            $comments[$col_name] = $column->getComment();
+        foreach (Schema::getColumns($table_name) as $column) {
+            $col_name = $column['name'];
+            $comments[$col_name] = $column['comment'];
         }
 
         return $comments;

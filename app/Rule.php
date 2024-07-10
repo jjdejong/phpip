@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class Rule extends Model
 {
@@ -68,10 +68,11 @@ class Rule extends Model
         if (! isset($table_name)) {
             return false;
         }
-        $tableInfo = DB::connection()->getDoctrineSchemaManager()->introspectTable($table_name);
+
         $comments = [];
-        foreach ($tableInfo->getColumns() as $column) {
-            $comments[$column->getName()] = $column->getComment();
+        foreach (Schema::getColumns($table_name) as $column) {
+            $col_name = $column['name'];
+            $comments[$col_name] = $column['comment'];
         }
 
         return $comments;

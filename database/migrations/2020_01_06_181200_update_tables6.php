@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -19,8 +20,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('matter', function (Blueprint $table) {
-            $sm = Schema::getConnection()->getDoctrineSchemaManager();
-            $indexes = $sm->listTableIndexes('matter');
+            $indexes = Schema::getIndexes('matter');
             if (array_key_exists('uid', $indexes)) {
                 $table->dropIndex('uid');
             }
@@ -29,7 +29,8 @@ return new class extends Migration
 
         // For matter_actor_lnk
         DB::unprepared('DROP TRIGGER IF EXISTS `matter_actor_lnk_AFTER_UPDATE`');
-        DB::unprepared("CREATE TRIGGER `matter_actor_lnk_AFTER_UPDATE` AFTER UPDATE ON `matter_actor_lnk` FOR EACH ROW
+        DB::unprepared(
+            "CREATE TRIGGER `matter_actor_lnk_AFTER_UPDATE` AFTER UPDATE ON `matter_actor_lnk` FOR EACH ROW
 BEGIN
   DECLARE vcli_ann_agt INT DEFAULT NULL;
 
@@ -49,8 +50,7 @@ END"
     public function down()
     {
         Schema::table('matter', function (Blueprint $table) {
-            $sm = Schema::getConnection()->getDoctrineSchemaManager();
-            $indexes = $sm->listTableIndexes('matter');
+            $indexes = Schema::getIndexes('matter');
             if (array_key_exists('uid_uq', $indexes)) {
                 $table->dropUnique('uid_uq');
             }

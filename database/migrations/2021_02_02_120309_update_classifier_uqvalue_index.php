@@ -9,8 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('classifier', function (Blueprint $table) {
-            $sm = Schema::getConnection()->getDoctrineSchemaManager();
-            $indexes = $sm->listTableIndexes('classifier');
+            $indexes = Schema::getIndexes('classifier');
             if (array_key_exists('uqvalue', $indexes)) {
                 $table->dropIndex('uqvalue');
             }
