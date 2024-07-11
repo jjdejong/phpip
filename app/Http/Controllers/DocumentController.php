@@ -209,10 +209,10 @@ class DocumentController extends Controller
         if (count($sendto_ids) != 0) {
             $mailto = 'mailto:'.implode(',', Actor::whereIn('id', $sendto_ids)->pluck('email')->all());
             $sep = '?';
-            $matter = Matter::where(['id' => $request->matter_id])->first();
-            $event = Event::where(['id' => $request->event_id])->first();
-            $task = Task::where(['id' => $request->task_id])->first();
-            $description = implode("\n", Matter::getDescription($request->matter_id, $member->language));
+            $matter = Matter::find($request->matter_id);
+            $event = Event::find($request->event_id);
+            $task = Task::find($request->task_id);
+            $description = implode("\n", $matter->getDescription($member->language));
             if (count($cc_ids) != 0) {
                 $mailto .= $sep.'cc='.implode(',', Actor::whereIn('id', $cc_ids)->pluck('email')->all());
                 $sep = '&';

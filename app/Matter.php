@@ -252,99 +252,130 @@ class Matter extends Model
             'del.login AS delegate',
             'matter.dead',
             DB::raw('IF(isnull(matter.container_id), 1, 0) AS Ctnr')
-        )
-            ->join('matter_category', 'matter.category_code', 'matter_category.code')
-            ->leftJoin(
-                DB::raw('matter_actor_lnk clilnk
-                JOIN actor cli ON cli.id = clilnk.actor_id'),
-                function ($join) {
-                    $join->on('matter.id', 'clilnk.matter_id')->where('clilnk.role', 'CLI');
-                }
-            )
-            ->leftJoin(DB::raw('matter_actor_lnk cliclnk
-                JOIN actor clic ON clic.id = cliclnk.actor_id'), function ($join) {
-                $join->on('matter.container_id', 'cliclnk.matter_id')->where([
-                    ['cliclnk.role', 'CLI'],
-                    ['cliclnk.shared', 1],
-                ]);
-            })
-            ->leftJoin(
-                DB::raw('matter_actor_lnk agtlnk
-                JOIN actor agt ON agt.id = agtlnk.actor_id'),
-                function ($join) {
-                    $join->on('matter.id', 'agtlnk.matter_id')->where([
+        )->join(
+            'matter_category', 
+            'matter.category_code', 
+            'matter_category.code'
+        )->leftJoin(
+            DB::raw('matter_actor_lnk clilnk JOIN actor cli ON cli.id = clilnk.actor_id'),
+            function ($join) {
+                $join->on('matter.id', 'clilnk.matter_id')->where('clilnk.role', 'CLI');
+            }
+        )->leftJoin(
+            DB::raw('matter_actor_lnk cliclnk JOIN actor clic ON clic.id = cliclnk.actor_id'), 
+            function ($join) {
+                $join->on('matter.container_id', 'cliclnk.matter_id')->where(
+                    [
+                        ['cliclnk.role', 'CLI'],
+                        ['cliclnk.shared', 1],
+                    ]
+                );
+            }
+        )->leftJoin(
+            DB::raw('matter_actor_lnk agtlnk JOIN actor agt ON agt.id = agtlnk.actor_id'),
+            function ($join) {
+                $join->on('matter.id', 'agtlnk.matter_id')->where(
+                    [
                         ['agtlnk.role', 'AGT'],
                         ['agtlnk.display_order', 1],
-                    ]);
-                }
-            )
-            ->leftJoin(DB::raw('matter_actor_lnk agtclnk
-                JOIN actor agtc ON agtc.id = agtclnk.actor_id'), function ($join) {
-                $join->on('matter.container_id', 'agtclnk.matter_id')->where([
-                    ['agtclnk.role', 'AGT'],
-                    ['agtclnk.shared', 1],
-                ]);
-            })
-            ->leftJoin(
-                DB::raw('matter_actor_lnk applnk
-                JOIN actor app ON app.id = applnk.actor_id'),
-                function ($join) {
-                    $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'applnk.matter_id')->where('applnk.role', 'APP');
-                }
-            )
-            ->leftJoin(
-                DB::raw('matter_actor_lnk dellnk
-                JOIN actor del ON del.id = dellnk.actor_id'),
-                function ($join) {
-                    $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'dellnk.matter_id')->where('dellnk.role', 'DEL');
-                }
-            )
-            ->leftJoin('event AS fil', function ($join) {
+                    ]
+                );
+            }
+        )->leftJoin(
+            DB::raw('matter_actor_lnk agtclnk JOIN actor agtc ON agtc.id = agtclnk.actor_id'), 
+            function ($join) {
+                $join->on('matter.container_id', 'agtclnk.matter_id')->where(
+                    [
+                        ['agtclnk.role', 'AGT'],
+                        ['agtclnk.shared', 1],
+                    ]
+                );
+            }
+        )->leftJoin(
+            DB::raw('matter_actor_lnk applnk JOIN actor app ON app.id = applnk.actor_id'),
+            function ($join) {
+                $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'applnk.matter_id')->where('applnk.role', 'APP');
+            }
+        )->leftJoin(
+            DB::raw('matter_actor_lnk dellnk JOIN actor del ON del.id = dellnk.actor_id'),
+            function ($join) {
+                $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'dellnk.matter_id')->where('dellnk.role', 'DEL');
+            }
+        )->leftJoin(
+            'event AS fil', 
+            function ($join) {
                 $join->on('matter.id', 'fil.matter_id')->where('fil.code', 'FIL');
-            })
-            ->leftJoin('event AS pub', function ($join) {
+            }
+        )->leftJoin(
+            'event AS pub', 
+            function ($join) {
                 $join->on('matter.id', 'pub.matter_id')->where('pub.code', 'PUB');
-            })
-            ->leftJoin('event AS grt', function ($join) {
+            }
+        )->leftJoin(
+            'event AS grt', 
+            function ($join) {
                 $join->on('matter.id', 'grt.matter_id')->where('grt.code', 'GRT');
-            })
-            ->leftJoin('event AS reg', function ($join) {
+            }
+        )->leftJoin(
+            'event AS reg', 
+            function ($join) {
                 $join->on('matter.id', 'reg.matter_id')->where('reg.code', 'REG');
-            })
-            ->leftJoin(DB::raw('event status
-                JOIN event_name ON event_name.code = status.code AND event_name.status_event = 1'), 'matter.id', 'status.matter_id')
-            ->leftJoin(
-                DB::raw('event e2
-                JOIN event_name en2 ON e2.code = en2.code AND en2.status_event = 1'),
-                function ($join) {
-                    $join->on('status.matter_id', 'e2.matter_id')->whereColumn('status.event_date', '<', 'e2.event_date');
-                }
-            )
-            ->leftJoin(DB::raw('classifier tit1
-            JOIN classifier_type ct1 ON tit1.type_code = ct1.code AND ct1.main_display = 1 AND ct1.display_order = 1'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit1.matter_id')
-            ->leftJoin(DB::raw('classifier tit2
-            JOIN classifier_type ct2 ON tit2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit2.matter_id')
-            ->leftJoin(DB::raw('classifier tit3
-            JOIN classifier_type ct3 ON tit3.type_code = ct3.code AND ct3.main_display = 1 AND ct3.display_order = 3'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit3.matter_id')
-            ->where('e2.matter_id', null);
+            }
+        )->leftJoin(
+            DB::raw('event status JOIN event_name ON event_name.code = status.code AND event_name.status_event = 1'), 
+            'matter.id', 
+            'status.matter_id'
+        )->leftJoin(
+            DB::raw('event e2 JOIN event_name en2 ON e2.code = en2.code AND en2.status_event = 1'),
+            function ($join) {
+                $join->on('status.matter_id', 'e2.matter_id')->whereColumn('status.event_date', '<', 'e2.event_date');
+            }
+        )->leftJoin(
+            DB::raw(
+                'classifier tit1 JOIN classifier_type ct1 
+                ON tit1.type_code = ct1.code 
+                AND ct1.main_display = 1 
+                AND ct1.display_order = 1'
+            ), 
+            DB::raw('IFNULL(matter.container_id, matter.id)'), 
+            'tit1.matter_id'
+        )->leftJoin(
+            DB::raw(
+                'classifier tit2 JOIN classifier_type ct2 
+                ON tit2.type_code = ct2.code 
+                AND ct2.main_display = 1 
+                AND ct2.display_order = 2'
+            ), 
+            DB::raw('IFNULL(matter.container_id, matter.id)'), 
+            'tit2.matter_id'
+        )->leftJoin(
+            DB::raw(
+                'classifier tit3 JOIN classifier_type ct3 
+                ON tit3.type_code = ct3.code 
+                AND ct3.main_display = 1 
+                AND ct3.display_order = 3'
+            ), 
+            DB::raw('IFNULL(matter.container_id, matter.id)'), 
+            'tit3.matter_id'
+        )->where('e2.matter_id', null);
 
         if (array_key_exists('Inventor1', $multi_filter)) {
             $query->leftJoin(
-                DB::raw('matter_actor_lnk invlnk
-                JOIN actor inv ON inv.id = invlnk.actor_id'),
+                DB::raw('matter_actor_lnk invlnk JOIN actor inv ON inv.id = invlnk.actor_id'),
                 function ($join) {
                     $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'invlnk.matter_id')->where('invlnk.role', 'INV');
                 }
             );
         } else {
             $query->leftJoin(
-                DB::raw('matter_actor_lnk invlnk
-                JOIN actor inv ON inv.id = invlnk.actor_id'),
+                DB::raw('matter_actor_lnk invlnk JOIN actor inv ON inv.id = invlnk.actor_id'),
                 function ($join) {
-                    $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'invlnk.matter_id')->where([
-                        ['invlnk.role', 'INV'],
-                        ['invlnk.display_order', 1],
-                    ]);
+                    $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'invlnk.matter_id')->where(
+                        [
+                            ['invlnk.role', 'INV'],
+                            ['invlnk.display_order', 1],
+                        ]
+                    );
                 }
             );
         }
@@ -358,10 +389,12 @@ class Matter extends Model
 
         // When the user is a client, limit the matters to client's own matters
         if ($authUserRole == 'CLI') {
-            $query->where(function ($q) use ($authUserId) {
-                $q->where('cli.id', $authUserId)
-                    ->orWhere('clic.id', $authUserId);
-            });
+            $query->where(
+                function ($q) use ($authUserId) {
+                    $q->where('cli.id', $authUserId)
+                        ->orWhere('clic.id', $authUserId);
+                }
+            );
         }
 
         if (! empty($multi_filter)) {
@@ -487,157 +520,77 @@ class Matter extends Model
         return $query->get();
     }
 
-    public static function getDescription($id, $lang = 'en')
+    public function getDescription($lang = 'en')
     {
-        $query = Matter::select(
-            'uid AS Ref',
-            'matter.country AS country',
-            'matter.category_code AS Cat',
-            'matter.origin',
-            'event_name.name AS Status',
-            'status.event_date AS Status_date',
-            DB::raw('COALESCE(cli.display_name, clic.display_name, cli.name, clic.name) AS Client'),
-            DB::raw('COALESCE(clilnk.actor_ref, cliclnk.actor_ref) AS ClRef'),
-            DB::raw('COALESCE(app.display_name, app.name) AS Applicant'),
-            //DB::raw("COALESCE(agt.display_name, agt.name) AS Agent"),
-            //'agtlnk.actor_ref AS AgtRef',
-            'tit1.value AS Title',
-            'tit2.value AS Title2',
-            DB::raw("CONCAT_WS(' ', inv.name, inv.first_name) as Inventor1"),
-            'fil.event_date AS Filed',
-            'fil.detail AS FilNo',
-            'pub.event_date AS Published',
-            'pub.detail AS PubNo',
-            'grt.event_date AS Granted',
-            'grt.detail AS GrtNo',
-            //'matter.id',
-            //'matter.container_id',
-            //'matter.parent_id',
-            //'matter.responsible',
-            //'del.login AS delegate',
-            //'matter.dead',
-            'country.name AS country_name',
-            'country.name_FR AS country_name_FR',
-            'country.name_DE AS country_name_DE',
-            DB::raw('IF(isnull(matter.container_id),1,0) AS Ctnr')
-        )
-            ->join('matter_category', 'matter.category_code', 'matter_category.code')
-            ->join('country', 'matter.country', 'country.iso')
-            ->leftJoin(DB::raw('matter_actor_lnk clilnk
-            JOIN actor cli ON cli.id = clilnk.actor_id'), function ($join) {
-                $join->on('matter.id', 'clilnk.matter_id')->where('clilnk.role', 'CLI');
-            })
-            ->leftJoin(DB::raw('matter_actor_lnk cliclnk
-            JOIN actor clic ON clic.id = cliclnk.actor_id'), function ($join) {
-                $join->on('matter.container_id', 'cliclnk.matter_id')->where([
-                    ['cliclnk.role', 'CLI'],
-                    ['cliclnk.shared', 1],
-                ]);
-            })
-            ->leftJoin(DB::raw('matter_actor_lnk invlnk
-            JOIN actor inv ON inv.id = invlnk.actor_id'), function ($join) {
-                $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'invlnk.matter_id')->where([
-                    ['invlnk.role', 'INV'],
-                    ['invlnk.display_order', 1],
-                ]);
-            })
-            ->leftJoin(DB::raw('matter_actor_lnk applnk
-            JOIN actor app ON app.id = applnk.actor_id'), function ($join) {
-                $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'applnk.matter_id')->where([
-                    ['applnk.role', 'APP'],
-                    ['applnk.display_order', 1],
-                ]);
-            })
-            ->leftJoin(DB::raw('matter_actor_lnk dellnk
-            JOIN actor del ON del.id = dellnk.actor_id'), function ($join) {
-                $join->on(DB::raw('ifnull(matter.container_id,matter.id)'), 'dellnk.matter_id')->where('dellnk.role', 'DEL');
-            })
-            ->leftJoin('event AS fil', function ($join) {
-                $join->on('matter.id', 'fil.matter_id')->where('fil.code', 'FIL');
-            })
-            ->leftJoin('event AS pub', function ($join) {
-                $join->on('matter.id', 'pub.matter_id')->where('pub.code', 'PUB');
-            })
-            ->leftJoin('event AS grt', function ($join) {
-                $join->on('matter.id', 'grt.matter_id')->where('grt.code', 'GRT');
-            })
-            ->leftJoin(DB::raw('event status
-            JOIN event_name ON event_name.code = status.code AND event_name.status_event = 1'), 'matter.id', 'status.matter_id')
-            ->leftJoin(DB::raw('event e2
-            JOIN event_name en2 ON e2.code=en2.code AND en2.status_event = 1'), function ($join) {
-                $join->on('status.matter_id', 'e2.matter_id')->whereColumn('status.event_date', '<', 'e2.event_date');
-            })
-            ->leftJoin(DB::raw('classifier tit1
-            JOIN classifier_type ct1 ON tit1.type_code = ct1.code AND ct1.main_display = 1 AND ct1.display_order = 1'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit1.matter_id')
-            ->leftJoin(DB::raw('classifier tit2
-            JOIN classifier_type ct2 ON tit2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2'), DB::raw('IFNULL(matter.container_id, matter.id)'), 'tit2.matter_id')
-            ->where('matter.id', $id);
-
-        $info = $query->first();
         $description = [];
-        $filed_date = Carbon::parse($info['Filed']);
-        $granted_date = Carbon::parse($info['Granted']);
-        $published_date = Carbon::parse($info['Published']);
-        $title = $info['Title'] ?? $info['Title2'];
+        //$matter = Matter::find($id);
+        $filed_date = Carbon::parse($this->filing->event_date);
+        // "grant" includes registration (for trademarks)
+        $granted_date = Carbon::parse($this->grant->event_date);
+        $published_date = Carbon::parse($this->publication->event_date);
+        $title = $this->titles->where('type_code', 'TITOF')->first()->value 
+            ?? $this->titles->first()->value;
+        $title_EN = $this->titles->where('type_code', 'TITEN')->first()->value 
+            ?? $this->titles->first()->value;
         if ($lang == 'fr') {
-            $description[] = "N/réf : {$info['Ref']}";
-            if ($info['ClRef']) {
-                $description[] = "V/réf : {$info['ClRef']}";
+            $description[] = "N/réf : {$this->uid}";
+            if ($this->client->actor_ref) {
+                $description[] = "V/réf : {$this->client->actor_ref}";
             }
-            if ($info['Cat'] == 'PAT') {
-                if ($info['Granted']) {
-                    $description[] = "Brevet {$info['GrtNo']} déposé en {$info['country_name_FR']} le {$filed_date->locale('fr_FR')->isoFormat('LL')} et délivré le {$granted_date->locale('fr_FR')->isoFormat('LL')}";
+            if ($this->category_code == 'PAT') {
+                if ($granted_date) {
+                    $description[] = "Brevet {$this->grant->detail} déposé en {$this->countryInfo->name_FR} le {$filed_date->locale('fr_FR')->isoFormat('LL')} et délivré le {$granted_date->locale('fr_FR')->isoFormat('LL')}";
                 } else {
-                    $line = "Demande de brevet {$info['FilNo']} déposée en {$info['country_name_FR']} le {$filed_date->locale('fr_FR')->isoFormat('LL')}";
-                    if ($info['Published']) {
-                        $line .= " et publiée le {$published_date->locale('fr_FR')->isoFormat('LL')} sous le n°{$info['PubNo']}";
+                    $line = "Demande de brevet {$this->filing->detail} déposée en {$this->countryInfo->name_FR} le {$filed_date->locale('fr_FR')->isoFormat('LL')}";
+                    if ($published_date) {
+                        $line .= " et publiée le {$published_date->locale('fr_FR')->isoFormat('LL')} sous le n°{$this->publication->detail}";
                     }
                     $description[] = $line;
                 }
                 $description[] = "Pour : $title";
-                $description[] = "Au nom de : {$info['Applicant']}";
+                $description[] = "Au nom de : {$this->applicants->pluck('name')->join(', ')}";
             }
-            if ($info['Cat'] == 'TM') {
-                $line = "Marque {$info['FilNo']} déposée en {$info['country_name_FR']} le {$filed_date->locale('fr_FR')->isoFormat('LL')}";
-                if ($info['Published']) {
-                    $line .= ", publiée le {$published_date->locale('fr_FR')->isoFormat('LL')} sous le n°{$info['PubNo']}";
+            if ($this->category_code == 'TM') {
+                $line = "Marque {$this->filing->detail} déposée en {$this->countryInfo->name_FR} le {$filed_date->locale('fr_FR')->isoFormat('LL')}";
+                if ($published_date) {
+                    $line .= ", publiée le {$published_date->locale('fr_FR')->isoFormat('LL')} sous le n°{$this->publication->detail}";
                 }
-                if ($info['Granted']) {
+                if ($granted_date) {
                     $line .=  " et enregistrée le {$granted_date->locale('fr_FR')->isoFormat('LL')}";
                 }
                 $description[] = $line;
                 $description[] = "Pour : $title";
-                $description[] = "Au nom de : {$info['Applicant']}";
+                $description[] = "Au nom de : {$this->applicants->pluck('name')->join(', ')}";
             }
         }
         if ($lang == 'en') {
-            $description[] = "Our ref: {$info['Ref']}";
-            if ($info['ClRef']) {
-                $description[] = "Your ref: {$info['ClRef']}";
+            $description[] = "Our ref: {$this->uid}";
+            if ($this->client->actor_ref) {
+                $description[] = "Your ref: {$this->client->actor_ref}";
             }
-            if ($info['Cat'] == 'PAT') {
-                if ($info['Granted']) {
-                    $description[] = "Patent {$info['GrtNo']} filed in {$info['country_name']} on {$info['Filed']} and granted on {$info['Granted']}";
+            if ($this->category_code == 'PAT') {
+                if ($granted_date) {
+                    $description[] = "Patent {$this->grant->detail} filed in {$this->countryInfo->name} on {$filed_date->locale('en_US')->isoFormat('LL')} and granted on {$granted_date->locale('en_US')->isoFormat('LL')}";
                 } else {
-                    $description[] = "Patent application {$info['FilNo']} filed in {$info['country_name']} on {$info['Filed']}";
-                    if ($info['Published']) {
-                        $description[]= " and published on {$info['Published']} as {$info['PubNo']}";
+                    $description[] = "Patent application {$this->filing->detail} filed in {$this->countryInfo->name} on {$filed_date->locale('en_US')->isoFormat('LL')}";
+                    if ($published_date) {
+                        $description[]= " and published on {$published_date->locale('en_US')->isoFormat('LL')} as {$this->publication->detail}";
                     }
                 }
-                $description[] = "For: $title" ;
-                $description[] = "In name of: {$info['Applicant']}";
+                $description[] = "For: $title_EN" ;
+                $description[] = "In name of: {$this->applicants->pluck('name')->join(', ')}";
             }
-            if ($info['Cat'] == 'TM') {
-                $line = "Trademark {$info['FilNo']} filed in {$info['country_name_FR']} on {$info['Filed']}";
-                if ($info['Published']) {
-                    $line .= ", published on {$info['Published']} as {$info['PubNo']}";
+            if ($this->category_code == 'TM') {
+                $line = "Trademark {$this->filing->detail} filed in {$this->countryInfo->name_FR} on {$filed_date->locale('en_US')->isoFormat('LL')}";
+                if ($published_date) {
+                    $line .= ", published on {$published_date->locale('en_US')->isoFormat('LL')} as {$this->publication->detail}";
                 }
-                if ($info['Granted']) {
-                    $line .=  " and registered on {$info['Granted']}";
+                if ($granted_date) {
+                    $line .=  " and registered on {$granted_date->locale('en_US')->isoFormat('LL')}";
                 }
                 $description[] = $line;
-                $description[] = "For: $title";
-                $description[] = "In name of: {$info['Applicant']}";
+                $description[] = "For: $title_EN";
+                $description[] = "In name of: {$this->applicants->pluck('name')->join(', ')}";
             }
         }
         return $description;

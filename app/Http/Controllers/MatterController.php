@@ -1121,7 +1121,7 @@ class MatterController extends Controller
 
     public function description(Matter $matter, $lang)
     {
-        $description = $matter->getDescription($matter->id, $lang);
+        $description = $matter->getDescription($lang);
 
         return view('matter.summary', compact('description'));
     }
