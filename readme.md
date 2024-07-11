@@ -10,6 +10,12 @@ Head for the [Wiki](https://github.com/jjdejong/phpip/wiki) for further informat
 
 # New features
 
+## 2024-07-11 Upgrade to Laravel 11
+
+Laravel 11 requires PHP 8.2. This is not included in Ubuntu 22.04 LTS. If you're not upgrading to 24.04 LTS, you need to install a later version of PHP (as explained [here](https://github.com/jjdejong/phpip/wiki/2.-Installing#upgrading-to-php-82-on-ubuntu-2204-and-earlier)).
+
+When set, run `composer install` to apply the upgrade.
+
 ## 2024-01-05 A significant upgrade of the autocompletion functionality
 
 Navigation and selection in the suggestion lists can now be performed with the keyboard.
