@@ -176,7 +176,7 @@ class DocumentController extends Controller
                 });
             });
         }
-        $members = $members->get();
+        $members = $members->orderBy('summary')->get();
 
         return view($view, compact('matter', 'members', 'contacts', 'tableComments', 'oldfilters', 'event', 'task'));
     }
