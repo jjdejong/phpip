@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Actor;
-use App\Event;
-use App\Matter;
-use App\MatterActors;
-use App\Task;
-use App\TemplateClass;
-use App\TemplateMember;
+use App\Models\Actor;
+use App\Models\Event;
+use App\Models\Matter;
+use App\Models\MatterActors;
+use App\Models\Task;
+use App\Models\TemplateClass;
+use App\Models\TemplateMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
@@ -185,7 +185,7 @@ class DocumentController extends Controller
       Prepare a mailto: href with template and data from the matter
       *
       * @param  \Illuminate\Http\Request  $request
-      * @param  \App\TemplateMember $member
+      * @param  \App\Models\TemplateMember $member
       * @return \Illuminate\Http\Response
     */
     public function mailto(TemplateMember $member, Request $request)

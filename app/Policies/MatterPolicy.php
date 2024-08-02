@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Matter;
-use App\User;
+use App\Models\Matter;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class MatterPolicy

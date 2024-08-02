@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -26,8 +26,8 @@ class UserController extends Controller
 
     public function create()
     {
-        $table = new \App\Actor;
         Gate::authorize('admin');
+        $table = new \App\Models\Actor;
         $userComments = $table->getTableComments('actor');
 
         return view('user.create', compact('userComments'));
@@ -52,7 +52,7 @@ class UserController extends Controller
     {
         Gate::authorize('readonly');
         $userInfo = $user->load(['company:id,name', 'roleInfo']);
-        $table = new \App\Actor;
+        $table = new \App\Models\Actor;
         $userComments = $table->getTableComments('actor');
 
         return view('user.show', compact('userInfo', 'userComments'));

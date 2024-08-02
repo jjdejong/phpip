@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Actor;
-use App\ActorPivot;
-use App\Event;
-use App\Matter;
+use App\Models\Actor;
+use App\Models\ActorPivot;
+use App\Models\Event;
+use App\Models\Matter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -90,12 +90,12 @@ class MatterController extends Controller
             }
         } else {
             $parent_matter = new Matter; // Create empty matter object to avoid undefined errors in view
-            $ref_prefix = \App\Category::find($category_code)['ref_prefix'];
+            $ref_prefix = \App\Models\Category::find($category_code)['ref_prefix'];
             $category = [
                 'code' => $category_code,
                 'next_caseref' => Matter::where('caseref', 'like', $ref_prefix . '%')
                     ->max('caseref'),
-                'name' => \App\Category::find($category_code)['category'],
+                'name' => \App\Models\Category::find($category_code)['category'],
             ];
             $category['next_caseref']++;
         }

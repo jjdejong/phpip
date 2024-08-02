@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Actor;
-use App\ActorPivot;
+use App\Models\Actor;
+use App\Models\ActorPivot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

@@ -11,7 +11,7 @@
   |
  */
 
-use App\Matter;
+use App\Models\Matter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('matter/autocomplete', function (Request $request) {
         $term = $request->input('term');
 
-        return App\Matter::with('filing')->select('id as key', 'uid as value')
+        return App\Models\Matter::with('filing')->select('id as key', 'uid as value')
             ->where('uid', 'like', "$term%")
             ->take(15)->get();
     });
@@ -81,7 +81,7 @@ Route::middleware(['auth'])->group(function () {
             $filter = ['Ref' => $matter_search];
             $matters = Matter::filter('caseref', 'asc', $filter, false, true)->get();
             if (count($matters) == 1) {
-                return redirect('matter/'.$matters[0]->id);
+                return redirect('matter/' . $matters[0]->id);
             }
         }
 
@@ -90,7 +90,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('matter/new-caseref', function (Request $request) {
         $term = $request->term;
-        $newref = App\Matter::where('caseref', 'like', "$term%")->max('caseref');
+        $newref = App\Models\Matter::where('caseref', 'like', "$term%")->max('caseref');
         if ($newref) {
             $newref++;
         } else {
@@ -106,122 +106,122 @@ Route::middleware(['auth'])->group(function () {
     // Autocompletions (accessible only to read-write users)
     Route::middleware('can:readwrite')->group(function () {
 
-    Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
-        $term = $request->term;
-        $results = App\EventName::select('name as value', 'code as key')
-            ->where([
-                ['name', 'like', "$term%"],
-                ['is_task', $is_task],
-            ]);
-        if ($request->filled('category')) {
-            $results->whereRaw('ifnull(category, ?) = ?', [$request->category, $request->category]);
-        }
+        Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
+            $term = $request->term;
+            $results = App\Models\EventName::select('name as value', 'code as key')
+                ->where([
+                    ['name', 'like', "$term%"],
+                    ['is_task', $is_task],
+                ]);
+            if ($request->filled('category')) {
+                $results->whereRaw('ifnull(category, ?) = ?', [$request->category, $request->category]);
+            }
 
-        return $results->take(10)->get();
+            return $results->take(10)->get();
+        });
+
+        Route::get('classifier-type/autocomplete/{main_display}', function (Request $request, $main_display) {
+            $term = $request->input('term');
+            $results = App\Models\ClassifierType::select('type as value', 'code as key')
+                ->where('type', 'like', "$term%")
+                ->where('main_display', $main_display)
+                ->orderBy('type');
+
+            return $results->take(10)->get();
+        });
+
+        Route::get('user/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+
+            return App\Models\User::select('name as value', 'login as key')
+                ->where('name', 'like', "$term%")
+                ->orWhere('login', 'like', "$term%")
+                ->take(10)->get();
+        });
+
+        Route::get('actor/autocomplete/{create_option?}', function (Request $request, $create_option = null) {
+            $term = $request->input('term');
+            $list = App\Models\Actor::select(DB::raw('coalesce(display_name, name) as value'), 'id as key')
+                ->where('name', 'like', "$term%")
+                ->orWhere('display_name', 'like', "$term")
+                ->take(10)->get();
+            if ($list->count() < 5 && $create_option) {
+                $list->push(['label' => "Create $term?", 'key' => 'create', 'value' => $term]);
+            }
+
+            return $list;
+        });
+
+        Route::get('role/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+
+            return App\Models\Role::select('name as value', 'code as key', 'shareable')
+                ->where('name', 'like', "$term%")
+                ->orWhere('code', 'like', "$term%")->get();
+        });
+
+        Route::get('dbrole/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+
+            return App\Models\Role::select('name as value', 'code as key')
+                ->where('name', 'like', "$term%")
+                ->whereIn('code', ['CLI', 'DBA', 'DBRW', 'DBRO'])->get();
+        });
+
+        Route::get('country/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+            $list = App\Models\Country::select('name as value', 'iso as key')
+                ->where('name', 'like', "$term%")
+                ->orWhere('iso', 'like', "$term%")->get();
+
+            return $list;
+        });
+
+        Route::get('category/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+
+            return App\Models\Category::select('category as value', 'code as key', 'ref_prefix as prefix')
+                ->where('category', 'like', "$term%")
+                ->orWhere('code', 'like', "$term%")->get();
+        });
+
+        Route::get('type/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+
+            return App\Models\Type::select('type as value', 'code as key')
+                ->where('type', 'like', "$term%")
+                ->orWhere('code', 'like', "$term%")->get();
+        });
+
+        Route::get('template-category/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+            $list = App\Models\TemplateMember::select('category as value', 'category as key')
+                ->where('category', 'like', "$term%")->distinct()->get();
+            if ($list->count() == 0) {
+                $list->push(['label' => "Create $term", 'key' => $term, 'value' => $term]);
+            }
+
+            return $list;
+        });
+
+        Route::get('template-class/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+
+            return App\Models\TemplateClass::select('name as value', 'id as key')
+                ->where('name', 'like', "$term%")->get();
+        });
+
+        Route::get('template-style/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+            $list = App\Models\TemplateMember::select('style as value', 'style as key')
+                ->where('style', 'like', "$term%")->distinct()->get();
+            if ($list->count() == 0) {
+                $list->push(['label' => "Create $term", 'key' => $term, 'value' => $term]);
+            }
+
+            return $list;
+        });
     });
-
-    Route::get('classifier-type/autocomplete/{main_display}', function (Request $request, $main_display) {
-        $term = $request->input('term');
-        $results = App\ClassifierType::select('type as value', 'code as key')
-            ->where('type', 'like', "$term%")
-            ->where('main_display', $main_display)
-            ->orderBy('type');
-
-        return $results->take(10)->get();
-    });
-
-    Route::get('user/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-
-        return App\User::select('name as value', 'login as key')
-            ->where('name', 'like', "$term%")
-            ->orWhere('login', 'like', "$term%")
-            ->take(10)->get();
-    });
-
-    Route::get('actor/autocomplete/{create_option?}', function (Request $request, $create_option = null) {
-        $term = $request->input('term');
-        $list = App\Actor::select(DB::raw('coalesce(display_name, name) as value'), 'id as key')
-            ->where('name', 'like', "$term%")
-            ->orWhere('display_name', 'like', "$term")
-            ->take(10)->get();
-        if ($list->count() < 5 && $create_option) {
-            $list->push(['label' => "Create $term?", 'key' => 'create', 'value' => $term]);
-        }
-
-        return $list;
-    });
-
-    Route::get('role/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-
-        return App\Role::select('name as value', 'code as key', 'shareable')
-            ->where('name', 'like', "$term%")
-            ->orWhere('code', 'like', "$term%")->get();
-    });
-
-    Route::get('dbrole/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-
-        return App\Role::select('name as value', 'code as key')
-            ->where('name', 'like', "$term%")
-            ->whereIn('code', ['CLI', 'DBA', 'DBRW', 'DBRO'])->get();
-    });
-
-    Route::get('country/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-        $list = App\Country::select('name as value', 'iso as key')
-            ->where('name', 'like', "$term%")
-            ->orWhere('iso', 'like', "$term%")->get();
-
-        return $list;
-    });
-
-    Route::get('category/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-
-        return App\Category::select('category as value', 'code as key', 'ref_prefix as prefix')
-            ->where('category', 'like', "$term%")
-            ->orWhere('code', 'like', "$term%")->get();
-    });
-
-    Route::get('type/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-
-        return App\Type::select('type as value', 'code as key')
-            ->where('type', 'like', "$term%")
-            ->orWhere('code', 'like', "$term%")->get();
-    });
-
-    Route::get('template-category/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-        $list = App\TemplateMember::select('category as value', 'category as key')
-            ->where('category', 'like', "$term%")->distinct()->get();
-        if ($list->count() == 0) {
-            $list->push(['label' => "Create $term", 'key' => $term, 'value' => $term]);
-        }
-
-        return $list;
-    });
-
-    Route::get('template-class/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-
-        return App\TemplateClass::select('name as value', 'id as key')
-            ->where('name', 'like', "$term%")->get();
-    });
-
-    Route::get('template-style/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-        $list = App\TemplateMember::select('style as value', 'style as key')
-            ->where('style', 'like', "$term%")->distinct()->get();
-        if ($list->count() == 0) {
-            $list->push(['label' => "Create $term", 'key' => $term, 'value' => $term]);
-        }
-
-        return $list;
-    });
-      });
 
     Route::post('event/{event}/recreateTasks', fn (App\Models\Event $event) => DB::statement('CALL recreate_tasks(?, ?)', [$event->id, Auth::user()->login]));
 
@@ -250,5 +250,5 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('template-member', App\Http\Controllers\TemplateMemberController::class);
         Route::resource('document', DocumentController::class)->parameters(['document' => 'class']);
         Route::resource('event-class', App\Http\Controllers\EventClassController::class);
-      });
+    });
 });

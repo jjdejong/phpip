@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Actor;
+use App\Models\Actor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
