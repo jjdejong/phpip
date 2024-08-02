@@ -17,9 +17,9 @@
     <div class="card border-info">
       <div class="card-header text-white bg-info p-1">
         <span class="lead">Categories</span>
-        @canany(['admin', 'readwrite'])
+        @can('readwrite')
         <a href="/matter/create?operation=new" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" class="btn btn-primary float-end" title="Create Matter">Create matter</a>
-        @endcanany
+        @endcan
       </div>
       <div class="card-body pt-0">
         <table  class="table table-striped table-sm">
@@ -27,9 +27,9 @@
             <th></th>
             <th>Count</th>
             <td>
-              @canany(['admin', 'readwrite'])
+              @can('readwrite')
               <span class="float-end text-secondary">New</span>
-              @endcanany
+              @endcan
             </td>
           </tr>
           @foreach ($categories as $group)
@@ -41,11 +41,11 @@
               {{ $group->total }}
             </td>
             <td class="py-0">
-              @canany(['admin', 'readwrite'])
+              @can('readwrite')
               <a class="badge text-bg-primary hidden-action float-end" href="/matter/create?operation=new&category={{$group->category_code}}" data-bs-target="#ajaxModal" title="Create {{ $group->category }}" data-bs-toggle="modal" data-size="modal-sm">
                 &plus;
               </a>
-              @endcanany
+              @endcan
             </td>
           </tr>
           @endforeach
@@ -55,9 +55,9 @@
     <div class="card border-info mt-1">
       <div class="card-header text-white bg-info p-1">
         <span class="lead">Users tasks</span>
-        @canany(['admin', 'readwrite'])
+        @can('readwrite')
         <button class="btn btn-transparent text-info float-end" disabled>I</button> {{--  This invisible button is only for improving the layout! --}}
-        @endcanany
+        @endcan
       </div>
       <div class="card-body pt-1">
         <table class="table table-striped table-sm">
@@ -98,7 +98,7 @@
           <div class="lead col-2">
             Open tasks
           </div>
-          @cannot('client')
+          @can('readonly')
           <div class="col-6">
             <div class="input-group">
               <label class="btn btn-info">
@@ -118,13 +118,13 @@
           </div>
           <div class="col-4">
             <div class="input-group">
-              @canany(['admin', 'readwrite'])
+              @can('readwrite')
               <button class="btn btn-light" type="button" id="clearOpenTasks">Clear selected on</button>
               <input type="text" class="form-control me-2" name="datetaskcleardate" id="taskcleardate" value="{{ now()->isoFormat('L') }}">
-              @endcanany
+              @endcan
             </div>
           </div>
-          @endcannot
+          @endcan
         </form>
         <div class="row mt-1 g-0">
           <div class="col">
@@ -138,11 +138,11 @@
           <div class="col-2">
             Due date
           </div>
-          @canany(['admin', 'readwrite'])
+          @can('readwrite')
           <div class="col-1">
             Clear
           </div>
-          @endcanany
+          @endcan
         </div>
       </div>
       <div class="card-body p-1" id="tasklist">
@@ -155,14 +155,14 @@
           <div class="lead col-8">
             Open renewals
           </div>
-          @canany(['admin', 'readwrite'])
+          @can('readwrite')
           <div class="col">
             <div class="input-group">
               <button class="btn btn-light" type="button" id="clearRenewals">Clear selected on</button>
               <input type="text" class="form-control me-2" name="renewalcleardate" id="renewalcleardate" value="{{ now()->isoFormat('L') }}">
             </div>
           </div>
-          @endcanany
+          @endcan
         </div>
         <div class="row mt-1 g-0">
           <div class="col">
@@ -176,11 +176,11 @@
           <div class="col-2">
             Due date
           </div>
-          @canany(['admin', 'readwrite'])
+          @can('readwrite')
           <div class="col-1">
             Clear
           </div>
-          @endcanany
+          @endcan
         </div>
       </div>
 

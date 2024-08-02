@@ -17,13 +17,13 @@
   <!-- Styles -->
   {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
   @yield('style')
-  @canany(['client', 'readonly'])
+  @cannot('readwrite')
     <style>
-      input.noformat {
+      input.noformat, [contenteditable] {
         pointer-events: none;
       }
     </style>
-  @endcanany
+  @endcannot
 </head>
 
 <body style="background-color: #99a">
@@ -146,15 +146,15 @@
                 <a class="dropdown-item" href="{{ url('/matter') }}">All</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=PAT') }}">Patents</a>
                 <a class="dropdown-item" href="{{ url('/matter?display_with=TM') }}">Trademarks</a>
-                @canany(['admin', 'readwrite'])
+                @can('readwrite')
                 <a class="dropdown-item" href="/matter/create?operation=new" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" title="Create Matter">Create</a>
                 <hr class="dropdown-divider">
                 <a class="dropdown-item" href="/matter/create?operation=ops" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" title="Create family from OPS">Create family from OPS</a>
-                @endcanany
+                @endcan
               </ul>
             </li>
-            @cannot('client')
-            @canany(['admin', 'readwrite'])
+            @can('readonly')
+            @can('readwrite')
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
                 Tools
@@ -169,7 +169,7 @@
                 @endcan
               </ul>
             </li>
-            @endcanany
+            @endcan
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
                 Tables
@@ -187,7 +187,7 @@
                 @endcan
               </ul>
             </li>
-            @endcannot
+            @endcan
             <li class="nav-item dropdown">
               <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                 {{ Auth::user()->login }}

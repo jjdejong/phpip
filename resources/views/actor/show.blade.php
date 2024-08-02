@@ -4,11 +4,11 @@
     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#actorContact">Contact</button>
     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#actorOther">Other</button>
     <a class="nav-link" data-bs-toggle="tab" id="actorUsedInToggle" href="/actor/{{ $actorInfo->id }}/usedin" data-bs-target="#actorUsedIn">Used in</a>
-    @canany(['admin', 'readwrite'])
+    @can('readwrite')
     <button id="deleteActor" title="Delete actor" class="nav-link btn btn-outline-danger" data-url='/actor/{{ $actorInfo->id }}' data-message="the actor {{ $actorInfo->name }}">
       Delete
     </button>
-    @endcanany
+    @endcan
   </nav>
   <div class="tab-content p-1" data-resource="/actor/{{ $actorInfo->id }}">
     <fieldset class="tab-pane fade show active" id="actorMain">

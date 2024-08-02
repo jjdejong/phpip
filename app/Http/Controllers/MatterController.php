@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use SimpleXMLElement;
@@ -66,22 +67,24 @@ class MatterController extends Controller
 
     public function create(Request $request)
     {
-        $this->authorize('create', Matter::class);
+        Gate::authorize('readwrite');
         $operation = $request->input('operation', 'new'); // new, clone, child, ops
         $category = [];
         $category_code = $request->input('category', 'PAT');
         if ($operation != 'new' && $operation != 'ops') {
             $parent_matter = Matter::with(
-                'container', 
-                'countryInfo', 
-                'originInfo', 
-                'category', 
+                'container',
+                'countryInfo',
+                'originInfo',
+                'category',
                 'type'
             )->find($request->matter_id);
             if ($operation == 'clone') {
                 // Generate the next available caseref based on the prefix
                 $parent_matter->caseref = Matter::where(
-                    'caseref', 'like', $parent_matter->category->ref_prefix.'%'
+                    'caseref',
+                    'like',
+                    $parent_matter->category->ref_prefix . '%'
                 )->max('caseref');
                 $parent_matter->caseref++;
             }
@@ -90,7 +93,7 @@ class MatterController extends Controller
             $ref_prefix = \App\Category::find($category_code)['ref_prefix'];
             $category = [
                 'code' => $category_code,
-                'next_caseref' => Matter::where('caseref', 'like', $ref_prefix.'%')
+                'next_caseref' => Matter::where('caseref', 'like', $ref_prefix . '%')
                     ->max('caseref'),
                 'name' => \App\Category::find($category_code)['category'],
             ];
@@ -102,9 +105,9 @@ class MatterController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('create', Matter::class);
+        Gate::authorize('readwrite');
         $this->validate(
-            $request, 
+            $request,
             [
                 'category_code' => 'required',
                 'caseref' => 'required',
@@ -197,9 +200,9 @@ class MatterController extends Controller
 
     public function storeN(Request $request)
     {
-        $this->authorize('create', Matter::class);
+        Gate::authorize('readwrite');
         $this->validate(
-            $request, 
+            $request,
             ['ncountry' => 'required|array']
         );
 
@@ -243,7 +246,7 @@ class MatterController extends Controller
 
     public function storeFamily(Request $request)
     {
-        $this->authorize('create', Matter::class);
+        Gate::authorize('readwrite');
         $this->validate($request, [
             'docnum' => 'required',
             'caseref' => 'required',
@@ -325,7 +328,7 @@ class MatterController extends Controller
                         $new_matter->events()->create(
                             [
                                 'code' => 'PRI',
-                                'detail' => $pri['country'].$pri['number'],
+                                'detail' => $pri['country'] . $pri['number'],
                                 'event_date' => $pri['date'],
                             ]
                         );
@@ -408,7 +411,7 @@ class MatterController extends Controller
                         );
                     }
                 }
-                $new_matter->notes = 'Applicants: '.collect($app['applicants'])->implode('; ')."\nInventors: ".collect($app['inventors'])->implode(' - ');
+                $new_matter->notes = 'Applicants: ' . collect($app['applicants'])->implode('; ') . "\nInventors: " . collect($app['inventors'])->implode(' - ');
             } else {
                 $new_matter->container_id = $container_id;
                 foreach ($app['pri'] as $pri) {
@@ -418,7 +421,7 @@ class MatterController extends Controller
                             // The priority application is in the family
                             $new_matter->events()->create(
                                 [
-                                    'code' => 'PRI', 
+                                    'code' => 'PRI',
                                     'alt_matter_id' => $matter_id_num[$pri['number']]
                                 ]
                             );
@@ -426,7 +429,7 @@ class MatterController extends Controller
                             $new_matter->events()->create(
                                 [
                                     'code' => 'PRI',
-                                    'detail' => $pri['country'].$pri['number'],
+                                    'detail' => $pri['country'] . $pri['number'],
                                     'event_date' => $pri['date'],
                                 ]
                             );
@@ -438,7 +441,7 @@ class MatterController extends Controller
                 $new_matter->parent_id = $matter_id_num[$app['pct']];
                 $new_matter->events()->create(
                     [
-                        'code' => 'PFIL', 
+                        'code' => 'PFIL',
                         'alt_matter_id' => $new_matter->parent_id
                     ]
                 );
@@ -447,8 +450,8 @@ class MatterController extends Controller
                 // This app is a divisional or a continuation
                 $new_matter->events()->create(
                     [
-                        'code' => 'ENT', 
-                        'event_date' => $app['app']['date'], 
+                        'code' => 'ENT',
+                        'event_date' => $app['app']['date'],
                         'detail' => 'Child filing date'
                     ]
                 );
@@ -461,8 +464,8 @@ class MatterController extends Controller
             if (array_key_exists('pub', $app)) {
                 $new_matter->events()->create(
                     [
-                        'code' => 'PUB', 
-                        'event_date' => $app['pub']['date'], 
+                        'code' => 'PUB',
+                        'event_date' => $app['pub']['date'],
                         'detail' => $app['pub']['number']
                     ]
                 );
@@ -470,8 +473,8 @@ class MatterController extends Controller
             if (array_key_exists('grt', $app)) {
                 $new_matter->events()->create(
                     [
-                        'code' => 'GRT', 
-                        'event_date' => $app['grt']['date'], 
+                        'code' => 'GRT',
+                        'event_date' => $app['grt']['date'],
                         'detail' => $app['grt']['number']
                     ]
                 );
@@ -541,7 +544,7 @@ class MatterController extends Controller
 
     public function edit(Matter $matter)
     {
-        $this->authorize('update', $matter);
+        Gate::authorize('readwrite');
         $matter->load(
             'container',
             'parent',
@@ -552,12 +555,14 @@ class MatterController extends Controller
             'filing'
         );
         $country_edit = $matter->tasks()->whereHas(
-            'rule', function (Builder $q) {
+            'rule',
+            function (Builder $q) {
                 $q->whereNotNull('for_country');
             }
         )->count() == 0;
         $cat_edit = $matter->tasks()->whereHas(
-            'rule', function (Builder $q) {
+            'rule',
+            function (Builder $q) {
                 $q->whereNotNull('for_category');
             }
         )->count() == 0;
@@ -567,7 +572,7 @@ class MatterController extends Controller
 
     public function update(Request $request, Matter $matter)
     {
-        $this->authorize('update', $matter);
+        Gate::authorize('readwrite');
         $request->validate(
             [
                 'term_adjust' => 'numeric',
@@ -583,7 +588,7 @@ class MatterController extends Controller
 
     public function destroy(Matter $matter)
     {
-        $this->authorize('delete', $matter);
+        Gate::authorize('readwrite');
         $matter->delete();
 
         return $matter;
@@ -654,14 +659,14 @@ class MatterController extends Controller
             fputcsv($export_csv, array_map('utf8_decode', $row), ';');
         }
         rewind($export_csv);
-        $filename = Now()->isoFormat('YMMDDHHmmss').'_matters.csv';
+        $filename = Now()->isoFormat('YMMDDHHmmss') . '_matters.csv';
 
         return response()->stream(
             function () use ($export_csv) {
                 fpassthru($export_csv);
             },
             200,
-            ['Content-Type' => 'application/csv', 'Content-Disposition' => 'attachment; filename='.$filename]
+            ['Content-Type' => 'application/csv', 'Content-Disposition' => 'attachment; filename=' . $filename]
         );
     }
 
@@ -673,7 +678,7 @@ class MatterController extends Controller
     {
         // No dedicated "form request" class being defined, this validation will silently terminate the operation when unsuccessful
         $this->validate(
-            $request, 
+            $request,
             ['file' => 'required|file|mimes:docx,dotx']
         );
         $file = $request->file('file');
@@ -930,82 +935,82 @@ class MatterController extends Controller
             'matter.id',
             'lwri.matter_id'
         )->leftJoin(
-            'event AS fil', 
+            'event AS fil',
             function ($join) {
                 $join->on('matter.id', 'fil.matter_id')->where('fil.code', 'FIL');
             }
         )->leftJoin(
-            'event AS pub', 
+            'event AS pub',
             function ($join) {
                 $join->on('matter.id', 'pub.matter_id')->where('pub.code', 'PUB');
             }
         )->leftJoin(
-            'event AS grt', 
+            'event AS grt',
             function ($join) {
                 $join->on('matter.id', 'grt.matter_id')->where('grt.code', 'GRT');
             }
         )->leftJoin(
-            'event AS reg', 
+            'event AS reg',
             function ($join) {
                 $join->on('matter.id', 'reg.matter_id')->where('reg.code', 'REG');
             }
         )->leftJoin(
-            'event AS pr', 
+            'event AS pr',
             function ($join) {
                 $join->on('matter.id', 'pr.matter_id')->where('pr.code', 'PR');
             }
         )->leftJoin(
-            'event_lnk_list AS pri', 
+            'event_lnk_list AS pri',
             function ($join) {
                 $join->on('matter.id', 'pri.matter_id')->where('pri.code', 'PRI');
             }
         )->leftJoin(
-            'event AS allow', 
+            'event AS allow',
             function ($join) {
                 $join->on('matter.id', 'allow.matter_id')->where('allow.code', 'ALL');
             }
         )->leftJoin(
-            'classifier AS titof', 
+            'classifier AS titof',
             function ($join) {
                 $join->on(
-                    'titof.matter_id', 
+                    'titof.matter_id',
                     DB::raw('IFNULL(matter.container_id, matter.id)')
                 )->where('titof.type_code', 'TITOF');
             }
         )->leftJoin(
-            'classifier AS titen', 
+            'classifier AS titen',
             function ($join) {
                 $join->on(
-                    'titen.matter_id', 
+                    'titen.matter_id',
                     DB::raw('IFNULL(matter.container_id, matter.id)')
                 )->where('titen.type_code', 'TITEN');
             }
         )->leftJoin(
-            'classifier AS tit', 
+            'classifier AS tit',
             function ($join) {
                 $join->on(
-                    'tit.matter_id', 
+                    'tit.matter_id',
                     DB::raw('IFNULL(matter.container_id, matter.id)')
                 )->where('tit.type_code', 'TIT');
             }
         )->leftJoin(
-            'classifier AS tm', 
+            'classifier AS tm',
             function ($join) {
                 $join->on(
-                    'tm.matter_id', 
+                    'tm.matter_id',
                     DB::raw('IFNULL(matter.container_id, matter.id)')
                 )->where('tm.type_code', 'TM');
             }
         )->leftJoin(
-            'classifier AS class', 
+            'classifier AS class',
             function ($join) {
                 $join->on(
-                    'class.matter_id', 
+                    'class.matter_id',
                     DB::raw('IFNULL(matter.container_id, matter.id)')
                 )->where('class.type_code', 'TMCL');
             }
         )->join('actor AS resp', 'resp.login', 'matter.responsible')
-        ->find($matter->id);
+            ->find($matter->id);
 
         // Exclude the data having line breaks
         $simpledata = collect($data)->except(
@@ -1058,7 +1063,7 @@ class MatterController extends Controller
         $template->setValue('nl', '<w:br/>');
 
         header('Content-Description: File Transfer');
-        header('Content-Disposition: attachment; filename="merged-'.$file->getClientOriginalName()).'"';
+        header('Content-Disposition: attachment; filename="merged-' . $file->getClientOriginalName()) . '"';
         header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
         header('Content-Transfer-Encoding: binary');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
@@ -1095,7 +1100,7 @@ class MatterController extends Controller
                 }
             ]
         )->whereHas(
-            'tasks', 
+            'tasks',
             function ($query) {
                 $query->where('code', 'REN');
             }
@@ -1133,7 +1138,7 @@ class MatterController extends Controller
         $token_url = 'https://ops.epo.org/3.2/auth/accesstoken';
         $token_response = Http::withHeaders(
             [
-                'Authorization' => 'Basic '.base64_encode($ops_key.':'.$ops_secret)
+                'Authorization' => 'Basic ' . base64_encode($ops_key . ':' . $ops_secret)
             ]
         )->asForm()->post($token_url, ['grant_type' => 'client_credentials']);
 
@@ -1156,7 +1161,7 @@ class MatterController extends Controller
         $members = data_get($ops_response, 'ops:world-patent-data.ops:patent-family.ops:family-member');
         if (Arr::isList($members)) {
             // Sort members by increasing filing date and doc-id, so that the first is the priority application
-            $members = collect($members)->sortBy(fn ($member) => $member['application-reference']['document-id']['date']['$'].$member['application-reference']['@doc-id']);
+            $members = collect($members)->sortBy(fn ($member) => $member['application-reference']['document-id']['date']['$'] . $member['application-reference']['@doc-id']);
             // Group all members by doc-id, so that publications and grants appear in a same record (yet as two arrays)
             $members = collect($members)->groupBy(fn ($member) => $member['application-reference']['@doc-id']);
         } else {
@@ -1193,7 +1198,7 @@ class MatterController extends Controller
             $apps[$i]['app']['kind'] = $app['kind']['$'];
             if ($app['kind']['$'] == 'W') {
                 $country = 'WO';
-                $app_number = $app['country']['$'].$app['doc-number']['$'];
+                $app_number = $app['country']['$'] . $app['doc-number']['$'];
             } else {
                 $country = $app['country']['$'];
                 $app_number = $app['doc-number']['$'];
@@ -1211,7 +1216,7 @@ class MatterController extends Controller
             $apps[$i]['app']['number'] = $app_number;
 
             // Data taken from EP or PCT case
-            if ((in_array($apps[$i]['app']['country'], ['EP', 'WO'])) && ! data_get($apps, '0.pri.title')) {
+            if ((in_array($apps[$i]['app']['country'], ['EP', 'WO'])) && !data_get($apps, '0.pri.title')) {
                 // Title (the last is the English title)
                 $apps[0]['title'] = collect($member[0]['exchange-document']['bibliographic-data']['invention-title'])->last()['$'];
 
@@ -1330,7 +1335,7 @@ class MatterController extends Controller
 
                 // PCT origin
                 if ($pct_nat = collect($event['priority-claim'])->where('priority-linkage-type.$', 'W')->first()) {
-                    $apps[$i]['pct'] = $pct_nat['document-id']['country']['$'].$pct_nat['document-id']['doc-number']['$'];
+                    $apps[$i]['pct'] = $pct_nat['document-id']['country']['$'] . $pct_nat['document-id']['doc-number']['$'];
                 } else {
                     $apps[$i]['pct'] = null;
                 }

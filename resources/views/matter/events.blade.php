@@ -3,19 +3,19 @@
     <tr>
       <th>
         Event
-        @canany(['admin', 'readwrite'])
+        @can('readwrite')
         <a data-bs-toggle="collapse" class="badge rounded-pill text-bg-info fw-normal ms-2" href="#addEventRow" id="addEvent" title="Add event">
           &plus;
         </a>
-        @endcanany
+        @endcan
       </th>
       <th>Date</th>
       <th>Number</th>
       <th>Notes</th>
       <th>Refers to</th>
-      @cannot('client')
+      @can('readonly')
       <th>Email</th>
-      @endcannot
+      @endcan
     </tr>
     <tr id="addEventRow" class="collapse">
       <td colspan="5">
@@ -44,13 +44,13 @@
       <td><input type="text" class="form-control noformat" size="16" name="detail" value="{{ $event->detail }}"></td>
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $event->notes }}"></td>
       <td><input type="text" class="form-control noformat" size="10" name="alt_matter_id" data-ac="/matter/autocomplete" value="{{ $event->altMatter ? $event->altMatter->uid : '' }}"></td>
-      @cannot('client')
+      @can('readonly')
       <td>
-            @if (count(App\EventName::where('code',$event->code)->first()->templates) != 0)
+            @if (count(App\Models\EventName::where('code',$event->code)->first()->templates) != 0)
             <button class="chooseTemplate button btn-info" data-url="/document/select/{{ $matter->id }}?EventName={{ $event->code }}&Event={{ $event->id }}" >&#9993;</button>
             @endif
       </td>
-      @endcannot
+      @endcan
     </tr>
     @endforeach
   </tbody>

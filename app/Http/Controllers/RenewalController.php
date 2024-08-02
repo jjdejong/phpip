@@ -362,7 +362,8 @@ class RenewalController extends Controller
             $data = [];
             $date_now = now();
             foreach ($request->task_ids as $ren_id) {
-                $log_line = ['task_id' => $ren_id,
+                $log_line = [
+                    'task_id' => $ren_id,
                     'job_id' => $newjob,
                     'from_step' => 2,
                     'to_step' => 4,

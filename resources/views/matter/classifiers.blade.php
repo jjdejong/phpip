@@ -8,9 +8,11 @@ $classifiers = $matter->classifiers->groupBy('type_name');
       <th class="border-top-0">URL</th>
       <th class="border-top-0">Link to matter</th>
       <th class="border-top-0">
+        @can('readwrite')
         <a href="#addClassifierRow" data-bs-toggle="collapse">
           <span class="float-end" title="Add classifier">&oplus;</span>
         </a>
+        @endcan
       </th>
     </tr>
   </thead>

@@ -22,11 +22,11 @@
       <div class="badge rounded-pill text-bg-warning" title="Urgent">&nbsp;</div>
       @endif
     </td>
-    @canany(['admin', 'readwrite'])
+    @can('readwrite')
     <td class="col-1 py-0 px-3">
       <input id="{{ $task->id }}" class="clear-open-task" type="checkbox">
     </td>
-    @endcanany
+    @endcan
   </tr>
   @endforeach
 </table>
