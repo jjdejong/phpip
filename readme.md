@@ -10,6 +10,12 @@ Head for the [Wiki](https://github.com/jjdejong/phpip/wiki) for further informat
 
 # New features
 
+## 2024-08-02 Updated the old application structure to that of Laravel 11
+
+This involved deleting, moving and cleaning many files, yet the functionality should not change. See commit `bf00718`.
+
+The authorization mechanism has been improved, using gates rather than policies. See commit `a4c4764`.
+
 ## 2024-01-05 A significant upgrade of the autocompletion functionality
 
 Navigation and selection in the suggestion lists can now be performed with the keyboard.
