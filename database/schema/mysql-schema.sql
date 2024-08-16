@@ -1,25 +1,14 @@
--- Server version	5.7.29
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `actor`
---
-
 DROP TABLE IF EXISTS `actor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `actor` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Family name or company name',
   `first_name` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'plus middle names, if required',
   `display_name` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'The name displayed in the interface, if not null',
@@ -27,11 +16,12 @@ CREATE TABLE `actor` (
   `password` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `default_role` char(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Link to actor_role table. A same actor can have different roles - this is the default role of the actor. CAUTION: for database users, this sets the user ACLs.',
   `function` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `parent_id` int(10) unsigned DEFAULT NULL COMMENT 'Parent company of this company (another actor), where applicable. Useful for linking several companies owned by a same corporation',
-  `company_id` int(10) unsigned DEFAULT NULL COMMENT 'Mainly for inventors and contacts. ID of the actor''s company or employer (another record in the actors table)',
-  `site_id` int(10) unsigned DEFAULT NULL COMMENT 'Mainly for inventors and contacts. ID of the actor''s company site (another record in the actors table), if the company has several sites that we want to differentiate',
+  `parent_id` int unsigned DEFAULT NULL COMMENT 'Parent company of this company (another actor), where applicable. Useful for linking several companies owned by a same corporation',
+  `company_id` int unsigned DEFAULT NULL COMMENT 'Mainly for inventors and contacts. ID of the actor''s company or employer (another record in the actors table)',
+  `site_id` int unsigned DEFAULT NULL COMMENT 'Mainly for inventors and contacts. ID of the actor''s company site (another record in the actors table), if the company has several sites that we want to differentiate',
   `phy_person` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Physical person or not',
   `nationality` char(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `language` char(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `small_entity` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Small entity status used in a few countries (FR, US)',
   `address` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Main address: street, zip and city',
   `country` char(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Country in address',
@@ -44,7 +34,6 @@ CREATE TABLE `actor` (
   `legal_form` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `registration_no` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `warn` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'The actor will be displayed in red in the matter view when set',
-  `pref_language` int(10) unsigned NOT NULL,
   `ren_discount` double(8,2) NOT NULL,
   `notes` text COLLATE utf8mb4_unicode_ci,
   `VAT_number` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -75,11 +64,6 @@ CREATE TABLE `actor` (
   CONSTRAINT `actor_site_id_foreign` FOREIGN KEY (`site_id`) REFERENCES `actor` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `actor_role`
---
-
 DROP TABLE IF EXISTS `actor_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -101,24 +85,19 @@ CREATE TABLE `actor_role` (
   KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `classifier`
---
-
 DROP TABLE IF EXISTS `classifier`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `classifier` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `matter_id` int(10) unsigned NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `matter_id` int unsigned NOT NULL,
   `type_code` char(5) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Link to ''classifier_types''',
   `value` text COLLATE utf8mb4_unicode_ci COMMENT 'A free-text value used when classifier_values has no record linked to the classifier_types record',
   `img` mediumblob,
   `url` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Display value as a link to the URL defined here',
-  `value_id` int(10) unsigned DEFAULT NULL COMMENT 'Links to the classifier_values table if it has a link to classifier_types',
+  `value_id` int unsigned DEFAULT NULL COMMENT 'Links to the classifier_values table if it has a link to classifier_types',
   `display_order` tinyint(1) NOT NULL DEFAULT '1',
-  `lnk_matter_id` int(10) unsigned DEFAULT NULL COMMENT 'Matter this case is linked to',
+  `lnk_matter_id` int unsigned DEFAULT NULL COMMENT 'Matter this case is linked to',
   `creator` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `updater` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -126,14 +105,14 @@ CREATE TABLE `classifier` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uqlnk` (`matter_id`,`type_code`,`lnk_matter_id`),
   UNIQUE KEY `uqvalue_id` (`matter_id`,`type_code`,`value_id`),
-  UNIQUE KEY `uqvalue` (`matter_id`,`type_code`,`value`(10)),
+  UNIQUE KEY `uqvalue` (`matter_id`,`type_code`,`value`(30)),
   KEY `value` (`value`(20)),
   KEY `type` (`type_code`),
   KEY `value_id` (`value_id`),
   KEY `lnk_matter` (`lnk_matter_id`),
   CONSTRAINT `classifier_lnk_matter_id_foreign` FOREIGN KEY (`lnk_matter_id`) REFERENCES `matter` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `classifier_matter_id_foreign` FOREIGN KEY (`matter_id`) REFERENCES `matter` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `classifier_type_code_foreign` FOREIGN KEY (`type_code`) REFERENCES `classifier_type` (`code`) ON UPDATE CASCADE,
+  CONSTRAINT `classifier_type_code_foreign` FOREIGN KEY (`type_code`) REFERENCES `classifier_type` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `classifier_value_id_foreign` FOREIGN KEY (`value_id`) REFERENCES `classifier_value` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -146,8 +125,7 @@ CREATE TABLE `classifier` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `classifier_before_insert` BEFORE INSERT ON `classifier` FOR EACH ROW
-  BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `classifier_before_insert` BEFORE INSERT ON `classifier` FOR EACH ROW BEGIN
     IF NEW.type_code = 'TITEN' THEN
   		SET NEW.value=tcase(NEW.value);
   	ELSEIF NEW.type_code IN ('TIT', 'TITOF', 'TITAL') THEN
@@ -159,11 +137,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `classifier_type`
---
-
 DROP TABLE IF EXISTS `classifier_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -183,16 +156,11 @@ CREATE TABLE `classifier_type` (
   CONSTRAINT `classifier_type_for_category_foreign` FOREIGN KEY (`for_category`) REFERENCES `matter_category` (`code`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `classifier_value`
---
-
 DROP TABLE IF EXISTS `classifier_value`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `classifier_value` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `value` varchar(160) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type_code` char(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Restrict this classifier name to the classifier type identified here',
   `notes` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -206,16 +174,11 @@ CREATE TABLE `classifier_value` (
   CONSTRAINT `classifier_value_type_code_foreign` FOREIGN KEY (`type_code`) REFERENCES `classifier_type` (`code`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `country`
---
-
 DROP TABLE IF EXISTS `country`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `country` (
-  `numcode` smallint(6) DEFAULT NULL,
+  `numcode` smallint DEFAULT NULL,
   `iso` char(2) COLLATE utf8mb4_unicode_ci NOT NULL,
   `iso3` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name_DE` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -225,28 +188,23 @@ CREATE TABLE `country` (
   `wo` tinyint(1) DEFAULT '0' COMMENT 'Flag default countries for PCT national phase',
   `em` tinyint(1) DEFAULT '0' COMMENT 'Flag default countries for EU trade mark',
   `oa` tinyint(1) DEFAULT '0' COMMENT 'Flag default countries for OA national phase',
-  `renewal_first` tinyint(3) unsigned DEFAULT '2' COMMENT 'The first year a renewal is due in this country',
+  `renewal_first` tinyint DEFAULT '2' COMMENT 'The first year a renewal is due in this country from renewal_base. When negative, the date is calculated from renewal_start',
   `renewal_base` char(5) COLLATE utf8mb4_unicode_ci DEFAULT 'FIL' COMMENT 'The base event for calculating renewal deadlines',
   `renewal_start` char(5) COLLATE utf8mb4_unicode_ci DEFAULT 'FIL' COMMENT 'The event from which renewals become due',
   `checked_on` date DEFAULT NULL,
   PRIMARY KEY (`iso`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `default_actor`
---
-
 DROP TABLE IF EXISTS `default_actor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `default_actor` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `actor_id` int(10) unsigned NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `actor_id` int unsigned NOT NULL,
   `role` char(5) COLLATE utf8mb4_unicode_ci NOT NULL,
   `for_category` char(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `for_country` char(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `for_client` int(10) unsigned DEFAULT NULL,
+  `for_client` int unsigned DEFAULT NULL,
   `shared` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -255,26 +213,21 @@ CREATE TABLE `default_actor` (
   KEY `role` (`role`),
   KEY `for_country` (`for_country`),
   KEY `for_client` (`for_client`),
-  CONSTRAINT `default_actor_actor_id_foreign` FOREIGN KEY (`actor_id`) REFERENCES `actor` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `default_actor_actor_id_foreign` FOREIGN KEY (`actor_id`) REFERENCES `actor` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `default_actor_for_client_foreign` FOREIGN KEY (`for_client`) REFERENCES `actor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `default_actor_for_country_foreign` FOREIGN KEY (`for_country`) REFERENCES `country` (`iso`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `default_actor_role_foreign` FOREIGN KEY (`role`) REFERENCES `actor_role` (`code`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `event`
---
-
 DROP TABLE IF EXISTS `event`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `event` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `code` char(5) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Link to event_names table',
-  `matter_id` int(10) unsigned NOT NULL,
+  `matter_id` int unsigned NOT NULL,
   `event_date` date DEFAULT NULL,
-  `alt_matter_id` int(10) unsigned DEFAULT NULL COMMENT 'Essentially for priority claims. ID of prior patent this event refers to',
+  `alt_matter_id` int unsigned DEFAULT NULL COMMENT 'Essentially for priority claims. ID of prior patent this event refers to',
   `detail` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Numbers or short comments',
   `notes` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `creator` char(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -288,7 +241,7 @@ CREATE TABLE `event` (
   KEY `alt_matter` (`alt_matter_id`),
   KEY `number` (`detail`),
   CONSTRAINT `event_alt_matter_id_foreign` FOREIGN KEY (`alt_matter_id`) REFERENCES `matter` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `event_code_foreign` FOREIGN KEY (`code`) REFERENCES `event_name` (`code`) ON UPDATE CASCADE,
+  CONSTRAINT `event_code_foreign` FOREIGN KEY (`code`) REFERENCES `event_name` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `event_matter_id_foreign` FOREIGN KEY (`matter_id`) REFERENCES `matter` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -301,8 +254,7 @@ CREATE TABLE `event` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `event_before_insert` BEFORE INSERT ON `event` FOR EACH ROW
-  BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `event_before_insert` BEFORE INSERT ON `event` FOR EACH ROW BEGIN
     DECLARE vdate DATE DEFAULT NULL;
   	IF NEW.alt_matter_id IS NOT NULL THEN
   		IF EXISTS (SELECT 1 FROM event WHERE code='FIL' AND NEW.alt_matter_id=matter_id AND event_date IS NOT NULL) THEN
@@ -327,17 +279,16 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW
-trig: BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW trig: BEGIN
 	DECLARE DueDate, BaseDate, m_expiry DATE DEFAULT NULL;
-	DECLARE tr_id, tr_days, tr_months, tr_years, m_pta, lnk_matter_id, CliAnnAgt INT DEFAULT NULL;
+	DECLARE tr_id, tr_days, tr_months, tr_years, m_pta, lnk_matter_id, CliAnnAgt, m_parent_id INT DEFAULT NULL;
 	DECLARE tr_task, m_type_code, tr_currency, m_country, m_origin CHAR(5) DEFAULT NULL;
 	DECLARE tr_detail, tr_responsible VARCHAR(160) DEFAULT NULL;
-	DECLARE Done, tr_clear_task, tr_delete_task, tr_end_of_month, tr_recurring, tr_use_parent, tr_use_priority, m_dead BOOLEAN DEFAULT 0;
+	DECLARE Done, tr_clear_task, tr_delete_task, tr_end_of_month, tr_recurring, tr_use_priority, m_dead BOOLEAN DEFAULT 0;
 	DECLARE tr_cost, tr_fee DECIMAL(6,2) DEFAULT null;
 
 	DECLARE cur_rule CURSOR FOR
-		SELECT task_rules.id, task, clear_task, delete_task, detail, days, months, years, recurring, end_of_month, use_parent, use_priority, cost, fee, currency, task_rules.responsible
+		SELECT task_rules.id, task, clear_task, delete_task, detail, days, months, years, recurring, end_of_month, use_priority, cost, fee, currency, task_rules.responsible
 		FROM task_rules
 		JOIN event_name ON event_name.code = task_rules.task
 		JOIN matter ON matter.id = NEW.matter_id
@@ -366,7 +317,7 @@ trig: BEGIN
 
 	DECLARE CONTINUE HANDLER FOR NOT FOUND SET Done = 1;
 
-	SELECT type_code, dead, expire_date, term_adjust, country, origin INTO m_type_code, m_dead, m_expiry, m_pta, m_country, m_origin FROM matter WHERE matter.id = NEW.matter_id;
+	SELECT type_code, dead, expire_date, term_adjust, country, origin, parent_id INTO m_type_code, m_dead, m_expiry, m_pta, m_country, m_origin, m_parent_id FROM matter WHERE matter.id = NEW.matter_id;
 	SELECT id INTO CliAnnAgt FROM actor WHERE display_name = 'CLIENT';
 
 	-- Do not change anything in dead cases
@@ -377,7 +328,7 @@ trig: BEGIN
 	OPEN cur_rule;
 		create_tasks: LOOP
 			SET BaseDate = NEW.event_date;
-			FETCH cur_rule INTO tr_id, tr_task, tr_clear_task, tr_delete_task, tr_detail, tr_days, tr_months, tr_years, tr_recurring, tr_end_of_month, tr_use_parent, tr_use_priority, tr_cost, tr_fee, tr_currency, tr_responsible;
+			FETCH cur_rule INTO tr_id, tr_task, tr_clear_task, tr_delete_task, tr_detail, tr_days, tr_months, tr_years, tr_recurring, tr_end_of_month, tr_use_priority, tr_cost, tr_fee, tr_currency, tr_responsible;
 
 			IF Done THEN
 				LEAVE create_tasks;
@@ -391,11 +342,6 @@ trig: BEGIN
 			-- Skip recurring renewal tasks if country table has no correspondence
 			IF tr_task = 'REN' AND tr_recurring = 1 AND NOT EXISTS (SELECT 1 FROM country WHERE iso = m_country and renewal_start = NEW.code) THEN
 				ITERATE create_tasks;
-			END IF;
-
-			-- Use earliest parent filing date for task deadline calculation, if PFIL event exists
-			IF tr_use_parent THEN
-				SELECT CAST(IFNULL(min(event_date), NEW.event_date) AS DATE) INTO BaseDate FROM event_lnk_list WHERE code = 'PFIL' AND matter_id = NEW.matter_id;
 			END IF;
 
 			-- Use earliest priority date for task deadline calculation, if a PRI event exists
@@ -425,7 +371,7 @@ trig: BEGIN
 			END IF;
 
 			-- Deadline for renewals that have become due in a parent case when filing a divisional (EP 4-months rule)
-			IF tr_task = 'REN' AND EXISTS (SELECT 1 FROM event WHERE code = 'PFIL' AND matter_id = NEW.matter_id) AND DueDate < NEW.event_date THEN
+			IF tr_task = 'REN' AND m_parent_id IS NOT NULL AND DueDate < NEW.event_date THEN
 				SET DueDate = NEW.event_date + INTERVAL 4 MONTH;
 			END IF;
 
@@ -466,8 +412,8 @@ trig: BEGIN
 		CLOSE cur_linked;
 	END IF;
 
-	-- Recalculate tasks based on the priority date or a parent case upon inserting a new priority claim or a parent filed event
-	IF NEW.code IN ('PRI', 'PFIL') THEN
+	-- Recalculate tasks based on the priority date upon inserting a new priority claim
+	IF NEW.code = 'PRI' THEN
 		CALL recalculate_tasks(NEW.matter_id, 'FIL', NEW.creator);
 	END IF;
 
@@ -491,8 +437,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `event_before_update` BEFORE UPDATE ON `event` FOR EACH ROW
-  BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `event_before_update` BEFORE UPDATE ON `event` FOR EACH ROW BEGIN
   	DECLARE vdate DATE DEFAULT NULL;
   	-- Date taken from Filed event in linked matter
   	IF NEW.alt_matter_id IS NOT NULL THEN
@@ -514,18 +459,14 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW
-trig: BEGIN
-
-	-- CALL recalculate_tasks(NEW.matter_id, NEW.code, NEW.updater);
-
-	DECLARE DueDate, BaseDate DATE DEFAULT NULL;
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW trig: BEGIN
+  DECLARE DueDate, BaseDate DATE DEFAULT NULL;
   DECLARE t_id, tr_days, tr_months, tr_years, tr_recurring, m_pta, lnk_matter_id INT DEFAULT NULL;
-  DECLARE Done, tr_end_of_month, tr_use_parent, tr_use_priority BOOLEAN DEFAULT 0;
+  DECLARE Done, tr_end_of_month, tr_use_priority BOOLEAN DEFAULT 0;
   DECLARE m_category, m_country CHAR(5) DEFAULT NULL;
 
 	DECLARE cur_rule CURSOR FOR
-		SELECT task.id, days, months, years, recurring, end_of_month, use_parent, use_priority
+		SELECT task.id, days, months, years, recurring, end_of_month, use_priority
 		FROM task_rules
 		JOIN task ON task.rule_used = task_rules.id
 		WHERE task.trigger_id = NEW.id;
@@ -544,7 +485,7 @@ trig: BEGIN
 
   OPEN cur_rule;
   update_tasks: LOOP
-  	FETCH cur_rule INTO t_id, tr_days, tr_months, tr_years, tr_recurring, tr_end_of_month, tr_use_parent, tr_use_priority;
+  	FETCH cur_rule INTO t_id, tr_days, tr_months, tr_years, tr_recurring, tr_end_of_month, tr_use_priority;
 
   	IF Done THEN
   	  LEAVE update_tasks;
@@ -554,11 +495,6 @@ trig: BEGIN
 			-- Recurring tasks are not managed
 			ITERATE update_tasks;
 		END IF;
-
-    -- Use parent filing date for task deadline calculation, if PFIL event exists
-  	IF tr_use_parent THEN
-  	  SELECT CAST(IFNULL(min(event_date), NEW.event_date) AS DATE) INTO BaseDate FROM event_lnk_list WHERE code = 'PFIL' AND matter_id = NEW.matter_id;
-  	END IF;
 
     -- Use earliest priority date for task deadline calculation, if a PRI event exists
   	IF tr_use_priority THEN
@@ -590,13 +526,13 @@ trig: BEGIN
   	CLOSE cur_linked;
   END IF;
 
-  -- Recalculate tasks based on the priority date or a parent case upon inserting a new priority claim or a parent filed event
-  IF NEW.code IN ('PRI', 'PFIL') THEN
+  -- Recalculate tasks based on the priority date upon inserting a new priority claim
+  IF NEW.code = 'PRI' THEN
   	CALL recalculate_tasks(NEW.matter_id, 'FIL', NEW.updater);
   END IF;
 
 	-- Recalculate expiry
-	IF NEW.code IN ('FIL', 'PFIL') THEN
+	IF NEW.code = 'FIL' THEN
   	SELECT category_code, term_adjust, country INTO m_category, m_pta, m_country FROM matter WHERE matter.id = NEW.matter_id;
   	SELECT months, years INTO tr_months, tr_years FROM task_rules
   		WHERE task = 'EXP'
@@ -605,7 +541,7 @@ trig: BEGIN
 				for_country = m_country,
 				concat(task, trigger_event) NOT IN (SELECT concat(task, trigger_event) FROM task_rules tr WHERE (tr.for_country, tr.for_category) = (m_country, m_category))
 			);
-		SELECT IFNULL(min(event_date), NEW.event_date) INTO BaseDate FROM event_lnk_list WHERE code IN ('FIL', 'PFIL') AND matter_id = NEW.matter_id;
+		SELECT IFNULL(min(event_date), NEW.event_date) INTO BaseDate FROM event_lnk_list WHERE code = 'FIL' AND matter_id = NEW.matter_id;
   	SET DueDate = BaseDate + INTERVAL m_pta DAY + INTERVAL tr_months MONTH + INTERVAL tr_years YEAR;
   	UPDATE matter SET expire_date = DueDate WHERE matter.id = NEW.matter_id;
   END IF;
@@ -624,8 +560,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `event_after_delete` AFTER DELETE ON `event` FOR EACH ROW
-BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `event_after_delete` AFTER DELETE ON `event` FOR EACH ROW BEGIN
   IF OLD.code IN ('PRI','PFIL') THEN
 	 CALL recalculate_tasks(OLD.matter_id, 'FIL', OLD.updater);
   END IF;
@@ -643,32 +578,22 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `event_class_lnk`
---
-
 DROP TABLE IF EXISTS `event_class_lnk`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `event_class_lnk` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `event_name_code` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `template_class_id` int(10) unsigned NOT NULL,
+  `template_class_id` int unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `event_class_lnk_template_class_id_foreign` (`template_class_id`),
   KEY `event_class_lnk_event_name_code_foreign` (`event_name_code`),
-  CONSTRAINT `event_class_lnk_event_name_code_foreign` FOREIGN KEY (`event_name_code`) REFERENCES `event_name` (`code`) ON UPDATE CASCADE,
-  CONSTRAINT `event_class_lnk_template_class_id_foreign` FOREIGN KEY (`template_class_id`) REFERENCES `template_classes` (`id`) ON UPDATE CASCADE
+  CONSTRAINT `event_class_lnk_event_name_code_foreign` FOREIGN KEY (`event_name_code`) REFERENCES `event_name` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `event_class_lnk_template_class_id_foreign` FOREIGN KEY (`template_class_id`) REFERENCES `template_classes` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Temporary view structure for view `event_lnk_list`
---
-
 DROP TABLE IF EXISTS `event_lnk_list`;
 /*!50001 DROP VIEW IF EXISTS `event_lnk_list`*/;
 SET @saved_cs_client     = @@character_set_client;
@@ -681,11 +606,6 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `detail`,
  1 AS `country`*/;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `event_name`
---
-
 DROP TABLE IF EXISTS `event_name`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -719,8 +639,7 @@ CREATE TABLE `event_name` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `ename_after_update` AFTER UPDATE ON `event_name` FOR EACH ROW
-BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `ename_after_update` AFTER UPDATE ON `event_name` FOR EACH ROW BEGIN
 	IF IFNULL(NEW.default_responsible,0) != IFNULL(OLD.default_responsible,0) THEN
 		UPDATE task SET assigned_to=NEW.default_responsible
 		WHERE code=NEW.code AND assigned_to <=> OLD.default_responsible;
@@ -731,16 +650,11 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `failed_jobs`
---
-
 DROP TABLE IF EXISTS `failed_jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `failed_jobs` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -749,20 +663,15 @@ CREATE TABLE `failed_jobs` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `fees`
---
-
 DROP TABLE IF EXISTS `fees`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `fees` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `for_category` char(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'PAT' COMMENT 'Category to which this rule applies.',
   `for_country` char(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Country where rule is applicable. If NULL, applies to all countries',
   `for_origin` char(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `qt` int(11) NOT NULL DEFAULT '0' COMMENT 'For which renewal',
+  `qt` int NOT NULL DEFAULT '0' COMMENT 'For which renewal',
   `use_before` date DEFAULT NULL COMMENT 'will be used only if the due date is before this date',
   `use_after` date DEFAULT NULL COMMENT 'will be used only if the due date is after this date',
   `cost` decimal(6,2) DEFAULT NULL,
@@ -784,31 +693,27 @@ CREATE TABLE `fees` (
   KEY `for_origin` (`for_origin`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `matter`
---
-
 DROP TABLE IF EXISTS `matter`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `matter` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `category_code` char(5) COLLATE utf8mb4_unicode_ci NOT NULL,
   `caseref` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Case reference for the database user. The references for the other actors (client, agent, etc.) are in the actor link table.',
   `country` char(2) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Country where the matter is filed',
   `origin` char(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Code of the regional system the patent originates from (mainly EP or WO)',
   `type_code` char(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `idx` tinyint(1) DEFAULT NULL COMMENT 'Increment this to differentiate multiple patents filed in the same country in the same family',
-  `suffix` varchar(16) COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (concat_ws('',concat_ws('-',concat_ws('/',`country`,`origin`),`type_code`),`idx`)) VIRTUAL,
+  `suffix` varchar(16) COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (concat_ws(_utf8mb4'',concat_ws(_utf8mb4'-',concat_ws(_utf8mb4'/',`country`,`origin`),`type_code`),`idx`)) VIRTUAL,
   `uid` varchar(45) COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (concat(`caseref`,`suffix`)) VIRTUAL,
-  `parent_id` int(10) unsigned DEFAULT NULL COMMENT 'Link to parent patent. Used to create a hierarchy',
-  `container_id` int(10) unsigned DEFAULT NULL COMMENT 'Identifies the container matter from which this matter gathers its shared data. If null, this matter is a container',
+  `parent_id` int unsigned DEFAULT NULL COMMENT 'Link to parent patent. Used to create a hierarchy',
+  `container_id` int unsigned DEFAULT NULL COMMENT 'Identifies the container matter from which this matter gathers its shared data. If null, this matter is a container',
   `responsible` char(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Database user responsible for the patent',
   `dead` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Indicates that the case is no longer supervised. Automatically set by "killer events" like "Abandoned"',
   `notes` text COLLATE utf8mb4_unicode_ci,
   `expire_date` date DEFAULT NULL,
-  `term_adjust` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Patent term adjustment in days. Essentially for US patents.',
+  `term_adjust` smallint NOT NULL DEFAULT '0' COMMENT 'Patent term adjustment in days. Essentially for US patents.',
+  `alt_ref` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Alternate reference',
   `creator` char(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'User who created the record',
   `updater` char(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'User who last modified the record',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -823,12 +728,13 @@ CREATE TABLE `matter` (
   KEY `parent` (`parent_id`),
   KEY `container` (`container_id`),
   KEY `responsible` (`responsible`),
-  CONSTRAINT `matter_category_code_foreign` FOREIGN KEY (`category_code`) REFERENCES `matter_category` (`code`) ON UPDATE CASCADE,
-  CONSTRAINT `matter_container_id_foreign` FOREIGN KEY (`container_id`) REFERENCES `matter` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `matter_country_foreign` FOREIGN KEY (`country`) REFERENCES `country` (`iso`) ON UPDATE CASCADE,
+  KEY `matter_alt_ref_index` (`alt_ref`),
+  CONSTRAINT `matter_category_code_foreign` FOREIGN KEY (`category_code`) REFERENCES `matter_category` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `matter_container_id_foreign` FOREIGN KEY (`container_id`) REFERENCES `matter` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `matter_country_foreign` FOREIGN KEY (`country`) REFERENCES `country` (`iso`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `matter_origin_foreign` FOREIGN KEY (`origin`) REFERENCES `country` (`iso`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `matter_parent_id_foreign` FOREIGN KEY (`parent_id`) REFERENCES `matter` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `matter_responsible_foreign` FOREIGN KEY (`responsible`) REFERENCES `actor` (`login`) ON UPDATE CASCADE,
+  CONSTRAINT `matter_parent_id_foreign` FOREIGN KEY (`parent_id`) REFERENCES `matter` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `matter_responsible_foreign` FOREIGN KEY (`responsible`) REFERENCES `actor` (`login`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `matter_type_code_foreign` FOREIGN KEY (`type_code`) REFERENCES `matter_type` (`code`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -841,8 +747,7 @@ CREATE TABLE `matter` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `matter_after_insert` AFTER INSERT ON `matter` FOR EACH ROW
-BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `matter_after_insert` AFTER INSERT ON `matter` FOR EACH ROW BEGIN
 	DECLARE vactorid, vshared INT DEFAULT NULL;
 	DECLARE vrole CHAR(5) DEFAULT NULL;
 	INSERT INTO event (code, matter_id, event_date, created_at, creator, updated_at) VALUES ('CRE', NEW.id, Now(), Now(), NEW.creator, Now());
@@ -868,8 +773,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `matter_before_update` BEFORE UPDATE ON `matter` FOR EACH ROW
-  BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `matter_before_update` BEFORE UPDATE ON `matter` FOR EACH ROW BEGIN
   	IF NEW.term_adjust != OLD.term_adjust THEN
   		SET NEW.expire_date = OLD.expire_date + INTERVAL (NEW.term_adjust - OLD.term_adjust) DAY;
   	END IF;
@@ -888,8 +792,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `matter_after_update` AFTER UPDATE ON `matter` FOR EACH ROW
-BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `matter_after_update` AFTER UPDATE ON `matter` FOR EACH ROW BEGIN
 	IF NEW.responsible != OLD.responsible THEN
 		UPDATE task JOIN event ON (task.trigger_id = event.id AND event.matter_id = NEW.id) SET task.assigned_to = NEW.responsible, task.updated_at = Now(), task.updater = NEW.updater
 		WHERE task.done = 0 AND task.assigned_to = OLD.responsible;
@@ -900,23 +803,18 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `matter_actor_lnk`
---
-
 DROP TABLE IF EXISTS `matter_actor_lnk`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `matter_actor_lnk` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `matter_id` int(10) unsigned NOT NULL,
-  `actor_id` int(10) unsigned NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `matter_id` int unsigned NOT NULL,
+  `actor_id` int unsigned NOT NULL,
   `display_order` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Order in which the actor should be displayed in a list of same type actors',
   `role` char(5) COLLATE utf8mb4_unicode_ci NOT NULL,
   `shared` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Copied from the actor_role.shareable field. Indicates that this information, stored in the "container", is shared among members of the same family',
   `actor_ref` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Actor''s reference',
-  `company_id` int(10) unsigned DEFAULT NULL COMMENT 'A copy of the actor''s company ID, if applicable, at the time the link was created.',
+  `company_id` int unsigned DEFAULT NULL COMMENT 'A copy of the actor''s company ID, if applicable, at the time the link was created.',
   `rate` decimal(5,2) DEFAULT '100.00' COMMENT 'For co-owners - rate of ownership, or inventors',
   `date` date DEFAULT NULL COMMENT 'A date field that can, for instance, contain the date of ownership acquisition',
   `creator` char(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -929,10 +827,10 @@ CREATE TABLE `matter_actor_lnk` (
   KEY `role_lnk` (`role`),
   KEY `actor_ref` (`actor_ref`),
   KEY `company_lnk` (`company_id`),
-  CONSTRAINT `matter_actor_lnk_actor_id_foreign` FOREIGN KEY (`actor_id`) REFERENCES `actor` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `matter_actor_lnk_company_id_foreign` FOREIGN KEY (`company_id`) REFERENCES `actor` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `matter_actor_lnk_actor_id_foreign` FOREIGN KEY (`actor_id`) REFERENCES `actor` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `matter_actor_lnk_company_id_foreign` FOREIGN KEY (`company_id`) REFERENCES `actor` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `matter_actor_lnk_matter_id_foreign` FOREIGN KEY (`matter_id`) REFERENCES `matter` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `matter_actor_lnk_role_foreign` FOREIGN KEY (`role`) REFERENCES `actor_role` (`code`) ON UPDATE CASCADE
+  CONSTRAINT `matter_actor_lnk_role_foreign` FOREIGN KEY (`role`) REFERENCES `actor_role` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -944,8 +842,7 @@ CREATE TABLE `matter_actor_lnk` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `malnk_after_insert` AFTER INSERT ON `matter_actor_lnk` FOR EACH ROW
-        BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `malnk_after_insert` AFTER INSERT ON `matter_actor_lnk` FOR EACH ROW BEGIN
           DECLARE vcli_ann_agt INT DEFAULT NULL;
 
           -- Delete renewal tasks when the special actor 'CLIENT' is set as the annuity agent
@@ -971,8 +868,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `matter_actor_lnk_AFTER_UPDATE` AFTER UPDATE ON `matter_actor_lnk` FOR EACH ROW
-BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `matter_actor_lnk_AFTER_UPDATE` AFTER UPDATE ON `matter_actor_lnk` FOR EACH ROW BEGIN
   DECLARE vcli_ann_agt INT DEFAULT NULL;
 
   -- Delete renewal tasks when the special actor 'CLIENT' is set as the annuity agent
@@ -989,11 +885,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Temporary view structure for view `matter_actors`
---
-
 DROP TABLE IF EXISTS `matter_actors`;
 /*!50001 DROP VIEW IF EXISTS `matter_actors`*/;
 SET @saved_cs_client     = @@character_set_client;
@@ -1022,11 +913,6 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `company`,
  1 AS `inherited`*/;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `matter_category`
---
-
 DROP TABLE IF EXISTS `matter_category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -1041,14 +927,9 @@ CREATE TABLE `matter_category` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`code`),
   KEY `display_with` (`display_with`),
-  CONSTRAINT `matter_category_display_with_foreign` FOREIGN KEY (`display_with`) REFERENCES `matter_category` (`code`) ON UPDATE CASCADE
+  CONSTRAINT `matter_category_display_with_foreign` FOREIGN KEY (`display_with`) REFERENCES `matter_category` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Temporary view structure for view `matter_classifiers`
---
-
 DROP TABLE IF EXISTS `matter_classifiers`;
 /*!50001 DROP VIEW IF EXISTS `matter_classifiers`*/;
 SET @saved_cs_client     = @@character_set_client;
@@ -1064,11 +945,6 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `lnk_matter_id`,
  1 AS `display_order`*/;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `matter_type`
---
-
 DROP TABLE IF EXISTS `matter_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -1082,26 +958,16 @@ CREATE TABLE `matter_type` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `migrations`
---
-
 DROP TABLE IF EXISTS `migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `migrations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int(11) NOT NULL,
+  `batch` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `password_resets`
---
-
 DROP TABLE IF EXISTS `password_resets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -1112,11 +978,6 @@ CREATE TABLE `password_resets` (
   KEY `password_resets_email_index` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Temporary view structure for view `renewal_list`
---
-
 DROP TABLE IF EXISTS `renewal_list`;
 /*!50001 DROP VIEW IF EXISTS `renewal_list`*/;
 SET @saved_cs_client     = @@character_set_client;
@@ -1161,26 +1022,21 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `grace_period`,
  1 AS `invoice_step`*/;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `renewals_logs`
---
-
 DROP TABLE IF EXISTS `renewals_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `renewals_logs` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `task_id` int(10) unsigned NOT NULL,
-  `job_id` int(10) unsigned NOT NULL,
-  `from_step` tinyint(4) DEFAULT NULL COMMENT 'Step before the job',
-  `to_step` tinyint(4) DEFAULT NULL COMMENT 'Step after the job',
-  `from_grace` tinyint(4) DEFAULT NULL COMMENT 'Grace state before the job',
-  `to_grace` tinyint(4) DEFAULT NULL COMMENT 'Grace state after the job',
-  `from_invoice` tinyint(4) DEFAULT NULL COMMENT 'Invoice state before the job',
-  `to_invoice` tinyint(4) DEFAULT NULL COMMENT 'Invoice state after the job',
-  `from_done` tinyint(4) DEFAULT NULL COMMENT 'Done state before the job',
-  `to_done` tinyint(4) DEFAULT NULL COMMENT 'Done state after the job',
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `task_id` int unsigned NOT NULL,
+  `job_id` int unsigned NOT NULL,
+  `from_step` tinyint DEFAULT NULL COMMENT 'Step before the job',
+  `to_step` tinyint DEFAULT NULL COMMENT 'Step after the job',
+  `from_grace` tinyint DEFAULT NULL COMMENT 'Grace state before the job',
+  `to_grace` tinyint DEFAULT NULL COMMENT 'Grace state after the job',
+  `from_invoice` tinyint DEFAULT NULL COMMENT 'Invoice state before the job',
+  `to_invoice` tinyint DEFAULT NULL COMMENT 'Invoice state after the job',
+  `from_done` tinyint DEFAULT NULL COMMENT 'Done state before the job',
+  `to_done` tinyint DEFAULT NULL COMMENT 'Done state after the job',
   `creator` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -1188,32 +1044,27 @@ CREATE TABLE `renewals_logs` (
   KEY `renewals_logs_task_id_index` (`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `task`
---
-
 DROP TABLE IF EXISTS `task`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `task` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `trigger_id` int(10) unsigned NOT NULL COMMENT 'Link to generating event',
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `trigger_id` int unsigned NOT NULL COMMENT 'Link to generating event',
   `code` char(5) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Task code. Link to event_names table',
   `due_date` date NOT NULL,
   `assigned_to` char(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'User responsible for the task (if not the user responsible for the case)',
   `detail` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Numbers or short comments',
   `done` tinyint(1) DEFAULT '0' COMMENT 'Set to 1 when task done',
   `done_date` date DEFAULT NULL COMMENT 'Optional task completion date',
-  `rule_used` int(10) unsigned DEFAULT NULL COMMENT 'ID of the rule that was used to set this task',
+  `rule_used` int unsigned DEFAULT NULL COMMENT 'ID of the rule that was used to set this task',
   `time_spent` time DEFAULT NULL COMMENT 'Time spent by attorney on task',
   `notes` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cost` decimal(6,2) DEFAULT NULL COMMENT 'The estimated or invoiced fee amount',
   `fee` decimal(6,2) DEFAULT NULL,
   `currency` char(3) COLLATE utf8mb4_unicode_ci DEFAULT 'EUR',
-  `step` tinyint(4) NOT NULL DEFAULT '0',
-  `invoice_step` tinyint(4) NOT NULL DEFAULT '0',
-  `grace_period` tinyint(4) NOT NULL DEFAULT '0',
+  `step` tinyint NOT NULL DEFAULT '0',
+  `invoice_step` tinyint NOT NULL DEFAULT '0',
+  `grace_period` tinyint NOT NULL DEFAULT '0',
   `creator` char(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `updater` char(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1226,7 +1077,7 @@ CREATE TABLE `task` (
   KEY `detail` (`detail`),
   KEY `task_rule` (`rule_used`),
   CONSTRAINT `task_assigned_to_foreign` FOREIGN KEY (`assigned_to`) REFERENCES `actor` (`login`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `task_code_foreign` FOREIGN KEY (`code`) REFERENCES `event_name` (`code`) ON UPDATE CASCADE,
+  CONSTRAINT `task_code_foreign` FOREIGN KEY (`code`) REFERENCES `event_name` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `task_rule_used_foreign` FOREIGN KEY (`rule_used`) REFERENCES `task_rules` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `task_trigger_id_foreign` FOREIGN KEY (`trigger_id`) REFERENCES `event` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1240,8 +1091,7 @@ CREATE TABLE `task` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `task_before_insert` BEFORE INSERT ON task FOR EACH ROW
-  BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `task_before_insert` BEFORE INSERT ON `task` FOR EACH ROW BEGIN
   	DECLARE vflag BOOLEAN;
   	DECLARE vresp CHAR(16);
   	SELECT use_matter_resp INTO vflag FROM event_name WHERE event_name.code=NEW.code;
@@ -1270,8 +1120,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW
-BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW BEGIN
   IF NEW.done_date IS NOT NULL AND OLD.done_date IS NULL AND OLD.done = 0 THEN
     SET NEW.done = 1;
   END IF;
@@ -1282,7 +1131,7 @@ BEGIN
     SET NEW.done_date = Least(OLD.due_date, Now());
   END IF;
   IF NEW.done = 0 AND OLD.done = 1 AND OLD.done_date IS NOT NULL THEN
-    SET NEW.done_date = NULL;
+    SET NEW.done_date = NULL, NEW.step = 0, NEW.invoice_step = 0, NEW.grace_period = 0;
   END IF;
 END */;;
 DELIMITER ;
@@ -1290,11 +1139,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Temporary view structure for view `task_list`
---
-
 DROP TABLE IF EXISTS `task_list`;
 /*!50001 DROP VIEW IF EXISTS `task_list`*/;
 SET @saved_cs_client     = @@character_set_client;
@@ -1322,16 +1166,11 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `rule_used`,
  1 AS `dead`*/;
 SET character_set_client = @saved_cs_client;
-
---
--- Table structure for table `task_rules`
---
-
 DROP TABLE IF EXISTS `task_rules`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `task_rules` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `active` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Indicates whether the rule should be used',
   `task` char(5) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Code of task that is created (or cleared)',
   `trigger_event` char(5) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Event that generates this task',
@@ -1342,14 +1181,13 @@ CREATE TABLE `task_rules` (
   `for_origin` char(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `for_type` char(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Type to which rule is applicable. If null, rule applies to all types',
   `detail` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Additional information on task',
-  `days` int(11) NOT NULL DEFAULT '0' COMMENT 'For task deadline calculation',
-  `months` int(11) NOT NULL DEFAULT '0' COMMENT 'For task deadline calculation',
-  `years` int(11) NOT NULL DEFAULT '0' COMMENT 'For task deadline calculation',
+  `days` int NOT NULL DEFAULT '0' COMMENT 'For task deadline calculation',
+  `months` int NOT NULL DEFAULT '0' COMMENT 'For task deadline calculation',
+  `years` int NOT NULL DEFAULT '0' COMMENT 'For task deadline calculation',
   `recurring` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'If non zero, indicates the recurring period in months. Mainly for annuities',
   `end_of_month` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'The deadline is at the end of the month. Mainly for annuities',
   `abort_on` char(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Task won''t be created if this event exists',
   `condition_event` char(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Task will only be created if this event exists',
-  `use_parent` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'The due date is calculated from the same event in the top parent (eg. for calculating annuities for a divisional)',
   `use_priority` tinyint(1) NOT NULL DEFAULT '0',
   `use_before` date DEFAULT NULL COMMENT 'Task will be created only if the base event is before this date',
   `use_after` date DEFAULT NULL COMMENT 'Task will be created only if the base event is after this date',
@@ -1362,7 +1200,7 @@ CREATE TABLE `task_rules` (
   `updater` char(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `uid` varchar(32) COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (md5(concat(`task`,`trigger_event`,`clear_task`,`delete_task`,`for_category`,ifnull(`for_country`,'c'),ifnull(`for_origin`,'o'),ifnull(`for_type`,'t'),`days`,`months`,`years`,`recurring`,ifnull(`abort_on`,'a'),ifnull(`condition_event`,'c'),`use_parent`,`use_priority`,ifnull(`detail`,'d')))) VIRTUAL,
+  `uid` varchar(32) COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (md5(concat(`task`,`trigger_event`,`clear_task`,`delete_task`,`for_category`,ifnull(`for_country`,_utf8mb4'c'),ifnull(`for_origin`,_utf8mb4'o'),ifnull(`for_type`,_utf8mb4't'),`days`,`months`,`years`,`recurring`,ifnull(`abort_on`,_utf8mb4'a'),ifnull(`condition_event`,_utf8mb4'c'),`use_priority`,ifnull(`detail`,_utf8mb4'd')))) VIRTUAL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `task_rules_uid_unique` (`uid`),
   KEY `trigger_event` (`trigger_event`,`for_country`),
@@ -1372,13 +1210,13 @@ CREATE TABLE `task_rules` (
   KEY `for_origin` (`for_origin`),
   KEY `abort_on` (`abort_on`),
   KEY `condition` (`condition_event`),
-  CONSTRAINT `task_rules_abort_on_foreign` FOREIGN KEY (`abort_on`) REFERENCES `event_name` (`code`) ON UPDATE CASCADE,
-  CONSTRAINT `task_rules_condition_event_foreign` FOREIGN KEY (`condition_event`) REFERENCES `event_name` (`code`) ON UPDATE CASCADE,
-  CONSTRAINT `task_rules_for_category_foreign` FOREIGN KEY (`for_category`) REFERENCES `matter_category` (`code`) ON UPDATE CASCADE,
-  CONSTRAINT `task_rules_for_country_foreign` FOREIGN KEY (`for_country`) REFERENCES `country` (`iso`) ON UPDATE CASCADE,
-  CONSTRAINT `task_rules_for_origin_foreign` FOREIGN KEY (`for_origin`) REFERENCES `country` (`iso`) ON UPDATE CASCADE,
-  CONSTRAINT `task_rules_task_foreign` FOREIGN KEY (`task`) REFERENCES `event_name` (`code`) ON UPDATE CASCADE,
-  CONSTRAINT `task_rules_trigger_event_foreign` FOREIGN KEY (`trigger_event`) REFERENCES `event_name` (`code`) ON UPDATE CASCADE
+  CONSTRAINT `task_rules_abort_on_foreign` FOREIGN KEY (`abort_on`) REFERENCES `event_name` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `task_rules_condition_event_foreign` FOREIGN KEY (`condition_event`) REFERENCES `event_name` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `task_rules_for_category_foreign` FOREIGN KEY (`for_category`) REFERENCES `matter_category` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `task_rules_for_country_foreign` FOREIGN KEY (`for_country`) REFERENCES `country` (`iso`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `task_rules_for_origin_foreign` FOREIGN KEY (`for_origin`) REFERENCES `country` (`iso`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `task_rules_task_foreign` FOREIGN KEY (`task`) REFERENCES `event_name` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `task_rules_trigger_event_foreign` FOREIGN KEY (`trigger_event`) REFERENCES `event_name` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -1390,8 +1228,7 @@ CREATE TABLE `task_rules` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `trules_after_update` AFTER UPDATE ON `task_rules` FOR EACH ROW
-BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `trules_after_update` AFTER UPDATE ON `task_rules` FOR EACH ROW BEGIN
 	IF (NEW.fee != OLD.fee OR NEW.cost != OLD.cost) THEN
 		UPDATE task SET fee=NEW.fee, cost=NEW.cost WHERE rule_used=NEW.id AND done=0;
 	END IF;
@@ -1401,16 +1238,11 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `template_classes`
---
-
 DROP TABLE IF EXISTS `template_classes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `template_classes` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(55) COLLATE utf8mb4_unicode_ci NOT NULL,
   `notes` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `default_role` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Role of actor who is the receiver of the document',
@@ -1419,21 +1251,17 @@ CREATE TABLE `template_classes` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `template_classes_name_unique` (`name`),
   KEY `template_classes_default_role_foreign` (`default_role`),
   CONSTRAINT `template_classes_default_role_foreign` FOREIGN KEY (`default_role`) REFERENCES `actor_role` (`code`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `template_members`
---
-
 DROP TABLE IF EXISTS `template_members`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `template_members` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `class_id` int(10) unsigned NOT NULL COMMENT 'The class which allow to link the template to an event or a task',
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `class_id` int unsigned NOT NULL COMMENT 'The class which allow to link the template to an event or a task',
   `language` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Code of the language for the document',
   `style` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Help to distinguish documents in a same class. Free text',
   `category` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Help to classify documents. Free text',
@@ -1450,11 +1278,6 @@ CREATE TABLE `template_members` (
   CONSTRAINT `template_members_class_id_foreign` FOREIGN KEY (`class_id`) REFERENCES `template_classes` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Temporary view structure for view `users`
---
-
 DROP TABLE IF EXISTS `users`;
 /*!50001 DROP VIEW IF EXISTS `users`*/;
 SET @saved_cs_client     = @@character_set_client;
@@ -1475,35 +1298,6 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `updater`,
  1 AS `remember_token`*/;
 SET character_set_client = @saved_cs_client;
-
---
--- Dumping events for database 'phpip_tracker'
---
-/*!50106 SET @save_time_zone= @@TIME_ZONE */ ;
-/*!50106 DROP EVENT IF EXISTS `kill_expired` */;
-DELIMITER ;;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;;
-/*!50003 SET character_set_client  = utf8mb4 */ ;;
-/*!50003 SET character_set_results = utf8mb4 */ ;;
-/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;;
-/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;;
-/*!50003 SET @saved_time_zone      = @@time_zone */ ;;
-/*!50003 SET time_zone             = 'SYSTEM' */ ;;
-/*!50106 CREATE*/ /*!50117 DEFINER=`phpip`@`localhost`*/ /*!50106 EVENT `kill_expired` ON SCHEDULE EVERY 1 WEEK STARTS '2017-01-31 20:23:25' ON COMPLETION PRESERVE DISABLE ON SLAVE COMMENT 'Updates the expired status of matters' DO CALL update_expired() */ ;;
-/*!50003 SET time_zone             = @saved_time_zone */ ;;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;;
-/*!50003 SET character_set_results = @saved_cs_results */ ;;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;;
-DELIMITER ;
-/*!50106 SET TIME_ZONE= @save_time_zone */ ;
-
---
--- Dumping routines for database 'phpip_tracker'
---
 /*!50003 DROP FUNCTION IF EXISTS `actor_list` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1514,7 +1308,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`localhost` FUNCTION `actor_list`(mid INT, arole TEXT) RETURNS text CHARSET utf8
+CREATE DEFINER=`phpip`@`%` FUNCTION `actor_list`(mid INT, arole TEXT) RETURNS text CHARSET utf8mb3
 BEGIN
           	DECLARE alist TEXT;
             SELECT GROUP_CONCAT(actor.name ORDER BY mal.display_order) INTO alist FROM matter_actor_lnk mal
@@ -1537,7 +1331,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`localhost` FUNCTION `lowerword`( str TEXT, word VARCHAR(5) ) RETURNS text CHARSET utf8
+CREATE DEFINER=`phpip`@`%` FUNCTION `lowerword`( str TEXT, word VARCHAR(5) ) RETURNS text CHARSET utf8mb3
 BEGIN
             DECLARE i INT DEFAULT 1;
             DECLARE loc INT;
@@ -1566,7 +1360,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`localhost` FUNCTION `matter_status`(mid INT) RETURNS text CHARSET utf8
+CREATE DEFINER=`phpip`@`%` FUNCTION `matter_status`(mid INT) RETURNS text CHARSET utf8mb3
 BEGIN
           	DECLARE mstatus TEXT;
             SELECT CONCAT_WS(': ', event_name.name, status.event_date) INTO mstatus FROM `event` status
@@ -1590,7 +1384,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`localhost` FUNCTION `tcase`( str TEXT) RETURNS text CHARSET utf8
+CREATE DEFINER=`phpip`@`%` FUNCTION `tcase`( str TEXT) RETURNS text CHARSET utf8mb3
 BEGIN
             DECLARE c CHAR(1);
             DECLARE s TEXT;
@@ -1645,51 +1439,54 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`localhost` PROCEDURE `insert_recurring_renewals`(
-			IN P_trigger_id INT,
-    	IN P_rule_id INT,
-    	IN P_base_date DATE,
-    	IN P_responsible CHAR(16),
-    	IN P_user CHAR(16)
-		)
+CREATE DEFINER=`phpip`@`%` PROCEDURE `insert_recurring_renewals`(
+  	IN P_trigger_id INT,
+  	IN P_rule_id INT,
+  	IN P_base_date DATE,
+  	IN P_responsible CHAR(16),
+  	IN P_user CHAR(16)
+  )
 proc: BEGIN
-	DECLARE FirstRenewal, RYear INT;
-  DECLARE StartDate, DueDate, ExpiryDate DATE DEFAULT NULL;
-	DECLARE Origin CHAR(2) DEFAULT NULL;
+  	DECLARE FirstRenewal, RYear INT;
+  	DECLARE BaseDate, StartDate, DueDate, ExpiryDate DATE DEFAULT NULL;
+  	DECLARE Origin CHAR(2) DEFAULT NULL;
 
-  SELECT estart.event_date, country.renewal_first, matter.expire_date, matter.origin INTO StartDate, FirstRenewal, ExpiryDate, Origin
-	  FROM country
-	  JOIN matter ON country.iso = matter.country
-	  JOIN event estart ON estart.matter_id = matter.id AND estart.id = P_trigger_id
-	  JOIN event ebase ON ebase.matter_id = matter.id
-	  WHERE country.renewal_start = estart.code
-	  AND country.renewal_base = ebase.code;
+  	SELECT ebase.event_date, estart.event_date, country.renewal_first, matter.expire_date, matter.origin INTO BaseDate, StartDate, FirstRenewal, ExpiryDate, Origin
+  		FROM country
+  		JOIN matter ON country.iso = matter.country
+  		JOIN event estart ON estart.matter_id = matter.id AND estart.id = P_trigger_id
+  		JOIN event ebase ON ebase.matter_id = matter.id
+  		WHERE country.renewal_start = estart.code
+  		AND country.renewal_base = ebase.code;
 
-	-- Leave if the country has no parameters (country dealt with specifically in task_rules)
-  IF StartDate IS NULL THEN
-		LEAVE proc;
-	END IF;
-
-	SET RYear = FirstRenewal;
-  renloop: WHILE RYear <= 20 DO
-		SET DueDate = P_base_date + INTERVAL RYear - 1 YEAR;
-		IF DueDate > ExpiryDate THEN
-			LEAVE proc;
-		END IF;
-	  IF DueDate < StartDate THEN
-			SET DueDate = StartDate;
-		END IF;
-		-- Ignore renewals in the past beyond the 6-months grace period unless PCT national phase
-	  IF (DueDate < Now() - INTERVAL 6 MONTH AND Origin != 'WO') OR (DueDate < (Now() - INTERVAL 19 MONTH) AND Origin = 'WO') THEN
-			SET RYear = RYear + 1;
-			ITERATE renloop;
-		END IF;
-	  INSERT INTO task (trigger_id, code, due_date, detail, rule_used, assigned_to, creator, created_at, updated_at)
-		VALUES (P_trigger_id, 'REN', DueDate, RYear, P_rule_id, P_responsible, P_user, Now(), Now());
-
-		SET RYear = RYear + 1;
-  END WHILE;
-END proc ;;
+  	-- Leave if the country has no parameters (country dealt with specifically in task_rules)
+  	IF StartDate IS NULL THEN
+  		LEAVE proc;
+  	END IF;
+  	SET BaseDate = LEAST(BaseDate, P_base_date);
+  	SET RYear = ABS(FirstRenewal);
+  	renloop: WHILE RYear <= 20 DO
+      IF (FirstRenewal > 0) THEN
+  		  SET DueDate = BaseDate + INTERVAL RYear - 1 YEAR;
+      ELSE
+        SET DueDate = StartDate + INTERVAL RYear - 1 YEAR;
+      END IF;
+  		IF DueDate > ExpiryDate THEN
+  			LEAVE proc;
+  		END IF;
+  		IF DueDate < StartDate THEN
+  			SET DueDate = StartDate;
+  		END IF;
+  		-- Ignore renewals in the past beyond the 6-months grace period unless PCT national phase
+  		IF (DueDate < Now() - INTERVAL 6 MONTH AND Origin != 'WO') OR (DueDate < (Now() - INTERVAL 19 MONTH) AND Origin = 'WO') THEN
+  			SET RYear = RYear + 1;
+  			ITERATE renloop;
+  		END IF;
+  		INSERT INTO task (trigger_id, code, due_date, detail, rule_used, assigned_to, creator, created_at, updated_at)
+  		VALUES (P_trigger_id, 'REN', DueDate, RYear, P_rule_id, P_responsible, P_user, Now(), Now());
+  		SET RYear = RYear + 1;
+  	END WHILE;
+  END proc ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1705,7 +1502,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`localhost` PROCEDURE `recalculate_tasks`(
+CREATE DEFINER=`phpip`@`%` PROCEDURE `recalculate_tasks`(
 			IN P_matter_id INT,
 			IN P_event_code CHAR(5),
 			IN P_user CHAR(16)
@@ -1713,11 +1510,11 @@ CREATE DEFINER=`phpip`@`localhost` PROCEDURE `recalculate_tasks`(
 proc: BEGIN
 	DECLARE e_event_date, DueDate, BaseDate DATE DEFAULT NULL;
 	DECLARE t_id, e_id, tr_days, tr_months, tr_years, tr_recurring, m_pta INT DEFAULT NULL;
-	DECLARE Done, tr_end_of_month, tr_use_parent, tr_use_priority BOOLEAN DEFAULT 0;
-	DECLARE m_category, m_country CHAR(5) DEFAULT NULL;
+	DECLARE Done, tr_end_of_month, tr_use_priority BOOLEAN DEFAULT 0;
+	DECLARE m_category, m_country, m_type CHAR(5) DEFAULT NULL;
 
 	DECLARE cur_rule CURSOR FOR
-		SELECT task.id, days, months, years, recurring, end_of_month, use_parent, use_priority
+		SELECT task.id, days, months, years, recurring, end_of_month, use_priority
 		FROM task_rules
 		JOIN task ON task.rule_used = task_rules.id
 		WHERE task.trigger_id = e_id;
@@ -1725,37 +1522,29 @@ proc: BEGIN
 	DECLARE CONTINUE HANDLER FOR NOT FOUND SET Done = 1;
 
 	SELECT id, event_date INTO e_id, e_event_date FROM event_lnk_list WHERE matter_id = P_matter_id AND code = P_event_code ORDER BY event_date LIMIT 1;
-	-- Leave if matter does not have the required event
+	
 	IF e_id IS NULL THEN
 		LEAVE proc;
 	END IF;
 
 	OPEN cur_rule;
 	update_tasks: LOOP
-		FETCH cur_rule INTO t_id, tr_days, tr_months, tr_years, tr_recurring, tr_end_of_month, tr_use_parent, tr_use_priority;
+		FETCH cur_rule INTO t_id, tr_days, tr_months, tr_years, tr_recurring, tr_end_of_month, tr_use_priority;
 
 		IF Done THEN
 			LEAVE update_tasks;
 		END IF;
 
 		IF tr_recurring = 1 THEN
-			-- Recurring tasks are not managed
 			ITERATE update_tasks;
 		END IF;
 
-    SET BaseDate = e_event_date;
+        SET BaseDate = e_event_date;
 
-		-- Use parent filing date for task deadline calculation, if PFIL event exists
-		IF tr_use_parent THEN
-			SELECT CAST(IFNULL(min(event_date), e_event_date) AS DATE) INTO BaseDate FROM event_lnk_list WHERE code = 'PFIL' AND matter_id = P_matter_id;
-		END IF;
-
-		-- Use earliest priority date for task deadline calculation, if a PRI event exists
 		IF tr_use_priority THEN
 			SELECT CAST(IFNULL(min(event_date), e_event_date) AS DATE) INTO BaseDate FROM event_lnk_list WHERE code = 'PRI' AND matter_id = P_matter_id;
 		END IF;
-
-		-- Calculate the deadline
+		
 		SET DueDate = BaseDate + INTERVAL tr_days DAY + INTERVAL tr_months MONTH + INTERVAL tr_years YEAR;
 		IF tr_end_of_month THEN
 			SET DueDate = LAST_DAY(DueDate);
@@ -1765,17 +1554,18 @@ proc: BEGIN
 	END LOOP update_tasks;
 	CLOSE cur_rule;
 
-	-- Recalculate expiry
-	IF P_event_code IN ('FIL', 'PFIL') THEN
-		SELECT category_code, term_adjust, country INTO m_category, m_pta, m_country FROM matter WHERE matter.id = P_matter_id;
+	IF P_event_code = 'FIL' THEN
+		SELECT category_code, term_adjust, country, type_code INTO m_category, m_pta, m_country, m_type FROM matter WHERE matter.id = P_matter_id;
 		SELECT months, years INTO tr_months, tr_years FROM task_rules
 			WHERE task = 'EXP'
 			AND for_category = m_category
-			AND IF (for_country IS NOT NULL,
+			AND IF (for_country IS NOT NULL AND for_type IS NULL,
 				for_country = m_country,
 				concat(task, trigger_event) NOT IN (SELECT concat(task, trigger_event) FROM task_rules tr WHERE (tr.for_country, tr.for_category) = (m_country, m_category))
+			) AND IF (for_type IS NOT NULL AND for_country IS NULL,
+				for_type = m_type,
+				concat(task, trigger_event) NOT IN (SELECT concat(task, trigger_event) FROM task_rules tr WHERE (tr.for_type, tr.for_category) = (m_type, m_category))
 			);
-		SELECT CAST(IFNULL(min(event_date), e_event_date) AS DATE) INTO BaseDate FROM event_lnk_list WHERE code = 'PFIL' AND matter_id = P_matter_id;
 		SET DueDate = BaseDate + INTERVAL m_pta DAY + INTERVAL tr_months MONTH + INTERVAL tr_years YEAR;
 		UPDATE matter SET expire_date = DueDate WHERE matter.id = P_matter_id;
 	END IF;
@@ -1795,20 +1585,20 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`localhost` PROCEDURE `recreate_tasks`(
+CREATE DEFINER=`phpip`@`%` PROCEDURE `recreate_tasks`(
 			IN P_trigger_id INT,
 			IN P_user CHAR(16)
 		)
 proc: BEGIN
 	DECLARE e_event_date, DueDate, BaseDate, m_expiry DATE DEFAULT NULL;
-	DECLARE e_matter_id, tr_id, tr_days, tr_months, tr_years, m_pta, lnk_matter_id, CliAnnAgt INT DEFAULT NULL;
+	DECLARE e_matter_id, tr_id, tr_days, tr_months, tr_years, m_pta, lnk_matter_id, CliAnnAgt, m_parent_id INT DEFAULT NULL;
 	DECLARE e_code, tr_task, m_country, m_type_code, tr_currency, m_origin CHAR(5) DEFAULT NULL;
 	DECLARE tr_detail, tr_responsible VARCHAR(160) DEFAULT NULL;
-	DECLARE Done, tr_clear_task, tr_delete_task, tr_end_of_month, tr_recurring, tr_use_parent, tr_use_priority, m_dead BOOLEAN DEFAULT 0;
+	DECLARE Done, tr_clear_task, tr_delete_task, tr_end_of_month, tr_recurring, tr_use_priority, m_dead BOOLEAN DEFAULT 0;
 	DECLARE tr_cost, tr_fee DECIMAL(6,2) DEFAULT null;
 
 	DECLARE cur_rule CURSOR FOR
-		SELECT task_rules.id, task, clear_task, delete_task, detail, days, months, years, recurring, end_of_month, use_parent, use_priority, cost, fee, currency, task_rules.responsible
+		SELECT task_rules.id, task, clear_task, delete_task, detail, days, months, years, recurring, end_of_month, use_priority, cost, fee, currency, task_rules.responsible
 		FROM task_rules
 		JOIN event_name ON event_name.code = task_rules.task
 		JOIN matter ON matter.id = e_matter_id
@@ -1840,7 +1630,7 @@ proc: BEGIN
 	-- Delete the tasks attached to the event by an existing rule
 	DELETE FROM task WHERE rule_used IS NOT NULL AND trigger_id = P_trigger_id;
 
-  SELECT e.matter_id, e.event_date, e.code, m.country, m.type_code, m.dead, m.expire_date, m.term_adjust, m.origin INTO e_matter_id, e_event_date, e_code, m_country, m_type_code, m_dead, m_expiry, m_pta, m_origin
+  SELECT e.matter_id, e.event_date, e.code, m.country, m.type_code, m.dead, m.expire_date, m.term_adjust, m.origin, m.parent_id INTO e_matter_id, e_event_date, e_code, m_country, m_type_code, m_dead, m_expiry, m_pta, m_origin, m_parent_id
 	FROM event e
 	JOIN matter m ON m.id = e.matter_id
 	WHERE e.id = P_trigger_id;
@@ -1855,7 +1645,7 @@ proc: BEGIN
 	OPEN cur_rule;
 	  create_tasks: LOOP
 			SET BaseDate = e_event_date;
-	    FETCH cur_rule INTO tr_id, tr_task, tr_clear_task, tr_delete_task, tr_detail, tr_days, tr_months, tr_years, tr_recurring, tr_end_of_month, tr_use_parent, tr_use_priority, tr_cost, tr_fee, tr_currency, tr_responsible;
+	    FETCH cur_rule INTO tr_id, tr_task, tr_clear_task, tr_delete_task, tr_detail, tr_days, tr_months, tr_years, tr_recurring, tr_end_of_month, tr_use_priority, tr_cost, tr_fee, tr_currency, tr_responsible;
 
 			IF Done THEN
 	      LEAVE create_tasks;
@@ -1869,11 +1659,6 @@ proc: BEGIN
 			-- Skip recurring renewal tasks if country table has no correspondence
 			IF tr_task = 'REN' AND tr_recurring = 1 AND NOT EXISTS (SELECT 1 FROM country WHERE iso = m_country and renewal_start = e_code) THEN
 				ITERATE create_tasks;
-			END IF;
-
-			-- Use earliest parent filing date for task deadline calculation, if PFIL event exists
-			IF tr_use_parent THEN
-				SELECT CAST(IFNULL(min(event_date), e_event_date) AS DATE) INTO BaseDate FROM event_lnk_list WHERE code = 'PFIL' AND matter_id = e_matter_id;
 			END IF;
 
 			-- Use earliest priority date for task deadline calculation, if a PRI event exists
@@ -1904,7 +1689,7 @@ proc: BEGIN
 
 
 			-- Deadline for renewals that have become due in a parent case when filing a divisional (EP 4-months rule)
-			IF tr_task = 'REN' AND EXISTS (SELECT 1 FROM event WHERE code = 'PFIL' AND matter_id = e_matter_id) AND DueDate < e_event_date THEN
+			IF tr_task = 'REN' AND m_parent_id IS NOT NULL AND DueDate < e_event_date THEN
 				SET DueDate = e_event_date + INTERVAL 4 MONTH;
 			END IF;
 
@@ -1945,8 +1730,8 @@ proc: BEGIN
 		CLOSE cur_linked;
   END IF;
 
-	-- Recalculate tasks based on the priority date or a parent case upon inserting a new priority claim or a parent filed event
-  IF e_code IN ('PRI', 'PFIL') THEN
+	-- Recalculate tasks based on the priority date upon inserting a new priority claim
+  IF e_code = 'PRI' THEN
     CALL recalculate_tasks(e_matter_id, 'FIL', P_user);
   END IF;
 
@@ -1971,7 +1756,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`localhost` PROCEDURE `update_expired`()
+CREATE DEFINER=`phpip`@`%` PROCEDURE `update_expired`()
 BEGIN
   	DECLARE vmatter_id INTEGER;
       DECLARE vexpire_date DATE;
@@ -1995,11 +1780,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Final view structure for view `event_lnk_list`
---
-
 /*!50001 DROP VIEW IF EXISTS `event_lnk_list`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -2008,16 +1788,11 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`phpip`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `event_lnk_list` AS select `event`.`id` AS `id`,`event`.`code` AS `code`,`event`.`matter_id` AS `matter_id`,if(isnull(`event`.`alt_matter_id`),`event`.`event_date`,`lnk`.`event_date`) AS `event_date`,if(isnull(`event`.`alt_matter_id`),`event`.`detail`,`lnk`.`detail`) AS `detail`,`matter`.`country` AS `country` from ((`event` left join `event` `lnk` on(((`event`.`alt_matter_id` = `lnk`.`matter_id`) and (`lnk`.`code` = 'FIL')))) left join `matter` on((`event`.`alt_matter_id` = `matter`.`id`))) */;
+/*!50013 DEFINER=`phpip`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `event_lnk_list` AS select `event`.`id` AS `id`,`event`.`code` AS `code`,`event`.`matter_id` AS `matter_id`,if((`event`.`alt_matter_id` is null),`event`.`event_date`,`lnk`.`event_date`) AS `event_date`,if((`event`.`alt_matter_id` is null),`event`.`detail`,`lnk`.`detail`) AS `detail`,`matter`.`country` AS `country` from ((`event` left join `event` `lnk` on(((`event`.`alt_matter_id` = `lnk`.`matter_id`) and (`lnk`.`code` = 'FIL')))) left join `matter` on((`event`.`alt_matter_id` = `matter`.`id`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `matter_actors`
---
-
 /*!50001 DROP VIEW IF EXISTS `matter_actors`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -2026,16 +1801,11 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`phpip`@`localhost` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`phpip`@`%` SQL SECURITY DEFINER */
 /*!50001 VIEW `matter_actors` AS select `pivot`.`id` AS `id`,`actor`.`id` AS `actor_id`,ifnull(`actor`.`display_name`,`actor`.`name`) AS `display_name`,`actor`.`name` AS `name`,`actor`.`first_name` AS `first_name`,`actor`.`email` AS `email`,`pivot`.`display_order` AS `display_order`,`pivot`.`role` AS `role_code`,`actor_role`.`name` AS `role_name`,`actor_role`.`shareable` AS `shareable`,`actor_role`.`show_ref` AS `show_ref`,`actor_role`.`show_company` AS `show_company`,`actor_role`.`show_rate` AS `show_rate`,`actor_role`.`show_date` AS `show_date`,`matter`.`id` AS `matter_id`,`actor`.`warn` AS `warn`,`pivot`.`actor_ref` AS `actor_ref`,`pivot`.`date` AS `date`,`pivot`.`rate` AS `rate`,`pivot`.`shared` AS `shared`,`co`.`name` AS `company`,if((`pivot`.`matter_id` = `matter`.`container_id`),1,0) AS `inherited` from ((((`matter_actor_lnk` `pivot` join `matter` on(((`pivot`.`matter_id` = `matter`.`id`) or ((`pivot`.`shared` = 1) and (`pivot`.`matter_id` = `matter`.`container_id`))))) join `actor` on((`pivot`.`actor_id` = `actor`.`id`))) left join `actor` `co` on((`co`.`id` = `pivot`.`company_id`))) join `actor_role` on((`pivot`.`role` = `actor_role`.`code`))) order by `actor_role`.`display_order`,`pivot`.`display_order` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `matter_classifiers`
---
-
 /*!50001 DROP VIEW IF EXISTS `matter_classifiers`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -2044,16 +1814,11 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`phpip`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `matter_classifiers` AS select `classifier`.`id` AS `id`,`matter`.`id` AS `matter_id`,`classifier`.`type_code` AS `type_code`,`classifier_type`.`type` AS `type_name`,`classifier_type`.`main_display` AS `main_display`,if(isnull(`classifier`.`value_id`),`classifier`.`value`,`classifier_value`.`value`) AS `value`,`classifier`.`url` AS `url`,`classifier`.`lnk_matter_id` AS `lnk_matter_id`,`classifier`.`display_order` AS `display_order` from (((`classifier` join `classifier_type` on((`classifier`.`type_code` = `classifier_type`.`code`))) join `matter` on((ifnull(`matter`.`container_id`,`matter`.`id`) = `classifier`.`matter_id`))) left join `classifier_value` on((`classifier_value`.`id` = `classifier`.`value_id`))) order by `classifier_type`.`display_order`,`classifier`.`display_order` */;
+/*!50013 DEFINER=`phpip`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `matter_classifiers` AS select `classifier`.`id` AS `id`,`matter`.`id` AS `matter_id`,`classifier`.`type_code` AS `type_code`,`classifier_type`.`type` AS `type_name`,`classifier_type`.`main_display` AS `main_display`,if((`classifier`.`value_id` is null),`classifier`.`value`,`classifier_value`.`value`) AS `value`,`classifier`.`url` AS `url`,`classifier`.`lnk_matter_id` AS `lnk_matter_id`,`classifier`.`display_order` AS `display_order` from (((`classifier` join `classifier_type` on((`classifier`.`type_code` = `classifier_type`.`code`))) join `matter` on((ifnull(`matter`.`container_id`,`matter`.`id`) = `classifier`.`matter_id`))) left join `classifier_value` on((`classifier_value`.`id` = `classifier`.`value_id`))) order by `classifier_type`.`display_order`,`classifier`.`display_order` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `renewal_list`
---
-
 /*!50001 DROP VIEW IF EXISTS `renewal_list`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -2062,16 +1827,11 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`phpip`@`localhost` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`phpip`@`%` SQL SECURITY DEFINER */
 /*!50001 VIEW `renewal_list` AS select `task`.`id` AS `id`,`task`.`detail` AS `detail`,`task`.`due_date` AS `due_date`,`task`.`done` AS `done`,`task`.`done_date` AS `done_date`,`event`.`matter_id` AS `matter_id`,`fees`.`cost` AS `cost`,`fees`.`fee` AS `fee`,`fees`.`cost_reduced` AS `cost_reduced`,`fees`.`fee_reduced` AS `fee_reduced`,`fees`.`cost_sup` AS `cost_sup`,`fees`.`fee_sup` AS `fee_sup`,`fees`.`fee_sup_reduced` AS `fee_sup_reduced`,`fees`.`cost_sup_reduced` AS `cost_sup_reduced`,`task`.`trigger_id` AS `trigger_id`,`matter`.`category_code` AS `category`,`matter`.`caseref` AS `caseref`,`matter`.`suffix` AS `suffix`,`matter`.`country` AS `country`,`mcountry`.`name_FR` AS `country_FR`,`matter`.`origin` AS `origin`,`matter`.`type_code` AS `type_code`,`matter`.`idx` AS `idx`,(select 1 from `classifier` `sme` where ((`matter`.`id` = `sme`.`matter_id`) and (`sme`.`type_code` = 'SME'))) AS `sme_status`,`event`.`code` AS `event_name`,`event`.`event_date` AS `event_date`,`event`.`detail` AS `number`,group_concat(`pa_app`.`display_name` separator ',') AS `applicant_dn`,`pa_cli`.`display_name` AS `client_dn`,`pa_cli`.`ren_discount` AS `discount`,`pmal_cli`.`actor_id` AS `client_id`,`pa_cli`.`email` AS `email`,ifnull(`task`.`assigned_to`,`matter`.`responsible`) AS `responsible`,`cla`.`value` AS `title`,`ev`.`detail` AS `pub_num`,`task`.`step` AS `step`,`task`.`grace_period` AS `grace_period`,`task`.`invoice_step` AS `invoice_step` from ((((((((((`matter` left join `matter_actor_lnk` `pmal_app` on(((ifnull(`matter`.`container_id`,`matter`.`id`) = `pmal_app`.`matter_id`) and (`pmal_app`.`role` = 'APP')))) left join `actor` `pa_app` on((`pa_app`.`id` = `pmal_app`.`actor_id`))) left join `matter_actor_lnk` `pmal_cli` on(((ifnull(`matter`.`container_id`,`matter`.`id`) = `pmal_cli`.`matter_id`) and (`pmal_cli`.`role` = 'CLI')))) left join `country` `mcountry` on((`mcountry`.`iso` = `matter`.`country`))) left join `actor` `pa_cli` on((`pa_cli`.`id` = `pmal_cli`.`actor_id`))) join `event` on((`matter`.`id` = `event`.`matter_id`))) left join `event` `ev` on(((`matter`.`id` = `ev`.`matter_id`) and (`ev`.`code` = 'PUB')))) join `task` on((`task`.`trigger_id` = `event`.`id`))) left join `classifier` `cla` on(((ifnull(`matter`.`container_id`,`matter`.`id`) = `cla`.`matter_id`) and (`cla`.`type_code` = 'TITOF')))) left join `fees` on(((`fees`.`for_country` = `matter`.`country`) and (`fees`.`for_category` = `matter`.`category_code`) and (`fees`.`qt` = `task`.`detail`)))) where ((`task`.`code` = 'REN') and (`matter`.`dead` = 0)) group by `task`.`id` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `task_list`
---
-
 /*!50001 DROP VIEW IF EXISTS `task_list`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -2080,16 +1840,11 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`phpip`@`localhost` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`phpip`@`%` SQL SECURITY DEFINER */
 /*!50001 VIEW `task_list` AS select `task`.`id` AS `id`,`task`.`code` AS `code`,`event_name`.`name` AS `name`,`task`.`detail` AS `detail`,`task`.`due_date` AS `due_date`,`task`.`done` AS `done`,`task`.`done_date` AS `done_date`,`event`.`matter_id` AS `matter_id`,`task`.`cost` AS `cost`,`task`.`fee` AS `fee`,`task`.`trigger_id` AS `trigger_id`,`matter`.`category_code` AS `category`,`matter`.`caseref` AS `caseref`,`matter`.`country` AS `country`,`matter`.`origin` AS `origin`,`matter`.`type_code` AS `type_code`,`matter`.`idx` AS `idx`,ifnull(`task`.`assigned_to`,`matter`.`responsible`) AS `responsible`,`actor`.`login` AS `delegate`,`task`.`rule_used` AS `rule_used`,`matter`.`dead` AS `dead` from (((((`matter` left join `matter_actor_lnk` on(((ifnull(`matter`.`container_id`,`matter`.`id`) = `matter_actor_lnk`.`matter_id`) and (`matter_actor_lnk`.`role` = 'DEL')))) left join `actor` on((`actor`.`id` = `matter_actor_lnk`.`actor_id`))) join `event` on((`matter`.`id` = `event`.`matter_id`))) join `task` on((`task`.`trigger_id` = `event`.`id`))) join `event_name` on((`task`.`code` = `event_name`.`code`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `users`
---
-
 /*!50001 DROP VIEW IF EXISTS `users`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -2098,7 +1853,7 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`phpip`@`localhost` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`phpip`@`%` SQL SECURITY DEFINER */
 /*!50001 VIEW `users` AS select `actor`.`id` AS `id`,`actor`.`name` AS `name`,`actor`.`login` AS `login`,`actor`.`password` AS `password`,`actor`.`default_role` AS `default_role`,`actor`.`company_id` AS `company_id`,`actor`.`email` AS `email`,`actor`.`phone` AS `phone`,`actor`.`notes` AS `notes`,`actor`.`creator` AS `creator`,`actor`.`created_at` AS `created_at`,`actor`.`updated_at` AS `updated_at`,`actor`.`updater` AS `updater`,`actor`.`remember_token` AS `remember_token` from `actor` where (`actor`.`login` is not null) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
@@ -2108,9 +1863,79 @@ DELIMITER ;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-03 20:07:11
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (1,'2014_10_12_100000_create_password_resets_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (2,'2018_12_07_184310_create_actor_role_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (3,'2018_12_07_184310_create_actor_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (4,'2018_12_07_184310_create_classifier_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (5,'2018_12_07_184310_create_classifier_type_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (6,'2018_12_07_184310_create_classifier_value_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (7,'2018_12_07_184310_create_country_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (8,'2018_12_07_184310_create_default_actor_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (9,'2018_12_07_184310_create_event_name_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (10,'2018_12_07_184310_create_event_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (11,'2018_12_07_184310_create_matter_actor_lnk_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (12,'2018_12_07_184310_create_matter_category_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (13,'2018_12_07_184310_create_matter_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (14,'2018_12_07_184310_create_matter_type_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (15,'2018_12_07_184310_create_task_rules_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (16,'2018_12_07_184310_create_task_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (17,'2018_12_07_184312_add_foreign_keys_to_actor_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (18,'2018_12_07_184312_add_foreign_keys_to_classifier_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (19,'2018_12_07_184312_add_foreign_keys_to_classifier_type_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (20,'2018_12_07_184312_add_foreign_keys_to_classifier_value_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (21,'2018_12_07_184312_add_foreign_keys_to_default_actor_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (22,'2018_12_07_184312_add_foreign_keys_to_event_name_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (23,'2018_12_07_184312_add_foreign_keys_to_event_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (24,'2018_12_07_184312_add_foreign_keys_to_matter_actor_lnk_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (25,'2018_12_07_184312_add_foreign_keys_to_matter_category_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (26,'2018_12_07_184312_add_foreign_keys_to_matter_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (27,'2018_12_07_184312_add_foreign_keys_to_task_rules_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (28,'2018_12_07_184312_add_foreign_keys_to_task_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (29,'2018_12_08_000109_add_trigger',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (30,'2018_12_08_002558_create_views_and_functions',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (31,'2019_03_07_171752_create_procedure_recalculate_tasks',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (32,'2019_03_07_171910_create_procedure_recreate_tasks',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (33,'2019_08_13_145446_update_tables',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (34,'2019_08_19_000000_create_failed_jobs_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (35,'2019_11_13_135330_update_tables2',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (36,'2019_11_17_025422_update_tables3',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (37,'2019_11_18_002207_update_tables4',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (38,'2019_11_25_123348_update_tables5',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (39,'2019_11_26_192706_create_user_view',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (40,'2019_12_06_000000_create_fees_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (41,'2019_12_06_002_alter_task_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (42,'2019_12_06_003_create_renewal_list_view',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (43,'2020_01_06_181200_update_tables6',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (44,'2020_01_21_173000_update_tables7',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (45,'2020_01_28_122217_update_db_roles',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (46,'2020_01_30_001_create_renewals_logs_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (47,'2020_02_02_105653_add_timestamps_default_actors',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (48,'2020_02_12_144400_update_procedure_update_expired',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (49,'2020_02_22_161215_create_template_classes',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (50,'2020_02_22_164446_create_template_members',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (51,'2020_02_22_173742_create_event_class_lnk',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (52,'2020_02_22_181558_add_foreignkeys_to_template_members',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (53,'2020_02_22_183512_add_foreignkeys_to_template_classes',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (54,'2020_02_24_110300_update_tables8c',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (55,'2020_02_24_190000_update_rules2',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (56,'2020_02_24_192100_implement_generic_renewals',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (57,'2020_03_23_110300_update_tables9c',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (58,'2020_03_28_190000_update_country',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (59,'2020_04_12_183512_add_foreignkeys_to_event_class_lnk',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (60,'2020_04_15_110300_update_tables10',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (61,'2020_06_16_122700_update_actor_lang',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (62,'2020_06_23_200200_remove_parent_filed_deps',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (63,'2020_07_29_190800_fix_insert_recurring_renewals',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (64,'2020_07_30_091000_update_special_countries',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (65,'2020_09_18_135000_update_tables11',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (66,'2020_10_01_130832_update_category_provisional',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (67,'2020_12_04_133640_update_matter_alt_ref',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (68,'2021_01_29_203100_update_procedure_recalculate_tasks',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (69,'2021_02_02_120309_update_classifier_uqvalue_index',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (70,'2021_05_18_174249_country_mx_renewals',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (71,'2021_08_16_163607_country_ma_renewals',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (72,'2021_13_03_165000_country_pl_renewals',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (73,'2023_02_16_113312_insert_new_country_codes',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (74,'2023_05_22_092530_insert_unitary_patent',1);
