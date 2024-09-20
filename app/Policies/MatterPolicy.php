@@ -2,23 +2,13 @@
 
 namespace App\Policies;
 
-use App\Matter;
-use App\User;
+use App\Models\Matter;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class MatterPolicy
 {
     use HandlesAuthorization;
-
-    /**
-     * Determine whether the user can view any matters.
-     *
-     * @return mixed
-     */
-    public function viewAny(User $user)
-    {
-        return true;
-    }
 
     /**
      * Determine whether the user can view the matter.
@@ -36,35 +26,5 @@ class MatterPolicy
         } else {
             return true;
         }
-    }
-
-    /**
-     * Determine whether the user can create matters.
-     *
-     * @return mixed
-     */
-    public function create(User $user)
-    {
-        return $user->default_role === 'DBRW' || $user->default_role === 'DBA';
-    }
-
-    /**
-     * Determine whether the user can update the matter.
-     *
-     * @return mixed
-     */
-    public function update(User $user, Matter $matter)
-    {
-        return $user->default_role === 'DBRW' || $user->default_role === 'DBA';
-    }
-
-    /**
-     * Determine whether the user can delete the matter.
-     *
-     * @return mixed
-     */
-    public function delete(User $user, Matter $matter)
-    {
-        return $user->default_role === 'DBRW' || $user->default_role === 'DBA';
     }
 }

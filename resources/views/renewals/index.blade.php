@@ -141,10 +141,10 @@
                                 <label class="btn btn-outline-primary btn-sm" title="In grace period" for="grace">{{ __('Grace') }}</label>
                             </div>
                             <div class="col-3 p-1">
-                                Cost
+                                {{ __("Cost") }}
                             </div>
                             <div class="col-3 p-1">
-                                Fee
+                                {{ __("Fee") }}
                             </div>
                         </div>
                     </th>
@@ -163,7 +163,7 @@
             <tbody id="renewalList">
                 @if (count($renewals) == 0)
                 <tr class="row text-danger">
-                    The list is empty
+                    {{ __("The list is empty") }}
                 </tr>
                 @else
                 @foreach ($renewals as $task)

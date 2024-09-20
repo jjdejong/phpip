@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Actor;
-use App\Fee;
+use App\Models\Actor;
+use App\Models\Fee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;

@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Rule;
+use App\Models\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Gate;
 
 class RuleController extends Controller
 {
     public function index(Request $request)
     {
-        App::setLocale(Auth::user()->language);
-        $this->authorize('viewAny', Rule::class);
+        Gate::authorize('readonly');
         $Task = $request->input('Task');
         $Trigger = $request->input('Trigger');
         $Country = $request->input('Country');
@@ -21,37 +20,37 @@ class RuleController extends Controller
         $Type = $request->input('Type');
         $Category = $request->input('Category');
         $rule = new Rule;
-        if (! is_null($Task)) {
+        if (!is_null($Task)) {
             $rule = $rule->whereHas('taskInfo', function ($q) use ($Task) {
-                $q->where('name', 'like', $Task.'%');
+                $q->where('name', 'like', $Task . '%');
             });
         }
-        if (! is_null($Trigger)) {
+        if (!is_null($Trigger)) {
             $rule = $rule->whereHas('trigger', function ($q) use ($Trigger) {
-                $q->where('name', 'like', $Trigger.'%');
+                $q->where('name', 'like', $Trigger . '%');
             });
         }
-        if (! is_null($Country)) {
+        if (!is_null($Country)) {
             $rule = $rule->whereHas('country', function ($q) use ($Country) {
-                $q->where('name', 'like', $Country.'%');
+                $q->where('name', 'like', $Country . '%');
             });
         }
-        if (! is_null($Category)) {
+        if (!is_null($Category)) {
             $rule = $rule->whereHas('category', function ($q) use ($Category) {
-                $q->where('category', 'like', $Category.'%');
+                $q->where('category', 'like', $Category . '%');
             });
         }
-        if (! is_null($Detail)) {
-            $rule = $rule->where('detail', 'like', $Detail.'%');
+        if (!is_null($Detail)) {
+            $rule = $rule->where('detail', 'like', $Detail . '%');
         }
-        if (! is_null($Type)) {
+        if (!is_null($Type)) {
             $rule = $rule->whereHas('type', function ($q) use ($Type) {
-                $q->where('type', 'like', $Type.'%');
+                $q->where('type', 'like', $Type . '%');
             });
         }
-        if (! is_null($Origin)) {
+        if (!is_null($Origin)) {
             $rule = $rule->whereHas('origin', function ($q) use ($Origin) {
-                $q->where('name', 'like', $Origin.'%');
+                $q->where('name', 'like', $Origin . '%');
             });
         }
         $ruleslist = $rule->with(['country:iso,name', 'trigger:code,name', 'category:code,category', 'origin:iso,name', 'type:code,type', 'taskInfo:code,name'])
@@ -63,8 +62,7 @@ class RuleController extends Controller
 
     public function show(Rule $rule)
     {
-        App::setLocale(Auth::user()->language);
-        $this->authorize('view', $rule);
+        Gate::authorize('readonly');
         $ruleInfo = $rule->load([
             'trigger:code,name',
             'country:iso,name',
@@ -84,8 +82,7 @@ class RuleController extends Controller
 
     public function create()
     {
-        App::setLocale(Auth::user()->language);
-        $this->authorize('create', Rule::class);
+        Gate::authorize('admin');
         $rule = new Rule;
         $ruleComments = $rule->getTableComments('task_rules');
 
@@ -94,8 +91,7 @@ class RuleController extends Controller
 
     public function update(Request $request, Rule $rule)
     {
-        App::setLocale(Auth::user()->language);
-        $this->authorize('update', $rule);
+        Gate::authorize('admin');
         $this->validate($request, [
             'task' => 'sometimes|required',
             'trigger_event' => 'sometimes|required',
@@ -116,8 +112,7 @@ class RuleController extends Controller
 
     public function store(Request $request)
     {
-        App::setLocale(Auth::user()->language);
-        $this->authorize('create', Rule::class);
+        Gate::authorize('admin');
         $this->validate($request, [
             'task' => 'required',
             'trigger_event' => 'required',
@@ -138,7 +133,7 @@ class RuleController extends Controller
 
     public function destroy(Rule $rule)
     {
-        $this->authorize('delete', $rule);
+        Gate::authorize('admin');
         $rule->delete();
 
         return $rule;

@@ -164,6 +164,23 @@ class CountryTableSeeder extends Seeder
                 'renewal_start' => 'FIL',
                 'checked_on' => '2020-02-24',
             ],
+                                             
+            [
+                'numcode' => 0,
+                'iso' => 'AP',
+                'iso3' => '',
+                'name_DE' => 'African Regional Intellectual Property Organization',
+                'name' => 'African Regional Intellectual Property Organization',
+                'name_FR' => 'Organisation régionale africaine de la propriété intellectuelle',
+                'ep' => 0,
+                'wo' => 0,
+                'em' => 0,
+                'oa' => 0,
+                'renewal_first' => 2,
+                'renewal_base' => 'FIL',
+                'renewal_start' => 'FIL',
+                'checked_on' => '2023-02-16',
+            ],
 
             [
                 'numcode' => 10,
@@ -961,7 +978,7 @@ class CountryTableSeeder extends Seeder
                 'renewal_first' => 2,
                 'renewal_base' => 'FIL',
                 'renewal_start' => 'GRT',
-                'checked_on' => '2020-02-24',
+                'checked_on' => '2020-03-28',
             ],
 
             [
@@ -1080,7 +1097,7 @@ class CountryTableSeeder extends Seeder
                 'renewal_first' => 2,
                 'renewal_base' => 'FIL',
                 'renewal_start' => 'GRT',
-                'checked_on' => '2020-02-24',
+                'checked_on' => '2023-02-16',
             ],
 
             [
@@ -3957,6 +3974,23 @@ class CountryTableSeeder extends Seeder
             ],
 
             [
+                'numcode' => 0,
+                'iso' => 'UP',
+                'iso3' => 'UPA',
+                'name_DE' => 'Einheitlichen Patentschutz',
+                'name' => 'Unitary Patent',
+                'name_FR' => 'Brevet Unitaire',
+                'ep' => 1,
+                'wo' => 0,
+                'em' => 0,
+                'oa' => 0,
+                'renewal_first' => 4,
+                'renewal_base' => 'FIL',
+                'renewal_start' => 'GRT',
+                'checked_on' => '2023-05-22',
+            ],
+
+            [
                 'numcode' => 840,
                 'iso' => 'US',
                 'iso3' => 'USA',
@@ -4155,8 +4189,8 @@ class CountryTableSeeder extends Seeder
                 'em' => 0,
                 'oa' => 0,
                 'renewal_first' => null,
-                'renewal_base' => 'null',
-                'renewal_start' => 'null',
+                'renewal_base' => null,
+                'renewal_start' => null,
                 'checked_on' => '2020-02-24',
             ],
 

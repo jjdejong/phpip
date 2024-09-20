@@ -1,6 +1,27 @@
 #!/usr/bin/php
 
 <?php
+/*
+This script connects to AQS's REST service to retrieve all patents in the portfolio handled by AQS, each patent with all of its renewals, past and future.
+
+Patent identification:
+$AQSpatent from AQS identified by $AQSpatent->uniqueClientId
+$myPatent from phpIP retrieved by matching matter.id with $AQSpatent->uniqueClientId
+
+Renewal identification:
+$renewal from AQS identified by $renewal->year ($renewal is an item of $AQSpatent->events->event)
+$myRenewal from phpIP retrieved by matching task.detail with $renewal->year
+
+The purpose is to create/update each (renewal) task in phpIP by setting the fields:
+  due_date
+  done_date
+  cost (invoiced to us by AQS)
+  fee (our fees)
+  notes (status from AQS: Estimated, Invoiced, Cancelled)
+  step (indicates advancement of instructions, -1 = processed)
+  invoice_step (indicates advancement of client invoicing, 1 = to invoice)
+*/
+
 $aqs = parse_ini_file('aqs.ini');
 $jwt_payload = '{"sub":"OMNIPAT","qsh":"/me/patents","iat":' . time() . ',"exp":' . time() + 1000 . '}';
 
@@ -12,8 +33,6 @@ function base64UrlEncode($data)
 $jwt_signature = base64UrlEncode(hash_hmac('sha256', $aqs['jwt_header_encoded'] . '.' . base64UrlEncode($jwt_payload), $aqs['jwt_secret'], true));
 
 $bearer_token = $aqs['jwt_header_encoded'] . '.' . base64UrlEncode($jwt_payload) . '.' . $jwt_signature;
-//echo "Token: ". $bearer_token. PHP_EOL;
-//exit;
 
 $headers = [
   'Accept: application/xml',
@@ -81,6 +100,9 @@ $annsprocessed = 0; // total annuities processed
 $ambiguous = 0;     // counts patents that have multiple matches
 
 $mandateOn = $xml->xpath('/response/item[mandate!="OFF"]');
+
+// Process patents retrieved from AQS
+
 foreach ($mandateOn as $AQSpatent) {
   if (!$AQSpatent->events) {
     // Patent has no renewals - skip
@@ -104,62 +126,37 @@ foreach ($mandateOn as $AQSpatent) {
       $unrecognized++;
       continue;
     }
-    $myRenewal = $result->fetch_object();
-    if (strpos($myRenewal->caseref . $myRenewal->alt_ref, trim($AQSpatent->clientReference)) === false) {
+    $myPatent = $result->fetch_object();
+    if (strpos($myPatent->caseref . $myPatent->alt_ref, trim($AQSpatent->clientReference)) === false) {
       // This case is OK but the reference needs to be checked
-      echo "\nWARNING: REFCLI $AQSpatent->clientReference does not match $myRenewal->caseref or $myRenewal->alt_ref for UID $AQSpatent->uniqueClientId";
+      echo "\nWARNING: REFCLI $AQSpatent->clientReference does not match $myPatent->caseref or $myPatent->alt_ref for UID $AQSpatent->uniqueClientId";
       $unrecognized++;
     }
-    if ($myRenewal->country != $AQSpatent->country) {
+    if ($myPatent->country != $AQSpatent->country) {
       // This case is wrong, go to next
-      echo "\nERROR: COUNTRY $AQSpatent->country does not match $myRenewal->country for UID $AQSpatent->uniqueClientId";
+      echo "\nERROR: COUNTRY $AQSpatent->country does not match $myPatent->country for UID $AQSpatent->uniqueClientId";
       $unrecognized++;
       continue;
     }
-    /*if ($myRenewal->origin != $AQSpatent->origin) {
+    /*if ($myPatent->origin != $AQSpatent->origin) {
         echo "\nORIG = $AQSpatent->origin ($AQSpatent->clientReference$AQSpatent->country-$AQSpatent->origin) does not match UID = $AQSpatent->uniqueClientId";
           $unrecognized++;
           continue;
       }*/
-    /*if ($myRenewal->div != $AQSpatent->applicationType) {
+    /*if ($myPatent->div != $AQSpatent->applicationType) {
         echo "\nDIV = $AQSpatent->applicationType ($AQSpatent->clientReference$AQSpatent->country-$AQSpatent->applicationType) does not match UID = $AQSpatent->uniqueClientId";
         $unrecognized++;
         continue;
       }*/
     $result->close();
   } else {
-    // No UID, try to find a unique ID with country, caseref, origin, type and annuity count
-    $q = "SELECT matter.id, actor_ref FROM matter
-        JOIN matter_actor_lnk ON matter.id = matter_actor_lnk.matter_id
-		    WHERE matter_actor_lnk.actor_id = $aqs_id
-		    AND country = '$AQSpatent->country'
-		    AND (caseref = '$AQSpatent->clientReference' OR alt_ref = '$AQSpatent->clientReference')
-		    AND ifnull(origin, '') = '$AQSpatent->origin'
-		    AND if(type_code IS NULL, 1, 2) + ifnull(idx, 0) = CAST('$AQSpatent->complement' AS UNSIGNED)";
-    $result = $db->query($q);
-    if (!$result) {
-      echo "\nInvalid query: (error " . $db->errno . ") " . $db->error;
-    }
-    if ($result->num_rows == 0) {
-      echo "\nWARNING: no data in our database for serviceProviderId: $AQSpatent->serviceProviderId";
-      $unrecognized++;
-      continue;
-    }
-    if ($result->num_rows > 1) {
-      echo "\nWARNING: AQS case $AQSpatent->serviceProviderId ($AQSpatent->clientReference) has multiple matches - ignored";
-      $ambiguous++;
-      continue;
-    }
-    $myRenewal = $result->fetch_object();
-    $AQSpatent->uniqueClientId = $myRenewal->id ?? '';
-    /*if ($AQSpatent->uniqueClientId != '') {
-        echo "\nAQS case $AQSpatent->serviceProviderFamilyReference-$AQSpatent->country-$AQSpatent->origin-$AQSpatent->applicationType ($AQSpatent->clientReference) had no UID, identified it as $AQSpatent->uniqueClientId";
-      }*/
-    $result->close();
+    // No UID in AQS - skip
+    echo "\nWARNING: no UID for serviceProviderId: $AQSpatent->serviceProviderId";
+    continue;
   }
 
-  if ($myRenewal->actor_ref != $AQSpatent->serviceProviderFamilyReference . $AQSpatent->country . '-' . $AQSpatent->origin . '-' . $AQSpatent->applicationType) {
-    // Case found and SGA² ref needs updating
+  if ($myPatent->actor_ref != $AQSpatent->serviceProviderFamilyReference . $AQSpatent->country . '-' . $AQSpatent->origin . '-' . $AQSpatent->applicationType) {
+    // AQS ref needs updating
     $q = "UPDATE matter_actor_lnk SET actor_ref = '$AQSpatent->serviceProviderFamilyReference$AQSpatent->country-$AQSpatent->origin-$AQSpatent->applicationType', updated_at = Now(), updater = 'AQS'
 		    WHERE matter_id = $AQSpatent->uniqueClientId
 		    AND actor_id = $aqs_id";
@@ -168,6 +165,8 @@ foreach ($mandateOn as $AQSpatent) {
       echo "\nInvalid query: (error " . $db->errno . ") " . $db->error;
     }
   }
+  
+  // Process renewals for each patent retrieved from AQS
 
   foreach ($AQSpatent->events->event as $renewal) {
     // Repeat for each annuity of the patent

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Actor;
-use App\EventClassLnk;
-use App\EventName;
+use App\Models\Actor;
+use App\Models\EventClassLnk;
+use App\Models\EventName;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;

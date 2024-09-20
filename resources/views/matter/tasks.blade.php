@@ -4,11 +4,12 @@
 <table class="table table-hover table-sm">
   <thead class="table-light">
     <tr>
+<<<<<<< HEAD
       <th>{{ __('Tasks by event') }}</th>
       <th>{{ __('Due date') }}</th>
       <th>{{ __('Ack') }}</th>
       <th>{{ __('Date') }}</th>
-      @cannot('client')
+      @can('readonly')
       @if($is_renewals)
       @php
         $ncols += 3;
@@ -18,13 +19,13 @@
       <th>{{ __("Cur.") }}</th>
       {{-- <th>{{ __("Time") }}</th> --}}
       @endif
-      @endcannot
+      @endcan
       <th>{{ __("By") }}</th>
       <th>{{ __("Notes") }}</th>
       <th style="width: 24px;">&nbsp;</th>
-      @cannot('client')
+      @can('readonly')
       <th>{{ __("Email") }}</th>
-      @endcannot
+      @endcan
     </tr>
   </thead>
   @foreach ( $events as $event )
@@ -34,7 +35,7 @@
         <ul class="list-inline my-1">
           <li class="list-inline-item">{{ __($event->info->name) }}</li>
           <li class="list-inline-item">{{ $event->event_date->isoFormat('L') }}</li>
-          @canany(['admin', 'readwrite'])
+          @can('readwrite')
           <span class="hidden-action float-end">
             <li class="list-inline-item">
               <a href="#" class="text-primary" id="addTaskToEvent" data-event_id="{{ $event->id }}" title="{{ __('Add task to :event',['event' => __($event->info->name)]) }}">
@@ -52,18 +53,18 @@
               </a>
             </li>
           </span>
-          @endcanany
+          @endcan
         </ul>
       </td>
-      @cannot('client')
+      @can('readonly')
       <td class="text-center align-middle">
-        @if (count(App\EventName::where('code', $event->code)->first()->templates) != 0)
+        @if (count(App\Models\EventName::where('code', $event->code)->first()->templates) != 0)
           <a href="#" class="chooseTemplate text-info" data-url="/document/select/{{ $matter->id }}?EventName={{ $event->code }}&Event={{ $event->id }}">
             <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#envelope"/></svg>
           </a>
         @endif
       </td>
-      @endcannot
+      @endcan
     </tr>
   
     @foreach ($event->tasks as $task)
@@ -75,30 +76,30 @@
       <td><input type="text" class="form-control noformat  {{ $task->done ? 'text-success' : 'text-danger' }}" name="due_date" value="{{ $task->due_date->isoFormat('L') }}"></td>
       <td><input type="checkbox" class="noformat" name="done" {{ $task->done ? 'checked' : '' }}></td>
       <td><input type="text" class="form-control noformat text-success" name="done_date" value="{{ empty($task->done_date) ? '' : $task->done_date->isoFormat('L') }}"></td>
-      @cannot('client')
+      @can('readonly')
       @if($is_renewals)
       <td><input type="text" class="form-control noformat" name="cost" value="{{ $task->cost }}"></td>
       <td><input type="text" class="form-control noformat" name="fee" value="{{ $task->fee }}"></td>
       <td><input type="text" class="form-control noformat" name="currency" value="{{ $task->currency }}"></td>
       {{-- <td><input type="text" class="form-control noformat" name="time_spent" value="{{ $task->time_spent }}"></td> --}}
       @endif
-      @endcannot
+      @endcan
       <td><input type="text" class="form-control noformat" name="assigned_to" data-ac="/user/autocomplete" value="{{ $task->assigned_to }}"></td>
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"></td>
       <td>
-        @canany(['admin', 'readwrite'])
+        @can('readwrite')
         <a href="#" class="hidden-action text-danger" id="deleteTask" title="{{ __('Delete task') }}">
           <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#trash"/></svg>
         </a>
-        @endcanany
+        @endcan
       </td>
-      @cannot('client')
+      @can('readonly')
       <td>
-          @if (count(App\EventName::where('code',$task->code)->first()->templates) != 0)
+          @if (count(App\Models\EventName::where('code',$task->code)->first()->templates) != 0)
             <a href="#" class="chooseTemplate text-info fw-bold" data-url="/document/select/{{ $matter->id }}?EventName={{ $task->code }}&Task={{ $task->id }}">@</a>
           @endif
       </td>
-      @endcannot
+      @endcan
     </tr>
     @endforeach
   </tbody>

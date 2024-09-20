@@ -3,7 +3,7 @@ echo "
 ********************************
 Updating Ubuntu
 ********************************"
-# Uncomment below for Ubuntu 20.04
+# Uncomment below for Ubuntu 22.04 and before to get the latest PHP version
 #add-apt-repository ppa:ondrej/php -y
 apt update
 apt -y upgrade
@@ -23,7 +23,7 @@ apt -y install php php-common libapache2-mod-php php-cli php-mysql php-json php-
 
 apt -y install unzip git-core composer
 
-echo "CREATE DATABASE phpip DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; CREATE USER phpip@localhost IDENTIFIED BY 'phpip'; GRANT ALL PRIVILEGES ON phpip.* TO phpip@localhost; SET GLOBAL log_bin_trust_function_creators = 1;" | mysql
+echo "CREATE DATABASE phpip DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; CREATE USER phpip@localhost IDENTIFIED BY 'phpIP2024!'; GRANT ALL PRIVILEGES ON phpip.* TO phpip@localhost; SET GLOBAL log_bin_trust_function_creators = 1;" | mysql
 
 echo "127.0.0.1    phpip.local" >> /etc/hosts
 
@@ -31,14 +31,15 @@ echo "
 ********************************
 Getting phpIP from GitHub
 ********************************"
-cd /var/www/html
+cd /var/www
 git clone https://github.com/jjdejong/phpip.git phpip
 cd phpip
 composer install
 cp .env.example .env
 php artisan key:generate
 php artisan config:clear
-cp doc/phpip.conf /etc/apache2/sites-enabled/
+cp doc/phpip.conf /etc/apache2/sites-available/
+a2ensite phpip
 chmod -R g+rw storage
 chmod -R g+rw bootstrap/cache
 chgrp -R www-data storage

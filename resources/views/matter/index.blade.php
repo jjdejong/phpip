@@ -35,10 +35,12 @@
         <input type="radio" class="btn-check" name="tab" {{ $tab == 1 ? 'checked' : '' }} id="btnstatusview">
         <label id="showStatus" class="btn btn-outline-info" for="btnstatusview">{{ __("Status View")}}</label>
       </div>
+      @can('readonly')
       <div class="btn-group me-3" id="mineAll">
         <input type="checkbox" class="btn-check" name="responsible" {{ Request::has('responsible') ? 'checked' : '' }} id="btnshowmine">
         <label id="showResponsible" class="btn btn-outline-info" data-responsible="{{ Auth::user()->login }}" for="btnshowmine">{{ __("Show Mine")}}</label>
       </div>
+      @endcan
       <div class="btn-group me-3">
         <input type="checkbox" class="btn-check" name="include_dead" {{ Request::get('include_dead') ? 'checked' : '' }} id="btnincludedead">
         <label id="includeDead" class="btn btn-outline-info" for="btnincludedead">{{ __("Include Dead")}}</label>
@@ -81,23 +83,21 @@
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'event_name.name' ? 'active' : '' }}" type="button" data-sortkey="event_name.name" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          @cannot('client')
+          @can('readonly')
           <td class="tab0 {{ $hideTab0 }}">
             <div class="input-group input-group-sm">
               <input class="form-control" name="Client" placeholder="{{ __('Client') }}" value="{{ Request::get('Client') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'cli.name' ? 'active' : '' }}" type="button" data-sortkey="cli.name" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          @endcannot
+          @endcan
           <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="8" name="ClRef" placeholder="{{ __('Cl. Ref')}}" value="{{ Request::get('ClRef') }}"></td>
-          @can('client')
           <td class="tab0 {{ $hideTab0 }}">
             <div class="input-group input-group-sm">
               <input class="form-control" name="Applicant" placeholder="{{ __('Applicant' )}}" value="{{ Request::get('Applicant') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'app.name' ? 'active' : '' }}" type="button" data-sortkey="app.name" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          @endcan
           <td class="tab0 {{ $hideTab0 }}">
             <div class="input-group input-group-sm">
               <input class="form-control" name="Agent" placeholder="{{ __('Agent') }}" value="{{ Request::get('Agent') }}">
@@ -175,13 +175,11 @@
             {{ __($matter->Status) }}
             @endif
           </td>
-          @cannot('client')
+          @can('readonly')
           <td class="tab0 {{ $hideTab0 }}">{{ $matter->Client }}</td>
-          @endcannot
-          <td class="tab0 {{ $hideTab0 }}">{{ $matter->ClRef }}</td>
-          @can('client')
-          <td class="tab0 {{ $hideTab0 }}">{{ $matter->Applicant }}</td>
           @endcan
+          <td class="tab0 {{ $hideTab0 }}">{{ $matter->ClRef }}</td>
+          <td class="tab0 {{ $hideTab0 }}">{{ $matter->Applicant }}</td>
           <td class="tab0 {{ $hideTab0 }}">{{ $matter->Agent }}</td>
           <td class="tab0 {{ $hideTab0 }}">{{ $matter->AgtRef }}</td>
           @if ( $matter->container_id && $matter->Title2 )

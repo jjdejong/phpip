@@ -11,59 +11,68 @@
   |
  */
 
-use App\Matter;
+use App\Models\Matter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MatterController;
+use App\Http\Controllers\RenewalController;
+use App\Http\Controllers\DocumentController;
 
-Route::get('/', fn () => view('welcome'));
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Auth::routes(['register' => false]);
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('matter/autocomplete', function (Request $request) {
         $term = $request->input('term');
 
-        return App\Matter::with('filing')->select('id as key', 'uid as value')
+        return App\Models\Matter::with('filing')->select('id as key', 'uid as value')
             ->where('uid', 'like', "$term%")
             ->take(15)->get();
     });
-    Route::get('matter/export', 'MatterController@export');
-    Route::get('matter/report', 'MatterController@report');
-    Route::post('matter/{matter}/mergeFile', 'MatterController@mergeFile');
-    Route::get('matter/{matter}/events', 'MatterController@events');
-    Route::get('matter/{matter}/tasks', 'MatterController@tasks');
-    Route::get('matter/{matter}/classifiers', 'MatterController@classifiers');
-    Route::get('matter/{matter}/renewals', 'MatterController@renewals');
-    Route::get('matter/{matter}/roleActors/{role}', 'MatterController@actors');
-    Route::get('matter/{matter}/description/{lang}', 'MatterController@description');
-    Route::get('matter/{matter}/info', 'MatterController@info');
-    Route::get('matter/{parent_matter}/createN', fn (Matter $parent_matter) => view('matter.createN', compact('parent_matter')));
-    Route::post('matter/storeN', 'MatterController@storeN');
-    Route::get('matter/getOPSfamily/{docnum}', 'MatterController@getOPSfamily');
-    Route::post('matter/storeFamily', 'MatterController@storeFamily');
-    Route::post('matter/clear-tasks', 'HomeController@clearTasks');
+    Route::controller(MatterController::class)->group(function () {
+        Route::get('matter/export', 'export');
+        Route::post('matter/{matter}/mergeFile', 'mergeFile');
+        Route::get('matter/{matter}/events', 'events');
+        Route::get('matter/{matter}/tasks', 'tasks');
+        Route::get('matter/{matter}/classifiers', 'classifiers');
+        Route::get('matter/{matter}/renewals', 'renewals');
+        Route::get('matter/{matter}/roleActors/{role}', 'actors');
+        Route::get('matter/{matter}/description/{lang}', 'description');
+        Route::get('matter/{matter}/info', 'info');
+        Route::post('matter/storeN', 'storeN');
+        Route::get('matter/getOPSfamily/{docnum}', 'getOPSfamily');
+        Route::post('matter/storeFamily', 'storeFamily');
+    });
 
-    Route::post('renewal/order', 'RenewalController@renewalOrder');
-    Route::post('renewal/call/{send}', 'RenewalController@firstcall');
-    Route::post('renewal/reminder', 'RenewalController@remindercall');
-    Route::post('renewal/invoice/{toinvoice}', 'RenewalController@invoice');
-    Route::post('renewal/topay', 'RenewalController@topay');
-    Route::post('renewal/paid', 'RenewalController@paid');
-    Route::post('renewal/done', 'RenewalController@done');
-    Route::post('renewal/lastcall', 'RenewalController@lastcall');
-    Route::post('renewal/receipt', 'RenewalController@receipt');
-    Route::post('renewal/closing', 'RenewalController@closing');
-    Route::post('renewal/abandon', 'RenewalController@abandon');
-    Route::post('renewal/lapsing', 'RenewalController@lapsing');
-    Route::get('renewal/export', 'RenewalController@export');
-    Route::get('logs', 'RenewalController@logs');
+    Route::controller(RenewalController::class)->group(function () {
+        Route::post('renewal/order', 'renewalOrder');
+        Route::post('renewal/call/{send}', 'firstcall');
+        Route::post('renewal/reminder', 'remindercall');
+        Route::post('renewal/invoice/{toinvoice}', 'invoice');
+        Route::post('renewal/topay', 'topay');
+        Route::post('renewal/paid', 'paid');
+        Route::post('renewal/done', 'done');
+        Route::post('renewal/lastcall', 'lastcall');
+        Route::post('renewal/receipt', 'receipt');
+        Route::post('renewal/closing', 'closing');
+        Route::post('renewal/abandon', 'abandon');
+        Route::post('renewal/lapsing', 'lapsing');
+        Route::get('renewal/export', 'export');
+        Route::get('logs', 'logs');
+    });
 
-    Route::post('document/mailto/{member}', 'DocumentController@mailto');
-    Route::get('document/select/{matter}', 'DocumentController@select');
+    Route::controller(App\Http\Controllers\DocumentController::class)->group(function () {
+        Route::post('document/mailto/{member}', 'mailto');
+        Route::get('document/select/{matter}', 'select');
+    });
 
     Route::post('matter/search', function (Request $request) {
         $matter_search = $request->input('matter_search');
@@ -72,7 +81,7 @@ Route::group(['middleware' => 'auth'], function () {
             $filter = ['Ref' => $matter_search];
             $matters = Matter::filter('caseref', 'asc', $filter, false, true)->get();
             if (count($matters) == 1) {
-                return redirect('matter/'.$matters[0]->id);
+                return redirect('matter/' . $matters[0]->id);
             }
         }
 
@@ -81,7 +90,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('matter/new-caseref', function (Request $request) {
         $term = $request->term;
-        $newref = App\Matter::where('caseref', 'like', "$term%")->max('caseref');
+        $newref = App\Models\Matter::where('caseref', 'like', "$term%")->max('caseref');
         if ($newref) {
             $newref++;
         } else {
@@ -91,257 +100,194 @@ Route::group(['middleware' => 'auth'], function () {
         return [['key' => $newref, 'value' => $newref]];
     });
 
-    Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
-        $term = $request->term;
-        $results = App\EventName::select('name as value', 'code as key')
-            ->where([
-                ['is_task', $is_task],
-            ]);
-        if ($request->filled('category')) {
-            $results->whereRaw('ifnull(category, ?) = ?', [$request->category, $request->category]);
-        }
-        $match_list = Array();
-        foreach($results->get() as $item) {
-            if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
-                $match_item = ["key" => $item["key"], "value" => __($item["value"])];
-                array_push($match_list, $match_item);
-            }
-        }
-        return $match_list;
-    });
-
-    Route::get('classifier-type/autocomplete/{main_display}', function (Request $request, $main_display) {
-        $term = $request->input('term');
-        $results = App\ClassifierType::select('type as value', 'code as key')
-            ->where('main_display', $main_display)
-            ->orderBy('type');
-        $match_list = Array();
-        foreach($results->get() as $item) {
-            if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
-                $match_item = ["key" => $item["key"], "value" => __($item["value"])];
-                array_push($match_list, $match_item);
-            }
-        }
-        return $match_list;
-    });
-
-    Route::get('user/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-
-        return App\User::select('name as value', 'login as key')
-            ->where('name', 'like', "$term%")
-            ->orWhere('login', 'like', "$term%")
-            ->take(10)->get();
-    });
-
-    Route::get('actor/autocomplete/{create_option?}', function (Request $request, $create_option = null) {
-        $term = $request->input('term');
-        $list = App\Actor::select(DB::raw('coalesce(display_name, name) as value'), 'id as key')
-            ->where('name', 'like', "$term%")
-            ->orWhere('display_name', 'like', "$term")
-            ->take(10)->get();
-        if ($list->count() < 5 && $create_option) {
-            $list->push(['label' => __("Create")." ".$term." ?", 'key' => 'create', 'value' => $term]);
-        }
-
-        return $list;
-    });
-
-    Route::get('role/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-
-        $full_list = App\Role::select('name as value', 'code as key', 'shareable')->get();
-        $match_list = Array();
-        foreach($full_list as $item) {
-            if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
-                $match_item = ["key" => $item["key"], "shareable" => $item["shareable"], "value" => __($item["value"])];
-                array_push($match_list, $match_item);
-            }
-        }
-        return $match_list;
-    });
-
-    Route::get('dbrole/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-
-        $full_list = App\Role::select('name as value', 'code as key')
-            ->whereIn('code', ['CLI', 'DBA', 'DBRW', 'DBRO'])->get();
-        $match_list = Array();
-        foreach($full_list as $item) {
-            if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
-                $match_item = ["key" => $item["key"], "value" => __($item["value"])];
-                array_push($match_list, $match_item);
-            }
-        }
-        return $match_list;
-    });
-
-    Route::get('country/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-        $full_list = App\Country::select('name as value', 'iso as key')->get();        
-        $match_list = Array();
-        foreach($full_list as $item) {
-            if(str_starts_with(strtolower(__($item["key"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
-                $match_item = ["key" => $item["key"], "value" => __($item["key"])];
-                array_push($match_list, $match_item);
-            }
-        }
-        return $match_list;
-    });
-
-    Route::get('category/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-
-        $full_list = App\Category::select('category as value', 'code as key', 'ref_prefix as prefix')->get();
-        $match_list = Array();
-        foreach($full_list as $item) {
-            if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
-                $match_item = ["key" => $item["key"], "prefix" => $item["prefix"], "value" => __($item["value"])];
-                array_push($match_list, $match_item);
-            }
-        }
-        return $match_list;
-    });
-
-    Route::get('type/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-
-        $full_list = App\Type::select('type as value', 'code as key')->get();
-        $match_list = Array();
-        foreach($full_list as $item) {
-            if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
-                $match_item = ["key" => $item["key"], "value" => __($item["value"])];
-                array_push($match_list, $match_item);
-            }
-        }
-        return $match_list;
-    });
-
-    Route::get('classifier/{classifier}/img', fn (App\Classifier $classifier) => response($classifier->img)
+    Route::get('classifier/{classifier}/img', fn (App\Models\Classifier $classifier) => response($classifier->img)
         ->header('Content-Type', $classifier->value));
 
-    Route::get('template-category/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-        $list = App\TemplateMember::select('category as value', 'category as key')
-            ->where('category', 'like', "$term%")->distinct()->get();
-        if ($list->count() == 0) {
-            $list->push(['label' => __("Create")." ".$term." ?", 'key' => $term, 'value' => $term]);
-        }
+    // Autocompletions (accessible only to read-write users)
+    Route::middleware('can:readwrite')->group(function () {
 
-        return $list;
+        Route::get('event-name/autocomplete/{is_task}', function (Request $request, $is_task) {
+            $term = $request->term;
+            $results = App\Models\EventName::select('name as value', 'code as key')
+                ->where([
+                    ['is_task', $is_task],
+                ]);
+            if ($request->filled('category')) {
+                $results->whereRaw('ifnull(category, ?) = ?', [$request->category, $request->category]);
+            }
+            $match_list = Array();
+            foreach($results->get() as $item) {
+                if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                    $match_item = ["key" => $item["key"], "value" => __($item["value"])];
+                    array_push($match_list, $match_item);
+                }
+            }
+            return $match_list;
+        });
+
+        Route::get('classifier-type/autocomplete/{main_display}', function (Request $request, $main_display) {
+            $term = $request->input('term');
+            $results = App\Models\ClassifierType::select('type as value', 'code as key')
+                ->where('main_display', $main_display)
+                ->orderBy('type');
+            $match_list = Array();
+            foreach($results->get() as $item) {
+                if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                    $match_item = ["key" => $item["key"], "value" => __($item["value"])];
+                    array_push($match_list, $match_item);
+                }
+            }
+            return $match_list;
+        });
+
+        Route::get('user/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+
+            return App\Models\User::select('name as value', 'login as key')
+                ->where('name', 'like', "$term%")
+                ->orWhere('login', 'like', "$term%")
+                ->take(10)->get();
+        });
+
+        Route::get('actor/autocomplete/{create_option?}', function (Request $request, $create_option = null) {
+            $term = $request->input('term');
+            $list = App\Models\Actor::select(DB::raw('coalesce(display_name, name) as value'), 'id as key')
+                ->where('name', 'like', "$term%")
+                ->orWhere('display_name', 'like', "$term")
+                ->take(10)->get();
+            if ($list->count() < 5 && $create_option) {
+                $list->push(['label' => __("Create")." ".$term." ?", 'key' => 'create', 'value' => $term]);
+            }
+
+            return $list;
+        });
+
+        Route::get('role/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+
+            $full_list = App\Models\Role::select('name as value', 'code as key', 'shareable')->get();
+            $match_list = Array();
+            foreach($full_list as $item) {
+                if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                    $match_item = ["key" => $item["key"], "shareable" => $item["shareable"], "value" => __($item["value"])];
+                    array_push($match_list, $match_item);
+                }
+            }
+            return $match_list;
+        });
+
+        Route::get('dbrole/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+
+            $full_list = App\Models\Role::select('name as value', 'code as key')
+                ->whereIn('code', ['CLI', 'DBA', 'DBRW', 'DBRO'])->get();
+            $match_list = Array();
+            foreach($full_list as $item) {
+                if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                    $match_item = ["key" => $item["key"], "value" => __($item["value"])];
+                    array_push($match_list, $match_item);
+                }
+            }
+            return $match_list;
+        });
+
+        Route::get('country/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+            $full_list = App\Models\Country::select('name as value', 'iso as key')->get();
+            $match_list = Array();
+            foreach($full_list as $item) {
+                if(str_starts_with(strtolower(__($item["key"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                    $match_item = ["key" => $item["key"], "value" => __($item["key"])];
+                    array_push($match_list, $match_item);
+                }
+            }
+            return $match_list;
+        });
+
+        Route::get('category/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+
+            $full_list = App\Models\Category::select('category as value', 'code as key', 'ref_prefix as prefix')->get();
+            $match_list = Array();
+            foreach($full_list as $item) {
+                if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                    $match_item = ["key" => $item["key"], "prefix" => $item["prefix"], "value" => __($item["value"])];
+                    array_push($match_list, $match_item);
+                }
+            }
+            return $match_list;
+        });
+
+        Route::get('type/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+
+            $full_list = App\Models\Type::select('type as value', 'code as key')->get();
+            $match_list = Array();
+            foreach($full_list as $item) {
+                if(str_starts_with(strtolower(__($item["value"])), strtolower($term)) or str_starts_with(strtolower($item["key"]), strtolower($term)) ){
+                    $match_item = ["key" => $item["key"], "value" => __($item["value"])];
+                    array_push($match_list, $match_item);
+                }
+            }
+            return $match_list;
+        });
+
+        Route::get('template-category/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+            $list = App\Models\TemplateMember::select('category as value', 'category as key')
+                ->where('category', 'like', "$term%")->distinct()->get();
+            if ($list->count() == 0) {
+                $list->push(['label' => __("Create")." ".$term." ?", 'key' => $term, 'value' => $term]);
+            }
+
+            return $list;
+        });
+
+        Route::get('template-class/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+
+            return App\Models\TemplateClass::select('name as value', 'id as key')
+                ->where('name', 'like', "$term%")->get();
+        });
+
+        Route::get('template-style/autocomplete', function (Request $request) {
+            $term = $request->input('term');
+            $list = App\Models\TemplateMember::select('style as value', 'style as key')
+                ->where('style', 'like', "$term%")->distinct()->get();
+            if ($list->count() == 0) {
+                $list->push(['label' => __("Create")." ".$term." ?", 'key' => $term, 'value' => $term]);
+            }
+
+            return $list;
+        });
     });
 
-    Route::get('template-class/autocomplete', function (Request $request) {
-        $term = $request->input('term');
+    Route::post('event/{event}/recreateTasks', fn (App\Models\Event $event) => DB::statement('CALL recreate_tasks(?, ?)', [$event->id, Auth::user()->login]));
 
-        return App\TemplateClass::select('name as value', 'id as key')
-            ->where('name', 'like', "$term%")->get();
+    Route::resource('matter', MatterController::class);
+    Route::resource('actor', App\Http\Controllers\ActorController::class);
+    Route::resource('user', App\Http\Controllers\UserController::class);
+    Route::apiResource('task', App\Http\Controllers\TaskController::class);
+
+    // The following resources are not accessible to clients
+    Route::middleware('can:except_client')->group(function () {
+        Route::post('matter/clear-tasks', [HomeController::class, 'clearTasks']);
+        Route::get('matter/{parent_matter}/createN', fn (Matter $parent_matter) => view('matter.createN', compact('parent_matter')));
+        Route::apiResource('event', App\Http\Controllers\EventController::class);
+        Route::resource('category', App\Http\Controllers\CategoryController::class);
+        Route::resource('classifier_type', App\Http\Controllers\ClassifierTypeController::class);
+        Route::resource('role', App\Http\Controllers\RoleController::class);
+        Route::resource('type', App\Http\Controllers\MatterTypeController::class);
+        Route::resource('default_actor', App\Http\Controllers\DefaultActorController::class);
+        Route::get('actor/{actor}/usedin', [App\Http\Controllers\ActorPivotController::class, 'usedIn']);
+        Route::resource('eventname', App\Http\Controllers\EventNameController::class);
+        Route::resource('rule', App\Http\Controllers\RuleController::class);
+        Route::apiResource('actor-pivot', App\Http\Controllers\ActorPivotController::class);
+        Route::apiResource('classifier', App\Http\Controllers\ClassifierController::class);
+        Route::resource('renewal', RenewalController::class);
+        Route::resource('fee', App\Http\Controllers\FeeController::class);
+        Route::resource('template-member', App\Http\Controllers\TemplateMemberController::class);
+        Route::resource('document', DocumentController::class)->parameters(['document' => 'class']);
+        Route::resource('event-class', App\Http\Controllers\EventClassController::class);
     });
-
-    Route::get('template-style/autocomplete', function (Request $request) {
-        $term = $request->input('term');
-        $list = App\TemplateMember::select('style as value', 'style as key')
-            ->where('style', 'like', "$term%")->distinct()->get();
-        if ($list->count() == 0) {
-            $list->push(['label' => __("Create")." ".$term." ?", 'key' => $term, 'value' => $term]);
-        }
-
-        return $list;
-    });
-
-    Route::post('event/{event}/recreateTasks', fn (App\Event $event) => DB::statement('CALL recreate_tasks(?, ?)', [$event->id, Auth::user()->login]));
-
-    Route::resource('matter', 'MatterController');
-    Route::apiResource('task', 'TaskController');
-    Route::apiResource('event', 'EventController');
-    Route::resource('category', 'CategoryController');
-    Route::resource('classifier_type', 'ClassifierTypeController');
-    Route::resource('role', 'RoleController');
-    Route::resource('type', 'MatterTypeController');
-    Route::resource('default_actor', 'DefaultActorController');
-    Route::resource('actor', 'ActorController');
-    Route::resource('user', 'UserController');
-    Route::get('actor/{actor}/usedin', 'ActorPivotController@usedIn');
-    Route::resource('eventname', 'EventNameController');
-    Route::resource('rule', 'RuleController');
-    Route::apiResource('actor-pivot', 'ActorPivotController');
-    Route::apiResource('classifier', 'ClassifierController');
-    Route::resource('renewal', 'RenewalController');
-    Route::resource('fee', 'FeeController');
-    Route::resource('template-member', 'TemplateMemberController');
-    Route::resource('document', 'DocumentController')->parameters(['document' => 'class']);
-    Route::resource('event-class', 'EventClassController');
-    Route::resource('rule-class', 'RuleClassController');
-
-    // Testing - not used
-    /* Route::get('matter/{matter}/actors', function (App\Matter $matter) {
-      //$actors = $matter->with('container.actors.actor:id,name,display_name,company_id', 'actors.actor:id,name,display_name,company_id')->get();
-      return $matter->actors;
-      });
-
-      Route::get('matter/{matter}/classifiers', function (App\Matter $matter) {
-      return $matter->classifiers->where('main_display', 0);
-      });
-
-      Route::get('matter/{matter}/titles', function (App\Matter $matter) {
-      return $matter->classifiers->where('main_display', 1);
-      });
-
-      Route::get('matter/{matter}/category', function (App\Matter $matter) {
-      return $matter->category;
-      });
-
-      Route::get('matter/{matter}/type', function (App\Matter $matter) {
-      return $matter->type;
-      });
-
-      Route::get('matter/{matter}/country', function (App\Matter $matter) {
-      return $matter->countryInfo;
-      });
-
-      Route::get('matter/{matter}/origin', function (App\Matter $matter) {
-      return $matter->originInfo;
-      });
-
-      Route::get('task/{task}/event', function (App\Task $task) {
-      return $task->event;
-      });
-
-      Route::get('event/{event}/tasks', function (App\Event $event) {
-      return $event->tasks;
-      });
-
-      Route::get('event/{event}/link', function (App\Event $event) {
-      return $event->link;
-      });
-
-      Route::get('events/withlinks', function () {
-      $event = App\Event::has('link')->first();
-      return $event->link;
-      });
-
-      Route::get('event/{id}/retrolink', function ($id) {
-      $event = App\Event::find($id);
-      return $event->retroLink;
-      });
-
-      Route::get('matter/{matter}/container', function (App\Matter $matter) {
-      return $matter->container;
-      });
-
-      Route::get('matter/{matter}/status', function (App\Matter $matter) {
-      return $matter->status;
-      });
-
-      Route::get('matter/status/{term}', function ($term) {
-      $matters = Matter::with('status')->whereHas('status', function($q) use ($term) {
-      $q->where('name', 'LIKE', "$term%");
-      })->take(25)->get();
-      return $matters;
-      });
-
-      Route::get('matter/{id}/priority_to', function ($id) {
-      $matter = Matter::with('priorityTo.children.children')->find($id);
-      return $matter->priorityTo->where('parent_id', null)->groupBy('caseref');
-      }); */
 });

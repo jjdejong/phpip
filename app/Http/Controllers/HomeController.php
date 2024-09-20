@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Matter;
-use App\Task;
+use App\Models\Matter;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;

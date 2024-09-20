@@ -14,12 +14,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <div class="card-header bg-primary text-light reveal-hidden p-1">
         <a id="see_family" class="bg-primary text-white lead {{ $matter->dead ? 'text-decoration-line-through' : '' }}" href="/matter?Ref={{ $matter->caseref }}" title={{ __("See family") }}>{{ $matter->uid }}</a>
         ({{ __($matter->category->category) }})
-        @canany(['admin', 'readwrite'])
+        @can('readwrite')
         <a class="bg-primary text-white float-end hidden-action"
           data-bs-toggle="modal" data-bs-target="#ajaxModal" href="/matter/{{ $matter->id }}/edit" title="{{ __('Advanced matter edition') }}">
           <svg width="14" height="14" fill="currentColor"><use xlink:href="#pencil-square"/></svg>
         </a>
-        @endcanany
+        @endcan
       </div>
       <div class="card-body p-1">
         <dl class="row mb-0">
@@ -54,7 +54,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         </div>
       </div>
       <div class="card-footer d-grid gap-2 p-1">
-        @canany(['admin', 'readwrite'])
+        @can('readwrite')
         <div class="btn-group">
           <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=child" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-sm" title="{{ __('Create child :category', ['category' => __($matter->category->category)]) }}">
             <svg width="14" height="14" fill="currentColor"><use xlink:href="#node-plus-fill"/></svg> {{ __('New Child') }}
@@ -66,7 +66,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <svg width="14" height="14" fill="currentColor"><use xlink:href="#flag-fill"/></svg> {{ __('Nat. Phase') }}
           </a>
         </div>
-        @endcanany
+        @endcan
       </div>
     </div>
   </div>
@@ -83,9 +83,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             </dd>
           @endforeach
         @endforeach
+        @can('readwrite')
         <div>
           <a class="badge rounded-pill text-bg-primary float-end" role="button" data-bs-toggle="collapse" href="#addTitleCollapse">+</a>
         </div>
+        @endcan
         <div id="addTitleCollapse" class="collapse">
           <form id="addTitleForm" autocomplete="off">
             <div class="row">
@@ -120,18 +122,18 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
     <div id="actorPanel" class="card border-secondary h-100" style="max-height: 600px">
       <div class="card-header reveal-hidden text-white bg-secondary">
         {{ __('Actors') }}
-        @canany(['admin', 'readwrite'])
+        @can('readwrite')
         <a class="hidden-action text-light fw-bold float-end" data-bs-toggle="popover" href="javascript:void(0)" title="{{ __('Add Actor') }}">
           <svg width="14" height="14" fill="currentColor"><use xlink:href="#person-plus-fill"/></svg>
         </a>
-        @endcanany
+        @endcan
       </div>
       <div class="card-body bg-light p-1" style="overflow: auto;">
         @foreach ( $actors as $role_name => $role_group )
         <div class="card reveal-hidden border-secondary mb-1">
           <div class="card-header bg-primary text-light p-1">
             {{ __($role_name) }}
-            @canany(['admin', 'readwrite'])
+            @can('readwrite')
             <a class="hidden-action float-end text-light fw-bold ms-3" data-bs-toggle="popover" title=" {{ __("Add :role",['role' => __($role_name)]) }}"
               data-role_name="{{ $role_name }}"
               data-role_code="{{ $role_group->first()->role_code }}"
@@ -142,18 +144,18 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
             <a class="hidden-action float-end text-light" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-lg" title="{{ __('Edit actors in :role group', ['role' => __($role_group->first()->role_name)] ) }}" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
               <svg width="12" height="12" fill="currentColor"><use xlink:href="#pencil-square"/></svg>
             </a>
-            @endcanany
+            @endcan
           </div>
           <div class="card-body p-1" style="max-height: 80px; overflow: auto;">
             <ul class="list-unstyled mb-0">
               @foreach ( $role_group as $actor )
               <li class="text-truncate {{ $actor->inherited ? 'fst-italic' : '' }}">
-                @if ( $actor->warn )
+                @if ( $actor->warn && $actor->role_code == 'CLI')
                 <span class="text-danger" title="{{ __('Special instructions') }}">
                   <svg width="12" height="12" fill="currentColor"><use xlink:href="#exclamation-triangle-fill"/></svg>
                 </span>
                 @endif
-                <a @if ($actor->warn) class="text-danger" @endif
+                <a @if ($actor->warn && $actor->role_code == 'CLI') class="text-danger" @endif
                   href="/actor/{{ $actor->actor_id }}"
                   data-bs-toggle="modal"
                   data-bs-target="#ajaxModal"

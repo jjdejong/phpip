@@ -759,7 +759,7 @@ msgstr "Dépendances entre acteurs"
 #: resources/views/user/index.blade.php:16
 #: resources/views/user/show.blade.php:8 resources/views/welcome.blade.php:73
 msgid "Login"
-msgstr "Identifiant"
+msgstr "Identification"
 
 #: lang/blade-translations/auth/static.php:20
 #: lang/blade-translations/user/static.php:22

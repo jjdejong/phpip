@@ -29,7 +29,7 @@ class sendCall extends Mailable
 
     public function build()
     {
-        $templates = \App\TemplateMember::whereHas('class', function (Builder $q) {
+        $templates = \App\Models\TemplateMember::whereHas('class', function (Builder $q) {
             $q->where('name', 'sys_renewals');
         })->where('language', $this->renewals[0]['language'] ?? app()->getLocale());
         if ($this->step == 'first') {

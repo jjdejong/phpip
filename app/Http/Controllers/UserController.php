@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\App;
@@ -13,11 +14,10 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        App::setLocale(Auth::user()->language);
-        $this->authorize('viewAny', User::class);
+        Gate::authorize('readonly');
         $user = new User;
         if ($request->filled('Name')) {
-            $user = $user->where('name', 'like', $request->Name.'%');
+            $user = $user->where('name', 'like', $request->Name . '%');
         }
         $userslist = $user->with('company')->orderby('name')->paginate(21);
         $userslist->appends($request->input())->links();
@@ -27,9 +27,8 @@ class UserController extends Controller
 
     public function create()
     {
-        App::setLocale(Auth::user()->language);
-        $this->authorize('create', User::class);
-        $table = new \App\Actor;
+        Gate::authorize('admin');
+        $table = new \App\Models\Actor;
         $userComments = $table->getTableComments('actor');
 
         return view('user.create', compact('userComments'));
@@ -37,8 +36,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        App::setLocale(Auth::user()->language);
-        $this->authorize('create', User::class);
+        Gate::authorize('admin');
         $request->validate([
             'name' => 'required|unique:actor|max:100',
             'login' => 'required|unique:users',
@@ -53,10 +51,9 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        App::setLocale(Auth::user()->language);
-        $this->authorize('view', $user);
+        Gate::authorize('readonly');
         $userInfo = $user->load(['company:id,name', 'roleInfo']);
-        $table = new \App\Actor;
+        $table = new \App\Models\Actor;
         $userComments = $table->getTableComments('actor');
 
         return view('user.show', compact('userInfo', 'userComments'));
@@ -69,8 +66,7 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        App::setLocale(Auth::user()->language);
-        $this->authorize('update', $user);
+        Gate::authorize('admin');
         $request->validate([
             'login' => 'sometimes|required|unique:users',
             'password' => 'sometimes|required|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[^a-zA-Z0-9]/',
@@ -88,7 +84,7 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        $this->authorize('delete', $user);
+        Gate::authorize('admin');
         $user->delete();
 
         return $user;

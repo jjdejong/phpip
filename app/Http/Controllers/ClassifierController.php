@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Classifier;
+use App\Models\Classifier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

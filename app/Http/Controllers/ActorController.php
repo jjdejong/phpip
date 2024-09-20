@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Actor;
+use App\Models\Actor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Gate;
 
 class ActorController extends Controller
 {
     public function index(Request $request)
     {
-        $this->authorize('viewAny', Actor::class);
+        Gate::authorize('readonly');
         $actor = new Actor;
         if ($request->filled('Name')) {
-            $actor = $actor->where('name', 'like', $request->Name.'%');
+            $actor = $actor->where('name', 'like', $request->Name . '%');
         }
         switch ($request->selector) {
             case 'phy_p':
@@ -35,7 +35,7 @@ class ActorController extends Controller
 
     public function create()
     {
-        $this->authorize('create', Actor::class);
+        Gate::authorize('readwrite');
         $table = new Actor;
         //TODO getTableComments is the same as in Rule.php. To render common
         $actorComments = $table->getTableComments('actor');
@@ -45,7 +45,7 @@ class ActorController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('create', Actor::class);
+        Gate::authorize('readwrite');
         $request->validate([
             'name' => 'required|max:100',
             'email' => 'email|nullable',
@@ -57,7 +57,7 @@ class ActorController extends Controller
 
     public function show(Actor $actor)
     {
-        $this->authorize('view', $actor);
+        Gate::authorize('readonly');
         $actorInfo = $actor->load(['company:id,name', 'parent:id,name', 'site:id,name', 'droleInfo', 'countryInfo:iso,name', 'country_mailingInfo:iso,name', 'country_billingInfo:iso,name', 'nationalityInfo:iso,name']);
         $actorComments = $actor->getTableComments('actor');
 
@@ -71,7 +71,7 @@ class ActorController extends Controller
 
     public function update(Request $request, Actor $actor)
     {
-        $this->authorize('update', $actor);
+        Gate::authorize('readwrite');
         $request->validate([
             'email' => 'email|nullable',
             'ren_discount' => 'numeric',
@@ -84,7 +84,7 @@ class ActorController extends Controller
 
     public function destroy(Actor $actor)
     {
-        $this->authorize('delete', $actor);
+        Gate::authorize('readwrite');
         $actor->delete();
 
         return $actor;

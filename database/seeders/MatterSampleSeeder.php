@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\ActorPivot;
-use App\Matter;
+use App\Models\ActorPivot;
+use App\Models\Matter;
 use Illuminate\Database\Seeder;
 
 class MatterSampleSeeder extends Seeder

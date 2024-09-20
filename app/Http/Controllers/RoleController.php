@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Actor;
-use App\Role;
+use App\Models\Actor;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -49,7 +49,6 @@ class RoleController extends Controller
 
     public function show(Role $role)
     {
-        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('actor_role');
         $role->get();

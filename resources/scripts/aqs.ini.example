@@ -1,4 +1,4 @@
-url = https://qa.anaquaservices.com/ws/me/patents/
+url = https://api.anaquaservices.com/ws/me/patents/
 jwt_header_encoded = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
 jwt_secret = <your AQS secret>
 aqs_fee = 10

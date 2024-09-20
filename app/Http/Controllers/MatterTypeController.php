@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Actor;
-use App\MatterType;
+use App\Models\Actor;
+use App\Models\MatterType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +48,6 @@ class MatterTypeController extends Controller
 
     public function show(MatterType $type)
     {
-        App::setLocale(Auth::user()->language);
         $table = new Actor;
         $tableComments = $table->getTableComments('matter_type');
 
