@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Config;
 
 class RenewrSync extends Command
 {
-    protected $signature = 'app:renewr-sync {--demo : Run in demo mode}';
+    protected $signature = 'tasks:renewr-sync {--demo : Run in demo mode}';
     protected $description = 'Process renewal portfolio data from Renewr';
 
     private $stats = [
