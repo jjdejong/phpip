@@ -10,11 +10,11 @@ class MatterClassifiers extends Model
 
     public function linkedMatter()
     {
-        return $this->belongsTo(\App\Models\Matter::class, 'lnk_matter_id');
+        return $this->belongsTo(Matter::class, 'lnk_matter_id');
     }
 
     public function matter()
     {
-        return $this->belongsTo(\App\Models\Matter::class);
+        return $this->belongsTo(Matter::class);
     }
 }

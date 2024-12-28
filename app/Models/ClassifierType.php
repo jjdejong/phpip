@@ -20,6 +20,6 @@ class ClassifierType extends Model
 
     public function category()
     {
-        return $this->belongsTo(\App\Models\Category::class, 'for_category', 'code');
+        return $this->belongsTo(Category::class, 'for_category', 'code');
     }
 }

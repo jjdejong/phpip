@@ -21,47 +21,47 @@ class Actor extends Model
 
     public function company()
     {
-        return $this->belongsTo(\App\Models\Actor::class, 'company_id');
+        return $this->belongsTo(Actor::class, 'company_id');
     }
 
     public function parent()
     {
-        return $this->belongsTo(\App\Models\Actor::class, 'parent_id');
+        return $this->belongsTo(Actor::class, 'parent_id');
     }
 
     public function site()
     {
-        return $this->belongsTo(\App\Models\Actor::class, 'site_id');
+        return $this->belongsTo(Actor::class, 'site_id');
     }
 
     public function matters()
     {
-        return $this->belongsToMany(\App\Models\Matter::class, 'matter_actor_lnk');
+        return $this->belongsToMany(Matter::class, 'matter_actor_lnk');
     }
 
     public function droleInfo()
     {
-        return $this->belongsTo(\App\Models\Role::class, 'default_role');
+        return $this->belongsTo(Role::class, 'default_role');
     }
 
     public function countryInfo()
     {
-        return $this->belongsTo(\App\Models\Country::class, 'country');
+        return $this->belongsTo(Country::class, 'country');
     }
 
     public function country_mailingInfo()
     {
-        return $this->belongsTo(\App\Models\Country::class, 'country_mailing');
+        return $this->belongsTo(Country::class, 'country_mailing');
     }
 
     public function country_billingInfo()
     {
-        return $this->belongsTo(\App\Models\Country::class, 'country_billing');
+        return $this->belongsTo(Country::class, 'country_billing');
     }
 
     public function nationalityInfo()
     {
-        return $this->belongsTo(\App\Models\Country::class, 'nationality');
+        return $this->belongsTo(Country::class, 'nationality');
     }
 
     public function getTableComments($table_name = null)

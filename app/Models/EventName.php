@@ -20,31 +20,31 @@ class EventName extends Model
 
     public function events()
     {
-        return $this->hasMany(\App\Models\Event::class, 'code');
+        return $this->hasMany(Event::class, 'code');
     }
 
     public function tasks()
     {
-        return $this->hasMany(\App\Models\Task::class, 'code');
+        return $this->hasMany(Task::class, 'code');
     }
 
     public function countryInfo()
     {
-        return $this->belongsTo(\App\Models\Country::class, 'country', 'iso');
+        return $this->belongsTo(Country::class, 'country', 'iso');
     }
 
     public function categoryInfo()
     {
-        return $this->belongsTo(\App\Models\Category::class, 'category', 'code');
+        return $this->belongsTo(Category::class, 'category', 'code');
     }
 
     public function default_responsibleInfo()
     {
-        return $this->belongsTo(\App\Models\User::class, 'default_responsible', 'login');
+        return $this->belongsTo(User::class, 'default_responsible', 'login');
     }
 
     public function templates()
     {
-        return $this->belongsToMany(\App\Models\TemplateClass::class, 'event_class_lnk', 'event_name_code', 'template_class_id');
+        return $this->belongsToMany(TemplateClass::class, 'event_class_lnk', 'event_name_code', 'template_class_id');
     }
 }

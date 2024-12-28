@@ -15,52 +15,52 @@ class Rule extends Model
 
     public function country()
     {
-        return $this->belongsTo(\App\Models\Country::class, 'for_country', 'iso');
+        return $this->belongsTo(Country::class, 'for_country', 'iso');
     }
 
     public function origin()
     {
-        return $this->belongsTo(\App\Models\Country::class, 'for_origin', 'iso');
+        return $this->belongsTo(Country::class, 'for_origin', 'iso');
     }
 
     public function category()
     {
-        return $this->belongsTo(\App\Models\Category::class, 'for_category', 'code');
+        return $this->belongsTo(Category::class, 'for_category', 'code');
     }
 
     public function trigger()
     {
-        return $this->belongsTo(\App\Models\EventName::class, 'trigger_event');
+        return $this->belongsTo(EventName::class, 'trigger_event');
     }
 
     public function taskInfo()
     {
-        return $this->belongsTo(\App\Models\EventName::class, 'task');
+        return $this->belongsTo(EventName::class, 'task');
     }
 
     public function type()
     {
-        return $this->belongsTo(\App\Models\Type::class, 'for_type', 'code');
+        return $this->belongsTo(Type::class, 'for_type', 'code');
     }
 
     public function condition_eventInfo()
     {
-        return $this->belongsTo(\App\Models\EventName::class, 'condition_event');
+        return $this->belongsTo(EventName::class, 'condition_event');
     }
 
     public function abort_onInfo()
     {
-        return $this->belongsTo(\App\Models\EventName::class, 'abort_on');
+        return $this->belongsTo(EventName::class, 'abort_on');
     }
 
     public function responsibleInfo()
     {
-        return $this->belongsTo(\App\Models\Actor::class, 'responsible', 'login');
+        return $this->belongsTo(Actor::class, 'responsible', 'login');
     }
 
     public function templates()
     {
-        return $this->belongsToMany(\App\Models\TemplateClass::class, 'rule_class_lnk', 'task_rule_id', 'template_class_id');
+        return $this->belongsToMany(TemplateClass::class, 'rule_class_lnk', 'task_rule_id', 'template_class_id');
     }
 
     public function getTableComments($table_name = null)

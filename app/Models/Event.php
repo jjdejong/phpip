@@ -20,27 +20,27 @@ class Event extends Model
 
     public function info()
     {
-        return $this->hasOne(\App\Models\EventName::class, 'code', 'code');
+        return $this->hasOne(EventName::class, 'code', 'code');
     }
 
     public function matter()
     {
-        return $this->belongsTo(\App\Models\Matter::class);
+        return $this->belongsTo(Matter::class);
     }
 
     public function altMatter()
     {
-        return $this->belongsTo(\App\Models\Matter::class, 'alt_matter_id')->withDefault();
+        return $this->belongsTo(Matter::class, 'alt_matter_id')->withDefault();
     }
 
     public function link()
     {
-        return $this->hasOne(\App\Models\Event::class, 'matter_id', 'alt_matter_id')->whereCode('FIL')->withDefault();
+        return $this->hasOne(Event::class, 'matter_id', 'alt_matter_id')->whereCode('FIL')->withDefault();
     }
 
     public function retroLink()
     {
-        return $this->belongsTo(\App\Models\Event::class, 'matter_id', 'alt_matter_id')->withDefault();
+        return $this->belongsTo(Event::class, 'matter_id', 'alt_matter_id')->withDefault();
     }
 
     public function tasks()
@@ -49,7 +49,7 @@ class Event extends Model
           var_dump($query->sql);
           var_dump($query->bindings);
           }); */
-        return $this->hasMany(\App\Models\Task::class, 'trigger_id')->orderBy('due_date');
+        return $this->hasMany(Task::class, 'trigger_id')->orderBy('due_date');
     }
 
     public function cleanNumber()

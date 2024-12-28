@@ -22,22 +22,22 @@ class User extends Authenticatable
 
     public function roleInfo()
     {
-        return $this->belongsTo(\App\Models\Role::class, 'default_role');
+        return $this->belongsTo(Role::class, 'default_role');
     }
 
     public function company()
     {
-        return $this->belongsTo(\App\Models\Actor::class, 'company_id');
+        return $this->belongsTo(Actor::class, 'company_id');
     }
 
     public function parent()
     {
-        return $this->belongsTo(\App\Models\Actor::class, 'parent_id');
+        return $this->belongsTo(Actor::class, 'parent_id');
     }
 
     public function matters()
     {
-        return $this->hasMany(\App\Models\Matter::class, 'responsible', 'login');
+        return $this->hasMany(Matter::class, 'responsible', 'login');
     }
 
     public function tasks()

@@ -10,6 +10,6 @@ class TemplateMember extends Model
 
     public function class()
     {
-        return $this->belongsTo(\App\Models\TemplateClass::class);
+        return $this->belongsTo(TemplateClass::class);
     }
 }

@@ -22,7 +22,7 @@ class Matter extends Model
     public function family()
     {
         // Gets family members
-        return $this->hasMany(\App\Models\Matter::class, 'caseref', 'caseref')
+        return $this->hasMany(Matter::class, 'caseref', 'caseref')
             ->orderBy('origin')
             ->orderBy('country')
             ->orderBy('type_code')
@@ -31,17 +31,17 @@ class Matter extends Model
 
     public function container()
     {
-        return $this->belongsTo(\App\Models\Matter::class, 'container_id')->withDefault();
+        return $this->belongsTo(Matter::class, 'container_id')->withDefault();
     }
 
     public function parent()
     {
-        return $this->belongsTo(\App\Models\Matter::class, 'parent_id')->withDefault();
+        return $this->belongsTo(Matter::class, 'parent_id')->withDefault();
     }
 
     public function children()
     {
-        return $this->hasMany(\App\Models\Matter::class, 'parent_id')
+        return $this->hasMany(Matter::class, 'parent_id')
             ->orderBy('origin')
             ->orderBy('country')
             ->orderBy('type_code')
@@ -51,7 +51,7 @@ class Matter extends Model
     public function priorityTo()
     {
         // Gets external matters claiming priority on this one (where clause is ignored by eager loading)
-        return $this->belongsToMany(\App\Models\Matter::class, 'event', 'alt_matter_id')
+        return $this->belongsToMany(Matter::class, 'event', 'alt_matter_id')
             ->where('caseref', '!=', $this->caseref)
             ->orderBy('caseref')
             ->orderBy('origin')
@@ -63,13 +63,13 @@ class Matter extends Model
     public function actors()
     {
         // MatterActors refers to a view that also includes the actors inherited from the container. Can only be used to display data
-        return $this->hasMany(\App\Models\MatterActors::class);
+        return $this->hasMany(MatterActors::class);
     }
 
     public function client()
     {
         // Used in Policies - do not change without checking MatterPolicy
-        return $this->hasOne(\App\Models\MatterActors::class)->whereRoleCode('CLI')->withDefault();
+        return $this->hasOne(MatterActors::class)->whereRoleCode('CLI')->withDefault();
     }
 
     public function delegate()
@@ -94,67 +94,67 @@ class Matter extends Model
 
     public function actorPivot()
     {
-        return $this->hasMany(\App\Models\ActorPivot::class);
+        return $this->hasMany(ActorPivot::class);
     }
 
     public function events()
     {
-        return $this->hasMany(\App\Models\Event::class)
+        return $this->hasMany(Event::class)
             ->orderBy('event_date');
     }
 
     public function filing()
     {
-        return $this->hasOne(\App\Models\Event::class)
+        return $this->hasOne(Event::class)
             ->whereCode('FIL')->withDefault();
     }
 
     public function parentFiling()
     {
-        return $this->hasMany(\App\Models\Event::class)
+        return $this->hasMany(Event::class)
             ->whereCode('PFIL')->withDefault();
     }
 
     public function publication()
     {
-        return $this->hasOne(\App\Models\Event::class)
+        return $this->hasOne(Event::class)
             ->whereCode('PUB')->withDefault();
     }
 
     public function grant()
     {
-        return $this->hasOne(\App\Models\Event::class)
+        return $this->hasOne(Event::class)
             ->whereIn('code', ['GRT', 'REG'])->withDefault();
     }
 
     public function registration()
     {
-        return $this->hasOne(\App\Models\Event::class)
+        return $this->hasOne(Event::class)
             ->whereCode('REG')->withDefault();
     }
 
     public function entered()
     {
-        return $this->hasOne(\App\Models\Event::class)
+        return $this->hasOne(Event::class)
             ->whereCode('ENT')->withDefault();
     }
 
     /*public function status()
     {
-        return $this->hasOne('App\Models\Event')
+        return $this->hasOne('Event::class')
             ->latest('event_date');
     }*/
 
     public function priority()
     {
-        return $this->hasMany(\App\Models\Event::class)
+        return $this->hasMany(Event::class)
             ->whereCode('PRI');
     }
 
     // All tasks, including renewals and done
     public function tasks()
     {
-        return $this->hasManyThrough(\App\Models\Task::class, \App\Models\Event::class, 'matter_id', 'trigger_id', 'id');
+        return $this->hasManyThrough(Task::class, Event::class, 'matter_id', 'trigger_id', 'id');
     }
 
     // Pending excluding renewals
@@ -178,46 +178,46 @@ class Matter extends Model
     // Returns all classifiers outside the "main display", including those inherited from the container (MatterClassifiers is a model referring to db view matter_classifiers)
     public function classifiers()
     {
-        return $this->hasMany(\App\Models\MatterClassifiers::class)
+        return $this->hasMany(MatterClassifiers::class)
             ->whereMainDisplay(0);
     }
 
     // Returns the classifiers native to the matter (only applies to a container, normally)
     public function classifiersNative()
     {
-        return $this->hasMany(\App\Models\Classifier::class);
+        return $this->hasMany(Classifier::class);
     }
 
     // Returns all classifiers of the "main display", including those inherited from the container (MatterClassifiers is a model referring to db view matter_classifiers)
     public function titles()
     {
-        return $this->hasMany(\App\Models\MatterClassifiers::class)
+        return $this->hasMany(MatterClassifiers::class)
             ->whereMainDisplay(1);
     }
 
     public function linkedBy()
     {
-        return $this->belongsToMany(\App\Models\Matter::class, 'classifier', 'lnk_matter_id');
+        return $this->belongsToMany(Matter::class, 'classifier', 'lnk_matter_id');
     }
 
     public function countryInfo()
     {
-        return $this->belongsTo(\App\Models\Country::class, 'country');
+        return $this->belongsTo(Country::class, 'country');
     }
 
     public function originInfo()
     {
-        return $this->belongsTo(\App\Models\Country::class, 'origin')->withDefault();
+        return $this->belongsTo(Country::class, 'origin')->withDefault();
     }
 
     public function category()
     {
-        return $this->belongsTo(\App\Models\Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function type()
     {
-        return $this->belongsTo(\App\Models\Type::class)->withDefault();
+        return $this->belongsTo(Type::class)->withDefault();
     }
 
     public static function filter($sortkey = 'id', $sortdir = 'desc', $multi_filter = [], $display_with = false, $include_dead = false)

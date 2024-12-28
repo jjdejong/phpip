@@ -12,26 +12,26 @@ class DefaultActor extends Model
 
     public function actor()
     {
-        return $this->belongsTo(\App\Models\Actor::class);
+        return $this->belongsTo(Actor::class);
     }
 
     public function country()
     {
-        return $this->belongsTo(\App\Models\Country::class, 'for_country', 'iso');
+        return $this->belongsTo(Country::class, 'for_country', 'iso');
     }
 
     public function category()
     {
-        return $this->belongsTo(\App\Models\Category::class, 'for_category', 'code');
+        return $this->belongsTo(Category::class, 'for_category', 'code');
     }
 
     public function client()
     {
-        return $this->belongsTo(\App\Models\Actor::class, 'for_client');
+        return $this->belongsTo(Actor::class, 'for_client');
     }
 
     public function roleInfo()
     {
-        return $this->belongsTo(\App\Models\Role::class, 'role', 'code');
+        return $this->belongsTo(Role::class, 'role', 'code');
     }
 }

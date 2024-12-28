@@ -12,6 +12,6 @@ class EventClassLnk extends Model
 
     public function class()
     {
-        return $this->belongsTo(\App\Models\TemplateClass::class, 'template_class_id');
+        return $this->belongsTo(TemplateClass::class, 'template_class_id');
     }
 }

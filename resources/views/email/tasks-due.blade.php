@@ -17,7 +17,7 @@
       <tr>
         <td><a href="{{ $phpip_url }}/{{ $task->matter->id }}">{{ $task->matter->uid }}</a></td>
         <td>{{ $task->matter->category_code }}</td>
-        <td>{{ $task->info->name }} - {{ $task->detail }}</td>
+        <td>{{ "{$task->info->name}{$task->detail ? " - $task->detail" : ''}" }}</td>
         <td>{{ $task->due_date->isoFormat('L') }}</td>
         <td>{{ $task->matter->responsible }}</td>
       </tr>

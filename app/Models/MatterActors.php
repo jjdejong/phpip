@@ -10,16 +10,16 @@ class MatterActors extends Model
 
     public function matter()
     {
-        return $this->belongsTo(\App\Models\Matter::class);
+        return $this->belongsTo(Matter::class);
     }
 
     public function actor()
     {
-        return $this->belongsTo(\App\Models\Actor::class);
+        return $this->belongsTo(Actor::class);
     }
 
     public function company()
     {
-        return $this->belongsTo(\App\Models\Actor::class, 'company_id');
+        return $this->belongsTo(Actor::class, 'company_id');
     }
 }

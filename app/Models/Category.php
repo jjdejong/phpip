@@ -20,11 +20,11 @@ class Category extends Model
 
     public function matter()
     {
-        return $this->hasMany(\App\Models\Matter::class);
+        return $this->hasMany(Matter::class);
     }
 
     public function displayWithInfo()
     {
-        return $this->belongsTo(\App\Models\Category::class, 'display_with', 'code');
+        return $this->belongsTo(Category::class, 'display_with', 'code');
     }
 }

@@ -22,16 +22,16 @@ class Classifier extends Model
 
     public function type()
     {
-        return $this->belongsTo(\App\Models\ClassifierType::class, 'type_code');
+        return $this->belongsTo(ClassifierType::class, 'type_code');
     }
 
     public function linkedMatter()
     {
-        return $this->belongsTo(\App\Models\Matter::class, 'lnk_matter_id');
+        return $this->belongsTo(Matter::class, 'lnk_matter_id');
     }
 
     public function matter()
     {
-        return $this->belongsTo(\App\Models\Matter::class);
+        return $this->belongsTo(Matter::class);
     }
 }
