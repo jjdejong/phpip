@@ -20,7 +20,7 @@ class Event extends Model
 
     public function info()
     {
-        return $this->hasOne(EventName::class, 'code', 'code');
+        return $this->belongsTo(EventName::class, 'code', 'code');
     }
 
     public function matter()
@@ -45,10 +45,6 @@ class Event extends Model
 
     public function tasks()
     {
-        /* \Event::listen('Illuminate\Database\Events\QueryExecuted', function($query) {
-          var_dump($query->sql);
-          var_dump($query->bindings);
-          }); */
         return $this->hasMany(Task::class, 'trigger_id')->orderBy('due_date');
     }
 

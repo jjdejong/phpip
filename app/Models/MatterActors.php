@@ -18,6 +18,11 @@ class MatterActors extends Model
         return $this->belongsTo(Actor::class);
     }
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_code');
+    }
+
     public function company()
     {
         return $this->belongsTo(Actor::class, 'company_id');

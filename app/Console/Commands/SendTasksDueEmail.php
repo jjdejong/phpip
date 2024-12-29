@@ -37,7 +37,5 @@ class SendTasksDueEmail extends Command
                     ->subject('[phpIP] - Tasks due in the next 30 days');
             }
         );
-
-        $this->info('Tasks due email has been sent successfully!');
     }
 }

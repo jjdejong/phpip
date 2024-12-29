@@ -251,7 +251,7 @@ class Matter extends Model
             'matter.responsible',
             'del.login AS delegate',
             'matter.dead',
-            DB::raw('IF(isnull(matter.container_id), 1, 0) AS Ctnr')
+            DB::raw('isnull(matter.container_id) AS Ctnr')
         )->join(
             'matter_category', 
             'matter.category_code', 
