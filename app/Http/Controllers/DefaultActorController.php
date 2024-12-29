@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Actor;
 use App\Models\DefaultActor;
 use Illuminate\Http\Request;
 
@@ -49,8 +48,8 @@ class DefaultActorController extends Controller
 
     public function create()
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('default_actor');
+        $table = new DefaultActor;
+        $tableComments = $table->getTableComments();
 
         return view('default_actor.create', compact('tableComments'));
     }
@@ -67,8 +66,7 @@ class DefaultActorController extends Controller
 
     public function show(DefaultActor $default_actor)
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('default_actor');
+        $tableComments = $default_actor->getTableComments();
         $default_actor->with(['roleInfo:code,name', 'actor:id,name', 'client:id,name', 'category:code,category', 'country:iso,name'])->get();
 
         return view('default_actor.show', compact('default_actor', 'tableComments'));

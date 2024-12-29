@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Actor;
 use App\Models\Fee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,8 +32,8 @@ class FeeController extends Controller
 
     public function create()
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('fees');
+        $table = new Fee;
+        $tableComments = $table->getTableComments();
 
         return view('fee.create', compact('tableComments'));
     }

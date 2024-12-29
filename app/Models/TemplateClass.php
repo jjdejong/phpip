@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTableComments;
 
 class TemplateClass extends Model
 {
+    use HasTableComments;
+    
     protected $guarded = ['created_at', 'updated_at'];
 
     public function role()

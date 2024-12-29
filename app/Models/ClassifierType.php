@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTableComments;
 
 class ClassifierType extends Model
 {
+    use HasTableComments;
+    
     protected $table = 'classifier_type';
 
     protected $primaryKey = 'code';

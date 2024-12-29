@@ -36,9 +36,8 @@ class ActorController extends Controller
     public function create()
     {
         Gate::authorize('readwrite');
-        $table = new Actor;
-        //TODO getTableComments is the same as in Rule.php. To render common
-        $actorComments = $table->getTableComments('actor');
+        $actor = new Actor;
+        $actorComments = $actor->getTableComments();
 
         return view('actor.create', compact('actorComments'));
     }
@@ -59,7 +58,7 @@ class ActorController extends Controller
     {
         Gate::authorize('readonly');
         $actorInfo = $actor->load(['company:id,name', 'parent:id,name', 'site:id,name', 'droleInfo', 'countryInfo:iso,name', 'country_mailingInfo:iso,name', 'country_billingInfo:iso,name', 'nationalityInfo:iso,name']);
-        $actorComments = $actor->getTableComments('actor');
+        $actorComments = $actor->getTableComments();
 
         return view('actor.show', compact('actorInfo', 'actorComments'));
     }

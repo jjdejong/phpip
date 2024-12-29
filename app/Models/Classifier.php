@@ -14,12 +14,6 @@ class Classifier extends Model
 
     protected $touches = ['matter'];
 
-    // use \Venturecraft\Revisionable\RevisionableTrait;
-    // protected $revisionEnabled = true;
-    // protected $revisionCreationsEnabled = true;
-    // protected $revisionCleanup = true; //Remove old revisions (works only when used with $historyLimit)
-    // protected $historyLimit = 500; //Maintain a maximum of 500 changes at any point of time, while cleaning up old revisions.
-
     public function type()
     {
         return $this->belongsTo(ClassifierType::class, 'type_code');

@@ -3,21 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Schema;
+use App\Traits\HasTableComments;
 
 class Actor extends Model
 {
+    use HasTableComments;
+    
     protected $table = 'actor';
 
     protected $hidden = ['login', 'last_login', 'password', 'remember_token', 'creator', 'created_at', 'updated_at', 'updater'];
 
     protected $guarded = ['id', 'password', 'created_at', 'updated_at'];
-
-    // use \Venturecraft\Revisionable\RevisionableTrait;
-    // protected $revisionEnabled = true;
-    // protected $revisionCreationsEnabled = true;
-    // protected $revisionCleanup = true; //Remove old revisions (works only when used with $historyLimit)
-    // protected $historyLimit = 500; //Maintain a maximum of 500 changes at any point of time, while cleaning up old revisions.
 
     public function company()
     {
@@ -62,20 +58,5 @@ class Actor extends Model
     public function nationalityInfo()
     {
         return $this->belongsTo(Country::class, 'nationality');
-    }
-
-    public function getTableComments($table_name = null)
-    {
-        if (! isset($table_name)) {
-            return false;
-        }
-
-        $comments = [];
-        foreach (Schema::getColumns($table_name) as $column) {
-            $col_name = $column['name'];
-            $comments[$col_name] = $column['comment'];
-        }
-
-        return $comments;
     }
 }

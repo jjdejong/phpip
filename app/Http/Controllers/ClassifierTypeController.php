@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Actor;
 use App\Models\ClassifierType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,8 +27,8 @@ class ClassifierTypeController extends Controller
 
     public function create()
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('classifier_type');
+        $table = new ClassifierType;
+        $tableComments = $table->getTableComments();
 
         return view('classifier_type.create', compact('tableComments'));
     }
@@ -47,8 +46,7 @@ class ClassifierTypeController extends Controller
 
     public function show(ClassifierType $classifier_type)
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('classifier_type');
+        $tableComments = $classifier_type->getTableComments();
         $classifier_type->load(['category:code,category']);
 
         return view('classifier_type.show', compact('classifier_type', 'tableComments'));

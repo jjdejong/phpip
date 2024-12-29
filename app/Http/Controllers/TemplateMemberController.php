@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Actor;
 use App\Models\TemplateMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -51,8 +50,8 @@ class TemplateMemberController extends Controller
 
     public function create()
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('template_members');
+        $table = new TemplateMember;
+        $tableComments = $table->getTableComments();
         $languages = $this->languages;
 
         return view('template-members.create', compact('tableComments', 'languages'));
@@ -72,8 +71,7 @@ class TemplateMemberController extends Controller
 
     public function show(TemplateMember $templateMember)
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('template_members');
+        $tableComments = $templateMember->getTableComments();
         $templateMember->with(['class', 'style', 'language']);
         $languages = $this->languages;
 

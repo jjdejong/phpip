@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTableComments;
 
 class Role extends Model
 {
+    use HasTableComments;
+    
     protected $table = 'actor_role';
 
     protected $primaryKey = 'code';

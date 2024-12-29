@@ -60,8 +60,8 @@ class DocumentController extends Controller
 
     public function create()
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('template_classes');
+        $table = new TemplateClass;
+        $tableComments = $table->getTableComments();
 
         return view('documents.create', compact('tableComments'));
     }
@@ -78,8 +78,7 @@ class DocumentController extends Controller
 
     public function show(TemplateClass $class)
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('template_classes');
+        $tableComments = $class->getTableComments();
         $class->with(['role']);
 
         return view('documents.show', compact('class', 'tableComments'));
@@ -110,11 +109,9 @@ class DocumentController extends Controller
                 ->where([['matter_id', $matter->id]])->whereNotNull('email')->distinct();
         }
         $contacts = $contacts->get();
-        $table = new Actor;
-        //TODO getTableComments is the same as in Rule.php. To render common
-        $tableComments = $table->getTableComments('template_members');
         $filters = $request->except(['page']);
         $members = new TemplateMember;
+        $tableComments = $members->getTableComments();
         $oldfilters = [];
         $view = 'documents.select';
         $event = null;

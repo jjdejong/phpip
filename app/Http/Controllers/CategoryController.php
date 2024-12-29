@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Actor;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,9 +27,8 @@ class CategoryController extends Controller
 
     public function create()
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('matter_category');
-
+        $category = new Category;
+        $tableComments = $category->getTableComments();
         return view('category.create', compact('tableComments'));
     }
 
@@ -48,8 +46,7 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('matter_category');
+        $tableComments = $category->getTableComments();
         $category->load(['displayWithInfo:code,category']);
 
         return view('category.show', compact('category', 'tableComments'));

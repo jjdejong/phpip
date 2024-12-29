@@ -28,8 +28,8 @@ class RoleController extends Controller
 
     public function create()
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('actor_role');
+        $table = new Role;
+        $tableComments = $table->getTableComments();
 
         return view('role.create', compact('tableComments'));
     }
@@ -48,8 +48,7 @@ class RoleController extends Controller
 
     public function show(Role $role)
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('actor_role');
+        $tableComments = $role->getTableComments();
         $role->get();
 
         return view('role.show', compact('role', 'tableComments'));

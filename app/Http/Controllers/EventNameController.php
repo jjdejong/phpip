@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Actor;
 use App\Models\EventClassLnk;
 use App\Models\EventName;
 use Illuminate\Http\Request;
@@ -30,8 +29,8 @@ class EventNameController extends Controller
 
     public function create()
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('event_name');
+        $table = new EventName;
+        $tableComments = $table->getTableComments();
 
         return view('eventname.create', compact('tableComments'));
     }
@@ -51,8 +50,7 @@ class EventNameController extends Controller
 
     public function show(EventName $eventname)
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('event_name');
+        $tableComments = $eventname->getTableComments();
         $eventname->load(['countryInfo:iso,name', 'categoryInfo:code,category', 'default_responsibleInfo:id,name']);
         $links = EventClassLnk::where('event_name_code', '=', $eventname->code)->get();
 

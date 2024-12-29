@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTableComments;
 
 class EventName extends Model
 {
+    use HasTableComments;
+    
     protected $table = 'event_name';
 
     protected $primaryKey = 'code';

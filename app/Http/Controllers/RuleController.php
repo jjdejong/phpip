@@ -75,7 +75,7 @@ class RuleController extends Controller
             'responsibleInfo:login,name',
         ]);
 
-        $ruleComments = $rule->getTableComments('task_rules');
+        $ruleComments = $rule->getTableComments();
 
         return view('rule.show', compact('ruleInfo', 'ruleComments'));
     }
@@ -84,7 +84,7 @@ class RuleController extends Controller
     {
         Gate::authorize('admin');
         $rule = new Rule;
-        $ruleComments = $rule->getTableComments('task_rules');
+        $ruleComments = $rule->getTableComments();
 
         return view('rule.create', compact('ruleComments'));
     }

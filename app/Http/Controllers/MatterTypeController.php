@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Actor;
 use App\Models\MatterType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,8 +27,8 @@ class MatterTypeController extends Controller
 
     public function create()
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('matter_type');
+        $table = new MatterType;
+        $tableComments = $table->getTableComments();
 
         return view('type.create', compact('tableComments'));
     }
@@ -47,8 +46,7 @@ class MatterTypeController extends Controller
 
     public function show(MatterType $type)
     {
-        $table = new Actor;
-        $tableComments = $table->getTableComments('matter_type');
+        $tableComments = $type->getTableComments();
 
         return view('type.show', compact('type', 'tableComments'));
     }

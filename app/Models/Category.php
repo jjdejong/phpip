@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTableComments;
 
 class Category extends Model
 {
+    use HasTableComments;
+    
     protected $table = 'matter_category';
 
     protected $primaryKey = 'code';
