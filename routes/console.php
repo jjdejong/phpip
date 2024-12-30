@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,13 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Schedule::command('tasks:send-due-email')
+    ->weeklyOn(1, '6:00')
+    ->onOneServer()
+    ->withoutOverlapping();
+
+Schedule::command('tasks:renewr-sync --demo')
+    ->weeklyOn(1, '3:00')
+    ->onOneServer()
+    ->withoutOverlapping();
