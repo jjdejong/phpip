@@ -10,6 +10,10 @@ Head for the [Wiki](https://github.com/jjdejong/phpip/wiki) for further informat
 
 # New features
 
+## 2024-12-30 Created a renewal sync script for the [Renewr](https://www.renewr.io/) renewal services
+
+By the same token, scheduled scripts such as this renewal sync script and the weekly due tasks reminder email have been moved to Artisan commands using the Laravel scheduling functionality.
+
 ## 2024-08-02 Updated the old application structure to that of Laravel 11
 
 This involved deleting, moving and cleaning many files, yet the functionality should not change. See commit `bf00718`.
