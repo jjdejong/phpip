@@ -529,9 +529,11 @@ class Matter extends Model
         $granted_date = Carbon::parse($this->grant->event_date);
         $published_date = Carbon::parse($this->publication->event_date);
         $title = $this->titles->where('type_code', 'TITOF')->first()->value 
-            ?? $this->titles->first()->value;
+            ?? $this->titles->first()->value
+            ?? "";
         $title_EN = $this->titles->where('type_code', 'TITEN')->first()->value 
-            ?? $this->titles->first()->value;
+            ?? $this->titles->first()->value
+            ?? "";
         if ($lang == 'fr') {
             $description[] = "N/réf : {$this->uid}";
             if ($this->client->actor_ref) {
