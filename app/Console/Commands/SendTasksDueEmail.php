@@ -20,7 +20,7 @@ class SendTasksDueEmail extends Command
             ->where('code', '!=', 'REN')
             ->where('due_date', '<', now()->addDays(30))
             ->where('done', 0)
-            ->with('matter', 'info')
+            ->with('matter', 'info', 'matter.client')
             ->orderBy('due_date')
             ->get();
 

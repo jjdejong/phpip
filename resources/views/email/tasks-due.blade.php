@@ -9,6 +9,7 @@
       <tr>
         <th>Ref</th>
         <th>Cat</th>
+        <th>Client</th>
         <th>Task</th>
         <th>Due</th>
         <th>Resp.</th>
@@ -17,6 +18,7 @@
       <tr>
         <td><a href="{{ $phpip_url }}/{{ $task->matter->id }}">{{ $task->matter->uid }}</a></td>
         <td>{{ $task->matter->category_code }}</td>
+        <td>{{ $task->matter->client->name }}</td>
         <td>{{ $task->info->name . ($task->detail ? " - $task->detail" : '') }}</td>
         <td>{{ $task->due_date->isoFormat('L') }}</td>
         <td>{{ $task->matter->responsible }}</td>
