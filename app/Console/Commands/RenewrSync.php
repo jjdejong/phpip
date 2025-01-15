@@ -7,10 +7,8 @@ use App\Models\Matter;
 use App\Models\Actor;
 use App\Models\Task;
 use App\Models\Country;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Config;
 
 class RenewrSync extends Command
 {
@@ -242,10 +240,10 @@ class RenewrSync extends Command
             $updates['currency'] = $renewal->fees->invoiceCurrency;
         }
 
-        $cost = $renewal->fees->totalFees - $serviceProviderFee;
+        $cost = $renewal->fees->invoiceTotalValue - $serviceProviderFee;
         if (round($cost, 2) != round($task->cost ?? 0, 2)) {
             $updates['cost'] = $cost;
-            $updates['notes'] = $renewal->instruction ?? 'Renewr init.';
+            $updates['notes'] = "$renewal->feeStatus|$renewal->instructionStatus|$renewal->warningStatus";
         }
 
         $fee = $this->calculateFee($cost, $serviceProviderFee);
@@ -253,13 +251,8 @@ class RenewrSync extends Command
             $updates['fee'] = $fee;
         }
 
-        if (
-            !empty($renewal->paymentDate)
-            && (!$task->done_date || $renewal->paymentDate != $task->done_date->format('Y-m-d'))
-            && $renewal->paymentDate != $renewal->renewalDate
-            && $renewal->paymentDate < now()->format('Y-m-d')
-        ) {
-            $updates['done_date'] = $renewal->paymentDate;
+        if (!empty($renewal->dateOfPayment) && (!$task->done_date || $renewal->dateOfPayment != $task->done_date->format('Y-m-d'))) {
+            $updates['done_date'] = $renewal->dateOfPayment;
             $updates['step'] = -1;
             if (!$task->invoice_step) {
                 $updates['invoice_step'] = 1;
@@ -283,7 +276,7 @@ class RenewrSync extends Command
     private function insertNewRenewal($matter, $renewal, $renewrPatent)
     {
         // Find trigger event
-        $triggerEvent = Country::where('renewal_base', 'FIL')
+        $triggerEvent = Country::where('renewal_start', 'FIL')
             ->where('iso', $renewrPatent->country)->exists()
             ? $matter->filing->id
             : $matter->grant->id;
@@ -294,7 +287,7 @@ class RenewrSync extends Command
         }
 
         $serviceProviderFee = config('renewr.fee_calculation.renewr_fee');
-        $cost = $renewal->fees->totalFees - $serviceProviderFee;
+        $cost = $renewal->fees->invoiceTotalValue - $serviceProviderFee;
         $fee = $this->calculateFee($cost, $serviceProviderFee);
 
         $task = Task::create([
@@ -304,19 +297,15 @@ class RenewrSync extends Command
             'currency' => $renewal->fees->invoiceCurrency ?? 'EUR',
             'cost' => $cost,
             'fee' => $fee,
-            'notes' => $renewal->instruction ?? 'Renewr init.',
+            'notes' => "$renewal->feeStatus|$renewal->instructionStatus|$renewal->warningStatus",
             'creator' => 'Renewr',
             'matter_id' => $matter->id,
             'trigger_id' => $triggerEvent,
         ]);
 
-        if (
-            !empty($renewal->paymentDate)
-            && $renewal->paymentDate != $renewal->renewalDate
-            && $renewal->paymentDate < now()->format('Y-m-d')
-        ) {
+        if (!empty($renewal->dateOfPayment)) {
             $task->update([
-                'done_date' => $renewal->paymentDate,
+                'done_date' => $renewal->dateOfPayment,
                 'step' => -1,
                 'invoice_step' => 1
             ]);
