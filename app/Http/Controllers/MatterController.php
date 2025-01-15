@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use SimpleXMLElement;
 
 class MatterController extends Controller
@@ -55,7 +56,7 @@ class MatterController extends Controller
     /**
      * Return a JSON array with info of a matter. For use with API REST.
      *
-     * @param  int  $id
+     * @param int $id
      * @return Json
      **/
     public function info($id)
@@ -555,17 +556,17 @@ class MatterController extends Controller
             'filing'
         );
         $country_edit = $matter->tasks()->whereHas(
-            'rule',
-            function (Builder $q) {
-                $q->whereNotNull('for_country');
-            }
-        )->count() == 0;
+                'rule',
+                function (Builder $q) {
+                    $q->whereNotNull('for_country');
+                }
+            )->count() == 0;
         $cat_edit = $matter->tasks()->whereHas(
-            'rule',
-            function (Builder $q) {
-                $q->whereNotNull('for_category');
-            }
-        )->count() == 0;
+                'rule',
+                function (Builder $q) {
+                    $q->whereNotNull('for_category');
+                }
+            )->count() == 0;
 
         return view('matter.edit', compact(['matter', 'cat_edit', 'country_edit']));
     }
@@ -738,9 +739,47 @@ class MatterController extends Controller
         // 'wri.name AS Writer',
         // 'ann.name AS Annuity_Agent'
 
-        $data = Matter::select(
+        // We are going to get a lot of task related due dates for the merge.
+        // The fact is that it could be filthy to just get each due_date and add a custom select
+        // So I thought that it could be cleaner if we just create a field for each task rule available
+        // By doing so, we make available almost any task in the doc merge
+        // Each due_date for any task is available with the following format : {task_name}_{detail}_Due_Date
+        // For example for The REQ Examination we have the follwing field available : Request_Examination_Due_Date
+
+        $taskRules = DB::table('task_rules')
+            ->whereIn('task', [
+                'REQ', // Request
+                'PAY', // Pay
+                'REM', // Reminder
+                'NPH', // National Phase
+                'PROD', // Produce
+                'REP', // Response
+                'VAL', // Validate
+            ])
+            ->leftJoin('event_name', 'task_rules.task', '=', 'event_name.code')
+            ->get()
+            ->unique(fn($rule) => $rule->task . $rule->detail)
+            ->map(function ($rule) {
+                $name = $rule->detail ? ($rule->name . ' ' . Str::of($rule->detail)->replaceMatches('/[^\w\s]/', '')) : $rule->name;
+                $name = Str::replace(' ', '_', Str::title($name));
+                return DB::raw(
+                    "(
+                        SELECT DATE_FORMAT(task_list.due_date, '%d/%m/%Y')
+                        FROM task_list
+                        WHERE task_list.matter_id = matter.id
+                        AND task_list.code = '{$rule->task}'" .
+                        ($rule->detail ? "AND task_list.detail = '{$rule->detail}'" : '') . "
+                        ORDER BY task_list.id DESC
+                        LIMIT 1
+                    ) AS {$name}_Due_Date"
+                );
+            })
+            ->toArray();
+
+        $data = Matter::select([
             'matter.id',
             'matter.uid AS File_Ref',
+            'matter.alt_ref AS Alt_Ref',
             'matter.country AS Country',
             'matter.category_code AS File_Category',
             DB::raw("DATE_FORMAT(fil.event_date, '%d/%m/%Y') AS Filing_Date"),
@@ -812,8 +851,10 @@ class MatterController extends Controller
             'lagt.actor_ref AS Agent_Ref',
             'resp.name AS Responsible',
             'wri.name AS Writer',
-            'ann.name AS Annuity_Agent'
-        )->leftJoin(
+            'ann.name AS Annuity_Agent',
+
+            ...$taskRules,
+        ])->leftJoin(
             DB::raw(
                 "matter_actor_lnk linv
                 JOIN actor inv ON inv.id = linv.actor_id AND linv.role = 'INV'"
@@ -1161,9 +1202,9 @@ class MatterController extends Controller
         $members = data_get($ops_response, 'ops:world-patent-data.ops:patent-family.ops:family-member');
         if (Arr::isList($members)) {
             // Sort members by increasing filing date and doc-id, so that the first is the priority application
-            $members = collect($members)->sortBy(fn ($member) => $member['application-reference']['document-id']['date']['$'] . $member['application-reference']['@doc-id']);
+            $members = collect($members)->sortBy(fn($member) => $member['application-reference']['document-id']['date']['$'] . $member['application-reference']['@doc-id']);
             // Group all members by doc-id, so that publications and grants appear in a same record (yet as two arrays)
-            $members = collect($members)->groupBy(fn ($member) => $member['application-reference']['@doc-id']);
+            $members = collect($members)->groupBy(fn($member) => $member['application-reference']['@doc-id']);
         } else {
             // Turn single element into a list of one element
             $members = [$members['application-reference']['@doc-id'] => [0 => $members]];
@@ -1243,7 +1284,7 @@ class MatterController extends Controller
                     $steps = $xml->xpath('//reg:procedural-step');
                     $proc = [];
                     foreach ($steps as $k => $step) {
-                        $proc[$k]['code'] = (string) $step->xpath('reg:procedural-step-code')[0];
+                        $proc[$k]['code'] = (string)$step->xpath('reg:procedural-step-code')[0];
                         if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_REQUEST"]/reg:date')) {
                             $proc[$k]['request'] = date('Y-m-d', strtotime($date[0]));
                         }
@@ -1260,7 +1301,7 @@ class MatterController extends Controller
                             $proc[$k]['grt_paid'] = date('Y-m-d', strtotime($date[0]));
                         }
                         if ($year = $step->xpath('reg:procedural-step-text[@step-text-type="YEAR"]')) {
-                            $proc[$k]['ren_year'] = (int) $year[0];
+                            $proc[$k]['ren_year'] = (int)$year[0];
                         }
                     }
                     $apps[$i]['procedure'] = $proc;
@@ -1293,7 +1334,7 @@ class MatterController extends Controller
                             $proc[$k]['ren_paid'] = date('Y-m-d', strtotime($date[0]));
                         }
                         if ($year = $step->xpath('ops:L500EP/ops:L520EP')) {
-                            $proc[$k]['ren_year'] = (int) $year[0];
+                            $proc[$k]['ren_year'] = (int)$year[0];
                         }
                     }
                     $apps[$i]['procedure'] = $proc;
