@@ -387,8 +387,8 @@ class Matter extends Model
             $query->where('matter_category.display_with', $display_with);
         }
 
-        // When the user is a client, limit the matters to client's own matters
-        if ($authUserRole == 'CLI') {
+        // When the user is a client or no role is defined, limit the matters to client's own matters
+        if ($authUserRole == 'CLI' || empty($authUserRole)) {
             $query->where(
                 function ($q) use ($authUserId) {
                     $q->where('cli.id', $authUserId)
@@ -508,7 +508,7 @@ class Matter extends Model
         $query = Matter::leftJoin('matter_category as mc', 'mc.code', 'matter.category_code')
             ->groupBy('category_code', 'category')
             ->select('mc.category', 'category_code', DB::raw('count(*) as total'));
-        if ($authUserRole == 'CLI') {
+        if ($authUserRole == 'CLI' || empty($authUserRole)) {
             $query->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
                 ->where([['cli.role', 'CLI'], ['cli.actor_id', $authUserId]]);
         } else {

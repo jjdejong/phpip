@@ -72,7 +72,7 @@ class Task extends Model
             ])
             ->groupby('login');
 
-        if ($role == 'CLI') {
+        if ($role == 'CLI' || empty($role)) {
             $selectQuery->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(m.container_id, m.id)'))
                 ->where([
                     ['cli.role', 'CLI'],
@@ -125,7 +125,7 @@ class Task extends Model
             $tasks->where('task.code', '!=', 'REN');
         }
 
-        if (Auth::user()->default_role == 'CLI') {
+        if (Auth::user()->default_role == 'CLI' || empty(Auth::user()->default_role)) {
             $tasks->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
                 ->where([
                     ['cli.role', 'CLI'],

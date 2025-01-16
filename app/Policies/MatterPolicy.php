@@ -17,7 +17,7 @@ class MatterPolicy
      */
     public function view(User $user, Matter $matter)
     {
-        if ($user->default_role === 'CLI') {
+        if ($user->default_role === 'CLI' || empty($user->default_role)) {
             if ($matter->client->count()) {
                 return $user->id === $matter->client->actor_id;
             } else {
