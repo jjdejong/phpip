@@ -349,7 +349,11 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               Notes
             </div>
             <div class="card-body p-1" style="overflow: auto;">
+              @can('readwrite')
               <textarea id="notes" class="form-control noformat" name="notes" data-resource="/matter/{{ $matter->id }}">{{ $matter->notes }}</textarea>
+              @else
+              <div class="noformat">{{ $matter->notes }}</div>
+              @endcan
             </div>
             <div class="card-footer p-1">
               Summaries:
