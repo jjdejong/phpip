@@ -34,16 +34,133 @@ class RenewrSync extends Command
                 throw new \Exception('No Renewr in actor table');
             }
 
-            // Load portfolio data
-            if ($this->option('demo')) {
-                $portfolio = $this->loadDemoData();
-            } else {
-                $portfolio = $this->fetchFromApi();
+            // Load and process portfolio data page by page
+            foreach ($this->option('demo') ? $this->loadDemoData() : $this->fetchFromApi() as $pageData) {
+                $this->processPortfolioPage($pageData, $renewrActor);
             }
 
+            $this->displayStats();
+        } catch (\Exception $e) {
+            Log::error('Portfolio renewal processing failed: ' . $e->getMessage());
+            $this->error('Portfolio renewal processing failed: ' . $e->getMessage());
+            return 1;
+        }
+
+        return 0;
+    }
+
+    private function fetchFromApi()
+    {
+        yield from $this->fetchPages(config('renewr.url'), [
+            'Accept: application/json',
+            'X-API-KEY: ' . config('renewr.api_key')
+        ], 'api_data');
+    }
+
+    private function loadDemoData()
+    {
+        // Fetch jwt token
+        $url = config('renewr.jwt_url');
+        $data = [
+            'client_id' => 'renewr-front',
+            'grant_type' => 'password',
+            'username' => config('renewr.demo_username'),
+            'password' => config('renewr.demo_password')
+        ];
+
+        $options = [
+            'http' => [
+                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method' => 'POST',
+                'content' => http_build_query($data),
+            ],
+        ];
+
+        $context = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        if ($result === false) {
+            throw new \Exception("Failed to get token");
+        }
+
+        $bearer_token = json_decode($result)->access_token;
+
+        $headers = [
+            'Accept: application/json',
+            'Authorization: Bearer ' . $bearer_token
+        ];
+
+        yield from $this->fetchPages(config('renewr.url'), $headers, 'demo_data');
+    }
+
+    private function fetchPages($url, $headers, $cacheKey)
+    {
+        $currentPage = 1;
+        $itemsPerPage = 100;
+        $totalPages = null;
+
+        // Try to get total pages from cache metadata
+        $metaCacheFile = $this->getCacheFilePath($cacheKey . '_meta');
+        if (file_exists($metaCacheFile)) {
+            $meta = json_decode(file_get_contents($metaCacheFile));
+            $totalPages = $meta->totalPages ?? null;
+        }
+
+        do {
+            if ($this->hasValidPageCache($cacheKey, $currentPage)) {
+                $this->info("Using cached data for page $currentPage");
+                $pageData = $this->getPageFromCache($cacheKey, $currentPage);
+                yield $pageData;
+            } else {
+                $pageUrl = "{$url}?itemsPerPage={$itemsPerPage}&currentPage={$currentPage}";
+                
+                $ch = curl_init($pageUrl);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                $response = curl_exec($ch);
+
+                if (curl_errno($ch)) {
+                    throw new \Exception('API request failed: ' . curl_error($ch));
+                }
+
+                curl_close($ch);
+
+                $result = json_decode($response);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    throw new \Exception("JSON Decode Error: " . json_last_error_msg());
+                }
+
+                if (empty($result)) {
+                    throw new \Exception("No portfolio data received from API");
+                }
+
+                if ($totalPages === null) {
+                    $totalPages = $result->pagination->totalPages;
+                    $this->info("Fetching {$result->pagination->totalItems} items across {$totalPages} pages...");
+                    
+                    // Store metadata
+                    file_put_contents($metaCacheFile, json_encode([
+                        'totalPages' => $totalPages,
+                        'totalItems' => $result->pagination->totalItems
+                    ]));
+                }
+
+                $this->info("Fetched page {$currentPage} of {$totalPages}");
+                $this->storePageInCache($cacheKey, $currentPage, $result->data);
+                
+                yield $result->data;
+            }
+            
+            $currentPage++;
+        } while ($currentPage <= $totalPages);
+    }
+
+    private function processPortfolioPage($pageData, $renewrActor)
+    {
+        try {
             DB::beginTransaction();
 
-            foreach ($portfolio as $renewrPatent) {
+            foreach ($pageData as $renewrPatent) {
                 if (empty($renewrPatent->renewalEvents)) {
                     continue;
                 }
@@ -58,122 +175,10 @@ class RenewrSync extends Command
             }
 
             DB::commit();
-            $this->displayStats();
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Portfolio renewal processing failed: ' . $e->getMessage());
-            $this->error('Portfolio renewal processing failed: ' . $e->getMessage());
-            return 1;
+            throw $e; // Re-throw to be caught by main handler
         }
-
-        return 0;
-    }
-
-    private function fetchFromApi()
-    {
-        $headers = [
-            'Accept: application/json',
-            'X-API-KEY: ' . config('renewr.api_key')
-        ];
-
-        $ch = curl_init(config('renewr.url'));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        $response = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-            throw new \Exception('API request failed: ' . curl_error($ch));
-        }
-
-        curl_close($ch);
-
-        $data = json_decode($response);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \Exception("JSON Decode Error: " . json_last_error_msg());
-        }
-
-        if (empty($data)) {
-            throw new \Exception("No portfolio data received from API");
-        }
-
-        return $data;
-    }
-
-    /**
-     * Load demo data for testing purposes.
-     * If a local data file exists, load it; otherwise, fetch data from the demo API using a jwt token.
-     * @return array
-     */
-    private function loadDemoData()
-    {
-        // Check if a local data file exists
-        $jsonFile = resource_path('scripts/data.json');
-        if (is_readable($jsonFile)) {
-            // Load data from local file
-            $data = json_decode(file_get_contents($jsonFile));
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \Exception("JSON Decode Error: " . json_last_error_msg());
-            }
-
-            if (empty($data)) {
-                throw new \Exception("No portfolio data received");
-            }
-        } else {
-            // Fetch jwt token
-            $url = config('renewr.jwt_url');
-            $data = [
-                'client_id' => 'renewr-front',
-                'grant_type' => 'password',
-                'username' => config('renewr.demo_username'),
-                'password' => config('renewr.demo_password')
-            ];
-
-            $options = [
-                'http' => [
-                    'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-                    'method' => 'POST',
-                    'content' => http_build_query($data),
-                ],
-            ];
-
-            $context = stream_context_create($options);
-            $result = file_get_contents($url, false, $context);
-            if ($result === false) {
-                throw new \Exception("Failed to get token");
-            }
-
-            $bearer_token = json_decode($result)->access_token;
-
-            // Fetch data
-            $headers = [
-                'Accept: application/json',
-                'Authorization: Bearer ' . $bearer_token
-            ];
-
-            $ch = curl_init(config('renewr.url'));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            $response = curl_exec($ch);
-
-            if (curl_errno($ch)) {
-                throw new \Exception('API request failed: ' . curl_error($ch));
-            }
-
-            curl_close($ch);
-
-            $data = json_decode($response);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \Exception("JSON Decode Error: " . json_last_error_msg());
-            }
-
-            if (empty($data)) {
-                throw new \Exception("No portfolio data received from API");
-            }
-        }
-
-        return $data;
     }
 
     private function findAndValidateMatter($renewrPatent, $renewrActor)
@@ -243,7 +248,7 @@ class RenewrSync extends Command
         $cost = $renewal->fees->invoiceTotalValue - $serviceProviderFee;
         if (round($cost, 2) != round($task->cost ?? 0, 2)) {
             $updates['cost'] = $cost;
-            $updates['notes'] = "$renewal->feeStatus|$renewal->instructionStatus|$renewal->warningStatus";
+            $updates['notes'] = $renewal->feesStatus;
         }
 
         $fee = $this->calculateFee($cost, $serviceProviderFee);
@@ -297,7 +302,7 @@ class RenewrSync extends Command
             'currency' => $renewal->fees->invoiceCurrency ?? 'EUR',
             'cost' => $cost,
             'fee' => $fee,
-            'notes' => "$renewal->feeStatus|$renewal->instructionStatus|$renewal->warningStatus",
+            'notes' => $renewal->feesStatus,
             'creator' => 'Renewr',
             'matter_id' => $matter->id,
             'trigger_id' => $triggerEvent,
@@ -343,5 +348,53 @@ class RenewrSync extends Command
     {
         $this->info("\nAnnuities updated: {$this->stats['updated']}, inserted: {$this->stats['inserted']}, among processed: {$this->stats['annsprocessed']}");
         $this->info("Patents not recognized: {$this->stats['unrecognized']}, total processed: {$this->stats['patsprocessed']}");
+    }
+
+    /**
+     * Get cache file path for a given key
+     */
+    private function getCacheFilePath(string $key, ?int $page = null): string 
+    {
+        $filename = "renewrsync_{$key}" . ($page !== null ? "_page{$page}" : "") . ".json";
+        return storage_path("app/cache/$filename");
+    }
+
+    /**
+     * Check if cached data exists and is valid
+     */
+    private function hasValidPageCache(string $key, int $page): bool
+    {
+        $cacheFile = $this->getCacheFilePath($key, $page);
+        if (!file_exists($cacheFile)) {
+            return false;
+        }
+        
+        // Check if cache is older than 24h
+        $modifiedTime = filemtime($cacheFile);
+        return (time() - $modifiedTime) < 86400; // 24 hours in seconds
+    }
+
+    /**
+     * Get cached data
+     */
+    private function getPageFromCache(string $key, int $page)
+    {
+        $cacheFile = $this->getCacheFilePath($key, $page);
+        return json_decode(file_get_contents($cacheFile));
+    }
+
+    /**
+     * Store data in cache
+     */
+    private function storePageInCache(string $key, int $page, $data): void
+    {
+        $cacheFile = $this->getCacheFilePath($key, $page);
+        $cacheDir = dirname($cacheFile);
+        
+        if (!is_dir($cacheDir)) {
+            mkdir($cacheDir, 0755, true);
+        }
+        
+        file_put_contents($cacheFile, json_encode($data));
     }
 }
