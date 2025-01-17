@@ -50,9 +50,9 @@ class Task extends Model
         return $this->hasOneThrough(Matter::class, Event::class, 'id', 'id', 'trigger_id', 'matter_id');
     }
 
-    public function rule()
+    public function rule(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasMany(Rule::class, 'id', 'rule_used');
+        return $this->belongsTo(Rule::class, 'rule_used', 'id');
     }
 
     public static function getUsersOpenTaskCount()

@@ -72,6 +72,21 @@ class Matter extends Model
         return $this->hasOne(MatterActors::class)->whereRoleCode('CLI')->withDefault();
     }
 
+    public function sharedClient()
+    {
+        return $this->hasOne(MatterActors::class)->whereRoleCode('CLI')->whereShared(1)->withDefault();
+    }
+
+    public function payer()
+    {
+        return $this->hasOne(MatterActors::class)->whereRoleCode('PAY')->withDefault();
+    }
+
+    public function sharedPayer()
+    {
+        return $this->hasOne(MatterActors::class)->whereRoleCode('PAY')->whereShared(1)->withDefault();
+    }
+
     public function delegate()
     {
         return $this->actors()->whereRoleCode('DEL');
@@ -87,9 +102,71 @@ class Matter extends Model
         return $this->actors()->whereRoleCode('APP');
     }
 
+    public function applicantsFromLnk()
+    {
+        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id')
+            ->using(ActorPivot::class)
+            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
+            ->wherePivot('role', 'APP');
+    }
+
+    public function sharedApplicantsFromLnk()
+    {
+        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id', 'container_id', '')
+            ->using(ActorPivot::class)
+            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
+            ->wherePivot('role', 'APP')
+            ->wherePivot('shared', 1);
+    }
+
     public function owners()
     {
-        return $this->actors()->whereRoleCode('OWN');
+        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id')
+            ->using(ActorPivot::class)
+            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
+            ->wherePivot('role', 'OWN');
+    }
+
+    public function sharedOwners()
+    {
+        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id', 'container_id', '')
+            ->using(ActorPivot::class)
+            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
+            ->wherePivot('role', 'OWN')
+            ->wherePivot('shared', 1);
+    }
+
+    public function inventors()
+    {
+        return $this->hasMany(MatterActors::class)
+            ->whereRoleCode('INV');
+    }
+
+    public function agents()
+    {
+        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id')
+            ->using(ActorPivot::class)
+            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
+            ->wherePivot('role', 'AGT');
+    }
+
+    public function writers()
+    {
+        return $this->hasMany(MatterActors::class)
+            ->whereRoleCode('WRT');
+    }
+
+    public function annuityAgents()
+    {
+        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id')
+            ->using(ActorPivot::class)
+            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
+            ->wherePivot('role', 'ANN');
+    }
+
+    public function responsibles(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Actor::class, 'login', 'responsible');
     }
 
     public function actorPivot()
@@ -101,6 +178,11 @@ class Matter extends Model
     {
         return $this->hasMany(Event::class)
             ->orderBy('event_date');
+    }
+
+    public function eventsFromView()
+    {
+        return $this->hasMany(EventLnkList::class, 'matter_id', 'id');
     }
 
     public function filing()
@@ -149,6 +231,12 @@ class Matter extends Model
     {
         return $this->hasMany(Event::class)
             ->whereCode('PRI');
+    }
+
+    public function prioritiesFromView()
+    {
+        return $this->hasMany(EventLnkList::class, 'matter_id', 'id')
+            ->where('code', 'PRI');
     }
 
     // All tasks, including renewals and done
@@ -596,5 +684,74 @@ class Matter extends Model
             }
         }
         return $description;
+    }
+
+    public function getBillingAddress()
+    {
+        $client = $this->client->actor ?? $this->sharedClient->actor;
+
+        if($client && $client->address_billing) {
+            return collect([
+                collect([
+                    $this->payer->actor?->name,
+                    $this->sharedPayer->actor?->name,
+                ]),
+                collect([
+                    $this->payer->actor?->address,
+                    $this->sharedPayer->actor?->address,
+                    $this->client->actor?->address_billing,
+                    $this->sharedClient->actor?->address_billing
+                ]),
+                collect([
+                    $this->payer->actor?->country,
+                    $this->sharedPayer->actor?->country,
+                    $this->client->actor?->country_billing,
+                    $this->sharedClient->actor?->country_billing
+                ]),
+            ])->map(function ($element) {
+                return $element->filter()->unique()->first();
+            })->filter()->implode("\n");
+        }
+
+        return collect([
+            collect([
+                $this->payer->actor?->name,
+                $this->sharedPayer->actor?->name,
+                $this->client->actor?->name,
+                $this->sharedClient->actor?->name
+            ]),
+            collect([
+                $this->payer->actor?->address,
+                $this->sharedPayer->actor?->address,
+                $this->client->actor?->address,
+                $this->sharedClient->actor?->address
+            ]),
+            collect([
+                $this->payer->actor?->country,
+                $this->sharedPayer->actor?->country,
+                $this->client->actor?->country,
+                $this->sharedClient->actor?->country
+            ])
+        ])->map(function ($element) {
+            return $element->filter()->unique()->first();
+        })->filter()->implode("\n");
+    }
+
+    /**
+     * Get the name of the owner or applicant of the current matter
+     * Used for the document merge
+     *
+     * @return string|null
+     */
+    public function getOwnerName()
+    {
+        $owners = $this->sharedOwners->pluck('name')->merge($this->owners->pluck('name'))->unique()->sort();
+        $applicants = $this->sharedApplicantsFromLnk->pluck('name')->merge($this->applicantsFromLnk->pluck('name'))->unique()->sort();
+
+        if ($owners->isNotEmpty()) {
+            return $owners->implode("\n");
+        }
+
+        return $applicants->implode("\n");
     }
 }

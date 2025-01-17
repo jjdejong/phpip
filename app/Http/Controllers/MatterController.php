@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MergeFileRequest;
 use App\Models\Actor;
 use App\Models\ActorPivot;
 use App\Models\Event;
 use App\Models\Matter;
+use App\Services\DocumentMergeService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -13,10 +15,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use SimpleXMLElement;
 
 class MatterController extends Controller
 {
+    protected $documentMergeService;
+
+    public function __construct(DocumentMergeService $documentMergeService)
+    {
+        $this->documentMergeService = $documentMergeService;
+    }
+
     public function index(Request $request)
     {
         $filters = $request->except(
@@ -55,7 +65,7 @@ class MatterController extends Controller
     /**
      * Return a JSON array with info of a matter. For use with API REST.
      *
-     * @param  int  $id
+     * @param int $id
      * @return Json
      **/
     public function info($id)
@@ -555,17 +565,17 @@ class MatterController extends Controller
             'filing'
         );
         $country_edit = $matter->tasks()->whereHas(
-            'rule',
-            function (Builder $q) {
-                $q->whereNotNull('for_country');
-            }
-        )->count() == 0;
+                'rule',
+                function (Builder $q) {
+                    $q->whereNotNull('for_country');
+                }
+            )->count() == 0;
         $cat_edit = $matter->tasks()->whereHas(
-            'rule',
-            function (Builder $q) {
-                $q->whereNotNull('for_category');
-            }
-        )->count() == 0;
+                'rule',
+                function (Builder $q) {
+                    $q->whereNotNull('for_category');
+                }
+            )->count() == 0;
 
         return view('matter.edit', compact(['matter', 'cat_edit', 'country_edit']));
     }
@@ -672,403 +682,20 @@ class MatterController extends Controller
 
     /**
      * Generate merged document on the fly from uploaded template
-     * *
      */
-    public function mergeFile(Matter $matter, Request $request)
+    public function mergeFile(Matter $matter, MergeFileRequest $request)
     {
-        // No dedicated "form request" class being defined, this validation will silently terminate the operation when unsuccessful
-        $this->validate(
-            $request,
-            ['file' => 'required|file|mimes:docx,dotx']
-        );
         $file = $request->file('file');
+        $template = $this->documentMergeService->merge($matter, $file->path());
 
-        // Attempt for a cleaner creation method of the data collection using relationships
-        // $data = collect();
-        // $data->id = $matter->id;
-        // $data->File_Ref = $matter->ui;
-        // $data->Country = $matter->country;
-        // $data->File_Category = $matter->category_code;
-        // $data->Filing_Date = $matter->filing->event_date->isoFormat('L');
-        // $data->Filing_Number = $matter->filing->detail;
-        // $data->Pub_Date = $matter->publication->event_date->isoFormat('L');
-        // $data->Pub_Number = $matter->publication->detail;
-        // $data->Priority = $matter->priority;
-        // // "GROUP_CONCAT(DISTINCT CONCAT(pri.country, pri.detail, ' - ', DATE_FORMAT(pri.event_date, '%d/%m/%Y'))
-        // //    SEPARATOR '\n') AS Priority"
-        // $data->Grant_Date = $matter->grant->event_date->isoFormat('L');
-        // $data->Grant_Number = $matter->grant->detail;
-        // $data->Registration_Date = $matter->registration->event_date->isoFormat('L');
-        // $data->Registration_Number = $matter->registration->detail;
-        // $data->Pub_Reg_Date = $matter->events()->whereCode('PR')->first()->event_date->isoFormat('L');
-        // $data->Pub_Reg_Number = $matter->events()->whereCode('PR')->first()->detail;
-        // $data->Allowance_Date = $matter->events()->whereCode('ALL')->first()->event_date->isoFormat('L');
-        // $data->Expiration_Date = $matter->expire_date;
-        // $data->Client = $matter->client->name;
-        // $data->Client_Address = $matter->client->address;
-        // $data->Client_Country = $matter->client->country;
-        // $data->Contact = $matter->contact->name;
-        // if ($matter->client->address_billing) {
-        //     $data->Billing_Address = $matter->client->address_billing . '\n' . $matter->client->country_billing;
-        // } else {
-        //     $data->Billing_Address = $matter->client->name . '\n' . $matter->client->address . '\n' . $matter->client->country;
-        // }
-        // $data->Client_Ref = $matter->client->actor_ref;
-        // $data->Email = $matter->client->email;
-        // $data->VAT = $matter->client->VAT_number;
-        // $data->Title = $matter->titles()->whereTypeCode('TIT')->first()->value;
-        // $data->Official_Title = $matter->titles()->whereTypeCode('TITOF')->first()->value ?? $data->Title;
-        // $data->English_Title = $matter->titles()->whereTypeCode('TITEN')->first()->value ?? $data->Official_Title;
-        // $data->Trademark = $matter->titles()->whereTypeCode('TM')->first()->value;
-        // $data->Classes = $matter->classifiers()->whereTypeCode('TMCL')->get()->implode('value', '.');
-        // $data->Inventors = $matter->actors()->whereRoleCode('INV')->orderBy('display_order')->get()->implode('name', ' - ');
-        // "GROUP_CONCAT(DISTINCT CONCAT_WS(' ', inv.name, inv.first_name)
-        //     ORDER BY linv.display_order ASC
-        //     SEPARATOR ' - ') AS Inventors"),
-        // "GROUP_CONCAT(DISTINCT CONCAT_WS('\n', CONCAT_WS(' ', inv.name, inv.first_name), inv.address, inv.country, inv.nationality)
-        //     ORDER BY linv.display_order ASC
-        //     SEPARATOR '\n\n') AS Inventor_Addresses"),
-        // "IF(GROUP_CONCAT(DISTINCT ownc.name) IS NOT NULL OR GROUP_CONCAT(DISTINCT own.name) IS NOT NULL,
-        //     CONCAT_WS('\n', GROUP_CONCAT(DISTINCT ownc.name SEPARATOR '\n'), GROUP_CONCAT(DISTINCT own.name SEPARATOR '\n')),
-        //     CONCAT_WS('\n', GROUP_CONCAT(DISTINCT applc.name SEPARATOR '\n'), GROUP_CONCAT(DISTINCT appl.name SEPARATOR '\n'))
-        // ) AS Owner"),
-        // "CONCAT_WS('\n', agt.name, agt.address, agt.country) AS Agent"),
-        // 'lagt.actor_ref AS Agent_Ref',
-        // 'resp.name AS Responsible',
-        // 'wri.name AS Writer',
-        // 'ann.name AS Annuity_Agent'
-
-        $data = Matter::select(
-            'matter.id',
-            'matter.uid AS File_Ref',
-            'matter.country AS Country',
-            'matter.category_code AS File_Category',
-            DB::raw("DATE_FORMAT(fil.event_date, '%d/%m/%Y') AS Filing_Date"),
-            'fil.detail AS Filing_Number',
-            DB::raw("DATE_FORMAT(pub.event_date, '%d/%m/%Y') AS Pub_Date"),
-            'pub.detail AS Pub_Number',
-            DB::raw(
-                "GROUP_CONCAT(DISTINCT CONCAT(
-                    pri.country, pri.detail, ' - ', 
-                    DATE_FORMAT(pri.event_date, '%d/%m/%Y')
-                )
-                SEPARATOR '\n') AS Priority"
-            ),
-            DB::raw("DATE_FORMAT(grt.event_date, '%d/%m/%Y') AS Grant_Date"),
-            'grt.detail AS Grant_Number',
-            DB::raw("DATE_FORMAT(reg.event_date, '%d/%m/%Y') AS Registration_Date"),
-            'reg.detail AS Registration_Number',
-            DB::raw("DATE_FORMAT(pr.event_date, '%d/%m/%Y') AS Pub_Reg_Date"),
-            'pr.detail AS Pub_Reg_Number',
-            DB::raw("DATE_FORMAT(allow.event_date, '%d/%m/%Y') AS Allowance_Date"),
-            'matter.expire_date AS Expiration_Date',
-            DB::raw('COALESCE(cli.name, clic.name) AS Client'),
-            DB::raw('COALESCE(cli.address, clic.address) AS Client_Address'),
-            DB::raw('COALESCE(cli.country, clic.country) AS Client_Country'),
-            'cnt.name AS Contact',
-            DB::raw(
-                "IF(
-                    COALESCE(cli.address_billing, clic.address_billing) IS NULL,
-                    CONCAT_WS('\n', 
-                        COALESCE(pay.name, payc.name, cli.name, clic.name), 
-                        COALESCE(pay.address, payc.address, cli.address, clic.address), 
-                        COALESCE(pay.country, payc.country, cli.country, clic.country)),
-                    CONCAT_WS('\n', 
-                        COALESCE(pay.name, payc.name), 
-                        COALESCE(pay.address, payc.address, cli.address_billing, clic.address_billing), 
-                        COALESCE(pay.country, payc.country, cli.country_billing, clic.country_billing))
-                ) AS Billing_Address"
-            ),
-            DB::raw('COALESCE(lcli.actor_ref, lclic.actor_ref) AS Client_Ref'),
-            DB::raw('COALESCE(cli.email, clic.email) AS Email'),
-            DB::raw('COALESCE(cli.VAT_number, clic.VAT_number) AS VAT'),
-            DB::raw('COALESCE(titof.value, tit.value) AS Official_Title'),
-            DB::raw('COALESCE(titen.value, titof.value, tit.value) AS English_Title'),
-            'tit.value AS Title',
-            'tm.value AS Trademark',
-            DB::raw("GROUP_CONCAT(DISTINCT class.value SEPARATOR '.') AS Classes"),
-            DB::raw(
-                "GROUP_CONCAT(DISTINCT CONCAT_WS(' ', inv.name, inv.first_name)
-                ORDER BY linv.display_order ASC
-                SEPARATOR ' - ') AS Inventors"
-            ),
-            DB::raw(
-                "GROUP_CONCAT(DISTINCT CONCAT_WS('\n', CONCAT_WS(' ', inv.name, inv.first_name), inv.address, inv.country, inv.nationality)
-                ORDER BY linv.display_order ASC
-                SEPARATOR '\n\n') AS Inventor_Addresses"
-            ),
-            DB::raw(
-                "IF(
-                    GROUP_CONCAT(DISTINCT ownc.name) IS NOT NULL OR GROUP_CONCAT(DISTINCT own.name) IS NOT NULL,
-                    CONCAT_WS('\n', 
-                        GROUP_CONCAT(DISTINCT ownc.name SEPARATOR '\n'), 
-                        GROUP_CONCAT(DISTINCT own.name SEPARATOR '\n')),
-                    CONCAT_WS('\n', 
-                        GROUP_CONCAT(DISTINCT applc.name SEPARATOR '\n'), 
-                        GROUP_CONCAT(DISTINCT appl.name SEPARATOR '\n'))
-                ) AS Owner"
-            ),
-            DB::raw("CONCAT_WS('\n', agt.name, agt.address, agt.country) AS Agent"),
-            'lagt.actor_ref AS Agent_Ref',
-            'resp.name AS Responsible',
-            'wri.name AS Writer',
-            'ann.name AS Annuity_Agent'
-        )->leftJoin(
-            DB::raw(
-                "matter_actor_lnk linv
-                JOIN actor inv ON inv.id = linv.actor_id AND linv.role = 'INV'"
-            ),
-            DB::raw('IFNULL(matter.container_id, matter.id)'),
-            'linv.matter_id'
-        )->leftJoin(
-            DB::raw(
-                "matter_actor_lnk lcli
-                JOIN actor cli ON cli.id = lcli.actor_id
-                AND lcli.role = 'CLI' AND lcli.display_order = 1"
-            ),
-            'matter.id',
-            'lcli.matter_id'
-        )->leftJoin(
-            DB::raw(
-                "matter_actor_lnk lclic
-                JOIN actor clic 
-                ON clic.id = lclic.actor_id
-                AND lclic.role = 'CLI'
-                AND lclic.display_order = 1
-                AND lclic.shared = 1"
-            ),
-            'matter.container_id',
-            'lclic.matter_id'
-        )->leftJoin(
-            DB::raw(
-                "matter_actor_lnk lpay
-                JOIN actor pay 
-                ON pay.id = lpay.actor_id
-                AND lpay.role = 'PAY' 
-                AND lpay.display_order = 1"
-            ),
-            'matter.id',
-            'lpay.matter_id'
-        )->leftJoin(
-            DB::raw(
-                "matter_actor_lnk lpayc
-                JOIN actor payc 
-                ON payc.id = lpayc.actor_id
-                AND lpayc.role = 'PAY'
-                AND lpayc.display_order = 1
-                AND lpayc.shared = 1"
-            ),
-            'matter.container_id',
-            'lpayc.matter_id'
-        )->leftJoin(
-            DB::raw(
-                "matter_actor_lnk lappl
-                JOIN actor appl 
-                ON appl.id = lappl.actor_id
-                AND lappl.role = 'APP'"
-            ),
-            'matter.id',
-            'lappl.matter_id'
-        )->leftJoin(
-            DB::raw(
-                "matter_actor_lnk lapplc
-                JOIN actor applc 
-                ON applc.id = lapplc.actor_id
-                AND lapplc.role = 'APP'
-                AND lapplc.shared = 1"
-            ),
-            'matter.container_id',
-            'lapplc.matter_id'
-        )->leftJoin(
-            DB::raw(
-                "matter_actor_lnk lown
-                JOIN actor own 
-                ON own.id = lown.actor_id
-                AND lown.role = 'OWN'"
-            ),
-            'matter.id',
-            'lown.matter_id'
-        )->leftJoin(
-            DB::raw(
-                "matter_actor_lnk lownc
-                JOIN actor ownc 
-                ON ownc.id = lownc.actor_id
-                AND lownc.role = 'OWN'
-                AND lownc.shared = 1"
-            ),
-            'matter.container_id',
-            'lownc.matter_id'
-        )->leftJoin(
-            DB::raw(
-                "matter_actor_lnk lann
-                JOIN actor ann 
-                ON ann.id = lann.actor_id
-                AND lann.role = 'ANN'"
-            ),
-            'matter.id',
-            'lann.matter_id'
-        )->leftJoin(
-            DB::raw(
-                "matter_actor_lnk lcnt
-                JOIN actor cnt 
-                ON cnt.id = lcnt.actor_id
-                AND lcnt.role = 'CNT'"
-            ),
-            DB::raw('IFNULL(matter.container_id, matter.id)'),
-            'lcnt.matter_id'
-        )->leftJoin(
-            DB::raw(
-                "matter_actor_lnk lagt
-                JOIN actor agt 
-                ON agt.id = lagt.actor_id
-                AND lagt.role = 'AGT'"
-            ),
-            'matter.id',
-            'lagt.matter_id'
-        )->leftJoin(
-            DB::raw(
-                "matter_actor_lnk lwri
-                JOIN actor wri 
-                ON wri.id = lwri.actor_id
-                AND lwri.role = 'WRI'"
-            ),
-            'matter.id',
-            'lwri.matter_id'
-        )->leftJoin(
-            'event AS fil',
-            function ($join) {
-                $join->on('matter.id', 'fil.matter_id')->where('fil.code', 'FIL');
-            }
-        )->leftJoin(
-            'event AS pub',
-            function ($join) {
-                $join->on('matter.id', 'pub.matter_id')->where('pub.code', 'PUB');
-            }
-        )->leftJoin(
-            'event AS grt',
-            function ($join) {
-                $join->on('matter.id', 'grt.matter_id')->where('grt.code', 'GRT');
-            }
-        )->leftJoin(
-            'event AS reg',
-            function ($join) {
-                $join->on('matter.id', 'reg.matter_id')->where('reg.code', 'REG');
-            }
-        )->leftJoin(
-            'event AS pr',
-            function ($join) {
-                $join->on('matter.id', 'pr.matter_id')->where('pr.code', 'PR');
-            }
-        )->leftJoin(
-            'event_lnk_list AS pri',
-            function ($join) {
-                $join->on('matter.id', 'pri.matter_id')->where('pri.code', 'PRI');
-            }
-        )->leftJoin(
-            'event AS allow',
-            function ($join) {
-                $join->on('matter.id', 'allow.matter_id')->where('allow.code', 'ALL');
-            }
-        )->leftJoin(
-            'classifier AS titof',
-            function ($join) {
-                $join->on(
-                    'titof.matter_id',
-                    DB::raw('IFNULL(matter.container_id, matter.id)')
-                )->where('titof.type_code', 'TITOF');
-            }
-        )->leftJoin(
-            'classifier AS titen',
-            function ($join) {
-                $join->on(
-                    'titen.matter_id',
-                    DB::raw('IFNULL(matter.container_id, matter.id)')
-                )->where('titen.type_code', 'TITEN');
-            }
-        )->leftJoin(
-            'classifier AS tit',
-            function ($join) {
-                $join->on(
-                    'tit.matter_id',
-                    DB::raw('IFNULL(matter.container_id, matter.id)')
-                )->where('tit.type_code', 'TIT');
-            }
-        )->leftJoin(
-            'classifier AS tm',
-            function ($join) {
-                $join->on(
-                    'tm.matter_id',
-                    DB::raw('IFNULL(matter.container_id, matter.id)')
-                )->where('tm.type_code', 'TM');
-            }
-        )->leftJoin(
-            'classifier AS class',
-            function ($join) {
-                $join->on(
-                    'class.matter_id',
-                    DB::raw('IFNULL(matter.container_id, matter.id)')
-                )->where('class.type_code', 'TMCL');
-            }
-        )->join('actor AS resp', 'resp.login', 'matter.responsible')
-            ->find($matter->id);
-
-        // Exclude the data having line breaks
-        $simpledata = collect($data)->except(
-            [
-                'Priority',
-                'Client_Address',
-                'Billing_Address',
-                'Inventor_Addresses',
-                'Owner',
-                'Agent',
-            ]
-        )->toArray();
-        // Data having line breaks
-        $complexdata = collect($data)->only(
-            [
-                'Priority',
-                'Client_Address',
-                'Billing_Address',
-                'Inventor_Addresses',
-                'Owner',
-                'Agent',
-            ]
-        );
-
-        $template = new \PhpOffice\PhpWord\TemplateProcessor($file->path());
-        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
-        $template->setValues($simpledata);
-        // Process the data having line breaks and replace the line breaks with ${nl} macros
-        foreach ($complexdata as $key => $item) {
-            $item = str_replace("\n", '${nl}', $item);
-            $template->setValue($key, $item);
-
-            /*
-             * Cleaner method for processing the line breaks, but not fully operational (the style of the placeholder is not applied but replaced by "Normal")
-             */
-            // $textrun = new \PhpOffice\PhpWord\Element\TextRun();
-            // $textlines = explode("\n", $item);
-            // $textrun->addText(array_shift($textlines));
-            // foreach ($textlines as $line) {
-            //     $textrun->addTextBreak();
-            //     $textrun->addText($line);
-            // }
-            // $template->setComplexValue($key, $textrun);
-            // unset($textlines);
-        }
-
-        // Prevent escaping the line break tags
-        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(false);
-        // Set the ${nl} macros to line break tags (replacing "\n" directly with "<w:br/>" causes escaping issues)
-        $template->setValue('nl', '<w:br/>');
-
-        header('Content-Description: File Transfer');
-        header('Content-Disposition: attachment; filename="merged-' . $file->getClientOriginalName()) . '"';
-        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-        header('Content-Transfer-Encoding: binary');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Expires: 0');
-        $template->saveAs('php://output');
+        return response()->streamDownload(function () use ($template) {
+            $template->saveAs('php://output');
+        }, 'merged-' . $file->getClientOriginalName(), [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'Content-Transfer-Encoding' => 'binary',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ]);
     }
 
     public function events(Matter $matter)
@@ -1161,9 +788,9 @@ class MatterController extends Controller
         $members = data_get($ops_response, 'ops:world-patent-data.ops:patent-family.ops:family-member');
         if (Arr::isList($members)) {
             // Sort members by increasing filing date and doc-id, so that the first is the priority application
-            $members = collect($members)->sortBy(fn ($member) => $member['application-reference']['document-id']['date']['$'] . $member['application-reference']['@doc-id']);
+            $members = collect($members)->sortBy(fn($member) => $member['application-reference']['document-id']['date']['$'] . $member['application-reference']['@doc-id']);
             // Group all members by doc-id, so that publications and grants appear in a same record (yet as two arrays)
-            $members = collect($members)->groupBy(fn ($member) => $member['application-reference']['@doc-id']);
+            $members = collect($members)->groupBy(fn($member) => $member['application-reference']['@doc-id']);
         } else {
             // Turn single element into a list of one element
             $members = [$members['application-reference']['@doc-id'] => [0 => $members]];
@@ -1243,7 +870,7 @@ class MatterController extends Controller
                     $steps = $xml->xpath('//reg:procedural-step');
                     $proc = [];
                     foreach ($steps as $k => $step) {
-                        $proc[$k]['code'] = (string) $step->xpath('reg:procedural-step-code')[0];
+                        $proc[$k]['code'] = (string)$step->xpath('reg:procedural-step-code')[0];
                         if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_REQUEST"]/reg:date')) {
                             $proc[$k]['request'] = date('Y-m-d', strtotime($date[0]));
                         }
@@ -1260,7 +887,7 @@ class MatterController extends Controller
                             $proc[$k]['grt_paid'] = date('Y-m-d', strtotime($date[0]));
                         }
                         if ($year = $step->xpath('reg:procedural-step-text[@step-text-type="YEAR"]')) {
-                            $proc[$k]['ren_year'] = (int) $year[0];
+                            $proc[$k]['ren_year'] = (int)$year[0];
                         }
                     }
                     $apps[$i]['procedure'] = $proc;
@@ -1293,7 +920,7 @@ class MatterController extends Controller
                             $proc[$k]['ren_paid'] = date('Y-m-d', strtotime($date[0]));
                         }
                         if ($year = $step->xpath('ops:L500EP/ops:L520EP')) {
-                            $proc[$k]['ren_year'] = (int) $year[0];
+                            $proc[$k]['ren_year'] = (int)$year[0];
                         }
                     }
                     $apps[$i]['procedure'] = $proc;
