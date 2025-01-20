@@ -10,6 +10,10 @@ Head for the [Wiki](https://github.com/jjdejong/phpip/wiki) for further informat
 
 # New features
 
+## 2025-01-17 Added flexible fields for tasks in the document merge function
+
+Now the due date of any task defined in the rules table can be included in the document template for merging. The format is {Task Name}_{Detail}_Due_Date, where "Task Name" and "Detail" are the values as provided in the rules table. Eg. ${Request_Examination_Due_Date}. Thank you @AxelDeneu.
+
 ## 2024-12-30 Created a renewal sync script for the [Renewr](https://www.renewr.io/) renewal services
 
 By the same token, scheduled scripts such as this renewal sync script and the weekly due tasks reminder email have been moved to Artisan commands using the Laravel scheduling functionality.
