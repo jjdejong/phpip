@@ -110,11 +110,11 @@ class DocumentMergeService
                     ])->filter()->implode("\n");
                 })->implode("\n\n"),
             'Owner' => $matter->getOwnerName(),
-            'Agent' => $matter->agents->first()->name ?
+            'Agent' => $matter->agents->first()?->name ?
                 collect([
-                    $matter->agents->first()->name,
-                    $matter->agents->first()->address,
-                    $matter->agents->first()->country
+                    $matter->agents->first()?->name,
+                    $matter->agents->first()?->address,
+                    $matter->agents->first()?->country
                 ])->filter()->implode("\n") : "",
             'Agent_Ref' => $matter->agents
                 ->first()
