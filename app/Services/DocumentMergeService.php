@@ -98,23 +98,23 @@ class DocumentMergeService
                 ->map(fn($class) => $class->value)
                 ->implode('.'),
             'Inventors' => $matter->inventors
-                ->map(fn($inventor) => $inventor->actor->first_name ? ($inventor->actor->name . ' ' . $inventor->actor->first_name) : $inventor->actor->name)
+                ->map(fn($inventor) => $inventor->first_name ? ($inventor->name . ' ' . $inventor->first_name) : $inventor->name)
                 ->implode(' - '),
             'Inventor_Addresses' => $matter->inventors
                 ->map(function ($inventor) {
                     return collect([
-                        $inventor->actor->first_name ? ($inventor->actor->name . ' ' . $inventor->actor->first_name) : $inventor->actor->name,
+                        $inventor->first_name ? ($inventor->name . ' ' . $inventor->first_name) : $inventor->name,
                         $inventor->actor->address,
                         $inventor->actor->country,
                         $inventor->actor->nationality
                     ])->filter()->implode("\n");
                 })->implode("\n\n"),
             'Owner' => $matter->getOwnerName(),
-            'Agent' => $matter->agents->first()?->actor?->name ?
+            'Agent' => $matter->agents->first()->name ?
                 collect([
-                    $matter->agents->first()->actor?->name,
-                    $matter->agents->first()->actor?->address,
-                    $matter->agents->first()->actor?->country
+                    $matter->agents->first()->name,
+                    $matter->agents->first()->address,
+                    $matter->agents->first()->country
                 ])->filter()->implode("\n") : "",
             'Agent_Ref' => $matter->agents
                 ->first()
@@ -130,9 +130,10 @@ class DocumentMergeService
                 ?->name,
         ])->merge($this->getTaskRules($matter));
 
+        $complex = ['Priority', 'Client_Address', 'Billing_Address', 'Inventor_Addresses', 'Owner', 'Agent'];
         return [
-            'simple' => $selects->except(['Priority', 'Client_Address', 'Billing_Address', 'Inventor_Addresses', 'Owner', 'Agent'])->toArray(),
-            'complex' => $selects->only(['Priority', 'Client_Address', 'Billing_Address', 'Inventor_Addresses', 'Owner', 'Agent'])
+            'simple' => $selects->except($complex->toArray()),
+            'complex' => $selects->only($complex)
         ];
     }
 
