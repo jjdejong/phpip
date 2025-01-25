@@ -10,9 +10,18 @@ use PhpOffice\PhpWord\TemplateProcessor;
 
 class DocumentMergeService
 {
-    public function merge(Matter $matter, $filePath)
+    private Matter $matter;
+
+    public function setMatter(Matter $matter)
     {
-        $data = $this->collectData($matter);
+        $this->matter = $matter;
+
+        return $this;
+    }
+
+    public function merge($filePath)
+    {
+        $data = $this->collectData();
         $template = new TemplateProcessor($filePath);
         Settings::setOutputEscapingEnabled(true);
         $template->setValues($data['simple']);
@@ -22,85 +31,82 @@ class DocumentMergeService
         return $template;
     }
 
-    private function collectData(Matter $matter)
+    private function collectData()
     {
         $selects = collect([
-            'id' => $matter->id,
-            'File_Ref' => $matter->uid,
-            'Alt_Ref' => $matter->alt_ref,
-            'Country' => $matter->country,
-            'File_Category' => $matter->category_code,
-            'Filing_Date' => $matter->events->where('code', 'FIL')
+            'id' => $this->matter->id,
+            'File_Ref' => $this->matter->uid,
+            'Alt_Ref' => $this->matter->alt_ref,
+            'Country' => $this->matter->country,
+            'File_Category' => $this->matter->category_code,
+            'Filing_Date' => $this->matter->events->where('code', 'FIL')
                 ->first()
                 ?->event_date->isoFormat('L'),
-            'Filing_Number' => $matter->events->where('code', 'FIL')
+            'Filing_Number' => $this->matter->events->where('code', 'FIL')
                 ->first()
                 ?->detail,
-            'Pub_Date' => $matter->events->where('code', 'PUB')
+            'Pub_Date' => $this->matter->events->where('code', 'PUB')
                 ->first()
                 ?->event_date->isoFormat('L'),
-            'Pub_Number' => $matter->events->where('code', 'PUB')
+            'Pub_Number' => $this->matter->events->where('code', 'PUB')
                 ->first()
                 ?->detail,
-            'Priority' => $matter->prioritiesFromView
+            'Priority' => $this->matter->prioritiesFromView
                 ->map(fn($priority) => $priority->country . $priority->detail . ' - ' . $priority->event_date->isoFormat('L'))->implode("\n"),
-            'Grant_Date' => $matter->events->where('code', 'GRT')
+            'Grant_Date' => $this->matter->events->where('code', 'GRT')
                 ->first()
                 ?->event_date->isoFormat('L'),
-            'Grant_Number' => $matter->events->where('code', 'GRT')
+            'Grant_Number' => $this->matter->events->where('code', 'GRT')
                 ->first()
                 ?->detail,
-            'Registration_Date' => $matter->events->where('code', 'REG')
+            'Registration_Date' => $this->matter->events->where('code', 'REG')
                 ->first()
                 ?->event_date->isoFormat('L'),
-            'Registration_Number' => $matter->events->where('code', 'REG')
+            'Registration_Number' => $this->matter->events->where('code', 'REG')
                 ->first()
                 ?->detail,
-            'Pub_Reg_Date' => $matter->events->where('code', 'PR')
+            'Pub_Reg_Date' => $this->matter->events->where('code', 'PR')
                 ->first()
                 ?->event_date->isoFormat('L'),
-            'Pub_Reg_Number' => $matter->events->where('code', 'PR')
+            'Pub_Reg_Number' => $this->matter->events->where('code', 'PR')
                 ->first()
                 ?->detail,
-            'Allowance_Date' => $matter->events->where('code', 'ALL')
+            'Allowance_Date' => $this->matter->events->where('code', 'ALL')
                 ->first()
                 ?->event_date->isoFormat('L'),
-            'Expiration_Date' => $matter->expire_date,
-            'Client' => $matter->client->name,
-            'Client_Address' => $matter->client->actor->address ?? $matter->sharedClient->actor->address,
-            'Client_Country' => $matter->client->actor->country ?? $matter->sharedClient->actor->country,
-            'Contact' => $matter->contact
+            'Expiration_Date' => $this->matter->expire_date,
+            'Contact' => $this->matter->contact
                 ->first()
                 ?->name,
-            'Billing_Address' => $matter->getBillingAddress(),
-            'Client_Ref' => $matter->client->actor_ref,
-            'Email' => $matter->client->email,
-            'VAT' => $matter->client->VAT_number,
-            'Official_Title' => $matter->titles->where('type_code', 'TITOF')
+            'Billing_Address' => $this->matter->getBillingAddress(),
+            'Client_Ref' => $this->matter->client->actor_ref,
+            'Email' => $this->matter->client->email,
+            'VAT' => $this->matter->client->VAT_number,
+            'Official_Title' => $this->matter->titles->where('type_code', 'TITOF')
                     ->first()
                     ?->value ??
-                $matter->titles->where('type_code', 'TIT')
+                $this->matter->titles->where('type_code', 'TIT')
                     ->first()
                     ?->value,
-            'English_Title' => $matter->titles->where('type_code', 'TITEN')
+            'English_Title' => $this->matter->titles->where('type_code', 'TITEN')
                     ->first()
                     ?->value ??
-                $matter->titles->where('type_code', 'TITOF')
+                $this->matter->titles->where('type_code', 'TITOF')
                     ->first()
                     ?->value,
-            'Title' => $matter->titles->where('type_code', 'TIT')
+            'Title' => $this->matter->titles->where('type_code', 'TIT')
                 ->first()
                 ?->value, // Changer TATA par le code de la classification
-            'Trademark' => $matter->titles->where('type_code', 'TM')
+            'Trademark' => $this->matter->titles->where('type_code', 'TM')
                 ->first()
                 ?->value,
-            'Classes' => $matter->titles->where('type_code', 'TMCL')
+            'Classes' => $this->matter->titles->where('type_code', 'TMCL')
                 ->map(fn($class) => $class->value)
                 ->implode('.'),
-            'Inventors' => $matter->inventors
+            'Inventors' => $this->matter->inventors
                 ->map(fn($inventor) => $inventor->first_name ? ($inventor->name . ' ' . $inventor->first_name) : $inventor->name)
                 ->implode(' - '),
-            'Inventor_Addresses' => $matter->inventors
+            'Inventor_Addresses' => $this->matter->inventors
                 ->map(function ($inventor) {
                     return collect([
                         $inventor->first_name ? ($inventor->name . ' ' . $inventor->first_name) : $inventor->name,
@@ -109,26 +115,17 @@ class DocumentMergeService
                         $inventor->actor->nationality
                     ])->filter()->implode("\n");
                 })->implode("\n\n"),
-            'Owner' => $matter->getOwnerName(),
-            'Agent' => $matter->agents->first()?->name ?
-                collect([
-                    $matter->agents->first()?->name,
-                    $matter->agents->first()?->address,
-                    $matter->agents->first()?->country
-                ])->filter()->implode("\n") : "",
-            'Agent_Ref' => $matter->agents
-                ->first()
-                ?->actor_ref,
-            'Responsible' => $matter->responsibles
+            'Owner' => $this->matter->getOwnerName(),
+            'Responsible' => $this->matter->responsibles
                 ->first()
                 ->name,
-            'Writer' => $matter->writers
+            'Writer' => $this->matter->writers
                 ->first()
                 ?->name,
-            'Annuity_Agent' => $matter->annuityAgents
-                ->first()
-                ?->name,
-        ])->merge($this->getTaskRules($matter));
+        ])->merge([
+            ...$this->getTaskRules(),
+            ...$this->getActorsFields(),
+        ]);
 
         $complex = ['Priority', 'Client_Address', 'Billing_Address', 'Inventor_Addresses', 'Owner', 'Agent'];
         return [
@@ -137,18 +134,95 @@ class DocumentMergeService
         ];
     }
 
-    private function getTaskRules(Matter $matter): \Illuminate\Support\Collection
+    private function getTaskRules(): \Illuminate\Support\Collection
     {
-        return $matter->tasks->whereNotNull('rule_used')->mapWithKeys(function ($task) {
+        return $this->matter->tasks->whereNotNull('rule_used')->mapWithKeys(function ($task) {
             $name = $task->rule?->detail ? ($task->rule->taskInfo->name . ' ' . Str::of($task->rule->detail)->replaceMatches('/[^\w\s]/', '')) : $task->rule->taskInfo->name;
             $name = Str::replace(' ', '_', Str::title($name));
 
-            if(!$name) {
+            if (!$name) {
                 return [];
             }
 
             return [$name . '_Due_Date' => $task->due_date->isoFormat('L')];
         })->filter();
+    }
+
+    private function getAgentFields(): \Illuminate\Support\Collection
+    {
+        $agent = $this->matter->agents->merge($this->matter->sharedAgents)->first();
+
+        if (!$agent) {
+            return collect();
+        }
+
+        return collect([
+            'Agent' => $agent->name ?
+                collect([
+                    $agent->name,
+                    $agent->address,
+                    $agent->country
+                ])->filter()->implode("\n") : "",
+            'Agent_Ref' => $agent->pivot->actor_ref,
+        ]);
+    }
+
+    private function getActorDetails(mixed $actor, string $prefix): \Illuminate\Support\Collection
+    {
+        if (!$actor) {
+            return collect();
+        }
+
+        return collect([
+            "{$prefix}" => $actor->name,
+            "{$prefix}_Ref" => $actor->pivot ? $actor->pivot->actor_ref : $actor->actor_ref,
+            "{$prefix}_Address" => $actor->address,
+            "{$prefix}_Country" => $actor->country,
+            "{$prefix}_Registration_No" => $actor->registration_no,
+            "{$prefix}_VAT_No" => $actor->VAT_number,
+        ]);
+    }
+
+    private function getPrimaryAgentFields(): \Illuminate\Support\Collection
+    {
+        $primaryAgent = $this->matter->agents->merge($this->matter->sharedAgents)->first();
+        return $this->getActorDetails($primaryAgent, 'Primary_Agent');
+    }
+
+    private function getSecondaryAgentFields(): \Illuminate\Support\Collection
+    {
+        $secondaryAgent = $this->matter->secondaryAgents->merge($this->matter->sharedSecondaryAgents)->first();
+        return $this->getActorDetails($secondaryAgent, 'Secondary_agent');
+    }
+
+    private function getAnnuityAgentFields(): \Illuminate\Support\Collection
+    {
+        $annuityAgent = $this->matter->annuityAgents->merge($this->matter->sharedAnnuityAgents)->first();
+        return $this->getActorDetails($annuityAgent, 'Annuity_Agent');
+    }
+
+    private function getClientFields(): \Illuminate\Support\Collection
+    {
+        $client = $this->matter->client;
+        return $this->getActorDetails($client->actor, 'Client');
+    }
+
+    private function getPayorFields(): \Illuminate\Support\Collection
+    {
+        $payor = $this->matter->payor;
+        return $this->getActorDetails($payor->actor, 'Payor');
+    }
+
+    private function getActorsFields(): \Illuminate\Support\Collection
+    {
+        return collect([
+            ...$this->getAgentFields(),
+            ...$this->getPrimaryAgentFields(),
+            ...$this->getSecondaryAgentFields(),
+            ...$this->getAnnuityAgentFields(),
+            ...$this->getClientFields(),
+            ...$this->getPayorFields(),
+        ]);
     }
 
     private function setComplexValues(TemplateProcessor $template, $complexData)

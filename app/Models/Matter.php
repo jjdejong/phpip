@@ -77,12 +77,12 @@ class Matter extends Model
         return $this->hasOne(MatterActors::class)->whereRoleCode('CLI')->whereShared(1)->withDefault();
     }
 
-    public function payer()
+    public function payor()
     {
         return $this->hasOne(MatterActors::class)->whereRoleCode('PAY')->withDefault();
     }
 
-    public function sharedPayer()
+    public function sharedPayor()
     {
         return $this->hasOne(MatterActors::class)->whereRoleCode('PAY')->whereShared(1)->withDefault();
     }
@@ -112,7 +112,7 @@ class Matter extends Model
 
     public function sharedApplicantsFromLnk()
     {
-        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id', 'container_id', '')
+        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id', 'container_id')
             ->using(ActorPivot::class)
             ->withPivot('role', 'display_order', 'shared', 'actor_ref')
             ->wherePivot('role', 'APP')
@@ -129,7 +129,7 @@ class Matter extends Model
 
     public function sharedOwners()
     {
-        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id', 'container_id', '')
+        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id', 'container_id')
             ->using(ActorPivot::class)
             ->withPivot('role', 'display_order', 'shared', 'actor_ref')
             ->wherePivot('role', 'OWN')
@@ -150,6 +150,32 @@ class Matter extends Model
             ->wherePivot('role', 'AGT');
     }
 
+    public function sharedAgents()
+    {
+        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id', 'container_id')
+            ->using(ActorPivot::class)
+            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
+            ->wherePivot('role', 'AGT')
+            ->wherePivot('shared', 1);
+    }
+
+    public function secondaryAgents()
+    {
+        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id')
+            ->using(ActorPivot::class)
+            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
+            ->wherePivot('role', 'AGT2');
+    }
+
+    public function sharedSecondaryAgents()
+    {
+        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id', 'container_id')
+            ->using(ActorPivot::class)
+            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
+            ->wherePivot('role', 'AGT2')
+            ->wherePivot('shared', 1);
+    }
+
     public function writers()
     {
         return $this->hasMany(MatterActors::class)
@@ -162,6 +188,15 @@ class Matter extends Model
             ->using(ActorPivot::class)
             ->withPivot('role', 'display_order', 'shared', 'actor_ref')
             ->wherePivot('role', 'ANN');
+    }
+
+    public function sharedAnnuityAgents()
+    {
+        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id', 'container_id')
+            ->using(ActorPivot::class)
+            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
+            ->wherePivot('role', 'ANN')
+            ->wherePivot('shared', 1);
     }
 
     public function responsibles(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -693,18 +728,18 @@ class Matter extends Model
         if($client && $client->address_billing) {
             return collect([
                 collect([
-                    $this->payer->actor?->name,
-                    $this->sharedPayer->actor?->name,
+                    $this->payor->actor?->name,
+                    $this->sharedPayor->actor?->name,
                 ]),
                 collect([
-                    $this->payer->actor?->address,
-                    $this->sharedPayer->actor?->address,
+                    $this->payor->actor?->address,
+                    $this->sharedPayor->actor?->address,
                     $this->client->actor?->address_billing,
                     $this->sharedClient->actor?->address_billing
                 ]),
                 collect([
-                    $this->payer->actor?->country,
-                    $this->sharedPayer->actor?->country,
+                    $this->payor->actor?->country,
+                    $this->sharedPayor->actor?->country,
                     $this->client->actor?->country_billing,
                     $this->sharedClient->actor?->country_billing
                 ]),
@@ -715,20 +750,20 @@ class Matter extends Model
 
         return collect([
             collect([
-                $this->payer->actor?->name,
-                $this->sharedPayer->actor?->name,
+                $this->payor->actor?->name,
+                $this->sharedPayor->actor?->name,
                 $this->client->actor?->name,
                 $this->sharedClient->actor?->name
             ]),
             collect([
-                $this->payer->actor?->address,
-                $this->sharedPayer->actor?->address,
+                $this->payor->actor?->address,
+                $this->sharedPayor->actor?->address,
                 $this->client->actor?->address,
                 $this->sharedClient->actor?->address
             ]),
             collect([
-                $this->payer->actor?->country,
-                $this->sharedPayer->actor?->country,
+                $this->payor->actor?->country,
+                $this->sharedPayor->actor?->country,
                 $this->client->actor?->country,
                 $this->sharedClient->actor?->country
             ])
