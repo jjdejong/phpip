@@ -161,7 +161,7 @@ class DocumentMergeService
                     $agent->address,
                     $agent->country
                 ])->filter()->implode("\n") : "",
-            'Agent_Ref' => $agent->pivot->actor_ref,
+            'Agent_Ref' => $agent->actor_ref,
         ]);
     }
 

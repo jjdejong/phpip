@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\Actor;
 use App\Models\ActorPivot;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Trait HasOneActorThroughActorPivot
@@ -27,11 +28,13 @@ trait HasOneActorThroughActorPivot
     {
         // Define the hasOneThrough relationship with the actors table
         $request = $this->hasOneThrough(Actor::class, ActorPivot::class, 'matter_id', 'id', 'id', 'actor_id')
+            ->select('actor.*', 'matter_actor_lnk.*')
             ->where('role', $role);
 
         // If no relationship exists for the given role, return the container actors that are shared
         if(!$request->exists()) {
             $request = $this->hasOneThrough(Actor::class, ActorPivot::class, 'matter_id', 'id', 'container_id', 'actor_id')
+                ->select('actor.*', 'matter_actor_lnk.*')
                 ->where('role', $role)
                 ->where('shared', 1);
         }
