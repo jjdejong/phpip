@@ -2,19 +2,24 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToManyActors;
+use App\Traits\HasOneActorThroughActorPivot;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class Matter extends Model
 {
+    use HasOneActorThroughActorPivot, BelongsToManyActors;
+
     protected $table = 'matter';
 
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    
+
     /*protected $casts = [
         'expire_date' => 'date:Y-m-d'
     ];*/
@@ -60,10 +65,22 @@ class Matter extends Model
             ->orderBy('idx');
     }
 
-    public function actors()
+    public function actors(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         // MatterActors refers to a view that also includes the actors inherited from the container. Can only be used to display data
         return $this->hasMany(MatterActors::class);
+    }
+
+    /**
+     * This relation is very useful as it allows us, using the pivot model, to access the role of the actor in the matter and filter any actor following our needs
+     * It doesn't replace the belongs to many relation, but allow us to return a relation with only one item instead of an Actor
+     * By doing that, we can eager-load the relation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function actorPivot(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ActorPivot::class);
     }
 
     public function client()
@@ -102,38 +119,30 @@ class Matter extends Model
         return $this->actors()->whereRoleCode('APP');
     }
 
-    public function applicantsFromLnk()
+    /**
+     * Define a belongsToMany relationship with the Actor model for applicants.
+     *
+     * This method returns a belongsToMany relationship with the actors table,
+     * using the ActorPivot model and filtering by the 'APP' role.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany The belongsToMany relationship for applicants.
+     */
+    public function applicantsFromLnk(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id')
-            ->using(ActorPivot::class)
-            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
-            ->wherePivot('role', 'APP');
+        return $this->belongsToManyActors('APP');
     }
 
-    public function sharedApplicantsFromLnk()
+    /**
+     * Define a belongsToMany relationship with the Actor model for owners.
+     *
+     * This method returns a belongsToMany relationship with the actors table,
+     * using the ActorPivot model and filtering by the 'OWN' role.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany The belongsToMany relationship for owners.
+     */
+    public function owners(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id', 'container_id')
-            ->using(ActorPivot::class)
-            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
-            ->wherePivot('role', 'APP')
-            ->wherePivot('shared', 1);
-    }
-
-    public function owners()
-    {
-        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id')
-            ->using(ActorPivot::class)
-            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
-            ->wherePivot('role', 'OWN');
-    }
-
-    public function sharedOwners()
-    {
-        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id', 'container_id')
-            ->using(ActorPivot::class)
-            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
-            ->wherePivot('role', 'OWN')
-            ->wherePivot('shared', 1);
+        return $this->belongsToManyActors('OWN');
     }
 
     public function inventors()
@@ -142,82 +151,65 @@ class Matter extends Model
             ->whereRoleCode('INV');
     }
 
-    public function agents()
+    /**
+     * We check for the agent using our pivot table. Also known as Primary Agent
+     * We use the HasOneActorThroughActorPivot trait to avoid repeating the same code
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     */
+    public function agent(): \Illuminate\Database\Eloquent\Relations\HasOneThrough
     {
-        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id')
-            ->using(ActorPivot::class)
-            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
-            ->wherePivot('role', 'AGT');
+        return $this->hasOneActorThroughActorPivot('AGT');
     }
 
-    public function sharedAgents()
+    /**
+     * We check for the secondary agent using our pivot table.
+     * We use the HasOneActorThroughActorPivot trait to avoid repeating the same code
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     */
+    public function secondaryAgent(): \Illuminate\Database\Eloquent\Relations\HasOneThrough
     {
-        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id', 'container_id')
-            ->using(ActorPivot::class)
-            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
-            ->wherePivot('role', 'AGT')
-            ->wherePivot('shared', 1);
+        return $this->hasOneActorThroughActorPivot('AGT2');
     }
 
-    public function secondaryAgents()
+    /**
+     * We check for the writer using our pivot table.
+     * We use the HasOneActorThroughActorPivot trait to avoid repeating the same code
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     */
+    public function writer(): \Illuminate\Database\Eloquent\Relations\HasOneThrough
     {
-        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id')
-            ->using(ActorPivot::class)
-            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
-            ->wherePivot('role', 'AGT2');
+        return $this->hasOneActorThroughActorPivot('WRT');
     }
 
-    public function sharedSecondaryAgents()
+    /**
+     * Here, we check for the annuityAgent using our pivot table
+     * We use the HasOneActorThroughActorPivot trait to avoid repeating the same code
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     */
+    public function annuityAgent(): \Illuminate\Database\Eloquent\Relations\HasOneThrough
     {
-        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id', 'container_id')
-            ->using(ActorPivot::class)
-            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
-            ->wherePivot('role', 'AGT2')
-            ->wherePivot('shared', 1);
+        return $this->hasOneActorThroughActorPivot('ANN');
     }
 
-    public function writers()
+    /**
+     * Get the responsible actor for the matter.
+     * We must name the method "responsibleActor" to avoid conflicts with the "responsible" attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function responsibleActor(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->hasMany(MatterActors::class)
-            ->whereRoleCode('WRT');
-    }
-
-    public function annuityAgents()
-    {
-        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id')
-            ->using(ActorPivot::class)
-            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
-            ->wherePivot('role', 'ANN');
-    }
-
-    public function sharedAnnuityAgents()
-    {
-        return $this->belongsToMany(Actor::class, 'matter_actor_lnk', 'matter_id', 'actor_id', 'container_id')
-            ->using(ActorPivot::class)
-            ->withPivot('role', 'display_order', 'shared', 'actor_ref')
-            ->wherePivot('role', 'ANN')
-            ->wherePivot('shared', 1);
-    }
-
-    public function responsibles(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Actor::class, 'login', 'responsible');
-    }
-
-    public function actorPivot()
-    {
-        return $this->hasMany(ActorPivot::class);
+        return $this->hasOne(Actor::class, 'login', 'responsible');
     }
 
     public function events()
     {
         return $this->hasMany(Event::class)
             ->orderBy('event_date');
-    }
-
-    public function eventsFromView()
-    {
-        return $this->hasMany(EventLnkList::class, 'matter_id', 'id');
     }
 
     public function filing()
@@ -376,8 +368,8 @@ class Matter extends Model
             'matter.dead',
             DB::raw('isnull(matter.container_id) AS Ctnr')
         )->join(
-            'matter_category', 
-            'matter.category_code', 
+            'matter_category',
+            'matter.category_code',
             'matter_category.code'
         )->leftJoin(
             DB::raw('matter_actor_lnk clilnk JOIN actor cli ON cli.id = clilnk.actor_id'),
@@ -385,7 +377,7 @@ class Matter extends Model
                 $join->on('matter.id', 'clilnk.matter_id')->where('clilnk.role', 'CLI');
             }
         )->leftJoin(
-            DB::raw('matter_actor_lnk cliclnk JOIN actor clic ON clic.id = cliclnk.actor_id'), 
+            DB::raw('matter_actor_lnk cliclnk JOIN actor clic ON clic.id = cliclnk.actor_id'),
             function ($join) {
                 $join->on('matter.container_id', 'cliclnk.matter_id')->where(
                     [
@@ -405,7 +397,7 @@ class Matter extends Model
                 );
             }
         )->leftJoin(
-            DB::raw('matter_actor_lnk agtclnk JOIN actor agtc ON agtc.id = agtclnk.actor_id'), 
+            DB::raw('matter_actor_lnk agtclnk JOIN actor agtc ON agtc.id = agtclnk.actor_id'),
             function ($join) {
                 $join->on('matter.container_id', 'agtclnk.matter_id')->where(
                     [
@@ -425,28 +417,28 @@ class Matter extends Model
                 $join->on(DB::raw('ifnull(matter.container_id, matter.id)'), 'dellnk.matter_id')->where('dellnk.role', 'DEL');
             }
         )->leftJoin(
-            'event AS fil', 
+            'event AS fil',
             function ($join) {
                 $join->on('matter.id', 'fil.matter_id')->where('fil.code', 'FIL');
             }
         )->leftJoin(
-            'event AS pub', 
+            'event AS pub',
             function ($join) {
                 $join->on('matter.id', 'pub.matter_id')->where('pub.code', 'PUB');
             }
         )->leftJoin(
-            'event AS grt', 
+            'event AS grt',
             function ($join) {
                 $join->on('matter.id', 'grt.matter_id')->where('grt.code', 'GRT');
             }
         )->leftJoin(
-            'event AS reg', 
+            'event AS reg',
             function ($join) {
                 $join->on('matter.id', 'reg.matter_id')->where('reg.code', 'REG');
             }
         )->leftJoin(
-            DB::raw('event status JOIN event_name ON event_name.code = status.code AND event_name.status_event = 1'), 
-            'matter.id', 
+            DB::raw('event status JOIN event_name ON event_name.code = status.code AND event_name.status_event = 1'),
+            'matter.id',
             'status.matter_id'
         )->leftJoin(
             DB::raw('event e2 JOIN event_name en2 ON e2.code = en2.code AND en2.status_event = 1'),
@@ -459,8 +451,8 @@ class Matter extends Model
                 ON tit1.type_code = ct1.code 
                 AND ct1.main_display = 1 
                 AND ct1.display_order = 1'
-            ), 
-            DB::raw('IFNULL(matter.container_id, matter.id)'), 
+            ),
+            DB::raw('IFNULL(matter.container_id, matter.id)'),
             'tit1.matter_id'
         )->leftJoin(
             DB::raw(
@@ -468,8 +460,8 @@ class Matter extends Model
                 ON tit2.type_code = ct2.code 
                 AND ct2.main_display = 1 
                 AND ct2.display_order = 2'
-            ), 
-            DB::raw('IFNULL(matter.container_id, matter.id)'), 
+            ),
+            DB::raw('IFNULL(matter.container_id, matter.id)'),
             'tit2.matter_id'
         )->leftJoin(
             DB::raw(
@@ -477,8 +469,8 @@ class Matter extends Model
                 ON tit3.type_code = ct3.code 
                 AND ct3.main_display = 1 
                 AND ct3.display_order = 3'
-            ), 
-            DB::raw('IFNULL(matter.container_id, matter.id)'), 
+            ),
+            DB::raw('IFNULL(matter.container_id, matter.id)'),
             'tit3.matter_id'
         )->where('e2.matter_id', null);
 
@@ -520,7 +512,7 @@ class Matter extends Model
             );
         }
 
-        if (! empty($multi_filter)) {
+        if (!empty($multi_filter)) {
             // When no filters are set, sorting is done by descending matter id's to see the most recent matters first.
             // As soon as a filter is set, sorting is done by default by caseref instead of by id, ascending.
             if ($sortkey == 'id') {
@@ -606,7 +598,7 @@ class Matter extends Model
         }
 
         // Do not display dead families unless desired
-        if (! $include_dead) {
+        if (!$include_dead) {
             $query->whereRaw('(select count(1) from matter m where m.caseref = matter.caseref and m.dead = 0) > 0');
         }
 
@@ -651,10 +643,10 @@ class Matter extends Model
         // "grant" includes registration (for trademarks)
         $granted_date = Carbon::parse($this->grant->event_date);
         $published_date = Carbon::parse($this->publication->event_date);
-        $title = $this->titles->where('type_code', 'TITOF')->first()->value 
+        $title = $this->titles->where('type_code', 'TITOF')->first()->value
             ?? $this->titles->first()->value
             ?? "";
-        $title_EN = $this->titles->where('type_code', 'TITEN')->first()->value 
+        $title_EN = $this->titles->where('type_code', 'TITEN')->first()->value
             ?? $this->titles->first()->value
             ?? "";
         if ($lang == 'fr') {
@@ -681,7 +673,7 @@ class Matter extends Model
                     $line .= ", publiée le {$published_date->locale('fr_FR')->isoFormat('LL')} sous le n°{$this->publication->detail}";
                 }
                 if ($granted_date) {
-                    $line .=  " et enregistrée le {$granted_date->locale('fr_FR')->isoFormat('LL')}";
+                    $line .= " et enregistrée le {$granted_date->locale('fr_FR')->isoFormat('LL')}";
                 }
                 $description[] = $line;
                 $description[] = "Pour : $title";
@@ -699,10 +691,10 @@ class Matter extends Model
                 } else {
                     $description[] = "Patent application {$this->filing->detail} filed in {$this->countryInfo->name} on {$filed_date->locale('en_US')->isoFormat('LL')}";
                     if ($published_date) {
-                        $description[]= " and published on {$published_date->locale('en_US')->isoFormat('LL')} as {$this->publication->detail}";
+                        $description[] = " and published on {$published_date->locale('en_US')->isoFormat('LL')} as {$this->publication->detail}";
                     }
                 }
-                $description[] = "For: $title_EN" ;
+                $description[] = "For: $title_EN";
                 $description[] = "In name of: {$this->applicants->pluck('name')->join(', ')}";
             }
             if ($this->category_code == 'TM') {
@@ -711,7 +703,7 @@ class Matter extends Model
                     $line .= ", published on {$published_date->locale('en_US')->isoFormat('LL')} as {$this->publication->detail}";
                 }
                 if ($granted_date) {
-                    $line .=  " and registered on {$granted_date->locale('en_US')->isoFormat('LL')}";
+                    $line .= " and registered on {$granted_date->locale('en_US')->isoFormat('LL')}";
                 }
                 $description[] = $line;
                 $description[] = "For: $title_EN";
@@ -725,7 +717,7 @@ class Matter extends Model
     {
         $client = $this->client->actor ?? $this->sharedClient->actor;
 
-        if($client && $client->address_billing) {
+        if ($client && $client->address_billing) {
             return collect([
                 collect([
                     $this->payor->actor?->name,
@@ -778,15 +770,14 @@ class Matter extends Model
      *
      * @return string|null
      */
-    public function getOwnerName()
+    public function getOwnerName(): ?string
     {
-        $owners = $this->sharedOwners->pluck('name')->merge($this->owners->pluck('name'))->unique()->sort();
-        $applicants = $this->sharedApplicantsFromLnk->pluck('name')->merge($this->applicantsFromLnk->pluck('name'))->unique()->sort();
+        $owners = $this->owners->pluck('name')->unique()->sort();
 
         if ($owners->isNotEmpty()) {
             return $owners->implode("\n");
         }
 
-        return $applicants->implode("\n");
+        return $this->applicantsFromLnk->pluck('name')->unique()->sort()->implode("\n");
     }
 }

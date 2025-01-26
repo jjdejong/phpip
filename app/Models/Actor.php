@@ -35,6 +35,11 @@ class Actor extends Model
         return $this->belongsToMany(Matter::class, 'matter_actor_lnk');
     }
 
+    public function mattersWithLnk()
+    {
+        return $this->hasMany(ActorPivot::class, 'actor_id');
+    }
+
     public function droleInfo()
     {
         return $this->belongsTo(Role::class, 'default_role');

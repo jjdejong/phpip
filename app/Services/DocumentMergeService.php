@@ -116,16 +116,16 @@ class DocumentMergeService
                     ])->filter()->implode("\n");
                 })->implode("\n\n"),
             'Owner' => $this->matter->getOwnerName(),
-            'Responsible' => $this->matter->responsibles
-                ->first()
-                ->name,
-            'Writer' => $this->matter->writers
-                ->first()
+            'Responsible' => $this->matter->responsibleActor
+                ?->name,
+            'Writer' => $this->matter->writer
                 ?->name,
         ])->merge([
             ...$this->getTaskRules(),
             ...$this->getActorsFields(),
         ]);
+
+        dd($this->matter->annuityAgent);
 
         $complex = ['Priority', 'Client_Address', 'Billing_Address', 'Inventor_Addresses', 'Owner', 'Agent'];
         return [
@@ -150,7 +150,7 @@ class DocumentMergeService
 
     private function getAgentFields(): \Illuminate\Support\Collection
     {
-        $agent = $this->matter->agents->merge($this->matter->sharedAgents)->first();
+        $agent = $this->matter->agent;
 
         if (!$agent) {
             return collect();
@@ -185,20 +185,17 @@ class DocumentMergeService
 
     private function getPrimaryAgentFields(): \Illuminate\Support\Collection
     {
-        $primaryAgent = $this->matter->agents->merge($this->matter->sharedAgents)->first();
-        return $this->getActorDetails($primaryAgent, 'Primary_Agent');
+        return $this->getActorDetails($this->matter->agent, 'Primary_Agent');
     }
 
     private function getSecondaryAgentFields(): \Illuminate\Support\Collection
     {
-        $secondaryAgent = $this->matter->secondaryAgents->merge($this->matter->sharedSecondaryAgents)->first();
-        return $this->getActorDetails($secondaryAgent, 'Secondary_agent');
+        return $this->getActorDetails($this->matter->secondaryAgent, 'Secondary_agent');
     }
 
     private function getAnnuityAgentFields(): \Illuminate\Support\Collection
     {
-        $annuityAgent = $this->matter->annuityAgents->merge($this->matter->sharedAnnuityAgents)->first();
-        return $this->getActorDetails($annuityAgent, 'Annuity_Agent');
+        return $this->getActorDetails($this->matter->annuityAgent, 'Annuity_Agent');
     }
 
     private function getClientFields(): \Illuminate\Support\Collection
