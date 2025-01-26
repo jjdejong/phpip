@@ -125,8 +125,6 @@ class DocumentMergeService
             ...$this->getActorsFields(),
         ]);
 
-        dd($this->matter->annuityAgent);
-
         $complex = ['Priority', 'Client_Address', 'Billing_Address', 'Inventor_Addresses', 'Owner', 'Agent'];
         return [
             'simple' => $selects->except($complex)->toArray(),
