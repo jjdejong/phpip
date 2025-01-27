@@ -2,17 +2,15 @@
 
 namespace App\Models;
 
-use App\Traits\BelongsToManyActors;
-use App\Traits\HasOneActorThroughActorPivot;
+use App\Traits\HasActorsFromRole;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class Matter extends Model
 {
-    use HasOneActorThroughActorPivot, BelongsToManyActors;
+    use HasActorsFromRole;
 
     protected $table = 'matter';
 
@@ -89,14 +87,26 @@ class Matter extends Model
         return $this->hasOne(MatterActors::class)->whereRoleCode('CLI')->withDefault();
     }
 
-    public function sharedClient()
+    /**
+     * We check for the client using our pivot table.
+     * We use the HasActorsFromRole trait to avoid repeating the same code
+     *
+     * @return \App\Models\Actor|null
+     */
+    public function clientFromLnk(): ?Actor
     {
-        return $this->hasOne(MatterActors::class)->whereRoleCode('CLI')->whereShared(1)->withDefault();
+        return $this->getActorFromRole('CLI');
     }
 
+    /**
+     * We check for the payor using our pivot table.
+     * We use the HasActorsFromRole trait to avoid repeating the same code
+     *
+     * @return \App\Models\Actor|null
+     */
     public function payor()
     {
-        return $this->hasOne(MatterActors::class)->whereRoleCode('PAY')->withDefault();
+        return $this->getActorFromRole('PAY');
     }
 
     public function sharedPayor()
@@ -120,29 +130,25 @@ class Matter extends Model
     }
 
     /**
-     * Define a belongsToMany relationship with the Actor model for applicants.
+     * This method returns a collection of actors matching the role 'APP' for the matter.
+     * using the matter_actor_lnk table and filtering by the 'APP' role.
      *
-     * This method returns a belongsToMany relationship with the actors table,
-     * using the ActorPivot model and filtering by the 'APP' role.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany The belongsToMany relationship for applicants.
+     * @return \Illuminate\Database\Eloquent\Collection The belongsToMany relationship for owners.
      */
-    public function applicantsFromLnk(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function applicantsFromLnk(): \Illuminate\Database\Eloquent\Collection
     {
-        return $this->belongsToManyActors('APP');
+        return $this->getActorsFromRole('APP');
     }
 
     /**
-     * Define a belongsToMany relationship with the Actor model for owners.
+     * This method returns a collection of actors matching the role 'OWN' for the matter.
+     * using the matter_actor_lnk table and filtering by the 'OWN' role.
      *
-     * This method returns a belongsToMany relationship with the actors table,
-     * using the ActorPivot model and filtering by the 'OWN' role.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany The belongsToMany relationship for owners.
+     * @return \Illuminate\Database\Eloquent\Collection The belongsToMany relationship for owners.
      */
-    public function owners(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function owners(): \Illuminate\Database\Eloquent\Collection
     {
-        return $this->belongsToManyActors('OWN');
+        return $this->getActorsFromRole('OWN');
     }
 
     public function inventors()
@@ -153,46 +159,46 @@ class Matter extends Model
 
     /**
      * We check for the agent using our pivot table. Also known as Primary Agent
-     * We use the HasOneActorThroughActorPivot trait to avoid repeating the same code
+     * We use the HasActorsFromRole trait to avoid repeating the same code
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     * @return \App\Models\Actor|null
      */
-    public function agent(): \Illuminate\Database\Eloquent\Relations\HasOneThrough
+    public function agent(): ?Actor
     {
-        return $this->hasOneActorThroughActorPivot('AGT');
+        return $this->getActorFromRole('AGT');
     }
 
     /**
      * We check for the secondary agent using our pivot table.
-     * We use the HasOneActorThroughActorPivot trait to avoid repeating the same code
+     * We use the HasActorsFromRole trait to avoid repeating the same code
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     * @return \App\Models\Actor|null
      */
-    public function secondaryAgent(): \Illuminate\Database\Eloquent\Relations\HasOneThrough
+    public function secondaryAgent(): ?Actor
     {
-        return $this->hasOneActorThroughActorPivot('AGT2');
+        return $this->getActorFromRole('AGT2');
     }
 
     /**
      * We check for the writer using our pivot table.
-     * We use the HasOneActorThroughActorPivot trait to avoid repeating the same code
+     * We use the HasActorsFromRole trait to avoid repeating the same code
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     * @return \App\Models\Actor|null
      */
-    public function writer(): \Illuminate\Database\Eloquent\Relations\HasOneThrough
+    public function writer(): ?Actor
     {
-        return $this->hasOneActorThroughActorPivot('WRT');
+        return $this->getActorFromRole('WRT');
     }
 
     /**
      * Here, we check for the annuityAgent using our pivot table
-     * We use the HasOneActorThroughActorPivot trait to avoid repeating the same code
+     * We use the HasActorsFromRole trait to avoid repeating the same code
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     * @return \App\Models\Actor|null
      */
-    public function annuityAgent(): \Illuminate\Database\Eloquent\Relations\HasOneThrough
+    public function annuityAgent(): ?Actor
     {
-        return $this->hasOneActorThroughActorPivot('ANN');
+        return $this->getActorFromRole('ANN');
     }
 
     /**
@@ -713,55 +719,36 @@ class Matter extends Model
         return $description;
     }
 
-    public function getBillingAddress()
+    /**
+     * Get the billing address for the matter.
+     *
+     * This method retrieves the billing address by combining the address parts
+     * from the client and the payor associated with the matter. It filters out
+     * any null values and ensures unique address parts before concatenating them
+     * into a single string separated by newline characters.
+     *
+     * @return string The concatenated billing address.
+     */
+    public function getBillingAddress(): string
     {
-        $client = $this->client->actor ?? $this->sharedClient->actor;
+        // Retrieve the client associated with the matter from the pivot table.
+        $client = $this->clientFromLnk();
 
-        if ($client && $client->address_billing) {
-            return collect([
-                collect([
-                    $this->payor->actor?->name,
-                    $this->sharedPayor->actor?->name,
-                ]),
-                collect([
-                    $this->payor->actor?->address,
-                    $this->sharedPayor->actor?->address,
-                    $this->client->actor?->address_billing,
-                    $this->sharedClient->actor?->address_billing
-                ]),
-                collect([
-                    $this->payor->actor?->country,
-                    $this->sharedPayor->actor?->country,
-                    $this->client->actor?->country_billing,
-                    $this->sharedClient->actor?->country_billing
-                ]),
-            ])->map(function ($element) {
-                return $element->filter()->unique()->first();
-            })->filter()->implode("\n");
-        }
+        // Retrieve the payor associated with the matter from the pivot table.
+        $payor = $this->payor();
 
-        return collect([
-            collect([
-                $this->payor->actor?->name,
-                $this->sharedPayor->actor?->name,
-                $this->client->actor?->name,
-                $this->sharedClient->actor?->name
-            ]),
-            collect([
-                $this->payor->actor?->address,
-                $this->sharedPayor->actor?->address,
-                $this->client->actor?->address,
-                $this->sharedClient->actor?->address
-            ]),
-            collect([
-                $this->payor->actor?->country,
-                $this->sharedPayor->actor?->country,
-                $this->client->actor?->country,
-                $this->sharedClient->actor?->country
-            ])
-        ])->map(function ($element) {
-            return $element->filter()->unique()->first();
-        })->filter()->implode("\n");
+        // Collect the address parts from the payor and client, filter out null values, and ensure uniqueness.
+        $addressParts = collect([
+            $payor?->name,
+            $payor?->address,
+            $payor?->country,
+            $client?->name,
+            $client?->address_billing ?? $client?->address,
+            $client?->country_billing ?? $client?->country,
+        ])->filter()->unique();
+
+        // Concatenate the address parts into a single string separated by newline characters.
+        return $addressParts->implode("\n");
     }
 
     /**
@@ -772,12 +759,12 @@ class Matter extends Model
      */
     public function getOwnerName(): ?string
     {
-        $owners = $this->owners->pluck('name')->unique()->sort();
+        $owners = $this->owners()->pluck('name')->unique()->sort();
 
         if ($owners->isNotEmpty()) {
             return $owners->implode("\n");
         }
 
-        return $this->applicantsFromLnk->pluck('name')->unique()->sort()->implode("\n");
+        return $this->applicantsFromLnk()->pluck('name')->unique()->sort()->implode("\n");
     }
 }
