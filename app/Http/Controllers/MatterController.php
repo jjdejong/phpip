@@ -686,7 +686,9 @@ class MatterController extends Controller
     public function mergeFile(Matter $matter, MergeFileRequest $request)
     {
         $file = $request->file('file');
-        $template = $this->documentMergeService->merge($matter, $file->path());
+        $template = $this->documentMergeService
+            ->setMatter($matter)
+            ->merge($file->path());
 
         return response()->streamDownload(function () use ($template) {
             $template->saveAs('php://output');
