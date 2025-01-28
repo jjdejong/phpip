@@ -118,7 +118,7 @@ class DocumentMergeService
             'Owner' => $this->matter->getOwnerName(),
             'Responsible' => $this->matter->responsibleActor
                 ?->name,
-            'Writer' => $this->matter->writer
+            'Writer' => $this->matter->writer()
                 ?->name,
         ])->merge([
             ...$this->getTaskRules(),
@@ -148,7 +148,7 @@ class DocumentMergeService
 
     private function getAgentFields(): \Illuminate\Support\Collection
     {
-        $agent = $this->matter->agent;
+        $agent = $this->matter->agent();
 
         if (!$agent) {
             return collect();
@@ -183,29 +183,27 @@ class DocumentMergeService
 
     private function getPrimaryAgentFields(): \Illuminate\Support\Collection
     {
-        return $this->getActorDetails($this->matter->agent, 'Primary_Agent');
+        return $this->getActorDetails($this->matter->agent(), 'Primary_Agent');
     }
 
     private function getSecondaryAgentFields(): \Illuminate\Support\Collection
     {
-        return $this->getActorDetails($this->matter->secondaryAgent, 'Secondary_agent');
+        return $this->getActorDetails($this->matter->secondaryAgent(), 'Secondary_agent');
     }
 
     private function getAnnuityAgentFields(): \Illuminate\Support\Collection
     {
-        return $this->getActorDetails($this->matter->annuityAgent, 'Annuity_Agent');
+        return $this->getActorDetails($this->matter->annuityAgent(), 'Annuity_Agent');
     }
 
     private function getClientFields(): \Illuminate\Support\Collection
     {
-        $client = $this->matter->client;
-        return $this->getActorDetails($client->actor, 'Client');
+        return $this->getActorDetails($this->matter->clientFromLnk(), 'Client');
     }
 
     private function getPayorFields(): \Illuminate\Support\Collection
     {
-        $payor = $this->matter->payor;
-        return $this->getActorDetails($payor->actor, 'Payor');
+        return $this->getActorDetails($this->matter->payor(), 'Payor');
     }
 
     private function getActorsFields(): \Illuminate\Support\Collection
