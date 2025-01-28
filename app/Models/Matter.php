@@ -93,7 +93,7 @@ class Matter extends Model
      *
      * @return \App\Models\Actor|null
      */
-    public function clientFromLnk(): ?Actor
+    public function clientFromLnk(): ?MatterActors
     {
         return $this->getActorFromRole('CLI');
     }
@@ -104,14 +104,9 @@ class Matter extends Model
      *
      * @return \App\Models\Actor|null
      */
-    public function payor()
+    public function payor(): ?MatterActors
     {
         return $this->getActorFromRole('PAY');
-    }
-
-    public function sharedPayor()
-    {
-        return $this->hasOne(MatterActors::class)->whereRoleCode('PAY')->whereShared(1)->withDefault();
     }
 
     public function delegate()
@@ -163,7 +158,7 @@ class Matter extends Model
      *
      * @return \App\Models\Actor|null
      */
-    public function agent(): ?Actor
+    public function agent(): ?MatterActors
     {
         return $this->getActorFromRole('AGT');
     }
@@ -174,7 +169,7 @@ class Matter extends Model
      *
      * @return \App\Models\Actor|null
      */
-    public function secondaryAgent(): ?Actor
+    public function secondaryAgent(): ?MatterActors
     {
         return $this->getActorFromRole('AGT2');
     }
@@ -185,7 +180,7 @@ class Matter extends Model
      *
      * @return \App\Models\Actor|null
      */
-    public function writer(): ?Actor
+    public function writer(): ?MatterActors
     {
         return $this->getActorFromRole('WRT');
     }
@@ -196,7 +191,7 @@ class Matter extends Model
      *
      * @return \App\Models\Actor|null
      */
-    public function annuityAgent(): ?Actor
+    public function annuityAgent(): ?MatterActors
     {
         return $this->getActorFromRole('ANN');
     }
@@ -741,11 +736,11 @@ class Matter extends Model
         // Collect the address parts from the payor and client, filter out null values, and ensure uniqueness.
         $addressParts = collect([
             $payor?->name,
-            $payor?->address,
-            $payor?->country,
+            $payor?->actor?->address,
+            $payor?->actor?->country,
             $client?->name,
-            $client?->address_billing ?? $client?->address,
-            $client?->country_billing ?? $client?->country,
+            $client?->actor?->address_billing ?? $client?->actor?->address,
+            $client?->actor?->country_billing ?? $client?->actor?->country,
         ])->filter()->unique();
 
         // Concatenate the address parts into a single string separated by newline characters.
