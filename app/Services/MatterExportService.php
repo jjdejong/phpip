@@ -20,7 +20,6 @@ class MatterExportService
         // Define the column captions for the CSV file.
         $captions = [
             'Our Ref',
-            'Alt Ref',
             'Country',
             'Cat',
             'Origin',
@@ -49,6 +48,7 @@ class MatterExportService
             'Delegate',
             'Dead',
             'Ctnr',
+            'Alt Ref',
         ];
 
         // Open a memory stream for the CSV file.

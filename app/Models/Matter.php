@@ -339,7 +339,6 @@ class Matter extends Model
     {
         $query = Matter::select(
             'matter.uid AS Ref',
-            'matter.alt_ref AS Alt_Ref',
             'matter.country AS country',
             'matter.category_code AS Cat',
             'matter.origin',
@@ -367,7 +366,8 @@ class Matter extends Model
             'matter.responsible',
             'del.login AS delegate',
             'matter.dead',
-            DB::raw('isnull(matter.container_id) AS Ctnr')
+            DB::raw('isnull(matter.container_id) AS Ctnr'),
+            'matter.alt_ref AS Alt_Ref'
         )->join(
             'matter_category',
             'matter.category_code',
