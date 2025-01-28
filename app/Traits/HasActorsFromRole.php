@@ -26,7 +26,11 @@ trait HasActorsFromRole
             ->where(function ($query) {
                 $query
                     ->where('matter_actor_lnk.matter_id', $this->id)
-                    ->orWhere('matter_actor_lnk.matter_id', $this->container_id);
+                    ->orWhere(function ($query) {
+                        $query
+                            ->where('matter_actor_lnk.matter_id', $this->container_id)
+                            ->where('matter_actor_lnk.shared', 1);
+                    });
             })
             ->select('actor.*', 'matter_actor_lnk.*')
             ->get();
