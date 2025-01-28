@@ -339,6 +339,7 @@ class Matter extends Model
     {
         $query = Matter::select(
             'matter.uid AS Ref',
+            'matter.alt_ref AS Alt_Ref',
             'matter.country AS country',
             'matter.category_code AS Cat',
             'matter.origin',
