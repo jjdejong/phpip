@@ -6,11 +6,23 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class MatterExportRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
     public function authorize()
     {
         return true;
     }
 
+    /**
+     * Prepare the data for validation.
+     *
+     * This method merges default values for 'sortkey' and 'sortdir' if they are missing.
+     *
+     * @return void
+     */
     public function prepareForValidation()
     {
         $this->mergeIfMissing([
@@ -19,6 +31,11 @@ class MatterExportRequest extends FormRequest
         ]);
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
     public function rules()
     {
         return [

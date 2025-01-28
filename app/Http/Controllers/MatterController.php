@@ -27,8 +27,9 @@ class MatterController extends Controller
 
     public function __construct(
         DocumentMergeService $documentMergeService,
-        MatterExportService $matterExportService
-    ) {
+        MatterExportService  $matterExportService
+    )
+    {
         $this->documentMergeService = $documentMergeService;
         $this->matterExportService = $matterExportService;
     }
@@ -611,11 +612,17 @@ class MatterController extends Controller
     }
 
     /**
-     * Exports Matters list
-     * *
+     * Exports Matters list.
+     *
+     * This method exports a list of matters based on the provided filters and returns
+     * a streamed response for downloading the file in CSV format.
+     *
+     * @param MatterExportRequest $request The request object containing the filters for exporting matters.
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse The streamed response for the CSV file download.
      */
     public function export(MatterExportRequest $request)
     {
+        // Extract filters from the request, excluding certain parameters.
         $filters = $request->except(
             [
                 'display_with',
@@ -630,6 +637,7 @@ class MatterController extends Controller
         );
 
         // @TODO rewrite the filter method to use the new query builder
+        // Retrieve the filtered matters and convert them to an array.
         $export = Matter::filter(
             $request->input('sortkey', 'caseref'),
             $request->input('sortdir', 'asc'),
@@ -638,6 +646,7 @@ class MatterController extends Controller
             $request->include_dead
         )->get()->toArray();
 
+        // Export the matters array to a CSV file and return the streamed response.
         return $this->matterExportService->export($export);
     }
 
