@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Matter;
+use App\Models\MatterActors;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use PhpOffice\PhpWord\Settings;
@@ -27,7 +28,7 @@ class DocumentMergeService
         $template->setValues($data['simple']);
         $this->setComplexValues($template, $data['complex']);
         Settings::setOutputEscapingEnabled(false);
-        $template->setValue('nl', '<w:br/>');
+        $template->setValue('nl', "<w:br/>\n");
         return $template;
     }
 
@@ -125,7 +126,20 @@ class DocumentMergeService
             ...$this->getActorsFields(),
         ]);
 
-        $complex = ['Priority', 'Client_Address', 'Billing_Address', 'Inventor_Addresses', 'Owner', 'Agent'];
+        // dd($selects);
+
+        $complex = [
+            'Priority',
+            'Primary_Agent_Address',
+            'Secondary_Agent_Address',
+            'Annuity_Agent_Address',
+            'Client_Address',
+            'Payor_Address',
+            'Billing_Address',
+            'Inventor_Addresses',
+            'Owner',
+            'Agent'
+        ];
         return [
             'simple' => $selects->except($complex)->toArray(),
             'complex' => $selects->only($complex)
@@ -158,26 +172,26 @@ class DocumentMergeService
             'Agent' => $agent->name ?
                 collect([
                     $agent->name,
-                    $agent->address,
-                    $agent->country
+                    $agent->actor?->address,
+                    $agent->actor?->country
                 ])->filter()->implode("\n") : "",
             'Agent_Ref' => $agent->actor_ref,
         ]);
     }
 
-    private function getActorDetails(mixed $actor, string $prefix): \Illuminate\Support\Collection
+    private function getActorDetails(?MatterActors $matterActor, string $prefix): \Illuminate\Support\Collection
     {
-        if (!$actor) {
+        if(!$matterActor) {
             return collect();
         }
 
         return collect([
-            "{$prefix}" => $actor->name,
-            "{$prefix}_Ref" => $actor->pivot ? $actor->pivot->actor_ref : $actor->actor_ref,
-            "{$prefix}_Address" => $actor->address,
-            "{$prefix}_Country" => $actor->country,
-            "{$prefix}_Registration_No" => $actor->registration_no,
-            "{$prefix}_VAT_No" => $actor->VAT_number,
+            "{$prefix}" => $matterActor->name,
+            "{$prefix}_Ref" => $matterActor->actor_ref,
+            "{$prefix}_Address" => $matterActor->actor?->address,
+            "{$prefix}_Country" => $matterActor->actor?->country,
+            "{$prefix}_Registration_No" => $matterActor->actor?->registration_no,
+            "{$prefix}_VAT_No" => $matterActor->actor?->VAT_number,
         ]);
     }
 
@@ -188,7 +202,7 @@ class DocumentMergeService
 
     private function getSecondaryAgentFields(): \Illuminate\Support\Collection
     {
-        return $this->getActorDetails($this->matter->secondaryAgent(), 'Secondary_agent');
+        return $this->getActorDetails($this->matter->secondaryAgent(), 'Secondary_Agent');
     }
 
     private function getAnnuityAgentFields(): \Illuminate\Support\Collection
