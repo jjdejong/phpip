@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MatterExportRequest;
 use App\Http\Requests\MergeFileRequest;
 use App\Models\Actor;
 use App\Models\ActorPivot;
 use App\Models\Event;
 use App\Models\Matter;
 use App\Services\DocumentMergeService;
+use App\Services\MatterExportService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -20,11 +22,16 @@ use SimpleXMLElement;
 
 class MatterController extends Controller
 {
-    protected $documentMergeService;
+    protected DocumentMergeService $documentMergeService;
+    protected MatterExportService $matterExportService;
 
-    public function __construct(DocumentMergeService $documentMergeService)
+    public function __construct(
+        DocumentMergeService $documentMergeService,
+        MatterExportService  $matterExportService
+    )
     {
         $this->documentMergeService = $documentMergeService;
+        $this->matterExportService = $matterExportService;
     }
 
     public function index(Request $request)
@@ -605,11 +612,17 @@ class MatterController extends Controller
     }
 
     /**
-     * Exports Matters list
-     * *
+     * Exports Matters list.
+     *
+     * This method exports a list of matters based on the provided filters and returns
+     * a streamed response for downloading the file in CSV format.
+     *
+     * @param MatterExportRequest $request The request object containing the filters for exporting matters.
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse The streamed response for the CSV file download.
      */
-    public function export(Request $request)
+    public function export(MatterExportRequest $request)
     {
+        // Extract filters from the request, excluding certain parameters.
         $filters = $request->except(
             [
                 'display_with',
@@ -623,6 +636,8 @@ class MatterController extends Controller
             ]
         );
 
+        // @TODO rewrite the filter method to use the new query builder
+        // Retrieve the filtered matters and convert them to an array.
         $export = Matter::filter(
             $request->input('sortkey', 'caseref'),
             $request->input('sortdir', 'asc'),
@@ -631,53 +646,8 @@ class MatterController extends Controller
             $request->include_dead
         )->get()->toArray();
 
-        $captions = [
-            'Our Ref',
-            'Country',
-            'Cat',
-            'Origin',
-            'Status',
-            'Status date',
-            'Client',
-            'Client Ref',
-            'Applicant',
-            'Agent',
-            'Agent Ref',
-            'Title',
-            'Title2',
-            'Title3',
-            'Inventor 1',
-            'Filed',
-            'FilNo',
-            'Published',
-            'Pub. No',
-            'Granted',
-            'Grt No',
-            'ID',
-            'container_ID',
-            'parent_ID',
-            'Type',
-            'Responsible',
-            'Delegate',
-            'Dead',
-            'Ctnr',
-        ];
-
-        $export_csv = fopen('php://memory', 'w');
-        fputcsv($export_csv, $captions, ';');
-        foreach ($export as $row) {
-            fputcsv($export_csv, array_map('utf8_decode', $row), ';');
-        }
-        rewind($export_csv);
-        $filename = Now()->isoFormat('YMMDDHHmmss') . '_matters.csv';
-
-        return response()->stream(
-            function () use ($export_csv) {
-                fpassthru($export_csv);
-            },
-            200,
-            ['Content-Type' => 'application/csv', 'Content-Disposition' => 'attachment; filename=' . $filename]
-        );
+        // Export the matters array to a CSV file and return the streamed response.
+        return $this->matterExportService->export($export);
     }
 
     /**
