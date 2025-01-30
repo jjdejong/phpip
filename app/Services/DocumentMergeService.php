@@ -28,7 +28,7 @@ class DocumentMergeService
         $template->setValues($data['simple']);
         $this->setComplexValues($template, $data['complex']);
         Settings::setOutputEscapingEnabled(false);
-        $template->setValue('nl', "<w:br/>\n");
+        $template->setValue('nl', "<w:br/>");
         return $template;
     }
 
