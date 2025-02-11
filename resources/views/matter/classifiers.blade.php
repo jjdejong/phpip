@@ -10,7 +10,9 @@ $classifiers = $matter->classifiers->groupBy('type_name');
       <th class="border-top-0">
         @can('readwrite')
         <a href="#addClassifierRow" data-bs-toggle="collapse">
-          <span class="float-end" title="Add classifier">&oplus;</span>
+          <span class="float-end" title="Add classifier">
+            <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#plus-circle-fill"/></svg>
+          </span>
         </a>
         @endcan
       </th>
@@ -33,7 +35,7 @@ $classifiers = $matter->classifiers->groupBy('type_name');
       <td>
         <input type="hidden" name="display_order" value="{{ $classifier->display_order }}" />
         <a href="#" class="hidden-action text-danger" id="deleteClassifier" title="Delete classifier">
-          &CircleMinus;
+          <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#trash-fill"></use></svg>
         </a>
       </td>
     </tr>

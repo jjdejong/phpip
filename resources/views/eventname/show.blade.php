@@ -36,8 +36,8 @@
 		<tr>
 			<th colspan="3">Linked templates</th>
 			<td>
-				<a data-bs-toggle="collapse" class="badge rounded-pill text-bg-info fw-normal ms-2" href="#addEventRow" id="addEventTempalte" title="Add template">
-					&plus;
+				<a data-bs-toggle="collapse" class="text-info ms-2" href="#addEventRow" id="addEventTempalte" title="Add template">
+					<svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#plus-circle-fill"/></svg>
 				</a>
 			</td>
 		</tr>
@@ -60,7 +60,9 @@
 				{{ $link->class->name}}
 			</td>
 			<td>
-        <a href="#" class="hidden-action text-danger" id="deleteTemplate" title="Delete template link">&CircleTimes;</a>
+        <a href="#" class="hidden-action text-danger" id="deleteTemplate" title="Delete template link">
+			<svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#trash-fill"></use></svg>
+		</a>
       </td>
 
 		</tr>

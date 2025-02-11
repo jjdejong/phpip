@@ -4,8 +4,8 @@
       <th>
         Event
         @can('readwrite')
-        <a data-bs-toggle="collapse" class="badge rounded-pill text-bg-info fw-normal ms-2" href="#addEventRow" id="addEvent" title="Add event">
-          &plus;
+        <a data-bs-toggle="collapse" class="text-info ms-2" href="#addEventRow" id="addEvent" title="Add event">
+          <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#plus-circle-fill"/></svg>
         </a>
         @endcan
       </th>
