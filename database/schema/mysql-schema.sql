@@ -125,7 +125,7 @@ CREATE TABLE `classifier` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `classifier_before_insert` BEFORE INSERT ON `classifier` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `classifier_before_insert` BEFORE INSERT ON `classifier` FOR EACH ROW BEGIN
     IF NEW.type_code = 'TITEN' THEN
   		SET NEW.value=tcase(NEW.value);
   	ELSEIF NEW.type_code IN ('TIT', 'TITOF', 'TITAL') THEN
@@ -254,7 +254,7 @@ CREATE TABLE `event` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `event_before_insert` BEFORE INSERT ON `event` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `event_before_insert` BEFORE INSERT ON `event` FOR EACH ROW BEGIN
     DECLARE vdate DATE DEFAULT NULL;
   	IF NEW.alt_matter_id IS NOT NULL THEN
   		IF EXISTS (SELECT 1 FROM event WHERE code='FIL' AND NEW.alt_matter_id=matter_id AND event_date IS NOT NULL) THEN
@@ -279,7 +279,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW trig: BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `event_after_insert` AFTER INSERT ON `event` FOR EACH ROW trig: BEGIN
 	DECLARE DueDate, BaseDate, m_expiry DATE DEFAULT NULL;
 	DECLARE tr_id, tr_days, tr_months, tr_years, m_pta, lnk_matter_id, CliAnnAgt, m_parent_id INT DEFAULT NULL;
 	DECLARE tr_task, m_type_code, tr_currency, m_country, m_origin CHAR(5) DEFAULT NULL;
@@ -437,7 +437,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `event_before_update` BEFORE UPDATE ON `event` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `event_before_update` BEFORE UPDATE ON `event` FOR EACH ROW BEGIN
   	DECLARE vdate DATE DEFAULT NULL;
   	-- Date taken from Filed event in linked matter
   	IF NEW.alt_matter_id IS NOT NULL THEN
@@ -459,7 +459,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW trig: BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `event_after_update` AFTER UPDATE ON `event` FOR EACH ROW trig: BEGIN
   DECLARE DueDate, BaseDate DATE DEFAULT NULL;
   DECLARE t_id, tr_days, tr_months, tr_years, tr_recurring, m_pta, lnk_matter_id INT DEFAULT NULL;
   DECLARE Done, tr_end_of_month, tr_use_priority BOOLEAN DEFAULT 0;
@@ -560,7 +560,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `event_after_delete` AFTER DELETE ON `event` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `event_after_delete` AFTER DELETE ON `event` FOR EACH ROW BEGIN
   IF OLD.code IN ('PRI','PFIL') THEN
 	 CALL recalculate_tasks(OLD.matter_id, 'FIL', OLD.updater);
   END IF;
@@ -639,7 +639,7 @@ CREATE TABLE `event_name` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `ename_after_update` AFTER UPDATE ON `event_name` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `ename_after_update` AFTER UPDATE ON `event_name` FOR EACH ROW BEGIN
 	IF IFNULL(NEW.default_responsible,0) != IFNULL(OLD.default_responsible,0) THEN
 		UPDATE task SET assigned_to=NEW.default_responsible
 		WHERE code=NEW.code AND assigned_to <=> OLD.default_responsible;
@@ -747,7 +747,7 @@ CREATE TABLE `matter` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `matter_after_insert` AFTER INSERT ON `matter` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `matter_after_insert` AFTER INSERT ON `matter` FOR EACH ROW BEGIN
 	DECLARE vactorid, vshared INT DEFAULT NULL;
 	DECLARE vrole CHAR(5) DEFAULT NULL;
 	INSERT INTO event (code, matter_id, event_date, created_at, creator, updated_at) VALUES ('CRE', NEW.id, Now(), Now(), NEW.creator, Now());
@@ -773,7 +773,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `matter_before_update` BEFORE UPDATE ON `matter` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `matter_before_update` BEFORE UPDATE ON `matter` FOR EACH ROW BEGIN
   	IF NEW.term_adjust != OLD.term_adjust THEN
   		SET NEW.expire_date = OLD.expire_date + INTERVAL (NEW.term_adjust - OLD.term_adjust) DAY;
   	END IF;
@@ -792,7 +792,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `matter_after_update` AFTER UPDATE ON `matter` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `matter_after_update` AFTER UPDATE ON `matter` FOR EACH ROW BEGIN
 	IF NEW.responsible != OLD.responsible THEN
 		UPDATE task JOIN event ON (task.trigger_id = event.id AND event.matter_id = NEW.id) SET task.assigned_to = NEW.responsible, task.updated_at = Now(), task.updater = NEW.updater
 		WHERE task.done = 0 AND task.assigned_to = OLD.responsible;
@@ -842,7 +842,7 @@ CREATE TABLE `matter_actor_lnk` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `malnk_after_insert` AFTER INSERT ON `matter_actor_lnk` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `malnk_after_insert` AFTER INSERT ON `matter_actor_lnk` FOR EACH ROW BEGIN
           DECLARE vcli_ann_agt INT DEFAULT NULL;
 
           -- Delete renewal tasks when the special actor 'CLIENT' is set as the annuity agent
@@ -868,7 +868,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `matter_actor_lnk_AFTER_UPDATE` AFTER UPDATE ON `matter_actor_lnk` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `matter_actor_lnk_AFTER_UPDATE` AFTER UPDATE ON `matter_actor_lnk` FOR EACH ROW BEGIN
   DECLARE vcli_ann_agt INT DEFAULT NULL;
 
   -- Delete renewal tasks when the special actor 'CLIENT' is set as the annuity agent
@@ -1091,7 +1091,7 @@ CREATE TABLE `task` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `task_before_insert` BEFORE INSERT ON `task` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `task_before_insert` BEFORE INSERT ON `task` FOR EACH ROW BEGIN
   	DECLARE vflag BOOLEAN;
   	DECLARE vresp CHAR(16);
   	SELECT use_matter_resp INTO vflag FROM event_name WHERE event_name.code=NEW.code;
@@ -1120,7 +1120,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `task_before_update` BEFORE UPDATE ON `task` FOR EACH ROW BEGIN
   IF NEW.done_date IS NOT NULL AND OLD.done_date IS NULL AND OLD.done = 0 THEN
     SET NEW.done = 1;
   END IF;
@@ -1228,7 +1228,7 @@ CREATE TABLE `task_rules` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`%`*/ /*!50003 TRIGGER `trules_after_update` AFTER UPDATE ON `task_rules` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`phpip`@`localhost`*/ /*!50003 TRIGGER `trules_after_update` AFTER UPDATE ON `task_rules` FOR EACH ROW BEGIN
 	IF (NEW.fee != OLD.fee OR NEW.cost != OLD.cost) THEN
 		UPDATE task SET fee=NEW.fee, cost=NEW.cost WHERE rule_used=NEW.id AND done=0;
 	END IF;
@@ -1308,7 +1308,7 @@ SET character_set_client = @saved_cs_client;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`%` FUNCTION `actor_list`(mid INT, arole TEXT) RETURNS text CHARSET utf8mb3
+CREATE DEFINER=`phpip`@`localhost` FUNCTION `actor_list`(mid INT, arole TEXT) RETURNS text CHARSET utf8mb3
 BEGIN
           	DECLARE alist TEXT;
             SELECT GROUP_CONCAT(actor.name ORDER BY mal.display_order) INTO alist FROM matter_actor_lnk mal
@@ -1331,7 +1331,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`%` FUNCTION `lowerword`( str TEXT, word VARCHAR(5) ) RETURNS text CHARSET utf8mb3
+CREATE DEFINER=`phpip`@`localhost` FUNCTION `lowerword`( str TEXT, word VARCHAR(5) ) RETURNS text CHARSET utf8mb3
 BEGIN
             DECLARE i INT DEFAULT 1;
             DECLARE loc INT;
@@ -1360,7 +1360,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`%` FUNCTION `matter_status`(mid INT) RETURNS text CHARSET utf8mb3
+CREATE DEFINER=`phpip`@`localhost` FUNCTION `matter_status`(mid INT) RETURNS text CHARSET utf8mb3
 BEGIN
           	DECLARE mstatus TEXT;
             SELECT CONCAT_WS(': ', event_name.name, status.event_date) INTO mstatus FROM `event` status
@@ -1384,7 +1384,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`%` FUNCTION `tcase`( str TEXT) RETURNS text CHARSET utf8mb3
+CREATE DEFINER=`phpip`@`localhost` FUNCTION `tcase`( str TEXT) RETURNS text CHARSET utf8mb3
 BEGIN
             DECLARE c CHAR(1);
             DECLARE s TEXT;
@@ -1439,7 +1439,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`%` PROCEDURE `insert_recurring_renewals`(
+CREATE DEFINER=`phpip`@`localhost` PROCEDURE `insert_recurring_renewals`(
   	IN P_trigger_id INT,
   	IN P_rule_id INT,
   	IN P_base_date DATE,
@@ -1502,7 +1502,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`%` PROCEDURE `recalculate_tasks`(
+CREATE DEFINER=`phpip`@`localhost` PROCEDURE `recalculate_tasks`(
 			IN P_matter_id INT,
 			IN P_event_code CHAR(5),
 			IN P_user CHAR(16)
@@ -1585,7 +1585,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`%` PROCEDURE `recreate_tasks`(
+CREATE DEFINER=`phpip`@`localhost` PROCEDURE `recreate_tasks`(
 			IN P_trigger_id INT,
 			IN P_user CHAR(16)
 		)
@@ -1756,7 +1756,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`phpip`@`%` PROCEDURE `update_expired`()
+CREATE DEFINER=`phpip`@`localhost` PROCEDURE `update_expired`()
 BEGIN
   	DECLARE vmatter_id INTEGER;
       DECLARE vexpire_date DATE;
@@ -1788,7 +1788,7 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`phpip`@`%` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`phpip`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `event_lnk_list` AS select `event`.`id` AS `id`,`event`.`code` AS `code`,`event`.`matter_id` AS `matter_id`,if((`event`.`alt_matter_id` is null),`event`.`event_date`,`lnk`.`event_date`) AS `event_date`,if((`event`.`alt_matter_id` is null),`event`.`detail`,`lnk`.`detail`) AS `detail`,`matter`.`country` AS `country` from ((`event` left join `event` `lnk` on(((`event`.`alt_matter_id` = `lnk`.`matter_id`) and (`lnk`.`code` = 'FIL')))) left join `matter` on((`event`.`alt_matter_id` = `matter`.`id`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
@@ -1801,7 +1801,7 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`phpip`@`%` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`phpip`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `matter_actors` AS select `pivot`.`id` AS `id`,`actor`.`id` AS `actor_id`,ifnull(`actor`.`display_name`,`actor`.`name`) AS `display_name`,`actor`.`name` AS `name`,`actor`.`first_name` AS `first_name`,`actor`.`email` AS `email`,`pivot`.`display_order` AS `display_order`,`pivot`.`role` AS `role_code`,`actor_role`.`name` AS `role_name`,`actor_role`.`shareable` AS `shareable`,`actor_role`.`show_ref` AS `show_ref`,`actor_role`.`show_company` AS `show_company`,`actor_role`.`show_rate` AS `show_rate`,`actor_role`.`show_date` AS `show_date`,`matter`.`id` AS `matter_id`,`actor`.`warn` AS `warn`,`pivot`.`actor_ref` AS `actor_ref`,`pivot`.`date` AS `date`,`pivot`.`rate` AS `rate`,`pivot`.`shared` AS `shared`,`co`.`name` AS `company`,if((`pivot`.`matter_id` = `matter`.`container_id`),1,0) AS `inherited` from ((((`matter_actor_lnk` `pivot` join `matter` on(((`pivot`.`matter_id` = `matter`.`id`) or ((`pivot`.`shared` = 1) and (`pivot`.`matter_id` = `matter`.`container_id`))))) join `actor` on((`pivot`.`actor_id` = `actor`.`id`))) left join `actor` `co` on((`co`.`id` = `pivot`.`company_id`))) join `actor_role` on((`pivot`.`role` = `actor_role`.`code`))) order by `actor_role`.`display_order`,`pivot`.`display_order` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
@@ -1814,7 +1814,7 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`phpip`@`%` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`phpip`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `matter_classifiers` AS select `classifier`.`id` AS `id`,`matter`.`id` AS `matter_id`,`classifier`.`type_code` AS `type_code`,`classifier_type`.`type` AS `type_name`,`classifier_type`.`main_display` AS `main_display`,if((`classifier`.`value_id` is null),`classifier`.`value`,`classifier_value`.`value`) AS `value`,`classifier`.`url` AS `url`,`classifier`.`lnk_matter_id` AS `lnk_matter_id`,`classifier`.`display_order` AS `display_order` from (((`classifier` join `classifier_type` on((`classifier`.`type_code` = `classifier_type`.`code`))) join `matter` on((ifnull(`matter`.`container_id`,`matter`.`id`) = `classifier`.`matter_id`))) left join `classifier_value` on((`classifier_value`.`id` = `classifier`.`value_id`))) order by `classifier_type`.`display_order`,`classifier`.`display_order` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
@@ -1827,7 +1827,7 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`phpip`@`%` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`phpip`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `renewal_list` AS select `task`.`id` AS `id`,`task`.`detail` AS `detail`,`task`.`due_date` AS `due_date`,`task`.`done` AS `done`,`task`.`done_date` AS `done_date`,`event`.`matter_id` AS `matter_id`,`fees`.`cost` AS `cost`,`fees`.`fee` AS `fee`,`fees`.`cost_reduced` AS `cost_reduced`,`fees`.`fee_reduced` AS `fee_reduced`,`fees`.`cost_sup` AS `cost_sup`,`fees`.`fee_sup` AS `fee_sup`,`fees`.`fee_sup_reduced` AS `fee_sup_reduced`,`fees`.`cost_sup_reduced` AS `cost_sup_reduced`,`task`.`trigger_id` AS `trigger_id`,`matter`.`category_code` AS `category`,`matter`.`caseref` AS `caseref`,`matter`.`suffix` AS `suffix`,`matter`.`country` AS `country`,`mcountry`.`name_FR` AS `country_FR`,`matter`.`origin` AS `origin`,`matter`.`type_code` AS `type_code`,`matter`.`idx` AS `idx`,(select 1 from `classifier` `sme` where ((`matter`.`id` = `sme`.`matter_id`) and (`sme`.`type_code` = 'SME'))) AS `sme_status`,`event`.`code` AS `event_name`,`event`.`event_date` AS `event_date`,`event`.`detail` AS `number`,group_concat(`pa_app`.`display_name` separator ',') AS `applicant_dn`,`pa_cli`.`display_name` AS `client_dn`,`pa_cli`.`ren_discount` AS `discount`,`pmal_cli`.`actor_id` AS `client_id`,`pa_cli`.`email` AS `email`,ifnull(`task`.`assigned_to`,`matter`.`responsible`) AS `responsible`,`cla`.`value` AS `title`,`ev`.`detail` AS `pub_num`,`task`.`step` AS `step`,`task`.`grace_period` AS `grace_period`,`task`.`invoice_step` AS `invoice_step` from ((((((((((`matter` left join `matter_actor_lnk` `pmal_app` on(((ifnull(`matter`.`container_id`,`matter`.`id`) = `pmal_app`.`matter_id`) and (`pmal_app`.`role` = 'APP')))) left join `actor` `pa_app` on((`pa_app`.`id` = `pmal_app`.`actor_id`))) left join `matter_actor_lnk` `pmal_cli` on(((ifnull(`matter`.`container_id`,`matter`.`id`) = `pmal_cli`.`matter_id`) and (`pmal_cli`.`role` = 'CLI')))) left join `country` `mcountry` on((`mcountry`.`iso` = `matter`.`country`))) left join `actor` `pa_cli` on((`pa_cli`.`id` = `pmal_cli`.`actor_id`))) join `event` on((`matter`.`id` = `event`.`matter_id`))) left join `event` `ev` on(((`matter`.`id` = `ev`.`matter_id`) and (`ev`.`code` = 'PUB')))) join `task` on((`task`.`trigger_id` = `event`.`id`))) left join `classifier` `cla` on(((ifnull(`matter`.`container_id`,`matter`.`id`) = `cla`.`matter_id`) and (`cla`.`type_code` = 'TITOF')))) left join `fees` on(((`fees`.`for_country` = `matter`.`country`) and (`fees`.`for_category` = `matter`.`category_code`) and (`fees`.`qt` = `task`.`detail`)))) where ((`task`.`code` = 'REN') and (`matter`.`dead` = 0)) group by `task`.`id` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
@@ -1840,7 +1840,7 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`phpip`@`%` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`phpip`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `task_list` AS select `task`.`id` AS `id`,`task`.`code` AS `code`,`event_name`.`name` AS `name`,`task`.`detail` AS `detail`,`task`.`due_date` AS `due_date`,`task`.`done` AS `done`,`task`.`done_date` AS `done_date`,`event`.`matter_id` AS `matter_id`,`task`.`cost` AS `cost`,`task`.`fee` AS `fee`,`task`.`trigger_id` AS `trigger_id`,`matter`.`category_code` AS `category`,`matter`.`caseref` AS `caseref`,`matter`.`country` AS `country`,`matter`.`origin` AS `origin`,`matter`.`type_code` AS `type_code`,`matter`.`idx` AS `idx`,ifnull(`task`.`assigned_to`,`matter`.`responsible`) AS `responsible`,`actor`.`login` AS `delegate`,`task`.`rule_used` AS `rule_used`,`matter`.`dead` AS `dead` from (((((`matter` left join `matter_actor_lnk` on(((ifnull(`matter`.`container_id`,`matter`.`id`) = `matter_actor_lnk`.`matter_id`) and (`matter_actor_lnk`.`role` = 'DEL')))) left join `actor` on((`actor`.`id` = `matter_actor_lnk`.`actor_id`))) join `event` on((`matter`.`id` = `event`.`matter_id`))) join `task` on((`task`.`trigger_id` = `event`.`id`))) join `event_name` on((`task`.`code` = `event_name`.`code`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
@@ -1853,7 +1853,7 @@ DELIMITER ;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`phpip`@`%` SQL SECURITY DEFINER */
+/*!50013 DEFINER=`phpip`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `users` AS select `actor`.`id` AS `id`,`actor`.`name` AS `name`,`actor`.`login` AS `login`,`actor`.`password` AS `password`,`actor`.`default_role` AS `default_role`,`actor`.`company_id` AS `company_id`,`actor`.`email` AS `email`,`actor`.`phone` AS `phone`,`actor`.`notes` AS `notes`,`actor`.`creator` AS `creator`,`actor`.`created_at` AS `created_at`,`actor`.`updated_at` AS `updated_at`,`actor`.`updater` AS `updater`,`actor`.`remember_token` AS `remember_token` from `actor` where (`actor`.`login` is not null) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
