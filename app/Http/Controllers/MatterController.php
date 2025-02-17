@@ -10,28 +10,27 @@ use App\Models\Event;
 use App\Models\Matter;
 use App\Services\DocumentMergeService;
 use App\Services\MatterExportService;
+use App\Services\OPSService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
-use SimpleXMLElement;
 
 class MatterController extends Controller
 {
     protected DocumentMergeService $documentMergeService;
     protected MatterExportService $matterExportService;
+    protected OPSService $opsService;
 
     public function __construct(
         DocumentMergeService $documentMergeService,
-        MatterExportService  $matterExportService
+        MatterExportService  $matterExportService,
+        OPSService $opsService
     )
     {
         $this->documentMergeService = $documentMergeService;
         $this->matterExportService = $matterExportService;
+        $this->opsService = $opsService;
     }
 
     public function index(Request $request)
@@ -271,10 +270,11 @@ class MatterController extends Controller
             'client_id' => 'required',
         ]);
 
-        $apps = collect($this->getOPSfamily($request->docnum));
+        $apps = collect($this->opsService->getFamilyMembers($request->docnum));
         if ($apps->has('errors') || $apps->has('exception')) {
             return response()->json($apps);
         }
+
         $container = [];
         $container_id = null;
         $matter_id_num = [];
@@ -677,6 +677,17 @@ class MatterController extends Controller
         ]);
     }
 
+    /**
+     * Get family members from OPS for a given document number
+     *
+     * @param string $docnum
+     * @return array
+     */
+    public function getOPSfamily(string $docnum)
+    {
+        return $this->opsService->getFamilyMembers($docnum);
+    }
+
     public function events(Matter $matter)
     {
         $events = $matter->events->load('info');
@@ -735,254 +746,5 @@ class MatterController extends Controller
         $description = $matter->getDescription($lang);
 
         return view('matter.summary', compact('description'));
-    }
-
-    public static function getOPSfamily($docnum)
-    {
-        $ops_key = env('OPS_APP_KEY');
-        $ops_secret = env('OPS_SECRET');
-        $token_url = 'https://ops.epo.org/3.2/auth/accesstoken';
-        $token_response = Http::withHeaders(
-            [
-                'Authorization' => 'Basic ' . base64_encode($ops_key . ':' . $ops_secret)
-            ]
-        )->asForm()->post($token_url, ['grant_type' => 'client_credentials']);
-
-        //$ops_legal = "http://ops.epo.org/3.2/rest-services/family/application/docdb/$docnum/legal.json";
-        // Using application number
-        //$ops_biblio = "https://ops.epo.org/3.2/rest-services/family/application/docdb/$docnum/biblio.json";
-        // Using publication number
-        $ops_biblio = "https://ops.epo.org/3.2/rest-services/family/publication/docdb/$docnum/biblio.json";
-        $ops_response = Http::withToken($token_response['access_token'])
-            ->asForm()
-            ->get($ops_biblio);
-
-        if ($ops_response->clientError()) {
-            return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS Family'];
-        }
-        if ($ops_response->serverError()) {
-            return ['exception' => 'OPS server error', 'message' => 'OPS server error, try again'];
-        }
-
-        $members = data_get($ops_response, 'ops:world-patent-data.ops:patent-family.ops:family-member');
-        if (Arr::isList($members)) {
-            // Sort members by increasing filing date and doc-id, so that the first is the priority application
-            $members = collect($members)->sortBy(fn($member) => $member['application-reference']['document-id']['date']['$'] . $member['application-reference']['@doc-id']);
-            // Group all members by doc-id, so that publications and grants appear in a same record (yet as two arrays)
-            $members = collect($members)->groupBy(fn($member) => $member['application-reference']['@doc-id']);
-        } else {
-            // Turn single element into a list of one element
-            $members = [$members['application-reference']['@doc-id'] => [0 => $members]];
-        }
-        $apps = [];
-        $i = 0;
-        foreach ($members as $key => $member) {
-            // [0] is the item referring to the publication and [1] is the item referring to the grant
-            $app = $member[0]['application-reference']['document-id'];
-            // Don't want filings of EP translations
-            if ($app['kind']['$'] == 'T') {
-                continue;
-            }
-            // $key is the @doc-id
-            $apps[$i]['id'] = $key;
-
-            if (Arr::isList($member[0]['priority-claim'])) {
-                $pri = collect($member[0]['priority-claim'])->where('priority-active-indicator.$', 'YES')->toArray();
-            } else {
-                // Turn single element into a list of one element
-                $pri = [0 => $member[0]['priority-claim']];
-            }
-
-            foreach ($pri as $k => $p) {
-                $apps[$i]['pri'][$k]['country'] = $p['document-id']['country']['$'];
-                $apps[$i]['pri'][$k]['number'] = $p['document-id']['doc-number']['$'];
-                $apps[$i]['pri'][$k]['kind'] = $p['document-id']['kind']['$'];
-                $apps[$i]['pri'][$k]['date'] = date('Y-m-d', strtotime($p['document-id']['date']['$']));
-            }
-
-            $apps[$i]['app']['date'] = date('Y-m-d', strtotime($app['date']['$']));
-            $apps[$i]['app']['kind'] = $app['kind']['$'];
-            if ($app['kind']['$'] == 'W') {
-                $country = 'WO';
-                $app_number = $app['country']['$'] . $app['doc-number']['$'];
-            } else {
-                $country = $app['country']['$'];
-                $app_number = $app['doc-number']['$'];
-            }
-            if ($country == 'US') {
-                if (strlen($app_number) == 8) {
-                    // Get only the first six digits, removing YY from the end. The serial is below 13 and is missing from the number
-                    $app_number = substr($app_number, 0, 6);
-                } else {
-                    // Remove the YYYY prefix
-                    $app_number = substr($app_number, 4);
-                }
-            }
-            $apps[$i]['app']['country'] = $country;
-            $apps[$i]['app']['number'] = $app_number;
-
-            // Data taken from EP or PCT case
-            if ((in_array($apps[$i]['app']['country'], ['EP', 'WO'])) && !data_get($apps, '0.pri.title')) {
-                // Title (the last is the English title)
-                $apps[0]['title'] = collect($member[0]['exchange-document']['bibliographic-data']['invention-title'])->last()['$'];
-
-                // Each inventor is under [i]['inventor-name']['name']['$'] both in "epodoc" and "original" format indicated by [i]['@data-format']
-                // take the higher half of the array indexes in original format
-                $inventors = collect($member[0]['exchange-document']['bibliographic-data']['parties']['inventors']['inventor'])
-                    ->where('@data-format', 'original');
-                $apps[0]['inventors'] = $inventors->values()->pluck('inventor-name.name.$');
-
-                // Each applicant is under [i]['applicant-name']['name']['$'] both in "epodoc" and "original" format indicated by [i]['@data-format']
-                // take the higher half of the array indexes in original format
-                $applicants = collect($member[0]['exchange-document']['bibliographic-data']['parties']['applicants']['applicant'])
-                    ->where('@data-format', 'original');
-                $apps[0]['applicants'] = $applicants->values()->pluck('applicant-name.name.$');
-
-                // Get procedural steps
-                $ops_procedure = "https://ops.epo.org/3.2/rest-services/register/application/epodoc/EP$app_number/procedural-steps";
-                $ops_response = Http::withToken($token_response['access_token'])
-                    ->asForm()
-                    ->get($ops_procedure);
-
-                if ($ops_response->successful()) {
-                    $xml = new SimpleXMLElement($ops_response);
-                    $steps = $xml->xpath('//reg:procedural-step');
-                    $proc = [];
-                    foreach ($steps as $k => $step) {
-                        $proc[$k]['code'] = (string)$step->xpath('reg:procedural-step-code')[0];
-                        if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_REQUEST"]/reg:date')) {
-                            $proc[$k]['request'] = date('Y-m-d', strtotime($date[0]));
-                        }
-                        if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_DISPATCH"]/reg:date')) {
-                            $proc[$k]['dispatched'] = date('Y-m-d', strtotime($date[0]));
-                        }
-                        if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_REPLY"]/reg:date')) {
-                            $proc[$k]['replied'] = date('Y-m-d', strtotime($date[0]));
-                        }
-                        if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="DATE_OF_PAYMENT"]/reg:date')) {
-                            $proc[$k]['ren_paid'] = date('Y-m-d', strtotime($date[0]));
-                        }
-                        if ($date = $step->xpath('reg:procedural-step-date[@step-date-type="GRANT_FEE_PAID"]/reg:date')) {
-                            $proc[$k]['grt_paid'] = date('Y-m-d', strtotime($date[0]));
-                        }
-                        if ($year = $step->xpath('reg:procedural-step-text[@step-text-type="YEAR"]')) {
-                            $proc[$k]['ren_year'] = (int)$year[0];
-                        }
-                    }
-                    $apps[$i]['procedure'] = $proc;
-                }
-            }
-
-            if (in_array($apps[$i]['app']['country'], ['FR', 'US'])) {
-                // Get legal
-                $ops_procedure = "https://ops.epo.org/3.2/rest-services/legal/application/docdb/{$apps[$i]['app']['country']}$app_number";
-                $ops_response = Http::withToken($token_response['access_token'])
-                    ->asForm()
-                    ->get($ops_procedure);
-
-                // if ($ops_response->clientError()) {
-                //     return ['errors' => ['docnum' => ['Number not found']], 'message' => 'Number not found in OPS Legal'];
-                // }
-                // if ($ops_response->serverError()) {
-                //     return ['exception' => 'OPS server error', 'message' => 'OPS server error, try again'];
-                // }
-
-                if ($ops_response->successful()) {
-                    $xml = new SimpleXMLElement($ops_response);
-                    // Get renewals. Code RFEE for FR and MAFP for US
-                    $steps = $xml->xpath('//ops:legal[@code="PLFP"] | //ops:legal[@code="MAFP"]');
-                    $proc = [];
-                    foreach ($steps as $k => $step) {
-                        // Code compatible with EP procedural steps
-                        $proc[$k]['code'] = 'RFEE';
-                        if ($date = $step->xpath('ops:L007EP')) {
-                            $proc[$k]['ren_paid'] = date('Y-m-d', strtotime($date[0]));
-                        }
-                        if ($year = $step->xpath('ops:L500EP/ops:L520EP')) {
-                            $proc[$k]['ren_year'] = (int)$year[0];
-                        }
-                    }
-                    $apps[$i]['procedure'] = $proc;
-                }
-            }
-            // The publication and the grant have been grouped into a single member as two publication references to iterate through
-            foreach ($member as $event) {
-                // Take DOCDB format
-                $pub = collect($event['publication-reference']['document-id'])->where('@document-id-type', 'docdb')->first();
-                //return $pub;
-                switch ($pub['kind']['$']) {
-                    case 'A':
-                    case 'A1':
-                    case 'A2':
-                        $apps[$i]['pub']['country'] = $pub['country']['$'];
-                        $apps[$i]['pub']['number'] = $pub['doc-number']['$'];
-                        $apps[$i]['pub']['date'] = date('Y-m-d', strtotime($pub['date']['$']));
-                        break;
-                    case 'B':
-                    case 'B1':
-                    case 'B2':
-                        $apps[$i]['grt']['country'] = $pub['country']['$'];
-                        $apps[$i]['grt']['number'] = $pub['doc-number']['$'];
-                        $apps[$i]['grt']['date'] = date('Y-m-d', strtotime($pub['date']['$']));
-                        // Find EP validations (doesn't always work)
-                        // if ($pub['country']['$'] == 'EP') {
-                        //     $ops = Http::withToken($token_response['access_token'])
-                        //         ->asForm()->get("https://ops.epo.org/3.2/rest-services/legal/publication/docdb/EP{$pub['doc-number']['$']}.json")
-                        //         ->json()['ops:world-patent-data']['ops:patent-family']['ops:family-member'];
-
-                        //     // Create list of validation countries identified by the EPO and remove null array elements
-                        //     $ep_val = @collect($ops[0]['ops:legal'])->pluck('ops:L500EP.ops:L501EP.$')->reject(function ($item, $key) {
-                        //         return $item == null;
-                        //     });
-                        //     $apps[$i]['grt']['validations'] = $ep_val;
-                        // }
-                        break;
-                }
-
-                // PCT origin
-                if ($pct_nat = collect($event['priority-claim'])->where('priority-linkage-type.$', 'W')->first()) {
-                    $apps[$i]['pct'] = $pct_nat['document-id']['country']['$'] . $pct_nat['document-id']['doc-number']['$'];
-                } else {
-                    $apps[$i]['pct'] = null;
-                }
-
-                // Possible divisional
-                if ($div = collect($event['priority-claim'])->where('priority-linkage-type.$', '3')->first()) {
-                    $app_number = $div['document-id']['doc-number']['$'];
-                    if ($div['document-id']['country']['$'] == 'US') {
-                        if (strlen($app_number) == 8) {
-                            // Get only the first six digits, removing YY from the end. The serial is below 13 and is missing from the number
-                            $app_number = substr($app_number, 0, 6);
-                        } else {
-                            // Remove the YYYY prefix
-                            $app_number = substr($app_number, 4);
-                        }
-                    }
-                    $apps[$i]['div'] = $app_number;
-                } else {
-                    $apps[$i]['div'] = null;
-                }
-
-                // Possible continuation
-                if ($div = collect($event['priority-claim'])->whereIn('priority-linkage-type.$', ['1', '2', 'C'])->first()) {
-                    $app_number = $div['document-id']['doc-number']['$'];
-                    if ($div['document-id']['country']['$'] == 'US') {
-                        if (strlen($app_number) == 8) {
-                            // Get only the first six digits, removing YY from the end. The serial is below 13 and is missing from the number
-                            $app_number = substr($app_number, 0, 6);
-                        } else {
-                            // Remove the YYYY prefix
-                            $app_number = substr($app_number, 4);
-                        }
-                    }
-                    $apps[$i]['cnt'] = $app_number;
-                } else {
-                    $apps[$i]['cnt'] = null;
-                }
-            }
-            $i++;
-        }
-
-        return $apps;
     }
 }
