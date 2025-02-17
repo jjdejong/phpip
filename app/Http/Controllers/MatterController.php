@@ -351,84 +351,91 @@ class MatterController extends Controller
                         );
                     }
                 }
-                $new_matter->classifiersNative()->create(['type_code' => 'TIT', 'value' => $app['title']]);
+                if (array_key_exists('title', $app)) {
+                    $new_matter->classifiersNative()->create(['type_code' => 'TIT', 'value' => $app['title']]);
+                }
                 $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'CLI', 'shared' => 1]);
-                if (strtolower($app['applicants'][0]) == strtolower(Actor::find($request->client_id)->name)) {
-                    $new_matter->actorPivot()->create(
-                        [
-                            'actor_id' => $request->client_id,
-                            'role' => 'APP',
-                            'shared' => 1,
-                        ]
-                    );
-                }
-                foreach ($app['applicants'] as $applicant) {
-                    // Search for phonetically equivalent in the actor table, and take first
-                    if (substr($applicant, -1) == ',') {
-                        // Remove ending comma
-                        $applicant = substr($applicant, 0, -1);
-                    }
-                    if ($actor = Actor::whereRaw("name SOUNDS LIKE '$applicant'")->first()) {
-                        // Some applicants are listed twice, with and without accents, so ignore unique key error for a second attempt
-                        $new_matter->actorPivot()->firstOrCreate(
+                if (array_key_exists('applicants', $app)) {
+                    if (strtolower($app['applicants'][0]) == strtolower(Actor::find($request->client_id)->name)) {
+                        $new_matter->actorPivot()->create(
                             [
-                                'actor_id' => $actor->id,
-                                'role' => 'APP',
-                                'shared' => 1,
-                            ]
-                        );
-                    } else {
-                        $new_actor = Actor::create(
-                            [
-                                'name' => $applicant,
-                                'default_role' => 'APP',
-                                'phy_person' => 0,
-                                'notes' => "Inserted by OPS family create tool for matter ID $new_matter->id",
-                            ]
-                        );
-                        $new_matter->actorPivot()->firstOrCreate(
-                            [
-                                'actor_id' => $new_actor->id,
+                                'actor_id' => $request->client_id,
                                 'role' => 'APP',
                                 'shared' => 1,
                             ]
                         );
                     }
-                }
-                foreach ($app['inventors'] as $inventor) {
-                    // Search for phonetically equivalent in the actor table, and take first
-                    if (substr($inventor, -1) == ',') {
-                        // Remove ending comma
-                        $inventor = substr($inventor, 0, -1);
+                    foreach ($app['applicants'] as $applicant) {
+                        // Search for phonetically equivalent in the actor table, and take first
+                        if (substr($applicant, -1) == ',') {
+                            // Remove ending comma
+                            $applicant = substr($applicant, 0, -1);
+                        }
+                        if ($actor = Actor::whereRaw("name SOUNDS LIKE '$applicant'")->first()) {
+                            // Some applicants are listed twice, with and without accents, so ignore unique key error for a second attempt
+                            $new_matter->actorPivot()->firstOrCreate(
+                                [
+                                    'actor_id' => $actor->id,
+                                    'role' => 'APP',
+                                    'shared' => 1,
+                                ]
+                            );
+                        } else {
+                            $new_actor = Actor::create(
+                                [
+                                    'name' => $applicant,
+                                    'default_role' => 'APP',
+                                    'phy_person' => 0,
+                                    'notes' => "Inserted by OPS family create tool for matter ID $new_matter->id",
+                                ]
+                            );
+                            $new_matter->actorPivot()->firstOrCreate(
+                                [
+                                    'actor_id' => $new_actor->id,
+                                    'role' => 'APP',
+                                    'shared' => 1,
+                                ]
+                            );
+                        }
                     }
-                    if ($actor = Actor::whereRaw("name SOUNDS LIKE '$inventor'")->first()) {
-                        // Some inventors are listed twice, with and without accents, so ignore second attempt
-                        $new_matter->actorPivot()->firstOrCreate(
-                            [
-                                'actor_id' => $actor->id,
-                                'role' => 'INV',
-                                'shared' => 1,
-                            ]
-                        );
-                    } else {
-                        $new_actor = Actor::create(
-                            [
-                                'name' => $inventor,
-                                'default_role' => 'INV',
-                                'phy_person' => 1,
-                                'notes' => "Inserted by OPS family create tool for matter ID $new_matter->id",
-                            ]
-                        );
-                        $new_matter->actorPivot()->firstOrCreate(
-                            [
-                                'actor_id' => $new_actor->id,
-                                'role' => 'INV',
-                                'shared' => 1,
-                            ]
-                        );
-                    }
+                    $new_matter->notes = 'Applicants: ' . collect($app['applicants'])->implode('; ');
                 }
-                $new_matter->notes = 'Applicants: ' . collect($app['applicants'])->implode('; ') . "\nInventors: " . collect($app['inventors'])->implode(' - ');
+                if (array_key_exists('inventors', $app)) {
+                    foreach ($app['inventors'] as $inventor) {
+                        // Search for phonetically equivalent in the actor table, and take first
+                        if (substr($inventor, -1) == ',') {
+                            // Remove ending comma
+                            $inventor = substr($inventor, 0, -1);
+                        }
+                        if ($actor = Actor::whereRaw("name SOUNDS LIKE '$inventor'")->first()) {
+                            // Some inventors are listed twice, with and without accents, so ignore second attempt
+                            $new_matter->actorPivot()->firstOrCreate(
+                                [
+                                    'actor_id' => $actor->id,
+                                    'role' => 'INV',
+                                    'shared' => 1,
+                                ]
+                            );
+                        } else {
+                            $new_actor = Actor::create(
+                                [
+                                    'name' => $inventor,
+                                    'default_role' => 'INV',
+                                    'phy_person' => 1,
+                                    'notes' => "Inserted by OPS family create tool for matter ID $new_matter->id",
+                                ]
+                            );
+                            $new_matter->actorPivot()->firstOrCreate(
+                                [
+                                    'actor_id' => $new_actor->id,
+                                    'role' => 'INV',
+                                    'shared' => 1,
+                                ]
+                            );
+                        }
+                    }
+                    $new_matter->notes .= "\nInventors: " . collect($app['inventors'])->implode(' - ');
+                }
             } else {
                 $new_matter->container_id = $container_id;
                 foreach ($app['pri'] as $pri) {
