@@ -1,9 +1,5 @@
 // Actor processing
 
-// // Bootstrap doc example
-// const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
-// const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
-
 // Initialize the popovers
 let popover = null;
 let popoverList = new bootstrap.Popover(document.body, {
@@ -15,12 +11,27 @@ let popoverList = new bootstrap.Popover(document.body, {
   sanitize: false
 });
 
+// Global listener references and cleanup function
+let currentActorHandler = null;
+let currentRoleHandler = null;
+function cleanupListeners() {
+    if (currentActorHandler) {
+        actorName.removeEventListener('acCompleted', currentActorHandler);
+        currentActorHandler = null;
+    }
+    if (currentRoleHandler) {
+        roleName.removeEventListener('acCompleted', currentRoleHandler);
+        currentRoleHandler = null;
+    }
+}
+
 // Process actor addition popovers
 app.addEventListener('shown.bs.popover', e => {
   // First destroy existing popover when a new popover is opened
   if (popover) {
     addActorForm.reset();
     popover.hide();
+    cleanupListeners();
   }
   popover = bootstrap.Popover.getInstance(e.target);
 
@@ -44,7 +55,8 @@ app.addEventListener('shown.bs.popover', e => {
     roleName.focus();
   }
 
-  actorName.addEventListener('acCompleted', (event) => {
+  // Attach listener for actorName's "acCompleted"
+  currentActorHandler = event => {
     selectedItem = event.detail;
     if (selectedItem.key === 'create') { // Creates actor on the fly
       fetchREST('/actor', 'POST', new URLSearchParams('name=' + selectedItem.value.toUpperCase() + '&default_role=' + addActorForm.role.value))
@@ -56,9 +68,11 @@ app.addEventListener('shown.bs.popover', e => {
     } else {
       addActorForm.actor_id.value = selectedItem.key;
     }
-  });
+  };
+  actorName.addEventListener('acCompleted', currentActorHandler);
   
-  roleName.addEventListener('acCompleted', (event) => {
+  // Attach listener for roleName's "acCompleted"
+  currentRoleHandler = event => {
     selectedItem = event.detail;
     addActorForm.shared.value = selectedItem.shareable;
     if (selectedItem.shareable) {
@@ -66,7 +80,8 @@ app.addEventListener('shown.bs.popover', e => {
     } else {
       actorNotShared.checked = true;
     }
-  });
+  };
+  roleName.addEventListener('acCompleted', currentRoleHandler);
 
   actorShared.onclick = () => {
     addActorForm['shared'].value = "1";
@@ -86,6 +101,8 @@ app.addEventListener('shown.bs.popover', e => {
         } else {
           addActorForm.reset();
           popover.hide();
+          cleanupListeners();
+          popover = null; // Allow immediate re-opening
           reloadPart(window.location.href, 'actorPanel');
         }
       });
@@ -95,6 +112,8 @@ app.addEventListener('shown.bs.popover', e => {
   popoverCancel.onclick = () => {
     addActorForm.reset();
     popover.hide();
+    cleanupListeners();
+    popover = null; // Allow immediate re-opening
   };
 }); // End popover processing
 
