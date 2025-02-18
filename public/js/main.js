@@ -262,6 +262,80 @@ app.addEventListener('click', (e) => {
                     .then(() => fetchInto(contentSrc, ajaxModal.querySelector('.modal-body')));
             }
             break;
+        
+        case 'updateCredentials':
+            const form = e.target.form;
+            const params = new URLSearchParams();
+            
+            // For login, only add if it's different from its default value
+            const loginInput = form.elements['login'];
+            if (loginInput.value !== loginInput.defaultValue) {
+                params.append('login', loginInput.value);
+            }
+            
+            // For password, only add if a new password is provided
+            const passwordInput = form.elements['password'];
+            if (passwordInput.value) {
+                params.append('password', passwordInput.value);
+                params.append('password_confirmation', form.elements['password_confirmation'].value);
+            }
+            
+            // Don't submit if nothing to update
+            if (params.toString() === '') {
+                return;
+            }
+            
+            // Show loading state
+            e.target.insertAdjacentHTML('afterbegin', '<i class="spinner-border spinner-border-sm me-2" role="status" />');
+            e.target.disabled = true;
+            
+            // Clear previous validation states
+            form.querySelectorAll('.is-valid, .is-invalid').forEach(el => {
+                el.classList.remove('is-valid', 'is-invalid');
+                const feedback = el.nextElementSibling;
+                if (feedback && feedback.classList.contains('invalid-feedback')) {
+                    feedback.remove();
+                }
+            });
+            
+            fetchREST(form.dataset.resource, 'PUT', params)
+                .then(data => {
+                    // Remove loading spinner
+                    const spinner = e.target.querySelector('.spinner-border');
+                    if (spinner) spinner.remove();
+                    e.target.disabled = false;
+
+                    if (data.errors) {
+                        // Show validation errors
+                        Object.entries(data.errors).forEach(([key, value]) => {
+                            const input = form.elements[key];
+                            if (input) {
+                                input.classList.add('is-invalid');
+                                // Add error feedback
+                                const feedback = document.createElement('div');
+                                feedback.className = 'invalid-feedback';
+                                feedback.textContent = value[0];
+                                input.parentNode.appendChild(feedback);
+                            }
+                        });
+                    } else {
+                        // Show success state for only the changed fields
+                        Array.from(params.keys()).forEach(key => {
+                            const input = form.elements[key];
+                            if (input) input.classList.add('is-valid');
+                        });
+                        // Update login's default value if it was changed
+                        if (params.has('login')) {
+                            loginInput.defaultValue = loginInput.value;
+                        }
+                        // Clear password fields if they were used
+                        if (params.has('password')) {
+                            passwordInput.value = '';
+                            form.elements['password_confirmation'].value = '';
+                        }
+                    }
+                });
+            break;
     }
 
     /* Various functions used here and there */
