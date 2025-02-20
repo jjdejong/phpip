@@ -45,15 +45,15 @@ class SharePointService
         return $tokenData['access_token'];
     }
 
-    public function findFolderLink($caseref, $suffix, $eventCode)
+    protected function findBaseFolderUrl($caseref, $forceRefresh = false)
     {
-        if (!$this->enabled) {
-            return null;
+        $cacheKey = "sharepoint_base_url_{$caseref}";
+        
+        if ($forceRefresh) {
+            Cache::forget($cacheKey);
         }
 
-        $cacheKey = "sharepoint_link_{$caseref}_{$suffix}_{$eventCode}";
-        
-        return Cache::remember($cacheKey, 3600, function () use ($caseref, $suffix, $eventCode) {
+        return Cache::remember($cacheKey, now()->addYear(), function () use ($caseref, $forceRefresh) {
             $response = Http::withToken($this->getAccessToken())
                 ->get("{$this->baseUrl}/drive/root:" . $this->folderPath . ":/children", [
                     'select' => 'webUrl,name',
@@ -61,11 +61,28 @@ class SharePointService
                     '$top' => 1
                 ]);
 
+            if ($response->status() === 404 && !$forceRefresh) {
+                // If we get 404 and haven't tried refresh yet, try one more time
+                return $this->findBaseFolderUrl($caseref, true);
+            }
+
             $items = $response->json()['value'];
-            return !empty($items) ? $items[0]['webUrl'] . '/' . 
-                   str_replace('/', '', $suffix) . '/' . 
-                   $eventCode : null;
+            return !empty($items) ? $items[0]['webUrl'] : null;
         });
+    }
+
+    public function findFolderLink($caseref, $suffix, $eventCode)
+    {
+        if (!$this->enabled) {
+            return null;
+        }
+
+        $baseFolderUrl = $this->findBaseFolderUrl($caseref);
+        if (!$baseFolderUrl) {
+            return null;
+        }
+
+        return $baseFolderUrl . '/' . str_replace('/', '', $suffix) . '/' . $eventCode;
     }
 
     public function isEnabled()
