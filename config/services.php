@@ -31,4 +31,19 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'sharepoint' => [
+        'enabled' => env('SHAREPOINT_ENABLED', false),
+        'api_url' => env('SHAREPOINT_API_URL'),
+        'token_url' => env('SHAREPOINT_TOKEN_URL'),
+        'client_id' => env('SHAREPOINT_CLIENT_ID'),
+        'client_secret' => env('SHAREPOINT_CLIENT_SECRET'),
+        'resource' => env('SHAREPOINT_RESOURCE'),
+        'folder_path' => env('SHAREPOINT_FOLDER_PATH'),
+        'event_codes' => [
+            'SR' => 'SR', 
+            'EXA' => 'OA', 
+            'ALL' => 'GRT',
+        ],
+    ],
+
 ];

@@ -1,3 +1,4 @@
+@inject('sharePoint', 'App\Services\SharePointService')
 @php
 $titles = $matter->titles->groupBy('type_name');
 $classifiers = $matter->classifiers->groupBy('type_name');
@@ -12,8 +13,29 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
   <div class="col-3">
     <div id="refsPanel" class="card border-primary p-0 h-100">
       <div class="card-header bg-primary text-light reveal-hidden p-1">
-        <a class="bg-primary text-white lead {{ $matter->dead ? 'text-decoration-line-through' : '' }}" href="/matter?Ref={{ $matter->caseref }}" title="See family">{{ $matter->uid }}</a>
+        <a class="bg-primary text-white lead {{ $matter->dead ? 'text-decoration-line-through' : '' }}" 
+           href="/matter?Ref= {{ $matter->caseref }}" 
+           title="See family"
+           target="_blank">
+           {{ $matter->uid }}
+        </a>
         ({{ $matter->category->category }})
+        @php
+            $sharePointLink = null;
+            if ($sharePoint->isEnabled()) {
+                $sharePointLink = $sharePoint->findFolderLink(
+                    $matter->caseref,
+                    $matter->suffix,
+                    ''
+                );
+            }
+        @endphp
+        <a class="bg-primary text-warning float-end hidden-action ms-2"
+          href="{{ $sharePointLink ?? '/matter?Ref=' . $matter->caseref }}" 
+          title="{{ $sharePointLink ? 'Go to documents' : 'See family'}}"
+          target="_blank">
+          <svg width="14" height="14" fill="currentColor"><use xlink:href="#folder-symlink-fill"/></svg>
+        </a>
         @can('readwrite')
         <a class="bg-primary text-white float-end hidden-action"
           data-bs-toggle="modal" data-bs-target="#ajaxModal" href="/matter/{{ $matter->id }}/edit" title="Advanced matter edition">

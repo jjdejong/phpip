@@ -69,7 +69,7 @@ class UserController extends Controller
         Gate::authorize('admin');
         $request->validate([
             'login' => 'sometimes|required|unique:users',
-            'password' => 'sometimes|required|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[^a-zA-Z0-9]/',
+            'password' => 'sometimes|confirmed|required|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[^a-zA-Z0-9]/',
             'email' => 'sometimes|required|email',
             'default_role' => 'sometimes|required',
         ]);

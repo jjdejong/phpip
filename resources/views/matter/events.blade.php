@@ -1,3 +1,5 @@
+@inject('sharePoint', 'App\Services\SharePointService')
+
 <table class="table table-hover table-sm">
   <thead class="table-light">
     <tr>
@@ -39,7 +41,26 @@
   <tbody id="eventList">
     @foreach ( $events as $event )
     <tr data-resource="/event/{{ $event->id }}">
-      <td>{{ $event->info->name }}</td>
+      <td>
+        @php
+            $sharePointLink = null;
+            if ($sharePoint->isEnabled() && 
+                array_key_exists($event->code, config('services.sharepoint.event_codes'))) {
+                $sharePointLink = $sharePoint->findFolderLink(
+                    $matter->caseref,
+                    $matter->suffix,
+                    config('services.sharepoint.event_codes')[$event->code] . $event->detail
+                );
+            }
+        @endphp
+        @if($sharePointLink)
+            <a href="{{ $sharePointLink }}" target="_blank">
+                {{ $event->info->name }}
+            </a>
+        @else
+            {{ $event->info->name }}
+        @endif
+      </td>
       <td><input type="text" class="form-control noformat" name="event_date" value="{{ $event->event_date->isoFormat('L') }}"></td>
       <td><input type="text" class="form-control noformat" size="16" name="detail" value="{{ $event->detail }}"></td>
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $event->notes }}"></td>
