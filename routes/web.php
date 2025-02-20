@@ -91,7 +91,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('matter/new-caseref', function (Request $request) {
         $term = $request->term;
         $newref = App\Models\Matter::where('caseref', 'like', "$term%")->max('caseref');
-        if ($newref) {
+        if ($newref && $newref != $term) {
             $newref++;
         } else {
             $newref = strtoupper($term);
