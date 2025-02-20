@@ -39,11 +39,15 @@ return [
         'client_secret' => env('SHAREPOINT_CLIENT_SECRET'),
         'resource' => env('SHAREPOINT_RESOURCE'),
         'folder_path' => env('SHAREPOINT_FOLDER_PATH'),
-        'event_codes' => [
-            'SR' => 'SR', 
-            'EXA' => 'OA', 
-            'ALL' => 'GRT',
-        ],
+        'event_codes' => array_reduce(
+            explode(',', env('SHAREPOINT_EVENT_CODES', 'SR:SR,EXA:OA,EXAF:OA,ALL:GRT')),
+            function($carry, $item) {
+                list($key, $value) = explode(':', $item);
+                $carry[$key] = $value;
+                return $carry;
+            },
+            []
+        ),
     ],
 
 ];
