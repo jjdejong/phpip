@@ -16,7 +16,7 @@ Now the due date of any task defined in the rules table can be included in the d
 
 ## 2024-12-30 Created a renewal sync script for the [Renewr](https://www.renewr.io/) renewal services
 
-By the same token, scheduled scripts such as this renewal sync script and the weekly due tasks reminder email have been moved to Artisan commands using the Laravel scheduling functionality.
+By the same token, scheduled scripts such as this renewal sync script and the weekly due tasks reminder email have been moved to Artisan commands using the Laravel scheduling functionality. See [here](https://github.com/jjdejong/phpip/wiki/Renewal-Management#renewr) for further details.
 
 ## 2024-08-02 Updated the old application structure to that of Laravel 11
 
