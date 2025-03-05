@@ -336,7 +336,7 @@ class RenewrSync extends Command
                 $config['our_fee'] +
                 $serviceProviderFee +
                     ($config['below_percentage'] -
-                    ($config['progressive_factor'] * $cost)
+                    (($config['below_percentage'] - $config['above_percentage']) * $cost / $config['threshold'])
                     ) * $cost,
                 2
             );
