@@ -13,30 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
-
-function render($__php, $__data)
-{
-    $obLevel = ob_get_level();
-    ob_start();
-    $__data['__env'] = app(\Illuminate\View\Factory::class);
-    extract($__data, EXTR_SKIP);
-    try {
-        eval('?'.'>'.$__php);
-    } catch (Exception $e) {
-        while (ob_get_level() > $obLevel) {
-            ob_end_clean();
-        }
-        throw $e;
-    } catch (Throwable $e) {
-        while (ob_get_level() > $obLevel) {
-            ob_end_clean();
-        }
-        throw new FatalThrowableError($e);
-    }
-
-    return ob_get_clean();
-}
 
 class DocumentController extends Controller
 {
@@ -215,7 +191,7 @@ class DocumentController extends Controller
                 $sep = '&';
             }
             if ($member->subject != '') {
-                $content = render($subject, compact('description', 'matter', 'event', 'task'));
+                $content = $this->renderTemplate($subject, compact('description', 'matter', 'event', 'task'));
                 if (is_array($content)) {
                     if (array_key_exists('error', $content)) {
                         return $content;
@@ -225,7 +201,7 @@ class DocumentController extends Controller
                     $sep = '&';
                 }
             }
-            $content = render($blade, compact('description', 'matter', 'event', 'task'));
+            $content = $this->renderTemplate($blade, compact('description', 'matter', 'event', 'task'));
             if (is_array($content)) {
                 if (array_key_exists('error', $content)) {
                     return $content;
@@ -241,6 +217,15 @@ class DocumentController extends Controller
             }
         } else {
             return json_encode(['message' => 'You need to select at least one contact.']);
+        }
+    }
+
+    private function renderTemplate(string $template, array $data)
+    {
+        try {
+            return Blade::render($template, $data);
+        } catch (\Throwable $e) {
+            return ['error' => $e->getMessage()];
         }
     }
 }
