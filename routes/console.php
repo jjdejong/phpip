@@ -24,7 +24,7 @@ Schedule::command('tasks:send-due-email')
     ->onOneServer()
     ->withoutOverlapping();
 
-Schedule::command('tasks:renewr-sync --demo')
+Schedule::command('tasks:renewr-sync')
     ->weeklyOn(1, '3:00')
     ->onOneServer()
     ->withoutOverlapping();
