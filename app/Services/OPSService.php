@@ -8,27 +8,49 @@ use SimpleXMLElement;
 
 class OPSService
 {
-    private string $accessToken;
+    private ?string $accessToken = null;
     private const BASE_URL = 'https://ops.epo.org/3.2';
 
-    public function __construct()
+    public function authenticate(): void
     {
-        $this->authenticate();
-    }
+        $key = env('OPS_APP_KEY');
+        $secret = env('OPS_SECRET');
 
-    private function authenticate(): void
-    {
-        $response = Http::withHeaders([
-            'Authorization' => 'Basic ' . base64_encode(env('OPS_APP_KEY') . ':' . env('OPS_SECRET'))
-        ])->asForm()->post(self::BASE_URL . '/auth/accesstoken', [
-            'grant_type' => 'client_credentials'
-        ]);
+        if (!$key || !$secret) {
+            return;
+        }
 
-        $this->accessToken = $response['access_token'];
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Basic ' . base64_encode($key . ':' . $secret)
+            ])->asForm()->post(self::BASE_URL . '/auth/accesstoken', [
+                'grant_type' => 'client_credentials'
+            ]);
+
+            $data = $response->json();
+            
+            // Valid OPS response will always contain these fields
+            if ($response->successful() && isset($data['access_token'], $data['expires_in'])) {
+                $this->accessToken = $data['access_token'];
+            }
+        } catch (\Exception $e) {
+            // Failed request or invalid response format
+            return;
+        }
     }
 
     public function getFamilyMembers(string $docnum): array
     {
+        if (!$this->accessToken) {
+            $this->authenticate();
+            if (!$this->accessToken) {
+                return [
+                    'errors' => ['auth' => ['OPS API credentials not configured']],
+                    'message' => 'Please configure valid OPS API credentials in .env file'
+                ];
+            }
+        }
+
         $ops_biblio = self::BASE_URL . "/rest-services/family/publication/docdb/$docnum/biblio.json";
         $ops_response = Http::withToken($this->accessToken)
             ->asForm()
