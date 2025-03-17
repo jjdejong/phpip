@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MatterType;
+use App\Models\Translations\MatterTypeTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,11 +38,31 @@ class MatterTypeController extends Controller
     {
         $request->validate([
             'code' => 'required|unique:matter_type|max:5',
-            'type' => 'required|max:45',
+            'type' => 'required|max:45'
         ]);
+        
         $request->merge(['creator' => Auth::user()->login]);
+        
+        $matterType = MatterType::create($request->except(['_token', '_method']));
+        
+        $translatableFields = ['type'];
+        $locale = Auth::user()->getLanguage();
+        $baseLanguage = explode('_', $locale)[0];
+        
+        if ($baseLanguage === 'en') {
+            $locale = 'en';
+        }
+        
+        $translations = array_intersect_key($request->all(), array_flip($translatableFields));
+        if (!empty(array_filter($translations))) {
+            MatterTypeTranslation::create([
+                'code' => $matterType->code,
+                'locale' => $locale,
+                ...$translations
+            ]);
+        }
 
-        return MatterType::create($request->except(['_token', '_method']));
+        return response()->json(['redirect' => route('mattertype.index')]);
     }
 
     public function show(MatterType $type)
@@ -51,28 +72,39 @@ class MatterTypeController extends Controller
         return view('type.show', compact('type', 'tableComments'));
     }
 
-    public function update(Request $request, MatterType $type)
+    public function update(Request $request, MatterType $mattertype)
     {
         $request->merge(['updater' => Auth::user()->login]);
         
-        // Define which fields are translatable
         $translatableFields = ['type'];
+        $locale = Auth::user()->getLanguage();
+        $baseLanguage = explode('_', $locale)[0];
         
-        // Process the update, separating translatable fields
-        $nonTranslatableData = $type->updateTranslationFields(
-            $request->except(['_token', '_method']), 
-            $translatableFields
-        );
-        
-        // Update non-translatable fields on the main model if there are any
-        if (!empty($nonTranslatableData)) {
-            $type->update($nonTranslatableData);
+        if ($baseLanguage === 'en') {
+            $locale = 'en';
         }
         
-        // Make sure we're returning the model with updated translations
-        $type->refresh();
+        $translations = array_intersect_key($request->all(), array_flip($translatableFields));
+        if (!empty(array_filter($translations))) {
+            MatterTypeTranslation::updateOrCreate(
+                [
+                    'code' => $mattertype->code,
+                    'locale' => $locale
+                ],
+                $translations
+            );
+        }
         
-        return $type;
+        $nonTranslatableData = array_diff_key(
+            $request->except(['_token', '_method']),
+            array_flip($translatableFields)
+        );
+        
+        if (!empty($nonTranslatableData)) {
+            $mattertype->update($nonTranslatableData);
+        }
+        
+        return $mattertype;
     }
 
     public function destroy(MatterType $type)

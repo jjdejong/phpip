@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Translations\MatterCategoryTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,9 +40,31 @@ class CategoryController extends Controller
             'category' => 'required|max:45',
             'display_with' => 'required',
         ]);
+        
         $request->merge(['creator' => Auth::user()->login]);
+        
+        // Create the category first
+        $category = Category::create($request->except(['_token', '_method']));
+        
+        // Handle translations
+        $translatableFields = ['category'];
+        $locale = Auth::user()->getLanguage();
+        $baseLanguage = explode('_', $locale)[0];
+        
+        if ($baseLanguage === 'en') {
+            $locale = 'en';
+        }
+        
+        $translations = array_intersect_key($request->all(), array_flip($translatableFields));
+        if (!empty(array_filter($translations))) {
+            MatterCategoryTranslation::create([
+                'code' => $category->code,
+                'locale' => $locale,
+                ...$translations
+            ]);
+        }
 
-        return Category::create($request->except(['_token', '_method']));
+        return response()->json(['redirect' => route('category.index')]);
     }
 
     public function show(Category $category)
@@ -56,22 +79,33 @@ class CategoryController extends Controller
     {
         $request->merge(['updater' => Auth::user()->login]);
         
-        // Define which fields are translatable
         $translatableFields = ['category'];
+        $locale = Auth::user()->getLanguage();
+        $baseLanguage = explode('_', $locale)[0];
         
-        // Process the update, separating translatable fields
-        $nonTranslatableData = $category->updateTranslationFields(
-            $request->except(['_token', '_method']), 
-            $translatableFields
+        if ($baseLanguage === 'en') {
+            $locale = 'en';
+        }
+        
+        $translations = array_intersect_key($request->all(), array_flip($translatableFields));
+        if (!empty(array_filter($translations))) {
+            MatterCategoryTranslation::updateOrCreate(
+                [
+                    'code' => $category->code,
+                    'locale' => $locale
+                ],
+                $translations
+            );
+        }
+        
+        $nonTranslatableData = array_diff_key(
+            $request->except(['_token', '_method']),
+            array_flip($translatableFields)
         );
         
-        // Update non-translatable fields on the main model if there are any
         if (!empty($nonTranslatableData)) {
             $category->update($nonTranslatableData);
         }
-        
-        // Make sure we're returning the model with updated translations
-        $category->refresh();
         
         return $category;
     }

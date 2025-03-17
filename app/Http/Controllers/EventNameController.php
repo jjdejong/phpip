@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\EventClassLnk;
 use App\Models\EventName;
+use App\Models\Translations\EventNameTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,8 +43,31 @@ class EventNameController extends Controller
             'name' => 'required|max:45',
             'notes' => 'max:160',
         ]);
+        
         $request->merge(['creator' => Auth::user()->login]);
-        EventName::create($request->except(['_token', '_method']));
+        
+        // Create the event name first
+        $eventname = EventName::create($request->except(['_token', '_method']));
+        
+        // Handle translations
+        $translatableFields = ['name', 'notes'];
+        $locale = Auth::user()->getLanguage();
+        $baseLanguage = explode('_', $locale)[0];
+        
+        // Normalize to 'en' if it's an English variant
+        if ($baseLanguage === 'en') {
+            $locale = 'en';
+        }
+        
+        // Create translation record
+        $translations = array_intersect_key($request->all(), array_flip($translatableFields));
+        if (!empty(array_filter($translations))) {
+            EventNameTranslation::create([
+                'code' => $eventname->code,
+                'locale' => $locale,
+                ...$translations
+            ]);
+        }
 
         return response()->json(['redirect' => route('eventname.index')]);
     }
@@ -61,22 +85,40 @@ class EventNameController extends Controller
     {
         $request->merge(['updater' => Auth::user()->login]);
         
-        // Define which fields are translatable
         $translatableFields = ['name', 'notes'];
+        $locale = Auth::user()->getLanguage();
+        $baseLanguage = explode('_', $locale)[0];
         
-        // Process the update, separating translatable fields
-        $nonTranslatableData = $eventname->updateTranslationFields(
-            $request->except(['_token', '_method']), 
-            $translatableFields
+        if ($baseLanguage === 'en') {
+            $locale = 'en';
+        }
+        
+        // Get translatable fields from request
+        $translations = array_intersect_key($request->all(), array_flip($translatableFields));
+        
+        if (!empty(array_filter($translations))) {
+            // Update translation table
+            EventNameTranslation::updateOrCreate(
+                [
+                    'code' => $eventname->code,
+                    'locale' => $locale
+                ],
+                $translations
+            );
+            
+            // Also update the main table with the same values
+            $eventname->update($translations);
+        }
+        
+        // Update non-translatable fields
+        $nonTranslatableData = array_diff_key(
+            $request->except(['_token', '_method']),
+            array_flip($translatableFields)
         );
         
-        // Update non-translatable fields on the main model if there are any
         if (!empty($nonTranslatableData)) {
             $eventname->update($nonTranslatableData);
         }
-        
-        // Make sure we're returning the model with updated translations
-        $eventname->refresh();
         
         return $eventname;
     }

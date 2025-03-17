@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Actor;
 use App\Models\Role;
+use App\Models\Translations\ActorRoleTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,11 +40,31 @@ class RoleController extends Controller
         $request->validate([
             'code' => 'required|unique:actor_role|max:5',
             'name' => 'required|max:45',
-            'display_order' => 'numeric|nullable',
+            'notes' => 'max:160'
         ]);
+        
         $request->merge(['creator' => Auth::user()->login]);
+        
+        $role = Role::create($request->except(['_token', '_method']));
+        
+        $translatableFields = ['name', 'notes'];
+        $locale = Auth::user()->getLanguage();
+        $baseLanguage = explode('_', $locale)[0];
+        
+        if ($baseLanguage === 'en') {
+            $locale = 'en';
+        }
+        
+        $translations = array_intersect_key($request->all(), array_flip($translatableFields));
+        if (!empty(array_filter($translations))) {
+            ActorRoleTranslation::create([
+                'code' => $role->code,
+                'locale' => $locale,
+                ...$translations
+            ]);
+        }
 
-        return Role::create($request->except(['_token', '_method']));
+        return response()->json(['redirect' => route('role.index')]);
     }
 
     public function show(Role $role)
@@ -58,22 +79,33 @@ class RoleController extends Controller
     {
         $request->merge(['updater' => Auth::user()->login]);
         
-        // Define which fields are translatable
         $translatableFields = ['name', 'notes'];
+        $locale = Auth::user()->getLanguage();
+        $baseLanguage = explode('_', $locale)[0];
         
-        // Process the update, separating translatable fields
-        $nonTranslatableData = $role->updateTranslationFields(
-            $request->except(['_token', '_method']), 
-            $translatableFields
+        if ($baseLanguage === 'en') {
+            $locale = 'en';
+        }
+        
+        $translations = array_intersect_key($request->all(), array_flip($translatableFields));
+        if (!empty(array_filter($translations))) {
+            ActorRoleTranslation::updateOrCreate(
+                [
+                    'code' => $role->code,
+                    'locale' => $locale
+                ],
+                $translations
+            );
+        }
+        
+        $nonTranslatableData = array_diff_key(
+            $request->except(['_token', '_method']),
+            array_flip($translatableFields)
         );
         
-        // Update non-translatable fields on the main model if there are any
         if (!empty($nonTranslatableData)) {
             $role->update($nonTranslatableData);
         }
-        
-        // Make sure we're returning the model with updated translations
-        $role->refresh();
         
         return $role;
     }

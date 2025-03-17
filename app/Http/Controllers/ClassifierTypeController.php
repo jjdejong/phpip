@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClassifierType;
+use App\Models\Translations\ClassifierTypeTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,10 +39,31 @@ class ClassifierTypeController extends Controller
         $request->validate([
             'code' => 'required|unique:classifier_type|max:5',
             'type' => 'required|max:45',
+            'notes' => 'max:160'
         ]);
+        
         $request->merge(['creator' => Auth::user()->login]);
+        
+        $classifierType = ClassifierType::create($request->except(['_token', '_method']));
+        
+        $translatableFields = ['type', 'notes'];
+        $locale = Auth::user()->getLanguage();
+        $baseLanguage = explode('_', $locale)[0];
+        
+        if ($baseLanguage === 'en') {
+            $locale = 'en';
+        }
+        
+        $translations = array_intersect_key($request->all(), array_flip($translatableFields));
+        if (!empty(array_filter($translations))) {
+            ClassifierTypeTranslation::create([
+                'code' => $classifierType->code,
+                'locale' => $locale,
+                ...$translations
+            ]);
+        }
 
-        return ClassifierType::create($request->except(['_token', '_method']));
+        return response()->json(['redirect' => route('classifiertype.index')]);
     }
 
     public function show(ClassifierType $classifier_type)
@@ -52,28 +74,39 @@ class ClassifierTypeController extends Controller
         return view('classifier_type.show', compact('classifier_type', 'tableComments'));
     }
 
-    public function update(Request $request, ClassifierType $classifierType)
+    public function update(Request $request, ClassifierType $classifiertype)
     {
         $request->merge(['updater' => Auth::user()->login]);
         
-        // Define which fields are translatable
         $translatableFields = ['type', 'notes'];
+        $locale = Auth::user()->getLanguage();
+        $baseLanguage = explode('_', $locale)[0];
         
-        // Process the update, separating translatable fields
-        $nonTranslatableData = $classifierType->updateTranslationFields(
-            $request->except(['_token', '_method']), 
-            $translatableFields
-        );
-        
-        // Update non-translatable fields on the main model if there are any
-        if (!empty($nonTranslatableData)) {
-            $classifierType->update($nonTranslatableData);
+        if ($baseLanguage === 'en') {
+            $locale = 'en';
         }
         
-        // Make sure we're returning the model with updated translations
-        $classifierType->refresh();
+        $translations = array_intersect_key($request->all(), array_flip($translatableFields));
+        if (!empty(array_filter($translations))) {
+            ClassifierTypeTranslation::updateOrCreate(
+                [
+                    'code' => $classifiertype->code,
+                    'locale' => $locale
+                ],
+                $translations
+            );
+        }
         
-        return $classifierType;
+        $nonTranslatableData = array_diff_key(
+            $request->except(['_token', '_method']),
+            array_flip($translatableFields)
+        );
+        
+        if (!empty($nonTranslatableData)) {
+            $classifiertype->update($nonTranslatableData);
+        }
+        
+        return $classifiertype;
     }
 
     public function destroy(ClassifierType $classifierType)

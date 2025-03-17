@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rule;
+use App\Models\Translations\TaskRuleTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -92,36 +93,35 @@ class RuleController extends Controller
     public function update(Request $request, Rule $rule)
     {
         Gate::authorize('admin');
-        $this->validate($request, [
-            'task' => 'sometimes|required',
-            'trigger_event' => 'sometimes|required',
-            'for_category' => 'sometimes|required',
-            'cost' => 'nullable|numeric',
-            'years' => 'nullable|numeric',
-            'months' => 'nullable|numeric',
-            'days' => 'nullable|numeric',
-            'fee' => 'nullable|numeric',
-            'use_before' => 'nullable|date',
-            'use_after' => 'nullable|date',
-        ]);
         $request->merge(['updater' => Auth::user()->login]);
         
-        // Define which fields are translatable
         $translatableFields = ['detail', 'notes'];
+        $locale = Auth::user()->getLanguage();
+        $baseLanguage = explode('_', $locale)[0];
         
-        // Process the update, separating translatable fields
-        $nonTranslatableData = $rule->updateTranslationFields(
-            $request->except(['_token', '_method']), 
-            $translatableFields
+        if ($baseLanguage === 'en') {
+            $locale = 'en';
+        }
+        
+        $translations = array_intersect_key($request->all(), array_flip($translatableFields));
+        if (!empty(array_filter($translations))) {
+            TaskRuleTranslation::updateOrCreate(
+                [
+                    'task_rule_id' => $rule->id,
+                    'locale' => $locale
+                ],
+                $translations
+            );
+        }
+        
+        $nonTranslatableData = array_diff_key(
+            $request->except(['_token', '_method']),
+            array_flip($translatableFields)
         );
         
-        // Update non-translatable fields on the main model if there are any
         if (!empty($nonTranslatableData)) {
             $rule->update($nonTranslatableData);
         }
-        
-        // Make sure we're returning the model with updated translations
-        $rule->refresh();
         
         return $rule;
     }
@@ -129,20 +129,32 @@ class RuleController extends Controller
     public function store(Request $request)
     {
         Gate::authorize('admin');
-        $this->validate($request, [
-            'task' => 'required',
-            'trigger_event' => 'required',
-            'for_category' => 'required',
-            'cost' => 'nullable|numeric',
-            'years' => 'numeric',
-            'months' => 'numeric',
-            'days' => 'numeric',
-            'fee' => 'nullable|numeric',
-            'use_before' => 'nullable|date',
-            'use_after' => 'nullable|date',
+        $request->validate([
+            'task_id' => 'required|exists:task,id',
+            'detail' => 'required',
+            'for_client' => 'boolean'
         ]);
+        
         $request->merge(['creator' => Auth::user()->login]);
-        Rule::create($request->except(['_token', '_method']));
+        
+        $rule = Rule::create($request->except(['_token', '_method']));
+        
+        $translatableFields = ['detail', 'notes'];
+        $locale = Auth::user()->getLanguage();
+        $baseLanguage = explode('_', $locale)[0];
+        
+        if ($baseLanguage === 'en') {
+            $locale = 'en';
+        }
+        
+        $translations = array_intersect_key($request->all(), array_flip($translatableFields));
+        if (!empty(array_filter($translations))) {
+            TaskRuleTranslation::create([
+                'task_rule_id' => $rule->id,
+                'locale' => $locale,
+                ...$translations
+            ]);
+        }
 
         return response()->json(['redirect' => route('rule.index')]);
     }
