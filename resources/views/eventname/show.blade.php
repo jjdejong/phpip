@@ -1,4 +1,19 @@
 <div data-resource="/eventname/{{ $eventname->code }}" class="reload-part">
+    <div class="alert alert-info py-1 mb-2">
+        <small>{{ __('Editing translations in') }}: 
+            @if(Auth::user()->language == 'en' || explode('_', Auth::user()->language)[0] == 'en')
+                English
+            @elseif(Auth::user()->language == 'fr')
+                Français
+            @elseif(Auth::user()->language == 'de')
+                Deutsch
+            @elseif(Auth::user()->language == 'es')
+                Español
+            @else
+                {{ Auth::user()->language }}
+            @endif
+        </small>
+    </div>
 	<table class="table table-hover table-sm">
 		<tr>
 			<th width="20%">Code</th>

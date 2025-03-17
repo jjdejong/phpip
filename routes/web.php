@@ -228,6 +228,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('matter', MatterController::class);
     Route::resource('actor', App\Http\Controllers\ActorController::class);
     Route::resource('user', App\Http\Controllers\UserController::class);
+    Route::get('/profile', [App\Http\Controllers\UserController::class, 'profile'])->name('user.profile');
+    Route::put('/profile/update', [App\Http\Controllers\UserController::class, 'updateProfile'])->name('user.updateProfile');
     Route::apiResource('task', App\Http\Controllers\TaskController::class);
 
     // The following resources are not accessible to clients
@@ -250,5 +252,11 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('template-member', App\Http\Controllers\TemplateMemberController::class);
         Route::resource('document', DocumentController::class)->parameters(['document' => 'class']);
         Route::resource('event-class', App\Http\Controllers\EventClassController::class);
+        
+        // Translation management routes
+        Route::get('translations', [App\Http\Controllers\TranslationController::class, 'index'])->name('translations.index');
+        Route::get('translations/{type}', [App\Http\Controllers\TranslationController::class, 'listEntities'])->name('translations.list');
+        Route::get('translations/{type}/{id}', [App\Http\Controllers\TranslationController::class, 'edit'])->name('translations.edit');
+        Route::put('translations/{type}/{id}', [App\Http\Controllers\TranslationController::class, 'update'])->name('translations.update');
     });
 });

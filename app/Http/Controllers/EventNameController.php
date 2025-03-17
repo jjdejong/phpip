@@ -60,8 +60,24 @@ class EventNameController extends Controller
     public function update(Request $request, EventName $eventname)
     {
         $request->merge(['updater' => Auth::user()->login]);
-        $eventname->update($request->except(['_token', '_method']));
-
+        
+        // Define which fields are translatable
+        $translatableFields = ['name', 'notes'];
+        
+        // Process the update, separating translatable fields
+        $nonTranslatableData = $eventname->updateTranslationFields(
+            $request->except(['_token', '_method']), 
+            $translatableFields
+        );
+        
+        // Update non-translatable fields on the main model if there are any
+        if (!empty($nonTranslatableData)) {
+            $eventname->update($nonTranslatableData);
+        }
+        
+        // Make sure we're returning the model with updated translations
+        $eventname->refresh();
+        
         return $eventname;
     }
 

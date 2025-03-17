@@ -15,6 +15,35 @@ class Actor extends Model
 
     protected $guarded = ['id', 'password', 'created_at', 'updated_at'];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'language' => 'string',
+    ];
+    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'login', 'password', 'email', 'language', 'company_id',
+        'default_role', 'phone', 'notes', 'updater'
+    ];
+
+    /**
+     * Get the actor's preferred language.
+     *
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return $this->language ?? config('app.locale');
+    }
+
     public function company()
     {
         return $this->belongsTo(Actor::class, 'company_id');

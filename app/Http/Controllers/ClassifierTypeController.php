@@ -55,8 +55,24 @@ class ClassifierTypeController extends Controller
     public function update(Request $request, ClassifierType $classifierType)
     {
         $request->merge(['updater' => Auth::user()->login]);
-        $classifierType->update($request->except(['_token', '_method']));
-
+        
+        // Define which fields are translatable
+        $translatableFields = ['type', 'notes'];
+        
+        // Process the update, separating translatable fields
+        $nonTranslatableData = $classifierType->updateTranslationFields(
+            $request->except(['_token', '_method']), 
+            $translatableFields
+        );
+        
+        // Update non-translatable fields on the main model if there are any
+        if (!empty($nonTranslatableData)) {
+            $classifierType->update($nonTranslatableData);
+        }
+        
+        // Make sure we're returning the model with updated translations
+        $classifierType->refresh();
+        
         return $classifierType;
     }
 

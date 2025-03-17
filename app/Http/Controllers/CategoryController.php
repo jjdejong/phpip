@@ -55,8 +55,24 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $request->merge(['updater' => Auth::user()->login]);
-        $category->update($request->except(['_token', '_method']));
-
+        
+        // Define which fields are translatable
+        $translatableFields = ['category'];
+        
+        // Process the update, separating translatable fields
+        $nonTranslatableData = $category->updateTranslationFields(
+            $request->except(['_token', '_method']), 
+            $translatableFields
+        );
+        
+        // Update non-translatable fields on the main model if there are any
+        if (!empty($nonTranslatableData)) {
+            $category->update($nonTranslatableData);
+        }
+        
+        // Make sure we're returning the model with updated translations
+        $category->refresh();
+        
         return $category;
     }
 

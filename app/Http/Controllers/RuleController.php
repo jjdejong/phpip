@@ -105,8 +105,24 @@ class RuleController extends Controller
             'use_after' => 'nullable|date',
         ]);
         $request->merge(['updater' => Auth::user()->login]);
-        $rule->update($request->except(['_token', '_method']));
-
+        
+        // Define which fields are translatable
+        $translatableFields = ['detail', 'notes'];
+        
+        // Process the update, separating translatable fields
+        $nonTranslatableData = $rule->updateTranslationFields(
+            $request->except(['_token', '_method']), 
+            $translatableFields
+        );
+        
+        // Update non-translatable fields on the main model if there are any
+        if (!empty($nonTranslatableData)) {
+            $rule->update($nonTranslatableData);
+        }
+        
+        // Make sure we're returning the model with updated translations
+        $rule->refresh();
+        
         return $rule;
     }
 

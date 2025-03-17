@@ -42,7 +42,9 @@ class HomeController extends Controller
             'done_date' => 'bail|required',
         ]);
         $tids = $request->task_ids;
-        $done_date = Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->done_date);
+        // Use the full locale (with region) for date formatting
+        $formattingLocale = session('formatting_locale', app()->getLocale());
+        $done_date = Carbon::createFromLocaleIsoFormat('L', $formattingLocale, $request->done_date);
         $updated = 0;
         foreach ($tids as $id) {
             $task = Task::find($id);

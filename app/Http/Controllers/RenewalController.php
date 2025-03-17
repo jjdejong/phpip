@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use App\Helpers\FormatHelper;
 
 class RenewalController extends Controller
 {
@@ -429,7 +430,7 @@ class RenewalController extends Controller
                         if ($ren->event_name == 'GRT' || $ren->event_name == 'PR') {
                             $desc .= ' délivré le ';
                         }
-                        $desc .= Carbon::parse($ren->event_date)->isoFormat('LL');
+                        $desc .= FormatHelper::formatDate(Carbon::parse($ren->event_date), 'LL');
                         // TODO select preposition 'en, au, aux' according to country
                         $desc .= ' en ' . $ren->country_FR;
                         if ($ren->title != '') {
@@ -438,7 +439,7 @@ class RenewalController extends Controller
                         if ($ren->client_ref != '') {
                             $desc .= " ($ren->client_ref)";
                         }
-                        $desc .= "\nÉchéance le " . Carbon::parse($ren->due_date)->isoFormat('LL');
+                        $desc .= "\nÉchéance le " . FormatHelper::formatDate(Carbon::parse($ren->due_date), 'LL');
                         // Détermine le taux de tva
                         if ($soc_res['tva_intra'] == '' || substr($soc_res['tva_intra'], 0, 2) == 'FR') {
                             $vat_rate = 0.2;
@@ -538,7 +539,7 @@ class RenewalController extends Controller
             fputcsv($export_csv, array_map('utf8_decode', $row), ';');
         }
         rewind($export_csv);
-        $filename = Now()->isoFormat('YMMDDHHmmss') . '_invoicing.csv';
+        $filename = now()->format('YmdHis') . '_invoicing.csv';
 
         return response()->stream(
             function () use ($export_csv) {
@@ -824,7 +825,7 @@ class RenewalController extends Controller
         if ($xml->header->sender->name == 'NAME') {
             $xml->header->sender->name = Auth::user()->name;
         }
-        $xml->header->{'payment-reference-id'} = 'ANNUITY ' . date('Ymd');
+        $xml->header->{'payment-reference-id'} = 'ANNUITY ' . now()->format('Ymd');
         $total = 0;
         $first = true;
         $renewals = Task::renewals()->whereIn('task.id', $tids)->get();

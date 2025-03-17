@@ -4,16 +4,47 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasTableComments;
+use App\Traits\HasTranslations;
+use App\Models\Translations\TaskRuleTranslation;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Rule extends Model
 {
-    use HasTableComments;
+    use HasTableComments, HasTranslations;
     
     protected $table = 'task_rules';
 
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
+    
+    /**
+     * Get the translated detail attribute.
+     */
+    protected function detail(): Attribute
+    {
+        return Attribute::make(
+            get: fn (?string $value) => $this->getTranslation('detail'),
+        );
+    }
+    
+    /**
+     * Get the translated notes attribute.
+     */
+    protected function notes(): Attribute
+    {
+        return Attribute::make(
+            get: fn (?string $value) => $this->getTranslation('notes'),
+        );
+    }
+    
+    /**
+     * Get the translations for this rule.
+     */
+    public function translations()
+    {
+        return $this->hasMany(TaskRuleTranslation::class, 'task_rule_id', 'id');
+    }
 
     public function country()
     {

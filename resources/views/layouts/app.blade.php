@@ -166,6 +166,7 @@
                 <a class="dropdown-item" href="{{ url('/renewal') }}">Manage renewals</a>
                 <a class="dropdown-item" href="{{ url('/fee') }}">Renewal fees</a>
                 @can('admin')
+                <a class="dropdown-item" href="{{ url('/translations') }}">Translations</a>
                 <a class="dropdown-item" href="{{ url('/rule') }}">Rules</a>
                 <a class="dropdown-item" href="{{ url('/document') }}">Email template classes</a>
                 <a class="dropdown-item" href="{{ url('/template-member') }}">Email templates</a>
@@ -197,6 +198,10 @@
               </a>
 
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{{ route('user.profile') }}">
+                  {{ __('My Profile') }}
+                </a>
+                <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   {{ __('Logout') }}
                 </a>
