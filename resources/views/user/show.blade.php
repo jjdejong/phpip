@@ -5,7 +5,7 @@
         <h5 class="card-title mb-0">User Info</h5>
       </div>
       <div class="card-body">
-        <table class="table table-striped" data-resource="{{ isset($isProfileView) ? route('user.updateProfile') : '/user/' . $userInfo->id }}">
+        <table class="table table-striped" data-resource="{{ '/user/' . $userInfo->id }}">
           <tr>
             <th title="{{ $userComments['name'] }}">Name</th>
             <td><input class="noformat form-control" name="name" value="{{ $userInfo->name }}"></td>
@@ -29,7 +29,7 @@
           <tr>
             <th>Language</th>
             <td>
-              <select class="form-select noformat" name="language" required>
+              <select class="form-select noformat" name="language">
                 <option value="en_GB" {{ $userInfo->language == 'en_GB' ? 'selected' : '' }}>English (British)</option>
                 <option value="en_US" {{ $userInfo->language == 'en_US' ? 'selected' : '' }}>English (American)</option>
                 <option value="fr" {{ $userInfo->language == 'fr' ? 'selected' : '' }}>Français</option>
