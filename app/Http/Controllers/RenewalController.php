@@ -6,11 +6,13 @@ use App\Mail\sendCall;
 use App\Models\MatterActors;
 use App\Models\RenewalsLog;
 use App\Models\Task;
+use App\Models\Actor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use App\Helpers\FormatHelper;
 
 class RenewalController extends Controller
 {
@@ -147,210 +149,266 @@ class RenewalController extends Controller
         }
     }
 
-    private function adjustFees($ren, &$cost, &$fee)
+    private function adjustFees($renewal, &$cost, &$fee)
     {
-        if ($ren->grace_period && strtotime($ren->done_date) < $ren->due_date) {
-            // Urgent timely payment, apply fee_factor
+        if ($renewal->grace_period && strtotime($renewal->done_date) < $renewal->due_date) {
             $fee_factor = config('renewal.validity.fee_factor', 1.0);
         } else {
             $fee_factor = 1.0;
         }
-        if ($ren->table_fee) {
-            // Fees are taken from the fees table
-            if ($ren->grace_period) {
-                $cost = $ren->sme_status ? $ren->cost_sup_reduced : $ren->cost_sup;
-                $fee = $ren->sme_status ? $ren->fee_sup_reduced : $ren->fee_sup;
-            } else {
-                $cost = $ren->sme_status ? $ren->cost_reduced : $ren->cost;
-                $fee = $ren->sme_status ? $ren->fee_reduced : $ren->fee;
-            }
-            if ($ren->discount > 1) {
-                // There is a fixed discounted fee - use that
-                $fee = $ren->discount;
-            } else {
-                // Apply a proportional discount
-                $fee *= (1.0 - $ren->discount);
-            }
+
+        if ($renewal->table_fee) {
+            $this->adjustTableFees($renewal, $cost, $fee);
         } else {
-            // Cost and fee are taken from the renewal task, and the fee includes a fixed and a proportional component
-            $cost = $ren->cost;
-            // Remove the fixed component from fee
-            $fee = $ren->fee - config('renewal.invoice.default_fee', 145);
-            if ($ren->discount > 1) {
-                // There is a fixed discounted fee - add it to the proportional component
-                $fee += $ren->discount;
-            } else {
-                // Add proportional discount, if present
-                $fee += (1.0 - $ren->discount) * config('renewal.invoice.default_fee', 145);
-            }
+            $this->adjustTaskFees($renewal, $cost, $fee);
         }
+        
         $fee *= $fee_factor;
+    }
+
+    private function adjustTableFees($renewal, &$cost, &$fee)
+    {
+        if ($renewal->grace_period) {
+            $cost = $renewal->sme_status ? $renewal->cost_sup_reduced : $renewal->cost_sup;
+            $fee = $renewal->sme_status ? $renewal->fee_sup_reduced : $renewal->fee_sup;
+        } else {
+            $cost = $renewal->sme_status ? $renewal->cost_reduced : $renewal->cost;
+            $fee = $renewal->sme_status ? $renewal->fee_reduced : $renewal->fee;
+        }
+
+        if ($renewal->discount > 1) {
+            $fee = $renewal->discount;
+        } else {
+            $fee *= (1.0 - $renewal->discount);
+        }
+    }
+
+    private function adjustTaskFees($renewal, &$cost, &$fee) 
+    {
+        $cost = $renewal->cost;
+        $fee = $renewal->fee - config('renewal.invoice.default_fee', 145);
+        
+        if ($renewal->discount > 1) {
+            $fee += $renewal->discount;
+        } else {
+            $fee += (1.0 - $renewal->discount) * config('renewal.invoice.default_fee', 145);
+        }
     }
 
     private function _call($ids, $notify_type, $reminder)
     {
-        // TODO Manage languages of the calls
-        // TODO Check first that each client has email
-
         if (empty($ids)) {
             return 'No renewal selected.';
         }
-        $previousClient = 'ZZZZZZZZZZZZZZZZZZZZZZZZ';
-        $firstPass = true;
+
         $sum = 0;
-        // For logs
         $newjob = RenewalsLog::max('job_id') + 1;
+
         for ($grace = 0; $grace < count($notify_type); $grace++) {
-            $from_grace = ($notify_type[$grace] == 'last') ? 0 : null;
-            $to_grace = ($notify_type[$grace] == 'last') ? 1 : null;
-            $resql = Task::renewals()
-                ->whereIn('task.id', $ids)
-                ->where('grace_period', $grace)
-                ->orderBy('pa_cli.name')
-                ->get();
-            $num = $resql->count();
-            $sum = $sum + $num;
-            if ($num != 0) {
-                $i = 0;
-                $earlier = '';
-                $renewals = [];
-                $total = 0;
-                $total_ht = 0;
-                $data = [];
-                foreach ($resql as $ren) {
-                    if (empty($ren->language)) {
-                        $ren->language = 'fr';
-                    }
-                    $config_prefix = 'renewal.description.' . $ren->language;
-                    $client = $ren->client_name;
-                    $due_date = Carbon::parse($ren->due_date)->locale($ren->language);
-                    if ($grace) {
-                        //  Add six months as grace grace_period
-                        // TODO Get the grace period from a rule according to country
-                        $due_date->addMonths(6);
-                    }
-                    if ($firstPass) {
-                        $firstPass = false;
-                        $earlier = $due_date;
-                    } else {
-                        $earlier = min($earlier, $due_date);
-                    }
-                    $renewal = [];
-                    $renewal['caseref'] = $ren->caseref;
-                    $desc = sprintf(config($config_prefix . '.line1'), $ren->uid, $ren->number);
-                    if ($ren->event_name == 'FIL') {
-                        $desc .= config($config_prefix . '.filed');
-                    }
-                    if ($ren->event_name == 'GRT' || $ren->event_name == 'PR') {
-                        $desc .= config($config_prefix . '.granted');
-                    }
-                    $desc .= Carbon::parse($ren->event_date)->locale($ren->language)->isoFormat('LL');
-                    if ($ren->client_ref != '') {
-                        $desc .= '<BR>' . sprintf(config($config_prefix . '.line2'), $ren->client_ref);
-                    }
-                    if ($ren->title != '') {
-                        $desc .= '<BR>' . sprintf(config($config_prefix . '.line3'), $ren->title == '' ? $ren->short_title : $ren->title);
-                    }
-                    $renewal['language'] = $ren->language;
-                    $renewal['due_date'] = $due_date->isoFormat('L');
-                    $renewal['country'] = match ($renewal['language']) {
-                        'fr' => $ren->country_FR,
-                        'de' => $ren->country_DE,
-                        default => $ren->country_EN,
-                    };
-                    $renewal['desc'] = $desc;
-                    $renewal['annuity'] = intval($ren->detail);
-                    $vat_rate = config('renewal.invoice.vat_rate', 0.2);
-                    $renewal['vat_rate'] = $vat_rate * 100;
-
-                    $this->adjustFees($ren, $cost, $fee);
-
-                    $renewal['cost'] = number_format($cost, 2, ',', ' ');
-                    $renewal['fee'] = number_format($fee, 2, ',', ' ');
-                    $renewal['tva'] = $fee * $vat_rate;
-                    $renewal['total_ht'] = number_format($fee + $cost, 2, ',', ' ');
-                    $renewal['total'] = number_format($fee * (1 + $vat_rate) + $cost, 2, ',', ' ');
-                    $total = $total + $fee * (1 + $vat_rate) + $cost;
-                    $total_ht = $total_ht + $fee + $cost;
-                    $previousClient = $client;
-                    $i++;
-                    $log_line = [
-                        'task_id' => $ren->id,
-                        'job_id' => $newjob,
-                        'from_step' => $ren->step,
-                        'to_step' => 2,
-                        'creator' => Auth::user()->login,
-                        'created_at' => now(),
-                    ];
-                    if (!is_null($from_grace)) {
-                        $log_line = array_merge($log_line, ['from_grace' => $from_grace]);
-                    }
-                    if (!is_null($to_grace)) {
-                        $log_line = array_merge($log_line, ['to_grace' => $to_grace]);
-                    }
-                    $data[] = $log_line;
-                    $renewals[] = $renewal;
-                    if ($i < $num) {
-                        $client = $resql[$i]->client_name;
-                    }
-                    if ($client != $previousClient || $i == $num) {
-                        // Send mail because the current renewal is the last for the client or of the list
-                        // TODO  Parameter the delays. No date earlier as today.
-                        if ($notify_type == 'last') {
-                            $validity_date = $earlier->subDays(config('renewal.validity.before_last'))->isoFormat('LL');
-                        } else {
-                            $validity_date = $earlier->subDays(config('renewal.validity.before'))->isoFormat('LL');
-                            // $earlier is modified with the previous instruction, thus substracting only the difference
-                            $instruction_date = $earlier->subDays(config('renewal.validity.instruct_before') - config('renewal.validity.before'))->isoFormat('LL');
-                        }
-                        $contacts = new MatterActors();
-                        $contacts = $contacts->select('email', 'name', 'first_name')->where('matter_id', $ren->matter_id)->where('role_code', 'CNT')->get();
-                        $email_list = [];
-                        if ($contacts->count() === 0) {
-                            // No contact registered, using client email
-                            $contact = new \App\Models\Actor();
-                            $contact = $contact->where('id', $ren->client_id)->first();
-                            if ($contact->email == '') {
-                                if (config('renewal.general.mail_recipient') == 'client') {
-                                    return 'No email address for ' . $ren->client_name;
-                                } else {
-                                    $contact->email = "<< $contact->name does not have email address in database >>";
-                                }
-                            }
-                            array_push($email_list, ['email' => $contact->email, 'name' => $contact->first_name . ' ' . $contact->name]);
-                        } else {
-                            foreach ($contacts as $contact) {
-                                array_push($email_list, ['email' => $contact->email, 'name' => $contact->first_name . ' ' . $contact->name]);
-                            }
-                        }
-                        if (config('renewal.general.mail_recipient') == 'client') {
-                            $recipient = $email_list;
-                            $dest = $ren->language == 'en' ? 'Dear Sirs, ' : 'Bonjour, ';
-                        } else {
-                            $recipient = Auth::user();
-                            $dest = implode(', ', array_column($email_list, 'email'));
-                        }
-                        Mail::to($recipient)->cc(Auth::user())
-                            ->send(new sendCall(
-                                $notify_type[$grace],
-                                $renewals,
-                                $validity_date,
-                                $instruction_date,
-                                number_format($total, 2, ',', ' '),
-                                number_format($total_ht, 2, ',', ' '),
-                                $reminder ? ($ren->language == 'en' ? '[REMINDER] ' : '[RAPPEL] ') : '',
-                                $dest
-                            ));
-                        $firstPass = true;
-                        $renewals = [];
-                    }
-                }
-                RenewalsLog::insert($data);
+            // Get and process renewals for this grace period
+            $renewalsData = $this->processRenewals($ids, $grace, $notify_type[$grace]);
+            if (empty($renewalsData['renewals'])) {
+                continue;
             }
+
+            // Create logs for the processed renewals
+            $logs = $this->processLogs($renewalsData['renewals'], $newjob, $notify_type[$grace]);
+            if (!empty($logs)) {
+                RenewalsLog::insert($logs);
+            }
+
+            // Send emails grouped by client
+            $emailResult = $this->sendEmails($renewalsData, $notify_type[$grace], $reminder);
+            if (is_string($emailResult)) {
+                return $emailResult; // Return error message if email sending failed
+            }
+
+            $sum += count($renewalsData['renewals']);
         }
 
         return $sum;
     }
+
+    private function processRenewals($ids, $grace, $notifyType)
+    {
+        $renewals = Task::renewals()
+            ->whereIn('task.id', $ids)
+            ->where('grace_period', $grace)
+            ->orderBy('pa_cli.name')
+            ->get();
+
+        $processedRenewals = [];
+        $clientGroups = [];
+        $totals = [];
+
+        foreach ($renewals as $ren) {
+            $processedRenewal = $this->prepareRenewalData($ren, $grace);
+            $processedRenewals[] = $ren; // Keep original model for logs
+
+            // Group renewals by client for email sending
+            $clientGroups[$ren->client_id][] = $processedRenewal;
+
+            // Calculate totals for each client group
+            if (!isset($totals[$ren->client_id])) {
+                $totals[$ren->client_id] = ['total' => 0, 'total_ht' => 0];
+            }
+
+            // Use the processed values for totals
+            $total = (float)str_replace([' ', ','], ['', '.'], $processedRenewal['total']);
+            $total_ht = (float)str_replace([' ', ','], ['', '.'], $processedRenewal['total_ht']);
+            $totals[$ren->client_id]['total'] += $total;
+            $totals[$ren->client_id]['total_ht'] += $total_ht;
+        }
+
+        return [
+            'renewals' => $processedRenewals,
+            'clientGroups' => $clientGroups,
+            'totals' => $totals
+        ];
+    }
+
+    private function prepareRenewalData($ren, $grace)
+    {
+        if (empty($ren->language)) {
+            $ren->language = 'fr';
+        }
+
+        $config_prefix = 'renewal.description.' . $ren->language;
+                    $due_date = Carbon::parse($ren->due_date)->locale($ren->language);
+        if ($grace) {
+            $due_date->addMonths(6);
+        }
+
+        // Prepare basic renewal data
+        $renewal = [
+            'caseref' => $ren->caseref,
+            'matter_id' => $ren->matter_id,
+            'language' => $ren->language,
+            'due_date' => $due_date->format('Y-m-d'),
+            'due_date_formatted' => FormatHelper::formatDate($due_date, 'L'),
+            'country' => match ($ren->language) {
+                'fr' => $ren->country_FR,
+                'de' => $ren->country_DE,
+                default => $ren->country_EN,
+            },
+            'annuity' => intval($ren->detail)
+        ];
+
+        // Prepare description
+        $desc = sprintf(config($config_prefix . '.line1'), $ren->uid, $ren->number);
+        if ($ren->event_name == 'FIL') {
+            $desc .= config($config_prefix . '.filed');
+        }
+        if ($ren->event_name == 'GRT' || $ren->event_name == 'PR') {
+            $desc .= config($config_prefix . '.granted');
+        }
+                    $desc .= Carbon::parse($ren->event_date)->locale($ren->language)->isoFormat('LL');
+        if ($ren->client_ref != '') {
+            $desc .= '<BR>' . sprintf(config($config_prefix . '.line2'), $ren->client_ref);
+        }
+        if ($ren->title != '') {
+            $desc .= '<BR>' . sprintf(
+                config($config_prefix . '.line3'),
+                $ren->title == '' ? $ren->short_title : $ren->title
+            );
+        }
+        $renewal['desc'] = $desc;
+
+        // Calculate fees
+        $vat_rate = config('renewal.invoice.vat_rate', 0.2);
+        $this->adjustFees($ren, $cost, $fee);
+
+        $renewal['vat_rate'] = $vat_rate * 100;
+        $renewal['cost'] = number_format($cost, 2, ',', ' ');
+        $renewal['fee'] = number_format($fee, 2, ',', ' ');
+        $renewal['tva'] = $fee * $vat_rate;
+        $renewal['total_ht'] = number_format($fee + $cost, 2, ',', ' ');
+        $renewal['total'] = number_format($fee * (1 + $vat_rate) + $cost, 2, ',', ' ');
+
+        return $renewal;
+    }
+
+    private function processLogs($renewals, $newjob, $notifyType)
+    {
+        $logs = [];
+        $from_grace = ($notifyType == 'last') ? 0 : null;
+        $to_grace = ($notifyType == 'last') ? 1 : null;
+
+        foreach ($renewals as $ren) {
+            $logs[] = [
+                'task_id' => $ren->id,
+                'job_id' => $newjob,
+                'from_step' => $ren->step,
+                'to_step' => 2,
+                'creator' => Auth::user()->login,
+                'created_at' => now(),
+                'from_grace' => $from_grace,
+                'to_grace' => $to_grace
+            ];
+        }
+
+        return $logs;
+    }
+
+    private function sendEmails($renewalsData, $notifyType, $reminder)
+    {
+        foreach ($renewalsData['clientGroups'] as $clientId => $renewals) {
+            $dueDate = Carbon::parse($renewals[0]['due_date']);
+
+            // Calculate validity and instruction dates
+            $validityDate = $notifyType == 'last'
+                ? FormatHelper::formatDate($dueDate->copy()->subDays(config('renewal.validity.before_last')), 'LL')
+                : FormatHelper::formatDate($dueDate->copy()->subDays(config('renewal.validity.before')), 'LL');
+
+            $instructionDate = $notifyType != 'last'
+                ? FormatHelper::formatDate($dueDate->copy()->subDays(config('renewal.validity.instruct_before')), 'LL')
+                : null;
+
+            // Get contacts
+            $contacts = MatterActors::select('email', 'name', 'first_name')
+            ->where('matter_id', $renewals[0]['matter_id'])
+            ->where('role_code', 'CNT')
+            ->get();
+
+            if ($contacts->isEmpty()) {
+                $contact = Actor::where('id', $clientId)->first();
+                if ($contact->email == '' && config('renewal.general.mail_recipient') == 'client') {
+                    return 'No email address for ' . $contact->name;
+                }
+                $contacts = [$contact];
+            }
+
+            // Prepare email data
+            $recipient = config('renewal.general.mail_recipient') == 'client'
+            ? $contacts
+                : Auth::user();
+
+            $dest = config('renewal.general.mail_recipient') == 'client'
+            ? ($renewals[0]['language'] == 'en' ? 'Dear Sirs, ' : 'Bonjour, ')
+            : implode(', ', $contacts->pluck('email')->toArray());
+
+            $reminderPrefix = $reminder
+                ? ($renewals[0]['language'] == 'en' ? '[REMINDER] ' : '[RAPPEL] ')
+                : '';
+
+            // Send email
+            Mail::to($recipient)
+                ->cc(Auth::user())
+                ->send(new SendCall(
+                    $notifyType,
+                    $renewals,
+                    $validityDate,
+                    $instructionDate,
+                    number_format($renewalsData['totals'][$clientId]['total'], 2, ',', ' '),
+                    number_format($renewalsData['totals'][$clientId]['total_ht'], 2, ',', ' '),
+                    $reminderPrefix,
+                    $dest
+                ));
+        }
+
+        return true;
+    }
+
 
     public function topay(Request $request)
     {
@@ -392,7 +450,7 @@ class RenewalController extends Controller
         $num = 0;
         if (config('renewal.invoice.backend') == 'dolibarr' && $toinvoice) {
             $resql = $query->orderBy('client_name')->get();
-            $previousClient = 'ZZZZZZZZZZZZZZZZZZZZZZZZ';
+            $previousClient = null;
             $firstPass = true;
             // get from config/renewal.php
             $apikey = config('renewal.api.DOLAPIKEY');
@@ -429,7 +487,7 @@ class RenewalController extends Controller
                         if ($ren->event_name == 'GRT' || $ren->event_name == 'PR') {
                             $desc .= ' délivré le ';
                         }
-                        $desc .= Carbon::parse($ren->event_date)->isoFormat('LL');
+                        $desc .= FormatHelper::formatDate(Carbon::parse($ren->event_date), 'LL');
                         // TODO select preposition 'en, au, aux' according to country
                         $desc .= ' en ' . $ren->country_FR;
                         if ($ren->title != '') {
@@ -438,7 +496,7 @@ class RenewalController extends Controller
                         if ($ren->client_ref != '') {
                             $desc .= " ($ren->client_ref)";
                         }
-                        $desc .= "\nÉchéance le " . Carbon::parse($ren->due_date)->isoFormat('LL');
+                        $desc .= "\nÉchéance le " . FormatHelper::formatDate(Carbon::parse($ren->due_date), 'LL');
                         // Détermine le taux de tva
                         if ($soc_res['tva_intra'] == '' || substr($soc_res['tva_intra'], 0, 2) == 'FR') {
                             $vat_rate = 0.2;
@@ -538,7 +596,7 @@ class RenewalController extends Controller
             fputcsv($export_csv, array_map('utf8_decode', $row), ';');
         }
         rewind($export_csv);
-        $filename = Now()->isoFormat('YMMDDHHmmss') . '_invoicing.csv';
+        $filename = now()->format('YmdHis') . '_invoicing.csv';
 
         return response()->stream(
             function () use ($export_csv) {
@@ -824,7 +882,7 @@ class RenewalController extends Controller
         if ($xml->header->sender->name == 'NAME') {
             $xml->header->sender->name = Auth::user()->name;
         }
-        $xml->header->{'payment-reference-id'} = 'ANNUITY ' . date('Ymd');
+        $xml->header->{'payment-reference-id'} = 'ANNUITY ' . now()->format('Ymd');
         $total = 0;
         $first = true;
         $renewals = Task::renewals()->whereIn('task.id', $tids)->get();
