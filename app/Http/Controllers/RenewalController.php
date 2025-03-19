@@ -366,26 +366,27 @@ class RenewalController extends Controller
 
             // Get contacts
             $contacts = MatterActors::select('email', 'name', 'first_name')
-            ->where('matter_id', $renewals[0]['matter_id'])
-            ->where('role_code', 'CNT')
-            ->get();
+                ->where('matter_id', $renewals[0]['matter_id'])
+                ->where('role_code', 'CNT')
+                ->get();
 
             if ($contacts->isEmpty()) {
                 $contact = Actor::where('id', $clientId)->first();
                 if ($contact->email == '' && config('renewal.general.mail_recipient') == 'client') {
                     return 'No email address for ' . $contact->name;
                 }
-                $contacts = [$contact];
+                $contacts = collect([$contact]);
             }
 
             // Prepare email data
             $recipient = config('renewal.general.mail_recipient') == 'client'
-            ? $contacts
+                ? $contacts
                 : Auth::user();
 
+            $contactEmails = $contacts->pluck('email')->filter()->toArray();
             $dest = config('renewal.general.mail_recipient') == 'client'
-            ? ($renewals[0]['language'] == 'en' ? 'Dear Sirs, ' : 'Bonjour, ')
-            : implode(', ', $contacts->pluck('email')->toArray());
+                ? ($renewals[0]['language'] == 'en' ? 'Dear Sirs, ' : 'Bonjour, ')
+                : implode(', ', $contactEmails);
 
             $reminderPrefix = $reminder
                 ? ($renewals[0]['language'] == 'en' ? '[REMINDER] ' : '[RAPPEL] ')
