@@ -228,6 +228,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('matter', MatterController::class);
     Route::resource('actor', App\Http\Controllers\ActorController::class);
     Route::resource('user', App\Http\Controllers\UserController::class);
+    Route::get('/profile', [App\Http\Controllers\UserController::class, 'profile'])->name('user.profile');
+    Route::put('/profile/update', [App\Http\Controllers\UserController::class, 'updateProfile'])->name('user.updateProfile');
     Route::apiResource('task', App\Http\Controllers\TaskController::class);
 
     // The following resources are not accessible to clients

@@ -82,7 +82,7 @@
               @else
             <td>
               @endif
-                {{ Carbon\Carbon::parse($group->urgent_date)->isoFormat('L') }}
+                {{ App\Helpers\FormatHelper::formatDate($group->urgent_date) }}
             </td>
           </tr>
           @endif
@@ -120,7 +120,7 @@
             <div class="input-group">
               @can('readwrite')
               <button class="btn btn-light" type="button" id="clearOpenTasks">Clear selected on</button>
-              <input type="text" class="form-control me-2" name="datetaskcleardate" id="taskcleardate" value="{{ now()->isoFormat('L') }}">
+              <input type="text" class="form-control me-2" name="datetaskcleardate" id="taskcleardate" value="{{ App\Helpers\FormatHelper::formatDate(now()) }}">
               @endcan
             </div>
           </div>
@@ -159,7 +159,7 @@
           <div class="col">
             <div class="input-group">
               <button class="btn btn-light" type="button" id="clearRenewals">Clear selected on</button>
-              <input type="text" class="form-control me-2" name="renewalcleardate" id="renewalcleardate" value="{{ now()->isoFormat('L') }}">
+              <input type="text" class="form-control me-2" name="renewalcleardate" id="renewalcleardate" value="{{ App\Helpers\FormatHelper::formatDate(now()) }}">
             </div>
           </div>
           @endcan

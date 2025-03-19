@@ -61,7 +61,23 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        //
+        Gate::authorize('admin');
+        $table = new Actor;
+        $userComments = $table->getTableComments();
+
+        return view('user.edit', compact('user', 'userComments'));
+    }
+    
+    public function profile()
+    {
+        $userInfo = Auth::user()->load(['company:id,name', 'roleInfo']);
+        $table = new Actor;
+        $userComments = $table->getTableComments();
+
+        // Add a flag to indicate this is the profile view
+        $isProfileView = true;
+
+        return view('user.profile', compact('userInfo', 'userComments', 'isProfileView'));
     }
 
     public function update(Request $request, User $user)
@@ -72,14 +88,66 @@ class UserController extends Controller
             'password' => 'sometimes|confirmed|required|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[^a-zA-Z0-9]/',
             'email' => 'sometimes|required|email',
             'default_role' => 'sometimes|required',
+            'language' => 'sometimes|required|string|max:5',
         ]);
         $request->merge(['updater' => Auth::user()->login]);
         if ($request->filled('password')) {
             $request->merge(['password' => Hash::make($request->password)]);
         }
         $user->update($request->except(['_token', '_method']));
+        
+        // Update locale for the current session if current user is updating their own profile
+        if (Auth::id() === $user->id && $request->filled('language')) {
+            // Extract language part for UI translations
+            $uiLanguage = explode('_', $request->language)[0];
+            
+            // Set application locale to the language part
+            app()->setLocale($uiLanguage);
+            
+            // Store the full locale for date/number formatting
+            session(['formatting_locale' => $request->language]);
+        }
 
         return $user;
+    }
+    
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+        
+        $request->validate([
+            'password' => 'nullable|confirmed|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[^a-zA-Z0-9]/',
+            'email' => 'required|email',
+            'language' => 'required|string|max:5',
+        ]);
+        
+        $request->merge(['updater' => $user->login]);
+        
+        $dataToUpdate = [
+            'email' => $request->email,
+            'language' => $request->language,
+            'updater' => $user->login
+        ];
+        
+        if ($request->filled('password')) {
+            $dataToUpdate['password'] = Hash::make($request->password);
+        }
+        
+        $user->update($dataToUpdate);
+        
+        // Update locale for the current session
+        if ($request->filled('language')) {
+            // Extract language part for UI translations
+            $uiLanguage = explode('_', $request->language)[0];
+            
+            // Set application locale to the language part
+            app()->setLocale($uiLanguage);
+            
+            // Store the full locale for date/number formatting
+            session(['formatting_locale' => $request->language]);
+        }
+        
+        return redirect()->route('user.profile')->with('success', 'Profile updated successfully');
     }
 
     public function destroy(User $user)
