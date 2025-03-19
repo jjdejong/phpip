@@ -13,105 +13,105 @@
 <div class="card">
     <div class="card-header py-1">
         <legend>
-            Manage renewals
-            <a href="https://github.com/jjdejong/phpip/wiki/Renewal-Management" class="text-primary" target="_blank" title="Help">
+            {{ __('Manage renewals') }}
+            <a href="https://github.com/jjdejong/phpip/wiki/Renewal-Management" class="text-primary" target="_blank" title="{{ __('Help') }}">
                 <svg width="16" height="16" fill="currentColor"><use xlink:href="#question-circle-fill"/></svg>
             </a>
-            <a href="/logs" class="btn btn-info">View logs</a>
-            <button id="clearFilters" type="button" class="btn btn-info float-right">&larrpl; Clear filters</button>
+            <a href="/logs" class="btn btn-info">{{ __('View logs') }}</a>
+            <button id="clearFilters" type="button" class="btn btn-info float-right">&larrpl; {{ __('Clear filters') }}</button>
         </legend>
         <div class="tab-content">
             <div class="tab-pane {{ !$step && !$invoice_step ? 'active' : '' }}" id="p1">
                 <div class="container text-end">
                     <div class="btn-group">
-                        <button class="btn btn-info" type="button" id="callRenewals">Send call email</button>
-                        <button class="btn btn-info" type="button" id="renewalsSent">Call sent manually</button>
+                        <button class="btn btn-info" type="button" id="callRenewals">{{ __('Send call email') }}</button>
+                        <button class="btn btn-info" type="button" id="renewalsSent">{{ __('Call sent manually') }}</button>
                     </div>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 2 ? 'active' : '' }}" id="p2">
                 <div class="container text-end">
                     <div class="btn-group">
-                        <button class="btn btn-outline-info" type="button" id="reminderRenewals">Send reminder email</button>
-                        <button class="btn btn-outline-info" type="button" id="lastReminderRenewals" title="Send reminder and enter grace period">Send last reminder email</button>
-                        <button class="btn btn-info" type="button" id="instructedRenewals" title="Instructions received to pay">Payment order received</button>
-                        <button class="btn btn-info" type="button" id="abandonRenewals" title="Abandon instructions received">Abandon</button>
-                        <button class="btn btn-info" type="button" id="lapsedRenewals" title="Office lapse communication received">Lapsed</button>
+                        <button class="btn btn-outline-info" type="button" id="reminderRenewals">{{ __('Send reminder email') }}</button>
+                        <button class="btn btn-outline-info" type="button" id="lastReminderRenewals" title="{{ __('Send reminder and enter grace period') }}">{{ __('Send last reminder email') }}</button>
+                        <button class="btn btn-info" type="button" id="instructedRenewals" title="{{ __('Instructions received to pay') }}">{{ __('Payment order received') }}</button>
+                        <button class="btn btn-info" type="button" id="abandonRenewals" title="{{ __('Abandon instructions received') }}">{{ __('Abandon') }}</button>
+                        <button class="btn btn-info" type="button" id="lapsedRenewals" title="{{ __('Office lapse communication received') }}">{{ __('Lapsed') }}</button>
                     </div>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 4 ? 'active' : ''}}" id="p3">
                 <div class="container text-end">
                     <div class="btn-group">
-                        <button class="btn btn-outline-info" type="button" id="xmlRenewals" title="Generate xml files for EP or FR">Download XML order to pay</button>
-                        <button class="btn btn-info" type="button" id='doneRenewals'>Paid</button>
+                        <button class="btn btn-outline-info" type="button" id="xmlRenewals" title="{{ __('Generate xml files for EP or FR') }}">{{ __('Download XML order to pay') }}</button>
+                        <button class="btn btn-info" type="button" id='doneRenewals'>{{ __('Paid') }}</button>
                     </div>
                 </div>
             </div>
             @if (config('renewal.general.receipt_tabs'))
             <div class="tab-pane {{ $step == 6 ? 'active' : ''}}" id="p4">
                 <div class="container text-end">
-                    <button class="btn btn-info" type="button" id="receiptRenewals">Official receipts received</button>
+                    <button class="btn btn-info" type="button" id="receiptRenewals">{{ __('Official receipts received') }}</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 8 ? 'active' : ''}}" id="p5">
                 <div class="container text-end">
-                    <button class="btn btn-info" type="button" id="sendReceiptsRenewals">Receipts sent</button>
+                    <button class="btn btn-info" type="button" id="sendReceiptsRenewals">{{ __('Receipts sent') }}</button>
                 </div>
             </div>
             @endif
             <div class="tab-pane {{ $step == 12 ? 'active' : ''}}" id="p6">
                 <div class="container text-end">
-                    <button class="btn btn-info" type="button" id="lapsingRenewals">Lapse</button>
+                    <button class="btn btn-info" type="button" id="lapsingRenewals">{{ __('Lapse') }}</button>
                 </div>
             </div>
             <div class="tab-pane {{ $invoice_step == 1 ? 'active' : ''}}" id="p7">
                 <div class="container text-end">
                     <div class="btn-group">
                         @if (config('renewal.invoice.backend') == 'dolibarr')
-                        <button class="btn btn-info" type="button" id="invoiceRenewals">Generate invoice</button>
+                        <button class="btn btn-info" type="button" id="invoiceRenewals">{{ __('Generate invoice') }}</button>
                         @endif
-                        <button class="btn btn-outline-info" type="button" id="renewalsExport">Export all</button>
-                        <button class="btn btn-info" type="button" id="renewalsInvoiced">Invoiced</button>
+                        <button class="btn btn-outline-info" type="button" id="renewalsExport">{{ __('Export all') }}</button>
+                        <button class="btn btn-info" type="button" id="renewalsInvoiced">{{ __('Invoiced') }}</button>
                     </div>
                 </div>
             </div>
             <div class="tab-pane {{ $invoice_step == 2 ? 'active' : ''}}" id="p8">
                 <div class="container text-end">
-                    <button class="btn btn-info" type="button" id="invoicesPaid">Paid</button>
+                    <button class="btn btn-info" type="button" id="invoicesPaid">{{ __('Paid') }}</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 14 ? 'active' : ''}}" id="p9">
                 <div class="container text-end">
-                    <button class="btn btn-info" type="button" id="sendLapsedRenewals">Lapse communication sent</button>
+                    <button class="btn btn-info" type="button" id="sendLapsedRenewals">{{ __('Lapse communication sent') }}</button>
                 </div>
             </div>
             <div class="tab-pane {{ $step == 10 ? 'active' : ''}}" id="p10">
                 <div class="container text-end">
-                    <button class="btn btn-secondary" type="button" disabled>Closed renewals</button>
+                    <button class="btn btn-secondary" type="button" disabled>{{ __('Closed renewals') }}</button>
                 </div>
             </div>
             <div class="tab-pane lead {{ $invoice_step == 3 ? 'active' : ''}}" id="p11">
                 <div class="container text-end">
-                    <button class="btn btn-secondary" type="button" disabled>Paid invoices</button>
+                    <button class="btn btn-secondary" type="button" disabled>{{ __('Paid invoices') }}</button>
                 </div>
             </div>
         </div>
         <nav class="mt-1">
             <div class="nav nav-tabs nav-fill" id="tabsGroup">
-                <a class="nav-item nav-link {{ !$step && !$invoice_step ? 'active' : '' }}" href="#p1" data-bs-toggle="tab" data-step="0">First call</a>
-                <a class="nav-item nav-link {{ $step == 2 ? 'active' : '' }}" href="#p2" data-bs-toggle="tab" data-step="2">Reminder</a>
-                <a class="nav-item nav-link {{ $step == 4 ? 'active' : '' }}" href="#p3" data-bs-toggle="tab" data-step="4">Payment</a>
+                <a class="nav-item nav-link {{ !$step && !$invoice_step ? 'active' : '' }}" href="#p1" data-bs-toggle="tab" data-step="0">{{ __('First call') }}</a>
+                <a class="nav-item nav-link {{ $step == 2 ? 'active' : '' }}" href="#p2" data-bs-toggle="tab" data-step="2">{{ __('Reminder') }}</a>
+                <a class="nav-item nav-link {{ $step == 4 ? 'active' : '' }}" href="#p3" data-bs-toggle="tab" data-step="4">{{ __('Payment') }}</a>
                 @if (config('renewal.general.receipt_tabs'))
-                <a class="nav-item nav-link {{ $step == 6 ? 'active' : '' }}" href="#p4" data-bs-toggle="tab" data-step="6">Receipts</a>
-                <a class="nav-item nav-link {{ $step == 8 ? 'active' : '' }}" href="#p5" data-bs-toggle="tab" data-step="8">Receipts received</a>
+                <a class="nav-item nav-link {{ $step == 6 ? 'active' : '' }}" href="#p4" data-bs-toggle="tab" data-step="6">{{ __('Receipts') }}</a>
+                <a class="nav-item nav-link {{ $step == 8 ? 'active' : '' }}" href="#p5" data-bs-toggle="tab" data-step="8">{{ __('Receipts received') }}</a>
                 @endif
-                <a class="nav-item nav-link {{ $step == 12 ? 'active' : '' }}" href="#p6" data-bs-toggle="tab" data-step="12">Abandoned</a>
-                <a class="nav-item nav-link {{ $step == 14 ? 'active' : '' }}" href="#p9" data-bs-toggle="tab" data-step="14">Lapsed</a>
-                <a class="nav-item nav-link {{ $step == 10 ? 'active' : '' }}" href="#p10" data-bs-toggle="tab" data-step="10">Closed</a>
-                <a class="nav-item nav-link {{ $invoice_step == 1 ? 'active' : '' }}" href="#p7" data-bs-toggle="tab" data-invoice_step="1">Invoicing</a>
-                <a class="nav-item nav-link {{ $invoice_step == 2 ? 'active' : '' }}" href="#p8" data-bs-toggle="tab" data-invoice_step="2">Invoiced</a>
-                <a class="nav-item nav-link {{ $invoice_step == 3 ? 'active' : '' }}" href="#p11" data-bs-toggle="tab" data-invoice_step="3">Invoices paid</a>
+                <a class="nav-item nav-link {{ $step == 12 ? 'active' : '' }}" href="#p6" data-bs-toggle="tab" data-step="12">{{ __('Abandoned') }}</a>
+                <a class="nav-item nav-link {{ $step == 14 ? 'active' : '' }}" href="#p9" data-bs-toggle="tab" data-step="14">{{ __('Lapsed') }}</a>
+                <a class="nav-item nav-link {{ $step == 10 ? 'active' : '' }}" href="#p10" data-bs-toggle="tab" data-step="10">{{ __('Closed') }}</a>
+                <a class="nav-item nav-link {{ $invoice_step == 1 ? 'active' : '' }}" href="#p7" data-bs-toggle="tab" data-invoice_step="1">{{ __('Invoicing') }}</a>
+                <a class="nav-item nav-link {{ $invoice_step == 2 ? 'active' : '' }}" href="#p8" data-bs-toggle="tab" data-invoice_step="2">{{ __('Invoiced') }}</a>
+                <a class="nav-item nav-link {{ $invoice_step == 3 ? 'active' : '' }}" href="#p11" data-bs-toggle="tab" data-invoice_step="3">{{ __('Invoices paid') }}</a>
             </div>
         </nav>
     </div>
@@ -120,50 +120,50 @@
             <thead>
                 <tr class="row table-primary" id="filterFields">
                     <td class="col-2">
-                        <input class="form-control form-control-sm" name="Name" value="{{ Request::get('Name') }}" placeholder="Client">
+                        <input class="form-control form-control-sm" name="Name" value="{{ Request::get('Name') }}" placeholder="{{ __('Client') }}">
                     </td>
                     <td class="col-3">
-                        <input class="form-control form-control-sm" name="Title" value="{{ Request::get('Title') }}" placeholder="Title">
+                        <input class="form-control form-control-sm" name="Title" value="{{ Request::get('Title') }}" placeholder="{{ __('Title') }}">
                     </td>
                     <td class="col-1">
-                        <input class="form-control form-control-sm" name="Case" value="{{ Request::get('Case') }}" placeholder="Matter">
+                        <input class="form-control form-control-sm" name="Case" value="{{ Request::get('Case') }}" placeholder="{{ __('Matter') }}">
                     </td>
                     <th class="col-3 text-center">
                         <div class="row">
                             <div class="col-2">
-                                <input class="form-control form-control-sm px-0" name="Country" value="{{ Request::get('Country') }}" placeholder="Ctry">
+                                <input class="form-control form-control-sm px-0" name="Country" value="{{ Request::get('Country') }}" placeholder="{{ __('Ctry') }}">
                             </div>
                             <div class="col-2">
-                                <input class="form-control form-control-sm px-0" name="Qt" value="{{ Request::get('Qt') }}" placeholder="Qt">
+                                <input class="form-control form-control-sm px-0" name="Qt" value="{{ Request::get('Qt') }}" placeholder="{{ __('Qt') }}">
                             </div>
                             <div class="col-2">
                                 <input id="grace" name="grace_period" type="checkbox" class="btn-check">
-                                <label class="btn btn-outline-primary btn-sm" title="In grace period" for="grace">Grace</label>
+                                <label class="btn btn-outline-primary btn-sm" title="{{ __('In grace period') }}" for="grace">{{ __('Grace') }}</label>
                             </div>
                             <div class="col-3 p-1">
-                                Cost
+                                {{ __('Cost') }}
                             </div>
                             <div class="col-3 p-1">
-                                Fee
+                                {{ __('Fee') }}
                             </div>
                         </div>
                     </th>
                     <td class="col-2">
                         <div class="input-group">
-                            <input type="date" class="form-control form-control-sm px-0" name="Fromdate" id="Fromdate" title="From selected date" value="{{ Request::get('Fromdate') }}">
-                            <input type="date" class="form-control form-control-sm px-0" name="Untildate" id="Untildate" title="Until selected date" value="{{ Request::get('Untildate') }}">
+                            <input type="date" class="form-control form-control-sm px-0" name="Fromdate" id="Fromdate" title="{{ __('From selected date') }}" value="{{ Request::get('Fromdate') }}">
+                            <input type="date" class="form-control form-control-sm px-0" name="Untildate" id="Untildate" title="{{ __('Until selected date') }}" value="{{ Request::get('Untildate') }}">
                         </div>
                     </td>
                     <td class="col-1 text-center">
                         <input id="selectAll" type="checkbox" class="btn-check">
-                        <label class="btn btn-outline-primary btn-sm" title="Select/unselect all" for="selectAll">&check;</label>
+                        <label class="btn btn-outline-primary btn-sm" title="{{ __('Select/unselect all') }}" for="selectAll">&check;</label>
                     </td>
                 </tr>
             </thead>
             <tbody id="renewalList">
                 @if (count($renewals) == 0)
                 <tr class="row text-danger">
-                    The list is empty
+                    {{ __('The list is empty') }}
                 </tr>
                 @else
                 @foreach ($renewals as $task)

@@ -2,7 +2,7 @@
   @foreach ($tasks as $task)
   <tr class="row g-0">
     <td class="col text-truncate py-0">
-      <a href="/matter/{{ $task->matter_id }}/{{ $isrenewals ? 'renewals' : 'tasks' }}" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-lg" data-resource="/task/" title="All tasks">
+      <a href="/matter/{{ $task->matter_id }}/{{ $isrenewals ? 'renewals' : 'tasks' }}" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-lg" data-resource="/task/" title="{{ __('All tasks') }}">
         {{ $task->name }} {{ $task->detail }}
       </a>
     </td>
@@ -17,9 +17,9 @@
     <td class="col-2 py-0 px-2">
       {{ App\Helpers\FormatHelper::formatDate($task->due_date) }}
       @if ($task->due_date < now())
-      <div class="badge rounded-pill text-bg-danger" title="Overdue">&nbsp;</div>
+      <div class="badge rounded-pill text-bg-danger" title="{{ __('Overdue') }}">&nbsp;</div>
       @elseif ($task->due_date < now()->addWeeks(2))
-      <div class="badge rounded-pill text-bg-warning" title="Urgent">&nbsp;</div>
+      <div class="badge rounded-pill text-bg-warning" title="{{ __('Urgent') }}">&nbsp;</div>
       @endif
     </td>
     @can('readwrite')

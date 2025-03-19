@@ -2,8 +2,8 @@
 
 @section('content')
 <legend class="alert alert-dark d-flex justify-content-between py-2">
-    Users
-    <a href="user/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="Create User">Create user</a>
+    {{ __('Users') }}
+    <a href="user/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="{{ __('Create User') }}">{{ __('Create user') }}</a>
 </legend>
 <div class="row">
   <div class="col">
@@ -11,17 +11,17 @@
       <table class="table table-striped table-hover table-sm">
         <thead class="card-header">
           <tr id="filter" class="table-primary align-middle">
-            <th><input class="form-control" name="Name" placeholder="Name" value="{{ Request::get('Name') }}"></th>
-            <th>Role</th>
-            <th>Login</th>
-            <th>Company</th>
+            <th><input class="form-control" name="Name" placeholder="{{ __('Name') }}" value="{{ Request::get('Name') }}"></th>
+            <th>{{ __('Role') }}</th>
+            <th>{{ __('Login') }}</th>
+            <th>{{ __('Company') }}</th>
           </tr>
         </thead>
         <tbody id="tableList" class="card-body">
           @foreach ($userslist as $user)
           <tr class="reveal-hidden" data-id="{{ $user->id }}">
             <td>
-              <a @if($user->warn) class="text-danger text-decoration-none" @endif href="/user/{{ $user->id }}" data-panel="ajaxPanel" title="User data">
+              <a @if($user->warn) class="text-danger text-decoration-none" @endif href="/user/{{ $user->id }}" data-panel="ajaxPanel" title="{{ __('User data') }}">
                 {{ $user->name }}
               </a>
             </td>
@@ -42,11 +42,11 @@
   <div class="col-4">
     <div class="card border-info">
       <div class="card-header bg-info text-light">
-        User information
+        {{ __('User information') }}
       </div>
       <div class="card-body p-2" id="ajaxPanel">
         <div class="alert alert-info" role="alert">
-          Click on user name to view and edit details
+          {{ __('Click on user name to view and edit details') }}
         </div>
       </div>
     </div>

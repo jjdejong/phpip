@@ -4,19 +4,19 @@
   <thead class="table-light">
     <tr>
       <th>
-        Event
+        {{ __('Event') }}
         @can('readwrite')
-        <a data-bs-toggle="collapse" class="text-info ms-2" href="#addEventRow" id="addEvent" title="Add event">
+        <a data-bs-toggle="collapse" class="text-info ms-2" href="#addEventRow" id="addEvent" title="{{ __('Add event') }}">
           <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#plus-circle-fill"/></svg>
         </a>
         @endcan
       </th>
-      <th>Date</th>
-      <th>Number</th>
-      <th>Notes</th>
-      <th>Refers to</th>
+      <th>{{ __('Date') }}</th>
+      <th>{{ __('Number') }}</th>
+      <th>{{ __('Notes') }}</th>
+      <th>{{ __('Refers to') }}</th>
       @can('readonly')
-      <th>Email</th>
+      <th>{{ __('Email') }}</th>
       @endcan
     </tr>
     <tr id="addEventRow" class="collapse">
@@ -25,12 +25,12 @@
           <input type="hidden" name="matter_id" value="{{ $matter->id }}">
           <div class="input-group">
             <input type="hidden" name="code">
-            <input type="text" class="form-control form-control-sm" name="eventName" placeholder="Event" data-ac="/event-name/autocomplete/0?category={{ $matter->category_code }}" data-actarget="code">
-            <input type="text" class="form-control form-control-sm" name="event_date" placeholder="Date (xx/xx/yyyy)">
-            <input type="text" class="form-control form-control-sm" name="detail" placeholder="Detail">
-            <input type="text" class="form-control form-control-sm" name="notes" placeholder="Notes">
+            <input type="text" class="form-control form-control-sm" name="eventName" placeholder="{{ __('Event') }}" data-ac="/event-name/autocomplete/0?category={{ $matter->category_code }}" data-actarget="code">
+            <input type="text" class="form-control form-control-sm" name="event_date" placeholder="{{ __('Date (xx/xx/yyyy)') }}">
+            <input type="text" class="form-control form-control-sm" name="detail" placeholder="{{ __('Detail') }}">
+            <input type="text" class="form-control form-control-sm" name="notes" placeholder="{{ __('Notes') }}">
             <input type="hidden" name="alt_matter_id">
-            <input type="text" class="form-control form-control-sm"  placeholder="Refers to" data-ac="/matter/autocomplete" data-actarget="alt_matter_id">
+            <input type="text" class="form-control form-control-sm"  placeholder="{{ __('Refers to') }}" data-ac="/matter/autocomplete" data-actarget="alt_matter_id">
             <button type="button" class="btn btn-primary btn-sm" id="addEventSubmit">&check;</button>
             <button type="reset" class="btn btn-outline-primary btn-sm">&times;</button>
           </div>

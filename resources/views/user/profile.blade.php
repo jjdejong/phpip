@@ -2,13 +2,13 @@
 
 @section('content')
 <legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
-  My Profile
+  {{ __('My Profile') }}
 </legend>
 
 @if (session('success'))
 <div class="alert alert-success alert-dismissible fade show" role="alert">
   {{ session('success') }}
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('Close') }}"></button>
 </div>
 @endif
 

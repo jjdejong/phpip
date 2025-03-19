@@ -353,9 +353,9 @@ class RenewalController extends Controller
     private function sendEmails($renewalsData, $notifyType, $reminder)
     {
         foreach ($renewalsData['clientGroups'] as $clientId => $renewals) {
+            // Calculate validity and instruction dates
             $dueDate = Carbon::parse($renewals[0]['due_date']);
 
-            // Calculate validity and instruction dates
             $validityDate = $notifyType == 'last'
                 ? FormatHelper::formatDate($dueDate->copy()->subDays(config('renewal.validity.before_last')), 'LL')
                 : FormatHelper::formatDate($dueDate->copy()->subDays(config('renewal.validity.before')), 'LL');
@@ -366,9 +366,9 @@ class RenewalController extends Controller
 
             // Get contacts
             $contacts = MatterActors::select('email', 'name', 'first_name')
-                ->where('matter_id', $renewals[0]['matter_id'])
-                ->where('role_code', 'CNT')
-                ->get();
+            ->where('matter_id', $renewals[0]['matter_id'])
+            ->where('role_code', 'CNT')
+            ->get();
 
             if ($contacts->isEmpty()) {
                 $contact = Actor::where('id', $clientId)->first();
@@ -380,13 +380,12 @@ class RenewalController extends Controller
 
             // Prepare email data
             $recipient = config('renewal.general.mail_recipient') == 'client'
-                ? $contacts
+            ? $contacts
                 : Auth::user();
 
-            $contactEmails = $contacts->pluck('email')->filter()->toArray();
             $dest = config('renewal.general.mail_recipient') == 'client'
-                ? ($renewals[0]['language'] == 'en' ? 'Dear Sirs, ' : 'Bonjour, ')
-                : implode(', ', $contactEmails);
+            ? ($renewals[0]['language'] == 'en' ? 'Dear Sirs, ' : 'Bonjour, ')
+            : collect($contacts)->pluck('email')->implode(', ');
 
             $reminderPrefix = $reminder
                 ? ($renewals[0]['language'] == 'en' ? '[REMINDER] ' : '[RAPPEL] ')
@@ -397,7 +396,7 @@ class RenewalController extends Controller
                 ->cc(Auth::user())
                 ->send(new SendCall(
                     $notifyType,
-                    $renewals,
+                    array_values($renewals), // Convert to indexed array to ensure proper collection handling
                     $validityDate,
                     $instructionDate,
                     number_format($renewalsData['totals'][$clientId]['total'], 2, ',', ' '),

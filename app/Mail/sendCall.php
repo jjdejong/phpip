@@ -13,13 +13,17 @@ class sendCall extends Mailable
     use Queueable, SerializesModels;
 
     public $renewals;
+    protected $language;
 
     public function __construct(public $step, $renewals, public $validity_date, public $instruction_date, public $total, public $total_ht, public $subject, public $dest)
     {
         $this->renewals = collect($renewals)->sortBy([
             ['caseref', 'asc'],
             ['country', 'asc']
-        ]);
+        ])->values();
+        
+        $this->language = $this->renewals->first()['language'] ?? app()->getLocale();
+
         // Added to ask for receipt confirmation
         $this->callbacks[] = (function ($message) {
             $message->getHeaders()->addTextHeader('X-Confirm-Reading-To', '<'.Auth::user()->email.'>');
@@ -31,7 +35,7 @@ class sendCall extends Mailable
     {
         $templates = \App\Models\TemplateMember::whereHas('class', function (Builder $q) {
             $q->where('name', 'sys_renewals');
-        })->where('language', $this->renewals[0]['language'] ?? app()->getLocale());
+        })->where('language', $this->language);
         if ($this->step == 'first') {
             $template = $templates->where('category', 'firstcall');
         }
@@ -45,7 +49,11 @@ class sendCall extends Mailable
         $template = $template->firstOrFail();
         $this->subject .= $template->subject;
 
-        return $this->view('email.renewalCall', compact('template'));
+        return $this->view('email.renewalCall', [
+            'template' => $template,
+            'language' => $this->language,
+            'renewals' => $this->renewals
+        ]);
     }
 
     public function via($notifiable)

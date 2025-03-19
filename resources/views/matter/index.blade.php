@@ -27,30 +27,30 @@
     <form class="btn-toolbar" role="toolbar">
       <div class="btn-group me-3">
         <input type="checkbox" class="btn-check" name="Ctnr" {{ Request::get('Ctnr') ? 'checked' : '' }} id="btnshowctnr">
-        <label id="showContainers" class="btn btn-outline-info" for="btnshowctnr">Show Containers</label>
+        <label id="showContainers" class="btn btn-outline-info" for="btnshowctnr">{{ __('Show Containers') }}</label>
       </div>
       <div class="btn-group me-3" id="actorStatus">
         <input type="radio" class="btn-check" name="tab" {{ $tab == 1 ? '' : 'checked' }} id="btnactorview">
-        <label id="showActors" class="btn btn-outline-info" for="btnactorview">Actor View</label>
+        <label id="showActors" class="btn btn-outline-info" for="btnactorview">{{ __('Actor View') }}</label>
         <input type="radio" class="btn-check" name="tab" {{ $tab == 1 ? 'checked' : '' }} id="btnstatusview">
-        <label id="showStatus" class="btn btn-outline-info" for="btnstatusview">Status View</label>
+        <label id="showStatus" class="btn btn-outline-info" for="btnstatusview">{{ __('Status View') }}</label>
       </div>
       @can('readonly')
       <div class="btn-group me-3" id="mineAll">
         <input type="checkbox" class="btn-check" name="responsible" {{ Request::has('responsible') ? 'checked' : '' }} id="btnshowmine">
-        <label id="showResponsible" class="btn btn-outline-info" data-responsible="{{ Auth::user()->login }}" for="btnshowmine">Show Mine</label>
+        <label id="showResponsible" class="btn btn-outline-info" data-responsible="{{ Auth::user()->login }}" for="btnshowmine">{{ __('Show Mine') }}</label>
       </div>
       @endcan
       <div class="btn-group me-3">
         <input type="checkbox" class="btn-check" name="include_dead" {{ Request::get('include_dead') ? 'checked' : '' }} id="btnincludedead">
-        <label id="includeDead" class="btn btn-outline-info" for="btnincludedead">Include Dead</label>
+        <label id="includeDead" class="btn btn-outline-info" for="btnincludedead">{{ __('Include Dead') }}</label>
       </div>
       <input type="hidden" name="display_with" value="{{ Request::get('display_with') }}">
       <div class="btn-group me-3">
-        <button id="exportList" type="button" class="btn btn-secondary"> &DownArrowBar; Export</button>
+        <button id="exportList" type="button" class="btn btn-secondary"> &DownArrowBar; {{ __('Export') }}</button>
       </div>
       <div class="button-group">
-        <button id="clearFilters" type="button" class="btn btn-dark" onclick="window.location.href = '/matter'">&larrpl; Clear filters</button>
+        <button id="clearFilters" type="button" class="btn btn-dark" onclick="window.location.href = '/matter'">&larrpl; {{ __('Clear filters') }}</button>
       </div>
     </form>
   </div>
@@ -60,73 +60,73 @@
         <tr id="filterFields">
           <td>
             <div class="input-group input-group-sm">
-              <input class="form-control" name="Ref" placeholder="Ref" value="{{ Request::get('Ref') }}">
+              <input class="form-control" name="Ref" placeholder="{{ __('Ref') }}" value="{{ Request::get('Ref') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'caseref' ? 'active' : '' }}" type="button" data-sortkey="caseref" data-sortdir="desc">&UpDownArrow;</button>
             </div>
           </td>
-          <td><input class="form-control form-control-sm px-0" size="3" name="Cat" placeholder="Cat" value="{{ Request::get('Cat') }}"></td>
+          <td><input class="form-control form-control-sm px-0" size="3" name="Cat" placeholder="{{ __('Cat') }}" value="{{ Request::get('Cat') }}"></td>
           <td>
             <div class="input-group input-group-sm">
-              <input class="form-control" name="Status" placeholder="Status" value="{{ Request::get('Status') }}">
+              <input class="form-control" name="Status" placeholder="{{ __('Status') }}" value="{{ Request::get('Status') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'event_name.name' ? 'active' : '' }}" type="button" data-sortkey="event_name.name" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
           @can('readonly')
           <td class="tab0 {{ $hideTab0 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control" name="Client" placeholder="Client" value="{{ Request::get('Client') }}">
+              <input class="form-control" name="Client" placeholder="{{ __('Client') }}" value="{{ Request::get('Client') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'cli.name' ? 'active' : '' }}" type="button" data-sortkey="cli.name" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
           @endcan
-          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="8" name="ClRef" placeholder="Cl. Ref" value="{{ Request::get('ClRef') }}"></td>
+          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="8" name="ClRef" placeholder="{{ __('Cl. Ref') }}" value="{{ Request::get('ClRef') }}"></td>
           <td class="tab0 {{ $hideTab0 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control" name="Applicant" placeholder="Applicant" value="{{ Request::get('Applicant') }}">
+              <input class="form-control" name="Applicant" placeholder="{{ __('Applicant') }}" value="{{ Request::get('Applicant') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'app.name' ? 'active' : '' }}" type="button" data-sortkey="app.name" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
           <td class="tab0 {{ $hideTab0 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control" name="Agent" placeholder="Agent" value="{{ Request::get('Agent') }}">
+              <input class="form-control" name="Agent" placeholder="{{ __('Agent') }}" value="{{ Request::get('Agent') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'agt.name' ? 'active' : '' }}" type="button" data-sortkey="agt.name" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="16" name="AgtRef" placeholder="Agt. Ref" value="{{ Request::get('AgtRef') }}"></td>
-          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Title" placeholder="Title" value="{{ Request::get('Title') }}"></td>
+          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="16" name="AgtRef" placeholder="{{ __('Agt. Ref') }}" value="{{ Request::get('AgtRef') }}"></td>
+          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Title" placeholder="{{ __('Title') }}" value="{{ Request::get('Title') }}"></td>
           <td class="tab0 {{ $hideTab0 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control" name="Inventor1" placeholder="Inventor" value="{{ Request::get('Inventor1') }}">
+              <input class="form-control" name="Inventor1" placeholder="{{ __('Inventor') }}" value="{{ Request::get('Inventor1') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'inv.name' ? 'active' : '' }}" type="button" data-sortkey="inv.name" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
           <td class="tab1 {{ $hideTab1 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control" name="Status_date" placeholder="Date" value="{{ Request::get('Status_date') }}">
+              <input class="form-control" name="Status_date" placeholder="{{ __('Date') }}" value="{{ Request::get('Status_date') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'status.event_date' ? 'active' : '' }}" type="button" data-sortkey="status.event_date" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
           <td class="tab1 {{ $hideTab1 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control" name="Filed" placeholder="Filed" value="{{ Request::get('Filed') }}">
+              <input class="form-control" name="Filed" placeholder="{{ __('Filed') }}" value="{{ Request::get('Filed') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'fil.event_date' ? 'active' : '' }}" type="button" data-sortkey="fil.event_date" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="FilNo" placeholder="Number" value="{{ Request::get('FilNo') }}"></td>
+          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="FilNo" placeholder="{{ __('Number') }}" value="{{ Request::get('FilNo') }}"></td>
           <td class="tab1 {{ $hideTab1 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control" name="Published" placeholder="Published" value="{{ Request::get('Published') }}">
+              <input class="form-control" name="Published" placeholder="{{ __('Published') }}" value="{{ Request::get('Published') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'pub.event_date' ? 'active' : '' }}" type="button" data-sortkey="pub.event_date" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="PubNo" placeholder="Number" value="{{ Request::get('PubNo') }}"></td>
+          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="PubNo" placeholder="{{ __('Number') }}" value="{{ Request::get('PubNo') }}"></td>
           <td class="tab1 {{ $hideTab1 }}">
             <div class="input-group input-group-sm">
-              <input class="form-control" name="Granted" placeholder="Granted/Reg'd" value="{{ Request::get('Granted') }}">
+              <input class="form-control" name="Granted" placeholder="{{ __('Granted/Reg\'d') }}" value="{{ Request::get('Granted') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'grt.event_date' ? 'active' : '' }}" type="button" data-sortkey="grt.event_date" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="GrtNo" placeholder="Number" value="{{ Request::get('GrtNo') }}"></td>
+          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="GrtNo" placeholder="{{ __('Number') }}" value="{{ Request::get('GrtNo') }}"></td>
         </tr>
       </thead>
       <tbody id="matterList">

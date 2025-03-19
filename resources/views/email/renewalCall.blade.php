@@ -1,4 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+@php
+    app()->setLocale($language);
+@endphp
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,13 +24,13 @@
         <!-- Body content -->
         <thead>
             <tr>
-                <th>Titre</th><th>Juridiction</th><th>Année</th><th>Échéance</th><th>Taxe</th><th>Honoraires</th>
-                <th>Total HT (€)</th>
+                <th>{{ __('Title') }}</th><th>{{ __('Jurisdiction') }}</th><th>{{ __('Year') }}</th><th>{{ __('Due date') }}</th><th>{{ __('Fee') }}</th><th>{{ __('Service charge') }}</th>
+                <th>{{ __('Total excl. VAT') }} (€)</th>
                 @if (config('renewal.general.vat_column'))
-                <th>Taux TVA</th>
-                <th>Total TTC (€)</th>
+                <th>{{ __('VAT rate') }}</th>
+                <th>{{ __('Total incl. VAT') }} (€)</th>
                 @endif
-                <th>Décision</th>
+                <th>{{ __('Decision') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -48,7 +51,7 @@
             </tr>
             @endforeach
             <tr>
-                <td style="text-align: right;" colspan="6">Total&nbsp;:</td>
+                <td style="text-align: right;" colspan="6">{{ __('Total') }}&nbsp;:</td>
                 <td style="text-align: right;">{{ $total_ht }}</td>
                 @if (config('renewal.general.vat_column'))
                 <td></td>
@@ -58,8 +61,8 @@
             </tr>
         </tbody>
     </table>
-    <p>Offre valide jusqu'au {{ $validity_date}}.</p>
-    <p>Sincères salutations,</p>
+    <p>{{ __('Offer valid until') }} {{ $validity_date}}.</p>
+    <p>{{ __('Best regards') }},</p>
     <p>{{ Auth::user()->name }}</p>
 </body>
 </html>

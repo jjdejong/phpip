@@ -103,15 +103,15 @@
         <form method="POST" action="/matter/search">
           @csrf
           <div class="input-group">
-            <input type="search" class="form-control" id="matter-search" name="matter_search" placeholder="Search" autocomplete="off">
+            <input type="search" class="form-control" id="matter-search" name="matter_search" placeholder="{{ __('Search') }}" autocomplete="off">
             <select class="form-select" id="matter-option" name="search_field">
-              <option value="Ref" selected>Case reference</option>
-              <option value="Responsible">Responsible</option>
-              <option value="Title">Title</option>
-              <option value="Client">Client</option>
-              <option value="Applicant">Applicant</option>
+              <option value="Ref" selected>{{ __('Case reference') }}</option>
+              <option value="Responsible">{{ __('Responsible') }}</option>
+              <option value="Title">{{ __('Title') }}</option>
+              <option value="Client">{{ __('Client') }}</option>
+              <option value="Applicant">{{ __('Applicant') }}</option>
             </select>
-            <button class="btn btn-info" type="submit">Go</button>
+            <button class="btn btn-info" type="submit">{{ __('Go') }}</button>
           </div>
         </form>
         @endauth
@@ -140,19 +140,19 @@
                   </li>
               @endif
             @else
-            <li><a class="nav-link" href={{ route('home') }}>Dashboard</a></li>
+            <li><a class="nav-link" href={{ route('home') }}>{{ __('Dashboard') }}</a></li>
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
-                Matters
+                {{ __('Matters') }}
               </a>
               <ul class="dropdown-menu">
-                <a class="dropdown-item" href="{{ url('/matter') }}">All</a>
-                <a class="dropdown-item" href="{{ url('/matter?display_with=PAT') }}">Patents</a>
-                <a class="dropdown-item" href="{{ url('/matter?display_with=TM') }}">Trademarks</a>
+                <a class="dropdown-item" href="{{ url('/matter') }}">{{ __('All') }}</a>
+                <a class="dropdown-item" href="{{ url('/matter?display_with=PAT') }}">{{ __('Patents') }}</a>
+                <a class="dropdown-item" href="{{ url('/matter?display_with=TM') }}">{{ __('Trademarks') }}</a>
                 @can('readwrite')
-                <a class="dropdown-item" href="/matter/create?operation=new" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" title="Create Matter">Create</a>
+                <a class="dropdown-item" href="/matter/create?operation=new" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" title="{{ __('Create Matter') }}">{{ __('Create') }}</a>
                 <hr class="dropdown-divider">
-                <a class="dropdown-item" href="/matter/create?operation=ops" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" title="Create family from OPS">Create family from OPS</a>
+                <a class="dropdown-item" href="/matter/create?operation=ops" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" title="{{ __('Create family from OPS') }}">{{ __('Create family from OPS') }}</a>
                 @endcan
               </ul>
             </li>
@@ -160,33 +160,33 @@
             @can('readwrite')
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
-                Tools
+                {{ __('Tools') }}
               </a>
               <ul class="dropdown-menu">
-                <a class="dropdown-item" href="{{ url('/renewal') }}">Manage renewals</a>
-                <a class="dropdown-item" href="{{ url('/fee') }}">Renewal fees</a>
+                <a class="dropdown-item" href="{{ url('/renewal') }}">{{ __('Manage renewals') }}</a>
+                <a class="dropdown-item" href="{{ url('/fee') }}">{{ __('Renewal fees') }}</a>
                 @can('admin')
-                <a class="dropdown-item" href="{{ url('/rule') }}">Rules</a>
-                <a class="dropdown-item" href="{{ url('/document') }}">Email template classes</a>
-                <a class="dropdown-item" href="{{ url('/template-member') }}">Email templates</a>
+                <a class="dropdown-item" href="{{ url('/rule') }}">{{ __('Rules') }}</a>
+                <a class="dropdown-item" href="{{ url('/document') }}">{{ __('Email template classes') }}</a>
+                <a class="dropdown-item" href="{{ url('/template-member') }}">{{ __('Email templates') }}</a>
                 @endcan
               </ul>
             </li>
             @endcan
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
-                Tables
+                {{ __('Tables') }}
               </a>
               <ul class="dropdown-menu">
-                <a class="dropdown-item" href="{{ url('/actor') }}">Actors</a>
+                <a class="dropdown-item" href="{{ url('/actor') }}">{{ __('Actors') }}</a>
                 @can('admin')
-                <a class="dropdown-item" href="{{ url('/user') }}">DB Users</a>
-                <a class="dropdown-item" href="{{ url('/eventname') }}">Event names</a>
-                <a class="dropdown-item" href="{{ url('/category') }}">Categories</a>
-                <a class="dropdown-item" href="{{ url('/role') }}">Actor roles</a>
-                <a class="dropdown-item" href="{{ url('/default_actor') }}">Default actors</a>
-                <a class="dropdown-item" href="{{ url('/type') }}">Matter types</a>
-                <a class="dropdown-item" href="{{ url('/classifier_type') }}">Classifier types</a>
+                <a class="dropdown-item" href="{{ url('/user') }}">{{ __('DB Users') }}</a>
+                <a class="dropdown-item" href="{{ url('/eventname') }}">{{ __('Event names') }}</a>
+                <a class="dropdown-item" href="{{ url('/category') }}">{{ __('Categories') }}</a>
+                <a class="dropdown-item" href="{{ url('/role') }}">{{ __('Actor roles') }}</a>
+                <a class="dropdown-item" href="{{ url('/default_actor') }}">{{ __('Default actors') }}</a>
+                <a class="dropdown-item" href="{{ url('/type') }}">{{ __('Matter types') }}</a>
+                <a class="dropdown-item" href="{{ url('/classifier_type') }}">{{ __('Classifier types') }}</a>
                 @endcan
               </ul>
             </li>
@@ -232,7 +232,7 @@
             </div>
             <div class="modal-footer">
               <span id="footerAlert" class="alert float-start"></span>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
             </div>
           </div>
         </div>

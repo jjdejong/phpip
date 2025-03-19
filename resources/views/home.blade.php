@@ -16,19 +16,19 @@
   <div class="col-4">
     <div class="card border-info">
       <div class="card-header text-white bg-info p-1">
-        <span class="lead">Categories</span>
+        <span class="lead">{{ __('Categories') }}</span>
         @can('readwrite')
-        <a href="/matter/create?operation=new" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" class="btn btn-primary float-end" title="Create Matter">Create matter</a>
+        <a href="/matter/create?operation=new" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" class="btn btn-primary float-end" title="{{ __('Create Matter') }}">{{ __('Create matter') }}</a>
         @endcan
       </div>
       <div class="card-body pt-0">
         <table  class="table table-striped table-sm">
           <tr>
             <th></th>
-            <th>Count</th>
+            <th>{{ __('Count') }}</th>
             <td>
               @can('readwrite')
-              <span class="float-end text-secondary">New</span>
+              <span class="float-end text-secondary">{{ __('New') }}</span>
               @endcan
             </td>
           </tr>
@@ -54,7 +54,7 @@
     </div>
     <div class="card border-info mt-1">
       <div class="card-header text-white bg-info p-1">
-        <span class="lead">Users tasks</span>
+        <span class="lead">{{ __('Users tasks') }}</span>
         @can('readwrite')
         <button class="btn btn-transparent text-info float-end" disabled>I</button> {{--  This invisible button is only for improving the layout! --}}
         @endcan
@@ -63,8 +63,8 @@
         <table class="table table-striped table-sm">
           <tr>
             <th></th>
-            <th>Open</th>
-            <th>Hottest</th>
+            <th>{{ __('Open') }}</th>
+            <th>{{ __('Hottest') }}</th>
           </tr>
         @foreach ($taskscount as $group)
           @if ($group->no_of_tasks > 0)
@@ -96,13 +96,13 @@
       <div class="card-header text-white bg-primary p-1">
         <form class="row">
           <div class="lead col-2">
-            Open tasks
+            {{ __('Open tasks') }}
           </div>
           @can('readonly')
           <div class="col-6">
             <div class="input-group">
               <label class="btn btn-info">
-                <input type="radio" class="btn-check" name="what_tasks" id="alltasks" value="0">Everyone
+                <input type="radio" class="btn-check" name="what_tasks" id="alltasks" value="0">{{ __('Everyone') }}
               </label>
               @if(!Request::filled('user_dashboard'))
               <label class="btn btn-info">
@@ -110,16 +110,16 @@
               </label>
               @endif
               <label class="btn btn-info">
-                <input type="radio" class="btn-check" name="what_tasks" id="clientTasks" value="2">Client
+                <input type="radio" class="btn-check" name="what_tasks" id="clientTasks" value="2">{{ __('Client') }}
               </label>
               <input type="hidden" id="clientId" name="client_id">
-              <input type="text" class="form-control me-3" data-ac="/actor/autocomplete" data-actarget="client_id" placeholder="Select Client">
+              <input type="text" class="form-control me-3" data-ac="/actor/autocomplete" data-actarget="client_id" placeholder="{{ __('Select Client') }}">
             </div>
           </div>
           <div class="col-4">
             <div class="input-group">
               @can('readwrite')
-              <button class="btn btn-light" type="button" id="clearOpenTasks">Clear selected on</button>
+              <button class="btn btn-light" type="button" id="clearOpenTasks">{{ __('Clear selected on') }}</button>
               <input type="text" class="form-control me-2" name="datetaskcleardate" id="taskcleardate" value="{{ App\Helpers\FormatHelper::formatDate(now()) }}">
               @endcan
             </div>
@@ -130,17 +130,17 @@
           <div class="col">
           </div>
           <div class="col-2">
-            Matter
+            {{ __('Matter') }}
           </div>
           <div class="col">
-            Description
+            {{ __('Description') }}
           </div>
           <div class="col-2">
-            Due date
+            {{ __('Due date') }}
           </div>
           @can('readwrite')
           <div class="col-1">
-            Clear
+            {{ __('Clear') }}
           </div>
           @endcan
         </div>
@@ -153,12 +153,12 @@
       <div class="card-header text-white bg-primary p-1">
         <div class="row">
           <div class="lead col-8">
-            Open renewals
+            {{ __('Open renewals') }}
           </div>
           @can('readwrite')
           <div class="col">
             <div class="input-group">
-              <button class="btn btn-light" type="button" id="clearRenewals">Clear selected on</button>
+              <button class="btn btn-light" type="button" id="clearRenewals">{{ __('Clear selected on') }}</button>
               <input type="text" class="form-control me-2" name="renewalcleardate" id="renewalcleardate" value="{{ App\Helpers\FormatHelper::formatDate(now()) }}">
             </div>
           </div>
@@ -168,17 +168,17 @@
           <div class="col">
           </div>
           <div class="col-2">
-            Matter
+            {{ __('Matter') }}
           </div>
           <div class="col">
-            Description
+            {{ __('Description') }}
           </div>
           <div class="col-2">
-            Due date
+            {{ __('Due date') }}
           </div>
           @can('readwrite')
           <div class="col-1">
-            Clear
+            {{ __('Clear') }}
           </div>
           @endcan
         </div>

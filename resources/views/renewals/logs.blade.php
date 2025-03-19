@@ -2,7 +2,7 @@
 
 @section('content')
 <legend class="alert alert-dark py-2 mb-1">
-  Renewal logs
+  {{ __('Renewal logs') }}
 </legend>
 <div class="row">
   <div class="col">
@@ -10,20 +10,20 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="table-primary align-middle">
-            <th><input class="form-control" data-source="/logs" name="Matter" placeholder="Matter"></th>
-            <th><input class="form-control" data-source="/logs" name="Client" placeholder="Client"></th>
-            <th><input class="form-control" data-source="/logs" name="Job" placeholder="Job"></th>
-            <th><input class="form-control" data-source="/logs" name="User" placeholder="User"></th>
+            <th><input class="form-control" data-source="/logs" name="Matter" placeholder="{{ __('Matter') }}"></th>
+            <th><input class="form-control" data-source="/logs" name="Client" placeholder="{{ __('Client') }}"></th>
+            <th><input class="form-control" data-source="/logs" name="Job" placeholder="{{ __('Job') }}"></th>
+            <th><input class="form-control" data-source="/logs" name="User" placeholder="{{ __('User') }}"></th>
             <th>
               <input type="date" class="form-control form-control-sm" name="Fromdate" id="Fromdate"
-                title="From selected date" value="{{ Request::get('Fromdate') }}">
+                title="{{ __('From selected date') }}" value="{{ Request::get('Fromdate') }}">
               <input type="date" class="form-control form-control-sm" name="Untildate" id="Untildate"
-                title="Until selected date" value="{{ Request::get('Untildate') }}">
+                title="{{ __('Until selected date') }}" value="{{ Request::get('Untildate') }}">
             </th>
-            <th>Qt</th>
-            <th>Steps</th>
-            <th>Grace</th>
-            <th>Invoicing</th>
+            <th>{{ __('Qt') }}</th>
+            <th>{{ __('Steps') }}</th>
+            <th>{{ __('Grace') }}</th>
+            <th>{{ __('Invoicing') }}</th>
           </tr>
         </thead>
         <tbody id="tableList">
@@ -31,13 +31,13 @@
             <tr data-id="{{ $log->id }}" class="reveal-hidden">
               <td>
                 @if( is_null($log->task))
-                  Task deleted
+                  {{ __('Task deleted') }}
                 @else
                   <a href="/matter/{{ $log->task->matter->id }}">{{ $log->task->matter->uid }}</a>
                 @endif
               </td>
               <td>
-                {{ is_null($log->task) ? 'Task deleted' : $log->task->matter->client->name }}
+                {{ is_null($log->task) ? __('Task deleted') : $log->task->matter->client->name }}
               </td>
               <td>{{ $log->job_id }}</td>
               <td>{{ $log->creatorInfo->name }}</td>

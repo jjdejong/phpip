@@ -7,12 +7,12 @@
   <body>
     <table border="1" cellspacing="0" cellpadding="5">
       <tr>
-        <th>Ref</th>
-        <th>Cat</th>
-        <th>Client</th>
-        <th>Task</th>
-        <th>Due</th>
-        <th>Resp.</th>
+        <th>{{ __('Ref') }}</th>
+        <th>{{ __('Cat') }}</th>
+        <th>{{ __('Client') }}</th>
+        <th>{{ __('Task') }}</th>
+        <th>{{ __('Due date') }}</th>
+        <th>{{ __('Responsible') }}</th>
       </tr>
       @foreach($tasks as $task)
       <tr>

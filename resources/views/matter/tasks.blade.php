@@ -4,24 +4,24 @@
 <table class="table table-hover table-sm">
   <thead class="table-light">
     <tr>
-      <th>Tasks by event</th>
-      <th>Due date</th>
-      <th>Ack</th>
-      <th>Date</th>
+      <th>{{ __('Tasks by event') }}</th>
+      <th>{{ __('Due date') }}</th>
+      <th>{{ __('Ack') }}</th>
+      <th>{{ __('Date') }}</th>
       @can('readonly')
       @if($is_renewals)
       @php $ncols += 3; @endphp
-      <th>Cost</th>
-      <th>Fee</th>
-      <th>Cur.</th>
+      <th>{{ __('Cost') }}</th>
+      <th>{{ __('Fee') }}</th>
+      <th>{{ __('Cur.') }}</th>
       {{-- <th>Time</th> --}}
       @endif
       @endcan
-      <th>By</th>
-      <th>Notes</th>
+      <th>{{ __('By') }}</th>
+      <th>{{ __('Notes') }}</th>
       <th style="width: 24px;">&nbsp;</th>
       @can('readonly')
-      <th>Email</th>
+      <th>{{ __('Email') }}</th>
       @endcan
     </tr>
   </thead>
@@ -35,17 +35,17 @@
           @can('readwrite')
           <span class="hidden-action float-end">
             <li class="list-inline-item">
-              <a href="#" class="text-primary" id="addTaskToEvent" data-event_id="{{ $event->id }}" title="Add task to {{ $event->info->name }}">
+              <a href="#" class="text-primary" id="addTaskToEvent" data-event_id="{{ $event->id }}" title="{{ __('Add task to') }} {{ $event->info->name }}">
                 <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#plus-circle-fill"/></svg>
               </a>
             </li>
             <li class="list-inline-item">
-              <a href="#" class="text-danger" id="deleteEvent" data-event_id="{{ $event->id }}" title="Delete event (with tasks)">
+              <a href="#" class="text-danger" id="deleteEvent" data-event_id="{{ $event->id }}" title="{{ __('Delete event (with tasks)') }}">
                 <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#trash-fill"/></svg>
               </a>
             </li>
             <li class="list-inline-item" style="font-size:1rem">
-              <a href="#" class="text-secondary" id="regenerateTasks" data-event_id="{{ $event->id }}" title="Regenerate Tasks">
+              <a href="#" class="text-secondary" id="regenerateTasks" data-event_id="{{ $event->id }}" title="{{ __('Regenerate Tasks') }}">
                 <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#arrow-repeat"/></svg>
               </a>
             </li>
@@ -85,7 +85,7 @@
       <td><input type="text" class="form-control noformat" name="notes" value="{{ $task->notes }}"></td>
       <td>
         @can('readwrite')
-        <a href="#" class="hidden-action text-danger" id="deleteTask" title="Delete task">
+        <a href="#" class="hidden-action text-danger" id="deleteTask" title="{{ __('Delete task') }}">
           <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#trash"/></svg>
         </a>
         @endcan
@@ -113,12 +113,12 @@
         <input type="hidden" name="trigger_id">
         <div class="input-group">
           <input type="hidden" name="code">
-          <input type="text" class="form-control form-control-sm" placeholder="Task" data-ac="/event-name/autocomplete/1?category={{ $matter->category_code }}" data-actarget="code">
-          <input type="text" class="form-control form-control-sm" name="detail" placeholder="Detail">
-          <input type="text" class="form-control form-control-sm" placeholder="Due date (xx/xx/yyyy)" name="due_date">
+          <input type="text" class="form-control form-control-sm" placeholder="{{ __('Task') }}" data-ac="/event-name/autocomplete/1?category={{ $matter->category_code }}" data-actarget="code">
+          <input type="text" class="form-control form-control-sm" name="detail" placeholder="{{ __('Detail') }}">
+          <input type="text" class="form-control form-control-sm" placeholder="{{ __('Due date (xx/xx/yyyy)') }}" name="due_date">
           <input type="hidden" name="assigned_to">
-          <input type="text" class="form-control form-control-sm" placeholder="Assigned to" data-ac="/user/autocomplete" data-actarget="assigned_to">
-          <input type="text" class="form-control form-control-sm" name="notes" placeholder="Notes">
+          <input type="text" class="form-control form-control-sm" placeholder="{{ __('Assigned to') }}" data-ac="/user/autocomplete" data-actarget="assigned_to">
+          <input type="text" class="form-control form-control-sm" name="notes" placeholder="{{ __('Notes') }}">
           <button type="button" class="btn btn-primary btn-sm" id="addTaskSubmit">&check;</button>
           <button type="reset" class="btn btn-outline-primary btn-sm" id="addTaskReset">&times;</button>
         </div>
