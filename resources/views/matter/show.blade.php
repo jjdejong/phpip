@@ -16,7 +16,8 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
         <a class="bg-primary text-white lead {{ $matter->dead ? 'text-decoration-line-through' : '' }}" 
            href="/matter?Ref= {{ $matter->caseref }}" 
            title="{{ __('See family') }}"
-           target="_blank">
+           target="_blank"
+           id="uid">
            {{ $matter->uid }}
         </a>
         ({{ $matter->category->category }})
