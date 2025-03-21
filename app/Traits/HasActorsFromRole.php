@@ -24,6 +24,7 @@ trait HasActorsFromRole
         return $this->actors()
             ->with('actor')
             ->where('role_code', $role)
+            ->orderBy('display_order')
             ->get();
     }
 

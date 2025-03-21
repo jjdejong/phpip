@@ -755,12 +755,12 @@ class Matter extends Model
      */
     public function getOwnerName(): ?string
     {
-        $owners = $this->owners()->pluck('name')->unique()->sort();
+        $owners = $this->owners()->pluck('name')->unique();
 
         if ($owners->isNotEmpty()) {
             return $owners->implode("\n");
         }
 
-        return $this->applicantsFromLnk()->pluck('name')->unique()->sort()->implode("\n");
+        return $this->applicantsFromLnk()->pluck('name')->unique()->implode("\n");
     }
 }
