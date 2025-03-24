@@ -10,6 +10,14 @@ Head for the [Wiki](https://github.com/jjdejong/phpip/wiki) for further informat
 
 # New features
 
+## 2025-03-19 Implemented localization for the UI in English, French and German
+
+The locale set for parameter APP_LOCALE of the `.env` file is applied to the UI. This can be "en_US", "en_GB", "fr" or "de". The _US and _GB variants differ in the date formats. 
+
+The tables containing names for the events/tasks, roles, categories, types, etc. have not been localized yet, since this requires a different approach. 
+
+It is intended that each user can set their preferred locale in their profile, whereby a same installation can be used in diifferent languages. A user profile form has been implemented for this, but it is not fully functional yet.
+
 ## 2025-01-17 Added flexible fields for tasks in the document merge function
 
 Now the due date of any task defined in the rules table can be included in the document template for merging. The format is {Task Name}_{Detail}_Due_Date, where "Task Name" and "Detail" are the values as provided in the rules table. Eg. ${Request_Examination_Due_Date}. Thank you @AxelDeneu.
