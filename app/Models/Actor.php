@@ -11,9 +11,26 @@ class Actor extends Model
     
     protected $table = 'actor';
 
-    protected $hidden = ['login', 'last_login', 'password', 'remember_token', 'creator', 'created_at', 'updated_at', 'updater'];
+    // Hide these from JSON/array output
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'creator',
+        'updater',
+        'created_at',
+        'updated_at',
+        'login'
+    ];
 
-    protected $guarded = ['id', 'password', 'created_at', 'updated_at'];
+    // Prevent mass assignment of these
+    protected $guarded = [
+        'id',
+        'password',
+        'remember_token',
+        'creator',
+        'created_at',
+        'updated_at'
+    ];
 
     /**
      * The attributes that should be cast.
@@ -24,16 +41,6 @@ class Actor extends Model
         'language' => 'string',
     ];
     
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'login', 'password', 'email', 'language', 'company_id',
-        'default_role', 'phone', 'notes', 'updater'
-    ];
-
     /**
      * Get the actor's preferred language.
      *
