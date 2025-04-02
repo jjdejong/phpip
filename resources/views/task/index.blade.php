@@ -15,7 +15,7 @@
       {{ $task->title ?? $task->trademark }}
     </td>
     <td class="col-2 py-0 px-2">
-      {{ App\Helpers\FormatHelper::formatDate($task->due_date) }}
+      {{ \Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}
       @if ($task->due_date < now())
       <div class="badge rounded-pill text-bg-danger" title="{{ __('Overdue') }}">&nbsp;</div>
       @elseif ($task->due_date < now()->addWeeks(2))

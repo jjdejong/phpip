@@ -22,15 +22,13 @@ class SetLocale
             if (Auth::check() && Auth::user()->language) {
                 $userLocale = Auth::user()->language;
                 
-                // Extract the language code ('en' from 'en_US' or 'fr' from 'fr')
-                $languageCode = explode('_', $userLocale)[0];
+                // Set the application locale to the full locale (e.g., 'en_US', 'fr')
+                // Laravel will automatically extract the primary language for translations
+                app()->setLocale($userLocale);
                 
-                // Set the application locale
-                app()->setLocale($languageCode);
-                
-                // Store the full locale for date formatting
+                // No need to store separate formatting_locale anymore, we use the same locale for everything
                 if ($request->session()->isStarted()) {
-                    $request->session()->put('formatting_locale', $userLocale);
+                    $request->session()->put('locale', $userLocale);
                 }
             }
         }

@@ -201,7 +201,7 @@
                             </div>
                         </td>
                         <td class="col-2 text-center">
-                            {{ App\Helpers\FormatHelper::formatDate($task->due_date) }}
+                            {{ \Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}
                             @if ($task->done)
                             <span class="text-success" title="Done">
                                 <svg width="14" height="14" fill="currentColor"><use xlink:href="#check-circle-fill"/></svg>

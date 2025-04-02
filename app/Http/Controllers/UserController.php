@@ -98,14 +98,11 @@ class UserController extends Controller
         
         // Update locale for the current session if current user is updating their own profile
         if (Auth::id() === $user->id && $request->filled('language')) {
-            // Extract language part for UI translations
-            $uiLanguage = explode('_', $request->language)[0];
+            // Set application locale to the full locale (e.g., 'en_US', 'fr')
+            app()->setLocale($request->language);
             
-            // Set application locale to the language part
-            app()->setLocale($uiLanguage);
-            
-            // Store the full locale for date/number formatting
-            session(['formatting_locale' => $request->language]);
+            // Store the locale in session
+            session(['locale' => $request->language]);
         }
 
         return $user;
@@ -137,14 +134,11 @@ class UserController extends Controller
         
         // Update locale for the current session
         if ($request->filled('language')) {
-            // Extract language part for UI translations
-            $uiLanguage = explode('_', $request->language)[0];
+            // Set application locale to the full locale (e.g., 'en_US', 'fr')
+            app()->setLocale($request->language);
             
-            // Set application locale to the language part
-            app()->setLocale($uiLanguage);
-            
-            // Store the full locale for date/number formatting
-            session(['formatting_locale' => $request->language]);
+            // Store the locale in session
+            session(['locale' => $request->language]);
         }
         
         return redirect()->route('user.profile')->with('success', 'Profile updated successfully');

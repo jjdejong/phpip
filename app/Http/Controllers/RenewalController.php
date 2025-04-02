@@ -12,7 +12,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use App\Helpers\FormatHelper;
 
 class RenewalController extends Controller
 {
@@ -285,7 +284,7 @@ class RenewalController extends Controller
             'matter_id' => $ren->matter_id,
             'language' => $ren->language,
             'due_date' => $due_date->format('Y-m-d'),
-            'due_date_formatted' => FormatHelper::formatDate($due_date, 'L'),
+            'due_date_formatted' => $due_date->isoFormat('L'),
             'country' => match ($ren->language) {
                 'fr' => $ren->country_FR,
                 'de' => $ren->country_DE,
@@ -357,11 +356,11 @@ class RenewalController extends Controller
             $dueDate = Carbon::parse($renewals[0]['due_date']);
 
             $validityDate = $notifyType == 'last'
-                ? FormatHelper::formatDate($dueDate->copy()->subDays(config('renewal.validity.before_last')), 'LL')
-                : FormatHelper::formatDate($dueDate->copy()->subDays(config('renewal.validity.before')), 'LL');
+                ? $dueDate->copy()->subDays(config('renewal.validity.before_last'))->isoFormat('LL')
+                : $dueDate->copy()->subDays(config('renewal.validity.before'))->isoFormat('LL');
 
             $instructionDate = $notifyType != 'last'
-                ? FormatHelper::formatDate($dueDate->copy()->subDays(config('renewal.validity.instruct_before')), 'LL')
+                ? $dueDate->copy()->subDays(config('renewal.validity.instruct_before'))->isoFormat('LL')
                 : null;
 
             // Get contacts
@@ -487,7 +486,7 @@ class RenewalController extends Controller
                         if ($ren->event_name == 'GRT' || $ren->event_name == 'PR') {
                             $desc .= ' délivré le ';
                         }
-                        $desc .= FormatHelper::formatDate(Carbon::parse($ren->event_date), 'LL');
+                        $desc .= Carbon::parse($ren->event_date)->isoFormat('LL');
                         // TODO select preposition 'en, au, aux' according to country
                         $desc .= ' en ' . $ren->country_FR;
                         if ($ren->title != '') {
@@ -496,7 +495,7 @@ class RenewalController extends Controller
                         if ($ren->client_ref != '') {
                             $desc .= " ($ren->client_ref)";
                         }
-                        $desc .= "\nÉchéance le " . FormatHelper::formatDate(Carbon::parse($ren->due_date), 'LL');
+                        $desc .= "\nÉchéance le " . Carbon::parse($ren->due_date)->isoFormat('LL');
                         // Détermine le taux de tva
                         if ($soc_res['tva_intra'] == '' || substr($soc_res['tva_intra'], 0, 2) == 'FR') {
                             $vat_rate = 0.2;

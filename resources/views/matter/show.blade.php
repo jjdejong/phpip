@@ -68,7 +68,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
           @endif
           @if ($matter->expire_date)
           <dt class="col-4 text-end">{{ __('Expiry') }}:</dt>
-          <dd class="col-8">{{ App\Helpers\FormatHelper::formatDate($matter->expire_date) }}</dd>
+          <dd class="col-8">{{ \Carbon\Carbon::parse($matter->expire_date)->isoFormat('L') }}</dd>
           @endif
         </dl>
         <div class="alert alert-info text-center py-1 mb-0">
@@ -192,7 +192,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
                 &nbsp;- {{ $actor->company }}
                 @endif
                 @if ( $actor->show_date && $actor->date )
-                ({{ App\Helpers\FormatHelper::formatDate($actor->date) }})
+                ({{ \Carbon\Carbon::parse($actor->date)->isoFormat('L') }})
                 @endif
                 @if ( $actor->show_rate && $actor->rate != '100' )
                 &nbsp;- {{ $actor->rate }}
@@ -228,12 +228,12 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               <div class="row g-0">
                 <span class="col-5">{{ $event->info->name }}</span>
                 @if ( $event->alt_matter_id )
-                <span class="col-3">{{ App\Helpers\FormatHelper::formatDate($event->link->event_date ?? $event->event_date) }}</span>
+                <span class="col-3">{{ \Carbon\Carbon::parse($event->link->event_date ?? $event->event_date)->isoFormat('L') }}</span>
                 <span class="col">
                   <a href="/matter/{{ $event->alt_matter_id }}" title="{{ $event->altMatter->uid }}" target="_blank">{{ $event->altMatter->country }} {{ $event->link->detail ?? $event->detail }}</a>
                 </span>
                 @else
-                <span class="col-3">{{ App\Helpers\FormatHelper::formatDate($event->event_date) }}</span>
+                <span class="col-3">{{ \Carbon\Carbon::parse($event->event_date)->isoFormat('L') }}</span>
                 <span class="col">
                   @if ( $event->publicUrl() )
                   <a href="{{ $event->publicUrl() }}" target="_blank">{{ $event->detail }}</a>
@@ -259,7 +259,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               @foreach ( $matter->tasksPending as $task )
               <div class="row">
                 <span class="col-9">{{ $task->info->name }}: {{ $task->detail }}</span>
-                <span class="col-3">{{ App\Helpers\FormatHelper::formatDate($task->due_date) }}</span>
+                <span class="col-3">{{ \Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}</span>
               </div>
               @endforeach
             </div>
@@ -279,7 +279,7 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
               @foreach ( $matter->renewalsPending->take(3) as $task )
               <div class="row">
                 <span class="col-4">{{ $task->detail }}</span>
-                <span class="col-8">{{ App\Helpers\FormatHelper::formatDate($task->due_date) }}</span>
+                <span class="col-8">{{ \Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}</span>
               </div>
               @endforeach
             </div>
