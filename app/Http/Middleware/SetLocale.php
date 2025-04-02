@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,22 +16,24 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $locale = config('app.fallback_locale');
-        
-        // If user is authenticated, set locale based on user's language preference
-        if (Auth::check() && Auth::user()->language) {
-            $locale = Auth::user()->language;
+        // Check if the session has started
+        if ($request->hasSession()) {
+            // If user is authenticated and has a language preference, use it
+            if (Auth::check() && Auth::user()->language) {
+                $userLocale = Auth::user()->language;
+                
+                // Extract the language code ('en' from 'en_US' or 'fr' from 'fr')
+                $languageCode = explode('_', $userLocale)[0];
+                
+                // Set the application locale
+                app()->setLocale($languageCode);
+                
+                // Store the full locale for date formatting
+                if ($request->session()->isStarted()) {
+                    $request->session()->put('formatting_locale', $userLocale);
+                }
+            }
         }
-            
-        // For UI translations, use just the language part (before underscore if present)
-        // e.g., 'en' from 'en_US'
-        $uiLanguage = explode('_', $locale)[0];
-        App::setLocale($uiLanguage);
-            
-        // Store the full locale for date/number formatting (e.g., 'en_US')
-        // This is used by FormatHelper for locale-specific formatting
-        session(['formatting_locale' => $locale]);
-
         return $next($request);
     }
 }
