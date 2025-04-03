@@ -188,7 +188,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('type/autocomplete', function (Request $request) {
             $term = $request->input('term');
 
-            return App\Models\Type::select('type as value', 'code as key')
+            return App\Models\MatterType::select('type as value', 'code as key')
                 ->where('type', 'like', "$term%")
                 ->orWhere('code', 'like', "$term%")->get();
         });

@@ -42,7 +42,7 @@ class Rule extends Model
 
     public function type()
     {
-        return $this->belongsTo(Type::class, 'for_type', 'code');
+        return $this->belongsTo(MatterType::class, 'for_type', 'code');
     }
 
     public function condition_eventInfo()
