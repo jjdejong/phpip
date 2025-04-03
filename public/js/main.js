@@ -503,32 +503,46 @@ const handleSelectedItem = function(selectedItem, input) {
 };
 
 const handleInput = async function(input, dropdown) {
-    const url = new URL(input.getAttribute('data-ac'), window.location.origin);
-    const term = input.value;
-    const minLength = input.getAttribute('data-aclength') || 1;
-    if (term.length < minLength) {
-        return;
-    }
-    url.searchParams.append('term', input.value);
-    const response = await fetch(url);
-    const suggestions = await response.json();
-    dropdown.innerHTML = '';
-    if (suggestions.length === 0) {
-        dropdown.classList.remove('show');
-        return;
-    }
-    suggestions.forEach(suggestion => {
-        const item = document.createElement('a');
-        item.classList.add('dropdown-item');
-        item.href = '#';
-        item.textContent = suggestion.label || suggestion.value;
-        item.addEventListener('mousedown', function(event) {
-            suggestionSelected = true;
-            handleSelectedItem(suggestion, input);
+    try {
+        const url = new URL(input.getAttribute('data-ac'), window.location.origin);
+        const term = input.value;
+        const minLength = input.getAttribute('data-aclength') || 1;
+        if (term.length < minLength) {
+            dropdown.classList.remove('show');
+            return;
+        }
+        url.searchParams.append('term', input.value);
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const suggestions = await response.json();
+        if (!Array.isArray(suggestions)) {
+            throw new Error('Invalid response format');
+        }
+        
+        dropdown.innerHTML = '';
+        if (suggestions.length === 0) {
+            dropdown.classList.remove('show');
+            return;
+        }
+        
+        suggestions.forEach(suggestion => {
+            const item = document.createElement('a');
+            item.classList.add('dropdown-item');
+            item.href = '#';
+            item.textContent = suggestion.label || suggestion.value;
+            item.addEventListener('mousedown', function(event) {
+                suggestionSelected = true;
+                handleSelectedItem(suggestion, input);
+            });
+            dropdown.appendChild(item);
         });
-        dropdown.appendChild(item);
-    });
-    dropdown.classList.add('show');
+        dropdown.classList.add('show');
+    } catch (error) {
+        console.error('Autocomplete error:', error);
+        dropdown.classList.remove('show');
+    }
 };
 
 const addAutocomplete = function(input) {
