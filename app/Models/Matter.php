@@ -333,7 +333,7 @@ class Matter extends Model
 
     public function type()
     {
-        return $this->belongsTo(Type::class)->withDefault();
+        return $this->belongsTo(MatterType::class)->withDefault();
     }
 
     public static function filter($sortkey = 'id', $sortdir = 'desc', $multi_filter = [], $display_with = false, $include_dead = false)
