@@ -52,7 +52,10 @@ class AutocompleteController extends Controller
             ]);
 
         if ($request->filled('category')) {
-            $query->where('category', $request->category);
+            $query->where(function($q) use ($request) {
+                $q->whereNull('category')
+                  ->orWhere('category', $request->category);
+            });
         }
 
         return $this->formatResponse($query->take(10)->get());
