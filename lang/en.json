@@ -47,6 +47,9 @@
     "Country": "Country",
     "Cannot be changed because the matter has tasks based on the country": "Cannot be changed because the matter has tasks based on the country",
     "Origin": "Origin",
+    "Priority application": "Priority application",
+    "Parent application": "Parent application",
+    "Use original matter as": "Use original matter as",
     "Type": "Type",
     "Parent": "Parent",
     "Container": "Container",
@@ -411,5 +414,15 @@
     "Decision": "Decision",
     "Total": "Total",
     "Offer valid until": "Offer valid until",
-    "Best regards": "Best regards"
+    "Best regards": "Best regards",
+    "Name": "Name",
+    "Reference": "Reference",
+    "Company": "Company",
+    "Date": "Date",
+    "Rate": "Rate",
+    "Shared": "Shared",
+    "Role": "Role",
+    "Change": "Change",
+    "Remove actor": "Remove actor",
+    "Add": "Add"
 }

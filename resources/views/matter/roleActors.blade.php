@@ -2,14 +2,14 @@
   <thead class="table-light">
     <tr>
       <th></th>
-      <th>Name</th>
-      <th>Reference</th>
-      <th>Company</th>
-      <th>Date</th>
-      <th>Rate</th>
-      <th>Shared</th>
+      <th>{{ __('Name') }}</th>
+      <th>{{ __('Reference') }}</th>
+      <th>{{ __('Company') }}</th>
+      <th>{{ __('Date') }}</th>
+      <th>{{ __('Rate') }}</th>
+      <th>{{ __('Shared') }}</th>
       <th>N</th>
-      <th>Role</th>
+      <th>{{ __('Role') }}</th>
       <th style="width: 24px;">&nbsp;</th>
     </tr>
   </thead>
@@ -24,8 +24,8 @@
       <td><input type="text" class="form-control noformat" size="6" name="rate" value="{{ $actor_item->rate }}"></td>
       <td><input type="checkbox" class="noformat" name="shared" {{ $actor_item->shared ? 'checked' : '' }}></td>
       <td><input type="text" class="form-control noformat" size="2" name="display_order" value="{{ $actor_item->display_order }}"></td>
-      <td><input type="text" class="form-control noformat" data-ac="/role/autocomplete" name="role" placeholder="Change"></td>
-      <td><a href="javascript:void(0);" class="hidden-action text-danger" id="removeActor" title="Remove actor">
+      <td><input type="text" class="form-control noformat" data-ac="/role/autocomplete" name="role" placeholder="{{ __('Change') }}"></td>
+      <td><a href="javascript:void(0);" class="hidden-action text-danger" id="removeActor" title="{{ __('Remove actor') }}">
         <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#trash-fill"></use></svg>
       </a></td>
     </tr>

@@ -79,13 +79,13 @@ $linkedBy = $matter->linkedBy->groupBy('type_code');
       <div class="card-footer d-grid gap-2 p-1">
         @can('readwrite')
         <div class="btn-group">
-          <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=child" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-sm" title="{{ __('Create child') }} {{ $matter->category->category }}">
+          <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=child" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-sm" title="{{ __('Create child') }}">
             <svg width="14" height="14" fill="currentColor"><use xlink:href="#node-plus-fill"/></svg> {{ __('New Child') }}
           </a>
-          <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=clone" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-sm" title="{{ __('Clone') }} {{ $matter->category->category }}">
+          <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=clone" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-sm" title="{{ __('Clone') }}">
             &boxbox; {{ __('Clone') }}
           </a>
-          <a class="btn btn-info btn-sm {{ $matter->countryInfo->goesnational ? '' : 'disabled' }}" href="/matter/{{ $matter->id }}/createN" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-sm" title="{{ __('Enter in national phase') }} {{ $matter->category->category }}">
+          <a class="btn btn-info btn-sm {{ $matter->countryInfo->goesnational ? '' : 'disabled' }}" href="/matter/{{ $matter->id }}/createN" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-sm" title="{{ __('Enter in national phase') }}">
             <svg width="14" height="14" fill="currentColor"><use xlink:href="#flag-fill"/></svg> {{ __('Nat. Phase') }}
           </a>
         </div>

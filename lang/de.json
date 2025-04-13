@@ -412,5 +412,18 @@
     "Body": "Inhalt",
     "Create template": "Vorlage erstellen",
     "Delete template": "Vorlage löschen",
-    "the template": "die Vorlage"
+    "the template": "die Vorlage",
+    "Priority application": "Prioritätsanmeldung",
+    "Parent application": "Stammanmeldung",
+    "Use original matter as": "Ursprüngliche Akte verwenden als",
+    "Name": "Name",
+    "Reference": "Referenz",
+    "Company": "Firma",
+    "Date": "Datum",
+    "Rate": "Satz",
+    "Shared": "Geteilt",
+    "Role": "Rolle",
+    "Change": "Ändern",
+    "Remove actor": "Akteur entfernen",
+    "Add": "Hinzufügen"
 }
