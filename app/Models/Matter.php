@@ -526,65 +526,68 @@ class Matter extends Model
                     switch ($key) {
                         case 'Ref':
                             $query->where(function ($q) use ($value) {
-                                $q->where('uid', 'LIKE', "$value%")
-                                    ->orWhere('alt_ref', 'LIKE', "$value%");
+                                $q->whereLike('uid', "$value%")
+                                    ->orWhereLike('alt_ref', "$value%");
                             });
                             break;
                         case 'Cat':
-                            $query->where('category_code', 'LIKE', "$value%");
+                            $query->whereLike('category_code', "$value%");
                             break;
                         case 'country':
-                            $query->where('matter.country', 'LIKE', "$value%");
+                            $query->whereLike('matter.country', "$value%");
                             break;
                         case 'Status':
                             $query->where('event_name.name', 'LIKE', "$value%");
                             break;
                         case 'Status_date':
-                            $query->where('status.event_date', 'LIKE', "$value%");
+                            $query->whereLike('status.event_date', "$value%");
                             break;
                         case 'Client':
-                            $query->where(DB::raw('IFNULL(cli.name, clic.name)'), 'LIKE', "$value%");
+                            $query->whereLike(DB::raw('IFNULL(cli.name, clic.name)'), "$value%");
                             break;
                         case 'ClRef':
-                            $query->where(DB::raw('IFNULL(clilnk.actor_ref, cliclnk.actor_ref)'), 'LIKE', "$value%");
+                            $query->whereLike(DB::raw('IFNULL(clilnk.actor_ref, cliclnk.actor_ref)'), "$value%");
                             break;
                         case 'Applicant':
-                            $query->where('app.name', 'LIKE', "$value%");
+                            $query->whereLike('app.name', "$value%");
                             break;
                         case 'Agent':
-                            $query->where(DB::raw('IFNULL(agt.name, agtc.name)'), 'LIKE', "$value%");
+                            $query->whereLike(DB::raw('IFNULL(agt.name, agtc.name)'), "$value%");
                             break;
                         case 'AgtRef':
-                            $query->where(DB::raw('IFNULL(agtlnk.actor_ref, agtclnk.actor_ref)'), 'LIKE', "$value%");
+                            $query->whereLike(DB::raw('IFNULL(agtlnk.actor_ref, agtclnk.actor_ref)'), "$value%");
                             break;
                         case 'Title':
-                            $query->where(DB::Raw('concat_ws(" ", tit1.value, tit2.value, tit3.value)'), 'LIKE', "%$value%");
+                            $query->whereLike(DB::Raw('concat_ws(" ", tit1.value, tit2.value, tit3.value)'), "%$value%");
                             break;
                         case 'Inventor1':
-                            $query->where('inv.name', 'LIKE', "$value%");
+                            $query->whereLike('inv.name', "$value%");
                             break;
                         case 'Filed':
-                            $query->where('fil.event_date', 'LIKE', "$value%");
+                            $query->whereLike('fil.event_date', "$value%");
                             break;
                         case 'FilNo':
-                            $query->where('fil.detail', 'LIKE', "$value%");
+                            $query->whereLike('fil.detail', "$value%");
                             break;
                         case 'Published':
-                            $query->where('pub.event_date', 'LIKE', "$value%");
+                            $query->whereLike('pub.event_date', "$value%");
                             break;
                         case 'PubNo':
-                            $query->where('pub.detail', 'LIKE', "$value%");
+                            $query->whereLike('pub.detail', "$value%");
                             break;
                         case 'Granted':
-                            $query->where('grt.event_date', 'LIKE', "$value%")
-                                ->orWhere('reg.event_date', 'LIKE', "$value%");
+                            $query->whereLike('grt.event_date', "$value%")
+                                ->orWhereLike('reg.event_date', "$value%");
                             break;
                         case 'GrtNo':
-                            $query->where('grt.detail', 'LIKE', "$value%")
-                                ->orWhere('reg.detail', 'LIKE', "$value%");
+                            $query->whereLike('grt.detail', "$value%")
+                                ->orWhereLike('reg.detail', "$value%");
                             break;
                         case 'responsible':
-                            $query->whereRaw("'$value' IN (matter.responsible, del.login)");
+                            $query->where(function($q) use ($value) {
+                                $q->where('matter.responsible', $value)
+                                  ->orWhere('del.login', $value);
+                            });
                             break;
                         case 'Ctnr':
                             if ($value) {
@@ -592,7 +595,7 @@ class Matter extends Model
                             }
                             break;
                         default:
-                            $query->where($key, 'LIKE', "$value%");
+                            $query->whereLike($key, "$value%");
                             break;
                     }
                 }

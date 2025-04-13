@@ -23,7 +23,7 @@ class AutocompleteController extends Controller
     {
         $results = Matter::with('filing')
             ->select('id as key', 'uid as value')
-            ->where('uid', 'like', "{$request->term}%")
+            ->whereLike('uid', "{$request->term}%")
             ->take(15)
             ->get()
             ->toArray();
@@ -33,7 +33,7 @@ class AutocompleteController extends Controller
 
     public function newCaseref(Request $request): JsonResponse
     {
-        $newref = Matter::where('caseref', 'like', "{$request->term}%")
+        $newref = Matter::whereLike('caseref', "{$request->term}%")
             ->max('caseref');
 
         $newref = $newref && $newref != $request->term
@@ -76,8 +76,8 @@ class AutocompleteController extends Controller
     public function user(Request $request): JsonResponse
     {
         $results = User::select('name as value', 'login as key')
-            ->where('name', 'like', "{$request->term}%")
-            ->orWhere('login', 'like', "{$request->term}%")
+            ->whereLike('name', "{$request->term}%")
+            ->orWhereLike('login', "{$request->term}%")
             ->take(10)
             ->get();
 
@@ -87,8 +87,8 @@ class AutocompleteController extends Controller
     public function actor(Request $request, $create_option = null): JsonResponse
     {
         $list = Actor::select(DB::raw('coalesce(display_name, name) as value'), 'id as key')
-            ->where('name', 'like', "{$request->term}%")
-            ->orWhere('display_name', 'like', "{$request->term}")
+            ->whereLike('name', "{$request->term}%")
+            ->orWhereLike('display_name', "{$request->term}%")
             ->take(10)
             ->get();
 
@@ -122,8 +122,8 @@ class AutocompleteController extends Controller
     public function country(Request $request): JsonResponse
     {
         $results = Country::select('name as value', 'iso as key')
-            ->where('name', 'like', "{$request->term}%")
-            ->orWhere('iso', 'like', "{$request->term}%")
+            ->whereLike('name', "{$request->term}%")
+            ->orWhereLike('iso', "{$request->term}%")
             ->get();
 
         return $this->formatResponse($results);
@@ -152,7 +152,7 @@ class AutocompleteController extends Controller
     public function templateCategory(Request $request): JsonResponse
     {
         $list = TemplateMember::select('category as value', 'category as key')
-            ->where('category', 'like', "{$request->term}%")
+            ->whereLike('category', "{$request->term}%")
             ->distinct()
             ->get();
 
@@ -166,7 +166,7 @@ class AutocompleteController extends Controller
     public function templateClass(Request $request): JsonResponse
     {
         $results = TemplateClass::select('name as value', 'id as key')
-            ->where('name', 'like', "{$request->term}%")
+            ->whereLike('name', "{$request->term}%")
             ->get();
 
         return $this->formatResponse($results);
@@ -175,7 +175,7 @@ class AutocompleteController extends Controller
     public function templateStyle(Request $request): JsonResponse
     {
         $list = TemplateMember::select('style as value', 'style as key')
-            ->where('style', 'like', "{$request->term}%")
+            ->whereLike('style', "{$request->term}%")
             ->distinct()
             ->get();
 
