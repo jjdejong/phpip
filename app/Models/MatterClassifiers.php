@@ -17,4 +17,9 @@ class MatterClassifiers extends Model
     {
         return $this->belongsTo(Matter::class);
     }
+
+    public function classifierType()
+    {
+        return $this->belongsTo(ClassifierType::class, 'type_code', 'code');
+    }
 }
