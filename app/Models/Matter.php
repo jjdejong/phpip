@@ -249,12 +249,6 @@ class Matter extends Model
             ->whereCode('ENT')->withDefault();
     }
 
-    /*public function status()
-    {
-        return $this->hasOne('Event::class')
-            ->latest('event_date');
-    }*/
-
     public function priority()
     {
         return $this->hasMany(Event::class)
@@ -521,6 +515,7 @@ class Matter extends Model
                 $sortkey = 'caseref';
                 $sortdir = 'asc';
             }
+
             foreach ($multi_filter as $key => $value) {
                 if ($value != '') {
                     switch ($key) {

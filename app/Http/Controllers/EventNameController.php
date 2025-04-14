@@ -15,7 +15,7 @@ class EventNameController extends Controller
         $Name = $request->input('Name');
         $ename = EventName::query();
         if (! is_null($Code)) {
-            $ename = $ename->where('code', 'like', $Code.'%');
+            $ename = $ename->whereLike('code', $Code.'%');
         }
         if (! is_null($Name)) {
             $ename = $ename->where('name', 'like', $Name.'%');

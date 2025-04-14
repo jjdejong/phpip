@@ -22,10 +22,10 @@ class DocumentController extends Controller
         $Name = $request->input('Name');
         $template_classes = TemplateClass::query();
         if (! is_null($Name)) {
-            $template_classes = $template_classes->where('name', 'like', $Name.'%');
+            $template_classes = $template_classes->whereLike('name', $Name.'%');
         }
         if (! is_null($Notes)) {
-            $template_classes = $template_classes->where('notes', 'like', $Notes.'%');
+            $template_classes = $template_classes->whereLike('notes', $Notes.'%');
         }
 
         $template_classes = $template_classes->orderby('name')->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
@@ -97,31 +97,31 @@ class DocumentController extends Controller
                 if ($value != '') {
                     switch ($key) {
                         case 'Category':
-                            $members = $members->where('category', 'LIKE', "$value%");
+                            $members = $members->whereLike('category', "{$value}%");
                             $oldfilters['Category'] = $value;
                             break;
                         case 'Language':
-                            $members = $members->where('language', 'LIKE', "$value%");
+                            $members = $members->whereLike('language', "{$value}%");
                             $oldfilters['Language'] = $value;
                             break;
                         case 'Name':
                             $members = $members->whereHas('class', function ($query) use ($value) {
-                                $query->where('name', 'LIKE', "$value%");
+                                $query->whereLike('name', "{$value}%");
                             });
                             $oldfilters['Name'] = $value;
                             break;
                         case 'Summary':
-                            $members = $members->where('summary', 'LIKE', "$value%");
+                            $members = $members->whereLike('summary', "{$value}%");
                             $oldfilters['Name'] = $value;
                             break;
                         case 'Style':
-                            $members = $members->where('style', 'LIKE', "$value%");
+                            $members = $members->whereLike('style', "{$value}%");
                             $oldfilters['Style'] = $value;
                             break;
                         case 'EventName':
                             $members = $members->whereHas('class', function ($query) use ($value) {
                                 $query->whereHas('eventNames', function ($q2) use ($value) {
-                                    $q2->where('event_name_code', '=', "$value");
+                                    $q2->where('event_name_code', "$value");
                                 });
                             });
                             $oldfilters['EventName'] = $value;
@@ -129,10 +129,10 @@ class DocumentController extends Controller
                             $view = 'documents.select2';
                             break;
                         case 'Event':
-                            $event = Event::where('id', '=', "$value")->first();
+                            $event = Event::where('id', "$value")->first();
                             break;
                         case 'Task':
-                            $task = Task::where('id', '=', "$value")->first();
+                            $task = Task::where('id', "$value")->first();
                             $event = $task->trigger;
                             break;
                     }

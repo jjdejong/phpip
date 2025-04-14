@@ -28,12 +28,14 @@ class RenewalController extends Controller
 
         // Get list of active renewals
         $renewals = Task::renewals();
+
         if ($step == 0) {
             $renewals->where('matter.dead', 0);
         }
         if ($MyRenewals) {
-            $renewals->where('assigned_to', Auth::user()->login);
+            $renewals->where('task.assigned_to', Auth::user()->login);
         }
+
         $with_step = false;
         $with_invoice = false;
         if (!empty($filters)) {
@@ -83,25 +85,28 @@ class RenewalController extends Controller
                 }
             }
         }
-        // Only display pending renewals at the beginning of the pipeline (CHECK: $with_invoice may not be necessary)
+
+        // Only display pending renewals at the beginning of the pipeline
         if (!($with_step || $with_invoice)) {
             $renewals->where('done', 0);
         }
+
         // Order by most recent renewals first in the "Closed" and "Invoice paid" steps
         if ($step == 10 || $invoice_step == 3) {
             $renewals->orderByDesc('due_date');
         }
+
         $renewals = $renewals->simplePaginate(config('renewal.general.paginate', 25));
-        // Adjust the cost and fee of each renewal based un customized settings
+
+        // Adjust the cost and fee of each renewal based on customized settings
         $renewals->transform(function ($ren) {
             $this->adjustFees($ren, $cost, $fee);
             $ren->cost = $cost;
             $ren->fee = $fee;
-
             return $ren;
         });
-        $renewals->appends($request->input())->links(); // Keep URL parameters in the paginator links
-
+        
+$renewals->appends($request->input())->links(); // Keep URL parameters in the paginator links
         return view('renewals.index', compact('renewals', 'step', 'invoice_step'));
     }
 

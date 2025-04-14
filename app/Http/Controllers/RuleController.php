@@ -27,30 +27,30 @@ class RuleController extends Controller
         }
         if (!is_null($Trigger)) {
             $rule = $rule->whereHas('trigger', function ($q) use ($Trigger) {
-                $q->where('name', 'like', $Trigger . '%');
+                $q->whereLike('name', "{$Trigger}%");
             });
         }
         if (!is_null($Country)) {
             $rule = $rule->whereHas('country', function ($q) use ($Country) {
-                $q->where('name', 'like', $Country . '%');
+                $q->whereLike('name', "{$Country}%");
             });
         }
         if (!is_null($Category)) {
             $rule = $rule->whereHas('category', function ($q) use ($Category) {
-                $q->where('category', 'like', $Category . '%');
+                $q->whereLike('category', "{$Category}%");
             });
         }
         if (!is_null($Detail)) {
-            $rule = $rule->where('detail', 'like', $Detail . '%');
+            $rule = $rule->whereLike('detail', "{$Detail}%");
         }
         if (!is_null($Type)) {
             $rule = $rule->whereHas('type', function ($q) use ($Type) {
-                $q->where('type', 'like', $Type . '%');
+                $q->whereLike('type', "{$Type}%");
             });
         }
         if (!is_null($Origin)) {
             $rule = $rule->whereHas('origin', function ($q) use ($Origin) {
-                $q->where('name', 'like', $Origin . '%');
+                $q->whereLike('name', "{$Origin}%");
             });
         }
         $ruleslist = $rule->with(['country:iso,name', 'trigger:code,name', 'category:code,category', 'origin:iso,name', 'type:code,type', 'taskInfo:code,name'])
