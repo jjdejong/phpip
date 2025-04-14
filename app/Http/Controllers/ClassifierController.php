@@ -54,4 +54,10 @@ class ClassifierController extends Controller
 
         return $classifier;
     }
+
+    public function showImage(Classifier $classifier)
+    {
+        return response($classifier->img)
+            ->header('Content-Type', $classifier->value);
+    }
 }
