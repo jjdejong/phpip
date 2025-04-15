@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class Task extends Model
 {
@@ -22,18 +22,6 @@ class Task extends Model
         'done_date' => 'date:Y-m-d',
     ];
 
-    // This is moved to the task's store() method, allowing easier programmatic date updates
-    // public function setDueDateAttribute($value)
-    // {
-    //     $locale = Carbon::getLocale();
-    //     $this->attributes['due_date'] = Carbon::createFromLocaleIsoFormat('L', $locale, $value);
-    // }
-
-    // public function setDoneDateAttribute($value)
-    // {
-    //     $locale = Carbon::getLocale();
-    //     $this->attributes['done_date'] = Carbon::createFromLocaleIsoFormat('L', $locale, $value);
-    // }
 
     public function info()
     {
@@ -83,64 +71,13 @@ class Task extends Model
         return $selectQuery->get();
     }
 
-    public function openTasks($renewals, $what_tasks, $user_dashboard)
+    public function openTasks()
     {
-        // $what_tasks, by default 0, is changed to 1 to see the "assigned_to" tasks or to the id of the client to see client specific tasks
-        $tasks = $this->select('task.id', 'en.name', 'task.detail', 'task.due_date', 'event.matter_id', 'matter.uid', 'tit.value as title', 'tm.value as trademark')
-            ->join('event_name as en', 'task.code', 'en.code')
-            ->join('event', 'task.trigger_id', 'event.id')
-            ->join('matter', 'event.matter_id', 'matter.id')
-            ->leftJoin('classifier as tit', function ($j) {
-                $j->on('tit.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
-                    ->where([
-                        ['tit.type_code', 'TIT'],
-                        ['tit.display_order', 1],
-                    ]);
-            })
-            ->leftJoin('classifier as tm', function ($j) {
-                $j->on('tm.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
-                    ->where('tm.type_code', 'TM');
-            })
-            ->where([
-                ['task.done', 0],
-                ['matter.dead', 0],
-            ]);
-
-        if ($what_tasks == 1) {
-            $tasks->where('assigned_to', Auth::user()->login);
-        }
-
-        // A client is defined for querying the tasks
-        if ($what_tasks > 1) {
-            $tasks->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
-                ->where([
-                    ['cli.role', 'CLI'],
-                    ['cli.actor_id', $what_tasks],
-                ]);
-        }
-
-        if ($renewals) {
-            $tasks->where('task.code', 'REN');
-        } else {
-            $tasks->where('task.code', '!=', 'REN');
-        }
-
-        if (Auth::user()->default_role == 'CLI' || empty(Auth::user()->default_role)) {
-            $tasks->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
-                ->where([
-                    ['cli.role', 'CLI'],
-                    ['cli.actor_id', Auth::user()->id],
-                ]);
-        }
-
-        if ($user_dashboard) {
-            $tasks->where(function ($q) use ($user_dashboard) {
-                $q->where('matter.responsible', $user_dashboard)
-                    ->orWhere('task.assigned_to', $user_dashboard);
+        return $this->with(['info', 'matter.titles', 'matter.client'])
+            ->where('done', 0)
+            ->whereHas('matter', function (Builder $q) {
+                $q->where('dead', 0);
             });
-        }
-
-        return $tasks->orderby('due_date');
     }
 
     public static function renewals()

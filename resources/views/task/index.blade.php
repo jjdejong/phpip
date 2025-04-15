@@ -2,17 +2,17 @@
   @foreach ($tasks as $task)
   <tr class="row g-0">
     <td class="col text-truncate py-0">
-      <a href="/matter/{{ $task->matter_id }}/{{ $isrenewals ? 'renewals' : 'tasks' }}" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-lg" data-resource="/task/" title="{{ __('All tasks') }}">
-        {{ $task->name }} {{ $task->detail }}
+      <a href="/matter/{{ $task->matter->id }}/{{ $isrenewals ? 'renewals' : 'tasks' }}" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-lg" data-resource="/task/" title="{{ __('All tasks') }}">
+        {{ $task->info->name }} {{ $task->detail }}
       </a>
     </td>
     <td class="col-2 py-0">
-      <a href="/matter/{{ $task->matter_id }}">
-        {{ $task->uid }}
+      <a href="/matter/{{ $task->matter->id }}">
+        {{ $task->matter->uid }}
       </a>
     </td>
     <td class="col text-truncate py-0">
-      {{ $task->title ?? $task->trademark }}
+      {{ $task->matter->titles->first()->value }}
     </td>
     <td class="col-2 py-0 px-2">
       {{ \Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}

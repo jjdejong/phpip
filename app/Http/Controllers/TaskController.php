@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Builder;
 
 class TaskController extends Controller
 {
@@ -14,8 +15,40 @@ class TaskController extends Controller
     {
         $task = new Task;
         $isrenewals = $request->isrenewals;
-        $tasks = $task->openTasks($isrenewals, $request->what_tasks, $request->user_dashboard)->simplePaginate(18);
-        $tasks->appends($request->input())->links(); // Keep URL parameters in the paginator links
+        $tasks = $task->openTasks();
+
+        // $what_tasks, by default 0, is changed to 1 to see the "assigned_to" tasks or to the id of the client to see client specific tasks
+        if ($request->what_tasks == 1) {
+            $tasks->where('assigned_to', Auth::user()->login);
+        }
+
+        if ($request->what_tasks > 1) {
+            $tasks->whereHas('client', function (Builder $q) use ($request) { 
+                $q->where('id', $request->what_tasks);
+            });
+        }
+
+        if ($isrenewals) {
+            $tasks->where('code', 'REN');
+        } else {
+            $tasks->where('code', '!=', 'REN');
+        }
+
+        if (Auth::user()->default_role == 'CLI' || empty(Auth::user()->default_role)) {
+            $tasks->whereHas('matter.client', function (Builder $q) {
+                $q->where('actor_id', Auth::user()->id);
+            });
+        }
+
+        if ($request->user_dashboard) {
+            $tasks->where('assigned_to', $request->user_dashboard)
+                ->orWhereHas('matter', function (Builder $q) use ($request) {
+                    $q->where('responsible', $request->user_dashboard);
+                });
+        }
+
+        $tasks = $tasks->orderBy('due_date')->simplePaginate(18)
+            ->appends($request->input());
 
         return view('task.index', compact('tasks', 'isrenewals'));
     }

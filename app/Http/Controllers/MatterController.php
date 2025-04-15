@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MatterController extends Controller
 {
@@ -698,7 +699,7 @@ class MatterController extends Controller
     public function tasks(Matter $matter)
     {
         // All events and their tasks, excepting renewals
-        $events = Event::with(['tasks' => function ($query) {
+        $events = Event::with(['tasks' => function (HasMany $query) {
             $query->where('code', '!=', 'REN');
         }, 'info:code,name', 'tasks.info:code,name'])->where('matter_id', $matter->id)
             ->orderBy('event_date')->get();
@@ -710,18 +711,11 @@ class MatterController extends Controller
     public function renewals(Matter $matter)
     {
         // The renewal trigger event and its renewals
-        $events = Event::with(
-            [
-                'tasks' => function ($query) {
-                    $query->where('code', 'REN');
-                }
-            ]
-        )->whereHas(
-            'tasks',
-            function ($query) {
-                $query->where('code', 'REN');
-            }
-        )->where('matter_id', $matter->id)->get();
+        $events = Event::whereHas('tasks', function (Builder $query) {
+            $query->where('code', 'REN');
+        })->with('tasks')
+          ->where('matter_id', $matter->id)
+          ->get();
         $is_renewals = 1;
 
         return view('matter.tasks', compact('events', 'matter', 'is_renewals'));
