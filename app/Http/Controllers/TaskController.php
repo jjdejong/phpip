@@ -23,8 +23,8 @@ class TaskController extends Controller
         }
 
         if ($request->what_tasks > 1) {
-            $tasks->whereHas('client', function (Builder $q) use ($request) { 
-                $q->where('id', $request->what_tasks);
+            $tasks->whereHas('matter.client', function (Builder $q) use ($request) { 
+                $q->where('actor_id', $request->what_tasks);
             });
         }
 
