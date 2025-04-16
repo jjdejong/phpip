@@ -13,7 +13,7 @@
 @section('content')
 
 <div class="row">
-  <div class="col-4">
+  <div class="col-4" id="leftPanels">
     <div class="card border-info">
       <div class="card-header text-white bg-info p-1">
         <span class="lead">{{ __('Categories') }}</span>

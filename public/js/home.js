@@ -17,10 +17,9 @@ function refreshTasks(flag) {
   url += '&isrenewals=1';
   fetchInto(url, renewallist);
 
-  // Refresh both the categories panel and users tasks panel with the current task filter
+  // Refresh both panels with a single call
   var homeUrl = '/home?what_tasks=' + flag;
-  reloadPart(homeUrl, 'categoriesList');
-  reloadPart(homeUrl, 'usersTasksPanel');
+  reloadPart(homeUrl, 'leftPanels');
 }
 
 // When client is selected via autocomplete, check the Client radio button and refresh
