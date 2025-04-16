@@ -52,14 +52,14 @@
         </table>
       </div>
     </div>
-    <div class="card border-info mt-1" id="usersTasksPanel">
+    <div class="card border-info mt-1">
       <div class="card-header text-white bg-info p-1">
         <span class="lead">{{ __('Users tasks') }}</span>
         @can('readwrite')
         <button class="btn btn-transparent text-info float-end" disabled>I</button> {{--  This invisible button is only for improving the layout! --}}
         @endcan
       </div>
-      <div class="card-body pt-1">
+      <div class="card-body pt-1" id="usersTasksPanel">
         <table class="table table-striped table-sm">
           <tr>
             <th></th>
