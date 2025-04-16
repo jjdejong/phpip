@@ -47,28 +47,42 @@ class Task extends Model
     {
         $userid = Auth::user()->id;
         $role = Auth::user()->default_role;
-        $selectQuery = Task::join('event as e', 'task.trigger_id', 'e.id')
-            ->join('matter as m', 'e.matter_id', 'm.id')
-            ->select(
-                DB::raw('count(*) as no_of_tasks'),
-                DB::raw('MIN(task.due_date) as urgent_date'),
-                DB::raw('ifnull(task.assigned_to, m.responsible) as login')
-            )
-            ->where([
-                ['m.dead', 0],
-                ['task.done', 0],
-            ])
-            ->groupby('login');
+        $what_tasks = request()->input('what_tasks');
+        
+        $query = static::with(['matter', 'matter.client'])
+            ->where('done', 0)
+            ->whereHas('matter', function (Builder $q) {
+                $q->where('dead', 0);
+            });
 
-        if ($role == 'CLI' || empty($role)) {
-            $selectQuery->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(m.container_id, m.id)'))
-                ->where([
-                    ['cli.role', 'CLI'],
-                    ['cli.actor_id', $userid],
-                ]);
+        // Apply filters based on what_tasks parameter
+        if ($what_tasks == 1) {
+            // My tasks - filter by assigned_to
+            $query->where('assigned_to', Auth::user()->login);
+        } elseif ($what_tasks > 1) {
+            // Client tasks - filter by client ID
+            $query->whereHas('matter.client', function ($q) use ($what_tasks) {
+                $q->where('actor_id', $what_tasks);
+            });
         }
 
-        return $selectQuery->get();
+        // Apply client role restrictions if needed
+        if ($role == 'CLI' || empty($role)) {
+            $query->whereHas('matter', function ($q) use ($userid) {
+                $q->whereHas('client', function ($q2) use ($userid) {
+                    $q2->where('actor_id', $userid);
+                });
+            });
+        }
+
+        // Select and group results
+        return $query->select(
+                DB::raw('count(*) as no_of_tasks'),
+                DB::raw('MIN(due_date) as urgent_date'),
+                DB::raw('IFNULL(assigned_to, (SELECT responsible FROM matter WHERE id = (SELECT matter_id FROM event WHERE id = task.trigger_id))) as login')
+            )
+            ->groupBy('login')
+            ->get();
     }
 
     public function openTasks()
