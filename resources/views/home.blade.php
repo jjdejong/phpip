@@ -21,7 +21,7 @@
         <a href="/matter/create?operation=new" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" class="btn btn-primary float-end" title="{{ __('Create Matter') }}">{{ __('Create matter') }}</a>
         @endcan
       </div>
-      <div class="card-body pt-0">
+      <div id="categoriesList" class="card-body pt-0">
         <table  class="table table-striped table-sm">
           <tr>
             <th></th>
@@ -35,14 +35,14 @@
           @foreach ($categories as $group)
           <tr class="reveal-hidden">
             <td class="py-0">
-              <a href="/matter?Cat={{ $group->category_code }}">{{ $group->category }}</a>
+              <a href="/matter?Cat={{ $group->code }}">{{ $group->category }}</a>
             </td>
             <td class="py-0">
               {{ $group->total }}
             </td>
             <td class="py-0">
               @can('readwrite')
-              <a class="hidden-action float-end" href="/matter/create?operation=new&category={{$group->category_code}}" data-bs-target="#ajaxModal" title="Create {{ $group->category }}" data-bs-toggle="modal" data-size="modal-sm">
+              <a class="hidden-action float-end" href="/matter/create?operation=new&category={{$group->code}}" data-bs-target="#ajaxModal" title="Create {{ $group->category }}" data-bs-toggle="modal" data-size="modal-sm">
                 <svg width="14" height="14" fill="currentColor" style="pointer-events: none"><use xlink:href="#plus-circle-fill"/></svg>
               </a>
               @endcan
@@ -52,7 +52,7 @@
         </table>
       </div>
     </div>
-    <div class="card border-info mt-1">
+    <div class="card border-info mt-1" id="usersTasksPanel">
       <div class="card-header text-white bg-info p-1">
         <span class="lead">{{ __('Users tasks') }}</span>
         @can('readwrite')

@@ -616,23 +616,32 @@ class Matter extends Model
         return $query;
     }
 
-    public static function getCategoryMatterCount($user = null)
+    public static function getCategoryMatterCount()
     {
-        $authUserRole = Auth::user()->default_role;
-        $authUserId = Auth::user()->id;
-        $query = Matter::leftJoin('matter_category as mc', 'mc.code', 'matter.category_code')
-            ->groupBy('category_code', 'category')
-            ->select('mc.category', 'category_code', DB::raw('count(*) as total'));
-        if ($authUserRole == 'CLI' || empty($authUserRole)) {
-            $query->join('matter_actor_lnk as cli', 'cli.matter_id', DB::raw('ifnull(matter.container_id, matter.id)'))
-                ->where([['cli.role', 'CLI'], ['cli.actor_id', $authUserId]]);
-        } else {
-            if ($user) {
-                $query = $query->where('responsible', '=', $user);
+        return Category::withCount(['matters as total' => function($query) {
+            if (request()->input('what_tasks') == 1) {
+                $query->where('responsible', Auth::user()->login);
             }
+            if (request()->input('what_tasks') > 1) {
+                $query->whereHas('client', function($aq) {
+                    $aq->where('actor_id', request()->input('what_tasks'));
+                });
         }
-
-        return $query->get();
+            if (Auth::user()->default_role == 'CLI' || empty(Auth::user()->default_role)) {
+                $query->whereHas('client', function($aq) {
+                    $aq->where('actor_id', Auth::id());
+                });
+            }
+        }])
+            ->when(Auth::user()->default_role == 'CLI' || empty(Auth::user()->default_role), 
+                function($query) {
+                    $query->whereHas('matters', function($q) {
+                        $q->whereHas('client', function($aq) {
+                            $aq->where('actor_id', Auth::id());
+                        });
+                    });
+                })
+            ->get();
     }
 
     public function getDescription($lang = 'en')

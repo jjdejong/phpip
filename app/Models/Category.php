@@ -21,9 +21,9 @@ class Category extends Model
 
     protected $guarded = ['created_at', 'updated_at'];
 
-    public function matter()
+    public function matters()
     {
-        return $this->hasMany(Matter::class);
+        return $this->hasMany(Matter::class, 'category_code', 'code');
     }
 
     public function displayWithInfo()
