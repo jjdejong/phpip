@@ -10,6 +10,12 @@ Head for the [Wiki](https://github.com/jjdejong/phpip/wiki) for further informat
 
 # New features
 
+## 2025-03-19 Implemented localization for names stored in tables (event names, roles, categories, types, etc.)
+
+Big change. You need to run `git pull; composer install; php artisan migrate`. 
+
+For further information, read this comprehensive [guide](LOCALIZATION.md).
+
 ## 2025-03-19 Implemented localization for the UI in English, French and German
 
 The locale set for parameter APP_LOCALE of the `.env` file is applied to the UI. This can be "en_US", "en_GB", "fr" or "de". The _US and _GB variants differ in the date formats. 
