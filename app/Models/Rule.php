@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasTableComments;
-use Spatie\Translatable\HasTranslations;
+use App\Traits\HasTranslationsExtended;
 
 class Rule extends Model
 {
     use HasTableComments;
-    use HasTranslations;
+    use HasTranslationsExtended;
     
     protected $table = 'task_rules';
 

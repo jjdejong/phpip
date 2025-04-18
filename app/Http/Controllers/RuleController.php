@@ -23,8 +23,7 @@ class RuleController extends Controller
         $rule = new Rule;
         $locale = app()->getLocale();
         // Normalize to the base locale (e.g., 'en' from 'en_US')
-        $baseLocale = explode('_', $locale)[0];
-        $baseLocale = explode('-', $baseLocale)[0];
+        $baseLocale = substr($locale, 0, 2);
         
         if (!is_null($Task)) {
             $rule = $rule->whereHas('taskInfo', function ($q) use ($Task) {

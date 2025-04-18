@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Builder as ModelBuilder;
 
 class Matter extends Model
 {
@@ -357,8 +356,7 @@ class Matter extends Model
     {
         $locale = app()->getLocale();
         // Normalize to the base locale (e.g., 'en' from 'en_US')
-        $baseLocale = explode('_', $locale)[0];
-        $baseLocale = explode('-', $baseLocale)[0];
+        $baseLocale = substr($locale, 0, 2);
 
         $query = Matter::select(
             'matter.uid AS Ref',

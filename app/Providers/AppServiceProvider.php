@@ -37,8 +37,7 @@ class AppServiceProvider extends ServiceProvider
             if (!$locale) {
                 $locale = app()->getLocale();
                 // Normalize to base locale (e.g., 'en' from 'en_US')
-                $locale = explode('_', $locale)[0];
-                $locale = explode('-', $locale)[0];
+                $locale = substr($locale, 0, 2);
             }
             
             return $this->whereRaw(

@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\Translatable\HasTranslations;
+use App\Traits\HasTranslationsExtended;
 
 class Task extends Model
 {
-    use HasTranslations;
+    use HasTranslationsExtended;
 
     protected $table = 'task';
 

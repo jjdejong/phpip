@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
+use App\Traits\HasTranslationsExtended;
 
 class MatterActors extends Model
 {
-    use HasTranslations;
+    use HasTranslationsExtended;
 
     public $timestamps = false;
 
