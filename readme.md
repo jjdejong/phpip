@@ -10,7 +10,7 @@ Head for the [Wiki](https://github.com/jjdejong/phpip/wiki) for further informat
 
 # New features
 
-## 2025-03-19 Implemented localization for names stored in tables (event names, roles, categories, types, etc.)
+## 2025-04-18 Implemented localization for names stored in tables (event names, roles, categories, types, etc.)
 
 Big change. You need to run `git pull; composer install; php artisan migrate`. 
 
