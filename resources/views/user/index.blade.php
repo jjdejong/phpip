@@ -13,7 +13,7 @@
           <tr id="filter" class="table-primary align-middle">
             <th><input class="form-control" name="Name" placeholder="{{ __('Name') }}" value="{{ Request::get('Name') }}"></th>
             <th>{{ __('Role') }}</th>
-            <th>{{ __('Login') }}</th>
+            <th>{{ __('User name') }}</th>
             <th>{{ __('Company') }}</th>
           </tr>
         </thead>

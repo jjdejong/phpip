@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasTableComments;
+use Spatie\Translatable\HasTranslations;
 
 class EventName extends Model
 {
     use HasTableComments;
-    
+    use HasTranslations;
+
     protected $table = 'event_name';
 
     protected $primaryKey = 'code';
@@ -20,6 +22,9 @@ class EventName extends Model
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
 
     protected $guarded = ['created_at', 'updated_at'];
+
+    // Define which attributes are translatable
+    public $translatable = ['name'];
 
     public function events()
     {

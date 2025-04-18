@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasTableComments;
+use Spatie\Translatable\HasTranslations;
 
 class Role extends Model
 {
     use HasTableComments;
+    use HasTranslations;
     
     protected $table = 'actor_role';
 
@@ -20,4 +22,7 @@ class Role extends Model
     protected $guarded = ['created_at', 'updated_at'];
 
     public $incrementing = false;
+
+    // Define which attributes are translatable
+    public $translatable = ['name'];
 }

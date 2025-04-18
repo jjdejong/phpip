@@ -4,16 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasTableComments;
+use Spatie\Translatable\HasTranslations;
 
 class Rule extends Model
 {
     use HasTableComments;
+    use HasTranslations;
     
     protected $table = 'task_rules';
 
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    protected $translatable = ['detail'];
 
     public function country()
     {

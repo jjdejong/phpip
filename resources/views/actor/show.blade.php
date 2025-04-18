@@ -90,7 +90,7 @@
     <fieldset class="tab-pane fade" id="actorOther">
       <table class="table table-striped">
         <tr>
-          <th title="{{ $actorComments['login'] }}">{{ __('Login') }}</th>
+          <th title="{{ $actorComments['login'] }}">{{ __('User name') }}</th>
           <td><input type="text" class="noformat form-control" name="login" value="{{ $actorInfo->login }}" placeholder="-"></td>
         </tr>
         <tr>

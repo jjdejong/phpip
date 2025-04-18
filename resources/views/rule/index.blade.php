@@ -16,13 +16,15 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="table-primary align-middle">
-            <th><input class="form-control form-control-sm" data-source="/rule" name="Task" placeholder="{{ __('Task') }}"></th>
-            <th><input class="form-control form-control-sm" data-source="/rule" name="Detail" placeholder="{{ __('Detail') }}"></th>
-            <th><input class="form-control form-control-sm" data-source="/rule" name="Trigger" placeholder="{{ __('Trigger event') }}" /></th>
-            <th><input class="form-control form-control-sm" data-source="/rule" name="Category" placeholder="{{ __('Category') }}"></th>
-            <th><input class="form-control form-control-sm" data-source="/rule" name="Country" placeholder="{{ __('Country') }}"></th>
-            <th><input class="form-control form-control-sm" data-source="/rule" name="Origin" placeholder="{{ __('Origin') }}"></th>
-            <th><input class="form-control form-control-sm" data-source="/rule" name="Type" placeholder="{{ __('Type') }}"></th>
+            <th style="width: 20%"><input class="form-control form-control-sm" data-source="/rule" name="Task" placeholder="{{ __('Task') }}"></th>
+            <th style="width: 15%"><input class="form-control form-control-sm" data-source="/rule" name="Detail" placeholder="{{ __('Detail') }}"></th>
+            <th style="width: 20%"><input class="form-control form-control-sm" data-source="/rule" name="Trigger" placeholder="{{ __('Trigger event') }}" /></th>
+            <th style="width: 15%"><input class="form-control form-control-sm" data-source="/rule" name="Category" placeholder="{{ __('Category') }}"></th>
+            <th style="width: 7%"><input class="form-control form-control-sm" data-source="/rule" name="Country" placeholder="{{ __('Country') }}"></th>
+            <th style="width: 7%"><input class="form-control form-control-sm" data-source="/rule" name="Origin" placeholder="{{ __('Origin') }}"></th>
+            <th style="width: 9%"><input class="form-control form-control-sm" data-source="/rule" name="Type" placeholder="{{ __('Type') }}"></th>
+            <th style="width: 3%" title="{{ __('Clear task') }}">C</th>
+            <th style="width: 3%" title="{{ __('Delete task') }}">D</th>
           </tr>
         </thead>
         <tbody id="tableList">
@@ -30,15 +32,17 @@
           <tr data-id="{{ $rule->id }}" class="reveal-hidden">
             <td>
               <a href="/rule/{{ $rule->id }}" data-panel="ajaxPanel" title="{{ __('Rule data') }}">
-                {{ $rule->taskInfo->name }}
+                {{ $rule->taskInfo->name }} ({{ $rule->task }})
               </a>
             </td>
             <td>{{ $rule->detail }}</td>
-            <td>{{ empty($rule->trigger) ? '' : $rule->trigger->name }}</td>
-            <td>{{ empty($rule->category) ? '' : $rule->category->category }}</td>
-            <td>{{ empty($rule->country) ? '' : $rule->country->name }}</td>
-            <td>{{ empty($rule->origin) ? '' : $rule->origin->name }}</td>
-            <td>{{ empty($rule->type) ? '' : $rule->type->type }}</td>
+            <td>{{ $rule->trigger->name }} ({{ $rule->trigger_event }})</td>
+            <td>{{ $rule->category?->category }}</td>
+            <td>{{ $rule->for_country }}</td>
+            <td>{{ $rule->for_origin }}</td>
+            <td>{{ $rule->type?->type }}</td>
+            <td class="text-center">@if($rule->clear_task) ✓ @endif</td>
+            <td class="text-center">@if($rule->delete_task) ✓ @endif</td>
           </tr>
           @endforeach
           <tr>

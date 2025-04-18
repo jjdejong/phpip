@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasTableComments;
+use Spatie\Translatable\HasTranslations;
 
 class MatterType extends Model
 {
     use HasTableComments;
+    use HasTranslations;
     
     protected $table = 'matter_type';
 
@@ -20,4 +22,6 @@ class MatterType extends Model
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
 
     protected $guarded = ['created_at', 'updated_at'];
+
+    public $translatable = ['type'];
 }

@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TaskRulesTableSeeder::class);
         $this->call(TemplateClassesTableSeeder::class);
         $this->call(TemplateMembersTableSeeder::class);
+        $this->call(TranslatedAttributesSeeder::class);
     }
 }

@@ -9,7 +9,7 @@
 				</small>
 			</div>
 			<div class="col">
-				<label class="fw-bolder" title="{{ $userComments['login'] }}">{{ __('Login') }}</label>
+				<label class="fw-bolder" title="{{ $userComments['login'] }}">{{ __('User name') }}</label>
 				<input class="form-control" name="login" autocomplete="off">
 			</div>
 		</div>

@@ -43,13 +43,13 @@ class RenewalController extends Controller
                 if ($value != '') {
                     switch ($key) {
                         case 'Title':
-                            $renewals->where('tit.value', 'LIKE', "%$value%");
+                            $renewals->whereLike('tit.value', "%$value%");
                             break;
                         case 'Case':
-                            $renewals->where('caseref', 'LIKE', "$value%");
+                            $renewals->whereLike('caseref', "$value%");
                             break;
                         case 'Qt':
-                            $renewals->where('task.detail', 'LIKE', "$value%");
+                            $renewals->where("task.detail->en", $value);
                             break;
                         case 'Fromdate':
                             $renewals->where('due_date', '>=', "$value");
@@ -61,7 +61,7 @@ class RenewalController extends Controller
                             $renewals->where(DB::raw('IFNULL(pa_cli.name, clic.name)'), 'LIKE', "$value%");
                             break;
                         case 'Country':
-                            $renewals->where('matter.country', 'LIKE', "$value%");
+                            $renewals->whereLike('matter.country', "$value%");
                             break;
                         case 'grace':
                             $renewals->where('grace_period', "$value");
@@ -79,7 +79,7 @@ class RenewalController extends Controller
                             }
                             break;
                         default:
-                            $renewals->where($key, 'LIKE', "$value%");
+                            $renewals->whereLike($key, "$value%");
                             break;
                     }
                 }
@@ -278,7 +278,7 @@ $renewals->appends($request->input())->links(); // Keep URL parameters in the pa
         }
 
         $config_prefix = 'renewal.description.' . $ren->language;
-                    $due_date = Carbon::parse($ren->due_date)->locale($ren->language);
+        $due_date = Carbon::parse($ren->due_date)->locale($ren->language);
         if ($grace) {
             $due_date->addMonths(6);
         }

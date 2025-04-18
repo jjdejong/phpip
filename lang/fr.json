@@ -5,7 +5,7 @@
     "The :attribute must contain at least one uppercase and one lowercase letter.": "Le :attribute doit contenir au moins une lettre majuscule et une lettre minuscule.",
     "The given :attribute has appeared in a data leak. Please choose a different :attribute.": "Le :attribute donné est apparu dans une fuite de données. Veuillez choisir un autre :attribute.",
     "Toggle navigation": "Basculer la navigation",
-    "Login": "Identifiant",
+    "Login": "Connexion",
     "Register": "S'inscrire",
     "Dashboard": "Tableau de bord",
     "Matters": "Dossiers",

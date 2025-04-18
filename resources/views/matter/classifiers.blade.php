@@ -1,5 +1,16 @@
 @php
-$classifiers = $matter->classifiers->groupBy('type_name');
+  // Get the collection from the matter
+  $classifiersCollection = $matter->classifiers ?? collect(); // Use loaded relationship or fallback
+
+  // Group by type_code
+  $groupedClassifiersByCode = $classifiersCollection->groupBy('type_code');
+
+  // Sort groups by the display_order of the related ClassifierType
+  $sortedClassifierGroups = $groupedClassifiersByCode->sortBy(function ($group, $type_code) {
+      // Access the classifierType relationship on the first item of the group
+      // Ensure classifierType relationship is eager-loaded or available on the MatterClassifiers model/view
+      return $group->first()?->classifierType?->display_order ?? 127;
+  });
 @endphp
 <table class="table table-sm table-borderless">
   <thead class="table-light">
@@ -18,18 +29,29 @@ $classifiers = $matter->classifiers->groupBy('type_name');
       </th>
     </tr>
   </thead>
-  @foreach ($classifiers as $type => $classifier_group)
+  {{-- Loop through the sorted groups --}}
+  @foreach ($sortedClassifierGroups as $type_code => $classifier_group)
+    @php
+      // Get the related ClassifierType model instance from the first item
+      $classifierTypeModel = $classifier_group->first()?->classifierType;
+      // Get the TRANSLATED type name
+      $translatedTypeName = $classifierTypeModel?->type ?? $type_code; // Fallback to code
+      $isImageType = $translatedTypeName == 'Image'; // Check if it's the Image type
+    @endphp
   <tbody>
     <tr>
       <th colspan="4">
-        {{ $type }}
+        {{-- Display the translated type name --}}
+        {{ $translatedTypeName }}
       </th>
     </tr>
   </tbody>
   <tbody class="sortable">
+    {{-- Loop through classifiers within this group --}}
     @foreach($classifier_group as $classifier)
     <tr class="reveal-hidden" data-resource="/classifier/{{ $classifier->id }}">
-      <td class="ps-2"><input type="text" class="form-control noformat" name="value" value="{{ $classifier->value }}" {{ $type == 'Image' ? 'disabled' : '' }}></td>
+      {{-- Use $isImageType to disable input --}}
+      <td class="ps-2"><input type="text" class="form-control noformat" name="value" value="{{ $classifier->value }}" {{ $isImageType ? 'disabled' : '' }}></td>
       <td><input type="text" class="form-control noformat" name="url" value="{{ $classifier->url }}"></td>
       <td><input type="text" class="form-control noformat" name="lnk_matter_id" data-ac="/matter/autocomplete" value="{{ $classifier->lnk_matter_id ? $classifier->linkedMatter->uid : '' }}"></td>
       <td>

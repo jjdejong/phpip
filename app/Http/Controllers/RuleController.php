@@ -6,6 +6,7 @@ use App\Models\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\DB;
 
 class RuleController extends Controller
 {
@@ -20,41 +21,48 @@ class RuleController extends Controller
         $Type = $request->input('Type');
         $Category = $request->input('Category');
         $rule = new Rule;
+        $locale = app()->getLocale();
+        // Normalize to the base locale (e.g., 'en' from 'en_US')
+        $baseLocale = explode('_', $locale)[0];
+        $baseLocale = explode('-', $baseLocale)[0];
+        
         if (!is_null($Task)) {
             $rule = $rule->whereHas('taskInfo', function ($q) use ($Task) {
-                $q->where('name', 'like', $Task . '%');
+                $q->whereJsonLike('name', $Task);
             });
         }
         if (!is_null($Trigger)) {
             $rule = $rule->whereHas('trigger', function ($q) use ($Trigger) {
-                $q->whereLike('name', "{$Trigger}%");
+                $q->whereJsonLike('name', $Trigger);
             });
         }
         if (!is_null($Country)) {
-            $rule = $rule->whereHas('country', function ($q) use ($Country) {
-                $q->whereLike('name', "{$Country}%");
-            });
+            $rule = $rule->whereLike('for_country', $Country.'%');
         }
         if (!is_null($Category)) {
             $rule = $rule->whereHas('category', function ($q) use ($Category) {
-                $q->whereLike('category', "{$Category}%");
+                $q->whereJsonLike('category', $Category);
             });
         }
+        
         if (!is_null($Detail)) {
-            $rule = $rule->whereLike('detail', "{$Detail}%");
+            $rule = $rule->whereJsonLike('detail', $Detail);
         }
+        
         if (!is_null($Type)) {
             $rule = $rule->whereHas('type', function ($q) use ($Type) {
-                $q->whereLike('type', "{$Type}%");
+                $q->whereJsonLike('type', $Type);
             });
         }
         if (!is_null($Origin)) {
-            $rule = $rule->whereHas('origin', function ($q) use ($Origin) {
-                $q->whereLike('name', "{$Origin}%");
-            });
+            $rule = $rule->whereLike('for_origin', "{$Origin}%");
         }
+        
         $ruleslist = $rule->with(['country:iso,name', 'trigger:code,name', 'category:code,category', 'origin:iso,name', 'type:code,type', 'taskInfo:code,name'])
-            ->orderby('task')->paginate(21);
+            ->select('task_rules.*')
+            ->join('event_name AS t', 't.code', '=', 'task_rules.task')
+            ->orderByRaw("t.name->>'$.$baseLocale'")
+            ->paginate(21);
         $ruleslist->appends($request->input())->links();
 
         return view('rule.index', compact('ruleslist'));

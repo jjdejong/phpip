@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder as ModelBuilder;
 
 class Matter extends Model
 {
@@ -125,6 +126,17 @@ class Matter extends Model
     }
 
     /**
+     * This accessor returns a string of all applicant names, separated by a semicolon.
+     *
+     * @return string The concatenated names of all applicants.
+     */
+    public function getApplicantNameAttribute()
+    {
+        $names = $this->applicants->pluck('name')->toArray();
+        return implode('; ', $names);
+    }
+
+    /**
      * This method returns a collection of actors matching the role 'APP' for the matter.
      * using the matter_actor_lnk table and filtering by the 'APP' role.
      *
@@ -144,6 +156,17 @@ class Matter extends Model
     public function owners(): \Illuminate\Database\Eloquent\Collection
     {
         return $this->getActorsFromRole('OWN');
+    }
+
+    /**
+     * This method returns a string of all owner names, separated by a semicolon.
+     *
+     * @return string The concatenated names of all owners.
+     */
+    public function getOwnerNameAttribute()
+    {
+        $names = $this->owners->pluck('name')->toArray();
+        return implode('; ', $names);
     }
 
     public function inventors()
@@ -332,12 +355,17 @@ class Matter extends Model
 
     public static function filter($sortkey = 'id', $sortdir = 'desc', $multi_filter = [], $display_with = false, $include_dead = false)
     {
+        $locale = app()->getLocale();
+        // Normalize to the base locale (e.g., 'en' from 'en_US')
+        $baseLocale = explode('_', $locale)[0];
+        $baseLocale = explode('-', $baseLocale)[0];
+
         $query = Matter::select(
             'matter.uid AS Ref',
             'matter.country AS country',
             'matter.category_code AS Cat',
             'matter.origin',
-            DB::raw("GROUP_CONCAT(DISTINCT event_name.name SEPARATOR '; ') AS Status"),
+            DB::raw("GROUP_CONCAT(DISTINCT event_name.name->>'$.$baseLocale' SEPARATOR '|') AS Status"),
             DB::raw('MIN(status.event_date) AS Status_date'),
             DB::raw("GROUP_CONCAT(DISTINCT COALESCE(cli.display_name, clic.display_name, cli.name, clic.name) SEPARATOR '; ') AS Client"),
             DB::raw("GROUP_CONCAT(DISTINCT COALESCE(clilnk.actor_ref, cliclnk.actor_ref) SEPARATOR '; ') AS ClRef"),
@@ -532,7 +560,7 @@ class Matter extends Model
                             $query->whereLike('matter.country', "$value%");
                             break;
                         case 'Status':
-                            $query->where('event_name.name', 'LIKE', "$value%");
+                            $query->whereJsonLike('event_name.name', $value);
                             break;
                         case 'Status_date':
                             $query->whereLike('status.event_date', "$value%");
@@ -626,7 +654,7 @@ class Matter extends Model
                 $query->whereHas('client', function($aq) {
                     $aq->where('actor_id', request()->input('what_tasks'));
                 });
-        }
+            }
             if (Auth::user()->default_role == 'CLI' || empty(Auth::user()->default_role)) {
                 $query->whereHas('client', function($aq) {
                     $aq->where('actor_id', Auth::id());

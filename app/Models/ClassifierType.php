@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasTableComments;
+use Spatie\Translatable\HasTranslations;
 
 class ClassifierType extends Model
 {
     use HasTableComments;
+    use HasTranslations;
     
     protected $table = 'classifier_type';
 
@@ -21,6 +23,8 @@ class ClassifierType extends Model
 
     protected $guarded = ['created_at', 'updated_at'];
 
+    public $translatable = ['type'];
+    
     public function category()
     {
         return $this->belongsTo(Category::class, 'for_category', 'code');

@@ -14,11 +14,13 @@ class RoleController extends Controller
         $Code = $request->input('Code');
         $Name = $request->input('Name');
         $role = Role::query();
+        
         if (! is_null($Code)) {
-            $role = $role->where('code', 'like', $Code.'%');
+            $role = $role->whereLike('code', $Code.'%');
         }
+
         if (! is_null($Name)) {
-            $name = $role->where('name', 'like', $Name.'%');
+            $role = $role->whereJsonLike('name', $Name);
         }
 
         $roles = $role->get();

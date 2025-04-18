@@ -13,11 +13,13 @@ class ClassifierTypeController extends Controller
         $Code = $request->input('Code');
         $Type = $request->input('Type');
         $classifierType = ClassifierType::query();
+        
         if (! is_null($Code)) {
-            $classifierType = $classifierType->where('code', 'like', $Code.'%');
+            $classifierType = $classifierType->whereLike('code', $Code.'%');
         }
+
         if (! is_null($Type)) {
-            $classifierType = $classifierType->where('type', 'like', $Type.'%');
+            $classifierType = $classifierType->whereJsonLike('type', $Type);
         }
 
         $types = $classifierType->with(['category:code,category'])->get();

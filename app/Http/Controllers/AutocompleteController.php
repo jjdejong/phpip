@@ -45,11 +45,9 @@ class AutocompleteController extends Controller
 
     public function eventName(Request $request, $is_task): JsonResponse
     {
-        $query = EventName::select('name as value', 'code as key')
-            ->where([
-                ['name', 'like', "{$request->term}%"],
-                ['is_task', $is_task],
-            ]);
+        $query = EventName::whereJsonLike('name', $request->term)
+            ->orWhereLike('code', "{$request->term}%")
+            ->where('is_task', $is_task);
 
         if ($request->filled('category')) {
             $query->where(function($q) use ($request) {
@@ -58,17 +56,30 @@ class AutocompleteController extends Controller
             });
         }
 
-        return $this->formatResponse($query->take(10)->get());
+        $eventNames = $query->take(10)->get();
+        $results = $eventNames->map(function ($item) {
+            return [
+                'key' => $item->code,
+                'value' => $item->name
+            ];
+        })->toArray();
+
+        return $this->formatResponse($results);
     }
 
     public function classifierType(Request $request, $main_display): JsonResponse
     {
-        $results = ClassifierType::select('type as value', 'code as key')
-            ->where('type', 'like', "{$request->term}%")
+        $query = ClassifierType::whereJsonLike('type', $request->term)
             ->where('main_display', $main_display)
-            ->orderBy('type')
-            ->take(10)
-            ->get();
+            ->orderBy('type');
+
+        $types = $query->take(10)->get();
+        $results = $types->map(function ($item) {
+            return [
+                'key' => $item->code,
+                'value' => $item->type
+            ];
+        })->toArray();
 
         return $this->formatResponse($results);
     }
@@ -101,20 +112,32 @@ class AutocompleteController extends Controller
 
     public function role(Request $request): JsonResponse
     {
-        $results = Role::select('name as value', 'code as key', 'shareable')
-            ->where('name', 'like', "{$request->term}%")
-            ->orWhere('code', 'like', "{$request->term}%")
-            ->get();
+        $query = Role::whereJsonLike('name', $request->term)
+            ->orWhereLike('code', "{$request->term}%");
+
+        $roles = $query->take(10)->get();
+        $results = $roles->map(function ($item) {
+            return [
+                'key' => $item->code,
+                'value' => $item->name,
+                'shareable' => $item->shareable
+            ];
+        })->toArray();
 
         return $this->formatResponse($results);
     }
 
     public function dbrole(Request $request): JsonResponse
     {
-        $results = Role::select('name as value', 'code as key')
-            ->where('name', 'like', "{$request->term}%")
-            ->whereIn('code', ['CLI', 'DBA', 'DBRW', 'DBRO'])
-            ->get();
+        $query = Role::whereJsonLike('name', $request->term)
+            ->whereIn('code', ['CLI', 'DBA', 'DBRW', 'DBRO']);
+
+        $results = $query->get()->map(function ($item) {
+            return [
+                'key' => $item->code,
+                'value' => $item->name
+            ];
+        })->toArray();
 
         return $this->formatResponse($results);
     }
@@ -131,20 +154,32 @@ class AutocompleteController extends Controller
 
     public function category(Request $request): JsonResponse
     {
-        $results = Category::select('category as value', 'code as key', 'ref_prefix as prefix')
-            ->where('category', 'like', "{$request->term}%")
-            ->orWhere('code', 'like', "{$request->term}%")
-            ->get();
+        $query = Category::whereJsonLike('category', $request->term)
+            ->orWhereLike('code', "{$request->term}%");
+
+        $categories = $query->take(10)->get();
+        $results = $categories->map(function ($item) {
+            return [
+                'key' => $item->code,
+                'value' => $item->category,
+                'prefix' => $item->ref_prefix
+            ];
+        })->toArray();
 
         return $this->formatResponse($results);
     }
 
     public function type(Request $request): JsonResponse
     {
-        $results = MatterType::select('type as value', 'code as key')
-            ->where('type', 'like', "{$request->term}%")
-            ->orWhere('code', 'like', "{$request->term}%")
-            ->get();
+        $query = MatterType::whereJsonLike('type', $request->term);
+
+        $types = $query->take(10)->get();
+        $results = $types->map(function ($item) {
+            return [
+                'key' => $item->code,
+                'value' => $item->type
+            ];
+        })->toArray();
 
         return $this->formatResponse($results);
     }

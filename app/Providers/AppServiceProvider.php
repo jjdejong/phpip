@@ -31,5 +31,20 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('admin', fn ($user) => $user->default_role === 'DBA');
         Gate::define('readwrite', fn ($user) => in_array($user->default_role, ['DBA', 'DBRW']));
         Gate::define('readonly', fn ($user) => in_array($user->default_role, ['DBA', 'DBRW', 'DBRO']));
+
+        // Add query macro for case-insensitive JSON column queries
+        \Illuminate\Database\Query\Builder::macro('whereJsonLike', function ($column, $value, $locale = null) {
+            if (!$locale) {
+                $locale = app()->getLocale();
+                // Normalize to base locale (e.g., 'en' from 'en_US')
+                $locale = explode('_', $locale)[0];
+                $locale = explode('-', $locale)[0];
+            }
+            
+            return $this->whereRaw(
+                "JSON_UNQUOTE(JSON_EXTRACT($column, '$.$locale')) COLLATE utf8mb4_0900_ai_ci LIKE ?",
+                ["$value%"]
+            );
+        });
     }
 }

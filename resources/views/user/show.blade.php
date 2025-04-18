@@ -60,7 +60,7 @@
           @method('PUT')
           <table class="table table-striped">
             <tr>
-              <th>{{ __('Login') }}</th>
+              <th>{{ __('User name') }}</th>
               <td>{{ $userInfo->login }}</td>
             </tr>
             <tr>

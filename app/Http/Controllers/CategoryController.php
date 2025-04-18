@@ -13,11 +13,13 @@ class CategoryController extends Controller
         $Code = $request->input('Code');
         $Category = $request->input('Category');
         $category = Category::query();
+        
         if (! is_null($Code)) {
-            $category = $category->where('code', 'like', $Code.'%');
+            $category = $category->whereLike('code', $Code.'%');
         }
+        
         if (! is_null($Category)) {
-            $category = $category->where('category', 'like', $Category.'%');
+            $category = $category->whereJsonLike('category', $Category);
         }
 
         $categories = $category->get();

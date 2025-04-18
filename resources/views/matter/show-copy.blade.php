@@ -1,8 +1,6 @@
 @inject('sharePoint', 'App\Services\SharePointService')
 @php
-$titles = $matter->titles->groupBy('type_name');
-$classifiers = $matter->classifiers->groupBy('type_code');
-$actors = $matter->actors->groupBy('role_name');
+$classifiers = $matter->classifiers->groupBy('type_name');
 @endphp
 
 @extends('layouts.app')
@@ -95,16 +93,44 @@ $actors = $matter->actors->groupBy('role_name');
   <div class="col">
     <div class="card border-secondary p-1 h-100">
       <dl id="titlePanel">
-        @foreach ( $titles as $type_name => $title_group )
-          <dt class="mt-2">
-            {{ $type_name }}
-          </dt>
-          @foreach ( $title_group as $title )
-            <dd class="mb-0" data-resource="/classifier/{{ $title->id }}" data-name="value" contenteditable>
-              {{ $title->value }}
-            </dd>
-          @endforeach
+        @php
+        // Get the collection from the matter, assuming 'titles' is the correct relationship name
+        // Ensure 'classifierType' relationship was eager loaded in the controller ($matter->load(['titles.classifierType']))
+        $titlesCollection = $matter->titles ?? collect(); // Use the loaded relationship, fallback to empty collection
+        
+        // Group by type_code
+        $groupedTitlesByCode = $titlesCollection->groupBy('type_code');
+        
+        // Sort groups by the display_order of the related ClassifierType
+        $sortedGroups = $groupedTitlesByCode->sortBy(function ($group, $type_code) {
+          return $group->first()?->classifierType?->display_order ?? 127;
+        });
+        @endphp
+    
+        {{-- Loop through the sorted groups --}}
+        @foreach ($sortedGroups as $type_code => $title_group)
+        @php
+        // Get the related ClassifierType model instance
+        $classifierTypeModel = $title_group->first()?->classifierType;
+        // Get the TRANSLATED type name
+        $translatedTypeName = $classifierTypeModel?->type ?? $type_code; // Fallback to code
+        @endphp
+    
+        <dt class="mt-2">
+          {{-- Display the translated type name --}}
+          {{ $translatedTypeName }}
+        </dt>
+    
+        {{-- Loop through titles within this group --}}
+        @foreach ( $title_group as $title )
+        {{-- $title is an instance of MatterClassifiers --}}
+        {{-- Accessing $title->value and $title->id should work as before --}}
+        <dd class="mb-0" data-resource="/classifier/{{ $title->id }}" data-name="value" contenteditable>
+          {{ $title->value }}
+        </dd>
         @endforeach
+        @endforeach
+    
         @can('readwrite')
         <div>
           <a class="badge rounded-pill text-bg-primary float-end" role="button" data-bs-toggle="collapse" href="#addTitleCollapse">+</a>
@@ -113,15 +139,19 @@ $actors = $matter->actors->groupBy('role_name');
         <div id="addTitleCollapse" class="collapse">
           <form id="addTitleForm" autocomplete="off">
             <div class="row">
+              {{-- The form relies on $matter, which is passed --}}
               <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
               <div class="col-2">
-                <input type="hidden" name="type_code">
-                <input type="text" class="form-control form-control-sm" data-ac="/classifier-type/autocomplete/1" data-actarget="type_code" data-aclength="0" placeholder="Type" autocomplete="off">
+                <input type="hidden" name="type_code"> {{-- Target for autocomplete --}}
+                {{-- Autocomplete likely sets the type_code, placeholder is static --}}
+                <input type="text" class="form-control form-control-sm" data-ac="/classifier-type/autocomplete/1"
+                  data-actarget="type_code" data-aclength="0" placeholder="Type" autocomplete="off">
               </div>
               <div class="col-10">
                 <div class="input-group">
-                  <input type="text" class="form-control form-control-sm" name="value" placeholder="Value" autocomplete="off">
-                  <button type="button" class="btn btn-primary btn-sm" id="addTitleSubmit">&check;</button>
+                  <input type="text" class="form-control form-control-sm" name="value" placeholder="Value"
+                    autocomplete="off">
+                  <button type="button" class="btn btn-primary btn-sm" id="addTitleSubmit">✓</button>
                 </div>
               </div>
             </div>
@@ -130,12 +160,15 @@ $actors = $matter->actors->groupBy('role_name');
       </dl>
     </div>
   </div>
+  {{-- Find the image classifier by its type_code before grouping --}}
   @php
     $imageClassifier = $matter->classifiers->firstWhere('type_code', 'IMG');
   @endphp
+  {{-- Check if an image classifier was found --}}
   @if ($imageClassifier)
   <div class="col-3">
     <div class="card border-dark bg-dark p-1">
+      {{-- Use the ID of the found image classifier --}}
       <img src="/classifier/{{ $imageClassifier->id }}/img" class="card-img-top" style="max-height: 150px; object-fit: contain;">
     </div>
   </div>
@@ -154,30 +187,68 @@ $actors = $matter->actors->groupBy('role_name');
         @endcan
       </div>
       <div class="card-body bg-light p-1" style="overflow: auto;">
-        @foreach ( $actors as $role_name => $role_group )
+        @php
+        // Get the flat collection of actors (already eager-loaded with their 'role')
+        $actors = $matter->actors;
+      
+        // Group the collection by the 'role_code'
+        $groupedActorsByCode = $actors->groupBy('role_code');
+      
+        // Sort the groups based on the role's display_order
+        // Uses the 'role' relationship loaded onto the first actor of each group
+        $sortedGroups = $groupedActorsByCode->sortBy(function ($group, $role_code) {
+          // Access the loaded 'role' relationship on the first actor in the group
+          // Use null-safe operator (?->) for safety in case the relationship is missing
+          return $group->first()?->role?->display_order ?? 127; // Default sort order if role not found
+        });
+        @endphp
+      
+        {{-- Loop through the groups, where $role_code is the key and $role_group is the Collection --}}
+        @foreach ($sortedGroups as $role_code => $role_group)
+        @php
+        // Get the actual Role model instance from the first actor in the group
+        $roleModel = $role_group->first()?->role;
+        // Get the TRANSLATED name from the Role model (uses spatie/translatable logic)
+        $translatedRoleName = $roleModel?->name ?? $role_code; // Fallback to code if role/name missing
+        @endphp
+      
         <div class="card reveal-hidden border-secondary mb-1">
           <div class="card-header bg-primary text-light p-1">
-            {{ $role_name }}
+            {{-- Display the translated name --}}
+            {{ $translatedRoleName }}
+      
             @can('readwrite')
-            <a class="hidden-action float-end text-light fw-bold ms-3" data-bs-toggle="popover" title="Add {{ $role_name }}"
-              data-role_name="{{ $role_name }}"
-              data-role_code="{{ $role_group->first()->role_code }}"
-              data-shareable="{{ $role_group->first()->shareable }}"
+            {{-- Use the translated name and the original role_code --}}
+            <a class="hidden-action float-end text-light fw-bold ms-3" data-bs-toggle="popover"
+              title="{{ __('Add') }} {{ $translatedRoleName }}" data-role_name="{{ $translatedRoleName }}" {{-- Pass translated name for
+              UI --}} data-role_code="{{ $role_code }}" {{-- Pass original code for backend logic --}} {{-- Get shareable
+              status directly from the eager-loaded Role model --}} data-shareable="{{ $roleModel?->shareable ?? 0 }}"
               href="javascript:void(0)">
-              <svg width="12" height="12" fill="currentColor"><use xlink:href="#person-plus-fill"/></svg>
+              <svg width="12" height="12" fill="currentColor">
+                <use xlink:href="#person-plus-fill" />
+              </svg>
             </a>
-            <a class="hidden-action float-end text-light" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-lg" title="Edit actors in {{ $role_group->first()->role_name }} group" href="/matter/{{ $matter->id }}/roleActors/{{ $role_group->first()->role_code }}">
-              <svg width="12" height="12" fill="currentColor"><use xlink:href="#pencil-square"/></svg>
+            {{-- Use the translated name and the original role_code --}}
+            <a class="hidden-action float-end text-light" data-bs-toggle="modal" data-bs-target="#ajaxModal"
+              data-size="modal-lg" title="Edit actors in {{ $translatedRoleName }} group"
+              href="/matter/{{ $matter->id }}/roleActors/{{ $role_code }}">
+              <svg width="12" height="12" fill="currentColor">
+                <use xlink:href="#pencil-square" />
+              </svg>
             </a>
             @endcan
           </div>
           <div class="card-body p-1" style="max-height: 80px; overflow: auto;">
             <ul class="list-unstyled mb-0">
+              {{-- Loop through the actors within this specific role group --}}
               @foreach ( $role_group as $actor )
+              {{-- Inner part remains mostly the same, using $actor properties from the MatterActors view model --}}
               <li class="text-truncate {{ $actor->inherited ? 'fst-italic' : '' }}">
                 @if ( $actor->warn && $actor->role_code == 'CLI')
                 <span class="text-danger" title="Special instructions">
-                  <svg width="12" height="12" fill="currentColor"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                  <svg width="12" height="12" fill="currentColor">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                  </svg>
                 </span>
                 @endif
                 <a @if ($actor->warn && $actor->role_code == 'CLI') class="text-danger" @endif
@@ -185,19 +256,22 @@ $actors = $matter->actors->groupBy('role_name');
                   data-bs-toggle="modal"
                   data-bs-target="#ajaxModal"
                   title="Actor data">
-                {{ $actor->display_name }}
+                  {{ $actor->display_name }} {{-- Display name from MatterActors --}}
                 </a>
+                {{-- These properties come directly from the MatterActors view model --}}
                 @if ( $actor->show_ref && $actor->actor_ref )
                 ({{ $actor->actor_ref }})
                 @endif
+                {{-- Note: $actor->company might need adjusting if it was supposed to come from the relationship --}}
+                {{-- Assuming $actor->company is directly available from the MatterActors view --}}
                 @if ( $actor->show_company && $actor->company )
-                &nbsp;- {{ $actor->company }}
+                 - {{ $actor->company }}
                 @endif
                 @if ( $actor->show_date && $actor->date )
                 ({{ \Carbon\Carbon::parse($actor->date)->isoFormat('L') }})
                 @endif
                 @if ( $actor->show_rate && $actor->rate != '100' )
-                &nbsp;- {{ $actor->rate }}
+                 - {{ $actor->rate }}
                 @endif
               </li>
               @endforeach
@@ -300,11 +374,49 @@ $actors = $matter->actors->groupBy('role_name');
               </a>
             </div>
             <div class="card-body p-1" id="classifierPanel" style="overflow: auto;">
-              @foreach ( $classifiers as $type_code => $classifier_group )
-                @if ( $type_code != 'IMG' )
-                <div class="card">
+              @php
+                // Get the collection from the matter
+                $classifiersCollection = $matter->classifiers ?? collect(); // Use loaded relationship or fallback
+
+                // Group by type_code
+                $groupedClassifiersByCode = $classifiersCollection->groupBy('type_code');
+
+                // Sort groups by the display_order of the related ClassifierType
+                $sortedClassifierGroups = $groupedClassifiersByCode->sortBy(function ($group, $type_code) {
+                    // Access the classifierType relationship on the first item of the group
+                    // Ensure classifierType relationship is eager-loaded or available on the MatterClassifiers model/view
+                    return $group->first()?->classifierType?->display_order ?? 127;
+                });
+
+                $linkTypeCode = 'LNK'; // Assuming 'LNK' is the type_code for Link classifiers
+                $linkTypeProcessed = false; // Flag to track if Link type was processed
+              @endphp
+
+              {{-- Loop through the sorted groups --}}
+              @foreach ($sortedClassifierGroups as $type_code => $classifier_group)
+                @php
+                  // Get the related ClassifierType model instance from the first item
+                  $classifierTypeModel = $classifier_group->first()?->classifierType;
+                  // Get the TRANSLATED type name
+                  $translatedTypeName = $classifierTypeModel?->type ?? $type_code; // Fallback to code
+                @endphp
+
+                {{-- Skip Image type --}}
+                @if ($translatedTypeName == 'Image')
+                  @continue
+                @endif
+
+                {{-- Check if this is the Link type --}}
+                @if ($type_code == $linkTypeCode)
+                  @php $linkTypeProcessed = true; @endphp
+                @endif
+
+                <div class="card mb-1">
                   <div class="card-body p-1">
-                    <span class="fw-bolder align-middle">{{ $classifier_group[0]->type_name }}</span>
+                    {{-- Display the translated type name --}}
+                    <span class="fw-bolder align-middle">{{ $translatedTypeName }}</span>
+
+                    {{-- Loop through classifiers within this group --}}
                     @foreach ( $classifier_group as $classifier )
                       @if ( $classifier->url )
                         <a href="{{ $classifier->url }}" class="badge fw-normal text-bg-primary align-middle" target="_blank">{{ $classifier->value }}</a>
@@ -314,24 +426,33 @@ $actors = $matter->actors->groupBy('role_name');
                         <div class="badge fw-normal text-bg-secondary align-middle">{{ $classifier->value }}</div>
                       @endif
                     @endforeach
-                    @if ( $type_code == 'LNK' )
+
+                    {{-- If this is the Link type group, also show linkedBy matters --}}
+                    @if ( $type_code == $linkTypeCode )
                       @foreach ( $matter->linkedBy as $linkedBy )
                         <a href="/matter/{{ $linkedBy->id }}" class="badge fw-normal text-bg-primary align-middle">{{ $linkedBy->uid }}</a>
                       @endforeach
                     @endif
                   </div>
                 </div>
-                @endif
               @endforeach
-              @if ( !in_array('LNK', $classifiers->keys()->all()) && !$matter->linkedBy->isEmpty() )
-              <div class="card">
-                <div class="card-body p-1">
-                  <span class="fw-bolder align-middle">Link</span>
+
+              {{-- Handle case where Link classifiers don't exist, but linkedBy matters do --}}
+              @if ( !$linkTypeProcessed && !$matter->linkedBy->isEmpty() )
+                @php
+                  // Attempt to get the translated name for the Link type specifically
+                  // This assumes you can query ClassifierType by code, adjust if needed
+                  $linkClassifierType = \App\Models\ClassifierType::where('code', $linkTypeCode)->first();
+                  $translatedLinkTypeName = $linkClassifierType?->type ?? __('Link'); // Fallback translation
+                @endphp
+                <div class="card mb-1">
+                  <div class="card-body p-1">
+                    <span class="fw-bolder align-middle">{{ $translatedLinkTypeName }}</span>
                     @foreach ( $matter->linkedBy as $linkedBy )
                       <a href="/matter/{{ $linkedBy->id }}" class="badge fw-normal text-bg-primary align-middle">{{ $linkedBy->uid }}</a>
                     @endforeach
+                  </div>
                 </div>
-              </div>
               @endif
             </div>
           </div>

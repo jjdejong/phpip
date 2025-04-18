@@ -17,8 +17,9 @@ class EventNameController extends Controller
         if (! is_null($Code)) {
             $ename = $ename->whereLike('code', $Code.'%');
         }
+
         if (! is_null($Name)) {
-            $ename = $ename->where('name', 'like', $Name.'%');
+            $ename = $ename->whereJsonLike('name', $Name);
         }
 
         $enameslist = $ename->paginate(21);
