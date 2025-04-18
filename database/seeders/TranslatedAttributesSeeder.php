@@ -136,7 +136,7 @@ class TranslatedAttributesSeeder extends Seeder
             'REM'   => ['en' => 'Reminder',            'fr' => 'Rappel',                   'de' => 'Erinnerung'],
             'REN'   => ['en' => 'Renewal',             'fr' => 'Renouvellement',           'de' => 'Verlängerung'],
             'REP'   => ['en' => 'Respond',             'fr' => 'Répondre',                 'de' => 'Erwidern'],
-            'REQ'   => ['en' => 'Request Examination', 'fr' => 'Requête en examen',        'de' => 'Prüfungsantrag'],
+            'REQ'   => ['en' => 'Request',             'fr' => 'Requête',                  'de' => 'Antrag'],
             'RSTR'  => ['en' => 'Restriction Req.',    'fr' => 'Requête restriction',      'de' => 'Beschränkungsantrag'],
             'SOL'   => ['en' => 'Sold',                'fr' => 'Vendu',                    'de' => 'Verkauft'],
             'SOP'   => ['en' => 'Summons to Oral Proc.', 'fr' => 'Citation proc. orale',   'de' => 'Ladung zur Mündl. Verh.'],
