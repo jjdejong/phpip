@@ -24,6 +24,16 @@ class TranslatedAttributesSeeder extends Seeder
         'extension' => ['en' => 'Request extension', 'fr' => 'Demander prolongation', 'de' => 'Verlängerung beantragen'],
     ];
 
+    // Values that are standardized across languages (numbers, codes, acronyms)
+    private array $standardizedValues = [
+        'r71_3' => ['en' => 'R71(3)'],
+        'r70_2' => ['en' => 'R70(2)'],
+        'r161' => ['en' => 'R161'],
+        'rce' => ['en' => 'RCE'],
+        'ids' => ['en' => 'IDS'],
+        'poa' => ['en' => 'POA'],
+    ];
+
     /**
      * Run the database seeds.
      *
@@ -211,7 +221,7 @@ class TranslatedAttributesSeeder extends Seeder
             9 => ['en' => 'Search Report', 'fr' => 'Rapport de Recherche', 'de' => 'Recherchenbericht'],
            10 => $this->commonTranslations['examReport'],
            11 => $this->commonTranslations['examReport'],
-           13 => ['en' => 'R71(3)', 'fr' => 'R71(3)', 'de' => 'R71(3)'],
+           13 => $this->standardizedValues['r71_3'],
            14 => $this->commonTranslations['grantFee'],
            15 => ['en' => 'Claim Translation', 'fr' => 'Traduction Revendications', 'de' => 'Anspruchsübersetzung'],
            16 => ['en' => 'Translate where necessary', 'fr' => 'Traduire si nécessaire', 'de' => 'Übersetzen wo nötig'],
@@ -221,16 +231,16 @@ class TranslatedAttributesSeeder extends Seeder
            21 => ['en' => 'Priority Deadline', 'fr' => 'Délai de Priorité', 'de' => 'Prioritätsfrist'],
            23 => $this->commonTranslations['examination'],
            25 => $this->commonTranslations['delete'],
-           30 => ['en' => 'IDS', 'fr' => 'IDS', 'de' => 'IDS'],
+           30 => $this->standardizedValues['ids'],
            34 => ['en' => 'National Phase', 'fr' => 'Phase Nationale', 'de' => 'Nationale Phase'],
            35 => ['en' => 'Small Entity', 'fr' => 'Petite Entité', 'de' => 'Kleines Unternehmen'],
            36 => ['en' => 'HK Grant Fee', 'fr' => 'Taxe Délivrance HK', 'de' => 'HK Erteilungsgebühr'],
            37 => ['en' => 'Communication', 'fr' => 'Communication', 'de' => 'Mitteilung'],
            38 => $this->commonTranslations['clear'],
            39 => $this->commonTranslations['grantFee'],
-           41 => ['en' => 'R70(2)', 'fr' => 'R70(2)', 'de' => 'R70(2)'],
+           41 => $this->standardizedValues['r70_2'],
            46 => ['en' => 'Restriction Req.', 'fr' => 'Requête Restriction', 'de' => 'Beschränkungsantrag'],
-           47 => ['en' => 'R161', 'fr' => 'R161', 'de' => 'R161'],
+           47 => $this->standardizedValues['r161'],
            49 => $this->commonTranslations['appeal'],
            52 => $this->commonTranslations['observations'],
            53 => $this->commonTranslations['examination'],
@@ -245,7 +255,7 @@ class TranslatedAttributesSeeder extends Seeder
            63 => $this->commonTranslations['extension'],
            64 => $this->commonTranslations['extension'],
            66 => $this->commonTranslations['grantFee'],
-           67 => ['en' => 'R70(2)', 'fr' => 'R70(2)', 'de' => 'R70(2)'],
+           67 => $this->standardizedValues['r70_2'],
            68 => ['en' => 'Designation Fees', 'fr' => 'Taxes de Désignation', 'de' => 'Benennungsgebühren'],
            69 => $this->commonTranslations['written'],
            70 => $this->commonTranslations['examination'],
@@ -261,7 +271,7 @@ class TranslatedAttributesSeeder extends Seeder
            242 => ['en' => 'Declaration of use', 'fr' => 'Déclaration d\'Usage', 'de' => 'Benutzungserklärung'],
            1280 => $this->commonTranslations['observations'],
            1282 => ['en' => '2nd part of individual fee', 'fr' => '2ème partie taxe indiv.', 'de' => '2. Teil Individualgebühr'],
-           1290 => ['en' => 'Soleau', 'fr' => 'Soleau', 'de' => 'Soleau'],
+           1290 => ['en' => 'Soleau'],
            1291 => ['en' => 'End of protection', 'fr' => 'Fin de protection', 'de' => 'Schutzende'],
            1300 => $this->commonTranslations['observations'],
            1301 => $this->commonTranslations['declaration'],
@@ -272,10 +282,10 @@ class TranslatedAttributesSeeder extends Seeder
            1310 => ['en' => 'Opinion', 'fr' => 'Avis', 'de' => 'Gutachten'],
            1311 => ['en' => 'Report', 'fr' => 'Rapport', 'de' => 'Bericht'],
            1315 => $this->commonTranslations['examReport'],
-           1316 => ['en' => 'POA', 'fr' => 'Pouvoir', 'de' => 'Vollmacht'],
+           1316 => $this->standardizedValues['poa'],
            1321 => ['en' => 'Analysis of SR', 'fr' => 'Analyse du Rap. Rech.', 'de' => 'Analyse Rech.ber.'],
            1322 => $this->commonTranslations['appeal'],
-           1323 => ['en' => 'RCE', 'fr' => 'RCE', 'de' => 'RCE'],
+           1323 => $this->standardizedValues['rce'],
            1326 => ['en' => 'Appeal', 'fr' => 'Recours', 'de' => 'Beschwerde'],
            1327 => $this->commonTranslations['clear'],
            1328 => ['en' => 'CompuMark Analysis', 'fr' => 'Analyse CompuMark', 'de' => 'CompuMark Analyse'],
