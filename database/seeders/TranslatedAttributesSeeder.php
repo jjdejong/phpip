@@ -8,6 +8,22 @@ use Illuminate\Support\Facades\Log;
 
 class TranslatedAttributesSeeder extends Seeder
 {
+    // Common translations that are reused multiple times
+    private array $commonTranslations = [
+        'clear' => ['en' => 'Clear', 'fr' => 'Acquitter', 'de' => 'Erfüllen'],
+        'delete' => ['en' => 'Delete', 'fr' => 'Supprimer', 'de' => 'Löschen'],
+        'examination' => ['en' => 'Examination', 'fr' => 'Examen', 'de' => 'Prüfung'],
+        'examReport' => ['en' => 'Exam Report', 'fr' => 'Rapport d\'Examen', 'de' => 'Prüfungsbericht'],
+        'grantFee' => ['en' => 'Grant Fee', 'fr' => 'Taxe de Délivrance', 'de' => 'Erteilungsgebühr'],
+        'observations' => ['en' => 'Observations', 'fr' => 'Observations', 'de' => 'Anmerkungen'],
+        'written' => ['en' => 'Written Opinion', 'fr' => 'Opinion Écrite', 'de' => 'Schriftlicher Bescheid'],
+        'appeal' => ['en' => 'Appeal Brief', 'fr' => 'Mémoire de Recours', 'de' => 'Beschwerdebegründung'],
+        'declaration' => ['en' => 'Decl. and Assignment', 'fr' => 'Décl. et Cession', 'de' => 'Erklärung u. Abtretung'],
+        'opposition' => ['en' => 'Opposition deadline', 'fr' => 'Délai d\'Opposition', 'de' => 'Widerspruchsfrist'],
+        'recurring' => ['en' => 'Recurring', 'fr' => 'Récurrent', 'de' => 'Wiederkehrend'],
+        'extension' => ['en' => 'Request extension', 'fr' => 'Demander prolongation', 'de' => 'Verlängerung beantragen'],
+    ];
+
     /**
      * Run the database seeds.
      *
@@ -21,9 +37,8 @@ class TranslatedAttributesSeeder extends Seeder
         Log::info('Starting TranslatedAttributesSeeder...');
 
         // --- actor_role.name ---
-        // Based on ActorRoleTableSeeder.txt
+        // Based on ActorRoleTableSeeder.php
         $actorRoles = [
-            // ** VERIFY/CORRECT 'fr' and 'de' TRANSLATIONS **
             'ADV'  => ['en' => 'Adversary',        'fr' => 'Adversaire',           'de' => 'Gegenpartei'],
             'AGT'  => ['en' => 'Primary Agent',    'fr' => 'Agent principal',      'de' => 'Hauptvertreter'],
             'AGT2' => ['en' => 'Secondary Agent',  'fr' => 'Agent secondaire',     'de' => 'Zweitvertreter'],
@@ -51,9 +66,8 @@ class TranslatedAttributesSeeder extends Seeder
 
 
         // --- classifier_type.type ---
-        // Based on ClassifierTypeTableSeeder.txt
+        // Based on ClassifierTypeTableSeeder.php
         $classifierTypes = [
-             // ** VERIFY/CORRECT 'fr' and 'de' TRANSLATIONS **
             'ABS'   => ['en' => 'Abstract',         'fr' => 'Abrégé',           'de' => 'Zusammenfassung'],
             'AGR'   => ['en' => 'Agreement',        'fr' => 'Accord',           'de' => 'Vereinbarung'],
             'BU'    => ['en' => 'Business Unit',    'fr' => 'Unité commerciale','de' => 'Geschäftsbereich'],
@@ -81,9 +95,8 @@ class TranslatedAttributesSeeder extends Seeder
 
 
         // --- event_name.name ---
-        // Based on EventNameTableSeeder.txt
+        // Based on EventNameTableSeeder.php
         $eventNames = [
-             // ** VERIFY/CORRECT 'fr' and 'de' TRANSLATIONS **
             'ABA'   => ['en' => 'Abandoned',           'fr' => 'Abandonné',                'de' => 'Aufgegeben'],
             'ABO'   => ['en' => 'Abandon Original',    'fr' => 'Abandon original',         'de' => 'Ursprüngliches aufgeben'],
             'ADV'   => ['en' => 'Advisory Action',     'fr' => 'Advisory Action',          'de' => 'Advisory Action'],
@@ -152,9 +165,8 @@ class TranslatedAttributesSeeder extends Seeder
 
 
          // --- matter_category.category ---
-         // Based on MatterCategoryTableSeeder.txt
+         // Based on MatterCategoryTableSeeder.php
          $matterCategories = [
-             // ** VERIFY/CORRECT 'fr' and 'de' TRANSLATIONS **
              'AGR'  => ['en' => 'Agreement',           'fr' => 'Accord',              'de' => 'Vereinbarung'],
              'DSG'  => ['en' => 'Design',              'fr' => 'Dessin ou modèle',    'de' => 'Design'],
              'FTO'  => ['en' => 'Freedom to Operate',  'fr' => 'Liberté d\'exploitation','de' => 'Freedom to Operate'],
@@ -176,9 +188,8 @@ class TranslatedAttributesSeeder extends Seeder
 
 
          // --- matter_type.type ---
-         // Based on MatterTypeTableSeeder.txt
+         // Based on MatterTypeTableSeeder.php
          $matterTypes = [
-             // ** VERIFY/CORRECT 'fr' and 'de' TRANSLATIONS **
              'CIP' => ['en' => 'Continuation in Part', 'fr' => 'Continuation partielle', 'de' => 'Teilfortsetzungsanmeldung'],
              'CNT' => ['en' => 'Continuation',         'fr' => 'Continuation',           'de' => 'Fortsetzungsanmeldung'],
              'DIV' => ['en' => 'Divisional',           'fr' => 'Divisionnaire',          'de' => 'Teilanmeldung'],
@@ -190,77 +201,83 @@ class TranslatedAttributesSeeder extends Seeder
 
 
         // --- task_rules.detail ---
-        // Based on TaskRulesTableSeeder.txt
+        // Based on TaskRulesTableSeeder.php
         // !! WARNING !! MAPPING USES PRIMARY KEY `id`.
          $taskRuleDetails = [
-            // ** VERIFY 'en' and if it *should* be translated **
-            // ** VERIFY/CORRECT 'fr' and 'de' TRANSLATIONS **
-            3 => ['en' => 'Clear', 'fr' => 'Acquitter', 'de' => 'Erfüllen'],
-            5 => ['en' => 'Clear', 'fr' => 'Acquitter', 'de' => 'Erfüllen'],
+            3 => $this->commonTranslations['clear'],
+            5 => $this->commonTranslations['clear'],
+            6 => $this->commonTranslations['examination'],
+            7 => $this->commonTranslations['examination'],
             9 => ['en' => 'Search Report', 'fr' => 'Rapport de Recherche', 'de' => 'Recherchenbericht'],
-           10 => ['en' => 'Exam Report', 'fr' => 'Rapport d\'Examen', 'de' => 'Prüfungsbericht'],
-           11 => ['en' => 'Exam Report', 'fr' => 'Rapport d\'Examen', 'de' => 'Prüfungsbericht'],
+           10 => $this->commonTranslations['examReport'],
+           11 => $this->commonTranslations['examReport'],
            13 => ['en' => 'R71(3)', 'fr' => 'R71(3)', 'de' => 'R71(3)'],
-           14 => ['en' => 'Grant Fee', 'fr' => 'Taxe de Délivrance', 'de' => 'Erteilungsgebühr'],
+           14 => $this->commonTranslations['grantFee'],
            15 => ['en' => 'Claim Translation', 'fr' => 'Traduction Revendications', 'de' => 'Anspruchsübersetzung'],
            16 => ['en' => 'Translate where necessary', 'fr' => 'Traduire si nécessaire', 'de' => 'Übersetzen wo nötig'],
-           18 => ['en' => 'Written Opinion', 'fr' => 'Opinion Écrite', 'de' => 'Schriftlicher Bescheid'],
+           18 => $this->commonTranslations['written'],
            19 => ['en' => 'Designation Fees', 'fr' => 'Taxes de Désignation', 'de' => 'Benennungsgebühren'],
-           20 => ['en' => 'Decl. and Assignment', 'fr' => 'Décl. et Cession', 'de' => 'Erklärung u. Abtretung'],
+           20 => $this->commonTranslations['declaration'],
            21 => ['en' => 'Priority Deadline', 'fr' => 'Délai de Priorité', 'de' => 'Prioritätsfrist'],
-           25 => ['en' => 'Delete', 'fr' => 'Supprimer', 'de' => 'Löschen'],
+           23 => $this->commonTranslations['examination'],
+           25 => $this->commonTranslations['delete'],
            30 => ['en' => 'IDS', 'fr' => 'IDS', 'de' => 'IDS'],
            34 => ['en' => 'National Phase', 'fr' => 'Phase Nationale', 'de' => 'Nationale Phase'],
            35 => ['en' => 'Small Entity', 'fr' => 'Petite Entité', 'de' => 'Kleines Unternehmen'],
            36 => ['en' => 'HK Grant Fee', 'fr' => 'Taxe Délivrance HK', 'de' => 'HK Erteilungsgebühr'],
            37 => ['en' => 'Communication', 'fr' => 'Communication', 'de' => 'Mitteilung'],
-           38 => ['en' => 'Clear', 'fr' => 'Acquitter', 'de' => 'Erfüllen'],
-           39 => ['en' => 'Grant Fee', 'fr' => 'Taxe de Délivrance', 'de' => 'Erteilungsgebühr'],
+           38 => $this->commonTranslations['clear'],
+           39 => $this->commonTranslations['grantFee'],
            41 => ['en' => 'R70(2)', 'fr' => 'R70(2)', 'de' => 'R70(2)'],
            46 => ['en' => 'Restriction Req.', 'fr' => 'Requête Restriction', 'de' => 'Beschränkungsantrag'],
            47 => ['en' => 'R161', 'fr' => 'R161', 'de' => 'R161'],
-           49 => ['en' => 'Appeal Brief', 'fr' => 'Mémoire de Recours', 'de' => 'Beschwerdebegründung'],
-           52 => ['en' => 'Observations', 'fr' => 'Observations', 'de' => 'Anmerkungen'],
-           56 => ['en' => 'Grant Fee', 'fr' => 'Taxe de Délivrance', 'de' => 'Erteilungsgebühr'],
+           49 => $this->commonTranslations['appeal'],
+           52 => $this->commonTranslations['observations'],
+           53 => $this->commonTranslations['examination'],
+           54 => $this->commonTranslations['examination'],
+           55 => $this->commonTranslations['examination'],
+           56 => $this->commonTranslations['grantFee'],
            57 => ['en' => 'Priority Docs', 'fr' => 'Documents Priorité', 'de' => 'Prioritätsunterlagen'],
            58 => ['en' => 'Filing Fee', 'fr' => 'Taxe de Dépôt', 'de' => 'Anmeldegebühr'],
            60 => ['en' => 'File divisional', 'fr' => 'Déposer divisionnaire', 'de' => 'Teilanmeldung einreichen'],
-           61 => ['en' => 'Exam Report', 'fr' => 'Rapport d\'Examen', 'de' => 'Prüfungsbericht'],
-           62 => ['en' => 'Exam Report', 'fr' => 'Rapport d\'Examen', 'de' => 'Prüfungsbericht'],
-           63 => ['en' => 'Request extension', 'fr' => 'Demander prolongation', 'de' => 'Verlängerung beantragen'],
-           64 => ['en' => 'Request extension', 'fr' => 'Demander prolongation', 'de' => 'Verlängerung beantragen'],
-           66 => ['en' => 'Grant Fee', 'fr' => 'Taxe de Délivrance', 'de' => 'Erteilungsgebühr'],
+           61 => $this->commonTranslations['examReport'],
+           62 => $this->commonTranslations['examReport'],
+           63 => $this->commonTranslations['extension'],
+           64 => $this->commonTranslations['extension'],
+           66 => $this->commonTranslations['grantFee'],
            67 => ['en' => 'R70(2)', 'fr' => 'R70(2)', 'de' => 'R70(2)'],
            68 => ['en' => 'Designation Fees', 'fr' => 'Taxes de Désignation', 'de' => 'Benennungsgebühren'],
-           69 => ['en' => 'Written Opinion', 'fr' => 'Opinion Écrite', 'de' => 'Schriftlicher Bescheid'],
-           80 => ['en' => 'Recurring', 'fr' => 'Récurrent', 'de' => 'Wiederkehrend'],
-           81 => ['en' => 'Recurring', 'fr' => 'Récurrent', 'de' => 'Wiederkehrend'],
-           234 => ['en' => 'Grant Fee', 'fr' => 'Taxe de Délivrance', 'de' => 'Erteilungsgebühr'],
-           235 => ['en' => 'Written Opinion', 'fr' => 'Opinion Écrite', 'de' => 'Schriftlicher Bescheid'],
-           236 => ['en' => 'Grant Fee', 'fr' => 'Taxe de Délivrance', 'de' => 'Erteilungsgebühr'],
+           69 => $this->commonTranslations['written'],
+           70 => $this->commonTranslations['examination'],
+           80 => $this->commonTranslations['recurring'],
+           81 => $this->commonTranslations['recurring'],
+           234 => $this->commonTranslations['grantFee'],
+           235 => $this->commonTranslations['written'],
+           236 => $this->commonTranslations['grantFee'],
            237 => ['en' => 'Working Report', 'fr' => 'Rapport d\'Exploitation', 'de' => 'Nutzungsbericht'],
-           238 => ['en' => 'Opposition deadline', 'fr' => 'Délai d\'Opposition', 'de' => 'Widerspruchsfrist'],
-           239 => ['en' => 'Opposition deadline', 'fr' => 'Délai d\'Opposition', 'de' => 'Widerspruchsfrist'],
-           240 => ['en' => 'Opposition deadline', 'fr' => 'Délai d\'Opposition', 'de' => 'Widerspruchsfrist'],
+           238 => $this->commonTranslations['opposition'],
+           239 => $this->commonTranslations['opposition'],
+           240 => $this->commonTranslations['opposition'],
            242 => ['en' => 'Declaration of use', 'fr' => 'Déclaration d\'Usage', 'de' => 'Benutzungserklärung'],
-           1280 => ['en' => 'Observations', 'fr' => 'Observations', 'de' => 'Anmerkungen'],
+           1280 => $this->commonTranslations['observations'],
            1282 => ['en' => '2nd part of individual fee', 'fr' => '2ème partie taxe indiv.', 'de' => '2. Teil Individualgebühr'],
            1290 => ['en' => 'Soleau', 'fr' => 'Soleau', 'de' => 'Soleau'],
            1291 => ['en' => 'End of protection', 'fr' => 'Fin de protection', 'de' => 'Schutzende'],
-           1300 => ['en' => 'Observations', 'fr' => 'Observations', 'de' => 'Anmerkungen'],
-           1301 => ['en' => 'Decl. and Assignment', 'fr' => 'Décl. et Cession', 'de' => 'Erklärung u. Abtretung'],
-           1303 => ['en' => 'Appeal Brief', 'fr' => 'Mémoire de Recours', 'de' => 'Beschwerdebegründung'],
-           1306 => ['en' => 'Delete', 'fr' => 'Supprimer', 'de' => 'Löschen'],
-           1307 => ['en' => 'Delete', 'fr' => 'Supprimer', 'de' => 'Löschen'],
+           1300 => $this->commonTranslations['observations'],
+           1301 => $this->commonTranslations['declaration'],
+           1302 => $this->commonTranslations['examination'],
+           1303 => $this->commonTranslations['appeal'],
+           1306 => $this->commonTranslations['delete'],
+           1307 => $this->commonTranslations['delete'],
            1310 => ['en' => 'Opinion', 'fr' => 'Avis', 'de' => 'Gutachten'],
            1311 => ['en' => 'Report', 'fr' => 'Rapport', 'de' => 'Bericht'],
-           1315 => ['en' => 'Exam Report', 'fr' => 'Rapport d\'Examen', 'de' => 'Prüfungsbericht'],
+           1315 => $this->commonTranslations['examReport'],
            1316 => ['en' => 'POA', 'fr' => 'Pouvoir', 'de' => 'Vollmacht'],
            1321 => ['en' => 'Analysis of SR', 'fr' => 'Analyse du Rap. Rech.', 'de' => 'Analyse Rech.ber.'],
-           1322 => ['en' => 'Appeal Brief', 'fr' => 'Mémoire de Recours', 'de' => 'Beschwerdebegründung'],
+           1322 => $this->commonTranslations['appeal'],
            1323 => ['en' => 'RCE', 'fr' => 'RCE', 'de' => 'RCE'],
            1326 => ['en' => 'Appeal', 'fr' => 'Recours', 'de' => 'Beschwerde'],
-           1327 => ['en' => 'Clear', 'fr' => 'Acquitter', 'de' => 'Erfüllen'],
+           1327 => $this->commonTranslations['clear'],
            1328 => ['en' => 'CompuMark Analysis', 'fr' => 'Analyse CompuMark', 'de' => 'CompuMark Analyse'],
            1329 => ['en' => 'Products & Services', 'fr' => 'Produits & Services', 'de' => 'Produkte & Dienstleistungen'],
         ];
