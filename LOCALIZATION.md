@@ -4,25 +4,24 @@
 
 ### Setting User Language
 Users can set their preferred language in their profile:
-- English (British) - `en_GB`
-- English (American) - `en_US`
+- English (British) - `en_GB` (date format DD/MM/YYYY)
+- English (American) - `en_US` (date format MM/DD/YYYY)
 - Français - `fr`
 - Deutsch - `de`
-- Español - `es`
 
-### Updating Translations
+### Translation Updates
 
-When new translations are available (after updating phpIP):
+When new translations are available after a phpIP update, run:
 
 ```bash
 # Normal update - preserves your customizations
 php artisan translations:refresh
 
-# Complete reset to official translations
+# Complete reset to "official" translations
 php artisan translations:refresh --force
 ```
 
-### Adding Custom Translations
+### Adding your Custom Translations
 
 1. **UI Elements**: Add translations to language files in `/lang/`:
    - `en.json` for English
