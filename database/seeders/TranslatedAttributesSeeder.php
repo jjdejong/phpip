@@ -239,6 +239,7 @@ class TranslatedAttributesSeeder extends Seeder
            38 => $this->commonTranslations['clear'],
            39 => $this->commonTranslations['grantFee'],
            41 => $this->standardizedValues['r70_2'],
+           44 => ['en' => 'Filing Fee', 'fr' => 'Taxe de Dépôt', 'de' => 'Anmeldegebühr'],
            46 => ['en' => 'Restriction Req.', 'fr' => 'Requête Restriction', 'de' => 'Beschränkungsantrag'],
            47 => $this->standardizedValues['r161'],
            49 => $this->commonTranslations['appeal'],
