@@ -14,7 +14,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'AGR',
                 'ref_prefix' => 'AGR',
-                'category' => 'Agreement',
+                'category' => json_encode('{"category_en": "Agreement"}'),
                 'display_with' => 'OTH',
                 'creator' => 'system',
                 'updater' => null,
@@ -25,7 +25,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'DSG',
                 'ref_prefix' => 'DSG',
-                'category' => 'Design',
+                'category' => json_encode('{"category_en": "Design"}'),
                 'display_with' => 'TM',
                 'creator' => 'system',
                 'updater' => null,
@@ -36,7 +36,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'FTO',
                 'ref_prefix' => 'OPI',
-                'category' => 'Freedom to Operate',
+                'category' => json_encode('{"category_en": "Freedom to Operate"}'),
                 'display_with' => 'LTG',
                 'creator' => 'system',
                 'updater' => null,
@@ -47,7 +47,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'LTG',
                 'ref_prefix' => 'LTG',
-                'category' => 'Litigation',
+                'category' => json_encode('{"category_en": "Litigation"}'),
                 'display_with' => 'LTG',
                 'creator' => 'system',
                 'updater' => null,
@@ -58,7 +58,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'OP',
                 'ref_prefix' => 'OPP',
-                'category' => 'Opposition (patent]',
+                'category' => json_encode('{"category_en": "Opposition (patent]"}'),
                 'display_with' => 'LTG',
                 'creator' => 'system',
                 'updater' => null,
@@ -69,7 +69,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'OPI',
                 'ref_prefix' => 'OPI',
-                'category' => 'Opinion',
+                'category' => json_encode('{"category_en": "Opinion"}'),
                 'display_with' => 'LTG',
                 'creator' => 'system',
                 'updater' => null,
@@ -80,7 +80,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'OTH',
                 'ref_prefix' => 'OTH',
-                'category' => 'Others',
+                'category' => json_encode('{"category_en": "Others"}'),
                 'display_with' => 'OTH',
                 'creator' => 'system',
                 'updater' => null,
@@ -91,7 +91,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'PAT',
                 'ref_prefix' => 'PAT',
-                'category' => 'Patent',
+                'category' => json_encode('{"category_en": "Patent"}'),
                 'display_with' => 'PAT',
                 'creator' => 'system',
                 'updater' => null,
@@ -102,7 +102,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'SO',
                 'ref_prefix' => 'PAT',
-                'category' => 'Soleau Envelop',
+                'category' => json_encode('{"category_en": "Soleau Envelop"}'),
                 'display_with' => 'PAT',
                 'creator' => 'system',
                 'updater' => null,
@@ -113,7 +113,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'SR',
                 'ref_prefix' => 'SR-',
-                'category' => 'Search',
+                'category' => json_encode('{"category_en": "Search"}'),
                 'display_with' => 'LTG',
                 'creator' => 'system',
                 'updater' => null,
@@ -124,7 +124,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'TM',
                 'ref_prefix' => 'TM-',
-                'category' => 'Trademark',
+                'category' => json_encode('{"category_en": "Trademark"}'),
                 'display_with' => 'TM',
                 'creator' => 'system',
                 'updater' => null,
@@ -135,7 +135,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'TMOP',
                 'ref_prefix' => 'TOP',
-                'category' => 'Opposition (TM]',
+                'category' => json_encode('{"category_en": "Opposition (TM]"}'),
                 'display_with' => 'TM',
                 'creator' => 'system',
                 'updater' => null,
@@ -146,7 +146,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'TS',
                 'ref_prefix' => 'TS-',
-                'category' => 'Trade Secret',
+                'category' => json_encode('{"category_en": "Trade Secret"}'),
                 'display_with' => 'PAT',
                 'creator' => 'system',
                 'updater' => null,
@@ -157,7 +157,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'UC',
                 'ref_prefix' => 'PAT',
-                'category' => 'Utility Certificate',
+                'category' => json_encode('{"category_en": "Utility Certificate"}'),
                 'display_with' => 'PAT',
                 'creator' => 'system',
                 'updater' => null,
@@ -168,7 +168,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'UM',
                 'ref_prefix' => 'PAT',
-                'category' => 'Utility Model',
+                'category' => json_encode('{"category_en": "Utility Model"}'),
                 'display_with' => 'PAT',
                 'creator' => 'system',
                 'updater' => null,
@@ -179,7 +179,7 @@ class MatterCategoryTableSeeder extends Seeder
             [
                 'code' => 'WAT',
                 'ref_prefix' => 'WAT',
-                'category' => 'Watch',
+                'category' => json_encode('{"category_en": "Watch"}'),
                 'display_with' => 'TM',
                 'creator' => 'system',
                 'updater' => null,

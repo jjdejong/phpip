@@ -13,7 +13,7 @@ class MatterTypeTableSeeder extends Seeder
 
             [
                 'code' => 'CIP',
-                'type' => 'Continuation in Part',
+                'type' => json_encode('{"type_en": "Continuation in Part"}'),
                 'creator' => 'system',
                 'updater' => null,
                 'created_at' => now(),
@@ -22,7 +22,7 @@ class MatterTypeTableSeeder extends Seeder
 
             [
                 'code' => 'CNT',
-                'type' => 'Continuation',
+                'type' => json_encode('{"type_en": "Continuation"}'),
                 'creator' => 'system',
                 'updater' => null,
                 'created_at' => now(),
@@ -31,7 +31,7 @@ class MatterTypeTableSeeder extends Seeder
 
             [
                 'code' => 'DIV',
-                'type' => 'Divisional',
+                'type' => json_encode('{"type_en": "Divisional"}'),
                 'creator' => 'system',
                 'updater' => null,
                 'created_at' => now(),
@@ -40,7 +40,7 @@ class MatterTypeTableSeeder extends Seeder
 
             [
                 'code' => 'PRO',
-                'type' => 'Provisional',
+                'type' => json_encode('{"type_en": "Provisional"}'),
                 'creator' => 'system',
                 'updater' => null,
                 'created_at' => now(),
@@ -49,7 +49,7 @@ class MatterTypeTableSeeder extends Seeder
 
             [
                 'code' => 'REI',
-                'type' => 'Reissue',
+                'type' => json_encode('{"type_en": "Reissue"}'),
                 'creator' => 'system',
                 'updater' => null,
                 'created_at' => now(),
@@ -58,7 +58,7 @@ class MatterTypeTableSeeder extends Seeder
 
             [
                 'code' => 'REX',
-                'type' => 'Re-examination',
+                'type' => json_encode('{"type_en": "Re-examination"}'),
                 'creator' => 'system',
                 'updater' => null,
                 'created_at' => now(),

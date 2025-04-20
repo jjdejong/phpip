@@ -13,7 +13,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'ABA',
-                'name' => 'Abandoned',
+                'name' => json_encode('{"name_en": "Abandoned"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -31,7 +31,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'ABO',
-                'name' => 'Abandon Original',
+                'name' => json_encode('{"name_en": "Abandon Original"}'),
                 'category' => 'PAT',
                 'country' => 'EP',
                 'is_task' => 1,
@@ -49,7 +49,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'ADV',
-                'name' => 'Advisory Action',
+                'name' => json_encode('{"name_en": "Advisory Action"}'),
                 'category' => 'PAT',
                 'country' => 'US',
                 'is_task' => 0,
@@ -67,7 +67,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'ALL',
-                'name' => 'Allowance',
+                'name' => json_encode('{"name_en": "Allowance"}'),
                 'category' => 'PAT',
                 'country' => null,
                 'is_task' => 0,
@@ -85,7 +85,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'APL',
-                'name' => 'Appeal',
+                'name' => json_encode('{"name_en": "Appeal"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -103,7 +103,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'CAN',
-                'name' => 'Cancelled',
+                'name' => json_encode('{"name_en": "Cancelled"}'),
                 'category' => 'TM',
                 'country' => null,
                 'is_task' => 0,
@@ -121,7 +121,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'CLO',
-                'name' => 'Closed',
+                'name' => json_encode('{"name_en": "Closed"}'),
                 'category' => 'LTG',
                 'country' => null,
                 'is_task' => 0,
@@ -139,7 +139,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'COM',
-                'name' => 'Communication',
+                'name' => json_encode('{"name_en": "Communication"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -157,7 +157,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'CRE',
-                'name' => 'Created',
+                'name' => json_encode('{"name_en": "Created"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -175,7 +175,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'DAPL',
-                'name' => 'Decision on Appeal',
+                'name' => json_encode('{"name_en": "Decision on Appeal"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -193,7 +193,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'DBY',
-                'name' => 'Draft By',
+                'name' => json_encode('{"name_en": "Draft By"}'),
                 'category' => 'PAT',
                 'country' => null,
                 'is_task' => 1,
@@ -211,7 +211,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'DEX',
-                'name' => 'Deadline Extended',
+                'name' => json_encode('{"name_en": "Deadline Extended"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -229,7 +229,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'DPAPL',
-                'name' => 'Decision on Pre-Appeal',
+                'name' => json_encode('{"name_en": "Decision on Pre-Appeal"}'),
                 'category' => 'PAT',
                 'country' => 'US',
                 'is_task' => 0,
@@ -247,7 +247,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'DRA',
-                'name' => 'Drafted',
+                'name' => json_encode('{"name_en": "Drafted"}'),
                 'category' => 'PAT',
                 'country' => null,
                 'is_task' => 0,
@@ -265,7 +265,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'DW',
-                'name' => 'Deemed withrawn',
+                'name' => json_encode('{"name_en": "Deemed withrawn"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -283,7 +283,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'EHK',
-                'name' => 'Extend to Hong Kong',
+                'name' => json_encode('{"name_en": "Extend to Hong Kong"}'),
                 'category' => 'PAT',
                 'country' => 'CN',
                 'is_task' => 1,
@@ -301,7 +301,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'ENT',
-                'name' => 'Entered',
+                'name' => json_encode('{"name_en": "Entered"}'),
                 'category' => 'PAT',
                 'country' => null,
                 'is_task' => 0,
@@ -319,7 +319,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'EOP',
-                'name' => 'End of Procedure',
+                'name' => json_encode('{"name_en": "End of Procedure"}'),
                 'category' => 'PAT',
                 'country' => null,
                 'is_task' => 0,
@@ -337,7 +337,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'EXA',
-                'name' => 'Examiner Action',
+                'name' => json_encode('{"name_en": "Examiner Action"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -355,7 +355,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'EXAF',
-                'name' => 'Examiner Action (Final)',
+                'name' => json_encode('{"name_en": "Examiner Action (Final)"}'),
                 'category' => 'PAT',
                 'country' => 'US',
                 'is_task' => 0,
@@ -373,7 +373,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'EXP',
-                'name' => 'Expiry',
+                'name' => json_encode('{"name_en": "Expiry"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -391,7 +391,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'FAP',
-                'name' => 'File Notice of Appeal',
+                'name' => json_encode('{"name_en": "File Notice of Appeal"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 1,
@@ -409,7 +409,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'FBY',
-                'name' => 'File by',
+                'name' => json_encode('{"name_en": "File by"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 1,
@@ -427,7 +427,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'FDIV',
-                'name' => 'File Divisional',
+                'name' => json_encode('{"name_en": "File Divisional"}'),
                 'category' => 'PAT',
                 'country' => null,
                 'is_task' => 1,
@@ -445,7 +445,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'FIL',
-                'name' => 'Filed',
+                'name' => json_encode('{"name_en": "Filed"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -463,7 +463,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'FOP',
-                'name' => 'File Opposition',
+                'name' => json_encode('{"name_en": "File Opposition"}'),
                 'category' => 'OP',
                 'country' => 'EP',
                 'is_task' => 1,
@@ -481,7 +481,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'FPR',
-                'name' => 'Further Processing',
+                'name' => json_encode('{"name_en": "Further Processing"}'),
                 'category' => 'PAT',
                 'country' => null,
                 'is_task' => 1,
@@ -499,7 +499,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'FRCE',
-                'name' => 'File RCE',
+                'name' => json_encode('{"name_en": "File RCE"}'),
                 'category' => 'PAT',
                 'country' => 'US',
                 'is_task' => 1,
@@ -517,7 +517,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'GRT',
-                'name' => 'Granted',
+                'name' => json_encode('{"name_en": "Granted"}'),
                 'category' => 'PAT',
                 'country' => null,
                 'is_task' => 0,
@@ -535,7 +535,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'INV',
-                'name' => 'Invalidated',
+                'name' => json_encode('{"name_en": "Invalidated"}'),
                 'category' => 'TM',
                 'country' => 'US',
                 'is_task' => 0,
@@ -553,7 +553,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'LAP',
-                'name' => 'Lapsed',
+                'name' => json_encode('{"name_en": "Lapsed"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -571,7 +571,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'NPH',
-                'name' => 'National Phase',
+                'name' => json_encode('{"name_en": "National Phase"}'),
                 'category' => 'PAT',
                 'country' => 'WO',
                 'is_task' => 1,
@@ -589,7 +589,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'OPP',
-                'name' => 'Opposition',
+                'name' => json_encode('{"name_en": "Opposition"}'),
                 'category' => null,
                 'country' => 'EP',
                 'is_task' => 0,
@@ -607,7 +607,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'OPR',
-                'name' => 'Oral Proceedings',
+                'name' => json_encode('{"name_en": "Oral Proceedings"}'),
                 'category' => 'PAT',
                 'country' => 'EP',
                 'is_task' => 1,
@@ -625,7 +625,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'ORE',
-                'name' => 'Opposition rejected',
+                'name' => json_encode('{"name_en": "Opposition rejected"}'),
                 'category' => 'PAT',
                 'country' => 'EP',
                 'is_task' => 0,
@@ -643,7 +643,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'PAY',
-                'name' => 'Pay',
+                'name' => json_encode('{"name_en": "Pay"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 1,
@@ -661,7 +661,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'PDES',
-                'name' => 'Post designation',
+                'name' => json_encode('{"name_en": "Post designation"}'),
                 'category' => 'TM',
                 'country' => 'WO',
                 'is_task' => 0,
@@ -679,7 +679,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'PFIL',
-                'name' => 'Parent Filed',
+                'name' => json_encode('{"name_en": "Parent Filed"}'),
                 'category' => 'PAT',
                 'country' => null,
                 'is_task' => 0,
@@ -697,7 +697,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'PR',
-                'name' => 'Publication of Reg.',
+                'name' => json_encode('{"name_en": "Publication of Reg."}'),
                 'category' => 'TM',
                 'country' => null,
                 'is_task' => 0,
@@ -715,7 +715,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'PREP',
-                'name' => 'Prepare',
+                'name' => json_encode('{"name_en": "Prepare"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 1,
@@ -733,7 +733,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'PRI',
-                'name' => 'Priority Claim',
+                'name' => json_encode('{"name_en": "Priority Claim"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -751,7 +751,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'PRID',
-                'name' => 'Priority Deadline',
+                'name' => json_encode('{"name_en": "Priority Deadline"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 1,
@@ -769,7 +769,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'PROD',
-                'name' => 'Produce',
+                'name' => json_encode('{"name_en": "Produce"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 1,
@@ -787,7 +787,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'PSR',
-                'name' => 'Publication of SR',
+                'name' => json_encode('{"name_en": "Publication of SR"}'),
                 'category' => 'PAT',
                 'country' => 'EP',
                 'is_task' => 0,
@@ -805,7 +805,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'PUB',
-                'name' => 'Published',
+                'name' => json_encode('{"name_en": "Published"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -823,7 +823,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'RCE',
-                'name' => 'Request Continued Examination',
+                'name' => json_encode('{"name_en": "Request Continued Examination"}'),
                 'category' => 'PAT',
                 'country' => 'US',
                 'is_task' => 0,
@@ -841,7 +841,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'REC',
-                'name' => 'Received',
+                'name' => json_encode('{"name_en": "Received"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -859,7 +859,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'REF',
-                'name' => 'Refused',
+                'name' => json_encode('{"name_en": "Refused"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -877,7 +877,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'REG',
-                'name' => 'Registration',
+                'name' => json_encode('{"name_en": "Registration"}'),
                 'category' => 'TM',
                 'country' => null,
                 'is_task' => 0,
@@ -895,7 +895,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'REM',
-                'name' => 'Reminder',
+                'name' => json_encode('{"name_en": "Reminder"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 1,
@@ -913,7 +913,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'REN',
-                'name' => 'Renewal',
+                'name' => json_encode('{"name_en": "Renewal"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 1,
@@ -931,7 +931,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'REP',
-                'name' => 'Respond',
+                'name' => json_encode('{"name_en": "Respond"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 1,
@@ -949,7 +949,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'REQ',
-                'name' => 'Request',
+                'name' => json_encode('{"name_en": "Request"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 1,
@@ -967,7 +967,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'RSTR',
-                'name' => 'Restriction Req.',
+                'name' => json_encode('{"name_en": "Restriction Req."}'),
                 'category' => 'PAT',
                 'country' => 'US',
                 'is_task' => 0,
@@ -985,7 +985,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'SOL',
-                'name' => 'Sold',
+                'name' => json_encode('{"name_en": "Sold"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -1003,7 +1003,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'SOP',
-                'name' => 'Summons to Oral Proc.',
+                'name' => json_encode('{"name_en": "Summons to Oral Proc."}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -1021,7 +1021,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'SR',
-                'name' => 'Search Report',
+                'name' => json_encode('{"name_en": "Search Report"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -1039,7 +1039,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'SUS',
-                'name' => 'Suspended',
+                'name' => json_encode('{"name_en": "Suspended"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -1057,7 +1057,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'TRF',
-                'name' => 'Transferred',
+                'name' => json_encode('{"name_en": "Transferred"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 0,
@@ -1075,7 +1075,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'VAL',
-                'name' => 'Validate',
+                'name' => json_encode('{"name_en": "Validate"}'),
                 'category' => 'PAT',
                 'country' => 'EP',
                 'is_task' => 1,
@@ -1093,7 +1093,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'WAT',
-                'name' => 'Watch',
+                'name' => json_encode('{"name_en": "Watch"}'),
                 'category' => null,
                 'country' => null,
                 'is_task' => 1,
@@ -1111,7 +1111,7 @@ class EventNameTableSeeder extends Seeder
 
             [
                 'code' => 'WIT',
-                'name' => 'Withdrawal',
+                'name' => json_encode('{"name_en": "Withdrawal"}'),
                 'category' => 'PAT',
                 'country' => null,
                 'is_task' => 0,

@@ -13,7 +13,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'AGT',
-                'name' => 'Primary Agent',
+                'name' => json_encode('{"name_en": "Primary Agent"}'),
                 'display_order' => 20,
                 'shareable' => 0,
                 'show_ref' => 1,
@@ -29,7 +29,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'AGT2',
-                'name' => 'Secondary Agent',
+                'name' => json_encode('{"name_en": "Secondary Agent"}'),
                 'display_order' => 22,
                 'shareable' => 0,
                 'show_ref' => 1,
@@ -45,7 +45,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'ANN',
-                'name' => 'Annuity Agent',
+                'name' => json_encode('{"name_en": "Annuity Agent"}'),
                 'display_order' => 21,
                 'shareable' => 0,
                 'show_ref' => 1,
@@ -61,7 +61,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'APP',
-                'name' => 'Applicant',
+                'name' => json_encode('{"name_en": "Applicant"}'),
                 'display_order' => 3,
                 'shareable' => 1,
                 'show_ref' => 1,
@@ -77,7 +77,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'CLI',
-                'name' => 'Client',
+                'name' => json_encode('{"name_en": "Client"}'),
                 'display_order' => 1,
                 'shareable' => 1,
                 'show_ref' => 1,
@@ -93,7 +93,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'CNT',
-                'name' => 'Contact',
+                'name' => json_encode('{"name_en": "Contact"}'),
                 'display_order' => 30,
                 'shareable' => 1,
                 'show_ref' => 1,
@@ -109,7 +109,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'DBA',
-                'name' => 'DB Administrator',
+                'name' => json_encode('{"name_en": "DB Administrator"}'),
                 'display_order' => 127,
                 'shareable' => 0,
                 'show_ref' => 0,
@@ -125,7 +125,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'DBRO',
-                'name' => 'DB Read-Only',
+                'name' => json_encode('{"name_en": "DB Read-Only"}'),
                 'display_order' => 127,
                 'shareable' => 0,
                 'show_ref' => 0,
@@ -141,7 +141,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'DBRW',
-                'name' => 'DB Read/Write',
+                'name' => json_encode('{"name_en": "DB Read/Write"}'),
                 'display_order' => 127,
                 'shareable' => 0,
                 'show_ref' => 0,
@@ -157,7 +157,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'DEL',
-                'name' => 'Delegate',
+                'name' => json_encode('{"name_en": "Delegate"}'),
                 'display_order' => 31,
                 'shareable' => 1,
                 'show_ref' => 0,
@@ -173,7 +173,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'FAGT',
-                'name' => 'Former Agent',
+                'name' => json_encode('{"name_en": "Former Agent"}'),
                 'display_order' => 23,
                 'shareable' => 0,
                 'show_ref' => 1,
@@ -189,7 +189,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'FOWN',
-                'name' => 'Former Owner',
+                'name' => json_encode('{"name_en": "Former Owner"}'),
                 'display_order' => 5,
                 'shareable' => 0,
                 'show_ref' => 0,
@@ -205,7 +205,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'INV',
-                'name' => 'Inventor',
+                'name' => json_encode('{"name_en": "Inventor"}'),
                 'display_order' => 10,
                 'shareable' => 1,
                 'show_ref' => 0,
@@ -221,7 +221,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'LCN',
-                'name' => 'Licensee',
+                'name' => json_encode('{"name_en": "Licensee"}'),
                 'display_order' => 127,
                 'shareable' => 0,
                 'show_ref' => 0,
@@ -237,7 +237,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'OFF',
-                'name' => 'Patent Office',
+                'name' => json_encode('{"name_en": "Patent Office"}'),
                 'display_order' => 127,
                 'shareable' => 0,
                 'show_ref' => 0,
@@ -253,7 +253,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'OPP',
-                'name' => 'Opposing Party',
+                'name' => json_encode('{"name_en": "Opposing Party"}'),
                 'display_order' => 127,
                 'shareable' => 0,
                 'show_ref' => 0,
@@ -269,7 +269,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'OWN',
-                'name' => 'Owner',
+                'name' => json_encode('{"name_en": "Owner"}'),
                 'display_order' => 4,
                 'shareable' => 0,
                 'show_ref' => 1,
@@ -285,7 +285,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'PAY',
-                'name' => 'Payor',
+                'name' => json_encode('{"name_en": "Payor"}'),
                 'display_order' => 2,
                 'shareable' => 1,
                 'show_ref' => 0,
@@ -301,7 +301,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'PTNR',
-                'name' => 'Partner',
+                'name' => json_encode('{"name_en": "Partner"}'),
                 'display_order' => 127,
                 'shareable' => 1,
                 'show_ref' => 0,
@@ -317,7 +317,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'TRA',
-                'name' => 'Translator',
+                'name' => json_encode('{"name_en": "Translator"}'),
                 'display_order' => 127,
                 'shareable' => 0,
                 'show_ref' => 0,
@@ -333,7 +333,7 @@ class ActorRoleTableSeeder extends Seeder
 
             [
                 'code' => 'WRI',
-                'name' => 'Writer',
+                'name' => json_encode('{"name_en": "Writer"}'),
                 'display_order' => 127,
                 'shareable' => 1,
                 'show_ref' => 0,

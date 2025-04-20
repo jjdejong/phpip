@@ -13,7 +13,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'ABS',
-                'type' => 'Abstract',
+                'type' => json_encode('{"type_en": "Abstract"}'),
                 'main_display' => 0,
                 'for_category' => null,
                 'display_order' => 127,
@@ -26,7 +26,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'AGR',
-                'type' => 'Agreement',
+                'type' => json_encode('{"type_en": "Agreement"}'),
                 'main_display' => 0,
                 'for_category' => null,
                 'display_order' => 127,
@@ -39,7 +39,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'BU',
-                'type' => 'Business Unit',
+                'type' => json_encode('{"type_en": "Business Unit"}'),
                 'main_display' => 0,
                 'for_category' => null,
                 'display_order' => 127,
@@ -52,7 +52,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'DESC',
-                'type' => 'Description',
+                'type' => json_encode('{"type_en": "Description"}'),
                 'main_display' => 1,
                 'for_category' => null,
                 'display_order' => 1,
@@ -65,7 +65,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'EVAL',
-                'type' => 'Evaluation',
+                'type' => json_encode('{"type_en": "Evaluation"}'),
                 'main_display' => 0,
                 'for_category' => null,
                 'display_order' => 127,
@@ -78,7 +78,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'IMG',
-                'type' => 'Image',
+                'type' => json_encode('{"type_en": "Image"}'),
                 'main_display' => 0,
                 'for_category' => null,
                 'display_order' => 127,
@@ -91,7 +91,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'IPC',
-                'type' => 'IPC',
+                'type' => json_encode('{"type_en": "IPC"}'),
                 'main_display' => 0,
                 'for_category' => null,
                 'display_order' => 127,
@@ -104,7 +104,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'KW',
-                'type' => 'Keyword',
+                'type' => json_encode('{"type_en": "Keyword"}'),
                 'main_display' => 0,
                 'for_category' => null,
                 'display_order' => 127,
@@ -117,7 +117,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'LNK',
-                'type' => 'Link',
+                'type' => json_encode('{"type_en": "Link"}'),
                 'main_display' => 0,
                 'for_category' => null,
                 'display_order' => 1,
@@ -130,7 +130,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'LOC',
-                'type' => 'Location',
+                'type' => json_encode('{"type_en": "Location"}'),
                 'main_display' => 0,
                 'for_category' => null,
                 'display_order' => 127,
@@ -143,7 +143,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'ORG',
-                'type' => 'Organization',
+                'type' => json_encode('{"type_en": "Organization"}'),
                 'main_display' => 0,
                 'for_category' => null,
                 'display_order' => 127,
@@ -156,7 +156,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'PA',
-                'type' => 'Prior Art',
+                'type' => json_encode('{"type_en": "Prior Art"}'),
                 'main_display' => 0,
                 'for_category' => null,
                 'display_order' => 127,
@@ -169,7 +169,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'PROD',
-                'type' => 'Product',
+                'type' => json_encode('{"type_en": "Product"}'),
                 'main_display' => 0,
                 'for_category' => null,
                 'display_order' => 127,
@@ -182,7 +182,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'PROJ',
-                'type' => 'Project',
+                'type' => json_encode('{"type_en": "Project"}'),
                 'main_display' => 0,
                 'for_category' => null,
                 'display_order' => 127,
@@ -195,7 +195,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'TECH',
-                'type' => 'Technology',
+                'type' => json_encode('{"type_en": "Technology"}'),
                 'main_display' => 0,
                 'for_category' => null,
                 'display_order' => 127,
@@ -208,7 +208,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'TIT',
-                'type' => 'Title',
+                'type' => json_encode('{"type_en": "Title"}'),
                 'main_display' => 1,
                 'for_category' => null,
                 'display_order' => 1,
@@ -221,7 +221,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'TITAL',
-                'type' => 'Alt. Title',
+                'type' => json_encode('{"type_en": "Alt. Title"}'),
                 'main_display' => 1,
                 'for_category' => 'PAT',
                 'display_order' => 4,
@@ -234,7 +234,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'TITEN',
-                'type' => 'English Title',
+                'type' => json_encode('{"type_en": "English Title"}'),
                 'main_display' => 1,
                 'for_category' => 'PAT',
                 'display_order' => 3,
@@ -247,7 +247,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'TITOF',
-                'type' => 'Official Title',
+                'type' => json_encode('{"type_en": "Official Title"}'),
                 'main_display' => 1,
                 'for_category' => 'PAT',
                 'display_order' => 2,
@@ -260,7 +260,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'TM',
-                'type' => 'Trademark',
+                'type' => json_encode('{"type_en": "Trademark"}'),
                 'main_display' => 1,
                 'for_category' => 'TM',
                 'display_order' => 1,
@@ -273,7 +273,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'TMCL',
-                'type' => 'Class (TM)',
+                'type' => json_encode('{"type_en": "Class (TM)"}'),
                 'main_display' => 0,
                 'for_category' => 'TM',
                 'display_order' => 2,
@@ -286,7 +286,7 @@ class ClassifierTypeTableSeeder extends Seeder
 
             [
                 'code' => 'TMTYP',
-                'type' => 'Type (TM)',
+                'type' => json_encode('{"type_en": "Type (TM)"}'),
                 'main_display' => 0,
                 'for_category' => 'TM',
                 'display_order' => 3,
