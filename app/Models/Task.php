@@ -109,19 +109,6 @@ class Task extends Model
             'task.done',
             'task.done_date',
             'event.matter_id',
-            'task.trigger_id',
-            'matter.category_code AS category',
-            'matter.caseref',
-            'matter.uid',
-            'matter.country',
-            'matter.origin',
-            'matter.responsible',
-            'matter.expire_date',
-            // Country names
-            'mcountry.name_FR AS country_FR',
-            'mcountry.name AS country_EN',
-            'mcountry.name_DE AS country_DE',
-            // Fees with fallbacks
             DB::raw('IFNULL(fees.cost, task.cost) AS cost'),
             DB::raw('IFNULL(fees.fee, task.fee) AS fee'),
             DB::raw('COALESCE(fees.cost_reduced, fees.cost, task.cost) AS cost_reduced'),
@@ -130,16 +117,22 @@ class Task extends Model
             DB::raw('COALESCE(fees.fee_sup, fees.fee, task.fee) AS fee_sup'),
             DB::raw('COALESCE(fees.cost_sup_reduced, fees.cost, task.cost) AS cost_sup_reduced'),
             DB::raw('COALESCE(fees.fee_sup_reduced, fees.fee, task.fee) AS fee_sup_reduced'),
-            // Small entity status
-            DB::raw('COALESCE(MIN(own.small_entity), MIN(ownc.small_entity), MIN(appl.small_entity), MIN(applc.small_entity)) AS sme_status'),
-            // Event details
+            'task.trigger_id',
+            'matter.category_code AS category',
+            'matter.caseref',
+            'matter.uid',
+            'matter.country',
+            'mcountry.name_FR AS country_FR',
+            'mcountry.name AS country_EN',
+            'mcountry.name_DE AS country_DE',
+            'matter.origin',
+            DB::raw('COALESCE(MIN(own.small_entity), MIN(ownc.small_entity), MIN(appl.small_entity), MIN(applc.small_entity)) AS small_entity'),
             'fil.event_date AS fil_date',
             'fil.detail AS fil_num',
             'grt.event_date AS grt_date',
             'event.code AS event_name',
             'event.event_date',
             'event.detail AS number',
-            // Actor names and details
             DB::raw("IF(GROUP_CONCAT(DISTINCT ownc.name) IS NOT NULL OR GROUP_CONCAT(DISTINCT own.name) IS NOT NULL,
                 CONCAT_WS('; ', GROUP_CONCAT(DISTINCT ownc.name SEPARATOR '; '), GROUP_CONCAT(DISTINCT own.name SEPARATOR '; ')),
                 CONCAT_WS('; ', GROUP_CONCAT(DISTINCT applc.name SEPARATOR '; '), GROUP_CONCAT(DISTINCT appl.name SEPARATOR '; '))
@@ -152,12 +145,14 @@ class Task extends Model
             DB::raw('COALESCE(pmal_cli.actor_ref, cliclnk.actor_ref) AS client_ref'),
             DB::raw('COALESCE(pa_cli.email, clic.email) AS email'),
             DB::raw('COALESCE(pa_cli.language, clic.language) AS language'),
+            'matter.responsible',
             'tit.value AS short_title',
             'titof.value AS title',
             'pub.detail AS pub_num',
             'task.step',
             'task.grace_period',
             'task.invoice_step',
+            'matter.expire_date',
             'fees.fee AS table_fee'
         ])
         ->join('event', 'matter.id', 'event.matter_id')

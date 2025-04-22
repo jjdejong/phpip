@@ -69,7 +69,8 @@ return [
       'task.step',
       'task.grace_period',
       'task.invoice_step',
-      'expire_date'
+      'expire_date',
+      'table_fee'
     ],
   ],
   "api" => [

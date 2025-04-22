@@ -589,11 +589,14 @@ $renewals->appends($request->input())->links(); // Keep URL parameters in the pa
             $this->adjustFees($ren, $cost, $fee);
             $ren->cost = $cost;
             $ren->fee = $fee;
-
-            return $ren;
+            // Convert to array and remove any empty arrays
+            $data = $ren->toArray();
+            return array_filter($data, function($value) {
+                return !is_array($value) || !empty($value);
+            });
         });
+
         $captions = config('renewal.invoice.captions');
-        // array_push($captions, 'cost_calc', 'fee_calc');
         $export_csv = fopen('php://memory', 'w');
         fputcsv($export_csv, $captions, ';');
         foreach ($export->toArray() as $row) {
