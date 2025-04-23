@@ -585,15 +585,11 @@ $renewals->appends($request->input())->links(); // Keep URL parameters in the pa
     {
         $export = Task::renewals()->where('invoice_step', 1)
             ->orderBy('pmal_cli.actor_id')->get();
-        $export->transform(function ($ren) {
+        $export = $export->map(function ($ren) {
             $this->adjustFees($ren, $cost, $fee);
             $ren->cost = $cost;
             $ren->fee = $fee;
-            // Convert to array and remove any empty arrays
-            $data = $ren->toArray();
-            return array_filter($data, function($value) {
-                return !is_array($value) || !empty($value);
-            });
+            return $ren->getAttributes();
         });
 
         $captions = config('renewal.invoice.captions');
