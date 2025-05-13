@@ -68,7 +68,7 @@
     <tr class="reveal-hidden" data-resource="/task/{{ $task->id }}">
       <td nowrap>
         <span class="ms-2">{{ $task->info->name }}</span>
-        <span data-name="detail" contenteditable>{{ $task->detail ?? '--' }}</span>
+        <span data-name="detail" contenteditable>{{ $task->detail ?: '--' }}</span>
       </td>
       <td><input type="text" class="form-control noformat  {{ $task->done ? 'text-success' : 'text-danger' }}" name="due_date" value="{{ $task->due_date->isoFormat('L') }}"></td>
       <td><input type="checkbox" class="noformat" name="done" {{ $task->done ? 'checked' : '' }}></td>
