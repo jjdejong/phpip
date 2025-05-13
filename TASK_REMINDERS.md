@@ -21,34 +21,54 @@ For the application to send emails, it needs to know your email service details.
 
 **Update the following email settings in your .env file:**  
    * `MAIL_MAILER`: The type of email service you're using (e.g., smtp, sendmail).  
-     `MAIL_MAILER=smtp`
+     ```
+     MAIL_MAILER=smtp
+     ```
 
    * `MAIL_HOST`: The server address of your email provider (e.g., smtp.gmail.com).  
-     `MAIL_HOST=smtp.gmail.com`
+     ```
+     MAIL_HOST=smtp.gmail.com
+     ```
 
    * `MAIL_PORT`: The port number for your email server (e.g., 2525, 587, 465).  
-     `MAIL_PORT=587`
+     ```
+     MAIL_PORT=587
+     ```
 
    * `MAIL_USERNAME`: Your username for the email account that will send the emails.  
-     `MAIL_USERNAME=your_email_username`
+     ```
+     MAIL_USERNAME=your_email_username
+     ```
 
    * `MAIL_PASSWORD`: The password for that email account.  
-     `MAIL_PASSWORD="your_email_password"`
+     ```
+     MAIL_PASSWORD="your_email_password"
+     ```
 
    * `MAIL_ENCRYPTION`: The encryption method (e.g., tls, ssl, or null if none).  
-     `MAIL_ENCRYPTION=tls`
+     ```
+     MAIL_ENCRYPTION=tls
+     ```
 
    * `MAIL_FROM_ADDRESS`: The email address that will appear as the sender.  
-     `MAIL_FROM_ADDRESS="noreply@mydomain.com"`
+     ```
+     MAIL_FROM_ADDRESS="noreply@mydomain.com"
+     ```
 
    * `MAIL_FROM_NAME`: The name that will appear as the sender. It's good to use your application's name.  
-     `MAIL_FROM_NAME="${APP_NAME}"`
+     ```
+     MAIL_FROM_NAME="${APP_NAME}"
+     ```
 
    * `MAIL_TO`: The primary email address where the task reminder emails should be sent.  
-     `MAIL_TO="your_main_email@example.com"`
+     ```
+     MAIL_TO="your_main_email@example.com"
+     ```
 
    * `MAIL_BCC` (Optional): If you want to send a blind carbon copy of the email to another address, set it here. If not specified, it defaults to the `MAIL_TO` address.  
-     `MAIL_BCC="another_email@example.com"`
+     ```
+     MAIL_BCC="another_email@example.com"
+     ```
 
 **Important:** Replace the example values with your actual email service details. If you're using a service like Gmail, you might need to enable "Less secure app access" or generate an "App Password". Check your email provider's documentation for details on SMTP configuration.
 
