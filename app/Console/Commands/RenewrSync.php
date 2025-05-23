@@ -219,7 +219,7 @@ class RenewrSync extends Command
 
             $task = $matter->tasks()
                 ->where('task.code', 'REN')
-                ->whereRaw('CAST(task.detail AS UNSIGNED) = ?', [$renewal->renewalYearNumber])
+                ->whereRaw("CAST(task.detail->>'$.en' AS UNSIGNED) = ?", [$renewal->renewalYearNumber])
                 ->first();
 
             if ($task) {
@@ -297,7 +297,7 @@ class RenewrSync extends Command
 
         $task = Task::create([
             'code' => 'REN',
-            'detail' => $renewal->renewalYearNumber,
+            'detail' => ['en' => $renewal->renewalYearNumber],
             'due_date' => $renewal->renewalDate,
             'currency' => $renewal->fees->invoiceCurrency ?? 'EUR',
             'cost' => $cost,
