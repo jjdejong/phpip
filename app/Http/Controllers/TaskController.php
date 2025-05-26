@@ -83,10 +83,20 @@ class TaskController extends Controller
             'due_date' => 'sometimes|filled',
             'cost' => 'nullable|numeric',
             'fee' => 'nullable|numeric',
+            'detail' => 'nullable|string',
         ]);
         $request->merge(['updater' => Auth::user()->login]);
         if ($request->filled('done_date')) {
             $request->merge(['done_date' => Carbon::createFromLocaleIsoFormat('L', app()->getLocale(), $request->done_date)]);
+        }
+        
+        // Handle detail field
+        if ($request->has('detail')) {
+            if (!$task->getTranslation('detail', 'en', false)) {
+                // If setting a non-empty value and there was no previous English translation,
+                // ensure it's set for both current locale and fallback
+                $task->setTranslation('detail', 'en', $request->detail);
+            }
         }
         // Remove task rule when due date is manually changed
         if ($request->filled('due_date')) {
