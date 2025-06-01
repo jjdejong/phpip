@@ -28,7 +28,13 @@ class DocumentController extends Controller
             $template_classes = $template_classes->whereLike('notes', $Notes.'%');
         }
 
-        $template_classes = $template_classes->orderby('name')->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
+        $query = $template_classes->orderby('name');
+
+        if ($request->wantsJson()) {
+            return response()->json($query->get());
+        }
+
+        $template_classes = $query->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
         $template_classes->appends($request->input())->links();
 
         return view('documents.index', compact('template_classes'));

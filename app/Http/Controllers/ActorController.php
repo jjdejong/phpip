@@ -27,7 +27,14 @@ class ActorController extends Controller
                 $actor = $actor->where('warn', 1);
                 break;
         }
-        $actorslist = $actor->with('company')->orderby('name')->paginate(21);
+
+        $query = $actor->with('company')->orderby('name');
+
+        if ($request->wantsJson()) {
+            return response()->json($query->get());
+        }
+
+        $actorslist = $query->paginate(21);
         $actorslist->appends($request->input())->links();
 
         return view('actor.index', compact('actorslist'));

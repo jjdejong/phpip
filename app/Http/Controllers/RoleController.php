@@ -25,6 +25,10 @@ class RoleController extends Controller
 
         $roles = $role->get();
 
+        if ($request->wantsJson()) {
+            return response()->json($roles);
+        }
+
         return view('role.index', compact('roles'));
     }
 

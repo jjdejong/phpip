@@ -47,7 +47,13 @@ class TaskController extends Controller
                 });
         }
 
-        $tasks = $tasks->orderBy('due_date')->simplePaginate(18)
+        $query = $tasks->orderBy('due_date');
+
+        if ($request->wantsJson()) {
+            return response()->json($query->get());
+        }
+
+        $tasks = $query->simplePaginate(18)
             ->appends($request->input());
 
         return view('task.index', compact('tasks', 'isrenewals'));

@@ -38,25 +38,31 @@ class MatterController extends Controller
     {
         $filters = $request->except(
             [
-                'display_with',
-                'page',
-                'filter',
-                'value',
-                'sortkey',
-                'sortdir',
-                'tab',
-                'include_dead',
-            ]
-        );
+            'display_with',
+            'page',
+            'filter',
+            'value',
+            'sortkey',
+            'sortdir',
+            'tab',
+            'include_dead',
+        ]);
 
-        $matters = Matter::filter(
+        $query = Matter::filter(
             $request->input('sortkey', 'id'),
             $request->input('sortdir', 'desc'),
             $filters,
             $request->display_with,
             $request->include_dead
-        )->simplePaginate(25);
-        $matters->withQueryString()->links(); // Keep URL parameters in the paginator links
+        );
+
+        if ($request->wantsJson()) {
+            $matters = $query->with('events.info')->get();
+            return response()->json($matters);
+        }
+
+        $matters = $query->simplePaginate(25);
+        $matters->withQueryString()->links();  // Keep URL parameters in the paginator links
 
         return view('matter.index', compact('matters'));
     }

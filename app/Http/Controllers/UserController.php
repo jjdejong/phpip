@@ -19,7 +19,14 @@ class UserController extends Controller
         if ($request->filled('Name')) {
             $user = $user->where('name', 'like', $request->Name . '%');
         }
-        $userslist = $user->with('company')->orderby('name')->paginate(21);
+
+        $query = $user->with('company')->orderby('name');
+
+        if ($request->wantsJson()) {
+            return response()->json($query->get());
+        }
+
+        $userslist = $query->paginate(21);
         $userslist->appends($request->input())->links();
 
         return view('user.index', compact('userslist'));

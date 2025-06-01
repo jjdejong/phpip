@@ -43,6 +43,10 @@ class DefaultActorController extends Controller
         }
         $default_actors = $default_actor->with(['roleInfo:code,name', 'actor:id,name', 'client:id,name', 'category:code,category', 'country:iso,name'])->get();
 
+        if ($request->wantsJson()) {
+            return response()->json($default_actors);
+        }
+
         return view('default_actor.index', compact('default_actors'));
     }
 
