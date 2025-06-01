@@ -25,7 +25,14 @@ class FeeController extends Controller
                 }
             }
         }
-        $fees = $fees->orderBy('for_category')->orderBy('for_country')->orderBy('qt')->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
+
+        $query = $fees->orderBy('for_category')->orderBy('for_country')->orderBy('qt');
+
+        if ($request->wantsJson()) {
+            return response()->json($query->get());
+        }
+
+        $fees = $query->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
 
         return view('fee.index', compact('fees'));
     }

@@ -96,6 +96,17 @@ class RenewalController extends Controller
             $renewals->orderByDesc('due_date');
         }
 
+        if ($request->wantsJson()) {
+            $renewals = $renewals->get();
+            $renewals->transform(function ($ren) {
+                $this->adjustFees($ren, $cost, $fee);
+                $ren->cost = $cost;
+                $ren->fee = $fee;
+                return $ren;
+            });
+            return response()->json($renewals);
+        }
+
         $renewals = $renewals->simplePaginate(config('renewal.general.paginate', 25));
 
         // Adjust the cost and fee of each renewal based on customized settings
@@ -106,7 +117,7 @@ class RenewalController extends Controller
             return $ren;
         });
         
-$renewals->appends($request->input())->links(); // Keep URL parameters in the paginator links
+        $renewals->appends($request->input())->links(); // Keep URL parameters in the paginator links
         return view('renewals.index', compact('renewals', 'step', 'invoice_step'));
     }
 

@@ -57,11 +57,16 @@ class RuleController extends Controller
             $rule = $rule->whereLike('for_origin', "{$Origin}%");
         }
         
-        $ruleslist = $rule->with(['country:iso,name', 'trigger:code,name', 'category:code,category', 'origin:iso,name', 'type:code,type', 'taskInfo:code,name'])
+        $query = $rule->with(['country:iso,name', 'trigger:code,name', 'category:code,category', 'origin:iso,name', 'type:code,type', 'taskInfo:code,name'])
             ->select('task_rules.*')
             ->join('event_name AS t', 't.code', '=', 'task_rules.task')
-            ->orderByRaw("t.name->>'$.$baseLocale'")
-            ->paginate(21);
+            ->orderByRaw("t.name->>'$.$baseLocale'");
+
+        if ($request->wantsJson()) {
+            return response()->json($query->get());
+        }
+
+        $ruleslist = $query->paginate(21);
         $ruleslist->appends($request->input())->links();
 
         return view('rule.index', compact('ruleslist'));

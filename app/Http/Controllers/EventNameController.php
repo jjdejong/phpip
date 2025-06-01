@@ -22,6 +22,10 @@ class EventNameController extends Controller
             $ename = $ename->whereJsonLike('name', $Name);
         }
 
+        if ($request->wantsJson()) {
+            return response()->json($ename->get());
+        }
+
         $enameslist = $ename->paginate(21);
         $enameslist->appends($request->input())->links();
 

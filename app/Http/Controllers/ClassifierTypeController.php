@@ -24,6 +24,10 @@ class ClassifierTypeController extends Controller
 
         $types = $classifierType->with(['category:code,category'])->get();
 
+        if ($request->wantsJson()) {
+            return response()->json($types);
+        }
+
         return view('classifier_type.index', compact('types'));
     }
 

@@ -42,7 +42,13 @@ class TemplateMemberController extends Controller
             $template_members = $template_members->where('style', 'LIKE', "$Style%");
         }
 
-        $template_members = $template_members->orderBy('summary')->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
+        $query = $template_members->orderBy('summary');
+
+        if ($request->wantsJson()) {
+            return response()->json($query->get());
+        }
+
+        $template_members = $query->simplePaginate(config('renewal.general.paginate') == 0 ? 25 : intval(config('renewal.general.paginate')));
         $template_members->appends($request->input())->links();
 
         return view('template-members.index', compact('template_members'));

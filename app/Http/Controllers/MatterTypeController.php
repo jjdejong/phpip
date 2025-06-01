@@ -24,6 +24,10 @@ class MatterTypeController extends Controller
 
         $matter_types = $type->get();
 
+        if ($request->wantsJson()) {
+            return response()->json($matter_types);
+        }
+
         return view('type.index', compact('matter_types'));
     }
 

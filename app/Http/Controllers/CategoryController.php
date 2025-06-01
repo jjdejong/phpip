@@ -24,6 +24,10 @@ class CategoryController extends Controller
 
         $categories = $category->get();
 
+        if ($request->wantsJson()) {
+            return response()->json($categories);
+        }
+
         return view('category.index', compact('categories'));
     }
 
