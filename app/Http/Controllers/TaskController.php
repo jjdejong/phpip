@@ -41,9 +41,14 @@ class TaskController extends Controller
         }
 
         if ($request->user_dashboard) {
-            $tasks->where('assigned_to', $request->user_dashboard)
-                ->orWhereHas('matter', function (Builder $q) use ($request) {
-                    $q->where('responsible', $request->user_dashboard);
+            $tasks
+                // Where needs encapsulation to avaid interference with others where conditions (caused by orWhere)
+                ->where(function (Builder $query) use ($request) {
+                    $query
+                        ->where('assigned_to', $request->user_dashboard)
+                        ->orWhereHas('matter', function (Builder $q) use ($request) {
+                            $q->where('responsible', $request->user_dashboard);
+                        });
                 });
         }
 
