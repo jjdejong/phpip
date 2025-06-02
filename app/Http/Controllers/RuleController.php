@@ -56,11 +56,11 @@ class RuleController extends Controller
         if (!is_null($Origin)) {
             $rule = $rule->whereLike('for_origin', "{$Origin}%");
         }
-        
+
         $query = $rule->with(['country:iso,name', 'trigger:code,name', 'category:code,category', 'origin:iso,name', 'type:code,type', 'taskInfo:code,name'])
             ->select('task_rules.*')
             ->join('event_name AS t', 't.code', '=', 'task_rules.task')
-            ->orderByRaw("t.name->>'$.$baseLocale'");
+            ->orderByRaw("JSON_UNQUOTE(JSON_EXTRACT(t.name, '$.\"{$baseLocale}\"'))");
 
         if ($request->wantsJson()) {
             return response()->json($query->get());

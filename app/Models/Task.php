@@ -104,7 +104,7 @@ class Task extends Model
         // The query is complex but optimized for performance by using joins and raw SQL for some calculations and conditions.
         return Matter::select([
             'task.id',
-            DB::raw("task.detail->>'$.en' AS detail"),
+            DB::raw("JSON_UNQUOTE(JSON_EXTRACT(task.detail, '$.\"en\"')) AS detail"),
             'task.due_date',
             'task.done',
             'task.done_date',
@@ -193,8 +193,8 @@ class Task extends Model
         // Fees
         ->leftJoin('fees', function($join) {
             $join->on('fees.for_country', 'matter.country')
-                 ->on('fees.for_category', 'matter.category_code')
-                 ->on(DB::raw("CAST(task.detail->>'$.en' AS UNSIGNED)"), 'fees.qt');
+                ->on('fees.for_category', 'matter.category_code')
+                ->on(DB::raw("CAST(JSON_UNQUOTE(JSON_EXTRACT(task.detail, '$.\"en\"')) AS UNSIGNED)"), 'fees.qt');
         })
         ->where('task.code', 'REN')
         ->groupBy('task.due_date')
