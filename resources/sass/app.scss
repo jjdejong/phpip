@@ -1,21 +1,22 @@
 // Import Bootstrap with theme customization
-@use 'bootstrap/scss/bootstrap' with (
-    $primary: #0c3f70,
-    $info: #618faa,
-    
-    // Body
-    $body-bg: #f8fafc,
-    $dropdown-link-hover-bg: #e4e9f0,
-    
-    // Typography
-    $font-family-sans-serif: ('Nunito', sans-serif),
-    $font-size-base: 0.8rem,
-    $line-height-base: 1.1,
-    
-    // Switching between light and dark text depending on the background
-    $min-contrast-ratio: 3,
-    
-    $popover-header-bg: #618faa
+@forward 'bootstrap/scss/bootstrap' with (
+  $primary: #0c3f70,
+  $info: #618faa,
+  
+  // Body
+  $body-bg: #f8fafc,
+  $dropdown-link-hover-bg: #e4e9f0,
+  
+  // Typography
+  $font-family-sans-serif: ('Nunito', sans-serif),
+  $font-size-base: 0.8rem,
+  $line-height-base: 1.1,
+
+  // Components
+  $min-contrast-ratio: 3,
+  
+  // Popovers
+  $popover-header-bg: #618faa,
 );
 
 // Fonts
