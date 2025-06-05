@@ -705,10 +705,9 @@ class MatterController extends Controller
     public function tasks(Matter $matter)
     {
         // All events and their tasks, excepting renewals
-        $events = Event::with(['tasks' => function (HasMany $query) {
+        $events = $matter->events()->with(['tasks' => function (HasMany $query) {
             $query->where('code', '!=', 'REN');
-        }, 'info:code,name', 'tasks.info:code,name'])->where('matter_id', $matter->id)
-            ->orderBy('event_date')->get();
+        }, 'info:code,name', 'tasks.info:code,name'])->get();
         $is_renewals = 0;
 
         return view('matter.tasks', compact('events', 'matter', 'is_renewals'));
@@ -717,11 +716,11 @@ class MatterController extends Controller
     public function renewals(Matter $matter)
     {
         // The renewal trigger event and its renewals
-        $events = Event::whereHas('tasks', function (Builder $query) {
+        $events = $matter->events()->whereHas('tasks', function (Builder $query) {
             $query->where('code', 'REN');
-        })->with('tasks')
-          ->where('matter_id', $matter->id)
-          ->get();
+        })->with(['tasks' => function (HasMany $query) {
+            $query->where('code', 'REN');
+        }, 'info:code,name', 'tasks.info:code,name'])->get();
         $is_renewals = 1;
 
         return view('matter.tasks', compact('events', 'matter', 'is_renewals'));
