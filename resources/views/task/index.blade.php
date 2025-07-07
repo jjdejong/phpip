@@ -12,7 +12,7 @@
       </a>
     </td>
     <td class="col text-truncate py-0">
-      {{ $task->matter->titles->first()->value }}
+      {{ $task->matter->titles->first()->value ?? "NO TITLE" }}
     </td>
     <td class="col-2 py-0 px-2">
       {{ \Carbon\Carbon::parse($task->due_date)->isoFormat('L') }}
