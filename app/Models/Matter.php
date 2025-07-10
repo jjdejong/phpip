@@ -42,7 +42,7 @@ class Matter extends Model
         return $this->belongsTo(Matter::class, 'parent_id')->withDefault();
     }
 
-    public function children()
+    public function descendants()
     {
         return $this->hasMany(Matter::class, 'parent_id')
             ->orderBy('origin')

@@ -78,8 +78,8 @@ $actors = $matter->actors->groupBy('role_name');
       <div class="card-footer d-grid gap-2 p-1">
         @can('readwrite')
         <div class="btn-group">
-          <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=child" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-sm" title="{{ __('Create child') }}">
-            <svg width="14" height="14" fill="currentColor"><use xlink:href="#node-plus-fill"/></svg> {{ __('New Child') }}
+          <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=descendant" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-sm" title="{{ __('Create descendant') }}">
+            <svg width="14" height="14" fill="currentColor"><use xlink:href="#node-plus-fill"/></svg> {{ __('New Descendant') }}
           </a>
           <a class="btn btn-info btn-sm" href="/matter/create?matter_id={{ $matter->id }}&operation=clone" data-bs-toggle="modal" data-bs-target="#ajaxModal" data-size="modal-sm" title="{{ __('Clone') }}">
             &boxbox; {{ __('Clone') }}

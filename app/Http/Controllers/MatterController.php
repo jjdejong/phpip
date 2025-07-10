@@ -6,7 +6,6 @@ use App\Http\Requests\MatterExportRequest;
 use App\Http\Requests\MergeFileRequest;
 use App\Models\Actor;
 use App\Models\ActorPivot;
-use App\Models\Event;
 use App\Models\Matter;
 use App\Services\DocumentMergeService;
 use App\Services\MatterExportService;
@@ -91,7 +90,7 @@ class MatterController extends Controller
     public function create(Request $request)
     {
         Gate::authorize('readwrite');
-        $operation = $request->input('operation', 'new'); // new, clone, child, ops
+        $operation = $request->input('operation', 'new'); // new, clone, descendant, ops
         $category = [];
         $category_code = $request->input('category', 'PAT');
         if ($operation != 'new' && $operation != 'ops') {
@@ -162,7 +161,7 @@ class MatterController extends Controller
         $new_matter = Matter::create($request->except(['_token', '_method', 'operation', 'parent_id', 'priority']));
 
         switch ($request->operation) {
-            case 'child':
+            case 'descendant':
                 $parent_matter = Matter::with('priority', 'filing')->find($request->parent_id);
                 // Copy priority claims from original matter
                 $new_matter->priority()->createMany($parent_matter->priority->toArray());
@@ -177,7 +176,7 @@ class MatterController extends Controller
                         [
                             'code' => 'ENT',
                             'event_date' => now(),
-                            'detail' => 'Child filing date',
+                            'detail' => 'Descendant filing date',
                         ]
                     );
                 }
@@ -483,7 +482,7 @@ class MatterController extends Controller
                     [
                         'code' => 'ENT',
                         'event_date' => $app['app']['date'],
-                        'detail' => 'Child filing date'
+                        'detail' => 'Descendant filing date'
                     ]
                 );
                 $parent = $apps->where('app.number', $parent_num)->first();
