@@ -343,26 +343,46 @@ $actors = $matter->actors->groupBy('role_name');
               <span class="float-end">&#9432;</span>
             </div>
             <div class="card-body p-1" id="relationsPanel" style="overflow: auto;">
-              @if ( $matter->family->count() )
+              @php
+                // Use the new variables from the controller
+                $familyList = isset($family) ? $family : ($matter->family ?? collect());
+                $externalMatters = isset($externalPriorityMatters) ? $externalPriorityMatters : collect();
+              @endphp
+              @if ($familyList->count())
               <dl class="mb-1">
                 <dt>{{ __('Fam') }}</dt>
                 <dd class="mb-1">
-                  @foreach ( $matter->family as $member )
+                  @foreach ($familyList as $member)
                   <a class="badge fw-normal text-bg-{{ $member->suffix == $matter->suffix ? 'secondary' : 'primary' }}" href="/matter/{{ $member->id }}">{{ $member->suffix }}</a>
                   @endforeach
                 </dd>
               </dl>
               @endif
-              @foreach ( $matter->priorityTo->groupBy('caseref') as $caseref => $family )
-              <dl class="mb-1">
-                <dt>{{ $caseref }}</dt>
-                <dd class="mb-1">
-                  @foreach ( $family as $rmatter )
-                  <a class="badge text-bg-primary fw-normal" href="/matter/{{ $rmatter->id }}">{{ $rmatter->suffix }}</a>
-                  @endforeach
-                </dd>
-              </dl>
-              @endforeach
+              @php
+                // Exclude matters from the current family from externalMatters
+                $familyIds = $familyList->pluck('id')->push($matter->id)->unique();
+                $externalMattersFiltered = $externalMatters->filter(function($ext) use ($familyIds) {
+                  return !$familyIds->contains($ext->id);
+                });
+                // Group by external family (caseref), and pick the first filed (by event FIL date or created_at)
+                $externalFirstFiled = $externalMattersFiltered->groupBy('caseref')->map(function($group) {
+                  return $group->sortBy(function($m) {
+                    // Prefer filing event date, fallback to created_at
+                    $filing = $m->filing ?? null;
+                    return $filing && $filing->event_date ? $filing->event_date : $m->created_at;
+                  })->first();
+                });
+              @endphp
+              @if ($externalFirstFiled->count())
+                <dl class="mb-1">
+                  <dt>{{ __('External priorities') }}</dt>
+                  <dd class="mb-1">
+                    @foreach ($externalFirstFiled as $ext)
+                      <a class="badge text-bg-primary fw-normal" href="/matter/{{ $ext->id }}">{{ $ext->uid }}</a>
+                    @endforeach
+                  </dd>
+                </dl>
+              @endif
             </div>
           </div>
         </div>

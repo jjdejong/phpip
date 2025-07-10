@@ -69,9 +69,25 @@ class MatterController extends Controller
     public function show(Matter $matter)
     {
         $this->authorize('view', $matter);
-        $matter->load(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers']);
+        $matter->load(['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers', 'family', 'priorityTo', 'linkedBy']);
 
-        return view('matter.show', compact('matter'));
+        // Get all family members (same caseref)
+        $family = $matter->family;
+        $familyIds = $family->pluck('id')->push($matter->id)->unique();
+
+        // Get all external matters claiming priority to any family member (by PRI event)
+        $externalPriorityMatters = \App\Models\Matter::whereHas('events', function($q) use ($familyIds) {
+            $q->where('code', 'PRI')->whereIn('alt_matter_id', $familyIds);
+        })->get();
+
+        // For retrolink: if this matter is an external matter claiming priority to a local matter, find the local matter
+        $retrolink = null;
+        $priEvent = $matter->events->where('code', 'PRI')->first();
+        if ($priEvent && $priEvent->alt_matter_id) {
+            $retrolink = \App\Models\Matter::find($priEvent->alt_matter_id);
+        }
+
+        return view('matter.show', compact('matter', 'family', 'externalPriorityMatters', 'retrolink'));
     }
 
     /**
