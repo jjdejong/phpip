@@ -50,10 +50,7 @@
     "Priority application": "Demande prioritaire",
     "Parent application": "Demande parente",
     "Use original matter as": "Utiliser dossier original comme",
-    "Client": "Client",
-    "Country": "Pays",
     "Type": "Type",
-    "Responsible": "Responsable",
     "Parent": "Parent",
     "Container": "Conteneur",
     "Index": "Index",
@@ -420,6 +417,8 @@
     "Total": "Total",
     "Offer valid until": "Offre valide jusqu'au",
     "Best regards": "Sincères salutations",
+    "Change": "Modifier",
+    "Remove actor": "Supprimer l'acteur",
     "Add": "Ajouter",
     "External priorities": "Priorités externes"
 }
