@@ -40,10 +40,10 @@ php artisan key:generate
 php artisan config:clear
 cp doc/phpip.conf /etc/apache2/sites-available/
 a2ensite phpip
-chmod -R g+rw storage
-chmod -R g+rw bootstrap/cache
 chgrp -R www-data storage
+chmod -R g+rws storage
 chgrp -R www-data bootstrap/cache
+chmod -R g+rw bootstrap/cache
 service apache2 reload
 
 echo "
