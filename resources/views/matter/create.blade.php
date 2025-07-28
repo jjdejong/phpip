@@ -54,7 +54,7 @@
   <div class="row mb-2">
     <label for="caseref" class="col-4 col-form-label fw-bold">{{ __('Caseref') }}</label>
     <div class="col-8">
-      @if ( $operation == 'child' )
+      @if ( $operation == 'descendant' )
       <input type="text" class="form-control" name="caseref" value="{{ $parent_matter->caseref ?? '' }}" readonly>
       @else
       <input type="text" class="form-control" data-ac="/matter/new-caseref" name="caseref" value="{{ $parent_matter->caseref ?? ( $category['next_caseref'] ?? '') }}" autocomplete="off">
@@ -69,7 +69,7 @@
     </div>
   </div>
 
-  @if ( $operation == 'child' )
+  @if ( $operation == 'descendant' )
   <fieldset>
     <legend>{{ __('Use original matter as') }}</legend>
     <div class="form-check my-1">
