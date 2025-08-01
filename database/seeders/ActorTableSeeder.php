@@ -10,7 +10,6 @@ class ActorTableSeeder extends Seeder
     public function run()
     {
         DB::table('actor')->insertOrIgnore([
-
             [
                 'id' => 1,
                 'name' => 'Client handled',
@@ -25,7 +24,7 @@ class ActorTableSeeder extends Seeder
                 'site_id' => null,
                 'phy_person' => 0,
                 'nationality' => null,
-                'language' => null,
+                'language' => 'en',
                 'small_entity' => 0,
                 'address' => null,
                 'country' => null,
@@ -62,7 +61,7 @@ class ActorTableSeeder extends Seeder
                 'site_id' => null,
                 'phy_person' => 1,
                 'nationality' => null,
-                'language' => null,
+                'language' => 'en',
                 'small_entity' => 0,
                 'address' => null,
                 'country' => null,
@@ -83,7 +82,7 @@ class ActorTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
                 'remember_token' => null,
-            ],
+            ]
         ]);
     }
 }

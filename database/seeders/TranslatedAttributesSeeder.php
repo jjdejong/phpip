@@ -343,15 +343,37 @@ class TranslatedAttributesSeeder extends Seeder
 
                     $jsonPayload = json_encode($translations, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT); // Pretty print for readability in DB
 
-                     $count = DB::table($tableName)
-                         ->where($keyColumn, $keyValue)
-                         ->update([$targetJsonColumn => $jsonPayload]);
+                     // For actor_role table, insert if not exists
+                     if ($tableName === 'actor_role') {
+                         $count = DB::table($tableName)
+                             ->updateOrInsert(
+                                 [$keyColumn => $keyValue],
+                                 [
+                                     $keyColumn => $keyValue,
+                                     $targetJsonColumn => $jsonPayload,
+                                     'display_order' => 127,
+                                     'shareable' => 0,
+                                     'show_ref' => 0,
+                                     'show_company' => 0,
+                                     'show_rate' => 0,
+                                     'show_date' => 0,
+                                     'created_at' => now(),
+                                     'updated_at' => now(),
+                                 ]
+                             ) ? 1 : 0;
+                     } else {
+                         $count = DB::table($tableName)
+                             ->where($keyColumn, $keyValue)
+                             ->update([$targetJsonColumn => $jsonPayload]);
+
+                         if ($count === 0 && DB::table($tableName)->where($keyColumn, $keyValue)->doesntExist()) {
+                             Log::warning("Row not found in {$tableName} for {$keyColumn} = '{$keyValue}'. Could not update.");
+                             $notFoundCount++;
+                         }
+                     }
 
                      if ($count > 0) {
                          $updatedCount += $count;
-                     } elseif (DB::table($tableName)->where($keyColumn, $keyValue)->doesntExist()) {
-                         Log::warning("Row not found in {$tableName} for {$keyColumn} = '{$keyValue}'. Could not update.");
-                         $notFoundCount++;
                      }
 
                 } catch (\JsonException $e) {
