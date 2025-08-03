@@ -46,63 +46,8 @@ class TranslatedAttributesSeeder extends Seeder
     {
         Log::info('Starting TranslatedAttributesSeeder...');
 
-        // --- actor_role.name ---
-        // Based on ActorRoleTableSeeder.php
-        $actorRoles = [
-            'ADV'  => ['en' => 'Adversary',        'fr' => 'Adversaire',           'de' => 'Gegenpartei'],
-            'AGT'  => ['en' => 'Primary Agent',    'fr' => 'Agent principal',      'de' => 'Hauptvertreter'],
-            'AGT2' => ['en' => 'Secondary Agent',  'fr' => 'Agent secondaire',     'de' => 'Zweitvertreter'],
-            'ANN'  => ['en' => 'Annuity Agent',    'fr' => 'Agent annuités',       'de' => 'Jahresgebührenvertreter'],
-            'APP'  => ['en' => 'Applicant',        'fr' => 'Déposant',             'de' => 'Anmelder'],
-            'CLI'  => ['en' => 'Client',           'fr' => 'Client',               'de' => 'Mandant'],
-            'CNT'  => ['en' => 'Contact',          'fr' => 'Contact',              'de' => 'Kontakt'],
-            'DBA'  => ['en' => 'DB Administrator', 'fr' => 'BDD Admin.',           'de' => 'DB-Administrator'],
-            'DBRO' => ['en' => 'DB Read-Only',     'fr' => 'BDD Lecture seule',    'de' => 'DB Nur-Lesezugriff'],
-            'DBRW' => ['en' => 'DB Read/Write',    'fr' => 'BDD Lecture/écriture', 'de' => 'DB Lese-/Schreibzugriff'],
-            'DEL'  => ['en' => 'Delegate',         'fr' => 'Délégataire',          'de' => 'Bevollmächtigter'],
-            'FAGT' => ['en' => 'Former Agent',     'fr' => 'Ancien agent',         'de' => 'Ehemaliger Vertreter'],
-            'FOWN' => ['en' => 'Former Owner',     'fr' => 'Ancien titulairte',    'de' => 'Ehemaliger Inhaber'],
-            'INV'  => ['en' => 'Inventor',         'fr' => 'Inventeur',            'de' => 'Erfinder'],
-            'LCN'  => ['en' => 'Licensee',         'fr' => 'Licencié',             'de' => 'Lizenznehmer'],
-            'OFF'  => ['en' => 'Patent Office',    'fr' => 'Office des brevets',   'de' => 'Patentamt'],
-            'OPP'  => ['en' => 'Opponent',         'fr' => 'Opposant',             'de' => 'Einsprechender'],
-            'OWN'  => ['en' => 'Owner',            'fr' => 'Titulaire',            'de' => 'Inhaber'],
-            'PAY'  => ['en' => 'Payor',            'fr' => 'Payeur',               'de' => 'Zahler'],
-            'PTNR' => ['en' => 'Partner',          'fr' => 'Partenaire',           'de' => 'Partner'],
-            'TRA'  => ['en' => 'Translator',       'fr' => 'Traducteur',           'de' => 'Übersetzer'],
-            'WRI'  => ['en' => 'Writer',           'fr' => 'Rédacteur',            'de' => 'Verfasser'],
-        ];
-        $this->updateTable('actor_role', 'code', 'name', $actorRoles);
-
-
-        // --- classifier_type.type ---
-        // Based on ClassifierTypeTableSeeder.php
-        $classifierTypes = [
-            'ABS'   => ['en' => 'Abstract',         'fr' => 'Abrégé',           'de' => 'Zusammenfassung'],
-            'AGR'   => ['en' => 'Agreement',        'fr' => 'Accord',           'de' => 'Vereinbarung'],
-            'BU'    => ['en' => 'Business Unit',    'fr' => 'Unité commerciale','de' => 'Geschäftsbereich'],
-            'DESC'  => ['en' => 'Description',      'fr' => 'Description',      'de' => 'Beschreibung'],
-            'EVAL'  => ['en' => 'Evaluation',       'fr' => 'Évaluation',       'de' => 'Bewertung'],
-            'IMG'   => ['en' => 'Image',            'fr' => 'Image',            'de' => 'Bild'],
-            'IPC'   => ['en' => 'Int. Pat. Class.', 'fr' => 'Class. Int. des Brevets', 'de' => 'Int. Pat. Klass.'],
-            'KW'    => ['en' => 'Keyword',          'fr' => 'Mot-clé',          'de' => 'Stichwort'],
-            'LNK'   => ['en' => 'Link',             'fr' => 'Lien',             'de' => 'Link'],
-            'LOC'   => ['en' => 'Location',         'fr' => 'Lieu',             'de' => 'Standort'],
-            'ORG'   => ['en' => 'Organization',     'fr' => 'Organisation',     'de' => 'Organisation'],
-            'PA'    => ['en' => 'Prior Art',        'fr' => 'Art antérieur',    'de' => 'Stand der Technik'],
-            'PROD'  => ['en' => 'Product',          'fr' => 'Produit',          'de' => 'Produkt'],
-            'PROJ'  => ['en' => 'Project',          'fr' => 'Projet',           'de' => 'Projekt'],
-            'TECH'  => ['en' => 'Technology',       'fr' => 'Technologie',      'de' => 'Technologie'],
-            'TIT'   => ['en' => 'Title',            'fr' => 'Titre',            'de' => 'Titel'],
-            'TITAL' => ['en' => 'Alt. Title',       'fr' => 'Titre alternatif', 'de' => 'Alternativer Titel'],
-            'TITEN' => ['en' => 'English Title',    'fr' => 'Titre anglais',    'de' => 'Englischer Titel'],
-            'TITOF' => ['en' => 'Official Title',   'fr' => 'Titre officiel',   'de' => 'Offizieller Titel'],
-            'TM'    => ['en' => 'Trademark',        'fr' => 'Marque',           'de' => 'Marke'],
-            'TMCL'  => ['en' => 'Class (TM)',       'fr' => 'Classe (Marque)',  'de' => 'Klasse (Marke)'],
-            'TMTYP' => ['en' => 'Type (TM)',        'fr' => 'Type (Marque)',    'de' => 'Typ (Marke)'],
-        ];
-        $this->updateTable('classifier_type', 'code', 'type', $classifierTypes);
-
+        // Seed tables in order to satisfy foreign key constraints
+        // event_name must be seeded before task_rules due to FK constraint
 
         // --- event_name.name ---
         // Based on EventNameTableSeeder.php
@@ -171,43 +116,97 @@ class TranslatedAttributesSeeder extends Seeder
             'WAT'   => ['en' => 'Watch',               'fr' => 'Surveiller',               'de' => 'Überwachen'],
             'WIT'   => ['en' => 'Withdrawal',          'fr' => 'Retrait',                  'de' => 'Zurücknahme'],
         ];
-         $this->updateTable('event_name', 'code', 'name', $eventNames);
+        $this->updateTable('event_name', 'code', 'name', $eventNames);
 
+        // --- matter_category.category ---
+        // Based on MatterCategoryTableSeeder.php
+        $matterCategories = [
+            'AGR'  => ['en' => 'Agreement',           'fr' => 'Accord',              'de' => 'Vereinbarung'],
+            'DSG'  => ['en' => 'Design',              'fr' => 'Dessin ou modèle',    'de' => 'Design'],
+            'FTO'  => ['en' => 'Freedom to Operate',  'fr' => 'Liberté d\'exploitation','de' => 'Freedom to Operate'],
+            'LTG'  => ['en' => 'Litigation',          'fr' => 'Contentieux',         'de' => 'Rechtsstreit'],
+            'OP'   => ['en' => 'Opposition (patent)', 'fr' => 'Opposition (brevet)', 'de' => 'Einspruch (Patent)'],
+            'OPI'  => ['en' => 'Opinion',             'fr' => 'Avis',                'de' => 'Gutachten'], // Or 'Meinung'? Context matters.
+            'OTH'  => ['en' => 'Others',              'fr' => 'Autres',              'de' => 'Sonstige'],
+            'PAT'  => ['en' => 'Patent',              'fr' => 'Brevet',              'de' => 'Patent'],
+            'SO'   => ['en' => 'Soleau Envelop',      'fr' => 'Enveloppe Soleau',    'de' => 'Soleau-Umschlag'],
+            'SR'   => ['en' => 'Search',              'fr' => 'Recherche',           'de' => 'Recherche'],
+            'TM'   => ['en' => 'Trademark',           'fr' => 'Marque',              'de' => 'Marke'],
+            'TMOP' => ['en' => 'Opposition (TM)',     'fr' => 'Opposition (Marque)', 'de' => 'Widerspruch (Marke)'],
+            'TS'   => ['en' => 'Trade Secret',        'fr' => 'Secret de fabrique',  'de' => 'Geschäftsgeheimnis'],
+            'UC'   => ['en' => 'Utility Certificate', 'fr' => 'Certificat d\'utilité', 'de' => 'Gebrauchszertifikat'],
+            'UM'   => ['en' => 'Utility Model',       'fr' => 'Modèle d\'utilité',   'de' => 'Gebrauchsmuster'],
+            'WAT'  => ['en' => 'Watch',               'fr' => 'Surveillance',        'de' => 'Überwachung'],
+        ];
+        $this->updateTable('matter_category', 'code', 'category', $matterCategories);
 
-         // --- matter_category.category ---
-         // Based on MatterCategoryTableSeeder.php
-         $matterCategories = [
-             'AGR'  => ['en' => 'Agreement',           'fr' => 'Accord',              'de' => 'Vereinbarung'],
-             'DSG'  => ['en' => 'Design',              'fr' => 'Dessin ou modèle',    'de' => 'Design'],
-             'FTO'  => ['en' => 'Freedom to Operate',  'fr' => 'Liberté d\'exploitation','de' => 'Freedom to Operate'],
-             'LTG'  => ['en' => 'Litigation',          'fr' => 'Contentieux',         'de' => 'Rechtsstreit'],
-             'OP'   => ['en' => 'Opposition (patent)', 'fr' => 'Opposition (brevet)', 'de' => 'Einspruch (Patent)'],
-             'OPI'  => ['en' => 'Opinion',             'fr' => 'Avis',                'de' => 'Gutachten'], // Or 'Meinung'? Context matters.
-             'OTH'  => ['en' => 'Others',              'fr' => 'Autres',              'de' => 'Sonstige'],
-             'PAT'  => ['en' => 'Patent',              'fr' => 'Brevet',              'de' => 'Patent'],
-             'SO'   => ['en' => 'Soleau Envelop',      'fr' => 'Enveloppe Soleau',    'de' => 'Soleau-Umschlag'],
-             'SR'   => ['en' => 'Search',              'fr' => 'Recherche',           'de' => 'Recherche'],
-             'TM'   => ['en' => 'Trademark',           'fr' => 'Marque',              'de' => 'Marke'],
-             'TMOP' => ['en' => 'Opposition (TM)',     'fr' => 'Opposition (Marque)', 'de' => 'Widerspruch (Marke)'],
-             'TS'   => ['en' => 'Trade Secret',        'fr' => 'Secret de fabrique',  'de' => 'Geschäftsgeheimnis'],
-             'UC'   => ['en' => 'Utility Certificate', 'fr' => 'Certificat d\'utilité', 'de' => 'Gebrauchszertifikat'],
-             'UM'   => ['en' => 'Utility Model',       'fr' => 'Modèle d\'utilité',   'de' => 'Gebrauchsmuster'],
-             'WAT'  => ['en' => 'Watch',               'fr' => 'Surveillance',        'de' => 'Überwachung'],
-         ];
-         $this->updateTable('matter_category', 'code', 'category', $matterCategories);
+        // --- matter_type.type ---
+        // Based on MatterTypeTableSeeder.php
+        $matterTypes = [
+            'CIP' => ['en' => 'Continuation in Part', 'fr' => 'Continuation partielle', 'de' => 'Teilfortsetzungsanmeldung'],
+            'CNT' => ['en' => 'Continuation',         'fr' => 'Continuation',           'de' => 'Fortsetzungsanmeldung'],
+            'DIV' => ['en' => 'Divisional',           'fr' => 'Divisionnaire',          'de' => 'Teilanmeldung'],
+            'PRO' => ['en' => 'Provisional',          'fr' => 'Provisoire',             'de' => 'Vorläufige Anmeldung'],
+            'REI' => ['en' => 'Reissue',              'fr' => 'Redélivrance',           'de' => 'Neuerteilung'],
+            'REX' => ['en' => 'Re-examination',       'fr' => 'Réexamen',               'de' => 'Neuprüfungsverfahren'],
+        ];
+        $this->updateTable('matter_type', 'code', 'type', $matterTypes);
 
+        // --- actor_role.name ---
+        // Based on ActorRoleTableSeeder.php
+        $actorRoles = [
+            'ADV'  => ['en' => 'Adversary',        'fr' => 'Adversaire',           'de' => 'Gegenpartei'],
+            'AGT'  => ['en' => 'Primary Agent',    'fr' => 'Agent principal',      'de' => 'Hauptvertreter'],
+            'AGT2' => ['en' => 'Secondary Agent',  'fr' => 'Agent secondaire',     'de' => 'Zweitvertreter'],
+            'ANN'  => ['en' => 'Annuity Agent',    'fr' => 'Agent annuités',       'de' => 'Jahresgebührenvertreter'],
+            'APP'  => ['en' => 'Applicant',        'fr' => 'Déposant',             'de' => 'Anmelder'],
+            'CLI'  => ['en' => 'Client',           'fr' => 'Client',               'de' => 'Mandant'],
+            'CNT'  => ['en' => 'Contact',          'fr' => 'Contact',              'de' => 'Kontakt'],
+            'DBA'  => ['en' => 'DB Administrator', 'fr' => 'BDD Admin.',           'de' => 'DB-Administrator'],
+            'DBRO' => ['en' => 'DB Read-Only',     'fr' => 'BDD Lecture seule',    'de' => 'DB Nur-Lesezugriff'],
+            'DBRW' => ['en' => 'DB Read/Write',    'fr' => 'BDD Lecture/écriture', 'de' => 'DB Lese-/Schreibzugriff'],
+            'DEL'  => ['en' => 'Delegate',         'fr' => 'Délégataire',          'de' => 'Bevollmächtigter'],
+            'FAGT' => ['en' => 'Former Agent',     'fr' => 'Ancien agent',         'de' => 'Ehemaliger Vertreter'],
+            'FOWN' => ['en' => 'Former Owner',     'fr' => 'Ancien titulairte',    'de' => 'Ehemaliger Inhaber'],
+            'INV'  => ['en' => 'Inventor',         'fr' => 'Inventeur',            'de' => 'Erfinder'],
+            'LCN'  => ['en' => 'Licensee',         'fr' => 'Licencié',             'de' => 'Lizenznehmer'],
+            'OFF'  => ['en' => 'Patent Office',    'fr' => 'Office des brevets',   'de' => 'Patentamt'],
+            'OPP'  => ['en' => 'Opponent',         'fr' => 'Opposant',             'de' => 'Einsprechender'],
+            'OWN'  => ['en' => 'Owner',            'fr' => 'Titulaire',            'de' => 'Inhaber'],
+            'PAY'  => ['en' => 'Payor',            'fr' => 'Payeur',               'de' => 'Zahler'],
+            'PTNR' => ['en' => 'Partner',          'fr' => 'Partenaire',           'de' => 'Partner'],
+            'TRA'  => ['en' => 'Translator',       'fr' => 'Traducteur',           'de' => 'Übersetzer'],
+            'WRI'  => ['en' => 'Writer',           'fr' => 'Rédacteur',            'de' => 'Verfasser'],
+        ];
+        $this->updateTable('actor_role', 'code', 'name', $actorRoles);
 
-         // --- matter_type.type ---
-         // Based on MatterTypeTableSeeder.php
-         $matterTypes = [
-             'CIP' => ['en' => 'Continuation in Part', 'fr' => 'Continuation partielle', 'de' => 'Teilfortsetzungsanmeldung'],
-             'CNT' => ['en' => 'Continuation',         'fr' => 'Continuation',           'de' => 'Fortsetzungsanmeldung'],
-             'DIV' => ['en' => 'Divisional',           'fr' => 'Divisionnaire',          'de' => 'Teilanmeldung'],
-             'PRO' => ['en' => 'Provisional',          'fr' => 'Provisoire',             'de' => 'Vorläufige Anmeldung'],
-             'REI' => ['en' => 'Reissue',              'fr' => 'Redélivrance',           'de' => 'Neuerteilung'],
-             'REX' => ['en' => 'Re-examination',       'fr' => 'Réexamen',               'de' => 'Neuprüfungsverfahren'],
-         ];
-         $this->updateTable('matter_type', 'code', 'type', $matterTypes);
+        // --- classifier_type.type ---
+        // Based on ClassifierTypeTableSeeder.php
+        $classifierTypes = [
+            'ABS'   => ['en' => 'Abstract',         'fr' => 'Abrégé',           'de' => 'Zusammenfassung'],
+            'AGR'   => ['en' => 'Agreement',        'fr' => 'Accord',           'de' => 'Vereinbarung'],
+            'BU'    => ['en' => 'Business Unit',    'fr' => 'Unité commerciale','de' => 'Geschäftsbereich'],
+            'DESC'  => ['en' => 'Description',      'fr' => 'Description',      'de' => 'Beschreibung'],
+            'EVAL'  => ['en' => 'Evaluation',       'fr' => 'Évaluation',       'de' => 'Bewertung'],
+            'IMG'   => ['en' => 'Image',            'fr' => 'Image',            'de' => 'Bild'],
+            'IPC'   => ['en' => 'Int. Pat. Class.', 'fr' => 'Class. Int. des Brevets', 'de' => 'Int. Pat. Klass.'],
+            'KW'    => ['en' => 'Keyword',          'fr' => 'Mot-clé',          'de' => 'Stichwort'],
+            'LNK'   => ['en' => 'Link',             'fr' => 'Lien',             'de' => 'Link'],
+            'LOC'   => ['en' => 'Location',         'fr' => 'Lieu',             'de' => 'Standort'],
+            'ORG'   => ['en' => 'Organization',     'fr' => 'Organisation',     'de' => 'Organisation'],
+            'PA'    => ['en' => 'Prior Art',        'fr' => 'Art antérieur',    'de' => 'Stand der Technik'],
+            'PROD'  => ['en' => 'Product',          'fr' => 'Produit',          'de' => 'Produkt'],
+            'PROJ'  => ['en' => 'Project',          'fr' => 'Projet',           'de' => 'Projekt'],
+            'TECH'  => ['en' => 'Technology',       'fr' => 'Technologie',      'de' => 'Technologie'],
+            'TIT'   => ['en' => 'Title',            'fr' => 'Titre',            'de' => 'Titel'],
+            'TITAL' => ['en' => 'Alt. Title',       'fr' => 'Titre alternatif', 'de' => 'Alternativer Titel'],
+            'TITEN' => ['en' => 'English Title',    'fr' => 'Titre anglais',    'de' => 'Englischer Titel'],
+            'TITOF' => ['en' => 'Official Title',   'fr' => 'Titre officiel',   'de' => 'Offizieller Titel'],
+            'TM'    => ['en' => 'Trademark',        'fr' => 'Marque',           'de' => 'Marke'],
+            'TMCL'  => ['en' => 'Class (TM)',       'fr' => 'Classe (Marque)',  'de' => 'Klasse (Marke)'],
+            'TMTYP' => ['en' => 'Type (TM)',        'fr' => 'Type (Marque)',    'de' => 'Typ (Marke)'],
+        ];
+        $this->updateTable('classifier_type', 'code', 'type', $classifierTypes);
 
 
         // --- task_rules.detail ---
@@ -322,11 +321,10 @@ class TranslatedAttributesSeeder extends Seeder
 
         Log::info("Updating table '{$tableName}', column '{$targetJsonColumn}' using key '{$keyColumn}'...");
         $updatedCount = 0;
-        $notFoundCount = 0;
         $errorCount = 0;
 
         // Wrap per-table update in transaction for atomicity
-        DB::transaction(function () use ($tableName, $keyColumn, $targetJsonColumn, $translationsData, &$updatedCount, &$notFoundCount, &$errorCount) {
+        DB::transaction(function () use ($tableName, $keyColumn, $targetJsonColumn, $translationsData, &$updatedCount, &$errorCount) {
              foreach ($translationsData as $keyValue => $translations) {
                  try {
                      // Ensure translations is an array and not empty (safeguard against incomplete entries)
@@ -343,33 +341,13 @@ class TranslatedAttributesSeeder extends Seeder
 
                     $jsonPayload = json_encode($translations, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT); // Pretty print for readability in DB
 
-                     // For actor_role table, insert if not exists
-                     if ($tableName === 'actor_role') {
-                         $count = DB::table($tableName)
-                             ->updateOrInsert(
-                                 [$keyColumn => $keyValue],
-                                 [
-                                     $keyColumn => $keyValue,
-                                     $targetJsonColumn => $jsonPayload,
-                                     'display_order' => 127,
-                                     'shareable' => 0,
-                                     'show_ref' => 0,
-                                     'show_company' => 0,
-                                     'show_rate' => 0,
-                                     'show_date' => 0,
-                                     'created_at' => now(),
-                                     'updated_at' => now(),
-                                 ]
-                             ) ? 1 : 0;
-                     } else {
-                         $count = DB::table($tableName)
-                             ->where($keyColumn, $keyValue)
-                             ->update([$targetJsonColumn => $jsonPayload]);
+                     // Update existing records with translations
+                     $count = DB::table($tableName)
+                         ->where($keyColumn, $keyValue)
+                         ->update([$targetJsonColumn => $jsonPayload]);
 
-                         if ($count === 0 && DB::table($tableName)->where($keyColumn, $keyValue)->doesntExist()) {
-                             Log::warning("Row not found in {$tableName} for {$keyColumn} = '{$keyValue}'. Could not update.");
-                             $notFoundCount++;
-                         }
+                     if ($count === 0 && DB::table($tableName)->where($keyColumn, $keyValue)->doesntExist()) {
+                         Log::warning("Row not found in {$tableName} for {$keyColumn} = '{$keyValue}'. Could not update.");
                      }
 
                      if ($count > 0) {
@@ -388,6 +366,6 @@ class TranslatedAttributesSeeder extends Seeder
              }
         });
 
-         Log::info("Finished updating {$tableName}. Updated records: {$updatedCount}. Records not found: {$notFoundCount}. Errors: {$errorCount}.");
+         Log::info("Finished updating {$tableName}. Updated records: {$updatedCount}. Errors: {$errorCount}.");
      }
 }
