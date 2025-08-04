@@ -11,7 +11,14 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="table-primary align-middle">
-            <th><input class="form-control" name="Name" placeholder="{{ __('Name') }}" value="{{ Request::get('Name') }}"></th>
+            <th>
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input class="form-control" name="Name" placeholder="{{ __('Name') }}" value="{{ Request::get('Name') }}">
+                <button class="btn btn-outline-secondary clear-filter" type="button" style="display: none;" data-target="Name">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </th>
             <th>{{ __('First name') }}</th>
             <th>{{ __('Display name') }}</th>
             <th class="text-center">{{ __('Company') }} <span class="float-end">{{ __('Person') }}</span></th>

@@ -11,8 +11,22 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="table-primary align-middle">
-            <th><input class="form-control" data-source="/category" name="Code" placeholder="{{ __('Code') }}"></th>
-            <th><input class="form-control" data-source="/category" name="Category" placeholder="{{ __('Category') }}"></th>
+            <th>
+              <div class="input-group input-group-sm" style="width: 80px;">
+                <input class="form-control" data-source="/category" name="Code" placeholder="{{ __('Code') }}">
+                <button class="btn btn-outline-secondary clear-filter" type="button" style="display: none;" data-target="Code">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </th>
+            <th>
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input class="form-control" data-source="/category" name="Category" placeholder="{{ __('Category') }}">
+                <button class="btn btn-outline-secondary clear-filter" type="button" style="display: none;" data-target="Category">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </th>
             <th colspan="2">{{ __('Display with') }}</th>
           </tr>
         </thead>

@@ -11,8 +11,22 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="table-primary align-middle">
-            <th><input class="form-control" data-source="/role" name="Code" placeholder="{{ __('Code') }}"></th>
-            <th><input class="form-control" data-source="/role" name="Name" placeholder="{{ __('Name') }}"></th>
+            <th>
+              <div class="input-group input-group-sm" style="width: 80px;">
+                <input class="form-control" data-source="/role" name="Code" placeholder="{{ __('Code') }}">
+                <button class="btn btn-outline-secondary clear-filter" type="button" style="display: none;" data-target="Code">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </th>
+            <th>
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input class="form-control" data-source="/role" name="Name" placeholder="{{ __('Name') }}">
+                <button class="btn btn-outline-secondary clear-filter" type="button" style="display: none;" data-target="Name">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </th>
             <th class="text-center" colspan="2">{{ __('Notes') }}</th>
           </tr>
         </thead>

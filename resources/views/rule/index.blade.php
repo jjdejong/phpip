@@ -16,13 +16,62 @@
       <table class="table table-striped table-hover table-sm">
         <thead>
           <tr id="filter" class="table-primary align-middle">
-            <th style="width: 20%"><input class="form-control form-control-sm" data-source="/rule" name="Task" placeholder="{{ __('Task') }}"></th>
-            <th style="width: 15%"><input class="form-control form-control-sm" data-source="/rule" name="Detail" placeholder="{{ __('Detail') }}"></th>
-            <th style="width: 20%"><input class="form-control form-control-sm" data-source="/rule" name="Trigger" placeholder="{{ __('Trigger event') }}" /></th>
-            <th style="width: 15%"><input class="form-control form-control-sm" data-source="/rule" name="Category" placeholder="{{ __('Category') }}"></th>
-            <th style="width: 7%"><input class="form-control form-control-sm" data-source="/rule" name="Country" placeholder="{{ __('Country') }}"></th>
-            <th style="width: 7%"><input class="form-control form-control-sm" data-source="/rule" name="Origin" placeholder="{{ __('Origin') }}"></th>
-            <th style="width: 9%"><input class="form-control form-control-sm" data-source="/rule" name="Type" placeholder="{{ __('Type') }}"></th>
+            <th style="width: 20%">
+              <div class="input-group input-group-sm">
+                <input class="form-control" data-source="/rule" name="Task" placeholder="{{ __('Task') }}">
+                <button class="btn btn-outline-secondary clear-filter" type="button" style="display: none;" data-target="Task">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </th>
+            <th style="width: 15%">
+              <div class="input-group input-group-sm">
+                <input class="form-control" data-source="/rule" name="Detail" placeholder="{{ __('Detail') }}">
+                <button class="btn btn-outline-secondary clear-filter" type="button" style="display: none;" data-target="Detail">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </th>
+            <th style="width: 20%">
+              <div class="input-group input-group-sm">
+                <input class="form-control" data-source="/rule" name="Trigger" placeholder="{{ __('Trigger event') }}">
+                <button class="btn btn-outline-secondary clear-filter" type="button" style="display: none;" data-target="Trigger">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </th>
+            <th style="width: 15%">
+              <div class="input-group input-group-sm">
+                <input class="form-control" data-source="/rule" name="Category" placeholder="{{ __('Category') }}">
+                <button class="btn btn-outline-secondary clear-filter" type="button" style="display: none;" data-target="Category">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </th>
+            <th style="width: 7%">
+              <div class="input-group input-group-sm">
+                <input class="form-control" data-source="/rule" name="Country" placeholder="{{ __('Country') }}">
+                <button class="btn btn-outline-secondary clear-filter" type="button" style="display: none;" data-target="Country">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </th>
+            <th style="width: 7%">
+              <div class="input-group input-group-sm">
+                <input class="form-control" data-source="/rule" name="Origin" placeholder="{{ __('Origin') }}">
+                <button class="btn btn-outline-secondary clear-filter" type="button" style="display: none;" data-target="Origin">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </th>
+            <th style="width: 9%">
+              <div class="input-group input-group-sm">
+                <input class="form-control" data-source="/rule" name="Type" placeholder="{{ __('Type') }}">
+                <button class="btn btn-outline-secondary clear-filter" type="button" style="display: none;" data-target="Type">
+                  <span>&times;</span>
+                </button>
+              </div>
+            </th>
             <th style="width: 3%" title="{{ __('Clear task') }}">C</th>
             <th style="width: 3%" title="{{ __('Delete task') }}">D</th>
           </tr>
