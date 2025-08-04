@@ -16,6 +16,8 @@ Implemented tranlations for country names.
 
 Added a UI for managing countries, allowing the edition of renewal parameters (be careful!) and setting preselections for national phases.
 
+Run `php artisan migrate`.
+
 ## 2025-04-18 Implemented localization for names stored in tables (event names, roles, categories, types, etc.)
 
 Big change. You need to run `git pull; composer install; php artisan migrate`. 
