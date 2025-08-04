@@ -10,7 +10,7 @@ Head for the [Wiki](https://github.com/jjdejong/phpip/wiki) for further informat
 
 # New features
 
-## 2025-08-04 Countires
+## 2025-08-04 Countries
 
 Implemented tranlations for country names. 
 
