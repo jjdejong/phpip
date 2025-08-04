@@ -1,4 +1,4 @@
-<div data-resource="/role/{{ $role->code }}">
+<div data-resource="/role/{{ $role->code }}" class="position-relative" style="padding-bottom: 50px;">
   <table class="table">
     <tr>
       <th>{{ __('Code') }}</th>
@@ -29,7 +29,10 @@
       <td colspan=3><textarea class="form-control noformat" name="notes">{{ $role->notes }}</textarea></td>
     </tr>
   </table>
-  <button type="button" class="btn btn-danger" title="{{ __('Delete role') }}" id="deleteRole" data-message="{{ __('the role') }} {{ $role->name  }}" data-url='/role/{{ $role->code }}'>
+  <button type="button" class="btn btn-outline-danger btn-sm position-absolute" title="{{ __('Delete role') }}" id="deleteRole" data-message="{{ __('the role') }} {{ $role->name  }}" data-url='/role/{{ $role->code }}' style="bottom: 10px; right: 10px;">
+    <svg width="16" height="16" fill="currentColor" class="me-1">
+      <use xlink:href="#trash"/>
+    </svg>
     {{ __('Delete') }}
   </button>
 </div>

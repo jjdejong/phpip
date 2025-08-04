@@ -1,4 +1,4 @@
-<div data-resource="/document/{{ $class->id }}">
+<div data-resource="/document/{{ $class->id }}" class="position-relative" style="padding-bottom: 50px;">
   <table class="table">
     <tr>
       <th>{{ __('Name') }}</th>
@@ -21,7 +21,10 @@
     </td></tr>
     @endif
   </table>
-  <button type="button" class="btn btn-danger" title="{{ __('Delete class') }}" id="deleteClass" data-message="{{ __('the class') }} {{ $class->name  }}" data-url='/document/{{ $class->id }}'>
+  <button type="button" class="btn btn-outline-danger btn-sm position-absolute" title="{{ __('Delete class') }}" id="deleteClass" data-message="{{ __('the class') }} {{ $class->name  }}" data-url='/document/{{ $class->id }}' style="bottom: 10px; right: 10px;">
+    <svg width="16" height="16" fill="currentColor" class="me-1">
+      <use xlink:href="#trash"/>
+    </svg>
     {{ __('Delete') }}
   </button>
 </div>

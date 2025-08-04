@@ -1,4 +1,4 @@
-<div data-resource="/classifier_type/{{ $classifier_type->code }}">
+<div data-resource="/classifier_type/{{ $classifier_type->code }}" class="position-relative" style="padding-bottom: 50px;">
 	<table class="table">
 		<tr>
 			<th width="22%">{{ __('Code') }}</th>
@@ -19,7 +19,10 @@
       <td><textarea class="form-control noformat" name="notes"> {{ $classifier_type->notes }}</textarea></td>
     </tr>
 	</table>
-	<button type="button" class="btn btn-danger" title="{{ __('Delete type') }}" id="deleteClassifierType" data-message="{{ __('type') }} {{$classifier_type->type }}" data-url='/classifier_type/{{ $classifier_type->code }}'>
+	<button type="button" class="btn btn-outline-danger btn-sm position-absolute" title="{{ __('Delete type') }}" id="deleteClassifierType" data-message="{{ __('type') }} {{$classifier_type->type }}" data-url='/classifier_type/{{ $classifier_type->code }}' style="bottom: 10px; right: 10px;">
+		<svg width="16" height="16" fill="currentColor" class="me-1">
+			<use xlink:href="#trash"/>
+		</svg>
 		{{ __('Delete') }}
 	</button>
 </div>

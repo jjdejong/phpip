@@ -1,5 +1,5 @@
 @can('admin')
-<div data-resource="/countries/{{ $country->iso }}" class="reload-part">
+<div data-resource="/countries/{{ $country->iso }}" class="reload-part position-relative" style="padding-bottom: 50px;">
   <table class="table table-hover table-sm">
     <tr>
       <th width="20%">{{ __('ISO Code') }}</th>
@@ -116,14 +116,12 @@
 
   @if(!$country->numcode)
     {{-- Delete button for custom countries only --}}
-    <div class="mt-3 d-flex justify-content-end">
-      <button type="button" class="btn btn-outline-danger btn-sm" id="deleteCountry" data-message="{{ __('country') }} {{ $country->getTranslation('name', app()->getLocale(), false) ?: $country->getTranslation('name', 'en', false) ?: $country->iso }}" data-url="/countries/{{ $country->iso }}">
-        <svg width="16" height="16" fill="currentColor" class="me-1">
-          <use xlink:href="#trash"/>
-        </svg>
-        {{ __('Delete Country') }}
-      </button>
-    </div>
+    <button type="button" class="btn btn-outline-danger btn-sm position-absolute" id="deleteCountry" data-message="{{ __('country') }} {{ $country->getTranslation('name', app()->getLocale(), false) ?: $country->getTranslation('name', 'en', false) ?: $country->iso }}" data-url="/countries/{{ $country->iso }}" style="bottom: 10px; right: 10px;">
+      <svg width="16" height="16" fill="currentColor" class="me-1">
+        <use xlink:href="#trash"/>
+      </svg>
+      {{ __('Delete Country') }}
+    </button>
   @endif
 </div>
 @else

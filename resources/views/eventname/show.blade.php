@@ -1,4 +1,4 @@
-<div data-resource="/eventname/{{ $eventname->code }}" class="reload-part">
+<div data-resource="/eventname/{{ $eventname->code }}" class="reload-part position-relative" style="padding-bottom: 50px;">
 	<table class="table table-hover table-sm">
 		<tr>
 			<th width="20%">{{ __('Code') }}</th>
@@ -68,7 +68,10 @@
 		</tr>
 		@endforeach
 	</table>
-	<button type="button" class="btn btn-danger" title="{{ __('Delete event name') }}" id="deleteEName" data-message="{{ __('event name') }} {{ $eventname->name  }}" data-url='/eventname/{{ $eventname->code }}'>
+	<button type="button" class="btn btn-outline-danger btn-sm position-absolute" title="{{ __('Delete event name') }}" id="deleteEName" data-message="{{ __('event name') }} {{ $eventname->name  }}" data-url='/eventname/{{ $eventname->code }}' style="bottom: 10px; right: 10px;">
+		<svg width="16" height="16" fill="currentColor" class="me-1">
+			<use xlink:href="#trash"/>
+		</svg>
 		{{ __('Delete') }}
 	</button>
 </div>

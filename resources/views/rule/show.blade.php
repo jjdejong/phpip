@@ -1,11 +1,8 @@
-<div class="card reload-part" style="height: 480px;">
+<div class="card reload-part position-relative" style="height: 480px;">
   <div class="nav nav-pills nav-fill" role="tablist">
     <a class="nav-item nav-link active p-2" data-bs-toggle="tab" href="#ruleMain" role="tab">{{ __('Main') }}</a>
     <a class="nav-item nav-link p-2" data-bs-toggle="tab" href="#ruleConditions" role="tab">{{ __('Conditions') }}</a>
     <a class="nav-item nav-link p-2" data-bs-toggle="tab" href="#ruleCost" role="tab">{{ __('Cost') }}</a>
-    <button id="deleteRule" title="{{ __('Delete rule') }}" class="nav-item nav-link p-2 btn btn-outline-danger" data-url='/rule/{{ $ruleInfo->id }}' data-message="{{ __('the rule') }} {{ $ruleInfo->taskInfo->name  }}" >
-      {{ __('Delete') }}
-    </button>
   </div>
   <div class="tab-content" data-resource="/rule/{{ $ruleInfo->id }}">
     <fieldset class="tab-pane fade show active" id="ruleMain">
@@ -138,4 +135,10 @@
       </table>
     </fieldset>
   </div>
+  <button type="button" class="btn btn-outline-danger btn-sm position-absolute" id="deleteRule" title="{{ __('Delete rule') }}" data-url='/rule/{{ $ruleInfo->id }}' data-message="{{ __('the rule') }} {{ $ruleInfo->taskInfo->name }}" style="bottom: 10px; right: 10px;">
+    <svg width="16" height="16" fill="currentColor" class="me-1">
+      <use xlink:href="#trash"/>
+    </svg>
+    {{ __('Delete') }}
+  </button>
 </div>

@@ -1,4 +1,4 @@
-<div data-resource="/category/{{ $category->code }}">
+<div data-resource="/category/{{ $category->code }}" class="position-relative" style="padding-bottom: 50px;">
 	<table class="table">
 		<tr>
 			<th width="20%">{{ __('Code') }}</th>
@@ -13,7 +13,10 @@
 			<td><input type="text" class="form-control noformat" data-ac="/category/autocomplete" name="display_with" value="{{ empty($category->display_with) ? '' : $category->displayWithInfo->category }}"></td>
 		</tr>
 	</table>
-	<button type="button" class="btn btn-danger" title="{{ __('Delete category') }}" id="deleteCategory" data-message="{{ __('category') }} {{$category->category }}" data-url='/category/{{ $category->code }}'>
+	<button type="button" class="btn btn-outline-danger btn-sm position-absolute" title="{{ __('Delete category') }}" id="deleteCategory" data-message="{{ __('category') }} {{$category->category }}" data-url='/category/{{ $category->code }}' style="bottom: 10px; right: 10px;">
+		<svg width="16" height="16" fill="currentColor" class="me-1">
+			<use xlink:href="#trash"/>
+		</svg>
 		{{ __('Delete') }}
 	</button>
 </div>

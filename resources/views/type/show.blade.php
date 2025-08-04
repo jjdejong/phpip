@@ -1,4 +1,4 @@
-<div data-resource="/type/{{ $type->code }}">
+<div data-resource="/type/{{ $type->code }}" class="position-relative" style="padding-bottom: 50px;">
 	<table class="table table-hover table-sm">
 		<tr>
 			<th>{{ __('Code') }}</td>
@@ -7,7 +7,10 @@
 			<td><input class="form-control noformat" name="type" value="{{ $type->type }}"></td>
 		</tr>
 	</table>
-	<button type="button" class="btn btn-danger" title="{{ __('Delete type') }}" id="deleteType" data-url='/type/{{ $type->code }}' data-message="{{ __('the matter type') }} {{ $type->type }}">
+	<button type="button" class="btn btn-outline-danger btn-sm position-absolute" title="{{ __('Delete type') }}" id="deleteType" data-url='/type/{{ $type->code }}' data-message="{{ __('the matter type') }} {{ $type->type }}" style="bottom: 10px; right: 10px;">
+		<svg width="16" height="16" fill="currentColor" class="me-1">
+			<use xlink:href="#trash"/>
+		</svg>
 		{{ __('Delete') }}
 	</button>
 </div>

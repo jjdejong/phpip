@@ -1,14 +1,9 @@
-<div class="card" style="height: 480px;">
+<div class="card position-relative" style="height: 480px;">
   <nav class="nav nav-tabs nav-fill">
     <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#actorMain">{{ __('Main') }}</button>
     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#actorContact">{{ __('Contact') }}</button>
     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#actorOther">{{ __('Other') }}</button>
     <a class="nav-link" data-bs-toggle="tab" id="actorUsedInToggle" href="/actor/{{ $actorInfo->id }}/usedin" data-bs-target="#actorUsedIn">{{ __('Used in') }}</a>
-    @can('readwrite')
-    <button id="deleteActor" title="{{ __('Delete actor') }}" class="nav-link btn btn-outline-danger" data-url='/actor/{{ $actorInfo->id }}' data-message="{{ __('the actor') }} {{ $actorInfo->name }}">
-      {{ __('Delete') }}
-    </button>
-    @endcan
   </nav>
   <div class="tab-content p-1" data-resource="/actor/{{ $actorInfo->id }}">
     <fieldset class="tab-pane fade show active" id="actorMain">
@@ -140,4 +135,12 @@
       <textarea class="noformat form-control" name="notes">{{ $actorInfo->notes }}</textarea>
     </div>
   </div>
+  @can('readwrite')
+  <button type="button" class="btn btn-outline-danger btn-sm position-absolute" id="deleteActor" title="{{ __('Delete actor') }}" data-url='/actor/{{ $actorInfo->id }}' data-message="{{ __('the actor') }} {{ $actorInfo->name }}" style="bottom: 10px; right: 10px;">
+    <svg width="16" height="16" fill="currentColor" class="me-1">
+      <use xlink:href="#trash"/>
+    </svg>
+    {{ __('Delete') }}
+  </button>
+  @endcan
 </div>

@@ -1,4 +1,4 @@
-<div data-resource="/default_actor/{{ $default_actor->id }}">
+<div data-resource="/default_actor/{{ $default_actor->id }}" class="position-relative" style="padding-bottom: 50px;">
   <table class="table">
     <tr>
       <th width="15%"><label title="{{ $tableComments['actor_id'] }}">{{ __('Actor') }}</label></th>
@@ -19,7 +19,10 @@
       <td><input type="checkbox" class="noformat" name="shared" {{ $default_actor->shared ? 'checked' : '' }}></td>
     </tr>
   </table>
-  <button type="button" class="btn btn-danger" title="{{ __('Delete entry') }}" id="deleteDActor" data-message="{{ __('entry for') }} {{ $default_actor->actor->name  }}" data-url='/default_actor/{{ $default_actor->id }}'>
+  <button type="button" class="btn btn-outline-danger btn-sm position-absolute" title="{{ __('Delete entry') }}" id="deleteDActor" data-message="{{ __('entry for') }} {{ $default_actor->actor->name  }}" data-url='/default_actor/{{ $default_actor->id }}' style="bottom: 10px; right: 10px;">
+    <svg width="16" height="16" fill="currentColor" class="me-1">
+      <use xlink:href="#trash"/>
+    </svg>
     {{ __('Delete') }}
   </button>
 </div>
