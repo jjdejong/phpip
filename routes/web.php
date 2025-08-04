@@ -18,6 +18,17 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MatterController;
+use App\Http\Controllers\CountryController;
+
+// Countries management routes (DBA only)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/countries', [CountryController::class, 'index'])->name('countries.index');
+    Route::get('/countries/create', [CountryController::class, 'create'])->name('countries.create');
+    Route::post('/countries', [CountryController::class, 'store'])->name('countries.store');
+    Route::get('/countries/{country}', [CountryController::class, 'show'])->name('countries.show');
+    Route::put('/countries/{country}', [CountryController::class, 'update'])->name('countries.update');
+    Route::delete('/countries/{country}', [CountryController::class, 'destroy'])->name('countries.destroy');
+});
 use App\Http\Controllers\RenewalController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\AutocompleteController;

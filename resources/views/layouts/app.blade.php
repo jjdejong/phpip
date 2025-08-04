@@ -168,6 +168,7 @@
                 @can('admin')
                 <a class="dropdown-item" href="{{ url('/rule') }}">{{ __('Rules') }}</a>
                 <a class="dropdown-item" href="{{ url('/document') }}">{{ __('Email template classes') }}</a>
+                <a class="dropdown-item" href="{{ url('/countries') }}">{{ __('Country Management') }}</a>
                 <a class="dropdown-item" href="{{ url('/template-member') }}">{{ __('Email templates') }}</a>
                 @endcan
               </ul>

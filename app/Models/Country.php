@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTranslationsExtended;
 
 class Country extends Model
 {
+    use HasTranslationsExtended;
+
     protected $table = 'country';
 
     protected $primaryKey = 'iso';
@@ -16,7 +19,10 @@ class Country extends Model
 
     public $timestamps = false;
 
-    protected $hidden = ['name_DE', 'name_FR', 'iso3', 'numcode'];
+    protected $hidden = ['iso3', 'numcode'];
+
+    // Define which attributes are translatable
+    public $translatable = ['name'];
 
     protected $guarded = [];
 

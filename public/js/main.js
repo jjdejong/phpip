@@ -188,6 +188,9 @@ app.addEventListener('click', (e) => {
         case 'createEventNameSubmit':
             submitModalForm('/eventname', createEventForm, null, e.target);
             break;
+        case 'createCountrySubmit':
+            submitModalForm('/countries', createCountryForm, null, e.target);
+            break;
 
         case 'createCategorySubmit':
             submitModalForm('/category', createCategoryForm, null, e.target);
@@ -241,12 +244,15 @@ app.addEventListener('click', (e) => {
         case 'deleteDActor':
         case 'deleteClassifierType':
         case 'deleteCategory':
+        case 'deleteCountry':
         case 'deleteClass':
         case 'deleteMember':
             if (confirm("Deleting  " + e.target.dataset.message + ". Continue anyway?")) {
                 fetchREST(e.target.dataset.url, 'DELETE')
                     .then(data => {
-                        if (data.message) {
+                        if (data.status === 'success') {
+                            location.reload();
+                        } else if (data.message) {
                             alert("Couldn't delete " + e.target.dataset.message + ". Check the dependencies. Database said: " + data.message);
                             return false;
                         } else {
@@ -386,7 +392,7 @@ app.addEventListener('change', e => {
                             e.target.classList.add('border-danger');
                             e.target.value = Object.values(data.errors)[0];
                         }
-                    } else if (data.message) {
+                    } else if (data.message && data.status !== 'success') {
                         if (ajaxModal.matches('.show')) {
                             footerAlert.innerHTML = data.message;
                             footerAlert.classList.add('alert-danger');
@@ -762,3 +768,60 @@ ajaxModal.addEventListener('dragend', e => {
     }
     dragItem = "";
 });
+
+// Reload country view after successful field updates
+app.addEventListener('xhrsent', e => {
+    const reloadPart = e.target.closest('.reload-part');
+    if (reloadPart && reloadPart.dataset.resource) {
+        fetchInto(reloadPart.dataset.resource, reloadPart);
+    }
+});
+
+// Handle country name locale switching
+app.addEventListener('change', e => {
+    if (e.target.matches('#nameLocaleSelect')) {
+        // For editable custom countries
+        const selectedLocale = e.target.value;
+        const mainInput = e.target.parentElement.querySelector('input[type="text"]');
+        const nameInputs = document.getElementById('nameInputs');
+        
+        // Get the value for the selected locale from hidden inputs
+        const sourceInput = nameInputs.querySelector(`input[data-locale="${selectedLocale}"]`);
+        
+        // Update main input name and value
+        mainInput.name = `name[${selectedLocale}]`;
+        mainInput.value = sourceInput ? sourceInput.value : '';
+        
+        // Keep the nameInputs hidden - we don't want to show all languages at once
+        // Update the corresponding hidden input when the main input changes
+        const updateHiddenInput = () => {
+            const currentLocaleInput = nameInputs.querySelector(`input[data-locale="${selectedLocale}"]`);
+            if (currentLocaleInput) {
+                currentLocaleInput.value = mainInput.value;
+            }
+        };
+        
+        // Set up listener for changes to main input
+        mainInput.removeEventListener('input', updateHiddenInput);
+        mainInput.addEventListener('input', updateHiddenInput);
+    } else if (e.target.matches('#nameLocaleSelectReadonly')) {
+        // For read-only standard countries - just update the displayed name
+        const selectedLocale = e.target.value;
+        const nameSpan = e.target.parentElement.querySelector('span');
+        const reloadPart = e.target.closest('.reload-part');
+        
+        // Fetch the country data with the new locale and update the display
+        if (reloadPart && reloadPart.dataset.resource) {
+            fetch(reloadPart.dataset.resource + '?locale=' + selectedLocale)
+                .then(response => response.text())
+                .then(html => {
+                    const doc = new DOMParser().parseFromString(html, 'text/html');
+                    const newNameSpan = doc.querySelector('span.form-control-sm');
+                    if (newNameSpan) {
+                        nameSpan.textContent = newNameSpan.textContent;
+                    }
+                });
+        }
+    }
+});
+

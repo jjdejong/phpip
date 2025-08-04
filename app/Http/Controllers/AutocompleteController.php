@@ -144,10 +144,16 @@ class AutocompleteController extends Controller
 
     public function country(Request $request): JsonResponse
     {
-        $results = Country::select('name as value', 'iso as key')
-            ->whereLike('name', "{$request->term}%")
-            ->orWhereLike('iso', "{$request->term}%")
-            ->get();
+        $query = Country::whereJsonLike('name', $request->term)
+            ->orWhereLike('iso', "{$request->term}%");
+
+        $countries = $query->take(10)->get();
+        $results = $countries->map(function ($country) {
+            return [
+                'key' => $country->iso,
+                'value' => $country->name
+            ];
+        })->toArray();
 
         return $this->formatResponse($results);
     }
