@@ -17,7 +17,7 @@ class Rule extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    protected $translatable = ['detail'];
+    public $translatable = ['detail'];
 
     public function country()
     {

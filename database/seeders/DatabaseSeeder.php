@@ -10,15 +10,13 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(CountryTableSeeder::class);
         
-        // Base seeders for translatable tables (insert English-only JSON)
+        // Translatable table seeders (insert multi-language JSON directly)
         $this->call(EventNameTableSeeder::class);
         $this->call(MatterCategoryTableSeeder::class);
         $this->call(ClassifierTypeTableSeeder::class);
         $this->call(MatterTypeTableSeeder::class);
         $this->call(ActorRoleTableSeeder::class);
-        
-        // Translation seeder (updates with multi-language JSON)
-        $this->call(TranslatedAttributesSeeder::class);
+        $this->call(TaskRulesTableSeeder::class);
         
         $this->call(ActorTableSeeder::class);
         $this->call(FeesTableSeeder::class);
