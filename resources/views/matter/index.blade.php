@@ -1,13 +1,7 @@
 @php
-  if (Request::get('tab') == 1) {
-    $hideTab0 = 'd-none';
-    $hideTab1 = '';
-    $tab = 1;
-  } else {
-    $hideTab0 = '';
-    $hideTab1 = 'd-none';
-    $tab = 0;
-  }
+    $tab = Request::get('tab') == 1 ? 1 : 0;
+    $hideTab0 = $tab == 1 ? 'd-none' : '';
+    $hideTab1 = $tab == 0 ? 'd-none' : '';
 @endphp
 
 @extends('layouts.app')

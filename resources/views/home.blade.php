@@ -7,6 +7,17 @@
       min-height: 80px;
       overflow: auto;
   }
+  input[data-ac] {
+      position: relative;
+  }
+  input[data-ac] + .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 1050;
+      min-width: 200px;
+      margin-top: 0.125rem;
+  }
 </style>
 @endsection
 
