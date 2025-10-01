@@ -102,7 +102,7 @@
       </div>
     </div>
   </div>
-  <div class="col-8" id="filter">
+  <div class="col-8" id="filter" x-data="{ selectedTask: '0' }">
     <div class="card border-primary">
       <div class="card-header text-white bg-primary p-1">
         <form class="row">
@@ -112,16 +112,16 @@
           @can('readonly')
           <div class="col-6">
             <div class="input-group">
-              <label class="btn btn-info">
-                <input type="radio" class="btn-check" name="what_tasks" id="alltasks" value="0">{{ __('Everyone') }}
+              <label class="btn btn-info" :class="{ 'active': selectedTask === '0' }">
+                <input type="radio" class="btn-check" name="what_tasks" id="alltasks" value="0" x-model="selectedTask">{{ __('Everyone') }}
               </label>
               @if(!Request::filled('user_dashboard'))
-              <label class="btn btn-info">
-                <input type="radio" class="btn-check" name="what_tasks" id="mytasks" value="1">{{ Auth::user()->login }}
+              <label class="btn btn-info" :class="{ 'active': selectedTask === '1' }">
+                <input type="radio" class="btn-check" name="what_tasks" id="mytasks" value="1" x-model="selectedTask">{{ Auth::user()->login }}
               </label>
               @endif
-              <label class="btn btn-info">
-                <input type="radio" class="btn-check" name="what_tasks" id="clientTasks" value="2">{{ __('Client') }}
+              <label class="btn btn-info" :class="{ 'active': selectedTask === '2' }">
+                <input type="radio" class="btn-check" name="what_tasks" id="clientTasks" value="2" x-model="selectedTask">{{ __('Client') }}
               </label>
               <input type="hidden" id="clientId" name="client_id">
               <input type="text" class="form-control me-3" data-ac="/actor/autocomplete" data-actarget="client_id" placeholder="{{ __('Select Client') }}">
