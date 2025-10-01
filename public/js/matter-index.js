@@ -28,26 +28,6 @@ filterFields.onclick = e => {
 
 filterButtons.onclick = e => {
   switch (e.target.id) {
-    case 'showStatus':
-      for (td of document.getElementsByClassName('tab1')) {
-        td.classList.remove('d-none');
-      }
-      for (td of document.getElementsByClassName('tab0')) {
-        td.classList.add('d-none');
-      }
-      url.searchParams.set('tab', '1');
-      window.history.pushState('', 'phpIP', url);
-      break;
-    case 'showActors':
-      for (td of document.getElementsByClassName('tab0')) {
-        td.classList.remove('d-none');
-      }
-      for (td of document.getElementsByClassName('tab1')) {
-        td.classList.add('d-none');
-      }
-      url.searchParams.set('tab', '0');
-      window.history.pushState('', 'phpIP', url);
-      break;
     case 'showContainers':
       if (url.searchParams.has('Ctnr')) {
         url.searchParams.delete('Ctnr');

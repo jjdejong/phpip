@@ -16,7 +16,7 @@
 @endsection
 
 @section('content')
-<div class="card border-primary mb-0">
+<div class="card border-primary mb-0" x-data="{ tab: {{ $tab }} }">
   <div id="filterButtons" class="card-header bg-primary p-1">
     <form class="btn-toolbar" role="toolbar">
       <div class="btn-group me-3">
@@ -24,10 +24,10 @@
         <label id="showContainers" class="btn btn-outline-info" for="btnshowctnr">{{ __('Show Containers') }}</label>
       </div>
       <div class="btn-group me-3" id="actorStatus">
-        <input type="radio" class="btn-check" name="tab" {{ $tab == 1 ? '' : 'checked' }} id="btnactorview">
-        <label id="showActors" class="btn btn-outline-info" for="btnactorview">{{ __('Actor View') }}</label>
-        <input type="radio" class="btn-check" name="tab" {{ $tab == 1 ? 'checked' : '' }} id="btnstatusview">
-        <label id="showStatus" class="btn btn-outline-info" for="btnstatusview">{{ __('Status View') }}</label>
+        <input type="radio" class="btn-check" name="tab" value="0" x-model="tab" id="btnactorview">
+        <label class="btn btn-outline-info" :class="{ 'active': tab == 0 }" for="btnactorview">{{ __('Actor View') }}</label>
+        <input type="radio" class="btn-check" name="tab" value="1" x-model="tab" id="btnstatusview">
+        <label class="btn btn-outline-info" :class="{ 'active': tab == 1 }" for="btnstatusview">{{ __('Status View') }}</label>
       </div>
       @can('readonly')
       <div class="btn-group me-3" id="mineAll">
@@ -66,61 +66,61 @@
             </div>
           </td>
           @can('readonly')
-          <td class="tab0 {{ $hideTab0 }}">
+          <td class="tab0" :class="{ 'd-none': tab == 1 }">
             <div class="input-group input-group-sm">
               <input class="form-control" name="Client" placeholder="{{ __('Client') }}" value="{{ Request::get('Client') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'cli.name' ? 'active' : '' }}" type="button" data-sortkey="cli.name" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
           @endcan
-          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="8" name="ClRef" placeholder="{{ __('Cl. Ref') }}" value="{{ Request::get('ClRef') }}"></td>
-          <td class="tab0 {{ $hideTab0 }}">
+          <td class="tab0" :class="{ 'd-none': tab == 1 }"><input class="form-control form-control-sm" size="8" name="ClRef" placeholder="{{ __('Cl. Ref') }}" value="{{ Request::get('ClRef') }}"></td>
+          <td class="tab0" :class="{ 'd-none': tab == 1 }">
             <div class="input-group input-group-sm">
               <input class="form-control" name="Applicant" placeholder="{{ __('Applicant') }}" value="{{ Request::get('Applicant') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'app.name' ? 'active' : '' }}" type="button" data-sortkey="app.name" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab0 {{ $hideTab0 }}">
+          <td class="tab0" :class="{ 'd-none': tab == 1 }">
             <div class="input-group input-group-sm">
               <input class="form-control" name="Agent" placeholder="{{ __('Agent') }}" value="{{ Request::get('Agent') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'agt.name' ? 'active' : '' }}" type="button" data-sortkey="agt.name" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" size="16" name="AgtRef" placeholder="{{ __('Agt. Ref') }}" value="{{ Request::get('AgtRef') }}"></td>
-          <td class="tab0 {{ $hideTab0 }}"><input class="form-control form-control-sm" name="Title" placeholder="{{ __('Title') }}" value="{{ Request::get('Title') }}"></td>
-          <td class="tab0 {{ $hideTab0 }}">
+          <td class="tab0" :class="{ 'd-none': tab == 1 }"><input class="form-control form-control-sm" size="16" name="AgtRef" placeholder="{{ __('Agt. Ref') }}" value="{{ Request::get('AgtRef') }}"></td>
+          <td class="tab0" :class="{ 'd-none': tab == 1 }"><input class="form-control form-control-sm" name="Title" placeholder="{{ __('Title') }}" value="{{ Request::get('Title') }}"></td>
+          <td class="tab0" :class="{ 'd-none': tab == 1 }">
             <div class="input-group input-group-sm">
               <input class="form-control" name="Inventor1" placeholder="{{ __('Inventor') }}" value="{{ Request::get('Inventor1') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'inv.name' ? 'active' : '' }}" type="button" data-sortkey="inv.name" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}">
+          <td class="tab1" :class="{ 'd-none': tab == 0 }">
             <div class="input-group input-group-sm">
               <input class="form-control" name="Status_date" placeholder="{{ __('Date') }}" value="{{ Request::get('Status_date') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'status.event_date' ? 'active' : '' }}" type="button" data-sortkey="status.event_date" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}">
+          <td class="tab1" :class="{ 'd-none': tab == 0 }">
             <div class="input-group input-group-sm">
               <input class="form-control" name="Filed" placeholder="{{ __('Filed') }}" value="{{ Request::get('Filed') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'fil.event_date' ? 'active' : '' }}" type="button" data-sortkey="fil.event_date" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="FilNo" placeholder="{{ __('Number') }}" value="{{ Request::get('FilNo') }}"></td>
-          <td class="tab1 {{ $hideTab1 }}">
+          <td class="tab1" :class="{ 'd-none': tab == 0 }"><input class="form-control form-control-sm" name="FilNo" placeholder="{{ __('Number') }}" value="{{ Request::get('FilNo') }}"></td>
+          <td class="tab1" :class="{ 'd-none': tab == 0 }">
             <div class="input-group input-group-sm">
               <input class="form-control" name="Published" placeholder="{{ __('Published') }}" value="{{ Request::get('Published') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'pub.event_date' ? 'active' : '' }}" type="button" data-sortkey="pub.event_date" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="PubNo" placeholder="{{ __('Number') }}" value="{{ Request::get('PubNo') }}"></td>
-          <td class="tab1 {{ $hideTab1 }}">
+          <td class="tab1" :class="{ 'd-none': tab == 0 }"><input class="form-control form-control-sm" name="PubNo" placeholder="{{ __('Number') }}" value="{{ Request::get('PubNo') }}"></td>
+          <td class="tab1" :class="{ 'd-none': tab == 0 }">
             <div class="input-group input-group-sm">
               <input class="form-control" name="Granted" placeholder="{{ __('Granted/Reg\'d') }}" value="{{ Request::get('Granted') }}">
               <button class="btn btn-outline-secondary sortable {{ Request::get('sortkey') == 'grt.event_date' ? 'active' : '' }}" type="button" data-sortkey="grt.event_date" data-sortdir="asc">&UpDownArrow;</button>
             </div>
           </td>
-          <td class="tab1 {{ $hideTab1 }}"><input class="form-control form-control-sm" name="GrtNo" placeholder="{{ __('Number') }}" value="{{ Request::get('GrtNo') }}"></td>
+          <td class="tab1" :class="{ 'd-none': tab == 0 }"><input class="form-control form-control-sm" name="GrtNo" placeholder="{{ __('Number') }}" value="{{ Request::get('GrtNo') }}"></td>
         </tr>
       </thead>
       <tbody id="matterList">
@@ -158,25 +158,25 @@
             @endif
           </td>
           @can('readonly')
-          <td class="tab0 {{ $hideTab0 }}">{{ $matter->Client }}</td>
+          <td class="tab0" :class="{ 'd-none': tab == 1 }">{{ $matter->Client }}</td>
           @endcan
-          <td class="tab0 {{ $hideTab0 }}">{{ $matter->ClRef }}</td>
-          <td class="tab0 {{ $hideTab0 }}">{{ $matter->Applicant }}</td>
-          <td class="tab0 {{ $hideTab0 }}">{{ $matter->Agent }}</td>
-          <td class="tab0 {{ $hideTab0 }}">{{ $matter->AgtRef }}</td>
+          <td class="tab0" :class="{ 'd-none': tab == 1 }">{{ $matter->ClRef }}</td>
+          <td class="tab0" :class="{ 'd-none': tab == 1 }">{{ $matter->Applicant }}</td>
+          <td class="tab0" :class="{ 'd-none': tab == 1 }">{{ $matter->Agent }}</td>
+          <td class="tab0" :class="{ 'd-none': tab == 1 }">{{ $matter->AgtRef }}</td>
           @if ( $matter->container_id && $matter->Title2 )
-          <td class="tab0 {{ $hideTab0 }}">{{ $matter->Title2 }}</td>
+          <td class="tab0" :class="{ 'd-none': tab == 1 }">{{ $matter->Title2 }}</td>
           @else
-          <td class="tab0 {{ $hideTab0 }}">{{ $matter->Title }}</td>
+          <td class="tab0" :class="{ 'd-none': tab == 1 }">{{ $matter->Title }}</td>
           @endif
-          <td class="tab0 {{ $hideTab0 }}">{{ $matter->Inventor1 }}</td>
-          <td class="tab1 {{ $hideTab1 }}">{{ $matter->Status_date }}</td>
-          <td class="tab1 {{ $hideTab1 }}">{{ $matter->Filed }}</td>
-          <td class="tab1 {{ $hideTab1 }}">{{ $matter->FilNo }}</td>
-          <td class="tab1 {{ $hideTab1 }}">{{ $matter->Published }}</td>
-          <td class="tab1 {{ $hideTab1 }}">{{ $matter->PubNo }}</td>
-          <td class="tab1 {{ $hideTab1 }}">{{ $matter->Granted }}</td>
-          <td class="tab1 {{ $hideTab1 }}">{{ $matter->GrtNo }}</td>
+          <td class="tab0" :class="{ 'd-none': tab == 1 }">{{ $matter->Inventor1 }}</td>
+          <td class="tab1" :class="{ 'd-none': tab == 0 }">{{ $matter->Status_date }}</td>
+          <td class="tab1" :class="{ 'd-none': tab == 0 }">{{ $matter->Filed }}</td>
+          <td class="tab1" :class="{ 'd-none': tab == 0 }">{{ $matter->FilNo }}</td>
+          <td class="tab1" :class="{ 'd-none': tab == 0 }">{{ $matter->Published }}</td>
+          <td class="tab1" :class="{ 'd-none': tab == 0 }">{{ $matter->PubNo }}</td>
+          <td class="tab1" :class="{ 'd-none': tab == 0 }">{{ $matter->Granted }}</td>
+          <td class="tab1" :class="{ 'd-none': tab == 0 }">{{ $matter->GrtNo }}</td>
         </tr>
         @endforeach
         <tr>
