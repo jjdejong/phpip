@@ -67,14 +67,20 @@
   <tbody>
     <tr id="addClassifierRow" class="collapse">
       <td colspan="4">
-        <form id="addClassifierForm" x-data="{ isImageType: false }">
+        <form id="addClassifierForm" x-data="{
+          isImageType: false,
+          init() {
+            this.$el.querySelector('[data-actarget=type_code]').addEventListener('acCompleted', (e) => {
+              this.isImageType = (e.detail.key === 'IMG');
+            });
+          }
+        }">
           <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
           <div class="row">
             <div class="col p-1">
               <input type="hidden" name="type_code" value="">
               <input type="text" class="form-control form-control-sm" size="16" placeholder="{{ __('Type') }}"
-                     data-ac="/classifier-type/autocomplete/0" data-actarget="type_code" data-aclength="0"
-                     @ac-completed="isImageType = ($event.detail.value === 'Image')">
+                     data-ac="/classifier-type/autocomplete/0" data-actarget="type_code" data-aclength="0">
             </div>
             <div class="col p-1" x-show="!isImageType">
               <input type="text" class="form-control form-control-sm px-1" name="value" placeholder="{{ __('Value') }}">
