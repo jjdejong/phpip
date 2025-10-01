@@ -133,13 +133,91 @@ $actors = $matter->actors->groupBy('role_name');
   @php
     $imageClassifier = $matter->classifiers->firstWhere('type_code', 'IMG');
   @endphp
-  @if ($imageClassifier)
-  <div class="col-3">
-    <div class="card border-dark bg-dark p-1">
-      <img src="/classifier/{{ $imageClassifier->id }}/img" class="card-img-top" style="max-height: 150px; object-fit: contain;">
+  <div class="col-3" x-data="{
+    expanded: {{ $imageClassifier ? 'true' : 'false' }},
+    imageUrl: '{{ $imageClassifier ? "/classifier/{$imageClassifier->id}/img" : "" }}',
+    classifierId: {{ $imageClassifier?->id ?? 'null' }},
+    matterId: {{ $matter->id }},
+
+    async uploadImage(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+
+      const formData = new FormData();
+      formData.append('matter_id', this.matterId);
+      formData.append('type_code', 'IMG');
+      formData.append('image', file);
+
+      try {
+        const response = await fetch('/classifier', {
+          method: 'POST',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': document.head.querySelector('[name=csrf-token]').content
+          },
+          body: formData
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          this.classifierId = data;
+          this.imageUrl = '/classifier/' + data + '/img';
+        }
+      } catch (error) {
+        console.error('Upload failed:', error);
+      }
+    },
+
+    async deleteImage() {
+      if (!this.classifierId || !confirm('Delete this image?')) return;
+
+      try {
+        const response = await fetchREST('/classifier/' + this.classifierId, 'DELETE');
+        if (response) {
+          this.imageUrl = '';
+          this.classifierId = null;
+          this.expanded = false;
+        }
+      } catch (error) {
+        console.error('Delete failed:', error);
+      }
+    },
+
+    handleDrop(e) {
+      const file = e.dataTransfer.files[0];
+      if (file) this.uploadImage(file);
+    }
+  }">
+    <div class="card border-dark" :class="expanded ? 'bg-dark' : 'bg-transparent border-0'" style="transition: all 0.2s;">
+      {{-- Collapsed state: just Add button --}}
+      <div x-show="!expanded" class="p-1">
+        <button type="button" @click="expanded = true" class="btn btn-sm btn-outline-secondary w-100">
+          <svg width="14" height="14" fill="currentColor"><use xlink:href="#plus-circle-fill"/></svg>
+        </button>
+      </div>
+
+      {{-- Expanded state: image or drop area --}}
+      <div x-show="expanded" class="p-1" style="min-height: 150px;">
+        {{-- Image display --}}
+        <div x-show="imageUrl" class="position-relative">
+          <img :src="imageUrl" class="card-img-top" style="max-height: 150px; object-fit: contain;">
+          <button type="button" @click="deleteImage()"
+                  class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 opacity-75">
+            <svg width="12" height="12" fill="currentColor"><use xlink:href="#trash-fill"/></svg>
+          </button>
+        </div>
+
+        {{-- Drop area --}}
+        <div x-show="!imageUrl" class="border border-2 border-dashed rounded d-flex align-items-center justify-content-center"
+             style="min-height: 150px; cursor: pointer;"
+             @click="$refs.fileInput.click()"
+             @dragover.prevent
+             @drop.prevent="handleDrop($event)">
+          <span class="text-muted">Drop image or click</span>
+        </div>
+        <input type="file" x-ref="fileInput" class="d-none" accept="image/*" @change="uploadImage($event.target.files[0])">
+      </div>
     </div>
   </div>
-  @endif
 </div>
 
 <div class="row g-1">

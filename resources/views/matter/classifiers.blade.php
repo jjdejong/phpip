@@ -32,11 +32,13 @@
   {{-- Loop through the sorted groups --}}
   @foreach ($sortedClassifierGroups as $type_code => $classifier_group)
     @php
+      // Skip image classifiers - they're managed separately
+      if ($type_code === 'IMG') continue;
+
       // Get the related ClassifierType model instance from the first item
       $classifierTypeModel = $classifier_group->first()?->classifierType;
       // Get the TRANSLATED type name
       $translatedTypeName = $classifierTypeModel?->type ?? $type_code; // Fallback to code
-      $isImageType = $translatedTypeName == 'Image'; // Check if it's the Image type
     @endphp
   <tbody>
     <tr>
@@ -50,8 +52,7 @@
     {{-- Loop through classifiers within this group --}}
     @foreach($classifier_group as $classifier)
     <tr class="reveal-hidden" data-resource="/classifier/{{ $classifier->id }}">
-      {{-- Use $isImageType to disable input --}}
-      <td class="ps-2"><input type="text" class="form-control noformat" name="value" value="{{ $classifier->value }}" {{ $isImageType ? 'disabled' : '' }}></td>
+      <td class="ps-2"><input type="text" class="form-control noformat" name="value" value="{{ $classifier->value }}"></td>
       <td><input type="text" class="form-control noformat" name="url" value="{{ $classifier->url }}"></td>
       <td><input type="text" class="form-control noformat" name="lnk_matter_id" data-ac="/matter/autocomplete" value="{{ $classifier->lnk_matter_id ? $classifier->linkedMatter->uid : '' }}"></td>
       <td>
@@ -67,14 +68,7 @@
   <tbody>
     <tr id="addClassifierRow" class="collapse">
       <td colspan="4">
-        <form id="addClassifierForm" x-data="{
-          isImageType: false,
-          init() {
-            this.$el.querySelector('[data-actarget=type_code]').addEventListener('acCompleted', (e) => {
-              this.isImageType = (e.detail.key === 'IMG');
-            });
-          }
-        }">
+        <form id="addClassifierForm">
           <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
           <div class="row">
             <div class="col p-1">
@@ -82,18 +76,15 @@
               <input type="text" class="form-control form-control-sm" size="16" placeholder="{{ __('Type') }}"
                      data-ac="/classifier-type/autocomplete/0" data-actarget="type_code" data-aclength="0">
             </div>
-            <div class="col p-1" x-show="!isImageType">
+            <div class="col p-1">
               <input type="text" class="form-control form-control-sm px-1" name="value" placeholder="{{ __('Value') }}">
             </div>
-            <div class="col p-1" x-show="!isImageType">
+            <div class="col p-1">
               <input type="url" class="form-control form-control-sm px-1" name="url" placeholder="{{ __('URL') }}">
             </div>
-            <div class="col p-1" x-show="!isImageType">
+            <div class="col p-1">
               <input type="hidden" name="lnk_matter_id" value="">
               <input type="text" class="form-control form-control-sm px-1" placeholder="{{ __('Linked to') }}" data-ac="/matter/autocomplete" data-actarget="lnk_matter_id">
-            </div>
-            <div class="col-7 p-1" x-show="isImageType" id="forFile">
-              <input type="file" class="form-control form-control-sm" name="image">
             </div>
             <div class="col-2 p-1 btn-group btn-group-sm">
               <button type="button" class="btn btn-primary" id="addClassifierSubmit">&check;</button>
