@@ -37,7 +37,8 @@ filterButtons.onchange = e => {
     refreshMatterList();
   } else if (e.target.name === 'responsible') {
     if (e.target.checked) {
-      url.searchParams.set('responsible', e.target.closest('label').dataset.responsible);
+      const label = document.querySelector('label[for="btnshowmine"]');
+      url.searchParams.set('responsible', label.dataset.responsible);
     } else {
       url.searchParams.delete('responsible');
     }
