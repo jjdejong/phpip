@@ -183,6 +183,8 @@ $actors = $matter->actors->groupBy('role_name');
     },
 
     handleDrop(e) {
+      e.preventDefault();
+      e.stopPropagation();
       const file = e.dataTransfer.files[0];
       if (file) this.uploadImage(file);
     }
