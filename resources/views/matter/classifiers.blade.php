@@ -74,7 +74,7 @@
               <input type="hidden" name="type_code" value="">
               <input type="text" class="form-control form-control-sm" size="16" placeholder="{{ __('Type') }}"
                      data-ac="/classifier-type/autocomplete/0" data-actarget="type_code" data-aclength="0"
-                     @accompleted="isImageType = ($event.detail.value === 'Image')">
+                     @ac-completed="isImageType = ($event.detail.value === 'Image')">
             </div>
             <div class="col p-1" x-show="!isImageType">
               <input type="text" class="form-control form-control-sm px-1" name="value" placeholder="{{ __('Value') }}">
