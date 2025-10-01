@@ -1,6 +1,5 @@
 let contentSrc, // Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
-    ceInitialContent, // Used for detecting changes of content-editable elements
-    cTypeCode; // Used for toggling image file input in matter.classifiers
+    ceInitialContent; // Used for detecting changes of content-editable elements
    
 // Ajax fill an element from a url returning HTML
 let fetchInto = async (url, element) => {
@@ -421,21 +420,7 @@ app.addEventListener('change', e => {
                 .catch(error => console.log(error));
         });
     }
-    // matter.classifiers addClassifierForm - replace input fields with file upload field when selecting an image type
-    if (e.target.dataset.actarget === 'type_code' && e.target.value === 'Image') {
-        for (elt of addClassifierForm.getElementsByClassName('hideForFile')) {
-            elt.classList.add('d-none');
-        }
-        forFile.classList.remove('d-none');
-        cTypeCode = 'IMG'
-    }
-    if (e.target.dataset.actarget === 'type_code' && e.target.value !== 'Image' && cTypeCode === 'IMG') {
-        for (elt of addClassifierForm.getElementsByClassName('hideForFile')) {
-            elt.classList.remove('d-none');
-        }
-        forFile.classList.add('d-none');
-        cTypeCode = ''
-    }
+    // Classifier form image type toggle now handled by Alpine.js
 });
 
 // Reset ajaxModal to default when it is closed

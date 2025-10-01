@@ -67,24 +67,26 @@
   <tbody>
     <tr id="addClassifierRow" class="collapse">
       <td colspan="4">
-        <form id="addClassifierForm">
+        <form id="addClassifierForm" x-data="{ isImageType: false }">
           <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
           <div class="row">
             <div class="col p-1">
               <input type="hidden" name="type_code" value="">
-              <input type="text" class="form-control form-control-sm" size="16" placeholder="{{ __('Type') }}" data-ac="/classifier-type/autocomplete/0" data-actarget="type_code" data-aclength="0">
+              <input type="text" class="form-control form-control-sm" size="16" placeholder="{{ __('Type') }}"
+                     data-ac="/classifier-type/autocomplete/0" data-actarget="type_code" data-aclength="0"
+                     @accompleted="isImageType = ($event.detail.value === 'Image')">
             </div>
-            <div class="col p-1 hideForFile">
+            <div class="col p-1" x-show="!isImageType">
               <input type="text" class="form-control form-control-sm px-1" name="value" placeholder="{{ __('Value') }}">
             </div>
-            <div class="col p-1 hideForFile">
+            <div class="col p-1" x-show="!isImageType">
               <input type="url" class="form-control form-control-sm px-1" name="url" placeholder="{{ __('URL') }}">
             </div>
-            <div class="col p-1 hideForFile">
+            <div class="col p-1" x-show="!isImageType">
               <input type="hidden" name="lnk_matter_id" value="">
               <input type="text" class="form-control form-control-sm px-1" placeholder="{{ __('Linked to') }}" data-ac="/matter/autocomplete" data-actarget="lnk_matter_id">
             </div>
-            <div class="col-7 p-1 d-none" id="forFile">
+            <div class="col-7 p-1" x-show="isImageType" id="forFile">
               <input type="file" class="form-control form-control-sm" name="image">
             </div>
             <div class="col-2 p-1 btn-group btn-group-sm">
