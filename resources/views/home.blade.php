@@ -123,8 +123,10 @@
               <label class="btn btn-info" :class="{ 'active': selectedTask === '2' }">
                 <input type="radio" class="btn-check" name="what_tasks" id="clientTasks" value="2" x-model="selectedTask">{{ __('Client') }}
               </label>
-              <input type="hidden" id="clientId" name="client_id">
-              <input type="text" class="form-control me-3" data-ac="/actor/autocomplete" data-actarget="client_id" placeholder="{{ __('Select Client') }}">
+              <div style="position: relative; flex: 1;">
+                <input type="hidden" id="clientId" name="client_id">
+                <input type="text" class="form-control me-3" data-ac="/actor/autocomplete" data-actarget="client_id" placeholder="{{ __('Select Client') }}">
+              </div>
             </div>
           </div>
           <div class="col-4">

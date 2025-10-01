@@ -26,32 +26,29 @@ filterFields.onclick = e => {
   }
 }
 
-filterButtons.onclick = e => {
-  switch (e.target.id) {
-    case 'showContainers':
-      if (url.searchParams.has('Ctnr')) {
-        url.searchParams.delete('Ctnr');
-      } else {
-        url.searchParams.set('Ctnr', '1');
-      }
-      refreshMatterList();
-      break;
-    case 'showResponsible':
-      if (url.searchParams.has('responsible')) {
-        url.searchParams.delete('responsible');
-      } else {
-        url.searchParams.set('responsible', e.target.dataset.responsible);
-      }
-      refreshMatterList();
-      break;
-    case 'includeDead':
-      if (url.searchParams.has('include_dead')) {
-        url.searchParams.delete('include_dead');
-      } else {
-        url.searchParams.set('include_dead', '1');
-      }
-      refreshMatterList();
-      break;
+filterButtons.onchange = e => {
+  // Alpine manages visual state, we just handle URL params and refresh
+  if (e.target.name === 'Ctnr') {
+    if (e.target.checked) {
+      url.searchParams.set('Ctnr', '1');
+    } else {
+      url.searchParams.delete('Ctnr');
+    }
+    refreshMatterList();
+  } else if (e.target.name === 'responsible') {
+    if (e.target.checked) {
+      url.searchParams.set('responsible', e.target.closest('label').dataset.responsible);
+    } else {
+      url.searchParams.delete('responsible');
+    }
+    refreshMatterList();
+  } else if (e.target.name === 'include_dead') {
+    if (e.target.checked) {
+      url.searchParams.set('include_dead', '1');
+    } else {
+      url.searchParams.delete('include_dead');
+    }
+    refreshMatterList();
   }
 }
 

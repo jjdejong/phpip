@@ -16,12 +16,17 @@
 @endsection
 
 @section('content')
-<div class="card border-primary mb-0" x-data="{ tab: {{ $tab }} }">
+<div class="card border-primary mb-0" x-data="{
+  tab: {{ $tab }},
+  showContainers: {{ Request::get('Ctnr') ? 'true' : 'false' }},
+  showMine: {{ Request::has('responsible') ? 'true' : 'false' }},
+  includeDead: {{ Request::get('include_dead') ? 'true' : 'false' }}
+}">
   <div id="filterButtons" class="card-header bg-primary p-1">
     <form class="btn-toolbar" role="toolbar">
       <div class="btn-group me-3">
-        <input type="checkbox" class="btn-check" name="Ctnr" {{ Request::get('Ctnr') ? 'checked' : '' }} id="btnshowctnr">
-        <label id="showContainers" class="btn btn-outline-info" for="btnshowctnr">{{ __('Show Containers') }}</label>
+        <input type="checkbox" class="btn-check" name="Ctnr" x-model="showContainers" id="btnshowctnr">
+        <label class="btn btn-outline-info" :class="{ 'active': showContainers }" for="btnshowctnr">{{ __('Show Containers') }}</label>
       </div>
       <div class="btn-group me-3" id="actorStatus">
         <input type="radio" class="btn-check" name="tab" value="0" x-model="tab" id="btnactorview">
@@ -31,13 +36,13 @@
       </div>
       @can('readonly')
       <div class="btn-group me-3" id="mineAll">
-        <input type="checkbox" class="btn-check" name="responsible" {{ Request::has('responsible') ? 'checked' : '' }} id="btnshowmine">
-        <label id="showResponsible" class="btn btn-outline-info" data-responsible="{{ Auth::user()->login }}" for="btnshowmine">{{ __('Show Mine') }}</label>
+        <input type="checkbox" class="btn-check" name="responsible" x-model="showMine" id="btnshowmine">
+        <label class="btn btn-outline-info" :class="{ 'active': showMine }" data-responsible="{{ Auth::user()->login }}" for="btnshowmine">{{ __('Show Mine') }}</label>
       </div>
       @endcan
       <div class="btn-group me-3">
-        <input type="checkbox" class="btn-check" name="include_dead" {{ Request::get('include_dead') ? 'checked' : '' }} id="btnincludedead">
-        <label id="includeDead" class="btn btn-outline-info" for="btnincludedead">{{ __('Include Dead') }}</label>
+        <input type="checkbox" class="btn-check" name="include_dead" x-model="includeDead" id="btnincludedead">
+        <label class="btn btn-outline-info" :class="{ 'active': includeDead }" for="btnincludedead">{{ __('Include Dead') }}</label>
       </div>
       <input type="hidden" name="display_with" value="{{ Request::get('display_with') }}">
       <div class="btn-group me-3">
