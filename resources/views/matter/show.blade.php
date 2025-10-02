@@ -92,52 +92,15 @@ $actors = $matter->actors->groupBy('role_name');
       </div>
     </div>
   </div>
-  <div class="col">
-    <div class="card border-secondary p-1 h-100">
-      <dl id="titlePanel">
-        @foreach ( $titles as $type_name => $title_group )
-          <dt class="mt-2">
-            {{ $type_name }}
-          </dt>
-          @foreach ( $title_group as $title )
-            <dd class="mb-0" data-resource="/classifier/{{ $title->id }}" data-name="value" contenteditable>
-              {{ $title->value }}
-            </dd>
-          @endforeach
-        @endforeach
-        @can('readwrite')
-        <div>
-          <a class="badge rounded-pill text-bg-primary float-end" role="button" data-bs-toggle="collapse" href="#addTitleCollapse">+</a>
-        </div>
-        @endcan
-        <div id="addTitleCollapse" class="collapse">
-          <form id="addTitleForm" autocomplete="off">
-            <div class="row">
-              <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
-              <div class="col-2">
-                <input type="hidden" name="type_code">
-                <input type="text" class="form-control form-control-sm" data-ac="/classifier-type/autocomplete/1" data-actarget="type_code" data-aclength="0" placeholder="Type" autocomplete="off">
-              </div>
-              <div class="col-10">
-                <div class="input-group">
-                  <input type="text" class="form-control form-control-sm" name="value" placeholder="Value" autocomplete="off">
-                  <button type="button" class="btn btn-primary btn-sm" id="addTitleSubmit">&check;</button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </dl>
-    </div>
-  </div>
   @php
     $imageClassifier = $matter->classifiers->firstWhere('type_code', 'IMG');
   @endphp
-  <div class="col-3" x-data="{
+  <div class="col position-relative" x-data="{
     expanded: {{ $imageClassifier ? 'true' : 'false' }},
     imageUrl: '{{ $imageClassifier ? "/classifier/{$imageClassifier->id}/img" : "" }}',
     classifierId: {{ $imageClassifier?->id ?? 'null' }},
-    matterId: {{ $matter->id }},
+    matterId: {{ $matter->container_id ?? $matter->id }},
+    showControls: false,
 
     async uploadImage(file) {
       if (!file || !file.type.startsWith('image/')) return;
@@ -158,9 +121,10 @@ $actors = $matter->actors->groupBy('role_name');
         });
 
         if (response.ok) {
-          const data = await response.json();
-          this.classifierId = data;
+          const data = await response.text();
+          this.classifierId = parseInt(data);
           this.imageUrl = '/classifier/' + data + '/img';
+          this.showControls = false;
         }
       } catch (error) {
         console.error('Upload failed:', error);
@@ -168,7 +132,7 @@ $actors = $matter->actors->groupBy('role_name');
     },
 
     async deleteImage() {
-      if (!this.classifierId || !confirm('Delete this image?')) return;
+      if (!this.classifierId || !confirm('{{ __('Delete this image?') }}')) return;
 
       try {
         const response = await fetchREST('/classifier/' + this.classifierId, 'DELETE');
@@ -176,6 +140,7 @@ $actors = $matter->actors->groupBy('role_name');
           this.imageUrl = '';
           this.classifierId = null;
           this.expanded = false;
+          this.showControls = false;
         }
       } catch (error) {
         console.error('Delete failed:', error);
@@ -189,34 +154,107 @@ $actors = $matter->actors->groupBy('role_name');
       if (file) this.uploadImage(file);
     }
   }">
-    <div class="card border-dark" :class="expanded ? 'bg-dark' : 'bg-transparent border-0'" style="transition: all 0.2s;">
-      {{-- Collapsed state: just Add button --}}
-      <div x-show="!expanded" class="p-1">
-        <button type="button" @click="expanded = true" class="btn btn-sm btn-outline-secondary w-100">
-          <svg width="14" height="14" fill="currentColor"><use xlink:href="#plus-circle-fill"/></svg>
-        </button>
-      </div>
-
-      {{-- Expanded state: image or drop area --}}
-      <div x-show="expanded" class="p-1" style="min-height: 150px;">
-        {{-- Image display --}}
-        <div x-show="imageUrl" class="position-relative">
-          <img :src="imageUrl" class="card-img-top" style="max-height: 150px; object-fit: contain;">
-          <button type="button" @click="deleteImage()"
-                  class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 opacity-75">
-            <svg width="12" height="12" fill="currentColor"><use xlink:href="#trash-fill"/></svg>
+    <div class="row g-1 h-100">
+      <div class="col" :class="expanded ? 'col-9' : 'col-12'">
+        <div class="card border-secondary p-1 h-100 position-relative">
+          <dl id="titlePanel">
+            @foreach ( $titles as $type_name => $title_group )
+              <dt class="mt-2">
+                {{ $type_name }}
+              </dt>
+              @foreach ( $title_group as $title )
+                <dd class="mb-0" data-resource="/classifier/{{ $title->id }}" data-name="value" contenteditable>
+                  {{ $title->value }}
+                </dd>
+              @endforeach
+            @endforeach
+            @can('readwrite')
+            <div>
+              <a class="badge rounded-pill text-bg-primary float-end" role="button" data-bs-toggle="collapse" href="#addTitleCollapse">+</a>
+            </div>
+            @endcan
+            <div id="addTitleCollapse" class="collapse">
+              <form id="addTitleForm" autocomplete="off">
+                <div class="row">
+                  <input type="hidden" name="matter_id" value="{{ $matter->container_id ?? $matter->id }}">
+                  <div class="col-2">
+                    <input type="hidden" name="type_code">
+                    <input type="text" class="form-control form-control-sm" data-ac="/classifier-type/autocomplete/1" data-actarget="type_code" data-aclength="0" placeholder="Type" autocomplete="off">
+                  </div>
+                  <div class="col-10">
+                    <div class="input-group">
+                      <input type="text" class="form-control form-control-sm" name="value" placeholder="Value" autocomplete="off">
+                      <button type="button" class="btn btn-primary btn-sm" id="addTitleSubmit">&check;</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </dl>
+          {{-- Image icon hint when collapsed and no image --}}
+          <button type="button"
+                  @click="expanded = true"
+                  class="btn btn-sm btn-outline-info position-absolute top-0 end-0 m-2"
+                  :style="'opacity: 0; transition: opacity 0.2s; display: ' + (!expanded && !imageUrl ? 'block' : 'none')"
+                  @mouseenter="$el.style.opacity = '1'"
+                  @mouseleave="$el.style.opacity = '0'">
+            <svg width="16" height="16" fill="currentColor"><use xlink:href="#image"/></svg>
           </button>
         </div>
+      </div>
+      <div class="col-3" x-show="expanded" x-transition>
+        <div class="card border-secondary bg-light p-1 position-relative"
+             style="height: 150px;">
+          {{-- Image display --}}
+          <div x-show="imageUrl" class="h-100 position-relative">
+            <div class="h-100 d-flex align-items-center justify-content-center">
+              <img :src="imageUrl" style="max-height: 140px; max-width: 100%; object-fit: contain;">
+            </div>
 
-        {{-- Drop area --}}
-        <div x-show="!imageUrl" class="border border-2 border-dashed rounded d-flex align-items-center justify-content-center"
-             style="min-height: 150px; cursor: pointer;"
-             @click="$refs.fileInput.click()"
-             @dragover.prevent
-             @drop.prevent="handleDrop($event)">
-          <span class="text-muted">Drop image or click</span>
+            {{-- Edit button on hover --}}
+            <button type="button"
+                    @click="showControls = true"
+                    class="btn btn-sm btn-outline-info position-absolute top-0 end-0 m-1"
+                    :style="'opacity: ' + (showControls ? '0' : '0') + '; transition: opacity 0.2s; pointer-events: ' + (showControls ? 'none' : 'auto')"
+                    @mouseenter="if (!showControls) $el.style.opacity = '1'"
+                    @mouseleave="if (!showControls) $el.style.opacity = '0'">
+              <svg width="16" height="16" fill="currentColor"><use xlink:href="#pencil-square"/></svg>
+            </button>
+
+            {{-- Edit controls overlay --}}
+            <div x-ref="dropzone"
+                 class="position-absolute top-0 start-0 w-100 h-100 bg-white flex-column align-items-stretch justify-content-center gap-2 p-2"
+                 :style="'display: ' + (showControls ? 'flex' : 'none') + '; opacity: 0.95;'"
+                 @mouseleave="showControls = false">
+              <div class="border border-2 border-dashed border-primary rounded flex-grow-1 d-flex align-items-center justify-content-center"
+                   style="cursor: pointer;"
+                   @click="$refs.fileInput.click()"
+                   @dragover.prevent
+                   @drop.prevent="handleDrop($event); showControls = false">
+                <div class="text-center text-primary">
+                  <svg width="24" height="24" fill="currentColor"><use xlink:href="#upload"/></svg>
+                  <div class="small">{{ __('Drop image') }}</div>
+                </div>
+              </div>
+              <button type="button" @click="deleteImage()" class="btn btn-sm btn-danger">
+                <svg width="16" height="16" fill="currentColor"><use xlink:href="#trash"/></svg> {{ __('Delete') }}
+              </button>
+            </div>
+          </div>
+
+          {{-- Drop area when no image --}}
+          <div class="border border-2 border-dashed border-secondary rounded align-items-center justify-content-center h-100"
+               :style="'cursor: pointer; display: ' + (imageUrl ? 'none' : 'flex')"
+               @click="$refs.fileInput.click()"
+               @dragover.prevent
+               @drop.prevent="handleDrop($event)">
+            <div class="text-center text-secondary">
+              <svg width="24" height="24" fill="currentColor"><use xlink:href="#upload"/></svg>
+              <div class="small">{{ __('Drop image') }}</div>
+            </div>
+          </div>
+          <input type="file" x-ref="fileInput" class="d-none" accept="image/*" @change="uploadImage($event.target.files[0])">
         </div>
-        <input type="file" x-ref="fileInput" class="d-none" accept="image/*" @change="uploadImage($event.target.files[0])">
       </div>
     </div>
   </div>
