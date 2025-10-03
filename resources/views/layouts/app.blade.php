@@ -11,8 +11,22 @@
   <title>{{ config('app.name', 'phpIP') }}</title>
 
   <!-- Scripts -->
+  <script>
+    window.appConfig = {
+      renewal: {
+        invoice: {
+          backend: @json(config('renewal.invoice.backend'))
+        },
+        general: {
+          receipt_tabs: @json(config('renewal.general.receipt_tabs'))
+        }
+      },
+      translations: {
+        deleteImageConfirm: @json(__('Delete this image?'))
+      }
+    };
+  </script>
   @vite(['resources/js/app.js'])
-  <script src="{{ asset('js/main.js') }}" defer></script>
 
   <!-- Styles -->
   {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
@@ -100,7 +114,7 @@
       <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
     </symbol>
   </svg>
-  
+
   <div id="app">
     <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm mb-1">
       <div class="container">

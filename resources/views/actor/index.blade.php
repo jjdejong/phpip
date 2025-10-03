@@ -78,7 +78,6 @@
 @endsection
 
 @section('script')
-<script src="{{ asset('js/tables.js') }}" defer></script>
 <script>
   person.onchange = (e) => {
     if (e.target.value.length === 0) {

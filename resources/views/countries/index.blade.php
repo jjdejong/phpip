@@ -82,5 +82,4 @@
 @endsection
 
 @section('script')
-<script src="{{ asset('js/tables.js') }}" defer></script>
 @endsection

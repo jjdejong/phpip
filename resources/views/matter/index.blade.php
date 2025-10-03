@@ -192,7 +192,3 @@
   </div>
 </div>
 @endsection
-
-@section('script')
-<script src="{{ asset('js/matter-index.js') }}" defer></script>
-@endsection

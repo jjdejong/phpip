@@ -230,27 +230,3 @@
     </div>
 </div>
 @endsection
-
-@section('script')
-<script src="{{ asset('js/renewal-index.js') }}" defer></script>
-{{-- TODO: put this in the renewal-index.js file avoiding the blade directives --}}
-<script>
-    @if(config('renewal.invoice.backend') == 'dolibarr')
-    invoiceRenewals.addEventListener("click", function (b) {
-        msgAction = "invoicing";
-        actionRenewals(b.target, msgAction, '/renewal/invoice/1')
-    });
-    @endif
-    @if(config('renewal.general.receipt_tabs'))
-        receiptRenewals.addEventListener("click", function (b) {
-        msgAction = "registering receipt";
-        actionRenewals(b.target, msgAction, '/renewal/receipt')
-    });
-
-    sendReceiptsRenewals.addEventListener("click", function (b) {
-        msgAction = "closing renewals";
-        actionRenewals(b.target, msgAction, '/renewal/closing')
-    });
-    @endif
-</script>
-@endsection

@@ -12,8 +12,8 @@ $actors = $matter->actors->groupBy('role_name');
   <div class="col-3">
     <div id="refsPanel" class="card border-primary p-0 h-100">
       <div class="card-header bg-primary text-light reveal-hidden p-1">
-        <a class="bg-primary text-white lead {{ $matter->dead ? 'text-decoration-line-through' : '' }}" 
-           href="/matter?Ref= {{ $matter->caseref }}" 
+        <a class="bg-primary text-white lead {{ $matter->dead ? 'text-decoration-line-through' : '' }}"
+           href="/matter?Ref= {{ $matter->caseref }}"
            title="{{ __('See family') }}"
            target="_blank"
            id="uid">
@@ -31,7 +31,7 @@ $actors = $matter->actors->groupBy('role_name');
             }
         @endphp
         <a class="bg-primary text-warning float-end hidden-action ms-2"
-          href="{{ $sharePointLink ?? '/matter?Ref=' . $matter->caseref }}" 
+          href="{{ $sharePointLink ?? '/matter?Ref=' . $matter->caseref }}"
           title="{{ $sharePointLink ? __('Go to documents') : __('See family') }}"
           target="_blank">
           <svg width="14" height="14" fill="currentColor"><use xlink:href="#folder-symlink-fill"/></svg>
@@ -95,65 +95,12 @@ $actors = $matter->actors->groupBy('role_name');
   @php
     $imageClassifier = $matter->classifiers->firstWhere('type_code', 'IMG');
   @endphp
-  <div class="col position-relative" x-data="{
-    expanded: {{ $imageClassifier ? 'true' : 'false' }},
+  <div class="col position-relative" x-data="imageUpload({
+    hasImage: {{ $imageClassifier ? 'true' : 'false' }},
     imageUrl: '{{ $imageClassifier ? "/classifier/{$imageClassifier->id}/img" : "" }}',
     classifierId: {{ $imageClassifier?->id ?? 'null' }},
-    matterId: {{ $matter->container_id ?? $matter->id }},
-    showControls: false,
-
-    async uploadImage(file) {
-      if (!file || !file.type.startsWith('image/')) return;
-
-      const formData = new FormData();
-      formData.append('matter_id', this.matterId);
-      formData.append('type_code', 'IMG');
-      formData.append('image', file);
-
-      try {
-        const response = await fetch('/classifier', {
-          method: 'POST',
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-TOKEN': document.head.querySelector('[name=csrf-token]').content
-          },
-          body: formData
-        });
-
-        if (response.ok) {
-          const data = await response.text();
-          this.classifierId = parseInt(data);
-          this.imageUrl = '/classifier/' + data + '/img';
-          this.showControls = false;
-        }
-      } catch (error) {
-        console.error('Upload failed:', error);
-      }
-    },
-
-    async deleteImage() {
-      if (!this.classifierId || !confirm('{{ __('Delete this image?') }}')) return;
-
-      try {
-        const response = await fetchREST('/classifier/' + this.classifierId, 'DELETE');
-        if (response) {
-          this.imageUrl = '';
-          this.classifierId = null;
-          this.expanded = false;
-          this.showControls = false;
-        }
-      } catch (error) {
-        console.error('Delete failed:', error);
-      }
-    },
-
-    handleDrop(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      const file = e.dataTransfer.files[0];
-      if (file) this.uploadImage(file);
-    }
-  }">
+    matterId: {{ $matter->container_id ?? $matter->id }}
+  })">
     <div class="row g-1 h-100">
       <div class="col" :class="expanded ? 'col-9' : 'col-12'">
         <div class="card border-secondary p-1 h-100 position-relative">
@@ -596,8 +543,4 @@ $actors = $matter->actors->groupBy('role_name');
    </form>
 </template>
 
-@endsection
-
-@section('script')
-<script src="{{ asset('js/matter-show.js') }}" defer></script>
 @endsection
