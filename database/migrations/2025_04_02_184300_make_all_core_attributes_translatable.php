@@ -25,7 +25,7 @@ return new class extends Migration {
     /**
      * The task_rules.uid generated column definition that needs to be handled specially
      */
-    private $taskRulesUidDefinition = "ADD COLUMN `uid` varchar(32) COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (md5(concat(`task`,`trigger_event`,`clear_task`,`delete_task`,`for_category`,ifnull(`for_country`,_utf8mb4'c'),ifnull(`for_origin`,_utf8mb4'o'),ifnull(`for_type`,_utf8mb4't'),`days`,`months`,`years`,`recurring`,ifnull(`abort_on`,_utf8mb4'a'),ifnull(`condition_event`,_utf8mb4'c'),`use_priority`,ifnull(`detail`,_utf8mb4'd')))) VIRTUAL";
+    private $taskRulesUidDefinition = "ADD COLUMN `uid` varchar(32) COLLATE utf8mb4_0900_ai_ci GENERATED ALWAYS AS (md5(concat(`task`,`trigger_event`,`clear_task`,`delete_task`,`for_category`,ifnull(`for_country`,_utf8mb4'c'),ifnull(`for_origin`,_utf8mb4'o'),ifnull(`for_type`,_utf8mb4't'),`days`,`months`,`years`,`recurring`,ifnull(`abort_on`,_utf8mb4'a'),ifnull(`condition_event`,_utf8mb4'c'),`use_priority`,ifnull(`detail`,_utf8mb4'd')))) VIRTUAL";
 
     /**
      * The suffix for the temporary column holding the default English value.
