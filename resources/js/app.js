@@ -1,3 +1,16 @@
+/**
+ * Application Entry Point
+ *
+ * This module serves as the main entry point for the phpIP application.
+ * It handles:
+ * - Bootstrap and styling imports
+ * - Alpine.js initialization and component registration
+ * - Page-specific module initialization based on DOM elements
+ * - Global function exposure for use in Alpine.js and inline handlers
+ *
+ * Automatically detects which page is loaded and initializes appropriate modules.
+ */
+
 import "./bootstrap";
 import "../sass/app.scss";
 
@@ -37,7 +50,12 @@ window.submitModalForm = submitModalForm;
 window.processSubmitErrors = processSubmitErrors;
 window.contentSrc = "";
 
-// Initialize on DOM ready
+/**
+ * Initializes the application when DOM is ready.
+ * Detects current page based on element IDs and initializes appropriate modules.
+ *
+ * @listens DOMContentLoaded
+ */
 document.addEventListener("DOMContentLoaded", () => {
   initMain();
 

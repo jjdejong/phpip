@@ -5,6 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+/**
+ * Handles user authentication and login.
+ *
+ * Uses Laravel's AuthenticatesUsers trait to provide standard login functionality.
+ * Configured to use the 'login' field instead of 'email' for authentication.
+ */
 class LoginController extends Controller
 {
     /*
@@ -38,7 +44,13 @@ class LoginController extends Controller
         $this->middleware('auth')->only('logout');
     }
 
-    // Use the 'login' column of the actor table for logging in
+    /**
+     * Get the login username field.
+     *
+     * Uses the 'login' column instead of Laravel's default 'email' field.
+     *
+     * @return string
+     */
     public function username()
     {
         return 'login';

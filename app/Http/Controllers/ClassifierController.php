@@ -6,13 +6,33 @@ use App\Models\Classifier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Manages matter classifiers for custom metadata and images.
+ *
+ * Classifiers store additional matter attributes like keywords, URLs, linked matters,
+ * and images. Supports binary image storage and retrieval with MIME type handling.
+ */
 class ClassifierController extends Controller
 {
+    /**
+     * Display a listing of classifiers.
+     *
+     * @return void
+     */
     public function index()
     {
         //
     }
 
+    /**
+     * Store a newly created classifier or update existing image classifier.
+     *
+     * Handles both regular classifiers (text, URLs, links) and image uploads.
+     * Image classifiers are unique per matter and will be updated if they exist.
+     *
+     * @param Request $request Classifier data including matter_id, type_code, and value/image
+     * @return \Illuminate\Http\Response Plain text ID response
+     */
     public function store(Request $request)
     {
         \Log::info('ClassifierController store called');
@@ -78,11 +98,26 @@ class ClassifierController extends Controller
         }
     }
 
+    /**
+     * Display the specified classifier.
+     *
+     * @param Classifier $classifier The classifier to display
+     * @return void
+     */
     public function show(Classifier $classifier)
     {
         //
     }
 
+    /**
+     * Update the specified classifier.
+     *
+     * Deletes the classifier if value is empty and it's a main display field.
+     *
+     * @param Request $request Updated classifier data
+     * @param Classifier $classifier The classifier to update
+     * @return Classifier The updated classifier
+     */
     public function update(Request $request, Classifier $classifier)
     {
         if ($classifier->type->main_display && ! $request->filled('value')) {
@@ -95,6 +130,12 @@ class ClassifierController extends Controller
         return $classifier;
     }
 
+    /**
+     * Remove the specified classifier from storage.
+     *
+     * @param Classifier $classifier The classifier to delete
+     * @return \Illuminate\Http\Response Plain text ID response
+     */
     public function destroy(Classifier $classifier)
     {
         $id = $classifier->id;
@@ -103,6 +144,12 @@ class ClassifierController extends Controller
         return response($id, 200)->header('Content-Type', 'text/plain');
     }
 
+    /**
+     * Display the image stored in a classifier.
+     *
+     * @param Classifier $classifier The classifier containing the image
+     * @return \Illuminate\Http\Response Binary image data with appropriate MIME type
+     */
     public function showImage(Classifier $classifier)
     {
         return response($classifier->img)

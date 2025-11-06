@@ -1,6 +1,22 @@
+/**
+ * Tables Module
+ *
+ * Provides common functionality for various index/list pages including:
+ * - Text input filtering with debouncing
+ * - Clear filter buttons
+ * - URL state management with browser history
+ * - Auto-refresh after modal operations
+ * - Used by: rule index, event name index, role index, type index, etc.
+ */
+
 import { reloadPart, debounce } from "./main.js";
 
-// This file is common to various index files for filtering lists
+/**
+ * Initializes common table filtering functionality.
+ * Sets up input filters, clear buttons, and refresh triggers.
+ *
+ * @returns {void}
+ */
 export function initTables() {
   const url = new URL(window.location.href);
 
@@ -15,6 +31,12 @@ export function initTables() {
     }
   });
 
+  /**
+   * Refreshes the table list with current filter parameters.
+   * Updates URL state and reloads the table list partial.
+   *
+   * @returns {void}
+   */
   function refreshList() {
     window.history.pushState("", "phpIP", url);
     reloadPart(url, "tableList");

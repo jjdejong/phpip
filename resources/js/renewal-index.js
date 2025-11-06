@@ -1,5 +1,24 @@
+/**
+ * Renewal Index Page Module
+ *
+ * Provides functionality for the renewal management page including:
+ * - Multi-step workflow for renewal processing (call, invoice, payment, etc.)
+ * - Filtering by date range, country, and other fields
+ * - Batch operations on selected renewals
+ * - Tab-based navigation for different renewal stages
+ * - XML export for external systems
+ * - Integration with invoicing backends (e.g., Dolibarr)
+ * - Grace period handling
+ */
+
 import { reloadPart, debounce } from "./main.js";
 
+/**
+ * Initializes the renewal index page functionality.
+ * Sets up filtering, tab navigation, and batch action handlers.
+ *
+ * @returns {void}
+ */
 export function initRenewalIndex() {
   const url = new URL(window.location.href);
 
@@ -26,6 +45,12 @@ export function initRenewalIndex() {
   const sendLapsedRenewalsEl = document.getElementById("sendLapsedRenewals");
   const xmlRenewalsEl = document.getElementById("xmlRenewals");
 
+  /**
+   * Refreshes the renewal list with current filter and tab parameters.
+   * Updates URL state and reloads the renewal list partial.
+   *
+   * @returns {void}
+   */
   function refreshList() {
     window.history.pushState("", "phpIP", url);
     reloadPart(url, "renewalList");
@@ -221,6 +246,16 @@ export function initRenewalIndex() {
     }
   }
 
+  /**
+   * Performs batch actions on selected renewals or date range.
+   * Shows loading spinner, collects selected renewal IDs, and submits to server.
+   *
+   * @async
+   * @param {HTMLButtonElement} button - The action button that was clicked
+   * @param {string} msgAction - Description of the action for user feedback
+   * @param {string} action_url - The API endpoint URL for the action
+   * @returns {Promise<void>}
+   */
   async function actionRenewals(button, msgAction, action_url) {
     // Active spinner
     button.insertAdjacentHTML(
@@ -257,6 +292,14 @@ export function initRenewalIndex() {
     button.removeChild(document.getElementsByClassName("spinner-border")[0]);
   }
 
+  /**
+   * Submits renewal update request to the server.
+   * Uses XMLHttpRequest for better control over request/response.
+   *
+   * @param {string} string - JSON string containing renewal IDs or date range
+   * @param {string} url - The API endpoint URL
+   * @returns {Promise<string>} Success message from server
+   */
   function submitUpdate(string, url) {
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
@@ -328,6 +371,11 @@ export function initRenewalIndex() {
     });
   }
 
+  /**
+   * Gets the IDs of all selected renewal checkboxes.
+   *
+   * @returns {Array<string>} Array of selected renewal task IDs
+   */
   function getSelected() {
     const tids = new Array();
     const boxes = document.getElementsByClassName("clear-ren-task");

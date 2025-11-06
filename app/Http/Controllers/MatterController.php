@@ -16,12 +16,25 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * Controller for managing intellectual property matters (patents, trademarks, etc.).
+ *
+ * Handles CRUD operations, family creation via EPO OPS API, document merging,
+ * and exporting of matter data.
+ */
 class MatterController extends Controller
 {
     protected DocumentMergeService $documentMergeService;
     protected MatterExportService $matterExportService;
     protected OPSService $opsService;
 
+    /**
+     * Initialize the controller with required services.
+     *
+     * @param DocumentMergeService $documentMergeService Service for merging matter data into documents.
+     * @param MatterExportService $matterExportService Service for exporting matters to CSV.
+     * @param OPSService $opsService Service for interacting with EPO OPS API.
+     */
     public function __construct(
         DocumentMergeService $documentMergeService,
         MatterExportService  $matterExportService,
@@ -33,6 +46,12 @@ class MatterController extends Controller
         $this->opsService = $opsService;
     }
 
+    /**
+     * Display a paginated list of matters with optional filtering and sorting.
+     *
+     * @param Request $request The HTTP request containing filter, sort, and pagination parameters.
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse The view or JSON response with filtered matters.
+     */
     public function index(Request $request)
     {
         $filters = $request->except(
@@ -66,6 +85,15 @@ class MatterController extends Controller
         return view('matter.index', compact('matters'));
     }
 
+    /**
+     * Display detailed information for a specific matter.
+     *
+     * Loads related data including tasks, renewals, events, family members,
+     * and external priority relationships.
+     *
+     * @param Matter $matter The matter to display.
+     * @return \Illuminate\Http\Response The view with matter details.
+     */
     public function show(Matter $matter)
     {
         $this->authorize('view', $matter);
@@ -103,6 +131,15 @@ class MatterController extends Controller
         )->find($id);
     }
 
+    /**
+     * Show the form for creating a new matter.
+     *
+     * Supports multiple creation modes: new, clone, descendant, and OPS import.
+     * Prepares the parent matter data when cloning or creating descendants.
+     *
+     * @param Request $request The HTTP request containing operation type and parent matter ID.
+     * @return \Illuminate\Http\Response The view for creating a new matter.
+     */
     public function create(Request $request)
     {
         Gate::authorize('readwrite');
@@ -141,6 +178,15 @@ class MatterController extends Controller
         return view('matter.create', compact('parent_matter', 'operation', 'category'));
     }
 
+    /**
+     * Store a new matter in the database.
+     *
+     * Handles matter creation based on operation type (new, clone, descendant).
+     * Manages unique identifier generation, priority claims copying, and actor relationships.
+     *
+     * @param Request $request The HTTP request containing matter data.
+     * @return \Illuminate\Http\JsonResponse JSON response with redirect URL to the new matter.
+     */
     public function store(Request $request)
     {
         Gate::authorize('readwrite');
@@ -236,6 +282,15 @@ class MatterController extends Controller
         return response()->json(['redirect' => route('matter.show', [$new_matter])]);
     }
 
+    /**
+     * Create multiple national phase entries from a PCT or EP application.
+     *
+     * Generates multiple matter entries for different countries, copying priority
+     * claims, filing/publication/grant events from the parent matter.
+     *
+     * @param Request $request The HTTP request containing parent matter and country list.
+     * @return \Illuminate\Http\JsonResponse JSON response with redirect URL to the created matters.
+     */
     public function storeN(Request $request)
     {
         Gate::authorize('readwrite');
@@ -282,6 +337,16 @@ class MatterController extends Controller
         return response()->json(['redirect' => "/matter?Ref=$request->caseref&origin=$parent_matter->country"]);
     }
 
+    /**
+     * Create an entire patent family from EPO OPS API data.
+     *
+     * Retrieves family members from OPS using a document number and creates
+     * matter records for each family member with events, actors, and relationships.
+     * Handles priorities, divisionals, continuations, and PCT national phases.
+     *
+     * @param Request $request The HTTP request containing document number and case reference.
+     * @return \Illuminate\Http\JsonResponse JSON response with redirect URL or error information.
+     */
     public function storeFamily(Request $request)
     {
         Gate::authorize('readwrite');
@@ -588,6 +653,15 @@ class MatterController extends Controller
         return response()->json(['redirect' => "/matter?Ref=$request->caseref&tab=1"]);
     }
 
+    /**
+     * Show the form for editing a matter.
+     *
+     * Determines whether country and category fields can be edited based on
+     * whether the matter has country/category-specific tasks.
+     *
+     * @param Matter $matter The matter to edit.
+     * @return \Illuminate\Http\Response The view for editing the matter.
+     */
     public function edit(Matter $matter)
     {
         Gate::authorize('readwrite');
@@ -616,6 +690,13 @@ class MatterController extends Controller
         return view('matter.edit', compact(['matter', 'cat_edit', 'country_edit']));
     }
 
+    /**
+     * Update a matter in the database.
+     *
+     * @param Request $request The HTTP request containing updated matter data.
+     * @param Matter $matter The matter to update.
+     * @return Matter The updated matter model.
+     */
     public function update(Request $request, Matter $matter)
     {
         Gate::authorize('readwrite');
@@ -632,6 +713,12 @@ class MatterController extends Controller
         return $matter;
     }
 
+    /**
+     * Remove a matter from the database.
+     *
+     * @param Matter $matter The matter to delete.
+     * @return Matter The deleted matter model.
+     */
     public function destroy(Matter $matter)
     {
         Gate::authorize('readwrite');
@@ -710,6 +797,12 @@ class MatterController extends Controller
         return $this->opsService->getFamilyMembers($docnum);
     }
 
+    /**
+     * Display all events for a matter.
+     *
+     * @param Matter $matter The matter whose events to display.
+     * @return \Illuminate\Http\Response The view with events list.
+     */
     public function events(Matter $matter)
     {
         $events = $matter->events->load('info');
@@ -717,6 +810,12 @@ class MatterController extends Controller
         return view('matter.events', compact('events', 'matter'));
     }
 
+    /**
+     * Display all tasks (excluding renewals) for a matter.
+     *
+     * @param Matter $matter The matter whose tasks to display.
+     * @return \Illuminate\Http\Response The view with tasks list.
+     */
     public function tasks(Matter $matter)
     {
         // All events and their tasks, excepting renewals
@@ -728,6 +827,12 @@ class MatterController extends Controller
         return view('matter.tasks', compact('events', 'matter', 'is_renewals'));
     }
 
+    /**
+     * Display renewal tasks for a matter.
+     *
+     * @param Matter $matter The matter whose renewals to display.
+     * @return \Illuminate\Http\Response The view with renewals list.
+     */
     public function renewals(Matter $matter)
     {
         // The renewal trigger event and its renewals
@@ -741,6 +846,13 @@ class MatterController extends Controller
         return view('matter.tasks', compact('events', 'matter', 'is_renewals'));
     }
 
+    /**
+     * Display actors of a specific role for a matter.
+     *
+     * @param Matter $matter The matter whose actors to display.
+     * @param string $role The role code to filter actors.
+     * @return \Illuminate\Http\Response The view with actors list.
+     */
     public function actors(Matter $matter, $role)
     {
         $role_group = $matter->actors->where('role_code', $role);
@@ -748,6 +860,12 @@ class MatterController extends Controller
         return view('matter.roleActors', compact('role_group', 'matter'));
     }
 
+    /**
+     * Display classifiers (titles, classes, etc.) for a matter.
+     *
+     * @param Matter $matter The matter whose classifiers to display.
+     * @return \Illuminate\Http\Response The view with classifiers list.
+     */
     public function classifiers(Matter $matter)
     {
         $matter->load(['classifiers']);
@@ -755,6 +873,13 @@ class MatterController extends Controller
         return view('matter.classifiers', compact('matter'));
     }
 
+    /**
+     * Display the description/summary for a matter in a specific language.
+     *
+     * @param Matter $matter The matter whose description to display.
+     * @param string $lang The language code for the description.
+     * @return \Illuminate\Http\Response The view with the description.
+     */
     public function description(Matter $matter, $lang)
     {
         $description = $matter->getDescription($lang);

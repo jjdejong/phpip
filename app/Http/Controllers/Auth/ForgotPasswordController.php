@@ -5,6 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
+/**
+ * Handles password reset email requests.
+ *
+ * Uses Laravel's SendsPasswordResetEmails trait to send password reset
+ * links to users who have forgotten their passwords.
+ */
 class ForgotPasswordController extends Controller
 {
     /*

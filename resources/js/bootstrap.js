@@ -1,3 +1,18 @@
+/**
+ * Bootstrap Configuration Module
+ *
+ * Handles the setup and configuration of Bootstrap UI framework.
+ * Makes Bootstrap methods globally available for use throughout the application.
+ *
+ * Note: This file also contains commented-out configurations for:
+ * - Lodash utilities
+ * - Popper.js (tooltip positioning)
+ * - Axios HTTP client with CSRF token handling
+ * - Laravel Echo for WebSocket/broadcasting support
+ *
+ * These can be enabled by uncommenting the relevant sections as needed.
+ */
+
 //import { debounce } from 'lodash-es';
 //window.debounce = debounce;
 
@@ -5,7 +20,13 @@
 //window.Popper = Popper
 
 import * as bootstrap from 'bootstrap';
-// This makes the bootstrap methods available outside the app.js module compiled by Vite
+
+/**
+ * Expose Bootstrap globally for use outside Vite module system.
+ * This allows access to Bootstrap's JavaScript components (Modal, Collapse, etc.)
+ * from anywhere in the application.
+ * @global
+ */
 window.bootstrap = bootstrap;
 
 /**

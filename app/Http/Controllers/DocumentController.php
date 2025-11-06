@@ -14,8 +14,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Manages document templates and email generation.
+ *
+ * Handles template classes and members for generating correspondence.
+ * Supports Blade templating for dynamic content generation and mailto
+ * link creation for client communications.
+ */
 class DocumentController extends Controller
 {
+    /**
+     * Display a paginated list of template classes with filtering.
+     *
+     * @param Request $request Filter parameters
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         $Notes = $request->input('Notes');
@@ -40,6 +53,11 @@ class DocumentController extends Controller
         return view('documents.index', compact('template_classes'));
     }
 
+    /**
+     * Show the form for creating a new template class.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         $table = new TemplateClass;
@@ -48,6 +66,12 @@ class DocumentController extends Controller
         return view('documents.create', compact('tableComments'));
     }
 
+    /**
+     * Store a newly created template class.
+     *
+     * @param Request $request Template class data
+     * @return TemplateClass The created template class
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -58,6 +82,12 @@ class DocumentController extends Controller
         return TemplateClass::create($request->except(['_token', '_method']));
     }
 
+    /**
+     * Display the specified template class.
+     *
+     * @param TemplateClass $class The template class to display
+     * @return \Illuminate\Http\Response
+     */
     public function show(TemplateClass $class)
     {
         $tableComments = $class->getTableComments();
@@ -66,6 +96,13 @@ class DocumentController extends Controller
         return view('documents.show', compact('class', 'tableComments'));
     }
 
+    /**
+     * Update the specified template class.
+     *
+     * @param Request $request Updated template class data
+     * @param TemplateClass $class The template class to update
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, TemplateClass $class)
     {
         $request->merge(['updater' => Auth::user()->login]);
@@ -74,6 +111,12 @@ class DocumentController extends Controller
         return response()->json(['success' => 'Template class updated']);
     }
 
+    /**
+     * Remove the specified template class from storage.
+     *
+     * @param TemplateClass $class The template class to delete
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(TemplateClass $class)
     {
         $class->delete();
@@ -81,6 +124,13 @@ class DocumentController extends Controller
         return response()->json(['success' => 'Template class deleted']);
     }
 
+    /**
+     * Select template members for a matter with filtering.
+     *
+     * @param Matter $matter The matter to generate correspondence for
+     * @param Request $request Filter and context parameters
+     * @return \Illuminate\Http\Response
+     */
     public function select(Matter $matter, Request $request)
     {
         $template_id = $request->input('template_id');
@@ -160,13 +210,16 @@ class DocumentController extends Controller
         return view($view, compact('matter', 'members', 'contacts', 'tableComments', 'oldfilters', 'event', 'task'));
     }
 
-    /*
-      Prepare a mailto: href with template and data from the matter
-      *
-      * @param  \Illuminate\Http\Request  $request
-      * @param  \App\Models\TemplateMember $member
-      * @return \Illuminate\Http\Response
-    */
+    /**
+     * Prepare a mailto link with template and matter data.
+     *
+     * Generates email content from Blade templates using matter, event, and task data.
+     * Creates mailto URL with populated subject, body, recipients, and CC.
+     *
+     * @param TemplateMember $member The template member to use
+     * @param Request $request Contains matter_id, event_id, task_id, and recipient selections
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function mailto(TemplateMember $member, Request $request)
     {
         // Todo Add field for maually add an address
@@ -226,6 +279,13 @@ class DocumentController extends Controller
         }
     }
 
+    /**
+     * Render a Blade template with provided data.
+     *
+     * @param string $template Compiled Blade template string
+     * @param array $data Data to pass to the template
+     * @return string|array Rendered content or error array
+     */
     private function renderTemplate(string $template, array $data)
     {
         try {

@@ -5,6 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ConfirmsPasswords;
 
+/**
+ * Handles password confirmation for sensitive operations.
+ *
+ * Uses Laravel's ConfirmsPasswords trait to require users to confirm
+ * their password before accessing sensitive areas or performing critical actions.
+ */
 class ConfirmPasswordController extends Controller
 {
     /*

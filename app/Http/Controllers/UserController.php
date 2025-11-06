@@ -10,8 +10,20 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
+/**
+ * Manages user accounts and authentication profiles.
+ *
+ * Handles CRUD operations for users, profile management, password changes,
+ * and language preferences. Users are actors with authentication credentials.
+ */
 class UserController extends Controller
 {
+    /**
+     * Display a paginated list of users.
+     *
+     * @param Request $request Filter parameters
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         Gate::authorize('readonly');
@@ -32,6 +44,11 @@ class UserController extends Controller
         return view('user.index', compact('userslist'));
     }
 
+    /**
+     * Show the form for creating a new user.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         Gate::authorize('admin');
@@ -41,6 +58,12 @@ class UserController extends Controller
         return view('user.create', compact('userComments'));
     }
 
+    /**
+     * Store a newly created user.
+     *
+     * @param Request $request User data including login, password, email, and default_role
+     * @return User The created user
+     */
     public function store(Request $request)
     {
         Gate::authorize('admin');
@@ -56,6 +79,12 @@ class UserController extends Controller
         return User::create($request->except(['_token', '_method', 'password_confirmation']));
     }
 
+    /**
+     * Display the specified user.
+     *
+     * @param User $user The user to display
+     * @return \Illuminate\Http\Response
+     */
     public function show(User $user)
     {
         Gate::authorize('readonly');
@@ -66,6 +95,12 @@ class UserController extends Controller
         return view('user.show', compact('userInfo', 'userComments'));
     }
 
+    /**
+     * Show the form for editing the specified user.
+     *
+     * @param User $user The user to edit
+     * @return \Illuminate\Http\Response
+     */
     public function edit(User $user)
     {
         Gate::authorize('admin');
@@ -74,7 +109,12 @@ class UserController extends Controller
 
         return view('user.edit', compact('user', 'userComments'));
     }
-    
+
+    /**
+     * Show the current user's profile.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function profile()
     {
         $userInfo = Auth::user()->load(['company:id,name', 'roleInfo']);
@@ -87,6 +127,16 @@ class UserController extends Controller
         return view('user.profile', compact('userInfo', 'userComments', 'isProfileView'));
     }
 
+    /**
+     * Update the specified user (admin only).
+     *
+     * Updates user credentials, settings, and language preference. Updates session locale
+     * if current user is editing their own profile.
+     *
+     * @param Request $request Updated user data
+     * @param User $user The user to update
+     * @return User The updated user
+     */
     public function update(Request $request, User $user)
     {
         Gate::authorize('admin');
@@ -114,7 +164,15 @@ class UserController extends Controller
 
         return $user;
     }
-    
+
+    /**
+     * Update the current user's profile.
+     *
+     * Allows users to update their own email, password, and language preferences.
+     *
+     * @param Request $request Updated profile data
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
@@ -151,6 +209,12 @@ class UserController extends Controller
         return redirect()->route('user.profile')->with('success', 'Profile updated successfully');
     }
 
+    /**
+     * Remove the specified user from storage.
+     *
+     * @param User $user The user to delete
+     * @return User The deleted user
+     */
     public function destroy(User $user)
     {
         Gate::authorize('admin');

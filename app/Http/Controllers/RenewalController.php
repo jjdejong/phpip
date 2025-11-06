@@ -13,8 +13,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Manages the renewal workflow for patent and trademark annuities.
+ *
+ * Handles the complete renewal lifecycle including notifications to clients,
+ * payment tracking, invoice generation (with Dolibarr integration), and
+ * receipt management. Supports multi-step workflow with logging.
+ */
 class RenewalController extends Controller
 {
+    /**
+     * Display a paginated list of renewals with filtering.
+     *
+     * @param Request $request Filter parameters for renewals
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         // Filters
@@ -121,6 +134,13 @@ class RenewalController extends Controller
         return view('renewals.index', compact('renewals', 'step', 'invoice_step'));
     }
 
+    /**
+     * Send first call notifications to clients for selected renewals.
+     *
+     * @param Request $request Contains task_ids array of renewal task IDs
+     * @param int $send Whether to send emails (1) or just create calls (0)
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function firstcall(Request $request, int $send)
     {
         $notify_type[0] = 'first';
@@ -138,6 +158,12 @@ class RenewalController extends Controller
         }
     }
 
+    /**
+     * Send reminder call notifications for renewals.
+     *
+     * @param Request $request Contains task_ids array of renewal task IDs
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function remindercall(Request $request)
     {
         $notify_type[0] = 'first';
@@ -150,6 +176,12 @@ class RenewalController extends Controller
         }
     }
 
+    /**
+     * Send final call notifications for renewals entering grace period.
+     *
+     * @param Request $request Contains task_ids array of renewal task IDs
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function lastcall(Request $request)
     {
         $notify_type[0] = 'last';
@@ -164,6 +196,14 @@ class RenewalController extends Controller
         }
     }
 
+    /**
+     * Adjust renewal fees based on grace period and SME status.
+     *
+     * @param object $renewal The renewal task object
+     * @param float &$cost Reference to cost variable to be modified
+     * @param float &$fee Reference to fee variable to be modified
+     * @return void
+     */
     private function adjustFees($renewal, &$cost, &$fee)
     {
         if ($renewal->grace_period && strtotime($renewal->done_date) < $renewal->due_date) {
@@ -181,6 +221,14 @@ class RenewalController extends Controller
         $fee *= $fee_factor;
     }
 
+    /**
+     * Adjust fees from fee table based on grace period and SME status.
+     *
+     * @param object $renewal The renewal task object
+     * @param float &$cost Reference to cost variable to be modified
+     * @param float &$fee Reference to fee variable to be modified
+     * @return void
+     */
     private function adjustTableFees($renewal, &$cost, &$fee)
     {
         if ($renewal->grace_period) {
@@ -198,6 +246,14 @@ class RenewalController extends Controller
         }
     }
 
+    /**
+     * Adjust fees from task data when no fee table entry exists.
+     *
+     * @param object $renewal The renewal task object
+     * @param float &$cost Reference to cost variable to be modified
+     * @param float &$fee Reference to fee variable to be modified
+     * @return void
+     */
     private function adjustTaskFees($renewal, &$cost, &$fee) 
     {
         $cost = $renewal->cost;
@@ -210,6 +266,14 @@ class RenewalController extends Controller
         }
     }
 
+    /**
+     * Process and send renewal notifications.
+     *
+     * @param array $ids Array of renewal task IDs
+     * @param array $notify_type Types of notifications to send
+     * @param bool $reminder Whether this is a reminder call
+     * @return int|string Number of processed renewals or error message
+     */
     private function _call($ids, $notify_type, $reminder)
     {
         if (empty($ids)) {
@@ -244,6 +308,14 @@ class RenewalController extends Controller
         return $sum;
     }
 
+    /**
+     * Process renewals for a specific grace period.
+     *
+     * @param array $ids Array of renewal task IDs
+     * @param int $grace Grace period indicator (0 or 1)
+     * @param string $notifyType Type of notification
+     * @return array Processed renewals grouped by client with totals
+     */
     private function processRenewals($ids, $grace, $notifyType)
     {
         $renewals = Task::renewals()
@@ -282,6 +354,13 @@ class RenewalController extends Controller
         ];
     }
 
+    /**
+     * Prepare renewal data for email notification.
+     *
+     * @param object $ren The renewal task object
+     * @param int $grace Grace period indicator
+     * @return array Formatted renewal data for email template
+     */
     private function prepareRenewalData($ren, $grace)
     {
         if (empty($ren->language)) {
@@ -343,6 +422,14 @@ class RenewalController extends Controller
         return $renewal;
     }
 
+    /**
+     * Create log entries for renewal processing.
+     *
+     * @param array $renewals Array of renewal objects
+     * @param int $newjob Job ID for logging
+     * @param string $notifyType Type of notification
+     * @return array Array of log entries ready for insertion
+     */
     private function processLogs($renewals, $newjob, $notifyType)
     {
         $logs = [];
@@ -365,6 +452,14 @@ class RenewalController extends Controller
         return $logs;
     }
 
+    /**
+     * Send renewal notification emails to clients.
+     *
+     * @param array $renewalsData Processed renewal data with client groups
+     * @param string $notifyType Type of notification
+     * @param bool $reminder Whether this is a reminder email
+     * @return bool|string True on success, error message on failure
+     */
     private function sendEmails($renewalsData, $notifyType, $reminder)
     {
         foreach ($renewalsData['clientGroups'] as $clientId => $renewals) {
@@ -424,7 +519,14 @@ class RenewalController extends Controller
         return true;
     }
 
-
+    /**
+     * Mark selected renewals as ready to pay.
+     *
+     * Moves renewals to step 4 and invoice_step 1 in the workflow.
+     *
+     * @param Request $request Contains task_ids array of renewal task IDs
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function topay(Request $request)
     {
         if (isset($request->task_ids)) {
@@ -455,6 +557,16 @@ class RenewalController extends Controller
         }
     }
 
+    /**
+     * Generate invoices for selected renewals.
+     *
+     * Optionally integrates with Dolibarr to create invoices. Updates renewal
+     * status to invoice_step 2.
+     *
+     * @param Request $request Contains task_ids array of renewal task IDs
+     * @param int $toinvoice Whether to create invoices in Dolibarr (1) or just update status (0)
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function invoice(Request $request, int $toinvoice)
     {
         if (isset($request->task_ids)) {
@@ -581,6 +693,12 @@ class RenewalController extends Controller
         return response()->json(['success' => "Invoices created for $num renewals"]);
     }
 
+    /**
+     * Mark invoices as paid for selected renewals.
+     *
+     * @param Request $request Contains task_ids array of renewal task IDs
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function paid(Request $request)
     {
         if (!isset($request->task_ids)) {
@@ -592,6 +710,12 @@ class RenewalController extends Controller
         return response()->json(['success' => "$num invoices paid"]);
     }
 
+    /**
+     * Export renewals ready to pay as CSV file.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response CSV download response
+     */
     public function export(Request $request)
     {
         $export = Task::renewals()->where('invoice_step', 1)
@@ -621,6 +745,13 @@ class RenewalController extends Controller
         );
     }
 
+    /**
+     * Search for client in Dolibarr system.
+     *
+     * @param string $client Client name to search for
+     * @param string $apikey Dolibarr API key
+     * @return array API response with client data
+     */
     private function _client($client, $apikey)
     {
         // Search for client correspondence in Dolibarr
@@ -638,6 +769,13 @@ class RenewalController extends Controller
         return json_decode($result, true);
     }
 
+    /**
+     * Create invoice in Dolibarr system.
+     *
+     * @param array $newprop Invoice properties
+     * @param string $apikey Dolibarr API key
+     * @return array [status_code, result_or_error_message]
+     */
     public function createInvoice($newprop, $apikey)
     {
         // Create invoice
@@ -666,7 +804,12 @@ class RenewalController extends Controller
     }
 
     /**
-     * clear selected renewals.
+     * Mark selected renewals as done (cleared).
+     *
+     * Sets done_date and moves renewals to step 6.
+     *
+     * @param Request $request Contains task_ids array of renewal task IDs
+     * @return \Illuminate\Http\JsonResponse
      */
     public function done(Request $request)
     {
@@ -707,7 +850,12 @@ class RenewalController extends Controller
     }
 
     /**
-     * register receipts.
+     * Register official receipts for selected renewals.
+     *
+     * Moves renewals to step 8 indicating receipt received.
+     *
+     * @param Request $request Contains task_ids array of renewal task IDs
+     * @return \Illuminate\Http\JsonResponse
      */
     public function receipt(Request $request)
     {
@@ -747,7 +895,12 @@ class RenewalController extends Controller
     }
 
     /**
-     * closing the task.
+     * Close selected renewals.
+     *
+     * Moves renewals to step 10 (or -1 if already done) to complete the workflow.
+     *
+     * @param Request $request Contains task_ids array of renewal task IDs
+     * @return \Illuminate\Http\JsonResponse
      */
     public function closing(Request $request)
     {
@@ -792,7 +945,12 @@ class RenewalController extends Controller
     }
 
     /**
-     * Abandon. Now, we wait for lapse.
+     * Mark renewals as abandoned by client.
+     *
+     * Moves renewals to step 12 and creates an ABA event on the matter.
+     *
+     * @param Request $request Contains task_ids array of renewal task IDs
+     * @return \Illuminate\Http\JsonResponse
      */
     public function abandon(Request $request)
     {
@@ -835,7 +993,12 @@ class RenewalController extends Controller
     }
 
     /**
-     * Lapse communication received. We will send it soon.
+     * Register lapse communications for selected renewals.
+     *
+     * Moves renewals to step 14 and creates a LAP event on the matter.
+     *
+     * @param Request $request Contains task_ids array of renewal task IDs
+     * @return \Illuminate\Http\JsonResponse
      */
     public function lapsing(Request $request)
     {
@@ -878,7 +1041,13 @@ class RenewalController extends Controller
     }
 
     /**
-     * Generate order.
+     * Generate XML payment order for selected renewals.
+     *
+     * Creates an XML file for submitting payments to patent/trademark offices.
+     * Optionally clears renewals after order generation.
+     *
+     * @param Request $request Contains task_ids and clear flag
+     * @return \Illuminate\Http\Response XML download response
      */
     public function renewalOrder(Request $request)
     {
@@ -1022,6 +1191,13 @@ class RenewalController extends Controller
         );
     }
 
+    /**
+     * Update a renewal task.
+     *
+     * @param Request $request Updated renewal data
+     * @param Task $renewal The renewal task to update
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, Task $renewal)
     {
         $this->validate($request, [
@@ -1034,6 +1210,12 @@ class RenewalController extends Controller
         return response()->json(['success' => 'Renewal updated']);
     }
 
+    /**
+     * Display renewal processing logs with filtering.
+     *
+     * @param Request $request Filter parameters for logs
+     * @return \Illuminate\Http\Response
+     */
     public function logs(Request $request)
     {
         // Get list of logs

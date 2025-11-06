@@ -5,6 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
+/**
+ * Handles password reset completion.
+ *
+ * Uses Laravel's ResetsPasswords trait to process password reset requests
+ * after users click the reset link in their email.
+ */
 class ResetPasswordController extends Controller
 {
     /*

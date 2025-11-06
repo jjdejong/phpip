@@ -8,6 +8,12 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * Handles new user registration.
+ *
+ * Uses Laravel's RegistersUsers trait to provide registration functionality
+ * with custom validation rules and user creation logic.
+ */
 class RegisterController extends Controller
 {
     /*
@@ -43,7 +49,7 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data The registration data to validate
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -58,7 +64,7 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param array $data The validated registration data
      * @return \App\Models\User
      */
     protected function create(array $data)

@@ -1,14 +1,39 @@
+/**
+ * Matter Show Page Module
+ *
+ * Provides functionality for the matter detail/show page including:
+ * - Actor management with popovers for adding/removing actors
+ * - Title/classifier management
+ * - Image upload functionality with drag-and-drop support (Alpine.js component)
+ * - File drop zone for document processing
+ * - Panel reloading after modal operations
+ * - Summary generation and clipboard operations
+ */
+
 import { fetchREST, reloadPart, processSubmitErrors } from "./main.js";
 
-// Get mutable reference to contentSrc
+/**
+ * Gets the current content source URL for modals.
+ * @returns {string} The current contentSrc URL
+ */
 let getContentSrc = () => {
   return window.contentSrc || "";
 };
+
+/**
+ * Sets the content source URL for modals.
+ * @param {string} value - The URL to set as contentSrc
+ */
 let setContentSrc = (value) => {
   window.contentSrc = value;
 };
 
-// Register Alpine.js component for image upload
+/**
+ * Registers the Alpine.js image upload component.
+ * Creates a reusable component for image upload/delete with drag-and-drop support.
+ *
+ * @returns {void}
+ */
 export function registerImageUpload() {
   if (window.Alpine) {
     window.Alpine.data("imageUpload", (initialData) => ({
@@ -18,6 +43,11 @@ export function registerImageUpload() {
       matterId: initialData.matterId,
       showControls: false,
 
+      /**
+       * Uploads an image file to the server.
+       * @param {File} file - The image file to upload
+       * @returns {Promise<void>}
+       */
       async uploadImage(file) {
         if (!file || !file.type.startsWith("image/")) return;
 
@@ -48,6 +78,10 @@ export function registerImageUpload() {
         }
       },
 
+      /**
+       * Deletes the current image after user confirmation.
+       * @returns {Promise<void>}
+       */
       async deleteImage() {
         if (
           !this.classifierId ||
@@ -74,6 +108,10 @@ export function registerImageUpload() {
         }
       },
 
+      /**
+       * Handles drag-and-drop events for image upload.
+       * @param {DragEvent} e - The drop event
+       */
       handleDrop(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -84,10 +122,23 @@ export function registerImageUpload() {
   }
 }
 
+/**
+ * Initializes the matter show page functionality.
+ * Sets up event listeners and handlers for:
+ * - Actor addition/removal popovers
+ * - Title/classifier management
+ * - Panel reloading after modal operations
+ * - File drop zone for document processing
+ *
+ * @returns {void}
+ */
 export function initMatterShow() {
   // Actor processing
 
-  // Initialize the popovers
+  /**
+   * Current popover instance.
+   * @type {bootstrap.Popover|null}
+   */
   let popover = null;
   let popoverList = new bootstrap.Popover(document.body, {
     selector: '[data-bs-toggle="popover"]',
@@ -98,9 +149,22 @@ export function initMatterShow() {
     sanitize: false,
   });
 
-  // Global listener references and cleanup function
+  /**
+   * Current actor autocomplete event handler.
+   * @type {Function|null}
+   */
   let currentActorHandler = null;
+
+  /**
+   * Current role autocomplete event handler.
+   * @type {Function|null}
+   */
   let currentRoleHandler = null;
+
+  /**
+   * Removes event listeners to prevent memory leaks when popover changes.
+   * @returns {void}
+   */
   function cleanupListeners() {
     if (currentActorHandler) {
       actorName.removeEventListener("acCompleted", currentActorHandler);

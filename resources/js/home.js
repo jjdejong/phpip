@@ -1,7 +1,28 @@
+/**
+ * Home Dashboard Module
+ *
+ * Provides functionality for the home/dashboard page including:
+ * - Task list display and filtering (all tasks, my tasks, client tasks)
+ * - Renewal list display
+ * - Task completion/clearing functionality
+ * - User dashboard view
+ * - Pagination support
+ */
+
 import { fetchInto, fetchREST, reloadPart } from "./main.js";
 
+/**
+ * Stores the last selected task filter flag.
+ * @type {string|number}
+ */
 let lastTasksFlag = 0;
 
+/**
+ * Refreshes both task and renewal lists based on the selected filter.
+ *
+ * @param {string|number} flag - Filter flag: 0=all tasks, 1=my tasks, 2=client tasks, or client ID
+ * @returns {void}
+ */
 function refreshTasks(flag) {
   const urlParams = new URLSearchParams(window.location.search);
   const user_dashboard_val = urlParams.get("user_dashboard");
@@ -22,12 +43,21 @@ function refreshTasks(flag) {
   reloadPart(homeUrl, "leftPanels");
 }
 
+/**
+ * Initializes the home dashboard page functionality.
+ * Sets up task filtering, completion handlers, and autocomplete integration.
+ *
+ * @returns {void}
+ */
 export function initHome() {
   // Set default checked state for "Everyone" radio button
   document.getElementById("alltasks").checked = true;
   refreshTasks(0);
 
-  // When client is selected via autocomplete, check the Client radio button and refresh
+  /**
+   * Event handler for client autocomplete selection.
+   * Switches to client tasks view when a client is selected.
+   */
   document
     .querySelector('[data-actarget="client_id"]')
     .addEventListener("acCompleted", () => {

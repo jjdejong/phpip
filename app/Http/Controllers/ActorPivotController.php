@@ -8,8 +8,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Manages actor-matter relationships (pivot table).
+ *
+ * Handles assignment of actors to matters in various roles with display
+ * ordering. Maintains referential integrity and provides dependency tracking.
+ */
 class ActorPivotController extends Controller
 {
+    /**
+     * Assign an actor to a matter in a specific role.
+     *
+     * Automatically maintains display_order sequence within role groups
+     * and inherits company_id from the actor.
+     *
+     * @param Request $request Contains matter_id, actor_id, role, and optional date
+     * @return ActorPivot The created actor-matter relationship
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -46,6 +61,13 @@ class ActorPivotController extends Controller
         return ActorPivot::create($request->except(['_token', '_method']));
     }
 
+    /**
+     * Update the specified actor-matter relationship.
+     *
+     * @param Request $request Updated relationship data
+     * @param ActorPivot $actorPivot The actor-matter relationship to update
+     * @return ActorPivot The updated relationship
+     */
     public function update(Request $request, ActorPivot $actorPivot)
     {
         $request->validate([
@@ -57,6 +79,14 @@ class ActorPivotController extends Controller
         return $actorPivot;
     }
 
+    /**
+     * Remove an actor from a matter.
+     *
+     * Automatically renumbers display_order for remaining actors in the same role.
+     *
+     * @param ActorPivot $actorPivot The actor-matter relationship to delete
+     * @return ActorPivot The deleted relationship
+     */
     public function destroy(ActorPivot $actorPivot)
     {
         $matter_id = $actorPivot->matter_id;
@@ -76,6 +106,15 @@ class ActorPivotController extends Controller
         return $actorPivot;
     }
 
+    /**
+     * Show matters and actors dependent on a specific actor.
+     *
+     * Lists up to 50 matters where the actor is assigned, plus up to 30 other
+     * actors that reference this actor as parent, company, or site.
+     *
+     * @param int $actor The actor ID to check dependencies for
+     * @return \Illuminate\Http\Response
+     */
     public function usedIn(int $actor)
     {
         $actorpivot = new ActorPivot();
