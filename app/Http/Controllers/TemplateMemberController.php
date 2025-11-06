@@ -6,12 +6,30 @@ use App\Models\TemplateMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Manages template members (individual document templates).
+ *
+ * Template members are specific document instances within a template class,
+ * containing Blade template markup for generating correspondence in different
+ * languages and formats.
+ */
 class TemplateMemberController extends Controller
 {
+    /**
+     * Supported template languages.
+     *
+     * @var array
+     */
     public $languages = ['fr' => 'Français',
         'en' => 'English',
         'de' => 'Deutsch'];
 
+    /**
+     * Display a paginated list of template members with filtering.
+     *
+     * @param Request $request Filter parameters
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         $Summary = $request->summary;
@@ -54,6 +72,11 @@ class TemplateMemberController extends Controller
         return view('template-members.index', compact('template_members'));
     }
 
+    /**
+     * Show the form for creating a new template member.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         $table = new TemplateMember;
@@ -63,6 +86,12 @@ class TemplateMemberController extends Controller
         return view('template-members.create', compact('tableComments', 'languages'));
     }
 
+    /**
+     * Store a newly created template member.
+     *
+     * @param Request $request Template member data including class_id and language
+     * @return TemplateMember The created template member
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -75,6 +104,12 @@ class TemplateMemberController extends Controller
         return $a;
     }
 
+    /**
+     * Display the specified template member.
+     *
+     * @param TemplateMember $templateMember The template member to display
+     * @return \Illuminate\Http\Response
+     */
     public function show(TemplateMember $templateMember)
     {
         $tableComments = $templateMember->getTableComments();
@@ -84,11 +119,24 @@ class TemplateMemberController extends Controller
         return view('template-members.show', compact('templateMember', 'languages', 'tableComments'));
     }
 
+    /**
+     * Show the form for editing the specified template member.
+     *
+     * @param TemplateMember $templateMember The template member to edit
+     * @return void
+     */
     public function edit(TemplateMember $templateMember)
     {
         //
     }
 
+    /**
+     * Update the specified template member.
+     *
+     * @param Request $request Updated template member data
+     * @param TemplateMember $templateMember The template member to update
+     * @return TemplateMember The updated template member
+     */
     public function update(Request $request, TemplateMember $templateMember)
     {
         $request->merge(['updater' => Auth::user()->login]);
@@ -97,6 +145,12 @@ class TemplateMemberController extends Controller
         return $templateMember;
     }
 
+    /**
+     * Remove the specified template member from storage.
+     *
+     * @param TemplateMember $templateMember The template member to delete
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(TemplateMember $templateMember)
     {
         $templateMember->delete();

@@ -5,8 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\DefaultActor;
 use Illuminate\Http\Request;
 
+/**
+ * Manages default actor assignments for matters.
+ *
+ * Defines which actors should be automatically assigned to new matters
+ * based on country, category, and client. Streamlines matter creation
+ * by pre-populating common actor roles.
+ */
 class DefaultActorController extends Controller
 {
+    /**
+     * Display a list of default actors with filtering.
+     *
+     * @param Request $request Filter parameters including Actor, Role, Country, Category, Client
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         $Actor = $request->input('Actor');
@@ -50,6 +63,11 @@ class DefaultActorController extends Controller
         return view('default_actor.index', compact('default_actors'));
     }
 
+    /**
+     * Show the form for creating a new default actor.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         $table = new DefaultActor;
@@ -58,6 +76,12 @@ class DefaultActorController extends Controller
         return view('default_actor.create', compact('tableComments'));
     }
 
+    /**
+     * Store a newly created default actor.
+     *
+     * @param Request $request Default actor data including actor_id and role
+     * @return DefaultActor The created default actor
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -68,6 +92,12 @@ class DefaultActorController extends Controller
         return DefaultActor::create($request->except(['_token', '_method']));
     }
 
+    /**
+     * Display the specified default actor.
+     *
+     * @param DefaultActor $default_actor The default actor to display
+     * @return \Illuminate\Http\Response
+     */
     public function show(DefaultActor $default_actor)
     {
         $tableComments = $default_actor->getTableComments();
@@ -76,6 +106,13 @@ class DefaultActorController extends Controller
         return view('default_actor.show', compact('default_actor', 'tableComments'));
     }
 
+    /**
+     * Update the specified default actor.
+     *
+     * @param Request $request Updated default actor data
+     * @param DefaultActor $default_actor The default actor to update
+     * @return DefaultActor The updated default actor
+     */
     public function update(Request $request, DefaultActor $default_actor)
     {
         $request->validate([
@@ -87,6 +124,12 @@ class DefaultActorController extends Controller
         return $default_actor;
     }
 
+    /**
+     * Remove the specified default actor from storage.
+     *
+     * @param DefaultActor $default_actor The default actor to delete
+     * @return DefaultActor The deleted default actor
+     */
     public function destroy(DefaultActor $default_actor)
     {
         $default_actor->delete();

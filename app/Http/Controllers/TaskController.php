@@ -9,8 +9,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * Handles CRUD operations for tasks and task filtering.
+ *
+ * Tasks represent actions to be completed related to matters, including
+ * regular tasks and renewals. Provides filtering by assignment, client,
+ * and renewal status.
+ */
 class TaskController extends Controller
 {
+    /**
+     * Display a paginated list of open tasks with optional filtering.
+     *
+     * @param Request $request Query parameters for filtering tasks
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         $task = new Task;
@@ -64,6 +77,12 @@ class TaskController extends Controller
         return view('task.index', compact('tasks', 'isrenewals'));
     }
 
+    /**
+     * Store a newly created task.
+     *
+     * @param Request $request Task data including trigger_id, due_date, cost, and fee
+     * @return Task The created task
+     */
     public function store(Request $request)
     {
         Gate::authorize('readwrite');
@@ -82,11 +101,27 @@ class TaskController extends Controller
         return Task::create($request->except(['_token', '_method']));
     }
 
+    /**
+     * Display the specified task.
+     *
+     * @param Task $task The task to display
+     * @return Task
+     */
     public function show(Task $task)
     {
         return $task;
     }
 
+    /**
+     * Update the specified task.
+     *
+     * Handles manual due date changes (removes task rule), detail field translations,
+     * and renewal task lifecycle management.
+     *
+     * @param Request $request Updated task data
+     * @param Task $task The task to update
+     * @return Task The updated task
+     */
     public function update(Request $request, Task $task)
     {
         Gate::authorize('readwrite');
@@ -123,6 +158,12 @@ class TaskController extends Controller
         return $task;
     }
 
+    /**
+     * Remove the specified task from storage.
+     *
+     * @param Task $task The task to delete
+     * @return Task The deleted task
+     */
     public function destroy(Task $task)
     {
         Gate::authorize('readwrite');

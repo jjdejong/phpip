@@ -7,6 +7,12 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
+/**
+ * Handles the application dashboard and quick task operations.
+ *
+ * Provides overview statistics for matters by category and user task counts.
+ * Includes bulk task completion functionality for the dashboard.
+ */
 class HomeController extends Controller
 {
     /**
@@ -20,8 +26,9 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Show the application dashboard with matter and task statistics.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -34,7 +41,10 @@ class HomeController extends Controller
     }
 
     /**
-     * Clear selected tasks.
+     * Clear selected tasks by setting their done dates.
+     *
+     * @param Request $request Contains task_ids array and done_date
+     * @return \Illuminate\Http\JsonResponse
      */
     public function clearTasks(Request $request)
     {

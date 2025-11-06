@@ -7,8 +7,20 @@ use App\Models\EventName;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Manages event name definitions.
+ *
+ * Event names represent procedural milestones in matter lifecycle (filing, grant,
+ * publication, etc.). Used as triggers for task rules and workflow automation.
+ */
 class EventNameController extends Controller
 {
+    /**
+     * Display a paginated list of event names with filtering.
+     *
+     * @param Request $request Filter parameters
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         $Code = $request->input('Code');
@@ -32,6 +44,11 @@ class EventNameController extends Controller
         return view('eventname.index', compact('enameslist'));
     }
 
+    /**
+     * Show the form for creating a new event name.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         $table = new EventName;
@@ -40,6 +57,12 @@ class EventNameController extends Controller
         return view('eventname.create', compact('tableComments'));
     }
 
+    /**
+     * Store a newly created event name.
+     *
+     * @param Request $request Event name data including code, name, and notes
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -53,6 +76,12 @@ class EventNameController extends Controller
         return response()->json(['redirect' => route('eventname.index')]);
     }
 
+    /**
+     * Display the specified event name with template class links.
+     *
+     * @param EventName $eventname The event name to display
+     * @return \Illuminate\Http\Response
+     */
     public function show(EventName $eventname)
     {
         $tableComments = $eventname->getTableComments();
@@ -62,6 +91,13 @@ class EventNameController extends Controller
         return view('eventname.show', compact('eventname', 'tableComments', 'links'));
     }
 
+    /**
+     * Update the specified event name.
+     *
+     * @param Request $request Updated event name data
+     * @param EventName $eventname The event name to update
+     * @return EventName The updated event name
+     */
     public function update(Request $request, EventName $eventname)
     {
         $request->merge(['updater' => Auth::user()->login]);
@@ -70,6 +106,12 @@ class EventNameController extends Controller
         return $eventname;
     }
 
+    /**
+     * Remove the specified event name from storage.
+     *
+     * @param EventName $eventname The event name to delete
+     * @return EventName The deleted event name
+     */
     public function destroy(EventName $eventname)
     {
         $eventname->delete();

@@ -1,14 +1,51 @@
-// Identifies what to display in the Ajax-filled modal. Updated according to the href attribute used for triggering the modal
+/**
+ * Main Utility Module
+ *
+ * Provides core functionality for the phpIP application including:
+ * - AJAX operations for fetching and updating content
+ * - REST API interactions with CSRF protection
+ * - Modal form submissions and validation
+ * - Autocomplete functionality
+ * - Drag-and-drop sorting
+ * - Content-editable field management
+ * - Event handling for various user interactions
+ */
+
+/**
+ * Identifies what to display in the Ajax-filled modal.
+ * Updated according to the href attribute used for triggering the modal.
+ * @type {string}
+ */
 export let contentSrc = "";
-// Used for detecting changes of content-editable elements
+
+/**
+ * Used for detecting changes of content-editable elements.
+ * @type {string}
+ */
 let ceInitialContent;
 
-// Ajax fill an element from a url returning HTML
+/**
+ * Fetches HTML content from a URL and inserts it into a DOM element.
+ *
+ * @async
+ * @param {string} url - The URL to fetch HTML content from
+ * @param {HTMLElement} element - The DOM element to insert the content into
+ * @returns {Promise<void>}
+ */
 export const fetchInto = async (url, element) => {
   const response = await fetch(url);
   element.innerHTML = await response.text();
 };
 
+/**
+ * Fetches HTML content and updates a specific part of the page by ID.
+ * Parses the response to extract only the matching element's content.
+ *
+ * @async
+ * @param {string} url - The URL to fetch HTML content from
+ * @param {string} partId - The ID of the element to update
+ * @returns {Promise<void>}
+ */
 export const reloadPart = async (url, partId) => {
   const response = await fetch(url);
   const doc = new DOMParser().parseFromString(
@@ -19,7 +56,16 @@ export const reloadPart = async (url, partId) => {
     doc.getElementById(partId).innerHTML;
 };
 
-// Perform REST operations with native JS
+/**
+ * Performs REST API operations with CSRF token protection.
+ * Handles common HTTP status codes (500, 419) and returns JSON response.
+ *
+ * @async
+ * @param {string} url - The API endpoint URL
+ * @param {string} method - HTTP method (GET, POST, PUT, DELETE)
+ * @param {FormData|URLSearchParams} body - Request body data
+ * @returns {Promise<Object>} JSON response from the server
+ */
 export const fetchREST = async (url, method, body) => {
   const response = await fetch(url, {
     headers: {
@@ -43,7 +89,15 @@ export const fetchREST = async (url, method, body) => {
   }
 };
 
-// Simple debounce
+/**
+ * Debounces a function to limit how often it can be called.
+ * Useful for input events that fire rapidly.
+ *
+ * @param {Function} func - The function to debounce
+ * @param {number} wait - Delay in milliseconds before executing the function
+ * @param {boolean} immediate - If true, trigger function on leading edge instead of trailing
+ * @returns {Function} Debounced version of the function
+ */
 export function debounce(func, wait, immediate) {
   var timeout;
   return function () {
@@ -60,7 +114,16 @@ export function debounce(func, wait, immediate) {
   };
 }
 
-// target: the URL to submit to, Form: the form element, after: optional further action, submitbutton: the button element (optional)
+/**
+ * Submits a modal form via AJAX and handles the response.
+ * Displays validation errors, handles redirects, or reloads content based on response.
+ *
+ * @param {string} target - The URL to submit the form to
+ * @param {HTMLFormElement} Form - The form element to submit
+ * @param {string|null} after - Action after successful submission ('reloadModal', 'reloadPartial', or null for page reload)
+ * @param {HTMLButtonElement} submitbutton - The submit button element (shows spinner during submission)
+ * @returns {void}
+ */
 export const submitModalForm = (target, Form, after, submitbutton) => {
   submitbutton.insertAdjacentHTML(
     "afterbegin",
@@ -107,6 +170,14 @@ export const submitModalForm = (target, Form, after, submitbutton) => {
     });
 };
 
+/**
+ * Processes validation errors from form submission and displays them in the UI.
+ * Marks invalid fields and shows error messages.
+ *
+ * @param {Object} errors - Object containing field names as keys and error messages as values
+ * @param {HTMLFormElement} Form - The form element containing the fields with errors
+ * @returns {void}
+ */
 export const processSubmitErrors = (errors, Form) => {
   Object.entries(errors).forEach(([key, value]) => {
     let inputElt = Form.querySelector('[data-actarget="' + key + '"]');
@@ -123,9 +194,26 @@ export const processSubmitErrors = (errors, Form) => {
   });
 };
 
-// Initialize main functionality
+/**
+ * Initializes the main application functionality.
+ * Sets up event listeners for:
+ * - Modal AJAX loading
+ * - Form submissions
+ * - Click event delegation
+ * - Change events for input fields
+ * - Autocomplete functionality
+ * - Drag-and-drop sorting
+ * - Content-editable fields
+ *
+ * @returns {void}
+ */
 export function initMain() {
   // Ajax fill the opened modal
+  /**
+   * Event handler for Bootstrap modal show event.
+   * Fetches content via AJAX when modal is triggered.
+   * @param {Event} event - Bootstrap modal show event
+   */
   ajaxModal.addEventListener("show.bs.modal", (event) => {
     var modalTrigger = event.relatedTarget;
     contentSrc = modalTrigger.href;
@@ -592,6 +680,15 @@ export function initMain() {
 
   // Autocompletion functionality
   let suggestionSelected = false;
+
+  /**
+   * Handles the selection of an autocomplete suggestion.
+   * Updates the input field and hidden target fields, triggers custom events.
+   *
+   * @param {Object} selectedItem - The selected suggestion object with key, value, and optional prefix
+   * @param {HTMLInputElement} input - The input element that triggered the autocomplete
+   * @returns {void}
+   */
   const handleSelectedItem = function (selectedItem, input) {
     input.setAttribute("data-selected", selectedItem.value);
     const targetName = input.dataset.actarget;
@@ -649,6 +746,15 @@ export function initMain() {
     }
   };
 
+  /**
+   * Handles input events for autocomplete fields.
+   * Fetches suggestions from the server and populates the dropdown.
+   *
+   * @async
+   * @param {HTMLInputElement} input - The input element with autocomplete
+   * @param {HTMLUListElement} dropdown - The dropdown menu element for suggestions
+   * @returns {Promise<void>}
+   */
   const handleInput = async function (input, dropdown) {
     try {
       const url = new URL(
@@ -695,6 +801,13 @@ export function initMain() {
     }
   };
 
+  /**
+   * Attaches autocomplete functionality to an input element.
+   * Creates dropdown, sets up event listeners for keyboard navigation and selection.
+   *
+   * @param {HTMLInputElement} input - The input element to add autocomplete to
+   * @returns {void}
+   */
   const addAutocomplete = function (input) {
     input.setAttribute("data-oldvalue", input.value);
     const dropdown = document.createElement("ul");

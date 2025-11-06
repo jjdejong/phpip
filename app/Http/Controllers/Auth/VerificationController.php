@@ -5,6 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 
+/**
+ * Handles email address verification.
+ *
+ * Uses Laravel's VerifiesEmails trait to verify user email addresses
+ * after registration. Includes middleware for authentication, signed URLs,
+ * and rate limiting.
+ */
 class VerificationController extends Controller
 {
     /*

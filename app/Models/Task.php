@@ -8,52 +8,146 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\HasTranslationsExtended;
 
+/**
+ * Task Model
+ *
+ * Represents reminders, deadlines, and renewals automatically generated from events
+ * based on rules. Tasks are the primary mechanism for deadline management in phpIP.
+ *
+ * Database table: task
+ *
+ * Key relationships:
+ * - Belongs to an event (trigger) that generated the task
+ * - Belongs to a rule that defined the task generation logic
+ * - Has access to matter through the trigger event
+ * - Has event name info describing the task type
+ *
+ * Business logic:
+ * - Tasks are automatically created by rules when events occur
+ * - Tasks can be assigned to specific users or inherit matter responsibility
+ * - Renewal tasks (REN) have special handling for fee calculations
+ * - Tasks automatically touch (update timestamp of) their parent matter
+ * - Task details are translatable (multi-language support)
+ * - Open tasks exclude those from dead matters
+ */
 class Task extends Model
 {
     use HasTranslationsExtended;
 
+    /**
+     * The database table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'task';
 
+    /**
+     * Attributes that should be hidden from serialization.
+     *
+     * @var array<string>
+     */
     protected $hidden = ['creator', 'created_at', 'updated_at', 'updater'];
 
+    /**
+     * Attributes that are not mass assignable.
+     *
+     * @var array<string>
+     */
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    /**
+     * Related models that should be touched when this model is updated.
+     *
+     * Updates the matter's timestamp when a task changes.
+     *
+     * @var array<string>
+     */
     protected $touches = ['matter'];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array<string, string>
+     */
     protected $casts = [
         'due_date' => 'date:Y-m-d',
         'done_date' => 'date:Y-m-d',
     ];
 
-    // Define which attributes are translatable
+    /**
+     * Attributes that support multi-language translations.
+     *
+     * @var array<string>
+     */
     public $translatable = ['detail'];
 
+    /**
+     * Get the event name information for this task.
+     *
+     * Returns the EventName model containing description and classification.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function info()
     {
         return $this->belongsTo(EventName::class, 'code');
     }
 
+    /**
+     * Get the event that triggered (generated) this task.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function trigger()
     {
         return $this->belongsTo(Event::class, 'trigger_id');
     }
 
+    /**
+     * Get the matter associated with this task.
+     *
+     * Uses a has-one-through relationship via the trigger event.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     */
     public function matter()
     {
         return $this->hasOneThrough(Matter::class, Event::class, 'id', 'id', 'trigger_id', 'matter_id');
     }
 
+    /**
+     * Get the rule that was used to generate this task.
+     *
+     * Rules define the logic for automatic task creation from events.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function rule(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Rule::class, 'rule_used', 'id');
     }
 
+    /**
+     * Get open task counts grouped by user.
+     *
+     * Returns a summary of undone tasks for each user/responsible, including:
+     * - Number of open tasks per user
+     * - Most urgent (earliest) due date per user
+     * - User login/identifier
+     *
+     * Respects user role restrictions:
+     * - Clients see only their own matters' tasks
+     * - Can filter by assigned user (what_tasks=1) or client (what_tasks>1)
+     * - Excludes tasks from dead matters
+     *
+     * @return \Illuminate\Support\Collection Collection of task counts by user
+     */
     public static function getUsersOpenTaskCount()
     {
         $userid = Auth::user()->id;
         $role = Auth::user()->default_role;
         $what_tasks = request()->input('what_tasks');
-        
+
         $query = static::with(['matter', 'matter.client'])
             ->where('done', 0)
             ->whereHas('matter', function (Builder $q) {
@@ -90,6 +184,14 @@ class Task extends Model
             ->get();
     }
 
+    /**
+     * Scope query to open tasks.
+     *
+     * Returns tasks that are not done and belong to matters that are not dead.
+     * Eager loads event info, matter titles, and client for efficient querying.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function openTasks()
     {
         return $this->with(['info', 'matter.titles', 'matter.client'])
@@ -99,6 +201,22 @@ class Task extends Model
             });
     }
 
+    /**
+     * Build a comprehensive query for renewal tasks with fees and matter details.
+     *
+     * This complex query joins tasks with their matters, events, actors, and fees to provide
+     * all information needed for renewal management and invoicing. Includes:
+     * - Task and matter details
+     * - Applicant/owner information with small entity status
+     * - Client information for billing
+     * - Fee calculations with various discount scenarios
+     * - Filing, grant, and publication dates
+     * - Multi-language country names and titles
+     *
+     * Used primarily for renewal reports and fee estimation.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder Query builder for renewal tasks
+     */
     public static function renewals()
     {
         // The query is complex but optimized for performance by using joins and raw SQL for some calculations and conditions.

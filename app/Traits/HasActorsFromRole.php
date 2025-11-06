@@ -6,18 +6,24 @@ use App\Models\Actor;
 use App\Models\ActorPivot;
 use App\Models\MatterActors;
 
+/**
+ * Trait for retrieving actors associated with a matter by role.
+ *
+ * Provides helper methods to fetch actors linked to a matter through specific roles
+ * (e.g., client, agent, inventor). Supports both direct actor relationships and
+ * inherited relationships from container matters.
+ */
 trait HasActorsFromRole
 {
     /**
-     * Define a belongsToMany relationship with the Actor model, including container relations.
+     * Get all actors associated with the matter for a specific role.
      *
-     * This method returns a belongsToMany relationship with the actors table,
-     * using the ActorPivot model and including additional pivot fields.
-     * If no relationship exists for the given role, it returns a relationship
-     * with the container actors that are shared.
+     * Retrieves actors filtered by role code, ordered by display order.
+     * The actors() relationship should be defined in the using model and
+     * typically includes both direct and inherited (shared) actor relationships.
      *
-     * @param string $role The role to filter the actors by.
-     * @return
+     * @param string $role The role code to filter actors by (e.g., 'CLI' for client, 'AGT' for agent).
+     * @return \Illuminate\Database\Eloquent\Collection Collection of MatterActors with the specified role.
      */
     public function getActorsFromRole(string $role): \Illuminate\Database\Eloquent\Collection
     {
@@ -29,15 +35,13 @@ trait HasActorsFromRole
     }
 
     /**
-     * Define a one-to-one relationship through a pivot table with a specific role.
+     * Get a single actor associated with the matter for a specific role.
      *
-     * This method returns a hasOneThrough relationship with the actors table,
-     * using the ActorPivot model and filtering by the specified role.
-     * If no relationship exists for the given role, it returns a relationship
-     * with the container actors that are shared.
+     * Convenience method that returns the first actor matching the specified role,
+     * typically used for roles that should have only one actor (e.g., primary client).
      *
-     * @param string $role The role to filter the relationship by.
-     * @return \App\Models\Actor|null The hasOneThrough relationship.
+     * @param string $role The role code to filter by (e.g., 'CLI' for client, 'AGT' for agent).
+     * @return \App\Models\MatterActors|null The first actor with the specified role, or null if none found.
      */
     public function getActorFromRole(string $role): ?MatterActors
     {

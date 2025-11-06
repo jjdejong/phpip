@@ -1,8 +1,31 @@
+/**
+ * Matter Index Page Module
+ *
+ * Provides functionality for the matter list/index page including:
+ * - Filtering by various fields (caseref, title, actors, etc.)
+ * - Sorting by column headers
+ * - Container/responsible filter toggles
+ * - Export functionality
+ * - URL state management with browser history
+ */
+
 import { reloadPart, debounce } from "./main.js";
 
+/**
+ * Initializes the matter index page functionality.
+ * Sets up filtering, sorting, and export controls.
+ *
+ * @returns {void}
+ */
 export function initMatterIndex() {
   const url = new URL(window.location.href);
 
+  /**
+   * Refreshes the matter list with current filter parameters.
+   * Updates URL state and reloads the matter list partial.
+   *
+   * @returns {void}
+   */
   function refreshMatterList() {
     url.searchParams.delete("page");
     window.history.pushState("", "phpIP", url);
