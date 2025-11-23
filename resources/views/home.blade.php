@@ -25,8 +25,8 @@
 
 <div class="row">
   <div class="col-4" id="leftPanels">
-    <div class="card border-info">
-      <div class="card-header text-white bg-info p-1">
+    <div class="card card-compact border-info">
+      <div class="card-header text-white bg-info">
         <span class="lead">{{ __('Categories') }}</span>
         @can('readwrite')
         <a href="/matter/create?operation=new" data-bs-target="#ajaxModal" data-bs-toggle="modal" data-size="modal-sm" class="btn btn-primary float-end" title="{{ __('Create Matter') }}">{{ __('Create matter') }}</a>
@@ -63,8 +63,8 @@
         </table>
       </div>
     </div>
-    <div class="card border-info mt-1">
-      <div class="card-header text-white bg-info p-1">
+    <div class="card card-compact border-info mt-2">
+      <div class="card-header text-white bg-info">
         <span class="lead">{{ __('Users tasks') }}</span>
         @can('readwrite')
         <button class="btn btn-transparent text-info float-end" disabled>I</button> {{--  This invisible button is only for improving the layout! --}}
@@ -103,8 +103,8 @@
     </div>
   </div>
   <div class="col-8" id="filter" x-data="{ selectedTask: '0' }">
-    <div class="card border-primary">
-      <div class="card-header text-white bg-primary p-1">
+    <div class="card card-compact border-primary">
+      <div class="card-header text-white bg-primary">
         <form class="row">
           <div class="lead col-2">
             {{ __('Open tasks') }}
@@ -162,8 +162,8 @@
         {{-- Placeholder --}}
       </div>
     </div>
-    <div class="card border-primary mt-1">
-      <div class="card-header text-white bg-primary p-1">
+    <div class="card card-compact border-primary mt-2">
+      <div class="card-header text-white bg-primary">
         <div class="row">
           <div class="lead col-8">
             {{ __('Open renewals') }}

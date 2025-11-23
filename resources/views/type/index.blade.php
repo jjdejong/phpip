@@ -1,10 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
-  {{ __('Matter Types') }}
-  <a href="type/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="{{ __('Type') }}" data-resource="/type/">{{ __('Create Matter Type') }}</a>
-</legend>
+<div class="page-header">
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="h4 mb-0">{{ __('Matter Types') }}</h1>
+    <div class="page-actions">
+      <a href="type/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="{{ __('Type') }}" data-resource="/type/">
+        <svg width="14" height="14" fill="currentColor" class="me-1">
+          <use xlink:href="#plus-circle-fill"/>
+        </svg>
+        {{ __('Create Matter Type') }}
+      </a>
+    </div>
+  </div>
+</div>
 <div class="row">
   <div class="col">
     <div class="card border-primary p-1" style="max-height: 640px; overflow: auto;">

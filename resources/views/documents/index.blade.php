@@ -1,10 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
-  {{ __('Email Template Classes') }}
-  <a href="document/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="{{ __('Document class') }}" data-source="/document" data-resource="/document/create/">{{ __('Create Email Template Class') }}</a>
-</legend>
+<div class="page-header">
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="h4 mb-0">{{ __('Email Template Classes') }}</h1>
+    <div class="page-actions">
+      <a href="document/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="{{ __('Document class') }}" data-source="/document" data-resource="/document/create/">
+        <svg width="14" height="14" fill="currentColor" class="me-1">
+          <use xlink:href="#envelope-plus"/>
+        </svg>
+        {{ __('Create Email Template Class') }}
+      </a>
+    </div>
+  </div>
+</div>
 <div class="row">
   <div class="col">
     <div class="card border-primar p-1">

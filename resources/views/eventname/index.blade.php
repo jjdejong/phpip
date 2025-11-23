@@ -1,10 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
-  {{ __('Event Names') }}
-  <a href="eventname/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="{{ __('Event name') }}" data-resource="/eventname/">{{ __('Create Event Name') }}</a>
-</legend>
+<div class="page-header">
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="h4 mb-0">{{ __('Event Names') }}</h1>
+    <div class="page-actions">
+      <a href="eventname/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="{{ __('Event name') }}" data-resource="/eventname/">
+        <svg width="14" height="14" fill="currentColor" class="me-1">
+          <use xlink:href="#plus-circle-fill"/>
+        </svg>
+        {{ __('Create Event Name') }}
+      </a>
+    </div>
+  </div>
+</div>
 <div class="row">
   <div class="col">
     <div class="card border-primary p-1" style="max-height: 640px; overflow: auto;">

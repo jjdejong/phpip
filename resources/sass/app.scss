@@ -51,3 +51,161 @@ a:not(.nav-link):not(.btn):not(.dropdown-item):hover {
     display: inline;
     box-shadow: none;
 }
+
+// ============================================================================
+// Phase 1 UI Enhancements - Spacing, Cards, Forms
+// ============================================================================
+
+// Spacing Standards
+// ----------------------------------------------------------------------------
+
+// Page-level spacing
+.page-container {
+  padding: 1rem; // 16px
+}
+
+// Card spacing variants
+.card {
+  margin-bottom: 1rem;
+  transition: box-shadow 0.3s ease-in-out;
+
+  .card-header {
+    padding: 0.5rem; // 8px - compact headers
+  }
+
+  .card-body {
+    padding: 0.75rem; // 12px - standard body
+  }
+
+  &.card-compact {
+    .card-header {
+      padding: 0.5rem;
+    }
+    .card-body {
+      padding: 0.5rem; // 8px - ultra-compact
+    }
+  }
+
+  // Hover effect for interactive cards
+  &:hover {
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+  }
+}
+
+// Card elevation variants
+.card-elevated {
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.08);
+}
+
+.card-elevated-lg {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+// Row gaps
+.row-compact {
+  gap: 0.5rem; // 8px
+}
+
+.row-standard {
+  gap: 1rem; // 16px
+}
+
+// Status Colors & Semantic Utilities
+// ----------------------------------------------------------------------------
+
+$success-light: #d4edda;
+$warning-light: #fff3cd;
+$danger-light: #f8d7da;
+$info-light: #d1ecf1;
+
+// Background utilities
+.bg-success-light { background-color: $success-light; }
+.bg-warning-light { background-color: $warning-light; }
+.bg-danger-light { background-color: $danger-light; }
+.bg-info-light { background-color: $info-light; }
+
+// Border utilities
+.border-success-light { border-color: $success-light !important; }
+.border-warning-light { border-color: $warning-light !important; }
+.border-danger-light { border-color: $danger-light !important; }
+.border-info-light { border-color: $info-light !important; }
+
+// Modern Form Enhancements
+// ----------------------------------------------------------------------------
+
+// Enhanced focus states
+.form-control:focus,
+.form-select:focus {
+  border-color: #618faa;
+  box-shadow: 0 0 0 0.2rem rgba(97, 143, 170, 0.25);
+}
+
+// Filled input indicator (enhanced existing pattern)
+input:not(:placeholder-shown) {
+  border-color: rgb(0, 190, 190);
+  font-weight: bold;
+  background-color: rgba(0, 190, 190, 0.05);
+}
+
+// Table Enhancements
+// ----------------------------------------------------------------------------
+
+// Responsive table wrapper
+.table-responsive-custom {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  @media (max-width: 768px) {
+    .table {
+      font-size: 0.75rem;
+    }
+  }
+}
+
+// Sticky table headers
+.table-sticky-header {
+  thead th {
+    position: sticky;
+    top: 0;
+    background-color: var(--bs-primary);
+    z-index: 10;
+  }
+}
+
+// Loading States
+// ----------------------------------------------------------------------------
+
+.spinner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+// Page Header Component
+// ----------------------------------------------------------------------------
+
+.page-header {
+  background-color: #fff;
+  border-bottom: 1px solid #dee2e6;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+
+  h1, .h1 {
+    margin-bottom: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .page-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
