@@ -123,34 +123,49 @@ return new class extends Migration
         }
 
         // Step 6: Recreate all triggers with new collation
-        // Get all triggers
         $triggers = DB::select("SELECT TRIGGER_NAME, EVENT_MANIPULATION, EVENT_OBJECT_TABLE FROM information_schema.TRIGGERS WHERE TRIGGER_SCHEMA = '{$database}'");
 
-        // Store trigger definitions before dropping
-        $triggerDefinitions = [];
-        foreach ($triggers as $trigger) {
-            $result = DB::select("SHOW CREATE TRIGGER `{$trigger->TRIGGER_NAME}`");
-            $triggerDefinitions[$trigger->TRIGGER_NAME] = $result[0]->{'SQL Original Statement'};
-        }
+        if (!empty($triggers)) {
+            // MySQL requires SUPER privilege (or log_bin_trust_function_creators=1) to CREATE TRIGGER
+            // when binary logging is enabled. Try to enable it; if we can't, leave triggers untouched.
+            $canRecreateTriggers = false;
+            try {
+                DB::statement('SET GLOBAL log_bin_trust_function_creators = 1');
+                $canRecreateTriggers = true;
+            } catch (\Exception $e) {
+                echo "[WARNING] Cannot set log_bin_trust_function_creators=1 (requires SUPER privilege). "
+                    . "Trigger recreation skipped — triggers remain with old collation. "
+                    . "To fix, ask a DBA to run: SET GLOBAL log_bin_trust_function_creators = 1, "
+                    . "then roll back and re-run this migration.\n";
+            }
 
-        // Drop all triggers
-        foreach ($triggers as $trigger) {
-            DB::statement("DROP TRIGGER IF EXISTS `{$trigger->TRIGGER_NAME}`");
-        }
+            if ($canRecreateTriggers) {
+                // Store trigger definitions before dropping
+                $triggerDefinitions = [];
+                foreach ($triggers as $trigger) {
+                    $result = DB::select("SHOW CREATE TRIGGER `{$trigger->TRIGGER_NAME}`");
+                    $triggerDefinitions[$trigger->TRIGGER_NAME] = $result[0]->{'SQL Original Statement'};
+                }
 
-        // Recreate triggers with new collation
-        DB::statement('SET character_set_client = utf8mb4');
-        DB::statement('SET collation_connection = utf8mb4_0900_ai_ci');
+                // Drop all triggers
+                foreach ($triggers as $trigger) {
+                    DB::statement("DROP TRIGGER IF EXISTS `{$trigger->TRIGGER_NAME}`");
+                }
 
-        foreach ($triggerDefinitions as $name => $definition) {
-            // Remove DEFINER clause if it causes issues
-            $definition = preg_replace('/DEFINER\s*=\s*`[^`]+`@`[^`]+`/i', '', $definition);
-            $definition = trim($definition);
-            if (!empty($definition)) {
-                DB::unprepared($definition);
-                echo "Recreated trigger: {$name}\n";
-            } else {
-                echo "WARNING: Empty definition for trigger: {$name}\n";
+                // Recreate triggers with new collation
+                DB::statement('SET character_set_client = utf8mb4');
+                DB::statement('SET collation_connection = utf8mb4_0900_ai_ci');
+
+                foreach ($triggerDefinitions as $name => $definition) {
+                    $definition = preg_replace('/DEFINER\s*=\s*`[^`]+`@`[^`]+`/i', '', $definition);
+                    $definition = trim($definition);
+                    if (!empty($definition)) {
+                        DB::unprepared($definition);
+                        echo "Recreated trigger: {$name}\n";
+                    } else {
+                        echo "WARNING: Empty definition for trigger: {$name}\n";
+                    }
+                }
             }
         }
 
