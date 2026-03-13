@@ -122,24 +122,25 @@ return new class extends Migration
             }
         }
 
+        // Steps 6 & 7: Recreate triggers and stored procedures/functions with new collation.
+        // MySQL requires SUPER privilege (or log_bin_trust_function_creators=1) to CREATE
+        // TRIGGER/FUNCTION/PROCEDURE when binary logging is enabled. Try once here for both steps.
+        $canRecreateStoredObjects = false;
+        try {
+            DB::statement('SET GLOBAL log_bin_trust_function_creators = 1');
+            $canRecreateStoredObjects = true;
+        } catch (\Exception $e) {
+            echo "[WARNING] Cannot set log_bin_trust_function_creators=1 (requires SUPER privilege). "
+                . "Trigger and stored routine recreation skipped — they remain with old collation. "
+                . "To fix, ask a DBA to run: SET GLOBAL log_bin_trust_function_creators = 1, "
+                . "then roll back and re-run this migration.\n";
+        }
+
         // Step 6: Recreate all triggers with new collation
-        $triggers = DB::select("SELECT TRIGGER_NAME, EVENT_MANIPULATION, EVENT_OBJECT_TABLE FROM information_schema.TRIGGERS WHERE TRIGGER_SCHEMA = '{$database}'");
+        if ($canRecreateStoredObjects) {
+            $triggers = DB::select("SELECT TRIGGER_NAME, EVENT_MANIPULATION, EVENT_OBJECT_TABLE FROM information_schema.TRIGGERS WHERE TRIGGER_SCHEMA = '{$database}'");
 
-        if (!empty($triggers)) {
-            // MySQL requires SUPER privilege (or log_bin_trust_function_creators=1) to CREATE TRIGGER
-            // when binary logging is enabled. Try to enable it; if we can't, leave triggers untouched.
-            $canRecreateTriggers = false;
-            try {
-                DB::statement('SET GLOBAL log_bin_trust_function_creators = 1');
-                $canRecreateTriggers = true;
-            } catch (\Exception $e) {
-                echo "[WARNING] Cannot set log_bin_trust_function_creators=1 (requires SUPER privilege). "
-                    . "Trigger recreation skipped — triggers remain with old collation. "
-                    . "To fix, ask a DBA to run: SET GLOBAL log_bin_trust_function_creators = 1, "
-                    . "then roll back and re-run this migration.\n";
-            }
-
-            if ($canRecreateTriggers) {
+            if (!empty($triggers)) {
                 // Store trigger definitions before dropping
                 $triggerDefinitions = [];
                 foreach ($triggers as $trigger) {
@@ -170,34 +171,36 @@ return new class extends Migration
         }
 
         // Step 7: Recreate stored procedures and functions
-        $procedures = DB::select("SELECT ROUTINE_NAME, ROUTINE_TYPE FROM information_schema.ROUTINES WHERE ROUTINE_SCHEMA = '{$database}'");
+        if ($canRecreateStoredObjects) {
+            $procedures = DB::select("SELECT ROUTINE_NAME, ROUTINE_TYPE FROM information_schema.ROUTINES WHERE ROUTINE_SCHEMA = '{$database}'");
 
-        $routineDefinitions = [];
-        foreach ($procedures as $procedure) {
-            $type = $procedure->ROUTINE_TYPE;
-            $name = $procedure->ROUTINE_NAME;
+            $routineDefinitions = [];
+            foreach ($procedures as $procedure) {
+                $type = $procedure->ROUTINE_TYPE;
+                $name = $procedure->ROUTINE_NAME;
 
-            if ($type === 'PROCEDURE') {
-                $result = DB::select("SHOW CREATE PROCEDURE `{$name}`");
-                $routineDefinitions[$name] = ['type' => 'PROCEDURE', 'sql' => $result[0]->{'Create Procedure'}];
-            } else {
-                $result = DB::select("SHOW CREATE FUNCTION `{$name}`");
-                $routineDefinitions[$name] = ['type' => 'FUNCTION', 'sql' => $result[0]->{'Create Function'}];
+                if ($type === 'PROCEDURE') {
+                    $result = DB::select("SHOW CREATE PROCEDURE `{$name}`");
+                    $routineDefinitions[$name] = ['type' => 'PROCEDURE', 'sql' => $result[0]->{'Create Procedure'}];
+                } else {
+                    $result = DB::select("SHOW CREATE FUNCTION `{$name}`");
+                    $routineDefinitions[$name] = ['type' => 'FUNCTION', 'sql' => $result[0]->{'Create Function'}];
+                }
             }
-        }
 
-        // Drop and recreate routines
-        foreach ($routineDefinitions as $name => $routine) {
-            DB::statement("DROP {$routine['type']} IF EXISTS `{$name}`");
+            // Drop and recreate routines
+            foreach ($routineDefinitions as $name => $routine) {
+                DB::statement("DROP {$routine['type']} IF EXISTS `{$name}`");
 
-            // Remove DEFINER clause
-            $sql = preg_replace('/DEFINER\s*=\s*`[^`]+`@`[^`]+`/i', '', $routine['sql']);
-            $sql = trim($sql);
-            if (!empty($sql)) {
-                DB::unprepared($sql);
-                echo "Recreated {$routine['type']}: {$name}\n";
-            } else {
-                echo "WARNING: Empty definition for {$routine['type']}: {$name}\n";
+                // Remove DEFINER clause
+                $sql = preg_replace('/DEFINER\s*=\s*`[^`]+`@`[^`]+`/i', '', $routine['sql']);
+                $sql = trim($sql);
+                if (!empty($sql)) {
+                    DB::unprepared($sql);
+                    echo "Recreated {$routine['type']}: {$name}\n";
+                } else {
+                    echo "WARNING: Empty definition for {$routine['type']}: {$name}\n";
+                }
             }
         }
     }
