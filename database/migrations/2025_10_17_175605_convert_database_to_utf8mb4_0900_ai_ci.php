@@ -61,17 +61,64 @@ return new class extends Migration
                     ON DELETE {$fk->DELETE_RULE}
                 ");
             } catch (\Exception $e) {
-                // Print orphaned rows to help diagnose the referential integrity violation
+                // Find all orphaned rows for this FK
                 $orphans = DB::select("
-                    SELECT c.`{$fk->COLUMN_NAME}`
+                    SELECT c.`{$fk->COLUMN_NAME}` AS orphan_value
                     FROM `{$fk->TABLE_NAME}` c
                     LEFT JOIN `{$fk->REFERENCED_TABLE_NAME}` p
                         ON c.`{$fk->COLUMN_NAME}` = p.`{$fk->REFERENCED_COLUMN_NAME}`
                     WHERE p.`{$fk->REFERENCED_COLUMN_NAME}` IS NULL
-                    LIMIT 20
+                      AND c.`{$fk->COLUMN_NAME}` IS NOT NULL
                 ");
-                echo "ORPHANED ROWS in {$fk->TABLE_NAME}.{$fk->COLUMN_NAME}: " . json_encode($orphans) . "\n";
-                throw $e;
+
+                if (empty($orphans)) {
+                    throw $e; // Not an orphan issue — surface the original error
+                }
+
+                // Check whether the child column allows NULLs
+                $colInfo = DB::selectOne("
+                    SELECT IS_NULLABLE
+                    FROM information_schema.COLUMNS
+                    WHERE TABLE_SCHEMA = DATABASE()
+                      AND TABLE_NAME   = ?
+                      AND COLUMN_NAME  = ?
+                ", [$fk->TABLE_NAME, $fk->COLUMN_NAME]);
+
+                $isNullable = $colInfo && $colInfo->IS_NULLABLE === 'YES';
+                $orphanValues = implode(', ', array_column($orphans, 'orphan_value'));
+
+                if ($isNullable) {
+                    // Safe fix: NULL out the orphaned references, then retry
+                    DB::statement("
+                        UPDATE `{$fk->TABLE_NAME}` c
+                        LEFT JOIN `{$fk->REFERENCED_TABLE_NAME}` p
+                            ON c.`{$fk->COLUMN_NAME}` = p.`{$fk->REFERENCED_COLUMN_NAME}`
+                        SET c.`{$fk->COLUMN_NAME}` = NULL
+                        WHERE p.`{$fk->REFERENCED_COLUMN_NAME}` IS NULL
+                          AND c.`{$fk->COLUMN_NAME}` IS NOT NULL
+                    ");
+                    echo "[INFO] {$fk->TABLE_NAME}.{$fk->COLUMN_NAME}: "
+                        . count($orphans) . " orphan(s) set to NULL (orphaned values were: {$orphanValues})\n";
+
+                    // Retry adding the FK now that orphans are resolved
+                    DB::statement("
+                        ALTER TABLE `{$fk->TABLE_NAME}`
+                        ADD CONSTRAINT `{$fk->CONSTRAINT_NAME}`
+                        FOREIGN KEY (`{$fk->COLUMN_NAME}`)
+                        REFERENCES `{$fk->REFERENCED_TABLE_NAME}` (`{$fk->REFERENCED_COLUMN_NAME}`)
+                        ON UPDATE {$fk->UPDATE_RULE}
+                        ON DELETE {$fk->DELETE_RULE}
+                    ");
+                } else {
+                    // Column is NOT NULL — cannot auto-fix safely, refuse and explain
+                    echo "[ERROR] {$fk->TABLE_NAME}.{$fk->COLUMN_NAME} → "
+                        . "{$fk->REFERENCED_TABLE_NAME}.{$fk->REFERENCED_COLUMN_NAME}: "
+                        . count($orphans) . " orphan(s) found but column is NOT NULL — cannot auto-fix.\n"
+                        . "  Orphaned values: {$orphanValues}\n"
+                        . "  Manual options: (a) delete these rows, (b) insert the missing parent rows, "
+                        . "or (c) alter the column to allow NULLs first.\n";
+                    throw $e;
+                }
             }
         }
 
