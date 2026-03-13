@@ -51,14 +51,28 @@ return new class extends Migration
         // Step 5: Recreate all foreign keys
         foreach ($foreignKeys as $fk) {
             echo "Recreating FK: {$fk->CONSTRAINT_NAME} on {$fk->TABLE_NAME}\n";
-            DB::statement("
-                ALTER TABLE `{$fk->TABLE_NAME}`
-                ADD CONSTRAINT `{$fk->CONSTRAINT_NAME}`
-                FOREIGN KEY (`{$fk->COLUMN_NAME}`)
-                REFERENCES `{$fk->REFERENCED_TABLE_NAME}` (`{$fk->REFERENCED_COLUMN_NAME}`)
-                ON UPDATE {$fk->UPDATE_RULE}
-                ON DELETE {$fk->DELETE_RULE}
-            ");
+            try {
+                DB::statement("
+                    ALTER TABLE `{$fk->TABLE_NAME}`
+                    ADD CONSTRAINT `{$fk->CONSTRAINT_NAME}`
+                    FOREIGN KEY (`{$fk->COLUMN_NAME}`)
+                    REFERENCES `{$fk->REFERENCED_TABLE_NAME}` (`{$fk->REFERENCED_COLUMN_NAME}`)
+                    ON UPDATE {$fk->UPDATE_RULE}
+                    ON DELETE {$fk->DELETE_RULE}
+                ");
+            } catch (\Exception $e) {
+                // Print orphaned rows to help diagnose the referential integrity violation
+                $orphans = DB::select("
+                    SELECT c.`{$fk->COLUMN_NAME}`
+                    FROM `{$fk->TABLE_NAME}` c
+                    LEFT JOIN `{$fk->REFERENCED_TABLE_NAME}` p
+                        ON c.`{$fk->COLUMN_NAME}` = p.`{$fk->REFERENCED_COLUMN_NAME}`
+                    WHERE p.`{$fk->REFERENCED_COLUMN_NAME}` IS NULL
+                    LIMIT 20
+                ");
+                echo "ORPHANED ROWS in {$fk->TABLE_NAME}.{$fk->COLUMN_NAME}: " . json_encode($orphans) . "\n";
+                throw $e;
+            }
         }
 
         // Step 6: Recreate all triggers with new collation
