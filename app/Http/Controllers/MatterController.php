@@ -316,7 +316,9 @@ class MatterController extends Controller
             // Copy shared events from original matter
             $new_matter->priority()->createMany($parent_matter->priority->toArray());
             //$new_matter->parentFiling()->createMany($parent_matter->parentFiling->toArray());
-            $new_matter->filing()->save($parent_matter->filing->replicate());
+            if ($parent_matter->filing->exists) {
+                $new_matter->filing()->save($parent_matter->filing->replicate());
+            }
             if ($parent_matter->publication()->exists()) {
                 $new_matter->publication()->save($parent_matter->publication->replicate());
             }
