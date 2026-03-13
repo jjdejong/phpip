@@ -51,45 +51,121 @@ return new class extends Migration
         // Step 5: Recreate all foreign keys
         foreach ($foreignKeys as $fk) {
             echo "Recreating FK: {$fk->CONSTRAINT_NAME} on {$fk->TABLE_NAME}\n";
-            DB::statement("
-                ALTER TABLE `{$fk->TABLE_NAME}`
-                ADD CONSTRAINT `{$fk->CONSTRAINT_NAME}`
-                FOREIGN KEY (`{$fk->COLUMN_NAME}`)
-                REFERENCES `{$fk->REFERENCED_TABLE_NAME}` (`{$fk->REFERENCED_COLUMN_NAME}`)
-                ON UPDATE {$fk->UPDATE_RULE}
-                ON DELETE {$fk->DELETE_RULE}
-            ");
+            try {
+                DB::statement("
+                    ALTER TABLE `{$fk->TABLE_NAME}`
+                    ADD CONSTRAINT `{$fk->CONSTRAINT_NAME}`
+                    FOREIGN KEY (`{$fk->COLUMN_NAME}`)
+                    REFERENCES `{$fk->REFERENCED_TABLE_NAME}` (`{$fk->REFERENCED_COLUMN_NAME}`)
+                    ON UPDATE {$fk->UPDATE_RULE}
+                    ON DELETE {$fk->DELETE_RULE}
+                ");
+            } catch (\Exception $e) {
+                // Find all orphaned rows for this FK
+                $orphans = DB::select("
+                    SELECT c.`{$fk->COLUMN_NAME}` AS orphan_value
+                    FROM `{$fk->TABLE_NAME}` c
+                    LEFT JOIN `{$fk->REFERENCED_TABLE_NAME}` p
+                        ON c.`{$fk->COLUMN_NAME}` = p.`{$fk->REFERENCED_COLUMN_NAME}`
+                    WHERE p.`{$fk->REFERENCED_COLUMN_NAME}` IS NULL
+                      AND c.`{$fk->COLUMN_NAME}` IS NOT NULL
+                ");
+
+                if (empty($orphans)) {
+                    throw $e; // Not an orphan issue — surface the original error
+                }
+
+                // Check whether the child column allows NULLs
+                $colInfo = DB::selectOne("
+                    SELECT IS_NULLABLE
+                    FROM information_schema.COLUMNS
+                    WHERE TABLE_SCHEMA = DATABASE()
+                      AND TABLE_NAME   = ?
+                      AND COLUMN_NAME  = ?
+                ", [$fk->TABLE_NAME, $fk->COLUMN_NAME]);
+
+                $isNullable = $colInfo && $colInfo->IS_NULLABLE === 'YES';
+                $orphanValues = implode(', ', array_column($orphans, 'orphan_value'));
+
+                if ($isNullable) {
+                    // Safe fix: NULL out the orphaned references, then retry
+                    DB::statement("
+                        UPDATE `{$fk->TABLE_NAME}` c
+                        LEFT JOIN `{$fk->REFERENCED_TABLE_NAME}` p
+                            ON c.`{$fk->COLUMN_NAME}` = p.`{$fk->REFERENCED_COLUMN_NAME}`
+                        SET c.`{$fk->COLUMN_NAME}` = NULL
+                        WHERE p.`{$fk->REFERENCED_COLUMN_NAME}` IS NULL
+                          AND c.`{$fk->COLUMN_NAME}` IS NOT NULL
+                    ");
+                    echo "[INFO] {$fk->TABLE_NAME}.{$fk->COLUMN_NAME}: "
+                        . count($orphans) . " orphan(s) set to NULL (orphaned values were: {$orphanValues})\n";
+
+                    // Retry adding the FK now that orphans are resolved
+                    DB::statement("
+                        ALTER TABLE `{$fk->TABLE_NAME}`
+                        ADD CONSTRAINT `{$fk->CONSTRAINT_NAME}`
+                        FOREIGN KEY (`{$fk->COLUMN_NAME}`)
+                        REFERENCES `{$fk->REFERENCED_TABLE_NAME}` (`{$fk->REFERENCED_COLUMN_NAME}`)
+                        ON UPDATE {$fk->UPDATE_RULE}
+                        ON DELETE {$fk->DELETE_RULE}
+                    ");
+                } else {
+                    // Column is NOT NULL — cannot auto-fix safely, refuse and explain
+                    echo "[ERROR] {$fk->TABLE_NAME}.{$fk->COLUMN_NAME} → "
+                        . "{$fk->REFERENCED_TABLE_NAME}.{$fk->REFERENCED_COLUMN_NAME}: "
+                        . count($orphans) . " orphan(s) found but column is NOT NULL — cannot auto-fix.\n"
+                        . "  Orphaned values: {$orphanValues}\n"
+                        . "  Manual options: (a) delete these rows, (b) insert the missing parent rows, "
+                        . "or (c) alter the column to allow NULLs first.\n";
+                    throw $e;
+                }
+            }
         }
 
         // Step 6: Recreate all triggers with new collation
-        // Get all triggers
         $triggers = DB::select("SELECT TRIGGER_NAME, EVENT_MANIPULATION, EVENT_OBJECT_TABLE FROM information_schema.TRIGGERS WHERE TRIGGER_SCHEMA = '{$database}'");
 
-        // Store trigger definitions before dropping
-        $triggerDefinitions = [];
-        foreach ($triggers as $trigger) {
-            $result = DB::select("SHOW CREATE TRIGGER `{$trigger->TRIGGER_NAME}`");
-            $triggerDefinitions[$trigger->TRIGGER_NAME] = $result[0]->{'SQL Original Statement'};
-        }
+        if (!empty($triggers)) {
+            // MySQL requires SUPER privilege (or log_bin_trust_function_creators=1) to CREATE TRIGGER
+            // when binary logging is enabled. Try to enable it; if we can't, leave triggers untouched.
+            $canRecreateTriggers = false;
+            try {
+                DB::statement('SET GLOBAL log_bin_trust_function_creators = 1');
+                $canRecreateTriggers = true;
+            } catch (\Exception $e) {
+                echo "[WARNING] Cannot set log_bin_trust_function_creators=1 (requires SUPER privilege). "
+                    . "Trigger recreation skipped — triggers remain with old collation. "
+                    . "To fix, ask a DBA to run: SET GLOBAL log_bin_trust_function_creators = 1, "
+                    . "then roll back and re-run this migration.\n";
+            }
 
-        // Drop all triggers
-        foreach ($triggers as $trigger) {
-            DB::statement("DROP TRIGGER IF EXISTS `{$trigger->TRIGGER_NAME}`");
-        }
+            if ($canRecreateTriggers) {
+                // Store trigger definitions before dropping
+                $triggerDefinitions = [];
+                foreach ($triggers as $trigger) {
+                    $result = DB::select("SHOW CREATE TRIGGER `{$trigger->TRIGGER_NAME}`");
+                    $triggerDefinitions[$trigger->TRIGGER_NAME] = $result[0]->{'SQL Original Statement'};
+                }
 
-        // Recreate triggers with new collation
-        DB::statement('SET character_set_client = utf8mb4');
-        DB::statement('SET collation_connection = utf8mb4_0900_ai_ci');
+                // Drop all triggers
+                foreach ($triggers as $trigger) {
+                    DB::statement("DROP TRIGGER IF EXISTS `{$trigger->TRIGGER_NAME}`");
+                }
 
-        foreach ($triggerDefinitions as $name => $definition) {
-            // Remove DEFINER clause if it causes issues
-            $definition = preg_replace('/DEFINER\s*=\s*`[^`]+`@`[^`]+`/i', '', $definition);
-            $definition = trim($definition);
-            if (!empty($definition)) {
-                DB::unprepared($definition);
-                echo "Recreated trigger: {$name}\n";
-            } else {
-                echo "WARNING: Empty definition for trigger: {$name}\n";
+                // Recreate triggers with new collation
+                DB::statement('SET character_set_client = utf8mb4');
+                DB::statement('SET collation_connection = utf8mb4_0900_ai_ci');
+
+                foreach ($triggerDefinitions as $name => $definition) {
+                    $definition = preg_replace('/DEFINER\s*=\s*`[^`]+`@`[^`]+`/i', '', $definition);
+                    $definition = trim($definition);
+                    if (!empty($definition)) {
+                        DB::unprepared($definition);
+                        echo "Recreated trigger: {$name}\n";
+                    } else {
+                        echo "WARNING: Empty definition for trigger: {$name}\n";
+                    }
+                }
             }
         }
 
