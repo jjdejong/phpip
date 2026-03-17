@@ -7,7 +7,7 @@
 	<input type="hidden" name="parent_id" value="{{ $parent_matter->id }}" />
 	<input type="hidden" name="responsible" value="{{ $parent_matter->responsible }}" />
 	<div id="ncountries">
-		@foreach( $parent_matter->countryInfo->natcountries as $iso => $name )
+		@foreach( $parent_matter->countryInfo?->natcountries ?? [] as $iso => $name )
 		<div class="input-group" id="country-{{ $iso }}">
 			<input type="hidden" name="ncountry[]" value="{{ $iso }}" />
 			<input type="text" class="form-control" readonly value="{{ $name }}" />
