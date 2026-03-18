@@ -31,7 +31,7 @@
       <td colspan="{{ $ncols }}">
         <ul class="list-inline my-1">
           <li class="list-inline-item">{{ $event->info->name }}</li>
-          <li class="list-inline-item">{{ $event->event_date->isoFormat('L') }}</li>
+          <li class="list-inline-item">{{ $event->event_date?->isoFormat('L') }}</li>
           @can('readwrite')
           <span class="hidden-action float-end">
             <li class="list-inline-item">
@@ -70,7 +70,7 @@
         <span class="ms-2">{{ $task->info->name }}</span>
         <span data-name="detail" contenteditable>{{ $task->detail ?: '--' }}</span>
       </td>
-      <td><input type="text" class="form-control noformat  {{ $task->done ? 'text-success' : 'text-danger' }}" name="due_date" value="{{ $task->due_date->isoFormat('L') }}"></td>
+      <td><input type="text" class="form-control noformat  {{ $task->done ? 'text-success' : 'text-danger' }}" name="due_date" value="{{ $task->due_date?->isoFormat('L') }}"></td>
       <td><input type="checkbox" class="noformat" name="done" {{ $task->done ? 'checked' : '' }}></td>
       <td><input type="text" class="form-control noformat text-success" name="done_date" value="{{ empty($task->done_date) ? '' : $task->done_date->isoFormat('L') }}"></td>
       @can('readonly')
