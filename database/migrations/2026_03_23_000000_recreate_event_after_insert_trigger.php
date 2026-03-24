@@ -15,17 +15,16 @@ return new class extends Migration
     public function up(): void
     {
         // MySQL requires log_bin_trust_function_creators (or SUPER) to create
-        // triggers when binary logging is enabled. Try to set it; if we cannot,
-        // bail out with a clear warning rather than dropping the trigger and
-        // leaving the database in a broken state.
+        // triggers when binary logging is enabled. SET GLOBAL must go through
+        // exec() rather than prepare()/execute() to avoid a COM_STMT_PREPARE
+        // protocol error. This is best-effort: if binary logging is off the
+        // trigger can be created without it, so we warn and continue rather
+        // than aborting.
         try {
-            DB::statement('SET GLOBAL log_bin_trust_function_creators = 1');
+            DB::getPdo()->exec('SET GLOBAL log_bin_trust_function_creators = 1');
         } catch (\Exception $e) {
-            echo "[WARNING] Cannot set log_bin_trust_function_creators=1: " . $e->getMessage() . "\n"
-                . "  The event_after_insert trigger could not be recreated.\n"
-                . "  Ask a DBA to grant the required privilege and re-run this migration,\n"
-                . "  or create the trigger manually using the SQL in database/schema/mysql-schema.sql.\n";
-            return;
+            echo "[WARNING] Could not set log_bin_trust_function_creators=1: " . $e->getMessage() . "\n"
+                . "  Attempting to create the trigger anyway (succeeds when binary logging is disabled).\n";
         }
 
         DB::statement('DROP TRIGGER IF EXISTS `event_after_insert`');
