@@ -17,17 +17,29 @@ return new class extends Migration
         // MySQL requires log_bin_trust_function_creators (or SUPER) to create
         // triggers when binary logging is enabled. SET GLOBAL must go through
         // exec() rather than prepare()/execute() to avoid a COM_STMT_PREPARE
-        // protocol error. This is best-effort: if binary logging is off the
-        // trigger can be created without it, so we warn and continue rather
-        // than aborting.
+        // protocol error.
+        //
+        // IMPORTANT: we only DROP the existing trigger after confirming we can
+        // set the global variable (i.e. we have the privilege to recreate it).
+        // If binary logging is off, the trigger can be created without the
+        // variable — in that case $privilegeGranted stays false but we still
+        // attempt the CREATE (skipping the DROP so nothing is lost on failure).
+        $privilegeGranted = false;
         try {
             DB::getPdo()->exec('SET GLOBAL log_bin_trust_function_creators = 1');
+            $privilegeGranted = true;
         } catch (\Exception $e) {
             echo "[WARNING] Could not set log_bin_trust_function_creators=1: " . $e->getMessage() . "\n"
-                . "  Attempting to create the trigger anyway (succeeds when binary logging is disabled).\n";
+                . "  Attempting to create the trigger without it (works when binary logging is disabled).\n"
+                . "  If creation fails below, ask a DBA to run:\n"
+                . "    SET GLOBAL log_bin_trust_function_creators = 1;\n"
+                . "  then roll back and re-run this migration.\n";
         }
 
-        DB::statement('DROP TRIGGER IF EXISTS `event_after_insert`');
+        // Only drop the trigger once we know we can recreate it.
+        if ($privilegeGranted) {
+            DB::statement('DROP TRIGGER IF EXISTS `event_after_insert`');
+        }
 
         try {
             DB::unprepared("
@@ -179,10 +191,19 @@ return new class extends Migration
 
             echo "Recreated trigger: event_after_insert\n";
         } catch (\Exception $e) {
-            echo "[ERROR] The event_after_insert trigger was dropped but could not be recreated: " . $e->getMessage() . "\n"
-                . "  Rules will NOT fire automatically when events are created until this is fixed.\n"
-                . "  To fix manually, ask a DBA to run the CREATE TRIGGER statement\n"
-                . "  found in database/schema/mysql-schema.sql (around line 282).\n";
+            if ($privilegeGranted) {
+                echo "[ERROR] The event_after_insert trigger was dropped but could not be recreated: " . $e->getMessage() . "\n"
+                    . "  Rules will NOT fire automatically when events are created until this is fixed.\n"
+                    . "  To fix manually, ask a DBA to run the CREATE TRIGGER statement\n"
+                    . "  found in database/schema/mysql-schema.sql (around line 282).\n";
+            } else {
+                echo "[ERROR] Could not create the event_after_insert trigger (binary logging is enabled and privilege was denied): " . $e->getMessage() . "\n"
+                    . "  The existing trigger (if any) was NOT dropped.\n"
+                    . "  To fix: ask a DBA to run:\n"
+                    . "    SET GLOBAL log_bin_trust_function_creators = 1;\n"
+                    . "  then roll back and re-run this migration:\n"
+                    . "    php artisan migrate:rollback --step=1 && php artisan migrate\n";
+            }
         }
     }
 
