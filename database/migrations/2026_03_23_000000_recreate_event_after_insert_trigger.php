@@ -204,6 +204,7 @@ return new class extends Migration
                     . "  then roll back and re-run this migration:\n"
                     . "    php artisan migrate:rollback --step=1 && php artisan migrate\n";
             }
+            throw $e;
         }
     }
 
