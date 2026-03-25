@@ -229,7 +229,8 @@ class MatterController extends Controller
                 $new_matter->priority()->createMany($parent_matter->priority->toArray());
                 $new_matter->container_id = $parent_matter->container_id ?? $request->parent_id;
                 if ($request->priority) {
-                    $new_matter->events()->create(['code' => 'PRI', 'alt_matter_id' => $request->parent_id]);
+                    $filing_date = $parent_matter->filing->event_date ?? now()->toDateString();
+                    $new_matter->events()->create(['code' => 'PRI', 'alt_matter_id' => $request->parent_id, 'event_date' => $filing_date]);
                 } else {
                     // Copy Filing event from original matter
                     $new_matter->filing()->save($parent_matter->filing->replicate(['detail']));
