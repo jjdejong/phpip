@@ -6,26 +6,35 @@ use Illuminate\Support\Facades\DB;
 return new class extends Migration
 {
     /**
-     * Recreate the 14 triggers that were not restored by the earlier
-     * recreate_event_after_insert_trigger migration.  All of these were
-     * dropped by the utf8mb4_0900_ai_ci collation migration when the database
-     * user lacked the log_bin_trust_function_creators privilege at that time.
+     * Recreate triggers that were dropped by the utf8mb4_0900_ai_ci collation migration
+     * and not yet restored.  Only missing triggers are touched — existing ones are left
+     * alone.  This makes the migration safe to run even when some triggers survived the
+     * collation migration intact, and idempotent on re-run.
      *
      * event_after_insert is handled by the earlier migration and is skipped here.
      */
     public function up(): void
     {
-        $privilegeGranted = false;
+        // Best-effort: try to set log_bin_trust_function_creators so that CREATE TRIGGER
+        // works when binary logging is enabled.  We do NOT abort if this fails — we still
+        // attempt the creates below (they will succeed when binary logging is off).
         try {
             DB::getPdo()->exec('SET GLOBAL log_bin_trust_function_creators = 1');
-            $privilegeGranted = true;
         } catch (\Exception $e) {
             echo "[WARNING] Could not set log_bin_trust_function_creators=1: " . $e->getMessage() . "\n"
-                . "  Attempting to create triggers without it (works when binary logging is disabled).\n"
-                . "  If creation fails below, ask a DBA to run:\n"
+                . "  Trigger creation will be attempted anyway; it will succeed when binary\n"
+                . "  logging is disabled.  If creation fails below, ask a DBA to run:\n"
                 . "    SET GLOBAL log_bin_trust_function_creators = 1;\n"
-                . "  then roll back and re-run this migration.\n";
+                . "  then re-run this migration.\n";
         }
+
+        // Find which triggers already exist so we can skip them.
+        $database = DB::connection()->getDatabaseName();
+        $existing = DB::select(
+            'SELECT TRIGGER_NAME FROM information_schema.TRIGGERS WHERE TRIGGER_SCHEMA = ?',
+            [$database]
+        );
+        $existingNames = array_map(fn($r) => $r->TRIGGER_NAME, $existing);
 
         $triggers = [
             'classifier_before_insert' => "
@@ -285,24 +294,34 @@ return new class extends Migration
             ",
         ];
 
+        $failed = [];
+
         foreach ($triggers as $name => $sql) {
-            if ($privilegeGranted) {
-                DB::statement("DROP TRIGGER IF EXISTS `{$name}`");
+            if (in_array($name, $existingNames)) {
+                echo "Trigger `{$name}` already exists, skipping.\n";
+                continue;
             }
 
+            // Trigger is missing — create it (no DROP needed since it doesn't exist).
             try {
                 DB::unprepared(trim($sql));
                 echo "Recreated trigger: {$name}\n";
             } catch (\Exception $e) {
-                if ($privilegeGranted) {
-                    echo "[ERROR] Trigger `{$name}` was dropped but could not be recreated: " . $e->getMessage() . "\n"
-                        . "  To fix manually, find the CREATE TRIGGER statement in database/schema/mysql-schema.sql.\n";
-                } else {
-                    echo "[ERROR] Could not create trigger `{$name}` (binary logging may be enabled and privilege was denied): " . $e->getMessage() . "\n"
-                        . "  The existing trigger (if any) was NOT dropped.\n";
-                }
-                throw $e;
+                echo "[ERROR] Could not create trigger `{$name}`: " . $e->getMessage() . "\n"
+                    . "  To fix: ask a DBA to run:\n"
+                    . "    SET GLOBAL log_bin_trust_function_creators = 1;\n"
+                    . "  then re-run this migration.\n"
+                    . "  Alternatively, create the trigger manually using the SQL in\n"
+                    . "  database/schema/mysql-schema.sql.\n";
+                $failed[] = $name;
             }
+        }
+
+        if (!empty($failed)) {
+            throw new \RuntimeException(
+                'The following triggers could not be created: ' . implode(', ', $failed) . '. '
+                . 'See warnings above. Re-run the migration after granting the required privilege.'
+            );
         }
     }
 
