@@ -307,21 +307,40 @@ return new class extends Migration
                 DB::unprepared(trim($sql));
                 echo "Recreated trigger: {$name}\n";
             } catch (\Exception $e) {
-                echo "[ERROR] Could not create trigger `{$name}`: " . $e->getMessage() . "\n"
-                    . "  To fix: ask a DBA to run:\n"
-                    . "    SET GLOBAL log_bin_trust_function_creators = 1;\n"
-                    . "  then re-run this migration.\n"
-                    . "  Alternatively, create the trigger manually using the SQL in\n"
-                    . "  database/schema/mysql-schema.sql.\n";
+                echo "[WARNING] Could not create trigger `{$name}`: " . $e->getMessage() . "\n";
                 $failed[] = $name;
             }
         }
 
         if (!empty($failed)) {
-            throw new \RuntimeException(
-                'The following triggers could not be created: ' . implode(', ', $failed) . '. '
-                . 'See warnings above. Re-run the migration after granting the required privilege.'
-            );
+            echo "\n[WARNING] The following triggers could not be created: " . implode(', ', $failed) . "\n"
+                . "\n"
+                . "  Root cause: the database user lacks the SUPER or SYSTEM_VARIABLES_ADMIN\n"
+                . "  privilege required to create triggers when binary logging is enabled.\n"
+                . "  These triggers handle automatic task management, expiry calculation,\n"
+                . "  matter status updates, and title casing — the application will work\n"
+                . "  but some automatic behaviours will be missing until they are restored.\n"
+                . "\n"
+                . "  To fix, ask a MySQL administrator to run ONE of the following:\n"
+                . "\n"
+                . "  Option A — Grant privilege temporarily, then re-run the migration:\n"
+                . "    SET GLOBAL log_bin_trust_function_creators = 1;\n"
+                . "    -- then in your shell:\n"
+                . "    php artisan migrate:rollback --step=1\n"
+                . "    php artisan migrate\n"
+                . "    -- then optionally restore:\n"
+                . "    SET GLOBAL log_bin_trust_function_creators = 0;\n"
+                . "\n"
+                . "  Option B — Add to my.cnf / my.ini and restart MySQL:\n"
+                . "    [mysqld]\n"
+                . "    log_bin_trust_function_creators = 1\n"
+                . "\n"
+                . "  Option C — Create the missing triggers manually (as a privileged MySQL\n"
+                . "    user) using the CREATE TRIGGER statements in database/schema/mysql-schema.sql.\n"
+                . "    Missing triggers: " . implode(', ', $failed) . "\n"
+                . "\n"
+                . "  Migration recorded as run. Re-run it after fixing privileges using:\n"
+                . "    php artisan migrate:rollback --step=1 && php artisan migrate\n";
         }
     }
 
