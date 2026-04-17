@@ -9,18 +9,18 @@
 	  "license" : "GPL",
 	  "type" : "project",
     "require": {
-	  	  "php": "^8.2",
-	  	  "laravel/framework": "^12.0",
+	  	  "php": "^8.3",
+	  	  "laravel/framework": "^13.0",
 	  	  "phpoffice/phpword": "^1.3.0",
 	  	  "spatie/laravel-translatable": "^6.11"
 	  },
     "require-dev": {
 	  	  "laravel/pint": "^1.17",
-	  	  "laravel/tinker": "^2.9",
+	  	  "laravel/tinker": "^3.0",
 	  	  "laravel/ui": "^4.2",
 	  	  "mockery/mockery": "^1.6",
 	  	  "nunomaduro/collision": "^8.1",
-	  	  "phpunit/phpunit": "^11.0.1"
+	  	  "phpunit/phpunit": "^12.0"
 	  },
     "config": {
       "optimize-autoloader": true,
