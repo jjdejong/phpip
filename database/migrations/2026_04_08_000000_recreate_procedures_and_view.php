@@ -93,8 +93,11 @@ return new class extends Migration
                             SET RYear = RYear + 1;
                             ITERATE renloop;
                         END IF;
-                        INSERT INTO task (trigger_id, code, due_date, detail, rule_used, assigned_to, creator, created_at, updated_at)
-                        VALUES (P_trigger_id, 'REN', DueDate, RYear, P_rule_id, P_responsible, P_user, Now(), Now());
+                        BEGIN
+                            DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN END;
+                            INSERT INTO task (trigger_id, code, due_date, detail, rule_used, assigned_to, creator, created_at, updated_at)
+                            VALUES (P_trigger_id, 'REN', DueDate, JSON_OBJECT('en', CAST(RYear AS CHAR)), P_rule_id, P_responsible, P_user, Now(), Now());
+                        END;
                         SET RYear = RYear + 1;
                     END WHILE;
                 END proc
@@ -294,8 +297,28 @@ return new class extends Migration
                             UPDATE matter SET expire_date = DueDate + INTERVAL m_pta DAY WHERE matter.id = e_matter_id;
                         ELSEIF tr_recurring = 0 THEN
                         -- Insert the new task if it is not a recurring one
-                            INSERT INTO task (trigger_id, code, due_date, detail, rule_used, cost, fee, currency, assigned_to, creator, created_at, updated_at)
-                            VALUES (P_trigger_id, tr_task, DueDate, tr_detail, tr_id, tr_cost, tr_fee, tr_currency, tr_responsible, P_user, Now(), Now());
+                            BEGIN
+                                DECLARE CONTINUE HANDLER FOR SQLEXCEPTION BEGIN END;
+                                INSERT INTO task (trigger_id, code, due_date, detail, rule_used, cost, fee, currency, assigned_to, creator, created_at, updated_at)
+                                VALUES (
+                                    P_trigger_id,
+                                    tr_task,
+                                    DueDate,
+                                    CASE
+                                        WHEN tr_detail IS NULL THEN NULL
+                                        WHEN JSON_VALID(tr_detail) AND JSON_TYPE(CAST(tr_detail AS JSON)) = 'OBJECT' THEN CAST(tr_detail AS JSON)
+                                        ELSE JSON_OBJECT('en', tr_detail)
+                                    END,
+                                    tr_id,
+                                    tr_cost,
+                                    tr_fee,
+                                    tr_currency,
+                                    tr_responsible,
+                                    P_user,
+                                    Now(),
+                                    Now()
+                                );
+                            END;
                         ELSEIF tr_task = 'REN' THEN
                         -- Recurring renewal is the only possibility here, normally
                             CALL insert_recurring_renewals(P_trigger_id, tr_id, BaseDate, tr_responsible, P_user);
