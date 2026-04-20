@@ -38,6 +38,17 @@ echo "CREATE DATABASE phpip; GRANT ALL PRIVILEGES ON phpip.* TO phpip@localhost 
 ```
 (This command assumes that mysql has been freshly installed with default options, where no password is required for root when running mysql with sudo.)
 
+If your MySQL server has binary logging enabled (common on managed/cloud databases), the app user also needs permission to create triggers. Either grant the privilege directly (MySQL 8.0+):
+```
+echo "GRANT SYSTEM_VARIABLES_ADMIN ON *.* TO phpip@localhost;" | sudo mysql
+```
+Or add this to your MySQL server configuration (`/etc/mysql/mysql.conf.d/mysqld.cnf`) and restart MySQL:
+```
+[mysqld]
+log_bin_trust_function_creators = 1
+```
+Without one of the above, `php artisan migrate` will fail when creating the `event_after_insert` trigger and rules will not fire automatically.
+
 ## 1.2. phpIP #
 
 The code can be installed anywhere with the virtual server approach, but it makes sense to install it in `/var/www/html/phpip`. Create the folder and change its owner to yourself so that you don't need to use `sudo` to work there:
