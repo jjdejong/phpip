@@ -67,19 +67,9 @@ The orchestrator depends on OPS as the primary family source.
 
 If you have API access to USPTO ODP configured, US party/title/procedure fields may be enriched when missing in OPS.
 
-## 5) Troubleshooting
+## 5) Troubleshooting (USPTO ODP only)
 
-### A) `Auth::routes()` / laravel-ui errors
-
-The app now defines auth routes explicitly and does not rely on the `Auth::routes()` macro.
-If you still see old behavior, clear caches and redeploy updated code:
-
-```bash
-php artisan optimize:clear
-composer install --no-dev --optimize-autoloader
-```
-
-### B) OPS import works but US enrichment does not
+### OPS import works but US enrichment does not
 
 Check:
 
@@ -88,12 +78,7 @@ Check:
 - API key requirements for your ODP dataset
 - network egress to the endpoint host from your phpIP server
 
-## 6) Scope note (to avoid confusion)
-
-This guide is only about **OPS/USPTO family import behavior**.
-Database/PDO runtime issues are separate deployment topics and are intentionally not covered here.
-
-## 7) Security notes
+## 6) Security notes
 
 - Keep API keys in `.env`, never in source files.
 - Restrict outbound network access from the server to approved API hosts only.
