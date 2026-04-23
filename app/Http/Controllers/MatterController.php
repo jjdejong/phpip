@@ -444,7 +444,7 @@ class MatterController extends Controller
                     $new_matter->classifiersNative()->create(['type_code' => 'TIT', 'value' => $app['title']]);
                 }
                 $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'CLI', 'shared' => 1]);
-                if (array_key_exists('applicants', $app)) {
+                if (array_key_exists('applicants', $app) && !empty($app['applicants'])) {
                     if (strtolower($app['applicants'][0]) == strtolower(Actor::find($request->client_id)->name)) {
                         $new_matter->actorPivot()->create(
                             [
@@ -489,7 +489,7 @@ class MatterController extends Controller
                     }
                     $new_matter->notes = 'Applicants: ' . collect($app['applicants'])->implode('; ');
                 }
-                if (array_key_exists('inventors', $app)) {
+                if (array_key_exists('inventors', $app) && !empty($app['inventors'])) {
                     foreach ($app['inventors'] as $inventor) {
                         // Search for phonetically equivalent in the actor table, and take first
                         if (substr($inventor, -1) == ',') {
