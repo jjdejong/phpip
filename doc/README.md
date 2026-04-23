@@ -169,3 +169,9 @@ The software is under development, so many changes can occur. To stay up to date
 * `composer install`
 
 The database structure may be updated too, so you need to apply the new migration scripts in `database/migrations`. Just run `php artisan migrate` in the root folder, which will apply the latest scripts.
+
+## 3.4 USPTO ODP optional setup (US family enrichment/fallback)
+
+If you want phpIP to enrich/fallback US family data using USPTO ODP, configure the related `.env` variables and cache clear steps described in:
+
+* `docs/USPTO_ODP.md`
