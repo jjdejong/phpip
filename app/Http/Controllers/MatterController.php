@@ -8,8 +8,8 @@ use App\Models\Actor;
 use App\Models\ActorPivot;
 use App\Models\Matter;
 use App\Services\DocumentMergeService;
+use App\Services\FamilyDataService;
 use App\Services\MatterExportService;
-use App\Services\OPSService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,24 +26,24 @@ class MatterController extends Controller
 {
     protected DocumentMergeService $documentMergeService;
     protected MatterExportService $matterExportService;
-    protected OPSService $opsService;
+    protected FamilyDataService $familyDataService;
 
     /**
      * Initialize the controller with required services.
      *
      * @param DocumentMergeService $documentMergeService Service for merging matter data into documents.
      * @param MatterExportService $matterExportService Service for exporting matters to CSV.
-     * @param OPSService $opsService Service for interacting with EPO OPS API.
+     * @param FamilyDataService $familyDataService Service for retrieving family data from OPS/USPTO.
      */
     public function __construct(
         DocumentMergeService $documentMergeService,
         MatterExportService  $matterExportService,
-        OPSService $opsService
+        FamilyDataService $familyDataService
     )
     {
         $this->documentMergeService = $documentMergeService;
         $this->matterExportService = $matterExportService;
-        $this->opsService = $opsService;
+        $this->familyDataService = $familyDataService;
     }
 
     /**
@@ -359,7 +359,7 @@ class MatterController extends Controller
             'client_id' => 'required',
         ]);
 
-        $apps = collect($this->opsService->getFamilyMembers($request->docnum));
+        $apps = collect($this->familyDataService->getFamilyMembers($request->docnum));
         if ($apps->has('errors') || $apps->has('exception')) {
             return response()->json($apps);
         }
@@ -444,7 +444,7 @@ class MatterController extends Controller
                     $new_matter->classifiersNative()->create(['type_code' => 'TIT', 'value' => $app['title']]);
                 }
                 $new_matter->actorPivot()->create(['actor_id' => $request->client_id, 'role' => 'CLI', 'shared' => 1]);
-                if (array_key_exists('applicants', $app)) {
+                if (array_key_exists('applicants', $app) && !empty($app['applicants'])) {
                     if (strtolower($app['applicants'][0]) == strtolower(Actor::find($request->client_id)->name)) {
                         $new_matter->actorPivot()->create(
                             [
@@ -489,7 +489,7 @@ class MatterController extends Controller
                     }
                     $new_matter->notes = 'Applicants: ' . collect($app['applicants'])->implode('; ');
                 }
-                if (array_key_exists('inventors', $app)) {
+                if (array_key_exists('inventors', $app) && !empty($app['inventors'])) {
                     foreach ($app['inventors'] as $inventor) {
                         // Search for phonetically equivalent in the actor table, and take first
                         if (substr($inventor, -1) == ',') {
@@ -796,7 +796,7 @@ class MatterController extends Controller
      */
     public function getOPSfamily(string $docnum)
     {
-        return $this->opsService->getFamilyMembers($docnum);
+        return $this->familyDataService->getFamilyMembers($docnum);
     }
 
     /**

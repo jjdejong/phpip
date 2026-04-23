@@ -50,4 +50,14 @@ return [
         ),
     ],
 
+    'uspto' => [
+        'enabled' => env('USPTO_ODP_ENABLED', false),
+        'api_key' => env('USPTO_ODP_API_KEY'),
+        // Preferred endpoint template, e.g. https://api.uspto.gov/.../{applicationNumber}
+        'application_endpoint' => env('USPTO_ODP_APPLICATION_ENDPOINT'),
+        // Optional generic search endpoint fallback, e.g. https://api.uspto.gov/api/v1/.../search
+        'search_endpoint' => env('USPTO_ODP_SEARCH_ENDPOINT'),
+        'search_field' => env('USPTO_ODP_SEARCH_FIELD', 'applicationNumberText'),
+    ],
+
 ];
