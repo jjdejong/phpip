@@ -8,8 +8,8 @@ use App\Models\Actor;
 use App\Models\ActorPivot;
 use App\Models\Matter;
 use App\Services\DocumentMergeService;
+use App\Services\FamilyDataService;
 use App\Services\MatterExportService;
-use App\Services\OPSService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,24 +26,24 @@ class MatterController extends Controller
 {
     protected DocumentMergeService $documentMergeService;
     protected MatterExportService $matterExportService;
-    protected OPSService $opsService;
+    protected FamilyDataService $familyDataService;
 
     /**
      * Initialize the controller with required services.
      *
      * @param DocumentMergeService $documentMergeService Service for merging matter data into documents.
      * @param MatterExportService $matterExportService Service for exporting matters to CSV.
-     * @param OPSService $opsService Service for interacting with EPO OPS API.
+     * @param FamilyDataService $familyDataService Service for retrieving family data from OPS/USPTO.
      */
     public function __construct(
         DocumentMergeService $documentMergeService,
         MatterExportService  $matterExportService,
-        OPSService $opsService
+        FamilyDataService $familyDataService
     )
     {
         $this->documentMergeService = $documentMergeService;
         $this->matterExportService = $matterExportService;
-        $this->opsService = $opsService;
+        $this->familyDataService = $familyDataService;
     }
 
     /**
@@ -359,7 +359,7 @@ class MatterController extends Controller
             'client_id' => 'required',
         ]);
 
-        $apps = collect($this->opsService->getFamilyMembers($request->docnum));
+        $apps = collect($this->familyDataService->getFamilyMembers($request->docnum));
         if ($apps->has('errors') || $apps->has('exception')) {
             return response()->json($apps);
         }
@@ -796,7 +796,7 @@ class MatterController extends Controller
      */
     public function getOPSfamily(string $docnum)
     {
-        return $this->opsService->getFamilyMembers($docnum);
+        return $this->familyDataService->getFamilyMembers($docnum);
     }
 
     /**
