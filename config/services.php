@@ -53,10 +53,14 @@ return [
     'uspto' => [
         'enabled' => env('USPTO_ODP_ENABLED', false),
         'api_key' => env('USPTO_ODP_API_KEY'),
-        // Preferred endpoint template, e.g. https://api.uspto.gov/.../{applicationNumber}
-        'application_endpoint' => env('USPTO_ODP_APPLICATION_ENDPOINT'),
-        // Optional generic search endpoint fallback, e.g. https://api.uspto.gov/api/v1/.../search
-        'search_endpoint' => env('USPTO_ODP_SEARCH_ENDPOINT'),
+        // Base USPTO ODP API URL; endpoint defaults below are resolved against this value.
+        'base_url' => env('USPTO_ODP_BASE_URL', 'https://api.uspto.gov'),
+        // Optional override for direct application endpoint template.
+        // Leave empty to use the built-in default.
+        'application_endpoint' => env('USPTO_ODP_APPLICATION_ENDPOINT', '/api/v1/patent/applications/{applicationNumber}'),
+        // Optional override for search endpoint.
+        // Leave empty to use the built-in default.
+        'search_endpoint' => env('USPTO_ODP_SEARCH_ENDPOINT', '/api/v1/patent/applications/search'),
         'search_field' => env('USPTO_ODP_SEARCH_FIELD', 'applicationNumberText'),
     ],
 

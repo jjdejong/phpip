@@ -74,34 +74,71 @@ class USPTOService
         $apiKey = config('services.uspto.api_key');
         $headers = $apiKey ? ['X-Api-Key' => $apiKey] : [];
 
-        // Preferred path: a direct endpoint template containing {applicationNumber}.
-        $template = config('services.uspto.application_endpoint');
-        if (!empty($template)) {
-            $url = str_replace('{applicationNumber}', $normalizedNumber, $template);
-            $response = Http::withHeaders($headers)->get($url);
+        // Preferred path: direct application endpoint (built-in default + optional override).
+        $templates = array_filter(array_unique([
+            config('services.uspto.application_endpoint'),
+            '/api/v1/patent/applications/{applicationNumber}',
+        ]));
+
+        foreach ($templates as $template) {
+            $url = $this->resolveEndpointUrl(
+                str_replace('{applicationNumber}', $normalizedNumber, $template)
+            );
+
+            if (empty($url)) {
+                continue;
+            }
+
+            $response = Http::withHeaders($headers)->acceptJson()->get($url);
             if ($response->successful()) {
-                return $this->normalizeRecord($response->json());
+                $normalized = $this->normalizeRecord($response->json());
+                if (!empty(array_filter($normalized))) {
+                    return $normalized;
+                }
             }
         }
 
-        // Fallback path: generic search endpoint.
+        // Fallback path: search endpoint (built-in default + optional override).
         $searchEndpoint = config('services.uspto.search_endpoint');
-        if (empty($searchEndpoint)) {
+        $searchUrl = $this->resolveEndpointUrl(
+            $searchEndpoint ?: '/api/v1/patent/applications/search'
+        );
+        if (empty($searchUrl)) {
             return [];
         }
 
         $queryField = config('services.uspto.search_field', 'applicationNumberText');
-        $payload = [
+        $queryStringPayload = [
             'q' => sprintf('%s:"%s"', $queryField, $normalizedNumber),
             'size' => 1,
         ];
 
-        $response = Http::withHeaders($headers)->get($searchEndpoint, $payload);
-        if (!$response->successful()) {
-            return [];
+        $response = Http::withHeaders($headers)->acceptJson()->get($searchUrl, $queryStringPayload);
+        if ($response->successful()) {
+            $normalized = $this->normalizeRecord($response->json());
+            if (!empty(array_filter($normalized))) {
+                return $normalized;
+            }
         }
 
-        return $this->normalizeRecord($response->json());
+        // Secondary fallback: POST JSON search payload.
+        $jsonSearchPayload = [
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        ['term' => [$queryField => $normalizedNumber]],
+                    ],
+                ],
+            ],
+            'size' => 1,
+        ];
+
+        $response = Http::withHeaders($headers)->acceptJson()->post($searchUrl, $jsonSearchPayload);
+        if ($response->successful()) {
+            return $this->normalizeRecord($response->json());
+        }
+
+        return [];
     }
 
     /**
@@ -119,44 +156,98 @@ class USPTOService
             $record = $payload['record'];
         } elseif (array_key_exists('results', $payload)) {
             $record = Arr::first($payload['results'], []);
+        } elseif (array_key_exists('items', $payload)) {
+            $record = Arr::first($payload['items'], []);
+        } elseif (array_key_exists('applications', $payload)) {
+            $record = Arr::first($payload['applications'], []);
+        } elseif (array_key_exists('data', $payload) && is_array($payload['data'])) {
+            $data = $payload['data'];
+            if (array_is_list($data)) {
+                $record = Arr::first($data, []);
+            } else {
+                $record = $data;
+            }
         } elseif (!is_array($record) || empty($record)) {
             $record = is_array($payload) ? $payload : [];
         }
 
+        if (array_key_exists('applicationMetaData', $record) && is_array($record['applicationMetaData'])) {
+            $record = array_merge($record['applicationMetaData'], $record);
+        }
+
         $applicants = collect(
-            data_get($record, 'applicants', data_get($record, 'applicantName', []))
+            data_get(
+                $record,
+                'applicants',
+                data_get($record, 'applicantName', data_get($record, 'parties.applicants', []))
+            )
         )
             ->map(function ($value) {
                 if (is_string($value)) {
                     return $value;
                 }
 
-                return data_get($value, 'name', data_get($value, 'applicantName'));
+                return data_get(
+                    $value,
+                    'name',
+                    data_get($value, 'applicantName', data_get($value, 'partyName'))
+                );
             })
             ->filter()
             ->values()
             ->all();
 
         $inventors = collect(
-            data_get($record, 'inventors', data_get($record, 'inventorName', []))
+            data_get(
+                $record,
+                'inventors',
+                data_get($record, 'inventorName', data_get($record, 'parties.inventors', []))
+            )
         )
             ->map(function ($value) {
                 if (is_string($value)) {
                     return $value;
                 }
 
-                return data_get($value, 'name', data_get($value, 'inventorName'));
+                return data_get(
+                    $value,
+                    'name',
+                    data_get($value, 'inventorName', data_get($value, 'partyName'))
+                );
             })
             ->filter()
             ->values()
             ->all();
 
         return [
-            'title' => data_get($record, 'inventionTitle', data_get($record, 'title')),
+            'title' => data_get(
+                $record,
+                'inventionTitle',
+                data_get($record, 'title', data_get($record, 'applicationTitleText'))
+            ),
             'applicants' => $applicants,
             'inventors' => $inventors,
-            'procedure' => data_get($record, 'events', data_get($record, 'legalEvents', [])),
+            'procedure' => data_get(
+                $record,
+                'events',
+                data_get($record, 'legalEvents', data_get($record, 'transactions', []))
+            ),
         ];
     }
-}
 
+    private function resolveEndpointUrl(?string $endpoint): ?string
+    {
+        if (empty($endpoint)) {
+            return null;
+        }
+
+        if (str_starts_with($endpoint, 'http://') || str_starts_with($endpoint, 'https://')) {
+            return $endpoint;
+        }
+
+        $baseUrl = rtrim((string) config('services.uspto.base_url', 'https://api.uspto.gov'), '/');
+        $path = '/' . ltrim($endpoint, '/');
+
+        return $baseUrl . $path;
+    }
+}

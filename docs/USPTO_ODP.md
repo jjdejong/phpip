@@ -27,18 +27,14 @@ USPTO_ODP_ENABLED=true
 # Optional API key (if your ODP dataset requires one)
 USPTO_ODP_API_KEY=
 
-# Option A (preferred): direct endpoint template with placeholder
-# Example shape: https://<host>/<path>/{applicationNumber}
-USPTO_ODP_APPLICATION_ENDPOINT=
+# Optional override: USPTO API base URL (default already works for ODP)
+# USPTO_ODP_BASE_URL=https://api.uspto.gov
 
-# Option B (fallback): search endpoint
-# Example shape: https://<host>/<path>/search
-USPTO_ODP_SEARCH_ENDPOINT=
+# Optional overrides (advanced only)
+# USPTO_ODP_APPLICATION_ENDPOINT=/api/v1/patent/applications/{applicationNumber}
+# USPTO_ODP_SEARCH_ENDPOINT=/api/v1/patent/applications/search
 USPTO_ODP_SEARCH_FIELD=applicationNumberText
 ```
-
-> Use endpoint URLs exactly as provided by your USPTO ODP API product page.
-> phpIP does not hardcode a specific product URL because ODP products can differ.
 
 Then clear Laravel config cache:
 
@@ -74,7 +70,7 @@ If you have API access to USPTO ODP configured, US party/title/procedure fields 
 Check:
 
 - `USPTO_ODP_ENABLED=true`
-- valid endpoint URL(s)
+- valid API key (if required by your account/product)
 - API key requirements for your ODP dataset
 - network egress to the endpoint host from your phpIP server
 
