@@ -79,11 +79,7 @@ php artisan optimize:clear
 composer install --no-dev --optimize-autoloader
 ```
 
-### B) `Class "Pdo\\Mysql" not found`
-
-Ensure `pdo` + `pdo_mysql` are installed on your PHP runtime. phpIP includes a compatibility fallback for SSL CA constant lookup, but DB drivers are still required.
-
-### C) OPS import works but US enrichment does not
+### B) OPS import works but US enrichment does not
 
 Check:
 
@@ -92,9 +88,13 @@ Check:
 - API key requirements for your ODP dataset
 - network egress to the endpoint host from your phpIP server
 
-## 6) Security notes
+## 6) Scope note (to avoid confusion)
+
+This guide is only about **OPS/USPTO family import behavior**.
+Database/PDO runtime issues are separate deployment topics and are intentionally not covered here.
+
+## 7) Security notes
 
 - Keep API keys in `.env`, never in source files.
 - Restrict outbound network access from the server to approved API hosts only.
 - Consider request logging/redaction policy for external API errors.
-
