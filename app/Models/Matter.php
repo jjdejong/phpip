@@ -932,6 +932,162 @@ class Matter extends Model
     }
 
     /**
+     * Count the matters that match the same filter criteria as filter().
+     *
+     * Only includes the joins required by the active filter predicates and
+     * by role-based visibility, so a typeahead query on Ref/Cat/country can
+     * skip the title, status, event and most actor joins entirely.
+     */
+    public static function filterCount(array $multi_filter = [], $display_with = false, $include_dead = false): int
+    {
+        $authUserRole = Auth::user()->default_role;
+        $authUserId = Auth::user()->id;
+        $isClient = $authUserRole == 'CLI' || empty($authUserRole);
+
+        $needs = array_filter($multi_filter, fn ($v) => $v !== '' && $v !== null);
+
+        $query = Matter::query()
+            ->join('matter_category', 'matter.category_code', '=', 'matter_category.code');
+
+        if ($isClient || isset($needs['Client']) || isset($needs['ClRef'])) {
+            $query->leftJoin(
+                DB::raw('matter_actor_lnk clilnk JOIN actor cli ON cli.id = clilnk.actor_id'),
+                function ($j) { $j->on('matter.id', '=', 'clilnk.matter_id')->where('clilnk.role', 'CLI'); }
+            )->leftJoin(
+                DB::raw('matter_actor_lnk cliclnk JOIN actor clic ON clic.id = cliclnk.actor_id'),
+                function ($j) { $j->on('matter.container_id', '=', 'cliclnk.matter_id')->where([['cliclnk.role', 'CLI'], ['cliclnk.shared', 1]]); }
+            );
+        }
+
+        if (isset($needs['Applicant'])) {
+            $query->leftJoin(
+                DB::raw('matter_actor_lnk applnk JOIN actor app ON app.id = applnk.actor_id'),
+                function ($j) { $j->on(DB::raw('IFNULL(matter.container_id, matter.id)'), '=', 'applnk.matter_id')->where('applnk.role', 'APP'); }
+            );
+        }
+
+        if (isset($needs['Agent']) || isset($needs['AgtRef'])) {
+            $query->leftJoin(
+                DB::raw('matter_actor_lnk agtlnk JOIN actor agt ON agt.id = agtlnk.actor_id'),
+                function ($j) { $j->on('matter.id', '=', 'agtlnk.matter_id')->where([['agtlnk.role', 'AGT'], ['agtlnk.display_order', 1]]); }
+            )->leftJoin(
+                DB::raw('matter_actor_lnk agtclnk JOIN actor agtc ON agtc.id = agtclnk.actor_id'),
+                function ($j) { $j->on('matter.container_id', '=', 'agtclnk.matter_id')->where([['agtclnk.role', 'AGT'], ['agtclnk.shared', 1]]); }
+            );
+        }
+
+        if (isset($needs['Inventor1'])) {
+            $query->leftJoin(
+                DB::raw('matter_actor_lnk invlnk JOIN actor inv ON inv.id = invlnk.actor_id'),
+                function ($j) { $j->on(DB::raw('IFNULL(matter.container_id, matter.id)'), '=', 'invlnk.matter_id')->where([['invlnk.role', 'INV'], ['invlnk.display_order', 1]]); }
+            );
+        }
+
+        if (isset($needs['responsible'])) {
+            $query->leftJoin(
+                DB::raw('matter_actor_lnk dellnk JOIN actor del ON del.id = dellnk.actor_id'),
+                function ($j) { $j->on(DB::raw('IFNULL(matter.container_id, matter.id)'), '=', 'dellnk.matter_id')->where('dellnk.role', 'DEL'); }
+            );
+        }
+
+        if (isset($needs['Filed']) || isset($needs['FilNo'])) {
+            $query->leftJoin('event as fil', function ($j) { $j->on('matter.id', '=', 'fil.matter_id')->where('fil.code', 'FIL'); });
+        }
+        if (isset($needs['Published']) || isset($needs['PubNo'])) {
+            $query->leftJoin('event as pub', function ($j) { $j->on('matter.id', '=', 'pub.matter_id')->where('pub.code', 'PUB'); });
+        }
+        if (isset($needs['Granted']) || isset($needs['GrtNo'])) {
+            $query->leftJoin('event as grt', function ($j) { $j->on('matter.id', '=', 'grt.matter_id')->where('grt.code', 'GRT'); })
+                  ->leftJoin('event as reg', function ($j) { $j->on('matter.id', '=', 'reg.matter_id')->where('reg.code', 'REG'); });
+        }
+
+        if (isset($needs['Status']) || isset($needs['Status_date'])) {
+            $query->leftJoin(
+                DB::raw('(SELECT matter_id, code, event_date FROM (
+                            SELECT e.matter_id, e.code, e.event_date,
+                                   RANK() OVER (PARTITION BY e.matter_id ORDER BY e.event_date DESC) AS rk
+                            FROM event e JOIN event_name en ON en.code = e.code AND en.status_event = 1
+                          ) ranked WHERE rk = 1) status'),
+                'matter.id', '=', 'status.matter_id'
+            )->leftJoin('event_name', 'event_name.code', '=', 'status.code');
+        }
+
+        if (isset($needs['Title'])) {
+            $query->leftJoin(
+                DB::raw('classifier tit1 JOIN classifier_type ct1 ON tit1.type_code = ct1.code AND ct1.main_display = 1 AND ct1.display_order = 1'),
+                DB::raw('IFNULL(matter.container_id, matter.id)'), '=', 'tit1.matter_id'
+            )->leftJoin(
+                DB::raw('classifier tit2 JOIN classifier_type ct2 ON tit2.type_code = ct2.code AND ct2.main_display = 1 AND ct2.display_order = 2'),
+                DB::raw('IFNULL(matter.container_id, matter.id)'), '=', 'tit2.matter_id'
+            )->leftJoin(
+                DB::raw('classifier tit3 JOIN classifier_type ct3 ON tit3.type_code = ct3.code AND ct3.main_display = 1 AND ct3.display_order = 3'),
+                DB::raw('IFNULL(matter.container_id, matter.id)'), '=', 'tit3.matter_id'
+            );
+        }
+
+        if ($display_with) {
+            $query->where('matter_category.display_with', $display_with);
+        }
+
+        if ($isClient) {
+            $query->where(function ($q) use ($authUserId) {
+                $q->where('cli.id', $authUserId)->orWhere('clic.id', $authUserId);
+            });
+        }
+
+        foreach ($needs as $key => $value) {
+            switch ($key) {
+                case 'Ref':
+                    $query->where(function ($q) use ($value) {
+                        $q->whereLike('uid', "$value%")->orWhereLike('alt_ref', "$value%");
+                    });
+                    break;
+                case 'Cat':           $query->whereLike('category_code', "$value%"); break;
+                case 'country':       $query->whereLike('matter.country', "$value%"); break;
+                case 'Status':        $query->whereJsonLike('event_name.name', $value); break;
+                case 'Status_date':   $query->whereLike('status.event_date', "$value%"); break;
+                case 'Client':        $query->whereLike(DB::raw('IFNULL(cli.name, clic.name)'), "$value%"); break;
+                case 'ClRef':         $query->whereLike(DB::raw('IFNULL(clilnk.actor_ref, cliclnk.actor_ref)'), "$value%"); break;
+                case 'Applicant':     $query->whereLike('app.name', "$value%"); break;
+                case 'Agent':         $query->whereLike(DB::raw('IFNULL(agt.name, agtc.name)'), "$value%"); break;
+                case 'AgtRef':        $query->whereLike(DB::raw('IFNULL(agtlnk.actor_ref, agtclnk.actor_ref)'), "$value%"); break;
+                case 'Title':         $query->whereLike(DB::raw('concat_ws(" ", tit1.value, tit2.value, tit3.value)'), "%$value%"); break;
+                case 'Inventor1':     $query->whereLike('inv.name', "$value%"); break;
+                case 'Filed':         $query->whereLike('fil.event_date', "$value%"); break;
+                case 'FilNo':         $query->whereLike('fil.detail', "$value%"); break;
+                case 'Published':     $query->whereLike('pub.event_date', "$value%"); break;
+                case 'PubNo':         $query->whereLike('pub.detail', "$value%"); break;
+                case 'Granted':
+                    $query->where(function ($q) use ($value) {
+                        $q->whereLike('grt.event_date', "$value%")->orWhereLike('reg.event_date', "$value%");
+                    });
+                    break;
+                case 'GrtNo':
+                    $query->where(function ($q) use ($value) {
+                        $q->whereLike('grt.detail', "$value%")->orWhereLike('reg.detail', "$value%");
+                    });
+                    break;
+                case 'responsible':
+                    $query->where(function ($q) use ($value) {
+                        $q->where('matter.responsible', $value)->orWhere('del.login', $value);
+                    });
+                    break;
+                case 'Ctnr':
+                    if ($value) $query->whereNull('container_id');
+                    break;
+                default:
+                    $query->whereLike($key, "$value%");
+            }
+        }
+
+        if (!$include_dead) {
+            $query->whereRaw('exists (select 1 from matter m where m.caseref = matter.caseref and m.dead = 0)');
+        }
+
+        return $query->distinct()->count('matter.id');
+    }
+
+    /**
      * Get categories with their matter counts filtered by user and request parameters.
      *
      * Returns all categories with a count of matters based on:

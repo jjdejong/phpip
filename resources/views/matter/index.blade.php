@@ -12,6 +12,7 @@
     border-color: rgb(0, 190, 190);
     font-weight: bold;
   }
+  .pagination-row .pagination { margin-bottom: 0; }
 </style>
 @endsection
 
@@ -185,7 +186,12 @@
         </tr>
         @endforeach
         <tr>
-          <td colspan="9">{{ $matters->links() }}</td>
+          <td colspan="9">
+            <div class="d-flex align-items-center gap-2 pagination-row">
+              {{ $matters->links() }}
+              <span id="matterCount" class="badge bg-primary" title="{{ __('Matching matters') }}">…</span>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>

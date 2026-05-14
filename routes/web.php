@@ -50,6 +50,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('new-caseref', [AutocompleteController::class, 'newCaseref'])->name('new-caseref');
         Route::post('search', [MatterSearchController::class, 'search'])->name('search');
         Route::get('export', 'export')->name('export');
+        Route::get('count', 'count')->name('count');
         Route::post('{matter}/mergeFile', 'mergeFile')->name('mergeFile');
         Route::get('{matter}/events', 'events')->name('events');
         Route::get('{matter}/tasks', 'tasks')->name('tasks');
