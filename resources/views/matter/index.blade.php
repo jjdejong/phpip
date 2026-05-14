@@ -153,7 +153,7 @@
           @else
         <tr class="table-info">
           @endif
-          <td {!! $matter->dead ? 'style="text-decoration: line-through;"' : '' !!}><a href="/matter/{{ $matter->id }}" target="_blank">{{ $matter->Ref }}</a></td>
+          <td {!! $matter->dead ? 'style="text-decoration: line-through;"' : '' !!}><a href="/matter/{{ $matter->id }}" target="_blank">{{ $matter->Ref }}</a>@if ( $matter->HasLink ) <svg width="14" height="14" fill="currentColor" class="text-muted ms-1"><title>{{ __('Linked to another matter') }}</title><use xlink:href="#link-45deg"/></svg>@endif</td>
           <td>{{ $matter->Cat }}</td>
           <td>
             @if ( $published )

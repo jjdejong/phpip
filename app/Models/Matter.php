@@ -672,7 +672,8 @@ class Matter extends Model
             'del.login AS delegate',
             'matter.dead',
             DB::raw('isnull(matter.container_id) AS Ctnr'),
-            'matter.alt_ref AS Alt_Ref'
+            'matter.alt_ref AS Alt_Ref',
+            DB::raw('EXISTS(SELECT 1 FROM classifier cl_lnk WHERE cl_lnk.matter_id = IFNULL(matter.container_id, matter.id) AND cl_lnk.lnk_matter_id IS NOT NULL) AS HasLink')
         )->join(
             'matter_category',
             'matter.category_code',
@@ -743,14 +744,18 @@ class Matter extends Model
                 $join->on('matter.id', 'reg.matter_id')->where('reg.code', 'REG');
             }
         )->leftJoin(
-            DB::raw('event status JOIN event_name ON event_name.code = status.code AND event_name.status_event = 1'),
+            DB::raw('(SELECT matter_id, code, event_date FROM (
+                        SELECT e.matter_id, e.code, e.event_date,
+                               RANK() OVER (PARTITION BY e.matter_id ORDER BY e.event_date DESC) AS rk
+                        FROM event e
+                        JOIN event_name en ON en.code = e.code AND en.status_event = 1
+                      ) ranked WHERE rk = 1) status'),
             'matter.id',
             'status.matter_id'
         )->leftJoin(
-            DB::raw('event e2 JOIN event_name en2 ON e2.code = en2.code AND en2.status_event = 1'),
-            function ($join) {
-                $join->on('status.matter_id', 'e2.matter_id')->whereColumn('status.event_date', '<', 'e2.event_date');
-            }
+            'event_name',
+            'event_name.code',
+            'status.code'
         )->leftJoin(
             DB::raw(
                 'classifier tit1 JOIN classifier_type ct1 
@@ -778,7 +783,7 @@ class Matter extends Model
             ),
             DB::raw('IFNULL(matter.container_id, matter.id)'),
             'tit3.matter_id'
-        )->where('e2.matter_id', null);
+        );
 
         if (array_key_exists('Inventor1', $multi_filter)) {
             $query->leftJoin(
@@ -909,7 +914,7 @@ class Matter extends Model
 
         // Do not display dead families unless desired
         if (!$include_dead) {
-            $query->whereRaw('(select count(1) from matter m where m.caseref = matter.caseref and m.dead = 0) > 0');
+            $query->whereRaw('exists (select 1 from matter m where m.caseref = matter.caseref and m.dead = 0)');
         }
 
         // Sorting by caseref is special - set additional conditions here
