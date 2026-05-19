@@ -10,6 +10,14 @@ Head for the [Wiki](https://github.com/jjdejong/phpip/wiki) for further informat
 
 # New features
 
+## 2026-04-23 USPTO ODP fallback/enrichment for US family members
+
+Family import now uses OPS as primary source, with optional USPTO ODP enrichment/fallback for US applications.
+
+The existing UI entry point remains unchanged: `Matters -> Create family from OPS`.
+
+Setup instructions are documented in [USPTO ODP integration guide](docs/USPTO_ODP.md).
+
 ## 2025-08-04 Countries
 
 Implemented translations for country names. 
