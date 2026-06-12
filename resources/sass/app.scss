@@ -65,10 +65,22 @@ a:not(.nav-link):not(.btn):not(.dropdown-item):hover {
 }
 
 // Card spacing variants
-.card {
+// Only apply to top-level cards, not nested ones
+.row > [class*="col"] > .card,
+.page-header + .row > [class*="col"] > .card,
+.container > .card,
+.container-fluid > .card {
   margin-bottom: 1rem;
   transition: box-shadow 0.3s ease-in-out;
 
+  // Hover effect for interactive cards (only top-level)
+  &:hover {
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+  }
+}
+
+// Card padding defaults
+.card {
   .card-header {
     padding: 0.5rem; // 8px - compact headers
   }
@@ -85,11 +97,6 @@ a:not(.nav-link):not(.btn):not(.dropdown-item):hover {
       padding: 0.5rem; // 8px - ultra-compact
     }
   }
-
-  // Hover effect for interactive cards
-  &:hover {
-    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
-  }
 }
 
 // Card elevation variants
@@ -101,13 +108,15 @@ a:not(.nav-link):not(.btn):not(.dropdown-item):hover {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
 }
 
-// Row gaps
+// Row gaps using Bootstrap's gutter system (preserves column layout)
 .row-compact {
-  gap: 0.5rem; // 8px
+  --bs-gutter-x: 0.5rem; // 8px
+  --bs-gutter-y: 0.5rem;
 }
 
 .row-standard {
-  gap: 1rem; // 16px
+  --bs-gutter-x: 1rem; // 16px
+  --bs-gutter-y: 1rem;
 }
 
 // Status Colors & Semantic Utilities
@@ -140,8 +149,8 @@ $info-light: #d1ecf1;
   box-shadow: 0 0 0 0.2rem rgba(97, 143, 170, 0.25);
 }
 
-// Filled input indicator (enhanced existing pattern)
-input:not(:placeholder-shown) {
+// Filled input indicator (only for inputs WITH a placeholder attribute)
+input[placeholder]:not(:placeholder-shown) {
   border-color: rgb(0, 190, 190);
   font-weight: bold;
   background-color: rgba(0, 190, 190, 0.05);

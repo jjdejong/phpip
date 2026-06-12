@@ -1,9 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
-  {{ __('My Profile') }}
-</legend>
+<div class="page-header">
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="h4 mb-0">{{ __('My Profile') }}</h1>
+  </div>
+</div>
 
 @if (session('success'))
 <div class="alert alert-success alert-dismissible fade show" role="alert">
