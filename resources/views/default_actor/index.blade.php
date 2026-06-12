@@ -1,10 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
-  {{ __('Default Actors') }}
-  <a href="default_actor/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="{{ __('Default actors') }}" data-resource="/default_actor/">{{ __('Create Default Actor') }}</a>
-</legend>
+<div class="page-header">
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="h4 mb-0">{{ __('Default Actors') }}</h1>
+    <div class="page-actions">
+      <a href="default_actor/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="{{ __('Default actors') }}" data-resource="/default_actor/">
+        <svg width="14" height="14" fill="currentColor" class="me-1">
+          <use xlink:href="#person-plus-fill"/>
+        </svg>
+        {{ __('Create Default Actor') }}
+      </a>
+    </div>
+  </div>
+</div>
 <div class="row">
   <div class="col">
     <div class="card border-primary p-1" style="max-height: 640px; overflow: auto;">
