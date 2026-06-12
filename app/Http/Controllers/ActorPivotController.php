@@ -34,6 +34,15 @@ class ActorPivotController extends Controller
             'date' => 'date',
         ]);
 
+        $existingLink = ActorPivot::where('matter_id', $request->matter_id)
+            ->where('role', $request->role)
+            ->where('actor_id', $request->actor_id)
+            ->first();
+
+        if ($existingLink) {
+            return $existingLink;
+        }
+
         // Fix display order indexes if wrong
         $roleGroup = ActorPivot::where('matter_id', $request->matter_id)->where('role', $request->role);
         $max = $roleGroup->max('display_order');
