@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 
@@ -89,8 +90,8 @@ class USPTOService
                 continue;
             }
 
-            $response = Http::timeout(10)->withHeaders($headers)->acceptJson()->get($url);
-            if ($response->successful()) {
+            $response = $this->getJson($url, $headers);
+            if ($response?->successful()) {
                 $normalized = $this->normalizeRecord($response->json());
                 if (!empty(array_filter($normalized))) {
                     return $normalized;
@@ -113,8 +114,8 @@ class USPTOService
             'size' => 1,
         ];
 
-        $response = Http::timeout(10)->withHeaders($headers)->acceptJson()->get($searchUrl, $queryStringPayload);
-        if ($response->successful()) {
+        $response = $this->getJson($searchUrl, $headers, $queryStringPayload);
+        if ($response?->successful()) {
             $normalized = $this->normalizeRecord($response->json());
             if (!empty(array_filter($normalized))) {
                 return $normalized;
@@ -133,12 +134,42 @@ class USPTOService
             'size' => 1,
         ];
 
-        $response = Http::timeout(10)->withHeaders($headers)->acceptJson()->post($searchUrl, $jsonSearchPayload);
-        if ($response->successful()) {
+        $response = $this->postJson($searchUrl, $headers, $jsonSearchPayload);
+        if ($response?->successful()) {
             return $this->normalizeRecord($response->json());
         }
 
         return [];
+    }
+
+    /**
+     * Issue a USPTO GET request, allowing callers to continue through fallbacks on timeouts.
+     *
+     * @param array $headers
+     * @param array $query
+     */
+    private function getJson(string $url, array $headers, array $query = []): ?\Illuminate\Http\Client\Response
+    {
+        try {
+            return Http::timeout(10)->withHeaders($headers)->acceptJson()->get($url, $query);
+        } catch (ConnectionException) {
+            return null;
+        }
+    }
+
+    /**
+     * Issue a USPTO POST request, allowing callers to return an empty enrichment on timeouts.
+     *
+     * @param array $headers
+     * @param array $payload
+     */
+    private function postJson(string $url, array $headers, array $payload): ?\Illuminate\Http\Client\Response
+    {
+        try {
+            return Http::timeout(10)->withHeaders($headers)->acceptJson()->post($url, $payload);
+        } catch (ConnectionException) {
+            return null;
+        }
     }
 
     /**
