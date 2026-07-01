@@ -75,75 +75,101 @@ class USPTOService
         $apiKey = config('services.uspto.api_key');
         $headers = $apiKey ? ['X-Api-Key' => $apiKey] : [];
 
-        try {
-            // Preferred path: direct application endpoint (built-in default + optional override).
-            $templates = array_filter(array_unique([
-                config('services.uspto.application_endpoint'),
-                '/api/v1/patent/applications/{applicationNumber}',
-            ]));
+        // Preferred path: direct application endpoint (built-in default + optional override).
+        $templates = array_filter(array_unique([
+            config('services.uspto.application_endpoint'),
+            '/api/v1/patent/applications/{applicationNumber}',
+        ]));
 
-            foreach ($templates as $template) {
-                $url = $this->resolveEndpointUrl(
-                    str_replace('{applicationNumber}', $normalizedNumber, $template)
-                );
-
-                if (empty($url)) {
-                    continue;
-                }
-
-                $response = Http::timeout(10)->withHeaders($headers)->acceptJson()->get($url);
-                if ($response->successful()) {
-                    $normalized = $this->normalizeRecord($response->json());
-                    if (!empty(array_filter($normalized))) {
-                        return $normalized;
-                    }
-                }
-            }
-
-            // Fallback path: search endpoint (built-in default + optional override).
-            $searchEndpoint = config('services.uspto.search_endpoint');
-            $searchUrl = $this->resolveEndpointUrl(
-                $searchEndpoint ?: '/api/v1/patent/applications/search'
+        foreach ($templates as $template) {
+            $url = $this->resolveEndpointUrl(
+                str_replace('{applicationNumber}', $normalizedNumber, $template)
             );
-            if (empty($searchUrl)) {
-                return [];
+
+            if (empty($url)) {
+                continue;
             }
 
-            $queryField = config('services.uspto.search_field', 'applicationNumberText');
-            $queryStringPayload = [
-                'q' => sprintf('%s:"%s"', $queryField, $normalizedNumber),
-                'size' => 1,
-            ];
-
-            $response = Http::timeout(10)->withHeaders($headers)->acceptJson()->get($searchUrl, $queryStringPayload);
-            if ($response->successful()) {
+            $response = $this->getJson($url, $headers);
+            if ($response?->successful()) {
                 $normalized = $this->normalizeRecord($response->json());
                 if (!empty(array_filter($normalized))) {
                     return $normalized;
                 }
             }
+        }
 
-            // Secondary fallback: POST JSON search payload.
-            $jsonSearchPayload = [
-                'query' => [
-                    'bool' => [
-                        'must' => [
-                            ['term' => [$queryField => $normalizedNumber]],
-                        ],
-                    ],
-                ],
-                'size' => 1,
-            ];
-
-            $response = Http::timeout(10)->withHeaders($headers)->acceptJson()->post($searchUrl, $jsonSearchPayload);
-            if ($response->successful()) {
-                return $this->normalizeRecord($response->json());
-            }
-        } catch (ConnectionException) {
+        // Fallback path: search endpoint (built-in default + optional override).
+        $searchEndpoint = config('services.uspto.search_endpoint');
+        $searchUrl = $this->resolveEndpointUrl(
+            $searchEndpoint ?: '/api/v1/patent/applications/search'
+        );
+        if (empty($searchUrl)) {
             return [];
         }
 
+        $queryField = config('services.uspto.search_field', 'applicationNumberText');
+        $queryStringPayload = [
+            'q' => sprintf('%s:"%s"', $queryField, $normalizedNumber),
+            'size' => 1,
+        ];
+
+        $response = $this->getJson($searchUrl, $headers, $queryStringPayload);
+        if ($response?->successful()) {
+            $normalized = $this->normalizeRecord($response->json());
+            if (!empty(array_filter($normalized))) {
+                return $normalized;
+            }
+        }
+
+        // Secondary fallback: POST JSON search payload.
+        $jsonSearchPayload = [
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        ['term' => [$queryField => $normalizedNumber]],
+                    ],
+                ],
+            ],
+            'size' => 1,
+        ];
+
+        $response = $this->postJson($searchUrl, $headers, $jsonSearchPayload);
+        if ($response?->successful()) {
+            return $this->normalizeRecord($response->json());
+        }
+
         return [];
+    }
+
+    /**
+     * Issue a USPTO GET request, allowing callers to continue through fallbacks on timeouts.
+     *
+     * @param array $headers
+     * @param array $query
+     */
+    private function getJson(string $url, array $headers, array $query = []): ?\Illuminate\Http\Client\Response
+    {
+        try {
+            return Http::timeout(10)->withHeaders($headers)->acceptJson()->get($url, $query);
+        } catch (ConnectionException) {
+            return null;
+        }
+    }
+
+    /**
+     * Issue a USPTO POST request, allowing callers to return an empty enrichment on timeouts.
+     *
+     * @param array $headers
+     * @param array $payload
+     */
+    private function postJson(string $url, array $headers, array $payload): ?\Illuminate\Http\Client\Response
+    {
+        try {
+            return Http::timeout(10)->withHeaders($headers)->acceptJson()->post($url, $payload);
+        } catch (ConnectionException) {
+            return null;
+        }
     }
 
     /**
