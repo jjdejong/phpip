@@ -89,7 +89,7 @@ class USPTOService
                 continue;
             }
 
-            $response = Http::withHeaders($headers)->acceptJson()->get($url);
+            $response = Http::timeout(10)->withHeaders($headers)->acceptJson()->get($url);
             if ($response->successful()) {
                 $normalized = $this->normalizeRecord($response->json());
                 if (!empty(array_filter($normalized))) {
@@ -113,7 +113,7 @@ class USPTOService
             'size' => 1,
         ];
 
-        $response = Http::withHeaders($headers)->acceptJson()->get($searchUrl, $queryStringPayload);
+        $response = Http::timeout(10)->withHeaders($headers)->acceptJson()->get($searchUrl, $queryStringPayload);
         if ($response->successful()) {
             $normalized = $this->normalizeRecord($response->json());
             if (!empty(array_filter($normalized))) {
@@ -133,7 +133,7 @@ class USPTOService
             'size' => 1,
         ];
 
-        $response = Http::withHeaders($headers)->acceptJson()->post($searchUrl, $jsonSearchPayload);
+        $response = Http::timeout(10)->withHeaders($headers)->acceptJson()->post($searchUrl, $jsonSearchPayload);
         if ($response->successful()) {
             return $this->normalizeRecord($response->json());
         }

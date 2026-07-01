@@ -2,6 +2,8 @@
 
 This guide explains how phpIP uses USPTO Open Data Portal (ODP) data together with EPO OPS for patent family import.
 
+> **Beta status:** USPTO ODP support is still experimental. Enabling it should not cause problems for the existing OPS import path, but USPTO ODP enrichment/fallback may not retrieve or normalize records correctly in all cases yet.
+
 ## 1) How provider switching works
 
 phpIP now uses a provider orchestrator (`FamilyDataService`) for family retrieval:
@@ -16,7 +18,17 @@ This means **you still use the same UI action**:
 
 No new UI menu is required.
 
-## 2) Configuration
+## 2) How to use it
+
+1. Log in to phpIP.
+2. Open `Matters -> Create family from OPS`.
+3. Enter an EP, WO, or other OPS-supported publication/application number as before.
+4. For a family containing US applications, phpIP keeps the OPS family data and uses USPTO ODP to fill missing US title, applicant, inventor, or procedure details when ODP is enabled.
+5. For a US application where OPS cannot provide the family data, phpIP attempts to use USPTO ODP as a fallback source for a single US matter.
+
+The feature is designed as an import enhancement, not a separate workflow. If USPTO ODP is disabled or unavailable, the existing OPS import flow continues to be used. While the USPTO ODP integration is in beta, failed or incomplete ODP retrieval should simply mean less enrichment data, not a broken OPS import.
+
+## 3) Configuration
 
 Set the following variables in `.env`:
 
@@ -42,7 +54,7 @@ Then clear Laravel config cache:
 php artisan optimize:clear
 ```
 
-## 3) Required existing OPS settings
+## 4) Required existing OPS settings
 
 USPTO support does **not** replace OPS setup. Keep OPS credentials configured:
 
@@ -53,7 +65,7 @@ OPS_SECRET=...
 
 The orchestrator depends on OPS as the primary family source.
 
-## 4) Validation checklist
+## 5) Validation checklist
 
 1. Log in to phpIP.
 2. Open `Matters -> Create family from OPS`.
@@ -63,7 +75,7 @@ The orchestrator depends on OPS as the primary family source.
 
 If you have API access to USPTO ODP configured, US party/title/procedure fields may be enriched when missing in OPS.
 
-## 5) Troubleshooting (USPTO ODP only)
+## 6) Troubleshooting (USPTO ODP only)
 
 ### OPS import works but US enrichment does not
 
@@ -74,7 +86,7 @@ Check:
 - API key requirements for your ODP dataset
 - network egress to the endpoint host from your phpIP server
 
-## 6) Security notes
+## 7) Security notes
 
 - Keep API keys in `.env`, never in source files.
 - Restrict outbound network access from the server to approved API hosts only.

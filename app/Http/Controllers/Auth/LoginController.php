@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -54,11 +56,15 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $this->validateLogin($request);
+        $this->ensureIsNotRateLimited($request);
 
         if (! Auth::attempt($this->credentials($request), $request->has('remember'))) {
+            RateLimiter::hit($this->throttleKey($request));
+
             return $this->sendFailedLoginResponse($request);
         }
 
+        RateLimiter::clear($this->throttleKey($request));
         $request->session()->regenerate();
 
         if (method_exists($this, 'authenticated')) {
@@ -146,5 +152,40 @@ class LoginController extends Controller
         throw ValidationException::withMessages([
             $this->username() => [trans('auth.failed')],
         ]);
+    }
+
+    /**
+     * Ensure the login request has not exceeded the allowed attempt count.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function ensureIsNotRateLimited(Request $request)
+    {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey($request), 5)) {
+            return;
+        }
+
+        $seconds = RateLimiter::availableIn($this->throttleKey($request));
+
+        throw ValidationException::withMessages([
+            $this->username() => [trans('auth.throttle', [
+                'seconds' => $seconds,
+                'minutes' => ceil($seconds / 60),
+            ])],
+        ])->status(429);
+    }
+
+    /**
+     * Get the rate limiting key for the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return string
+     */
+    protected function throttleKey(Request $request)
+    {
+        return Str::lower($request->input($this->username(), '')) . '|' . $request->ip();
     }
 }

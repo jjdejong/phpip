@@ -12,11 +12,15 @@ Head for the [Wiki](https://github.com/jjdejong/phpip/wiki) for further informat
 
 ## 2026-04-23 USPTO ODP fallback/enrichment for US family members
 
-Family import now uses OPS as primary source, with optional USPTO ODP enrichment/fallback for US applications.
+Family import now uses a dedicated provider orchestration service. EPO OPS remains the primary family source, while USPTO ODP can enrich US family members with missing title, applicant, inventor, or procedure data. If OPS cannot return a family for a US application, phpIP can fall back to USPTO ODP to prepare a single US matter from the available ODP record.
 
 The existing UI entry point remains unchanged: `Matters -> Create family from OPS`.
 
-Setup instructions are documented in [USPTO ODP integration guide](docs/USPTO_ODP.md).
+The import is also more tolerant of sparse OPS data: missing applicants/inventors and single-party OPS response objects no longer stop family creation.
+
+USPTO ODP support should be considered beta. When enabled, it is designed not to disturb the existing OPS import flow, but USPTO ODP data may not always be retrieved or normalized correctly yet.
+
+Setup and usage instructions are documented in the [USPTO ODP integration guide](docs/USPTO_ODP.md).
 
 ## 2025-08-04 Countries
 
