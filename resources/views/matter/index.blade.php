@@ -12,6 +12,7 @@
     border-color: rgb(0, 190, 190);
     font-weight: bold;
   }
+  .pagination-row .pagination { margin-bottom: 0; }
 </style>
 @endsection
 
@@ -153,7 +154,7 @@
           @else
         <tr class="table-info">
           @endif
-          <td {!! $matter->dead ? 'style="text-decoration: line-through;"' : '' !!}><a href="/matter/{{ $matter->id }}" target="_blank">{{ $matter->Ref }}</a></td>
+          <td {!! $matter->dead ? 'style="text-decoration: line-through;"' : '' !!}><a href="/matter/{{ $matter->id }}" target="_blank">{{ $matter->Ref }}</a>@if ( $matter->HasLink ) <svg width="14" height="14" fill="currentColor" class="text-muted ms-1"><title>{{ __('Linked to another matter') }}</title><use xlink:href="#link-45deg"/></svg>@endif</td>
           <td>{{ $matter->Cat }}</td>
           <td>
             @if ( $published )
@@ -185,7 +186,12 @@
         </tr>
         @endforeach
         <tr>
-          <td colspan="9">{{ $matters->links() }}</td>
+          <td colspan="9">
+            <div class="d-flex align-items-center gap-2 pagination-row">
+              {{ $matters->links() }}
+              <span id="matterCount" class="badge bg-primary" title="{{ __('Matching matters') }}">…</span>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>

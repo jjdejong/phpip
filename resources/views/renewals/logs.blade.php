@@ -1,9 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<legend class="alert alert-dark py-2 mb-1">
-  {{ __('Renewal logs') }}
-</legend>
+<div class="page-header">
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="h4 mb-0">{{ __('Renewal logs') }}</h1>
+  </div>
+</div>
 <div class="row">
   <div class="col">
     <div class="card">

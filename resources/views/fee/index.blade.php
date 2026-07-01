@@ -2,15 +2,24 @@
 
 @section('content')
 <div class="container-fluid">
-  <legend class="alert alert-dark d-flex justify-content-between py-2 mb-1">
-    <span>
-      {{ __('Fees') }}
-      <a class="text-primary" href="https://github.com/jjdejong/phpip/wiki/Renewal-Management#costs-and-fees" target="_blank">
-        <svg width="16" height="16" fill="currentColor"><use xlink:href="#question-circle-fill"/></svg>
-      </a>
-    </span>
-    <a href="fee/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="{{ __('New line') }}" data-resource="/fee/">{{ __('Add a new line') }}</a>
-  </legend>
+  <div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <h1 class="h4 mb-0">
+        {{ __('Fees') }}
+        <a class="text-primary" href="https://github.com/jjdejong/phpip/wiki/Renewal-Management#costs-and-fees" target="_blank" title="{{ __('Help documentation') }}">
+          <svg width="16" height="16" fill="currentColor"><use xlink:href="#question-circle-fill"/></svg>
+        </a>
+      </h1>
+      <div class="page-actions">
+        <a href="fee/create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajaxModal" title="{{ __('New line') }}" data-resource="/fee/">
+          <svg width="14" height="14" fill="currentColor" class="me-1">
+            <use xlink:href="#plus-circle-fill"/>
+          </svg>
+          {{ __('Add a new line') }}
+        </a>
+      </div>
+    </div>
+  </div>
   <div class="card border-primary">
     <div class="card-header bg-primary text-light py-1">
       <div class="row text-center">

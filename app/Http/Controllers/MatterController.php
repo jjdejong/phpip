@@ -13,6 +13,7 @@ use App\Services\MatterExportService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -83,6 +84,24 @@ class MatterController extends Controller
         $matters->withQueryString()->links();  // Keep URL parameters in the paginator links
 
         return view('matter.index', compact('matters'));
+    }
+
+    /**
+     * Return the total row count for the current filter as JSON.
+     *
+     * Called asynchronously from the matter list so the table renders
+     * immediately (via simplePaginate) and the badge populates when
+     * the count finishes.
+     */
+    public function count(Request $request)
+    {
+        $filters = $request->except([
+            'display_with', 'page', 'filter', 'value', 'sortkey', 'sortdir', 'tab', 'include_dead',
+        ]);
+
+        $total = Matter::filterCount($filters, $request->display_with, $request->include_dead);
+
+        return response()->json(['count' => $total]);
     }
 
     /**

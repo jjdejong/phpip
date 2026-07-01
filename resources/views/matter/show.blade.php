@@ -8,9 +8,9 @@ $actors = $matter->actors->groupBy('role_name');
 @extends('layouts.app')
 
 @section('content')
-<div class="row g-1 mb-1">
+<div class="row row-compact mb-2">
   <div class="col-3">
-    <div id="refsPanel" class="card border-primary p-0 h-100">
+    <div id="refsPanel" class="card card-elevated border-primary p-0 h-100">
       <div class="card-header bg-primary text-light reveal-hidden p-1">
         <a class="bg-primary text-white lead {{ $matter->dead ? 'text-decoration-line-through' : '' }}"
            href="/matter?Ref= {{ $matter->caseref }}"
@@ -101,7 +101,7 @@ $actors = $matter->actors->groupBy('role_name');
     classifierId: {{ $imageClassifier?->id ?? 'null' }},
     matterId: {{ $matter->container_id ?? $matter->id }}
   })">
-    <div class="row g-1 h-100">
+    <div class="row row-compact h-100">
       <div class="col" :class="expanded ? 'col-9' : 'col-12'">
         <div class="card border-secondary p-1 h-100 position-relative">
           <dl id="titlePanel">
@@ -207,9 +207,9 @@ $actors = $matter->actors->groupBy('role_name');
   </div>
 </div>
 
-<div class="row g-1">
+<div class="row row-compact">
   <div class="col-3">
-    <div id="actorPanel" class="card border-secondary h-100" style="max-height: 600px">
+    <div id="actorPanel" class="card card-compact border-secondary h-100" style="max-height: 600px">
       <div class="card-header reveal-hidden text-white bg-secondary">
         {{ __('Actors') }}
         @can('readwrite')
@@ -275,7 +275,7 @@ $actors = $matter->actors->groupBy('role_name');
   </div>
   <div class="col-9">
     <div id="multiPanel" class="container p-0">
-      <div class="row mb-1 g-1" style="min-height: 138px;">
+      <div class="row mb-2 row-compact" style="min-height: 138px;">
         <div class="col">
           <div class="card p-0 border-primary reveal-hidden h-100">
             <div class="card-header bg-primary p-1">
@@ -333,7 +333,7 @@ $actors = $matter->actors->groupBy('role_name');
           </div>
         </div>
       </div>
-      <div class="row mb-1 g-1" style="min-height: 138px;">
+      <div class="row mb-2 row-compact" style="min-height: 138px;">
         <div class="col-2">
           <div class="card p-0 border-primary reveal-hidden h-100">
             <div class="card-header {{ $matter->renewalsPending->count() ? 'text-warning' : 'text-light' }} p-1 bg-primary">
@@ -452,7 +452,7 @@ $actors = $matter->actors->groupBy('role_name');
           </div>
         </div>
       </div>
-      <div class="row g-1" style="min-height: 100px;">
+      <div class="row row-compact" style="min-height: 100px;">
         <div class="col-10">
           <div class="card border-secondary p-0 h-100">
             <div class="card-header p-1 bg-secondary text-light">

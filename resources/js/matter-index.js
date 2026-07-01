@@ -26,11 +26,28 @@ export function initMatterIndex() {
    *
    * @returns {void}
    */
-  function refreshMatterList() {
+  async function refreshMatterList() {
     url.searchParams.delete("page");
     window.history.pushState("", "phpIP", url);
-    reloadPart(url, "matterList");
+    await reloadPart(url, "matterList");
+    refreshMatterCount();
   }
+
+  let countAbort = null;
+  function refreshMatterCount() {
+    const badge = document.getElementById("matterCount");
+    if (!badge) return;
+    if (countAbort) countAbort.abort();
+    countAbort = new AbortController();
+    badge.textContent = "…";
+    const countUrl = new URL("/matter/count", window.location.origin);
+    for (const [k, v] of url.searchParams) countUrl.searchParams.set(k, v);
+    fetch(countUrl, { signal: countAbort.signal, headers: { Accept: "application/json" } })
+      .then((r) => r.json())
+      .then((j) => { badge.textContent = j.count.toLocaleString(); })
+      .catch(() => {});
+  }
+  refreshMatterCount();
 
   const filterFieldsEl = document.getElementById("filterFields");
   if (filterFieldsEl) {
