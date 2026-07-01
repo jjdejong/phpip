@@ -165,7 +165,8 @@ class OPSService
                     ->last()['$'];
 
                 // Each inventor is under [i]['inventor-name']['name']['$'] both in "epodoc" and "original" format
-                $inventors = collect($member[0]['exchange-document']['bibliographic-data']['parties']['inventors']['inventor'] ?? [])
+                $inventorData = $member[0]['exchange-document']['bibliographic-data']['parties']['inventors']['inventor'] ?? [];
+                $inventors = collect(array_is_list($inventorData) ? $inventorData : [$inventorData])
                     ->where('@data-format', 'original')
                     ->values()
                     ->pluck('inventor-name.name.$')
@@ -177,7 +178,8 @@ class OPSService
                 }
 
                 // Each applicant is under [i]['applicant-name']['name']['$']
-                $applicants = collect($member[0]['exchange-document']['bibliographic-data']['parties']['applicants']['applicant'] ?? [])
+                $applicantData = $member[0]['exchange-document']['bibliographic-data']['parties']['applicants']['applicant'] ?? [];
+                $applicants = collect(array_is_list($applicantData) ? $applicantData : [$applicantData])
                     ->where('@data-format', 'original')
                     ->values()
                     ->pluck('applicant-name.name.$')
