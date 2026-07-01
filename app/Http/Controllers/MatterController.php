@@ -579,12 +579,19 @@ class MatterController extends Controller
                         ]
                     );
                 } else {
-                    $new_matter->events()->create(
-                        [
-                            'code' => 'PFIL',
-                            'detail' => $app['pct'],
-                        ]
-                    );
+                    $pct_priority = collect($app['pri'])->first(function ($pri) use ($app) {
+                        return $pri['number'] == $app['pct'] || $pri['country'] . $pri['number'] == $app['pct'];
+                    });
+
+                    if ($pct_priority) {
+                        $new_matter->events()->create(
+                            [
+                                'code' => 'PFIL',
+                                'detail' => $app['pct'],
+                                'event_date' => $pct_priority['date'],
+                            ]
+                        );
+                    }
                 }
             }
             if ($parent_num) {
