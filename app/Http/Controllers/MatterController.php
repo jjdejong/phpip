@@ -570,13 +570,22 @@ class MatterController extends Controller
                 }
             }
             if ($app['pct'] != null) {
-                $new_matter->parent_id = $matter_id_num[$app['pct']];
-                $new_matter->events()->create(
-                    [
-                        'code' => 'PFIL',
-                        'alt_matter_id' => $new_matter->parent_id
-                    ]
-                );
+                if (array_key_exists($app['pct'], $matter_id_num)) {
+                    $new_matter->parent_id = $matter_id_num[$app['pct']];
+                    $new_matter->events()->create(
+                        [
+                            'code' => 'PFIL',
+                            'alt_matter_id' => $new_matter->parent_id
+                        ]
+                    );
+                } else {
+                    $new_matter->events()->create(
+                        [
+                            'code' => 'PFIL',
+                            'detail' => $app['pct'],
+                        ]
+                    );
+                }
             }
             if ($parent_num) {
                 // This app is a divisional or a continuation
