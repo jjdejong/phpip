@@ -510,12 +510,17 @@ class MatterController extends Controller
                 }
                 if (array_key_exists('inventors', $app) && !empty($app['inventors'])) {
                     foreach ($app['inventors'] as $inventor) {
-                        // Search for phonetically equivalent in the actor table, and take first
                         if (substr($inventor, -1) == ',') {
                             // Remove ending comma
                             $inventor = substr($inventor, 0, -1);
                         }
-                        if ($actor = Actor::whereRaw("name SOUNDS LIKE ?", [$inventor])->first()) {
+                        $inventor = trim($inventor);
+
+                        if ($inventor === '') {
+                            continue;
+                        }
+
+                        if ($actor = Actor::where('name', $inventor)->first()) {
                             // Some inventors are listed twice, with and without accents, so ignore second attempt
                             $new_matter->actorPivot()->firstOrCreate(
                                 [
@@ -570,13 +575,29 @@ class MatterController extends Controller
                 }
             }
             if ($app['pct'] != null) {
-                $new_matter->parent_id = $matter_id_num[$app['pct']];
-                $new_matter->events()->create(
-                    [
-                        'code' => 'PFIL',
-                        'alt_matter_id' => $new_matter->parent_id
-                    ]
-                );
+                if (array_key_exists($app['pct'], $matter_id_num)) {
+                    $new_matter->parent_id = $matter_id_num[$app['pct']];
+                    $new_matter->events()->create(
+                        [
+                            'code' => 'PFIL',
+                            'alt_matter_id' => $new_matter->parent_id
+                        ]
+                    );
+                } else {
+                    $pct_priority = collect($app['pri'])->first(function ($pri) use ($app) {
+                        return $pri['number'] == $app['pct'] || $pri['country'] . $pri['number'] == $app['pct'];
+                    });
+
+                    if ($pct_priority) {
+                        $new_matter->events()->create(
+                            [
+                                'code' => 'PFIL',
+                                'detail' => $app['pct'],
+                                'event_date' => $pct_priority['date'],
+                            ]
+                        );
+                    }
+                }
             }
             if ($parent_num) {
                 // This app is a divisional or a continuation
