@@ -510,12 +510,17 @@ class MatterController extends Controller
                 }
                 if (array_key_exists('inventors', $app) && !empty($app['inventors'])) {
                     foreach ($app['inventors'] as $inventor) {
-                        // Search for phonetically equivalent in the actor table, and take first
                         if (substr($inventor, -1) == ',') {
                             // Remove ending comma
                             $inventor = substr($inventor, 0, -1);
                         }
-                        if ($actor = Actor::whereRaw("name SOUNDS LIKE ?", [$inventor])->first()) {
+                        $inventor = trim($inventor);
+
+                        if ($inventor === '') {
+                            continue;
+                        }
+
+                        if ($actor = Actor::where('name', $inventor)->first()) {
                             // Some inventors are listed twice, with and without accents, so ignore second attempt
                             $new_matter->actorPivot()->firstOrCreate(
                                 [
