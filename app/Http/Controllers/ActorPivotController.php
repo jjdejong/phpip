@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Actor;
 use App\Models\ActorPivot;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -58,7 +59,14 @@ class ActorPivotController extends Controller
             'date' => Now(),
         ]);
 
-        return ActorPivot::create($request->except(['_token', '_method']));
+        try {
+            return ActorPivot::create($request->except(['_token', '_method']));
+        } catch (UniqueConstraintViolationException $exception) {
+            return ActorPivot::where('matter_id', $request->matter_id)
+                ->where('role', $request->role)
+                ->where('actor_id', $request->actor_id)
+                ->firstOrFail();
+        }
     }
 
     /**
