@@ -62,18 +62,32 @@ export const reloadPart = async (url, partId) => {
  *
  * @async
  * @param {string} url - The API endpoint URL
- * @param {string} method - HTTP method (GET, POST, PUT, DELETE)
+ * @param {string} method - HTTP method (GET, POST, PUT, PATCH, DELETE)
  * @param {FormData|URLSearchParams} body - Request body data
  * @returns {Promise<Object>} JSON response from the server
  */
 export const fetchREST = async (url, method, body) => {
+  let requestMethod = method;
+  let requestBody = body;
+
+  // PHP populates form data reliably for POST requests across all SAPIs.
+  // Laravel then restores the intended verb from the _method parameter.
+  if (
+    ["PUT", "PATCH"].includes(method) &&
+    body instanceof URLSearchParams
+  ) {
+    requestMethod = "POST";
+    requestBody = new URLSearchParams(body);
+    requestBody.set("_method", method);
+  }
+
   const response = await fetch(url, {
     headers: {
       "X-Requested-With": "XMLHttpRequest",
       "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content,
     },
-    method: method,
-    body: body,
+    method: requestMethod,
+    body: requestBody,
   });
   switch (response.status) {
     case 500:
