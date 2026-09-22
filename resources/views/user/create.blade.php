@@ -33,7 +33,7 @@
 			<div class="col">
 				<label title="{{ __('Select user\'s company') }}">{{ __('Company') }}</label>
 				<input type="hidden" name="company_id">
-				<input type="text" class="form-control" data-ac="/actor/autocomplete" dπata-actarget="company_id">
+				<input type="text" class="form-control" data-ac="/actor/autocomplete" data-actarget="company_id">
 			</div>
 		</div>
 		<div class="row mb-2">

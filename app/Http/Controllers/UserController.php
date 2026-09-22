@@ -73,6 +73,9 @@ class UserController extends Controller
             'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()],
             'email' => 'required|email',
             'default_role' => 'required',
+            // company_id decides which client's matters a CLI user can see,
+            // so it has to be a real actor and not whatever the form posted.
+            'company_id' => 'nullable|integer|exists:actor,id',
         ]);
         $request->merge(['creator' => Auth::user()->login]);
 
@@ -146,6 +149,8 @@ class UserController extends Controller
             'email' => 'sometimes|required|email',
             'default_role' => 'sometimes|required',
             'language' => 'sometimes|required|string|max:5',
+            // See store(): this field is an authorization input for CLI users.
+            'company_id' => 'sometimes|nullable|integer|exists:actor,id',
         ]);
         $request->merge(['updater' => Auth::user()->login]);
         if ($request->filled('password')) {

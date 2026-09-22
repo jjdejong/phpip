@@ -13,18 +13,20 @@ class MatterPolicy
     /**
      * Determine whether the user can view the matter.
      *
+     * Client users may view a matter when one of their client company's actors
+     * is linked to it as client, directly or inherited from the container.
+     * Everyone else may view every matter.
+     *
      * @return mixed
      */
     public function view(User $user, Matter $matter)
     {
-        if ($user->default_role === 'CLI' || empty($user->default_role)) {
-            if ($matter->client->count()) {
-                return $user->id === $matter->client->actor_id;
-            } else {
-                return false;
-            }
-        } else {
+        if (! $user->isClient()) {
             return true;
         }
+
+        return $matter->clients()
+            ->forClientUser($user)
+            ->exists();
     }
 }

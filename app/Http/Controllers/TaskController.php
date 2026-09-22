@@ -47,9 +47,9 @@ class TaskController extends Controller
             $tasks->where('code', '!=', 'REN');
         }
 
-        if (Auth::user()->default_role == 'CLI' || empty(Auth::user()->default_role)) {
-            $tasks->whereHas('matter.client', function (Builder $q) {
-                $q->where('actor_id', Auth::user()->id);
+        if (Auth::user()->isClient()) {
+            $tasks->whereHas('matter.clients', function (Builder $q) {
+                $q->forClientUser(Auth::user());
             });
         }
 

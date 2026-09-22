@@ -171,15 +171,31 @@ class Matter extends Model
      * Get the client actor for this matter.
      *
      * Returns the client actor using the MatterActors view.
-     * IMPORTANT: Used in MatterPolicy - do not modify without checking authorization logic.
      * Returns a default empty model if no client exists.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function client()
     {
-        // Used in Policies - do not change without checking MatterPolicy
         return $this->hasOne(MatterActors::class)->whereRoleCode('CLI')->withDefault();
+    }
+
+    /**
+     * All actors linked to this matter as client.
+     *
+     * IMPORTANT: this is the relation authorization must use. A matter can
+     * carry more than one client link (a company and one of its contacts), and
+     * client() is an unordered hasOne with withDefault() - reading
+     * $matter->client in an access check silently picks one arbitrary link and
+     * denies the holders of the others. This relation exists so that mistake is
+     * not available to write. Used in MatterPolicy, Task, TaskController and
+     * getCategoryMatterCount; scope the rows with MatterActors::forClientUser.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function clients()
+    {
+        return $this->hasMany(MatterActors::class)->whereRoleCode('CLI');
     }
 
     /**
@@ -623,11 +639,39 @@ class Matter extends Model
     }
 
     /**
+     * Restrict a matter query to what a client user may see.
+     *
+     * Mirrors MatterActors::forClientUser for filter() and filterCount(), which
+     * build the client joins by hand and so cannot use the relation. The cli
+     * and clic aliases ARE the actor table, so the company test is an indexed
+     * column compare here rather than a subquery.
+     *
+     * Keep the two in step - they are the same rule expressed against two
+     * different query shapes.
+     */
+    private static function whereVisibleToClient($query, User $user): void
+    {
+        $companyId = $user->clientCompanyId();
+
+        $query->where(function ($q) use ($user, $companyId) {
+            $q->where('cli.id', $user->id)
+                ->orWhere('clic.id', $user->id);
+
+            if ($companyId) {
+                $q->orWhere('cli.id', $companyId)
+                    ->orWhere('clic.id', $companyId)
+                    ->orWhere('cli.company_id', $companyId)
+                    ->orWhere('clic.company_id', $companyId);
+            }
+        });
+    }
+
+    /**
      * Build a filtered query for matters with complex joins and filtering.
      *
      * Constructs a comprehensive query that joins matters with their actors, events, and classifiers
      * to provide a flattened view suitable for display in matter lists. Implements role-based
-     * access control to restrict clients to their own matters.
+     * access control to restrict clients to their own company's matters.
      *
      * @param string $sortkey The column to sort by (default: 'id')
      * @param string $sortdir The sort direction 'asc' or 'desc' (default: 'desc')
@@ -806,21 +850,15 @@ class Matter extends Model
             );
         }
 
-        $authUserRole = Auth::user()->default_role;
-        $authUserId = Auth::user()->id;
+        $isClient = Auth::user()->isClient();
 
         if ($display_with) {
             $query->where('matter_category.display_with', $display_with);
         }
 
-        // When the user is a client or no role is defined, limit the matters to client's own matters
-        if ($authUserRole == 'CLI' || empty($authUserRole)) {
-            $query->where(
-                function ($q) use ($authUserId) {
-                    $q->where('cli.id', $authUserId)
-                        ->orWhere('clic.id', $authUserId);
-                }
-            );
+        // When the user is a client or no role is defined, limit the matters to those of the client's company
+        if ($isClient) {
+            self::whereVisibleToClient($query, Auth::user());
         }
 
         if (!empty($multi_filter)) {
@@ -940,9 +978,7 @@ class Matter extends Model
      */
     public static function filterCount(array $multi_filter = [], $display_with = false, $include_dead = false): int
     {
-        $authUserRole = Auth::user()->default_role;
-        $authUserId = Auth::user()->id;
-        $isClient = $authUserRole == 'CLI' || empty($authUserRole);
+        $isClient = Auth::user()->isClient();
 
         $needs = array_filter($multi_filter, fn ($v) => $v !== '' && $v !== null);
 
@@ -1030,9 +1066,7 @@ class Matter extends Model
         }
 
         if ($isClient) {
-            $query->where(function ($q) use ($authUserId) {
-                $q->where('cli.id', $authUserId)->orWhere('clic.id', $authUserId);
-            });
+            self::whereVisibleToClient($query, Auth::user());
         }
 
         foreach ($needs as $key => $value) {
@@ -1091,7 +1125,7 @@ class Matter extends Model
      * Get categories with their matter counts filtered by user and request parameters.
      *
      * Returns all categories with a count of matters based on:
-     * - User's role (clients see only their own matters)
+     * - User's role (clients see only their own company's matters)
      * - 'what_tasks' request parameter (filter by responsible user or client)
      * Used for dashboard and navigation displays.
      *
@@ -1108,17 +1142,17 @@ class Matter extends Model
                     $aq->where('actor_id', request()->input('what_tasks'));
                 });
             }
-            if (Auth::user()->default_role == 'CLI' || empty(Auth::user()->default_role)) {
-                $query->whereHas('client', function($aq) {
-                    $aq->where('actor_id', Auth::id());
+            if (Auth::user()->isClient()) {
+                $query->whereHas('clients', function($aq) {
+                    $aq->forClientUser(Auth::user());
                 });
             }
         }])
-            ->when(Auth::user()->default_role == 'CLI' || empty(Auth::user()->default_role),
+            ->when(Auth::user()->isClient(),
                 function($query) {
                     $query->whereHas('matters', function($q) {
-                        $q->whereHas('client', function($aq) {
-                            $aq->where('actor_id', Auth::id());
+                        $q->whereHas('clients', function($aq) {
+                            $aq->forClientUser(Auth::user());
                         });
                     });
                 })

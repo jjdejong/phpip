@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasTranslationsExtended;
 
@@ -44,6 +45,33 @@ class MatterActors extends Model
      * @var array<string>
      */
     public $translatable = ['role_name'];
+
+    /**
+     * Limit a set of client links to those a client user may see.
+     *
+     * This is the one definition of client visibility: the link is visible when
+     * its actor is the user, is the user's client company, or is employed by
+     * that company. Matter::whereVisibleToClient() mirrors it for the hand-built
+     * joins in Matter::filter(), which cannot use a relation.
+     *
+     * Callers must have established that the user is a client - internal users
+     * are never filtered through this.
+     */
+    public function scopeForClientUser(Builder $query, User $user): void
+    {
+        $companyId = $user->clientCompanyId();
+
+        $query->where(function (Builder $q) use ($user, $companyId) {
+            $q->where('actor_id', $user->id);
+
+            if ($companyId) {
+                $q->orWhere('actor_id', $companyId)
+                    ->orWhereIn('actor_id', function ($sub) use ($companyId) {
+                        $sub->select('id')->from('actor')->where('company_id', $companyId);
+                    });
+            }
+        });
+    }
 
     /**
      * Get the matter this actor relationship belongs to.

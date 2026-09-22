@@ -93,6 +93,48 @@ class User extends Authenticatable
     }
 
     /**
+     * Whether this user is a client user (restricted access).
+     *
+     * An empty role is treated as a client for safety - it must never fall
+     * through to the unrestricted branch. Such an account gets no company
+     * scoping either, see clientCompanyId().
+     */
+    public function isClient(): bool
+    {
+        return $this->default_role === 'CLI' || empty($this->default_role);
+    }
+
+    /**
+     * The client company whose matters this user may see, or null for none.
+     *
+     * Matters are normally linked to the client *company* actor, so a contact
+     * has to be able to see their company's matters. The company is read from
+     * actor.company_id. A client that IS a company carries no company_id of its
+     * own, so it acts as its own company and thereby also sees the matters of
+     * its contacts - the scope has to work in both directions, or two logins of
+     * the same client disagree about what they can see.
+     *
+     * Returns null for anyone who is not a fully configured client user. In
+     * particular an account whose default_role is empty keeps exactly the
+     * access it had before company scoping existed: its own matters and nothing
+     * else. A blank role is an unconfigured account, not a grant.
+     *
+     * Note this makes actor.company_id an authorization input. Every actor
+     * employed by the company is treated as an identity of that client, so an
+     * employee who is separately the client of record on a private matter would
+     * expose it to their colleagues. Curating company_id on client logins is
+     * therefore a security task, not just bookkeeping.
+     */
+    public function clientCompanyId(): ?int
+    {
+        if ($this->default_role !== 'CLI') {
+            return null;
+        }
+
+        return (int) ($this->company_id ?: $this->id);
+    }
+
+    /**
      * Get all matters this user is responsible for.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

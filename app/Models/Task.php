@@ -136,7 +136,7 @@ class Task extends Model
      * - User login/identifier
      *
      * Respects user role restrictions:
-     * - Clients see only their own matters' tasks
+     * - Clients see only their own company's matters' tasks
      * - Can filter by assigned user (what_tasks=1) or client (what_tasks>1)
      * - Excludes tasks from dead matters
      *
@@ -144,8 +144,6 @@ class Task extends Model
      */
     public static function getUsersOpenTaskCount()
     {
-        $userid = Auth::user()->id;
-        $role = Auth::user()->default_role;
         $what_tasks = request()->input('what_tasks');
 
         $query = static::with(['matter', 'matter.client'])
@@ -166,10 +164,10 @@ class Task extends Model
         }
 
         // Apply client role restrictions if needed
-        if ($role == 'CLI' || empty($role)) {
-            $query->whereHas('matter', function ($q) use ($userid) {
-                $q->whereHas('client', function ($q2) use ($userid) {
-                    $q2->where('actor_id', $userid);
+        if (Auth::user()->isClient()) {
+            $query->whereHas('matter', function ($q) {
+                $q->whereHas('clients', function ($q2) {
+                    $q2->forClientUser(Auth::user());
                 });
             });
         }
