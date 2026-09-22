@@ -140,14 +140,16 @@ class MatterController extends Controller
     /**
      * Return a JSON array with info of a matter. For use with API REST.
      *
-     * @param int $id
+     * @param Matter $matter
      * @return Json
      **/
-    public function info($id)
+    public function info(Matter $matter)
     {
-        return Matter::with(
+        $this->authorize('view', $matter);
+
+        return $matter->load(
             ['tasksPending.info', 'renewalsPending', 'events.info', 'titles', 'actors', 'classifiers']
-        )->find($id);
+        );
     }
 
     /**
@@ -813,6 +815,8 @@ class MatterController extends Controller
      */
     public function mergeFile(Matter $matter, MergeFileRequest $request)
     {
+        $this->authorize('view', $matter);
+
         $file = $request->file('file');
         $template = $this->documentMergeService
             ->setMatter($matter)
@@ -847,6 +851,8 @@ class MatterController extends Controller
      */
     public function events(Matter $matter)
     {
+        $this->authorize('view', $matter);
+
         $events = $matter->events->load('info');
 
         return view('matter.events', compact('events', 'matter'));
@@ -860,6 +866,8 @@ class MatterController extends Controller
      */
     public function tasks(Matter $matter)
     {
+        $this->authorize('view', $matter);
+
         // All events and their tasks, excepting renewals
         $events = $matter->events()->with(['tasks' => function (HasMany $query) {
             $query->where('code', '!=', 'REN');
@@ -877,6 +885,8 @@ class MatterController extends Controller
      */
     public function renewals(Matter $matter)
     {
+        $this->authorize('view', $matter);
+
         // The renewal trigger event and its renewals
         $events = $matter->events()->whereHas('tasks', function (Builder $query) {
             $query->where('code', 'REN');
@@ -897,6 +907,8 @@ class MatterController extends Controller
      */
     public function actors(Matter $matter, $role)
     {
+        $this->authorize('view', $matter);
+
         $role_group = $matter->actors->where('role_code', $role);
 
         return view('matter.roleActors', compact('role_group', 'matter'));
@@ -910,6 +922,8 @@ class MatterController extends Controller
      */
     public function classifiers(Matter $matter)
     {
+        $this->authorize('view', $matter);
+
         $matter->load(['classifiers']);
 
         return view('matter.classifiers', compact('matter'));
@@ -924,6 +938,8 @@ class MatterController extends Controller
      */
     public function description(Matter $matter, $lang)
     {
+        $this->authorize('view', $matter);
+
         $description = $matter->getDescription($lang);
 
         return view('matter.summary', compact('description'));

@@ -133,6 +133,8 @@ class DocumentController extends Controller
      */
     public function select(Matter $matter, Request $request)
     {
+        $this->authorize('view', $matter);
+
         $template_id = $request->input('template_id');
         //limit to actors with email
         $contacts = MatterActors::where([['matter_id', $matter->id], ['role_code', 'CNT']])->whereNotNull('email');
@@ -241,7 +243,8 @@ class DocumentController extends Controller
         if (count($sendto_ids) != 0) {
             $mailto = 'mailto:'.implode(',', Actor::whereIn('id', $sendto_ids)->pluck('email')->all());
             $sep = '?';
-            $matter = Matter::find($request->matter_id);
+            $matter = Matter::findOrFail($request->matter_id);
+            $this->authorize('view', $matter);
             $event = Event::find($request->event_id);
             $task = Task::find($request->task_id);
             $description = implode("\n", $matter->getDescription($member->language));

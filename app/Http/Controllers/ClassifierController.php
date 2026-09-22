@@ -152,6 +152,8 @@ class ClassifierController extends Controller
      */
     public function showImage(Classifier $classifier)
     {
+        $this->authorize('view', $classifier->matter);
+
         return response($classifier->img)
             ->header('Content-Type', $classifier->value);
     }

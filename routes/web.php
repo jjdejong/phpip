@@ -73,7 +73,8 @@ Route::middleware(['auth'])->group(function () {
     // Matter routes group
     Route::controller(MatterController::class)->prefix('matter')->name('matter.')->group(function () {
         Route::get('autocomplete', [AutocompleteController::class, 'matter'])->name('autocomplete');
-        Route::get('new-caseref', [AutocompleteController::class, 'newCaseref'])->name('new-caseref');
+        Route::get('new-caseref', [AutocompleteController::class, 'newCaseref'])->name('new-caseref')
+            ->middleware('can:readwrite');
         Route::post('search', [MatterSearchController::class, 'search'])->name('search');
         Route::get('export', 'export')->name('export');
         Route::get('count', 'count')->name('count');
@@ -86,7 +87,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('{matter}/description/{lang}', 'description')->name('description');
         Route::get('{matter}/info', 'info')->name('info');
         Route::post('storeN', 'storeN')->name('storeN');
-        Route::get('getOPSfamily/{docnum}', 'getOPSfamily')->name('getOPSfamily');
+        Route::get('getOPSfamily/{docnum}', 'getOPSfamily')->name('getOPSfamily')
+            ->middleware('can:readwrite');
         Route::post('storeFamily', 'storeFamily')->name('storeFamily');
     });
 
@@ -109,8 +111,10 @@ Route::middleware(['auth'])->group(function () {
     // Classifier routes
     Route::get('classifier/{classifier}/img', [ClassifierController::class, 'showImage'])->name('classifier.image');
 
-    // Renewal routes
-    Route::controller(RenewalController::class)->prefix('renewal')->name('renewal.')->group(function () {
+    // Renewal routes - an internal workflow, never exposed to clients.
+    // Route::resource('renewal') below is already in the except_client group,
+    // but these are declared first and would otherwise win.
+    Route::controller(RenewalController::class)->middleware('can:except_client')->prefix('renewal')->name('renewal.')->group(function () {
         Route::post('order', 'renewalOrder');
         Route::post('call/{send}', 'firstcall');
         Route::post('reminder', 'remindercall');
@@ -133,7 +137,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('select/{matter}', 'select');
     });
 
-    Route::post('event/{event}/recreateTasks', fn (App\Models\Event $event) => DB::statement('CALL recreate_tasks(?, ?)', [$event->id, Auth::user()->login]));
+    Route::post('event/{event}/recreateTasks', fn (App\Models\Event $event) => DB::statement('CALL recreate_tasks(?, ?)', [$event->id, Auth::user()->login]))
+        ->middleware('can:readwrite');
 
     // Resource routes
     Route::resource('matter', MatterController::class);

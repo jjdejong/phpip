@@ -14,6 +14,7 @@ use App\Models\TemplateMember;
 use App\Models\MatterType;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
 
@@ -36,6 +37,12 @@ class AutocompleteController extends Controller
     {
         $results = Matter::with('filing')
             ->select('id as key', 'uid as value')
+            // Without this a client could enumerate the whole portfolio here
+            ->when(Auth::user()->isClient(), function ($query) {
+                $query->whereHas('clients', function ($q) {
+                    $q->forClientUser(Auth::user());
+                });
+            })
             ->whereLike('uid', "{$request->term}%")
             ->take(15)
             ->get()

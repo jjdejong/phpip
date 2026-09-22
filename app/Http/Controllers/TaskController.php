@@ -109,6 +109,12 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        // index() scopes the list; a task fetched by id must be checked too,
+        // or the scope is bypassed by guessing ids.
+        $matter = $task->matter;
+        abort_if($matter === null, 403);
+        $this->authorize('view', $matter);
+
         return $task;
     }
 

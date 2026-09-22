@@ -158,4 +158,94 @@ class ClientAccessTest extends TestCase
 
         $this->call('GET', '/matter/4')->assertStatus(200);
     }
+
+    /**
+     * Every matter sub-resource must run the policy, not just show(). These all
+     * hang off the matter page a client legitimately reaches for their own
+     * matters, so they are authorized per matter rather than blocked outright.
+     */
+    public function testMatterSubResourcesAreDeniedToAnUnrelatedClient()
+    {
+        $this->resetDatabaseAndSeed();
+        $this->be($this->clientUser('outsider'));
+
+        foreach ([
+            '/matter/4/info',
+            '/matter/4/events',
+            '/matter/4/tasks',
+            '/matter/4/renewals',
+            '/matter/4/classifiers',
+            '/matter/4/roleActors/CLI',
+            '/matter/4/description/en',
+        ] as $url) {
+            $this->call('GET', $url)->assertStatus(403, "expected 403 from $url");
+        }
+
+        $this->call('POST', '/matter/4/mergeFile')->assertStatus(403);
+    }
+
+    /** ... and the client of the matter still reaches all of them. */
+    public function testMatterSubResourcesStayOpenToTheClientOfTheMatter()
+    {
+        $this->resetDatabaseAndSeed();
+        $this->be($this->clientUser('emusk', 124));
+
+        foreach ([
+            '/matter/4/info',
+            '/matter/4/events',
+            '/matter/4/tasks',
+            '/matter/4/renewals',
+            '/matter/4/classifiers',
+            '/matter/4/roleActors/CLI',
+            '/matter/4/description/en',
+        ] as $url) {
+            $this->call('GET', $url)->assertStatus(200, "expected 200 from $url");
+        }
+    }
+
+    /** Fetching a task by id must not bypass the scoping applied to /task. */
+    public function testTaskShowIsDeniedToAnUnrelatedClient()
+    {
+        $this->resetDatabaseAndSeed();
+        $taskId = DB::table('task')->value('id');
+        $this->be($this->clientUser('outsider'));
+
+        $this->call('GET', "/task/$taskId")->assertStatus(403);
+    }
+
+    /** The renewal workflow is internal; clients must not reach any of it. */
+    public function testRenewalWorkflowIsClosedToClients()
+    {
+        $this->resetDatabaseAndSeed();
+        $this->be($this->clientUser('outsider'));
+
+        $this->call('GET', '/renewal/export')->assertStatus(403);
+        $this->call('GET', '/renewal/logs')->assertStatus(403);
+        $this->call('POST', '/renewal/paid')->assertStatus(403);
+    }
+
+    /** Document generation exposes contact emails, so it follows the policy. */
+    public function testDocumentSelectIsDeniedToAnUnrelatedClient()
+    {
+        $this->resetDatabaseAndSeed();
+        $this->be($this->clientUser('outsider'));
+
+        $this->call('GET', '/document/select/4')->assertStatus(403);
+    }
+
+    /** Autocomplete must not leak case references outside the client's scope. */
+    public function testMatterAutocompleteIsScopedForClients()
+    {
+        $this->resetDatabaseAndSeed();
+
+        $this->be($this->clientUser('emusk', 124));
+        $this->call('GET', '/matter/autocomplete', ['term' => 'PAT'])
+            ->assertStatus(200)
+            ->assertSee('PAT001');
+
+        $this->be($this->clientUser('outsider'));
+        $this->call('GET', '/matter/autocomplete', ['term' => 'PAT'])
+            ->assertStatus(200)
+            ->assertDontSee('PAT001');
+    }
 }
