@@ -146,6 +146,39 @@ class ClientAccessTest extends TestCase
         $this->call('GET', '/matter/4')->assertStatus(403);
     }
 
+    /**
+     * A contact keeps their natural CNT role - which is what gets proposed when
+     * they are linked to a matter - and still gets their company's matters.
+     */
+    public function testContactWithCntRoleGetsCompanyScope()
+    {
+        $this->resetDatabaseAndSeed();
+        $this->be($this->clientUser('contact', 124, 'CNT'));
+
+        $this->call('GET', '/matter')
+            ->assertStatus(200)
+            ->assertSeeText('PAT001');
+
+        $this->call('GET', '/matter/4')->assertStatus(200);
+    }
+
+    /**
+     * Regression: a login whose role is neither CLI nor a staff role used to be
+     * treated as staff and could see every matter.
+     */
+    public function testNonStaffRoleIsRestricted()
+    {
+        $this->resetDatabaseAndSeed();
+        $this->be($this->clientUser('stray', null, 'CNT'));
+
+        $this->call('GET', '/matter')
+            ->assertStatus(200)
+            ->assertViewHas('matters', fn ($matters) => $matters->isEmpty());
+
+        $this->call('GET', '/matter/4')->assertStatus(403);
+        $this->call('GET', '/category')->assertStatus(403);
+    }
+
     /** Internal users (actor 2 = phpipuser, DBA) bypass the client scope. */
     public function testInternalUserSeesEverything()
     {

@@ -93,15 +93,32 @@ class User extends Authenticatable
     }
 
     /**
+     * The roles that make a login a member of staff. Everything else is a client.
+     */
+    public const STAFF_ROLES = ['DBA', 'DBRW', 'DBRO'];
+
+    /**
+     * Whether this user is staff: one of the database roles, which see everything.
+     */
+    public function isStaff(): bool
+    {
+        return in_array($this->default_role, self::STAFF_ROLES, true);
+    }
+
+    /**
      * Whether this user is a client user (restricted access).
      *
-     * An empty role is treated as a client for safety - it must never fall
-     * through to the unrestricted branch. Such an account gets no company
-     * scoping either, see clientCompanyId().
+     * Defined as "not staff" rather than "role is CLI", because default_role
+     * does two jobs: for a login it is the permission set, but for any actor it
+     * is also the role proposed when linking them to a matter. A client contact
+     * is naturally CNT, and forcing them to CLI to grant portal access breaks
+     * that. With this definition any login outside the staff roles - CLI, CNT,
+     * blank, or anything else - is restricted, so a new role can never
+     * accidentally grant access to every matter.
      */
     public function isClient(): bool
     {
-        return $this->default_role === 'CLI' || empty($this->default_role);
+        return ! $this->isStaff();
     }
 
     /**
@@ -114,10 +131,10 @@ class User extends Authenticatable
      * its contacts - the scope has to work in both directions, or two logins of
      * the same client disagree about what they can see.
      *
-     * Returns null for anyone who is not a fully configured client user. In
-     * particular an account whose default_role is empty keeps exactly the
-     * access it had before company scoping existed: its own matters and nothing
-     * else. A blank role is an unconfigured account, not a grant.
+     * Returns null for staff, and for a login whose default_role is empty: a
+     * blank role is an unconfigured account, not a grant, so it keeps only its
+     * own matters. Any other client login - CLI for a company, CNT for one of
+     * its contacts - gets the company scope.
      *
      * Note this makes actor.company_id an authorization input. Every actor
      * employed by the company is treated as an identity of that client, so an
@@ -127,7 +144,7 @@ class User extends Authenticatable
      */
     public function clientCompanyId(): ?int
     {
-        if ($this->default_role !== 'CLI') {
+        if ($this->isStaff() || empty($this->default_role)) {
             return null;
         }
 
