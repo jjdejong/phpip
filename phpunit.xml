@@ -24,6 +24,8 @@
     </filter>
     <php>
         <env name="APP_ENV" value="testing"/>
+        <!-- Never the dev database: feature tests migrate and seed. force wins over an exported DB_DATABASE too. -->
+        <env name="DB_DATABASE" value="phpip_test" force="true"/>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_DRIVER" value="sync"/>

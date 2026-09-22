@@ -147,6 +147,21 @@ class CountryTableSeeder extends Seeder
             ],
 
             [
+                'numcode' => 0,
+                'iso' => 'AP',
+                'iso3' => '',
+                'name' => ['en' => 'African Regional Intellectual Property Organization', 'fr' => 'Organisation régionale africaine de la propriété intellectuelle', 'de' => 'African Regional Intellectual Property Organization'],
+                'ep' => 0,
+                'wo' => 0,
+                'em' => 0,
+                'oa' => 0,
+                'renewal_first' => 2,
+                'renewal_base' => 'FIL',
+                'renewal_start' => 'FIL',
+                'checked_on' => '2023-02-16',
+            ],
+
+            [
                 'numcode' => 10,
                 'iso' => 'AQ',
                 'iso3' => 'ATA',
@@ -683,6 +698,21 @@ class CountryTableSeeder extends Seeder
                 'renewal_first' => 2,
                 'renewal_base' => 'FIL',
                 'renewal_start' => 'FIL',
+                'checked_on' => '2020-02-24',
+            ],
+
+            [
+                'numcode' => 152,
+                'iso' => 'CL',
+                'iso3' => 'CHL',
+                'name' => ['en' => 'Chile', 'fr' => 'Chili', 'de' => 'Chile'],
+                'ep' => 0,
+                'wo' => 0,
+                'em' => 0,
+                'oa' => 0,
+                'renewal_first' => null,
+                'renewal_base' => null,
+                'renewal_start' => null,
                 'checked_on' => '2020-02-24',
             ],
 
@@ -1572,6 +1602,21 @@ class CountryTableSeeder extends Seeder
             ],
 
             [
+                'numcode' => 376,
+                'iso' => 'IL',
+                'iso3' => 'ISR',
+                'name' => ['en' => 'Israel', 'fr' => 'Israël', 'de' => 'Israel'],
+                'ep' => 0,
+                'wo' => 0,
+                'em' => 0,
+                'oa' => 0,
+                'renewal_first' => null,
+                'renewal_base' => null,
+                'renewal_start' => null,
+                'checked_on' => '2020-02-24',
+            ],
+
+            [
                 'numcode' => 833,
                 'iso' => 'IM',
                 'iso3' => 'IMN',
@@ -2334,6 +2379,21 @@ class CountryTableSeeder extends Seeder
                 'renewal_base' => 'FIL',
                 'renewal_start' => 'FIL',
                 'checked_on' => '2020-02-24',
+            ],
+
+            [
+                'numcode' => 484,
+                'iso' => 'MX',
+                'iso3' => 'MEX',
+                'name' => ['en' => 'Mexico', 'fr' => 'Mexique', 'de' => 'Mexiko'],
+                'ep' => 0,
+                'wo' => 0,
+                'em' => 0,
+                'oa' => 0,
+                'renewal_first' => null,
+                'renewal_base' => null,
+                'renewal_start' => null,
+                'checked_on' => '2021-05-18',
             ],
 
             [
@@ -3462,6 +3522,21 @@ class CountryTableSeeder extends Seeder
             ],
 
             [
+                'numcode' => 840,
+                'iso' => 'US',
+                'iso3' => 'USA',
+                'name' => ['en' => 'United States', 'fr' => 'États-Unis', 'de' => 'Vereinigte Staaten von Amerika'],
+                'ep' => 0,
+                'wo' => 1,
+                'em' => 0,
+                'oa' => 0,
+                'renewal_first' => null,
+                'renewal_base' => null,
+                'renewal_start' => null,
+                'checked_on' => '2020-02-24',
+            ],
+
+            [
                 'numcode' => 858,
                 'iso' => 'UY',
                 'iso3' => 'URY',
@@ -3608,6 +3683,21 @@ class CountryTableSeeder extends Seeder
                 'renewal_first' => 2,
                 'renewal_base' => 'FIL',
                 'renewal_start' => 'FIL',
+                'checked_on' => '2020-02-24',
+            ],
+
+            [
+                'numcode' => 0,
+                'iso' => 'WO',
+                'iso3' => 'PCT',
+                'name' => ['en' => 'World Intellectual Property Organization', 'fr' => 'Organisation Mondiale de la Propriété Intellectuelle', 'de' => 'Weltorganisation für geistiges Eigentum'],
+                'ep' => 0,
+                'wo' => 0,
+                'em' => 0,
+                'oa' => 0,
+                'renewal_first' => null,
+                'renewal_base' => null,
+                'renewal_start' => null,
                 'checked_on' => '2020-02-24',
             ],
 

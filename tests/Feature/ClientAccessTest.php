@@ -4,6 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\Actor;
 use App\Models\User;
+use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\SampleSeeder;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
@@ -18,6 +21,21 @@ use Tests\TestCase;
  */
 class ClientAccessTest extends TestCase
 {
+    // Each test runs in a transaction that is rolled back, rather than using
+    // TestCase::resetDatabaseAndSeed(): its migrate:rollback reverses the
+    // utf8mb4 conversion migration, whose down() fails on this schema.
+    use DatabaseTransactions;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // All seeders use insertOrIgnore, so this is a no-op on a seeded
+        // database and makes a merely migrated one usable.
+        $this->seed(DatabaseSeeder::class);
+        $this->seed(SampleSeeder::class);
+    }
+
     /** Create a client login, optionally attached to a company actor. */
     private function clientUser(string $login, ?int $companyId = null, ?string $role = 'CLI'): User
     {
@@ -46,7 +64,6 @@ class ClientAccessTest extends TestCase
 
     public function testCompanyContactSeesTheCompanysMatters()
     {
-        $this->resetDatabaseAndSeed();
         $this->be($this->clientUser('emusk', 124));
 
         $this->call('GET', '/matter')
@@ -58,7 +75,6 @@ class ClientAccessTest extends TestCase
 
     public function testClientCompanyItselfStillSeesItsMatters()
     {
-        $this->resetDatabaseAndSeed();
         $this->be(User::find(124));
 
         $this->call('GET', '/matter')
@@ -74,7 +90,6 @@ class ClientAccessTest extends TestCase
      */
     public function testCompanyUserSeesMattersLinkedToItsContacts()
     {
-        $this->resetDatabaseAndSeed();
         $contact = $this->clientUser('emusk', 124);
 
         // Move matter 4's client link from the company to the contact
@@ -96,7 +111,6 @@ class ClientAccessTest extends TestCase
      */
     public function testUserMatchingASecondClientLinkIsAllowed()
     {
-        $this->resetDatabaseAndSeed();
         $contact = $this->clientUser('second', null);
         $this->linkAsClient(4, $contact->id, 2);
 
@@ -107,7 +121,6 @@ class ClientAccessTest extends TestCase
     /** The real boundary: a contact of one company must not see another's. */
     public function testContactOfAnotherCompanyIsDenied()
     {
-        $this->resetDatabaseAndSeed();
         $otherCompany = Actor::create(['name' => 'OTHER Inc.', 'phy_person' => 0]);
         $this->be($this->clientUser('rival', $otherCompany->id));
 
@@ -120,7 +133,6 @@ class ClientAccessTest extends TestCase
 
     public function testUnrelatedClientIsDenied()
     {
-        $this->resetDatabaseAndSeed();
         $this->be($this->clientUser('outsider'));
 
         $this->call('GET', '/matter')
@@ -136,7 +148,6 @@ class ClientAccessTest extends TestCase
      */
     public function testEmptyRoleUserGetsNoCompanyScope()
     {
-        $this->resetDatabaseAndSeed();
         $this->be($this->clientUser('norole', 124, null));
 
         $this->call('GET', '/matter')
@@ -152,7 +163,6 @@ class ClientAccessTest extends TestCase
      */
     public function testContactWithCntRoleGetsCompanyScope()
     {
-        $this->resetDatabaseAndSeed();
         $this->be($this->clientUser('contact', 124, 'CNT'));
 
         $this->call('GET', '/matter')
@@ -168,7 +178,6 @@ class ClientAccessTest extends TestCase
      */
     public function testNonStaffRoleIsRestricted()
     {
-        $this->resetDatabaseAndSeed();
         $this->be($this->clientUser('stray', null, 'CNT'));
 
         $this->call('GET', '/matter')
@@ -182,7 +191,6 @@ class ClientAccessTest extends TestCase
     /** Internal users (actor 2 = phpipuser, DBA) bypass the client scope. */
     public function testInternalUserSeesEverything()
     {
-        $this->resetDatabaseAndSeed();
         $this->be(User::find(2));
 
         $this->call('GET', '/matter')
@@ -199,7 +207,6 @@ class ClientAccessTest extends TestCase
      */
     public function testMatterSubResourcesAreDeniedToAnUnrelatedClient()
     {
-        $this->resetDatabaseAndSeed();
         $this->be($this->clientUser('outsider'));
 
         foreach ([
@@ -220,7 +227,6 @@ class ClientAccessTest extends TestCase
     /** ... and the client of the matter still reaches all of them. */
     public function testMatterSubResourcesStayOpenToTheClientOfTheMatter()
     {
-        $this->resetDatabaseAndSeed();
         $this->be($this->clientUser('emusk', 124));
 
         foreach ([
@@ -239,7 +245,6 @@ class ClientAccessTest extends TestCase
     /** Fetching a task by id must not bypass the scoping applied to /task. */
     public function testTaskShowIsDeniedToAnUnrelatedClient()
     {
-        $this->resetDatabaseAndSeed();
         $taskId = DB::table('task')->value('id');
         $this->be($this->clientUser('outsider'));
 
@@ -249,7 +254,6 @@ class ClientAccessTest extends TestCase
     /** The renewal workflow is internal; clients must not reach any of it. */
     public function testRenewalWorkflowIsClosedToClients()
     {
-        $this->resetDatabaseAndSeed();
         $this->be($this->clientUser('outsider'));
 
         $this->call('GET', '/renewal/export')->assertStatus(403);
@@ -260,7 +264,6 @@ class ClientAccessTest extends TestCase
     /** Document generation exposes contact emails, so it follows the policy. */
     public function testDocumentSelectIsDeniedToAnUnrelatedClient()
     {
-        $this->resetDatabaseAndSeed();
         $this->be($this->clientUser('outsider'));
 
         $this->call('GET', '/document/select/4')->assertStatus(403);
@@ -269,7 +272,6 @@ class ClientAccessTest extends TestCase
     /** Autocomplete must not leak case references outside the client's scope. */
     public function testMatterAutocompleteIsScopedForClients()
     {
-        $this->resetDatabaseAndSeed();
 
         $this->be($this->clientUser('emusk', 124));
         $this->call('GET', '/matter/autocomplete', ['term' => 'PAT'])
