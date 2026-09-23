@@ -245,7 +245,8 @@ class ClientAccessTest extends TestCase
     /** Fetching a task by id must not bypass the scoping applied to /task. */
     public function testTaskShowIsDeniedToAnUnrelatedClient()
     {
-        $taskId = DB::table('task')->value('id');
+        // A client-visible code, so the 403 comes from the policy and not the task scope
+        $taskId = DB::table('task')->whereIn('code', config('client.visible_task_codes'))->value('id');
         $this->be($this->clientUser('outsider'));
 
         $this->call('GET', "/task/$taskId")->assertStatus(403);
@@ -282,5 +283,67 @@ class ClientAccessTest extends TestCase
         $this->call('GET', '/matter/autocomplete', ['term' => 'PAT'])
             ->assertStatus(200)
             ->assertDontSee('PAT001');
+    }
+
+    /** Add an open task of the given code to matter PAT001 (id 4). */
+    private function addTaskToPat001(string $code, string $detail): int
+    {
+        $eventId = DB::table('event')->insertGetId([
+            'matter_id' => 4,
+            'code' => 'REC',
+            'event_date' => now()->toDateString(),
+        ]);
+
+        return DB::table('task')->insertGetId([
+            'trigger_id' => $eventId,
+            'code' => $code,
+            'due_date' => now()->addMonth()->toDateString(),
+            'detail' => json_encode(['en' => $detail]),
+            'done' => 0,
+        ]);
+    }
+
+    /**
+     * Clients see only the whitelisted, official task codes - on the dashboard,
+     * the matter page and by id. Internal tasks such as invoicing stay hidden.
+     */
+    public function testClientSeesOnlyWhitelistedTasks()
+    {
+        $officialId = $this->addTaskToPat001('REP', 'Official action XYZZY');
+        $internalId = $this->addTaskToPat001('PREP', 'Invoice PLUGH');
+
+        $this->be($this->clientUser('emusk', 124));
+
+        $this->call('GET', '/task')
+            ->assertStatus(200)
+            ->assertSee('XYZZY')
+            ->assertDontSee('PLUGH');
+
+        $this->call('GET', '/matter/4')
+            ->assertStatus(200)
+            ->assertSee('XYZZY')
+            ->assertDontSee('PLUGH');
+
+        $this->call('GET', '/matter/4/tasks')
+            ->assertStatus(200)
+            ->assertSee('XYZZY')
+            ->assertDontSee('PLUGH');
+
+        $this->call('GET', "/task/$officialId")->assertStatus(200);
+        $this->call('GET', "/task/$internalId")->assertStatus(404);
+    }
+
+    /** The whitelist is for clients only; staff still see every task. */
+    public function testStaffSeeInternalTasks()
+    {
+        $internalId = $this->addTaskToPat001('PREP', 'Invoice PLUGH');
+
+        $this->be(User::find(2));
+
+        $this->call('GET', '/task')
+            ->assertStatus(200)
+            ->assertSee('PLUGH');
+
+        $this->call('GET', "/task/$internalId")->assertStatus(200);
     }
 }

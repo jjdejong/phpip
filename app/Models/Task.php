@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\ClientVisibleTaskScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -54,6 +55,14 @@ class Task extends Model
      * @var array<string>
      */
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    /**
+     * Restrict client users to the task codes they are allowed to see.
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new ClientVisibleTaskScope);
+    }
 
     /**
      * Related models that should be touched when this model is updated.
