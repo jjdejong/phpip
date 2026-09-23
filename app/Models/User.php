@@ -98,6 +98,11 @@ class User extends Authenticatable
     public const STAFF_ROLES = ['DBA', 'DBRW', 'DBRO'];
 
     /**
+     * Memoized result of clientActorIds().
+     */
+    private ?array $clientActorIds = null;
+
+    /**
      * Whether this user is staff: one of the database roles, which see everything.
      */
     public function isStaff(): bool
@@ -149,6 +154,26 @@ class User extends Authenticatable
         }
 
         return (int) ($this->company_id ?: $this->id);
+    }
+
+    /**
+     * The actors whose client links this user may see: the user, and when it has
+     * a client company, that company and every actor employed by it.
+     *
+     * Resolved once per request, as it is used for every scoped query.
+     */
+    public function clientActorIds(): array
+    {
+        if ($this->clientActorIds === null) {
+            $ids = [$this->id];
+            if ($companyId = $this->clientCompanyId()) {
+                $ids[] = $companyId;
+                array_push($ids, ...Actor::where('company_id', $companyId)->pluck('id')->all());
+            }
+            $this->clientActorIds = array_values(array_unique($ids));
+        }
+
+        return $this->clientActorIds;
     }
 
     /**

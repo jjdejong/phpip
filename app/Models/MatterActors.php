@@ -56,21 +56,15 @@ class MatterActors extends Model
      *
      * Callers must have established that the user is a client - internal users
      * are never filtered through this.
+     *
+     * The actor ids are resolved first and passed as a literal list. matter_actors
+     * is a UNION view, and MySQL only pushes a plain "actor_id IN (...)" down into
+     * it: an OR with a subquery made it rebuild the whole view for every row of
+     * the outer query - 26 s instead of 0.1 s for the dashboard task counts.
      */
     public function scopeForClientUser(Builder $query, User $user): void
     {
-        $companyId = $user->clientCompanyId();
-
-        $query->where(function (Builder $q) use ($user, $companyId) {
-            $q->where('actor_id', $user->id);
-
-            if ($companyId) {
-                $q->orWhere('actor_id', $companyId)
-                    ->orWhereIn('actor_id', function ($sub) use ($companyId) {
-                        $sub->select('id')->from('actor')->where('company_id', $companyId);
-                    });
-            }
-        });
+        $query->whereIn('actor_id', $user->clientActorIds());
     }
 
     /**
