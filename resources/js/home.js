@@ -50,8 +50,13 @@ function refreshTasks(flag) {
  * @returns {void}
  */
 export function initHome() {
-  // Set default checked state for "Everyone" radio button
-  document.getElementById("alltasks").checked = true;
+  // The filter and clearing controls are only rendered for staff roles, so
+  // each of them may be missing (client users get the task lists alone)
+  const allTasks = document.getElementById("alltasks");
+  if (allTasks) {
+    // Set default checked state for "Everyone" radio button
+    allTasks.checked = true;
+  }
   refreshTasks(0);
 
   /**
@@ -60,7 +65,7 @@ export function initHome() {
    */
   document
     .querySelector('[data-actarget="client_id"]')
-    .addEventListener("acCompleted", () => {
+    ?.addEventListener("acCompleted", () => {
       clientTasks.checked = true;
       refreshTasks("2");
     });
@@ -78,7 +83,10 @@ export function initHome() {
     }
   };
 
-  clearRenewals.onclick = () => {
+  const clearRenewals = document.getElementById("clearRenewals");
+  const clearOpenTasks = document.getElementById("clearOpenTasks");
+
+  if (clearRenewals) clearRenewals.onclick = () => {
     let params = new URLSearchParams();
     let list = renewallist.querySelectorAll("input:checked");
     if (list.length === 0) {
@@ -98,7 +106,7 @@ export function initHome() {
     });
   };
 
-  clearOpenTasks.onclick = () => {
+  if (clearOpenTasks) clearOpenTasks.onclick = () => {
     let params = new URLSearchParams();
     let list = tasklist.querySelectorAll("input:checked");
     if (list.length === 0) {

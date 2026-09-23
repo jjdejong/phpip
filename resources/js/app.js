@@ -59,8 +59,9 @@ window.contentSrc = "";
 document.addEventListener("DOMContentLoaded", () => {
   initMain();
 
-  // Only initialize home if we're on the home page
-  if (document.getElementById("alltasks")) {
+  // Only initialize home if we're on the home page. The task list is rendered
+  // for every user, unlike the filter controls, which clients don't get
+  if (document.getElementById("tasklist")) {
     initHome();
   }
 
