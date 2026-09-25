@@ -20,7 +20,9 @@ class RenewrSync extends Command
         'inserted' => 0,
         'unrecognized' => 0,
         'patsprocessed' => 0,
-        'annsprocessed' => 0
+        'annsprocessed' => 0,
+        'unpriced' => 0,
+        'failed' => 0
     ];
 
     public function handle()
@@ -43,6 +45,12 @@ class RenewrSync extends Command
         } catch (\Exception $e) {
             Log::error('Portfolio renewal processing failed: ' . $e->getMessage());
             $this->error('Portfolio renewal processing failed: ' . $e->getMessage());
+            return 1;
+        }
+
+        // Report patents that could not be processed so that the scheduler flags the run
+        if ($this->stats['failed'] > 0) {
+            Log::error("Portfolio renewal processing: {$this->stats['failed']} patents failed, see previous log entries");
             return 1;
         }
 
@@ -98,15 +106,16 @@ class RenewrSync extends Command
         $itemsPerPage = 100;
         $totalPages = null;
 
-        // Try to get total pages from cache metadata
+        // Try to get total pages from cache metadata, only if it is as recent as the page caches
         $metaCacheFile = $this->getCacheFilePath($cacheKey . '_meta');
-        if (file_exists($metaCacheFile)) {
+        if ($this->isFreshCacheFile($metaCacheFile)) {
             $meta = json_decode(file_get_contents($metaCacheFile));
             $totalPages = $meta->totalPages ?? null;
         }
 
         do {
-            if ($this->hasValidPageCache($cacheKey, $currentPage)) {
+            // A cached page can only be used when the page count is known, otherwise fetch it to get the pagination
+            if ($totalPages !== null && $this->hasValidPageCache($cacheKey, $currentPage)) {
                 $this->info("Using cached data for page $currentPage");
                 $pageData = $this->getPageFromCache($cacheKey, $currentPage);
                 yield $pageData;
@@ -134,10 +143,11 @@ class RenewrSync extends Command
                     throw new \Exception("No portfolio data received from API");
                 }
 
-                if ($totalPages === null) {
+                // Always follow the pagination of a fresh response, the portfolio size changes over time
+                if ($totalPages !== $result->pagination->totalPages) {
                     $totalPages = $result->pagination->totalPages;
                     $this->info("Fetching {$result->pagination->totalItems} items across {$totalPages} pages...");
-                    
+
                     // Store metadata
                     file_put_contents($metaCacheFile, json_encode([
                         'totalPages' => $totalPages,
@@ -157,27 +167,26 @@ class RenewrSync extends Command
 
     private function processPortfolioPage($pageData, $renewrActor)
     {
-        try {
-            DB::beginTransaction();
-
-            foreach ($pageData as $renewrPatent) {
-                if (empty($renewrPatent->renewalEvents)) {
-                    continue;
-                }
-                $this->stats['patsprocessed']++;
-
-                $matter = $this->findAndValidateMatter($renewrPatent, $renewrActor);
-                if (!$matter) {
-                    continue;
-                }
-
-                $this->processRenewals($matter, $renewrPatent);
+        foreach ($pageData as $renewrPatent) {
+            if (empty($renewrPatent->renewalEvents)) {
+                continue;
             }
+            $this->stats['patsprocessed']++;
 
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            throw $e; // Re-throw to be caught by main handler
+            // One transaction per patent, so that a faulty record does not discard the rest of the page
+            try {
+                DB::transaction(function () use ($renewrPatent, $renewrActor) {
+                    $matter = $this->findAndValidateMatter($renewrPatent, $renewrActor);
+                    if ($matter) {
+                        $this->processRenewals($matter, $renewrPatent);
+                    }
+                });
+            } catch (\Throwable $e) {
+                $this->stats['failed']++;
+                $message = "Renewr sync failed for providerId " . ($renewrPatent->providerId ?? '?') . " ($renewrPatent->clientCaseRef): " . $e->getMessage();
+                Log::error($message);
+                $this->error($message);
+            }
         }
     }
 
@@ -244,19 +253,21 @@ class RenewrSync extends Command
             $updates['due_date'] = $renewal->renewalDate;
         }
 
-        if ($renewal->fees->invoiceCurrency && $task->currency != $renewal->fees->invoiceCurrency) {
-            $updates['currency'] = $renewal->fees->invoiceCurrency;
-        }
+        if ($this->hasFees($renewal, $renewrPatent)) {
+            if (!empty($renewal->fees->invoiceCurrency) && $task->currency != $renewal->fees->invoiceCurrency) {
+                $updates['currency'] = $renewal->fees->invoiceCurrency;
+            }
 
-        $cost = $renewal->fees->invoiceTotalValue - $serviceProviderFee;
-        if (round($cost, 2) != round($task->cost ?? 0, 2)) {
-            $updates['cost'] = $cost;
-            $updates['notes'] = $renewal->feesStatus;
-        }
+            $cost = $renewal->fees->invoiceTotalValue - $serviceProviderFee;
+            if (round($cost, 2) != round($task->cost ?? 0, 2)) {
+                $updates['cost'] = $cost;
+                $updates['notes'] = $renewal->feesStatus;
+            }
 
-        $fee = $this->calculateFee($cost, $serviceProviderFee);
-        if ($fee != $task->fee) {
-            $updates['fee'] = $fee;
+            $fee = $this->calculateFee($cost, $serviceProviderFee);
+            if ($fee != $task->fee) {
+                $updates['fee'] = $fee;
+            }
         }
 
         if (!empty($renewal->dateOfPayment) && (!$task->done_date || $renewal->dateOfPayment != $task->done_date->format('Y-m-d'))) {
@@ -294,9 +305,13 @@ class RenewrSync extends Command
             return;
         }
 
-        $serviceProviderFee = config('renewr.fee_calculation.renewr_fee');
-        $cost = $renewal->fees->invoiceTotalValue - $serviceProviderFee;
-        $fee = $this->calculateFee($cost, $serviceProviderFee);
+        // Without fees, the renewal is created unpriced and will be priced by a later sync
+        $cost = $fee = null;
+        if ($this->hasFees($renewal, $renewrPatent)) {
+            $serviceProviderFee = config('renewr.fee_calculation.renewr_fee');
+            $cost = $renewal->fees->invoiceTotalValue - $serviceProviderFee;
+            $fee = $this->calculateFee($cost, $serviceProviderFee);
+        }
 
         $task = Task::create([
             'code' => 'REN',
@@ -320,6 +335,23 @@ class RenewrSync extends Command
         }
         $this->info("Inserted renewal $renewal->renewalYearNumber for $renewrPatent->providerId ($renewrPatent->clientCaseRef)");
         $this->stats['inserted']++;
+    }
+
+    /**
+     * Check whether Renewr provided fees for a renewal, which it may omit for estimated renewals.
+     */
+    private function hasFees($renewal, $renewrPatent): bool
+    {
+        if (isset($renewal->fees->invoiceTotalValue)) {
+            return true;
+        }
+
+        $this->stats['unpriced']++;
+        $message = "No fees for renewal $renewal->renewalYearNumber in $renewrPatent->providerId ($renewrPatent->clientCaseRef), status " . ($renewal->feesStatus ?? 'unknown');
+        Log::warning("Renewr sync: $message");
+        $this->warn($message);
+
+        return false;
     }
 
     private function calculateFee($cost, $serviceProviderFee)
@@ -351,6 +383,7 @@ class RenewrSync extends Command
     {
         $this->info("\nAnnuities updated: {$this->stats['updated']}, inserted: {$this->stats['inserted']}, among processed: {$this->stats['annsprocessed']}");
         $this->info("Patents not recognized: {$this->stats['unrecognized']}, total processed: {$this->stats['patsprocessed']}");
+        $this->info("Annuities without fees: {$this->stats['unpriced']}, patents failed: {$this->stats['failed']}");
     }
 
     /**
@@ -367,14 +400,19 @@ class RenewrSync extends Command
      */
     private function hasValidPageCache(string $key, int $page): bool
     {
-        $cacheFile = $this->getCacheFilePath($key, $page);
+        return $this->isFreshCacheFile($this->getCacheFilePath($key, $page));
+    }
+
+    /**
+     * Check if a cache file exists and is less than 24h old
+     */
+    private function isFreshCacheFile(string $cacheFile): bool
+    {
         if (!file_exists($cacheFile)) {
             return false;
         }
-        
-        // Check if cache is older than 24h
-        $modifiedTime = filemtime($cacheFile);
-        return (time() - $modifiedTime) < 86400; // 24 hours in seconds
+
+        return (time() - filemtime($cacheFile)) < 86400; // 24 hours in seconds
     }
 
     /**
