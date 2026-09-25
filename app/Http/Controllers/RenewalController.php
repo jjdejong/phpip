@@ -232,11 +232,11 @@ class RenewalController extends Controller
     private function adjustTableFees($renewal, &$cost, &$fee)
     {
         if ($renewal->grace_period) {
-            $cost = $renewal->sme_status ? $renewal->cost_sup_reduced : $renewal->cost_sup;
-            $fee = $renewal->sme_status ? $renewal->fee_sup_reduced : $renewal->fee_sup;
+            $cost = $renewal->small_entity ? $renewal->cost_sup_reduced : $renewal->cost_sup;
+            $fee = $renewal->small_entity ? $renewal->fee_sup_reduced : $renewal->fee_sup;
         } else {
-            $cost = $renewal->sme_status ? $renewal->cost_reduced : $renewal->cost;
-            $fee = $renewal->sme_status ? $renewal->fee_reduced : $renewal->fee;
+            $cost = $renewal->small_entity ? $renewal->cost_reduced : $renewal->cost;
+            $fee = $renewal->small_entity ? $renewal->fee_reduced : $renewal->fee;
         }
 
         if ($renewal->discount > 1) {
@@ -1088,9 +1088,9 @@ class RenewalController extends Controller
                 $fee_code = $renewal->detail;
             }
             if ($renewal->grace_period) {
-                $cost = $renewal->sme_status ? $renewal->cost_sup_reduced : $renewal->cost_sup;
+                $cost = $renewal->small_entity ? $renewal->cost_sup_reduced : $renewal->cost_sup;
             } else {
-                $cost = $renewal->sme_status ? $renewal->cost_reduced : $renewal->cost;
+                $cost = $renewal->small_entity ? $renewal->cost_reduced : $renewal->cost;
             }
             $total += $cost;
             if ($renewal->origin == 'EP') {

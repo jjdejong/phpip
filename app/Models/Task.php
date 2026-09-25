@@ -240,8 +240,9 @@ class Task extends Model
             DB::raw('COALESCE(fees.fee_reduced, fees.fee, task.fee) AS fee_reduced'),
             DB::raw('COALESCE(fees.cost_sup, fees.cost, task.cost) AS cost_sup'),
             DB::raw('COALESCE(fees.fee_sup, fees.fee, task.fee) AS fee_sup'),
-            DB::raw('COALESCE(fees.cost_sup_reduced, fees.cost, task.cost) AS cost_sup_reduced'),
-            DB::raw('COALESCE(fees.fee_sup_reduced, fees.fee, task.fee) AS fee_sup_reduced'),
+            // Small entity in grace period: fall back to the grace amount, then the reduced amount, then the normal amount
+            DB::raw('COALESCE(fees.cost_sup_reduced, fees.cost_sup, fees.cost_reduced, fees.cost, task.cost) AS cost_sup_reduced'),
+            DB::raw('COALESCE(fees.fee_sup_reduced, fees.fee_sup, fees.fee_reduced, fees.fee, task.fee) AS fee_sup_reduced'),
             'task.trigger_id',
             'matter.category_code AS category',
             'matter.caseref',
