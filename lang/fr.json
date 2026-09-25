@@ -422,5 +422,8 @@
   "Change": "Modifier",
   "Remove actor": "Supprimer l'acteur",
   "Add": "Ajouter",
-  "External priorities": "Priorités externes"
+  "External priorities": "Priorités externes",
+  "Only renewals awaiting a Renewr sync": "Uniquement les annuités en attente de synchronisation Renewr",
+  "Awaiting Renewr sync since": "En attente de synchronisation Renewr depuis le",
+  "No fee source: not in the fees table and not handled by Renewr": "Aucune source de tarif : absent de la table des taxes et non géré par Renewr"
 }

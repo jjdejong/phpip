@@ -57,6 +57,13 @@ class Task extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     /**
+     * SQL condition true when the matter, or its family container, is linked to Renewr,
+     * for use in queries joining the matter table.
+     */
+    public const RENEWR_LINK_SQL = "EXISTS(SELECT 1 FROM matter_actor_lnk rlnk JOIN actor ractor ON ractor.id = rlnk.actor_id
+        WHERE ractor.name LIKE 'Renewr%' AND rlnk.matter_id IN (matter.id, IFNULL(matter.container_id, matter.id)))";
+
+    /**
      * Restrict client users to the task codes they are allowed to see.
      */
     protected static function booted(): void
@@ -279,7 +286,10 @@ class Task extends Model
             'task.grace_period',
             'task.invoice_step',
             'matter.expire_date',
-            'fees.fee AS table_fee'
+            'fees.fee AS table_fee',
+            'matter.dead',
+            DB::raw(self::RENEWR_LINK_SQL . ' AS renewr'),
+            'task.created_at AS task_created_at'
         ])
         ->join('event', 'matter.id', 'event.matter_id')
         ->join('task', 'task.trigger_id', 'event.id')

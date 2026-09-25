@@ -79,6 +79,13 @@ class RenewalController extends Controller
                         case 'grace':
                             $renewals->where('grace_period', "$value");
                             break;
+                        case 'pending_sync':
+                            // Same conditions as flagUnpriced() for pending_sync
+                            $renewals->whereNull('fees.fee')
+                                ->whereNull('task.cost')
+                                ->where('matter.dead', 0)
+                                ->whereRaw(Task::RENEWR_LINK_SQL);
+                            break;
                         case 'step':
                             $renewals->where('step', "$value");
                             if ($value != 0) {
@@ -112,6 +119,7 @@ class RenewalController extends Controller
         if ($request->wantsJson()) {
             $renewals = $renewals->get();
             $renewals->transform(function ($ren) {
+                $this->flagUnpriced($ren);
                 $this->adjustFees($ren, $cost, $fee);
                 $ren->cost = $cost;
                 $ren->fee = $fee;
@@ -124,6 +132,7 @@ class RenewalController extends Controller
 
         // Adjust the cost and fee of each renewal based on customized settings
         $renewals->transform(function ($ren) {
+            $this->flagUnpriced($ren);
             $this->adjustFees($ren, $cost, $fee);
             $ren->cost = $cost;
             $ren->fee = $fee;
@@ -197,6 +206,22 @@ class RenewalController extends Controller
     }
 
     /**
+     * Flag renewals of live matters that have no price yet.
+     *
+     * pending_sync: the renewal is handled by Renewr and awaits a sync.
+     * no_fee_source: the renewal is neither in the fees table nor handled by Renewr.
+     *
+     * @param object $renewal The renewal task object, before its fees are adjusted
+     * @return void
+     */
+    private function flagUnpriced($renewal)
+    {
+        $unpriced = !$renewal->table_fee && $renewal->cost === null && !$renewal->dead;
+        $renewal->pending_sync = $unpriced && $renewal->renewr;
+        $renewal->no_fee_source = $unpriced && !$renewal->renewr;
+    }
+
+    /**
      * Adjust renewal fees based on grace period and SME status.
      *
      * @param object $renewal The renewal task object
@@ -257,6 +282,13 @@ class RenewalController extends Controller
     private function adjustTaskFees($renewal, &$cost, &$fee) 
     {
         $cost = $renewal->cost;
+
+        // An unpriced renewal keeps a zero fee whatever the client's discount, so that it stands out
+        if ($renewal->fee === null) {
+            $fee = 0;
+            return;
+        }
+
         $fee = $renewal->fee - config('renewal.invoice.default_fee', 145);
         
         if ($renewal->discount > 1) {

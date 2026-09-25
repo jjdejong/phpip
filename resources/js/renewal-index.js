@@ -25,6 +25,7 @@ export function initRenewalIndex() {
   // Get all required element references
   const filterFieldsEl = document.getElementById("filterFields");
   const graceEl = document.getElementById("grace");
+  const pendingSyncEl = document.getElementById("pendingSync");
   const selectAllEl = document.getElementById("selectAll");
   const tabsGroupEl = document.getElementById("tabsGroup");
   const clearFiltersEl = document.getElementById("clearFilters");
@@ -80,6 +81,18 @@ export function initRenewalIndex() {
       } else {
         url.searchParams.set("grace_period", "1");
       }
+      refreshList();
+    };
+  }
+
+  if (pendingSyncEl) {
+    pendingSyncEl.onchange = (e) => {
+      if (!e.target.checked) {
+        url.searchParams.delete("pending_sync");
+      } else {
+        url.searchParams.set("pending_sync", "1");
+      }
+      url.searchParams.delete("page");
       refreshList();
     };
   }

@@ -70,7 +70,10 @@ return [
       'task.grace_period',
       'task.invoice_step',
       'expire_date',
-      'table_fee'
+      'table_fee',
+      'matter.dead',
+      'renewr',
+      'task.created_at'
     ],
   ],
   "api" => [

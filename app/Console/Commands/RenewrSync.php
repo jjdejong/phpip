@@ -22,7 +22,8 @@ class RenewrSync extends Command
         'patsprocessed' => 0,
         'annsprocessed' => 0,
         'unpriced' => 0,
-        'failed' => 0
+        'failed' => 0,
+        'dead' => 0
     ];
 
     public function handle()
@@ -207,6 +208,12 @@ class RenewrSync extends Command
             return null;
         }
 
+        // Renewr keeps the cases we no longer follow (abandoned, taken over by a third party...)
+        if ($matter->dead) {
+            $this->stats['dead']++;
+            return null;
+        }
+
         if ($matter->uid != $renewrPatent->clientCaseRef) {
             $this->warn("Provider ref. $renewrPatent->clientCaseRef does not match our ref. $matter->uid for providerId $renewrPatent->providerId");
             $this->stats['unrecognized']++;
@@ -383,7 +390,7 @@ class RenewrSync extends Command
     {
         $this->info("\nAnnuities updated: {$this->stats['updated']}, inserted: {$this->stats['inserted']}, among processed: {$this->stats['annsprocessed']}");
         $this->info("Patents not recognized: {$this->stats['unrecognized']}, total processed: {$this->stats['patsprocessed']}");
-        $this->info("Annuities without fees: {$this->stats['unpriced']}, patents failed: {$this->stats['failed']}");
+        $this->info("Annuities without fees: {$this->stats['unpriced']}, patents failed: {$this->stats['failed']}, dead matters skipped: {$this->stats['dead']}");
     }
 
     /**

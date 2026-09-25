@@ -169,6 +169,18 @@ class RenewrSyncTest extends TestCase
         $this->assertEquals(250.25, $task->fee);
     }
 
+    public function test_dead_matters_are_not_synced(): void
+    {
+        $matter = $this->patent('RSYNC5', 'DE');
+        $matter->update(['dead' => 1]);
+
+        $this->serveApi([$this->renewrPatent($matter, [$this->renewrEvent(5, '2024-03-31', 509)])], 1);
+
+        $this->artisan('tasks:renewr-sync')->assertExitCode(0);
+
+        $this->assertNull($this->renewal($matter, 5));
+    }
+
     public function test_page_count_is_taken_from_the_api_not_from_stale_metadata(): void
     {
         $matter = $this->patent('RSYNC4', 'DE');

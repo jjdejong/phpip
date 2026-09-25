@@ -421,5 +421,8 @@
     "Change": "Change",
     "Remove actor": "Remove actor",
     "Add": "Add",
-    "External priorities": "External priorities"
+    "External priorities": "External priorities",
+    "Only renewals awaiting a Renewr sync": "Only renewals awaiting a Renewr sync",
+    "Awaiting Renewr sync since": "Awaiting Renewr sync since",
+    "No fee source: not in the fees table and not handled by Renewr": "No fee source: not in the fees table and not handled by Renewr"
 }

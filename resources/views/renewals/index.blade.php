@@ -140,8 +140,12 @@
                                 <input id="grace" name="grace_period" type="checkbox" class="btn-check">
                                 <label class="btn btn-outline-primary btn-sm" title="{{ __('In grace period') }}" for="grace">{{ __('Grace') }}</label>
                             </div>
-                            <div class="col-3 p-1">
+                            <div class="col-3 p-1 text-nowrap">
                                 {{ __('Cost') }}
+                                <input id="pendingSync" name="pending_sync" type="checkbox" class="btn-check" {{ Request::get('pending_sync') ? 'checked' : '' }}>
+                                <label class="btn btn-outline-warning btn-sm px-1 py-0" title="{{ __('Only renewals awaiting a Renewr sync') }}" for="pendingSync">
+                                    <span class="badge rounded-pill text-bg-warning">&nbsp;</span>
+                                </label>
                             </div>
                             <div class="col-3 p-1">
                                 {{ __('Fee') }}
@@ -193,6 +197,11 @@
                                     @endif
                                 </div>
                                 <div class="col-3 text-end">
+                                    @if ($task->pending_sync)
+                                    <span class="badge rounded-pill text-bg-warning" title="{{ __('Awaiting Renewr sync since') }} {{ \Carbon\Carbon::parse($task->task_created_at)->isoFormat('L') }}">&nbsp;</span>
+                                    @elseif ($task->no_fee_source)
+                                    <span class="badge rounded-pill text-bg-secondary" title="{{ __('No fee source: not in the fees table and not handled by Renewr') }}">&nbsp;</span>
+                                    @endif
                                     {{ $task->cost }}
                                 </div>
                                 <div class="col-3 text-end">
