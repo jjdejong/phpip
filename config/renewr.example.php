@@ -4,6 +4,7 @@ return [
     'api_key' => env('RENEWR_API_KEY', ''),
     'url' => env('RENEWR_API_URL', 'https://demo-api.renewr.io/api/external/patent/with-renewal-event-and-fees'),
     'skip_done' => true, // Skip already cleared renewals
+    'notify_email' => env('RENEWR_NOTIFY_EMAIL'), // Receives the new issues met by each sync, and sync failures. Leave empty for no email
     'fee_calculation' => [
         'renewr_fee' => env('RENEWR_FEE', 0), // Base fee charged by Renewr per operation
         'our_fee' => env('RENEWR_OUR_FEE', 0), // Our standard service fee

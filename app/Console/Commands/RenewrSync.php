@@ -9,6 +9,7 @@ use App\Models\Task;
 use App\Models\Country;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class RenewrSync extends Command
 {
@@ -24,6 +25,21 @@ class RenewrSync extends Command
         'unpriced' => 0,
         'failed' => 0,
         'dead' => 0
+    ];
+
+    /**
+     * Issues met during the run, by kind, keyed by what they concern, for the report email.
+     */
+    private $issues = [];
+
+    private const ISSUE_KINDS = [
+        'failed' => 'Patents that failed to sync',
+        'country' => 'Country mismatches (patent skipped)',
+        'unknown' => 'Unknown providerId (patent skipped)',
+        'no_provider_id' => 'No providerId at Renewr (patent skipped)',
+        'no_trigger' => 'Renewals not created, no filing or grant event',
+        'no_fees' => 'Annuities without fees',
+        'reference' => 'Reference mismatches',
     ];
 
     public function handle()
@@ -46,8 +62,11 @@ class RenewrSync extends Command
         } catch (\Exception $e) {
             Log::error('Portfolio renewal processing failed: ' . $e->getMessage());
             $this->error('Portfolio renewal processing failed: ' . $e->getMessage());
+            $this->reportIssues($e->getMessage());
             return 1;
         }
+
+        $this->reportIssues();
 
         // Report patents that could not be processed so that the scheduler flags the run
         if ($this->stats['failed'] > 0) {
@@ -186,7 +205,7 @@ class RenewrSync extends Command
                 $this->stats['failed']++;
                 $message = "Renewr sync failed for providerId " . ($renewrPatent->providerId ?? '?') . " ($renewrPatent->clientCaseRef): " . $e->getMessage();
                 Log::error($message);
-                $this->error($message);
+                $this->issue('failed', $renewrPatent->providerId ?? $renewrPatent->clientCaseRef, $message, true);
             }
         }
     }
@@ -194,7 +213,7 @@ class RenewrSync extends Command
     private function findAndValidateMatter($renewrPatent, $renewrActor)
     {
         if (!$renewrPatent->providerId) {
-            $this->warn("No providerId for patent: $renewrPatent->clientCaseRef");
+            $this->issue('no_provider_id', $renewrPatent->clientCaseRef, "No providerId for patent: $renewrPatent->clientCaseRef");
             return null;
         }
 
@@ -203,7 +222,7 @@ class RenewrSync extends Command
         }])->find($renewrPatent->providerId);
 
         if (!$matter) {
-            $this->warn("No data for providerId: $renewrPatent->providerId");
+            $this->issue('unknown', $renewrPatent->providerId, "No data for providerId: $renewrPatent->providerId ($renewrPatent->clientCaseRef)");
             $this->stats['unrecognized']++;
             return null;
         }
@@ -215,12 +234,12 @@ class RenewrSync extends Command
         }
 
         if ($matter->uid != $renewrPatent->clientCaseRef) {
-            $this->warn("Provider ref. $renewrPatent->clientCaseRef does not match our ref. $matter->uid for providerId $renewrPatent->providerId");
+            $this->issue('reference', $renewrPatent->providerId, "Provider ref. $renewrPatent->clientCaseRef does not match our ref. $matter->uid for providerId $renewrPatent->providerId");
             $this->stats['unrecognized']++;
         }
 
         if ($matter->country != $renewrPatent->country) {
-            $this->error("Provider country $renewrPatent->country does not match our country $matter->country for providerId $renewrPatent->providerId");
+            $this->issue('country', $renewrPatent->providerId, "Provider country $renewrPatent->country does not match our country $matter->country for providerId $renewrPatent->providerId ($renewrPatent->clientCaseRef)", true);
             $this->stats['unrecognized']++;
             return null;
         }
@@ -308,7 +327,7 @@ class RenewrSync extends Command
             : $matter->grant->id;
 
         if (!$triggerEvent) {
-            $this->warn("Could not find trigger event for renewal $renewal->renewalYearNumber in $renewrPatent->clientCaseRef");
+            $this->issue('no_trigger', "$renewrPatent->providerId/$renewal->renewalYearNumber", "Could not find trigger event for renewal $renewal->renewalYearNumber in $renewrPatent->clientCaseRef");
             return;
         }
 
@@ -356,7 +375,7 @@ class RenewrSync extends Command
         $this->stats['unpriced']++;
         $message = "No fees for renewal $renewal->renewalYearNumber in $renewrPatent->providerId ($renewrPatent->clientCaseRef), status " . ($renewal->feesStatus ?? 'unknown');
         Log::warning("Renewr sync: $message");
-        $this->warn($message);
+        $this->issue('no_fees', "$renewrPatent->providerId/$renewal->renewalYearNumber", $message);
 
         return false;
     }
@@ -391,6 +410,69 @@ class RenewrSync extends Command
         $this->info("\nAnnuities updated: {$this->stats['updated']}, inserted: {$this->stats['inserted']}, among processed: {$this->stats['annsprocessed']}");
         $this->info("Patents not recognized: {$this->stats['unrecognized']}, total processed: {$this->stats['patsprocessed']}");
         $this->info("Annuities without fees: {$this->stats['unpriced']}, patents failed: {$this->stats['failed']}, dead matters skipped: {$this->stats['dead']}");
+    }
+
+    /**
+     * Record an issue for the report email, and display it.
+     */
+    private function issue(string $kind, string $key, string $message, bool $error = false): void
+    {
+        $this->issues[$kind][$key] = $message;
+        $error ? $this->error($message) : $this->warn($message);
+    }
+
+    /**
+     * Email the issues not reported by the previous complete run, or the error that stopped this run.
+     *
+     * The issues of a complete run are stored, so that recurring issues are only counted in the next reports.
+     */
+    private function reportIssues(?string $crash = null): void
+    {
+        $stateFile = $this->getCacheFilePath('issues');
+        $known = file_exists($stateFile) ? array_flip(json_decode(file_get_contents($stateFile), true) ?? []) : [];
+
+        $current = [];
+        $new = [];
+        foreach ($this->issues as $kind => $issues) {
+            foreach ($issues as $key => $message) {
+                $current[] = "$kind|$key";
+                if (!isset($known["$kind|$key"])) {
+                    $new[$kind][$key] = $message;
+                }
+            }
+        }
+
+        // A crashed run did not see the whole portfolio, keep the issues of the last complete run
+        if (!$crash) {
+            if (!is_dir(dirname($stateFile))) {
+                mkdir(dirname($stateFile), 0755, true);
+            }
+            file_put_contents($stateFile, json_encode($current));
+        }
+
+        $recipient = config('renewr.notify_email');
+        if (!$recipient || (!$crash && empty($new))) {
+            return;
+        }
+
+        $newCount = array_sum(array_map('count', $new));
+        $subject = $crash ? '[phpIP] Renewr sync failed' : "[phpIP] Renewr sync: $newCount new " . ($newCount > 1 ? 'issues' : 'issue');
+
+        try {
+            Mail::html(
+                view('email.renewr-sync', [
+                    'crash' => $crash,
+                    'kinds' => self::ISSUE_KINDS,
+                    'issues' => $this->issues,
+                    'new' => $new,
+                    'stats' => $this->stats,
+                ])->render(),
+                fn ($message) => $message->to($recipient)->subject($subject)
+            );
+        } catch (\Throwable $e) {
+            Log::error('Renewr sync report could not be sent: ' . $e->getMessage());
+            $this->error('Renewr sync report could not be sent: ' . $e->getMessage());
+        }
     }
 
     /**

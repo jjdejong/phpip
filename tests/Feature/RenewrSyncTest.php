@@ -10,6 +10,7 @@ use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 /**
@@ -179,6 +180,90 @@ class RenewrSyncTest extends TestCase
         $this->artisan('tasks:renewr-sync')->assertExitCode(0);
 
         $this->assertNull($this->renewal($matter, 5));
+    }
+
+    /** Emails sent through the array transport since the last call. */
+    private function sentReports(): array
+    {
+        $transport = Mail::mailer('array')->getSymfonyTransport();
+        $messages = array_map(fn ($sent) => $sent->getOriginalMessage(), $transport->messages()->all());
+        $transport->flush();
+
+        return $messages;
+    }
+
+    public function test_only_new_issues_are_emailed(): void
+    {
+        config(['mail.default' => 'array', 'renewr.notify_email' => 'renewals@example.com']);
+        $this->sentReports();
+
+        $matter = $this->patent('RSYNC6', 'DE');
+        $unknown = ['providerId' => null, 'clientCaseRef' => 'RSYNC-UNLINKED', 'country' => 'DE',
+            'renewalEvents' => [$this->renewrEvent(5, '2024-03-31', 509)]];
+
+        // First run: both issues are new
+        $this->serveApi([
+            $unknown,
+            $this->renewrPatent($matter, [$this->renewrEvent(6, '2025-03-31', null, 'ESTIMATED')]),
+        ], 1);
+        $this->artisan('tasks:renewr-sync')->assertExitCode(0);
+
+        $reports = $this->sentReports();
+        $this->assertCount(1, $reports);
+        $this->assertEquals('[phpIP] Renewr sync: 2 new issues', $reports[0]->getSubject());
+        $this->assertEquals('renewals@example.com', $reports[0]->getTo()[0]->getAddress());
+        $this->assertStringContainsString('No providerId for patent: RSYNC-UNLINKED', $reports[0]->getHtmlBody());
+        $this->assertStringContainsString('No fees for renewal 6', $reports[0]->getHtmlBody());
+
+        // Same issues again: no email
+        File::delete(glob($this->storage . '/app/cache/renewrsync_api_data_*'));
+        $this->artisan('tasks:renewr-sync')->assertExitCode(0);
+        $this->assertCount(0, $this->sentReports());
+
+        // One more issue: only it is listed
+        File::delete(glob($this->storage . '/app/cache/renewrsync_api_data_*'));
+        $this->serveApi([
+            $unknown,
+            $this->renewrPatent($matter, [
+                $this->renewrEvent(6, '2025-03-31', null, 'ESTIMATED'),
+                $this->renewrEvent(7, '2026-03-31', null, 'ESTIMATED'),
+            ]),
+        ], 1);
+        $this->artisan('tasks:renewr-sync')->assertExitCode(0);
+
+        $reports = $this->sentReports();
+        $this->assertCount(1, $reports);
+        $this->assertEquals('[phpIP] Renewr sync: 1 new issue', $reports[0]->getSubject());
+        $body = $reports[0]->getHtmlBody();
+        $newSection = substr($body, 0, strpos($body, 'All issues of this run'));
+        $this->assertStringContainsString('No fees for renewal 7', $newSection);
+        $this->assertStringNotContainsString('No fees for renewal 6', $newSection);
+        $this->assertStringNotContainsString('RSYNC-UNLINKED', $newSection);
+    }
+
+    public function test_a_crashed_sync_is_emailed(): void
+    {
+        config(['mail.default' => 'array', 'renewr.notify_email' => 'renewals@example.com', 'renewr.url' => 'file://' . $this->storage . '/missing.json']);
+        $this->sentReports();
+
+        $this->artisan('tasks:renewr-sync')->assertExitCode(1);
+
+        $reports = $this->sentReports();
+        $this->assertCount(1, $reports);
+        $this->assertEquals('[phpIP] Renewr sync failed', $reports[0]->getSubject());
+        $this->assertStringContainsString('API request failed', $reports[0]->getHtmlBody());
+    }
+
+    public function test_no_email_without_recipient(): void
+    {
+        config(['mail.default' => 'array', 'renewr.notify_email' => null]);
+        $this->sentReports();
+
+        $matter = $this->patent('RSYNC7', 'DE');
+        $this->serveApi([$this->renewrPatent($matter, [$this->renewrEvent(6, '2025-03-31', null, 'ESTIMATED')])], 1);
+        $this->artisan('tasks:renewr-sync')->assertExitCode(0);
+
+        $this->assertCount(0, $this->sentReports());
     }
 
     public function test_page_count_is_taken_from_the_api_not_from_stale_metadata(): void
