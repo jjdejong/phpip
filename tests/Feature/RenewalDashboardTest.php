@@ -91,18 +91,9 @@ class RenewalDashboardTest extends TestCase
 
         $this->get('/renewal?Case=RDASH')
             ->assertOk()
-            ->assertSee('id="pendingSync"', false)
-            ->assertSee('<span class="badge rounded-pill text-bg-warning" title="' . __('Awaiting Renewr sync since'), false)
-            ->assertSee('<span class="badge rounded-pill text-bg-secondary" title="', false);
-    }
-
-    public function test_pending_sync_filter_lists_only_renewals_awaiting_renewr(): void
-    {
-        $this->renewal('RDASH1', 'CH', 'PAT', [], true);
-        $this->renewal('RDASH2', 'CH', 'TM');
-        $this->renewal('RDASH3', 'CH', 'PAT', ['cost' => 500, 'fee' => 250.25], true);
-
-        $this->assertEquals(['RDASH1'], $this->dashboard(['pending_sync' => 1])->keys()->all());
+            ->assertSee('<span class="badge rounded-pill text-bg-warning py-0 lh-sm" title="' . __('Awaiting Renewr sync since'), false)
+            ->assertSee('>noSync</span>', false)
+            ->assertSee('>noSrc</span>', false);
     }
 
     public function test_unpriced_renewal_has_zero_fee_whatever_the_discount(): void

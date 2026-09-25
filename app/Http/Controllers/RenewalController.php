@@ -79,13 +79,6 @@ class RenewalController extends Controller
                         case 'grace':
                             $renewals->where('grace_period', "$value");
                             break;
-                        case 'pending_sync':
-                            // Same conditions as flagUnpriced() for pending_sync
-                            $renewals->whereNull('fees.fee')
-                                ->whereNull('task.cost')
-                                ->where('matter.dead', 0)
-                                ->whereRaw(Task::RENEWR_LINK_SQL);
-                            break;
                         case 'step':
                             $renewals->where('step', "$value");
                             if ($value != 0) {

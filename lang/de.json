@@ -423,7 +423,6 @@
     "Remove actor": "Akteur entfernen",
     "Add": "Hinzufügen",
     "External priorities": "Externe Prioritäten",
-    "Only renewals awaiting a Renewr sync": "Nur Jahresgebühren, die auf eine Renewr-Synchronisierung warten",
     "Awaiting Renewr sync since": "Wartet auf Renewr-Synchronisierung seit",
     "No fee source: not in the fees table and not handled by Renewr": "Keine Gebührenquelle: nicht in der Gebührentabelle und nicht von Renewr betreut"
 }
