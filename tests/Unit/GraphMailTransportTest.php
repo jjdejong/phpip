@@ -109,6 +109,46 @@ class GraphMailTransportTest extends TestCase
         });
     }
 
+    public function test_mime_header_body_separator_matches_symfony_for_text_html_and_multipart(): void
+    {
+        $this->provider();
+        $messages = [
+            'text/plain' => $this->email(),
+            'text/html' => $this->email()->text(null)->html('<p>Hello</p>'),
+            'multipart/mixed' => $this->email()->html('<p>Hello</p>')->attach('case-data', 'case.txt'),
+        ];
+        foreach ($messages as $contentType => $email) {
+            $email->date(new \DateTimeImmutable('2026-11-02T12:00:00+00:00'));
+            $email->getHeaders()->addIdHeader('Message-ID', 'separator-test@example.com');
+            $expected = $email->toString();
+            $this->transport()->send($email);
+            $request = Http::recorded(fn (Request $request) => $request->url() === self::SEND_URL)->last()[0];
+            $mime = base64_decode($request->body(), true);
+
+            $parts = explode("\r\n\r\n", $mime, 2);
+            $this->assertCount(2, $parts, 'MIME must have a blank line between all top-level headers and content.');
+            [$headers, $body] = $parts;
+            [$expectedHeaders, $expectedBody] = explode("\r\n\r\n", $expected, 2);
+            // Recipient reconciliation can reorder headers; their fields and the body must match.
+            $fields = static function (string $block): array {
+                $lines = preg_split('/\r\n(?=[^ \t])/', $block);
+                sort($lines);
+
+                return $lines;
+            };
+            $this->assertSame($fields($expectedHeaders), $fields($headers));
+            $this->assertSame($expectedBody, $body, 'Graph content must match Symfony native serialization.');
+            $this->assertStringContainsString('Content-Type: '.$contentType, $headers);
+            if ($contentType === 'multipart/mixed') {
+                // Part headers belong inside multipart content; its first line must be a boundary.
+                $this->assertStringStartsWith('--', $body);
+            } else {
+                $this->assertStringContainsString('Content-Transfer-Encoding:', $headers);
+                $this->assertSame($contentType === 'text/plain' ? 'Hello' : '<p>Hello</p>', $body);
+            }
+        }
+    }
+
     public function test_explicit_envelope_cannot_leak_original_recipients(): void
     {
         $this->provider();

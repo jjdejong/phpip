@@ -67,6 +67,8 @@ class GraphTransport extends AbstractTransport
         }
         $headers->remove('Message-ID');
         $headers->addIdHeader('Message-ID', $message->getMessageId());
+        // AbstractPart::toString() includes Content-Type/encoding headers and then
+        // the CRLF separator. An extra CRLF here would put those headers in the body.
         $mime = $headers->toString().($email->getBody()?->toString() ?? '');
         // Stay below Graph's simple send request limit, without requesting draft/read access.
         if (strlen($mime) > 3000000) {
