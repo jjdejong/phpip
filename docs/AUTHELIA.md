@@ -25,6 +25,7 @@ is:
   scopes:
     - openid
     - profile
+    - email
   response_types:
     - code
   grant_types:
@@ -58,11 +59,15 @@ configuration (or `config:clear` during development).
 
 An administrator must first create the phpIP account with a `login` exactly
 matching Authelia's `preferred_username`, including case. Authelia's standard
-`profile` scope supplies this claim. Emails and group names are not used to link
-accounts. Users are never automatically created or assigned roles. The existing
-phpIP account's role and company determine its access as usual. Treat changes to
-Authelia usernames as account-linking changes; do not reassign a username to a
-different person while the corresponding phpIP login remains active.
+`profile` scope supplies this claim. If Authelia returns an email address as
+`preferred_username` instead (for example, when users sign in with their email),
+phpIP can link it to an existing account only when the `email` scope is enabled,
+Authelia marks the email as verified, and exactly one phpIP account has that email
+(case-insensitive). Missing, unverified, or duplicate email addresses are rejected.
+Email and group claims never create accounts or assign roles. The existing phpIP
+account's role and company determine its access as usual. Treat changes to
+Authelia usernames and email addresses as account-linking changes; do not reassign
+them to a different person while the corresponding phpIP account remains active.
 
 Login attempts expire after ten minutes and callbacks can be used only once.
 Denied consent, expired attempts, missing accounts, and provider failures return

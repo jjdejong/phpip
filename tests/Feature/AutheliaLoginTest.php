@@ -42,9 +42,9 @@ class AutheliaLoginTest extends TestCase
         ]);
     }
 
-    private function localUser(): User
+    private function localUser(?string $email = null, string $login = 'authelia-test'): User
     {
-        $actor = Actor::create(['name' => 'Authelia test', 'login' => 'authelia-test']);
+        $actor = Actor::create(['name' => 'Authelia test', 'login' => $login, 'email' => $email]);
 
         return User::findOrFail($actor->id);
     }
@@ -70,7 +70,7 @@ class AutheliaLoginTest extends TestCase
         $attempt = session('authelia');
         $this->assertSame('phpip', $parameters['client_id']);
         $this->assertSame('code', $parameters['response_type']);
-        $this->assertSame('openid profile', $parameters['scope']);
+        $this->assertSame('openid profile email', $parameters['scope']);
         $this->assertSame($attempt['state'], $parameters['state']);
         $this->assertSame('S256', $parameters['code_challenge_method']);
         $this->assertSame(rtrim(strtr(base64_encode(hash('sha256', $attempt['verifier'], true)), '+/', '-_'), '='), $parameters['code_challenge']);
@@ -96,6 +96,49 @@ class AutheliaLoginTest extends TestCase
             && $request->hasHeader('Authorization', 'Basic '.base64_encode('phpip:test-secret')));
         Http::assertSent(fn (Request $request) => $request->url() === 'https://auth.example.com/api/oidc/userinfo'
             && $request->hasHeader('Authorization', 'Bearer test-token'));
+    }
+
+    public function test_verified_email_links_to_one_existing_account_when_username_is_email(): void
+    {
+        $user = $this->localUser('timothy@synchronyip.com');
+        $parameters = $this->begin();
+        $this->provider([
+            'sub' => 'authelia-subject',
+            'preferred_username' => 'timothy@synchronyip.com',
+            'email' => 'TIMOTHY@synchronyip.com',
+            'email_verified' => true,
+        ]);
+
+        $this->get('/login/authelia/callback?'.http_build_query([
+            'state' => $parameters['state'], 'code' => 'test-code',
+        ]))->assertRedirect('/home');
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_email_fallback_rejects_unverified_or_ambiguous_email(): void
+    {
+        $user = $this->localUser('shared@example.com');
+        $parameters = $this->begin();
+        $this->provider([
+            'sub' => 'subject', 'preferred_username' => 'timothy@synchronyip.com',
+            'email' => 'shared@example.com', 'email_verified' => false,
+        ]);
+        $this->get('/login/authelia/callback?'.http_build_query([
+            'state' => $parameters['state'], 'code' => 'test-code',
+        ]))->assertRedirect('/login')->assertSessionHasErrors('authelia');
+        $this->assertGuest();
+
+        $other = $this->localUser('shared@example.com', 'authelia-test-2');
+        $parameters = $this->begin();
+        $this->provider([
+            'sub' => 'subject', 'preferred_username' => 'timothy@synchronyip.com',
+            'email' => 'shared@example.com', 'email_verified' => true,
+        ]);
+        $this->get('/login/authelia/callback?'.http_build_query([
+            'state' => $parameters['state'], 'code' => 'test-code',
+        ]))->assertRedirect('/login')->assertSessionHasErrors('authelia');
+        $this->assertGuest();
+        $this->assertNotSame($user->id, $other->id);
     }
 
     public function test_callback_without_a_login_attempt_is_rejected(): void

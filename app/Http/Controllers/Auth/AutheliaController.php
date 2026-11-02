@@ -30,7 +30,7 @@ class AutheliaController extends Controller
             'client_id' => $settings['client_id'],
             'redirect_uri' => $settings['redirect_uri'],
             'response_type' => 'code',
-            'scope' => 'openid profile',
+            'scope' => 'openid profile email',
             'state' => $state,
             'code_challenge' => rtrim(strtr(base64_encode(hash('sha256', $verifier, true)), '+/', '-_'), '='),
             'code_challenge_method' => 'S256',
@@ -89,7 +89,21 @@ class AutheliaController extends Controller
         // Only existing phpIP logins are eligible. Preserve local roles and company scope.
         $user = User::where('login', $username)->first();
         if (! $user || $user->login !== $username) {
-            return $this->failed();
+            // Some Authelia deployments authenticate with email and return that as
+            // preferred_username. Link only an explicitly verified email that
+            // uniquely identifies one pre-existing local account.
+            $email = $profile->json('email');
+            if ($profile->json('email_verified') !== true || ! is_string($email)
+                || filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+                return $this->failed();
+            }
+
+            $matches = User::whereRaw('LOWER(email) = ?', [Str::lower(trim($email))])->limit(2)->get();
+            if ($matches->count() !== 1) {
+                return $this->failed();
+            }
+
+            $user = $matches->first();
         }
 
         Auth::login($user);
