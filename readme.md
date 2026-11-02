@@ -10,6 +10,10 @@ Head for the [Wiki](https://github.com/jjdejong/phpip/wiki) for further informat
 
 # New features
 
+## 2026-11-02 Microsoft 365 send-only mail
+
+The optional Microsoft Graph mailer sends through a fixed Exchange Online mailbox using application-only OAuth, with certificate or client-secret credentials. It uses Laravel's existing mail workflows and does not use EWS. Follow the [Exchange mail guide](docs/EXCHANGE_MAIL.md) to configure mailbox-scoped send-only access.
+
 ## 2026-10-30 Optional Authelia login
 
 Authelia sign-in is available alongside local password login. It matches existing phpIP usernames and preserves their roles and company access. See the [Authelia setup guide](docs/AUTHELIA.md) for client registration and environment settings.
