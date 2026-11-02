@@ -42,9 +42,9 @@ class AutheliaLoginTest extends TestCase
         ]);
     }
 
-    private function localUser(?string $email = null): User
+    private function localUser(?string $email = null, string $login = 'authelia-test'): User
     {
-        $actor = Actor::create(['name' => 'Authelia test', 'login' => 'authelia-test', 'email' => $email]);
+        $actor = Actor::create(['name' => 'Authelia test', 'login' => $login, 'email' => $email]);
 
         return User::findOrFail($actor->id);
     }
@@ -128,7 +128,7 @@ class AutheliaLoginTest extends TestCase
         ]))->assertRedirect('/login')->assertSessionHasErrors('authelia');
         $this->assertGuest();
 
-        $other = $this->localUser('shared@example.com');
+        $other = $this->localUser('shared@example.com', 'authelia-test-2');
         $parameters = $this->begin();
         $this->provider([
             'sub' => 'subject', 'preferred_username' => 'timothy@synchronyip.com',
