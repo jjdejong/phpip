@@ -1,4 +1,6 @@
 {
+  "Sign in with Authelia": "Mit Authelia anmelden",
+  "Authelia sign-in failed. Please try again or contact your administrator.": "Die Anmeldung mit Authelia ist fehlgeschlagen. Bitte versuchen Sie es erneut oder wenden Sie sich an Ihren Administrator.",
     "These are not the official countries but the countries you chose as a preselection for the national phases": "Dies sind nicht die offiziellen Länder, sondern die Länder, die Sie als Vorauswahl für die nationalen Phasen gewählt haben",
     "Regional Phase Preselection": "Vorauswahl der regionalen Phase",
     "The :attribute must contain at least one letter.": "Das :attribute muss mindestens einen Buchstaben enthalten.",

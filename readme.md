@@ -10,6 +10,14 @@ Head for the [Wiki](https://github.com/jjdejong/phpip/wiki) for further informat
 
 # New features
 
+## 2026-11-02 Microsoft 365 send-only mail
+
+The optional Microsoft Graph mailer sends through a fixed Exchange Online mailbox using application-only OAuth, with certificate or client-secret credentials. It uses Laravel's existing mail workflows and does not use EWS. Follow the [Exchange mail guide](docs/EXCHANGE_MAIL.md) to configure mailbox-scoped send-only access.
+
+## 2026-10-30 Optional Authelia login
+
+Authelia sign-in is available alongside local password login. It matches existing phpIP usernames and preserves their roles and company access. See the [Authelia setup guide](docs/AUTHELIA.md) for client registration and environment settings.
+
 ## 2026-04-23 USPTO ODP fallback/enrichment for US family members
 
 Family import now uses a dedicated provider orchestration service. EPO OPS remains the primary family source, while USPTO ODP can enrich US family members with missing title, applicant, inventor, or procedure data. If OPS cannot return a family for a US application, phpIP can fall back to USPTO ODP to prepare a single US matter from the available ODP record.
