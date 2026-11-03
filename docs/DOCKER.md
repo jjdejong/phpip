@@ -45,12 +45,12 @@ After the seed succeeds, remove that environment variable and sign in as
 `phpipuser` with the password you supplied, then change it in the app. Never
 seed an existing production database as an upgrade step.
 
-App Platform does not load `.env.docker`, so set `MAIL_MAILER=log` explicitly
-for the default safe, non-sending behavior; messages appear in the app's
-runtime logs. Password reset and renewal messages will not reach recipients
-until SMTP is configured. To send mail, configure `MAIL_MAILER=smtp` plus the
-SMTP host, port, username, password, encryption, and sender values in the app
-component.
+App Platform does not load `.env.docker`, so set `MAIL_MAILER=log` and
+`LOG_CHANNEL=stderr` explicitly for the default safe, non-sending behavior;
+messages then appear in the app's runtime logs. Password reset and renewal
+messages will not reach recipients until SMTP is configured. To send mail,
+configure `MAIL_MAILER=smtp` plus the SMTP host, port, username, password,
+encryption, and sender values in the app component.
 App Platform runs the web container only, so schedule tasks separately or use
 the Compose setup on a Droplet, which starts both the app and database services
 together.
@@ -305,9 +305,11 @@ them; **`down -v` deletes them**. Keep `.env.docker` in your secure backup as we
 Create a logical database backup without putting the password in shell history:
 
 ```sh
+mkdir -p "$HOME/phpip-backups"
+chmod 700 "$HOME/phpip-backups"
 docker compose --env-file .env.docker exec -T db sh -c \
   'MYSQL_PWD="$MYSQL_PASSWORD" exec mysqldump -u"$MYSQL_USER" --no-tablespaces --single-transaction --routines --triggers "$MYSQL_DATABASE"' \
-  > phpip-backup.sql
+  > "$HOME/phpip-backups/phpip-backup-$(date -u +%Y%m%dT%H%M%SZ).sql"
 ```
 
 Keep backups outside the repository/build context. To back up storage, stop the
@@ -316,7 +318,8 @@ app and scheduler briefly so their files do not change while archiving:
 ```sh
 docker compose --env-file .env.docker stop app scheduler
 docker compose --env-file .env.docker run --rm --no-deps --entrypoint tar app \
-  -czf - -C /var/www/html storage > phpip-storage.tar.gz
+  -czf - -C /var/www/html storage \
+  > "$HOME/phpip-backups/phpip-storage-$(date -u +%Y%m%dT%H%M%SZ).tar.gz"
 docker compose --env-file .env.docker up -d app
 # Restart the scheduler too if it was enabled.
 ```
