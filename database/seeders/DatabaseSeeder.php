@@ -8,6 +8,10 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
+        if (app()->environment('production') && empty(env('INITIAL_USER_PASSWORD'))) {
+            throw new \RuntimeException('Set INITIAL_USER_PASSWORD before seeding the production database.');
+        }
+
         $this->call(CountryTableSeeder::class);
         
         // Translatable table seeders (insert multi-language JSON directly)
