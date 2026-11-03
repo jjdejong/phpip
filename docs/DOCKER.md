@@ -27,13 +27,13 @@ recognizes the forwarded HTTPS scheme. Use this wildcard only while the app is
 reachable through App Platform's ingress; if you expose the container through
 another network path, configure the proxy IPs or CIDRs instead.
 
-Laravel sets each MySQL session's timezone from `APP_TIMEZONE` by default; set
-optional `DB_TIMEZONE` only if the database should use a different zone. The
-configured zone must be available in MySQL's timezone tables. Compose sets
+Existing MySQL installs retain their previous session timezone behavior unless
+`DB_TIMEZONE` is set. To align trigger-generated `NOW()` values on App Platform,
+set `DB_TIMEZONE` to the same IANA timezone as `APP_TIMEZONE`; the name must be
+available in the managed database's timezone tables. Compose sets
 `DB_TIMEZONE=SYSTEM` because its MySQL server is configured with `APP_TIMEZONE`.
-For an App Platform database, the session setting makes trigger-generated
-`NOW()` values follow the app's timezone even when the managed server itself
-uses UTC.
+If the managed database does not have timezone tables loaded, configure its
+server timezone to match `APP_TIMEZONE` and leave `DB_TIMEZONE` unset.
 
 On a new database, run both `php artisan migrate --force` and
 `php artisan db:seed --force` in an App Platform console or one-off job. The
@@ -67,14 +67,21 @@ sudo systemctl enable --now docker
 docker compose version
 ```
 
-Clone the repository (use the PR branch instead of `master` if testing before
-the Docker changes are merged):
+After the Docker changes merge, clone the canonical upstream repository:
 
 ```sh
-git clone https://github.com/srdco/phpip.git ~/phpip
+git clone https://github.com/jjdejong/phpip.git ~/phpip
 cd ~/phpip
 cp .env.docker.example .env.docker
 chmod 600 .env.docker
+```
+
+Before the Docker changes merge, use the contributor fork and branch instead
+of the upstream clone above:
+
+```sh
+git clone --branch codex/docker-upstream-only https://github.com/srdco/phpip.git ~/phpip
+cd ~/phpip
 ```
 
 Set `APP_KEY` in `.env.docker` to `base64:` followed by the output of
