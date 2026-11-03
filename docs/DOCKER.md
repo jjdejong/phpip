@@ -18,8 +18,18 @@ the app component from that database's connection details. Use its private host
 when both components are in the same DigitalOcean network. Do not set
 `DB_HOST=127.0.0.1` unless MySQL actually runs inside the app container.
 
+DigitalOcean managed MySQL requires TLS. Download the cluster CA certificate
+from its database connection details, base64-encode it locally with
+`base64 -w0 ca-certificate.crt` (on macOS, use
+`base64 < ca-certificate.crt | tr -d '\n'`), and set the output as the
+`MYSQL_ATTR_SSL_CA_BASE64` app environment variable. Laravel writes it to a
+private temporary file and configures PDO to validate the database certificate.
+Keep certificate verification enabled.
+
 Also configure a persistent `APP_KEY`, `APP_URL` (your public `https://` URL),
-and `APP_TIMEZONE` in the app component. Generate the key with
+`APP_TIMEZONE`, and `SESSION_DRIVER=cookie` in the app component. The cookie
+session driver works across App Platform instances without a shared filesystem
+or an extra session table. Generate the key with
 `php artisan key:generate --show` in a local checkout and retain the same value
 across deployments. The container exits at startup if `APP_KEY` is missing.
 For App Platform's TLS-terminating ingress, set `TRUSTED_PROXIES=*` so Laravel
@@ -40,7 +50,8 @@ On a new database, run both `php artisan migrate --force` and
 baseline seeder is required for production too: it loads countries, roles, event
 and matter types, templates, and the initial account, but does not load sample
 matters. Before seeding a production database, set `INITIAL_USER_PASSWORD` to a
-unique secret in the app component; production seeding stops if it is missing.
+unique secret (for example, `openssl rand -hex 24`) in the app component;
+production seeding stops if it is missing.
 After the seed succeeds, remove that environment variable and sign in as
 `phpipuser` with the password you supplied, then change it in the app. Never
 seed an existing production database as an upgrade step.
@@ -88,7 +99,8 @@ Set `APP_KEY` in `.env.docker` to `base64:` followed by the output of
 `openssl rand -base64 32`. Set distinct `DB_PASSWORD` and `MYSQL_ROOT_PASSWORD`
 values, for example with `openssl rand -hex 24` twice. Set your company name,
 locale, timezone, and `APP_URL` for your domain. Set `INITIAL_USER_PASSWORD` to
-a unique value before running the seed command. Keep the key and database
+a unique value (for example, `openssl rand -hex 24`) before running the seed
+command. Keep the key and database
 passwords stable. Leave `APP_BIND_ADDRESS=127.0.0.1` when an HTTPS reverse proxy
 will forward requests to the Droplet's port 8000. Compose does not configure
 DNS or HTTPS. For TLS termination at that proxy, set `TRUSTED_PROXIES` to its
@@ -269,8 +281,15 @@ The runtime image excludes development dependencies, including PHPUnit.
 The Docker GitHub Actions workflow builds a fresh stack, migrates and seeds it,
 checks HTTP login and compiled assets, and replaces the app container to check
 database and storage persistence. The same HTTP check can be run against a
-disposable seeded stack with `python3 tests/docker-smoke.py`. This is a container
-smoke check, not the full application test suite.
+disposable seeded stack by exporting the password from `.env.docker`:
+
+```sh
+export INITIAL_USER_PASSWORD="$(sed -n 's/^INITIAL_USER_PASSWORD=//p' .env.docker)"
+python3 tests/docker-smoke.py
+unset INITIAL_USER_PASSWORD
+```
+
+This is a container smoke check, not the full application test suite.
 
 The image creates active `config/renewal.php` and `config/renewr.php` from their
 tracked example files. This gives renewal pages usable defaults and lets the
