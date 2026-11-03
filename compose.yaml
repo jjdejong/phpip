@@ -10,6 +10,8 @@ x-application: &application
     DB_HOST: db
     DB_PORT: 3306
     DB_SOCKET: ""
+    # MySQL's server-local zone follows APP_TIMEZONE via TZ and SYSTEM.
+    DB_TIMEZONE: SYSTEM
     # .env.docker also feeds MySQL initialization; don't pass its root secret to PHP.
     MYSQL_ROOT_PASSWORD: ""
     LOG_CHANNEL: stderr
