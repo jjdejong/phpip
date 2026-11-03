@@ -18,16 +18,19 @@ jobs:
       - name: Create isolated test configuration
         run: |
           python3 - <<'PY'
-          import base64, pathlib, secrets
+          import base64, os, pathlib, secrets
           text = pathlib.Path('.env.docker.example').read_text()
           values = {
               'APP_KEY': 'base64:' + base64.b64encode(secrets.token_bytes(32)).decode(),
               'DB_PASSWORD': secrets.token_hex(24),
               'MYSQL_ROOT_PASSWORD': secrets.token_hex(24),
+              'INITIAL_USER_PASSWORD': secrets.token_urlsafe(24),
           }
           for key, value in values.items():
               text = text.replace(key + '=\n', key + '=' + value + '\n')
           pathlib.Path('.env.docker').write_text(text)
+          with pathlib.Path(os.environ['GITHUB_ENV']).open('a') as env_file:
+              env_file.write('INITIAL_USER_PASSWORD=' + values['INITIAL_USER_PASSWORD'] + '\n')
           PY
       - name: Build and initialize
         run: |
