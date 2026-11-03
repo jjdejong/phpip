@@ -2,6 +2,32 @@
 
 use Illuminate\Support\Str;
 
+$mysqlSslCa = env('MYSQL_ATTR_SSL_CA');
+$mysqlSslCaBase64 = env('MYSQL_ATTR_SSL_CA_BASE64');
+if ($mysqlSslCaBase64 !== null && $mysqlSslCaBase64 !== '') {
+    $mysqlSslCaContents = base64_decode($mysqlSslCaBase64, true);
+    if ($mysqlSslCaContents === false) {
+        throw new InvalidArgumentException('MYSQL_ATTR_SSL_CA_BASE64 must contain valid base64 data.');
+    }
+
+    $mysqlSslCa = sys_get_temp_dir().'/phpip-mysql-ca-'.hash('sha256', $mysqlSslCaContents).'.pem';
+    if (! is_file($mysqlSslCa) || file_get_contents($mysqlSslCa) !== $mysqlSslCaContents) {
+        $temporaryCaFile = tempnam(sys_get_temp_dir(), 'phpip-mysql-ca-');
+        $caFileCreated = $temporaryCaFile !== false
+            && file_put_contents($temporaryCaFile, $mysqlSslCaContents) !== false
+            && chmod($temporaryCaFile, 0600)
+            && rename($temporaryCaFile, $mysqlSslCa);
+
+        if (! $caFileCreated) {
+            if (is_string($temporaryCaFile)) {
+                @unlink($temporaryCaFile);
+            }
+
+            throw new RuntimeException('Unable to materialize the MySQL CA certificate.');
+        }
+    }
+}
+
 return [
 
     /*
@@ -60,7 +86,8 @@ return [
             'strict' => false,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                (class_exists(\Pdo\Mysql::class) ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
+                (class_exists(\Pdo\Mysql::class) ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => $mysqlSslCa,
+                (class_exists(\Pdo\Mysql::class) ? \Pdo\Mysql::ATTR_SSL_VERIFY_SERVER_CERT : \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT) => $mysqlSslCa ? true : null,
             ]) : [],
         ],
 
