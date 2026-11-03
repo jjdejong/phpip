@@ -43,11 +43,13 @@ services:
   db:
     image: mysql:8.4
     environment:
+      TZ: ${APP_TIMEZONE:-UTC}
       MYSQL_DATABASE: ${DB_DATABASE:-phpip}
       MYSQL_USER: ${DB_USERNAME:-phpip}
       MYSQL_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env.docker}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env.docker}
     command:
+      - --default-time-zone=SYSTEM
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_0900_ai_ci
       - --log-bin-trust-function-creators=1
