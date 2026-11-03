@@ -27,9 +27,11 @@ private temporary file and configures PDO to validate the database certificate.
 Keep certificate verification enabled.
 
 Also configure a persistent `APP_KEY`, `APP_URL` (your public `https://` URL),
-`APP_TIMEZONE`, and `SESSION_DRIVER=cookie` in the app component. The cookie
-session driver works across App Platform instances without a shared filesystem
-or an extra session table. Generate the key with
+`APP_TIMEZONE`, `SESSION_DRIVER=cookie`, and `SESSION_SECURE_COOKIE=true` in the
+app component. The cookie session driver avoids dependence on local filesystem
+sessions and marks the authenticated cookie for HTTPS only. Keep the App
+Platform service at one instance because login throttling uses the local
+file-backed cache. Generate the key with
 `php artisan key:generate --show` in a local checkout and retain the same value
 across deployments. The container exits at startup if `APP_KEY` is missing.
 For App Platform's TLS-terminating ingress, set `TRUSTED_PROXIES=*` so Laravel
