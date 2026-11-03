@@ -56,6 +56,7 @@ return [
             'collation' => 'utf8mb4_0900_ai_ci',
             'prefix' => '',
             'prefix_indexes' => true,
+            'timezone' => env('DB_TIMEZONE', env('APP_TIMEZONE', 'UTC')),
             'strict' => false,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
