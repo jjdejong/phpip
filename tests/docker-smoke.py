@@ -57,7 +57,7 @@ payload = urllib.parse.urlencode(
     {
         "_token": page.token,
         "login": "phpipuser",
-        "password": os.environ.get("INITIAL_USER_PASSWORD", "changeme"),
+        "password": os.environ.get("INITIAL_USER_PASSWORD") or "changeme",
     }
 ).encode()
 with opener.open(base + "/login", data=payload, timeout=15) as response:
