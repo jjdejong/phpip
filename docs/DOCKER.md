@@ -27,11 +27,33 @@ recognizes the forwarded HTTPS scheme. Use this wildcard only while the app is
 reachable through App Platform's ingress; if you expose the container through
 another network path, configure the proxy IPs or CIDRs instead.
 
-After setting the database connection, run `php artisan migrate --force` in an
-App Platform console or one-off job. Run `php artisan db:seed --force` only for
-a new test database; it creates the initial test user. App Platform runs the
-web container only, so schedule tasks separately or use the Compose setup on a
-Droplet, which starts both the app and database services together.
+Laravel sets each MySQL session's timezone from `APP_TIMEZONE` by default; set
+optional `DB_TIMEZONE` only if the database should use a different zone. The
+configured zone must be available in MySQL's timezone tables. Compose sets
+`DB_TIMEZONE=SYSTEM` because its MySQL server is configured with `APP_TIMEZONE`.
+For an App Platform database, the session setting makes trigger-generated
+`NOW()` values follow the app's timezone even when the managed server itself
+uses UTC.
+
+On a new database, run both `php artisan migrate --force` and
+`php artisan db:seed --force` in an App Platform console or one-off job. The
+baseline seeder is required for production too: it loads countries, roles, event
+and matter types, templates, and the initial account, but does not load sample
+matters. Before seeding a production database, set `INITIAL_USER_PASSWORD` to a
+unique secret in the app component; production seeding stops if it is missing.
+After the seed succeeds, remove that environment variable and sign in as
+`phpipuser` with the password you supplied, then change it in the app. Never
+seed an existing production database as an upgrade step.
+
+App Platform does not load `.env.docker`, so set `MAIL_MAILER=log` explicitly
+for the default safe, non-sending behavior; messages appear in the app's
+runtime logs. Password reset and renewal messages will not reach recipients
+until SMTP is configured. To send mail, configure `MAIL_MAILER=smtp` plus the
+SMTP host, port, username, password, encryption, and sender values in the app
+component.
+App Platform runs the web container only, so schedule tasks separately or use
+the Compose setup on a Droplet, which starts both the app and database services
+together.
 
 ## Ubuntu Droplet setup
 
@@ -58,7 +80,8 @@ chmod 600 .env.docker
 Set `APP_KEY` in `.env.docker` to `base64:` followed by the output of
 `openssl rand -base64 32`. Set distinct `DB_PASSWORD` and `MYSQL_ROOT_PASSWORD`
 values, for example with `openssl rand -hex 24` twice. Set your company name,
-locale, timezone, and `APP_URL` for your domain. Keep the key and database
+locale, timezone, and `APP_URL` for your domain. Set `INITIAL_USER_PASSWORD` to
+a unique value before running the seed command. Keep the key and database
 passwords stable. Leave `APP_BIND_ADDRESS=127.0.0.1` when an HTTPS reverse proxy
 will forward requests to the Droplet's port 8000. Compose does not configure
 DNS or HTTPS. For TLS termination at that proxy, set `TRUSTED_PROXIES` to its
@@ -113,9 +136,10 @@ This removes only the database volume. `docker compose down -v` also deletes
 application storage; never remove volumes containing data you need.
 
 After the app is healthy, configure your domain's HTTPS reverse proxy to forward
-to `http://127.0.0.1:8000`, then open the domain set in `APP_URL`. A fresh seed
-creates `phpipuser` / `changeme`; change that password immediately. The
-scheduler remains disabled until explicitly enabled.
+to `http://127.0.0.1:8000`, then open the domain set in `APP_URL`. Sign in as
+`phpipuser` with the value supplied in `INITIAL_USER_PASSWORD`, change it in the
+app, then remove the variable from `.env.docker` and recreate the app container.
+The scheduler remains disabled until explicitly enabled.
 
 ## Local Docker setup
 
@@ -129,9 +153,10 @@ chmod 600 .env.docker
 Edit `.env.docker`. Set distinct random `DB_PASSWORD` and `MYSQL_ROOT_PASSWORD`
 values, and set `APP_KEY` to `base64:` followed by the output of
 `openssl rand -base64 32`. Keep this key across updates and restores. Set your
-company name, URL, locale, and timezone. The Docker environment file is ignored
-by Git and excluded from image builds; your existing `.env` is not used by the
-containers.
+company name, URL, locale, and timezone. If `APP_ENV=production`, set a unique
+`INITIAL_USER_PASSWORD` before the first seed. The Docker environment file is
+ignored by Git and excluded from image builds; your existing `.env` is not used
+by the containers.
 
 Always pass `--env-file .env.docker`: Compose uses it both for database settings
 and container configuration. Omitting it may select settings from a host `.env`.
@@ -146,7 +171,8 @@ docker compose --env-file .env.docker up -d --wait app
 
 Open <http://localhost:8000>. Apache listens on container port 8080 for
 DigitalOcean App Platform compatibility; Compose maps it to host port 8000 by
-default. A fresh seed creates the upstream initial login `phpipuser` / `changeme`;
+default. Sign in as `phpipuser` with the value supplied in
+`INITIAL_USER_PASSWORD` (or `changeme` when seeding outside production) and
 change its password immediately. Seeding is an explicit
 first-install action, never an automatic container startup action. Do not seed
 an existing installation or import sample data into a real portfolio.
