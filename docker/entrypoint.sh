@@ -18,12 +18,12 @@ case "${1:-}" in
 esac
 
 if [ "${1:-}" = scheduler ]; then
-    exec su -s /bin/sh www-data -c 'exec php artisan schedule:work --no-interaction'
+    exec gosu www-data php artisan schedule:work --no-interaction
 fi
 
 # Run console commands as the web user so shared files stay writable by Apache.
 if [ "${1:-}" = php ] && [ "${2:-}" = artisan ] && [ "$(id -u)" = 0 ]; then
-    exec su -s /bin/sh www-data -c 'exec "$@"' -- sh "$@"
+    exec gosu www-data "$@"
 fi
 
 exec docker-php-entrypoint "$@"
