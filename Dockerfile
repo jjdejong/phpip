@@ -11,7 +11,7 @@ RUN yarn build
 
 FROM php:8.4-apache-bookworm AS php-base
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        default-mysql-client libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
+        default-mysql-client gosu libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
         libicu-dev libonig-dev libxml2-dev libzip-dev unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j"$(nproc)" gd intl mbstring pdo_mysql zip opcache \
