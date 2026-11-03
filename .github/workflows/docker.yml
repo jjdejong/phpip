@@ -1,0 +1,57 @@
+name: Docker
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create isolated test configuration
+        run: |
+          python3 - <<'PY'
+          import base64, pathlib, secrets
+          text = pathlib.Path('.env.docker.example').read_text()
+          values = {
+              'APP_KEY': 'base64:' + base64.b64encode(secrets.token_bytes(32)).decode(),
+              'DB_PASSWORD': secrets.token_hex(24),
+              'MYSQL_ROOT_PASSWORD': secrets.token_hex(24),
+          }
+          for key, value in values.items():
+              text = text.replace(key + '=\n', key + '=' + value + '\n')
+          pathlib.Path('.env.docker').write_text(text)
+          PY
+      - name: Build and initialize
+        run: |
+          docker compose --env-file .env.docker config --quiet
+          docker compose --env-file .env.docker build app
+          docker compose --env-file .env.docker up -d --wait db
+          docker compose --env-file .env.docker run --rm app php artisan migrate --force
+          docker compose --env-file .env.docker run --rm app php artisan db:seed --force
+          docker compose --env-file .env.docker up -d --wait app
+          docker compose --env-file .env.docker exec -T app php artisan config:show renewal.invoice.captions
+          docker compose --env-file .env.docker exec -T app php artisan config:show renewr.url
+      - name: Verify application and container replacement
+        run: |
+          docker compose --env-file .env.docker exec -T app sh -c 'test -z "$MYSQL_ROOT_PASSWORD"'
+          python3 tests/docker-smoke.py
+          docker compose --env-file .env.docker exec -T app php artisan schedule:list
+          docker compose --env-file .env.docker exec -T --user www-data app sh -c 'printf docker-persistence > storage/app/docker-smoke-check'
+          docker compose --env-file .env.docker up -d --wait --force-recreate app
+          docker compose --env-file .env.docker exec -T --user www-data app sh -c 'test "$(cat storage/app/docker-smoke-check)" = docker-persistence && rm storage/app/docker-smoke-check'
+          python3 tests/docker-smoke.py
+          docker compose --env-file .env.docker run --rm app php artisan migrate --force
+      - name: Container diagnostics
+        if: failure()
+        run: docker compose --env-file .env.docker logs --tail=100
+      - name: Remove isolated test stack
+        if: always()
+        run: docker compose --env-file .env.docker --profile scheduler down -v

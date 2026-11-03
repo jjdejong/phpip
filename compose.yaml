@@ -1,0 +1,70 @@
+name: phpip
+
+x-application: &application
+  image: phpip:local
+  build:
+    context: .
+  env_file: .env.docker
+  environment:
+    DB_CONNECTION: mysql
+    DB_HOST: db
+    DB_PORT: 3306
+    DB_SOCKET: ""
+    # .env.docker also feeds MySQL initialization; don't pass its root secret to PHP.
+    MYSQL_ROOT_PASSWORD: ""
+    LOG_CHANNEL: stderr
+    CACHE_DRIVER: file
+    SESSION_DRIVER: file
+    QUEUE_CONNECTION: sync
+  volumes:
+    - app-storage:/var/www/html/storage
+  depends_on:
+    db:
+      condition: service_healthy
+
+services:
+  app:
+    <<: *application
+    ports:
+      - "${APP_BIND_ADDRESS:-127.0.0.1}:${APP_PORT:-8000}:8080"
+    restart: unless-stopped
+
+  scheduler:
+    <<: *application
+    command: ["scheduler"]
+    profiles: ["scheduler"]
+    healthcheck:
+      disable: true
+    restart: unless-stopped
+    # The Apache base image uses SIGWINCH; the console worker needs SIGTERM.
+    stop_signal: SIGTERM
+    stop_grace_period: 60s
+
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-phpip}
+      MYSQL_USER: ${DB_USERNAME:-phpip}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env.docker}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env.docker}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --log-bin-trust-function-creators=1
+      # Keep MySQL usable on small test Droplets while retaining stored routines.
+      - --innodb-buffer-pool-size=64M
+      - --max-connections=20
+      - --performance-schema=OFF
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=\"$$MYSQL_PASSWORD\" mysql --protocol=TCP -h 127.0.0.1 -u\"$$MYSQL_USER\" \"$$MYSQL_DATABASE\" -e 'SELECT 1' >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  db-data:
+  app-storage:

@@ -10,6 +10,10 @@ Head for the [Wiki](https://github.com/jjdejong/phpip/wiki) for further informat
 
 # New features
 
+## 2026-11-02 Docker Compose setup
+
+phpIP can now run as an optional Docker Compose stack with PHP 8.4, MySQL 8.4, persistent database and application storage, and an optional Laravel scheduler. Existing non-Docker installations are unchanged. See the [Docker guide](docs/DOCKER.md) for setup and upgrade instructions.
+
 ## 2026-04-23 USPTO ODP fallback/enrichment for US family members
 
 Family import now uses a dedicated provider orchestration service. EPO OPS remains the primary family source, while USPTO ODP can enrich US family members with missing title, applicant, inventor, or procedure data. If OPS cannot return a family for a US application, phpIP can fall back to USPTO ODP to prepare a single US matter from the available ODP record.
