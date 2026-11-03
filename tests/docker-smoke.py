@@ -6,6 +6,7 @@ Uses the seed account; never run against a live portfolio.
 
 import http.cookiejar
 from html.parser import HTMLParser
+import os
 import sys
 import urllib.parse
 import urllib.request
@@ -53,7 +54,11 @@ for asset in page.assets:
         assert response.status == 200, f"Compiled asset unavailable: {path}"
 
 payload = urllib.parse.urlencode(
-    {"_token": page.token, "login": "phpipuser", "password": "changeme"}
+    {
+        "_token": page.token,
+        "login": "phpipuser",
+        "password": os.environ.get("INITIAL_USER_PASSWORD", "changeme"),
+    }
 ).encode()
 with opener.open(base + "/login", data=payload, timeout=15) as response:
     assert "/login" not in response.url, "Seeded account could not log in"
