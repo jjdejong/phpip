@@ -18,6 +18,15 @@ the app component from that database's connection details. Use its private host
 when both components are in the same DigitalOcean network. Do not set
 `DB_HOST=127.0.0.1` unless MySQL actually runs inside the app container.
 
+Also configure a persistent `APP_KEY`, `APP_URL` (your public `https://` URL),
+and `APP_TIMEZONE` in the app component. Generate the key with
+`php artisan key:generate --show` in a local checkout and retain the same value
+across deployments. The container exits at startup if `APP_KEY` is missing.
+For App Platform's TLS-terminating ingress, set `TRUSTED_PROXIES=*` so Laravel
+recognizes the forwarded HTTPS scheme. Use this wildcard only while the app is
+reachable through App Platform's ingress; if you expose the container through
+another network path, configure the proxy IPs or CIDRs instead.
+
 After setting the database connection, run `php artisan migrate --force` in an
 App Platform console or one-off job. Run `php artisan db:seed --force` only for
 a new test database; it creates the initial test user. App Platform runs the
@@ -152,6 +161,10 @@ exposing the application.
 Use MySQL 8.4 for this stack. Current migrations require `utf8mb4_0900_ai_ci` and
 rebuild stored functions, procedures, views, and triggers. Old installation
 documentation describing MySQL 5.7 or older MariaDB versions is not applicable.
+The bundled MySQL container uses `APP_TIMEZONE` (default `America/Chicago`) for
+server-local timestamps such as trigger-generated `NOW()` values, matching the
+application. If you change the timezone after initialization, recreate the
+database container so the server adopts the updated timezone.
 
 The image removes explicit `DEFINER` clauses from its copy of the baseline
 schema. Fresh database objects therefore belong to the configured importing
