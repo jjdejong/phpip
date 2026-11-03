@@ -12,6 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Only trust forwarded HTTPS headers from explicitly configured proxies.
+        if ($trustedProxies = env('TRUSTED_PROXIES')) {
+            $middleware->trustProxies(at: $trustedProxies);
+        }
+
         $middleware->web(append: [
             SetLocale::class,
             // Other web middleware...

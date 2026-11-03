@@ -4,11 +4,14 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class ActorTableSeeder extends Seeder
 {
     public function run()
     {
+        $initialPassword = env('INITIAL_USER_PASSWORD');
+
         DB::table('actor')->insertOrIgnore([
             [
                 'id' => 1,
@@ -53,7 +56,7 @@ class ActorTableSeeder extends Seeder
                 'first_name' => null,
                 'display_name' => null,
                 'login' => 'phpipuser',
-                'password' => '$2y$10$auLQHQ3EIsg90hqnQsA1huhks3meaxwfWWEvJtD8R38jzwNN6y3zO',
+                'password' => Hash::make($initialPassword ?: 'changeme'),
                 'default_role' => 'DBA',
                 'function' => null,
                 'parent_id' => null,

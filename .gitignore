@@ -6,6 +6,8 @@
 Homestead.json
 Homestead.yaml
 .env
+.env.docker
+/compose.override.yaml
 /nbproject/private/
 /config/renewal.php
 .DS_Store
