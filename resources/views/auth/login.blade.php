@@ -8,6 +8,16 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
+                    @error('authelia')
+                        <div class="alert alert-danger" role="alert">{{ $message }}</div>
+                    @enderror
+                    @if (config('services.authelia.enabled'))
+                        <div class="mb-4 text-center">
+                            <a class="btn btn-outline-primary" href="{{ route('authelia.redirect') }}">
+                                {{ __('Sign in with Authelia') }}
+                            </a>
+                        </div>
+                    @endif
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 

@@ -2,6 +2,14 @@
 
 return [
 
+    'authelia' => [
+        'enabled' => env('AUTHELIA_ENABLED', false),
+        'issuer' => env('AUTHELIA_ISSUER'),
+        'client_id' => env('AUTHELIA_CLIENT_ID'),
+        'client_secret' => env('AUTHELIA_CLIENT_SECRET'),
+        'redirect_uri' => env('AUTHELIA_REDIRECT_URI'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Third Party Services

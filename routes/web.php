@@ -35,6 +35,7 @@ use App\Http\Controllers\AutocompleteController;
 use App\Http\Controllers\MatterSearchController;
 use App\Http\Controllers\ClassifierController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\AutheliaController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ConfirmPasswordController;
@@ -48,6 +49,8 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function () {
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [LoginController::class, 'login']);
+    Route::get('login/authelia', [AutheliaController::class, 'redirect'])->name('authelia.redirect');
+    Route::get('login/authelia/callback', [AutheliaController::class, 'callback'])->name('authelia.callback');
 
     Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
     Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
@@ -116,13 +119,13 @@ Route::middleware(['auth'])->group(function () {
     // but these are declared first and would otherwise win.
     Route::controller(RenewalController::class)->middleware('can:except_client')->prefix('renewal')->name('renewal.')->group(function () {
         Route::post('order', 'renewalOrder');
-        Route::post('call/{send}', 'firstcall');
-        Route::post('reminder', 'remindercall');
+        Route::post('call/{send}', 'firstcall')->middleware('can:readwrite');
+        Route::post('reminder', 'remindercall')->middleware('can:readwrite');
         Route::post('invoice/{toinvoice}', 'invoice');
         Route::post('topay', 'topay');
         Route::post('paid', 'paid');
         Route::post('done', 'done');
-        Route::post('lastcall', 'lastcall');
+        Route::post('lastcall', 'lastcall')->middleware('can:readwrite');
         Route::post('receipt', 'receipt');
         Route::post('closing', 'closing');
         Route::post('abandon', 'abandon');

@@ -34,6 +34,18 @@ return [
     */
 
     'mailers' => [
+        'graph' => [
+            'transport' => 'graph',
+            'tenant_id' => env('GRAPH_MAIL_TENANT_ID'),
+            'client_id' => env('GRAPH_MAIL_CLIENT_ID'),
+            'mailbox' => env('GRAPH_MAIL_MAILBOX'),
+            'user_id' => env('GRAPH_MAIL_USER_ID'),
+            'client_secret' => env('GRAPH_MAIL_CLIENT_SECRET'),
+            'certificate_path' => env('GRAPH_MAIL_CERTIFICATE_PATH'),
+            'private_key_path' => env('GRAPH_MAIL_PRIVATE_KEY_PATH'),
+            'private_key_passphrase' => env('GRAPH_MAIL_PRIVATE_KEY_PASSPHRASE', ''),
+        ],
+
         'smtp' => [
             'transport' => 'smtp',
             'host' => env('MAIL_HOST', 'smtp.mailgun.org'),

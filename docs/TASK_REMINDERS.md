@@ -70,7 +70,9 @@ For the application to send emails, it needs to know your email service details.
      MAIL_BCC="another_email@example.com"
      ```
 
-**Important:** Replace the example values with your actual email service details. If you're using a service like Gmail, you might need to enable "Less secure app access" or generate an "App Password". Check your email provider's documentation for details on SMTP configuration.
+**Microsoft 365 / Exchange Online:** use `MAIL_MAILER=graph` and follow the [send-only Exchange setup guide](EXCHANGE_MAIL.md). This uses OAuth over HTTPS and requires a mailbox-scoped application permission; the SMTP host, username, and password settings above are unused.
+
+For SMTP providers, use their supported authentication method with TLS. Do not enable legacy "Less secure app access". The standard phpIP SMTP mailer does not acquire or renew OAuth tokens.
 
 ### **2: Ensure the Scheduler is Running on Your Server**
 
