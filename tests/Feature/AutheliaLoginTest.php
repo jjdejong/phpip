@@ -120,7 +120,7 @@ class AutheliaLoginTest extends TestCase
         $user = $this->localUser('shared@example.com');
         $parameters = $this->begin();
         $this->provider([
-            'sub' => 'subject', 'preferred_username' => 'timothy@synchronyip.com',
+            'sub' => 'subject', 'preferred_username' => 'shared@example.com',
             'email' => 'shared@example.com', 'email_verified' => false,
         ]);
         $this->get('/login/authelia/callback?'.http_build_query([
@@ -131,7 +131,7 @@ class AutheliaLoginTest extends TestCase
         $other = $this->localUser('shared@example.com', 'authelia-test-2');
         $parameters = $this->begin();
         $this->provider([
-            'sub' => 'subject', 'preferred_username' => 'timothy@synchronyip.com',
+            'sub' => 'subject', 'preferred_username' => 'shared@example.com',
             'email' => 'shared@example.com', 'email_verified' => true,
         ]);
         $this->get('/login/authelia/callback?'.http_build_query([
@@ -139,6 +139,20 @@ class AutheliaLoginTest extends TestCase
         ]))->assertRedirect('/login')->assertSessionHasErrors('authelia');
         $this->assertGuest();
         $this->assertNotSame($user->id, $other->id);
+    }
+
+    public function test_regular_unknown_username_cannot_link_by_verified_email(): void
+    {
+        $this->localUser('timothy@example.com');
+        $parameters = $this->begin();
+        $this->provider([
+            'sub' => 'other-subject', 'preferred_username' => 'another-user',
+            'email' => 'timothy@example.com', 'email_verified' => true,
+        ]);
+        $this->get('/login/authelia/callback?'.http_build_query([
+            'state' => $parameters['state'], 'code' => 'test-code',
+        ]))->assertRedirect('/login')->assertSessionHasErrors('authelia');
+        $this->assertGuest();
     }
 
     public function test_callback_without_a_login_attempt_is_rejected(): void

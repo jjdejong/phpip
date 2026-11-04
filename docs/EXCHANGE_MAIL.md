@@ -74,6 +74,7 @@ The settings have separate purposes:
 | `GRAPH_MAIL_TENANT_ID` | Directory (tenant) ID from the Entra app registration's Overview page. Use the UUID, not a tenant name or `common`. |
 | `GRAPH_MAIL_CLIENT_ID` | Application (client) ID from that same Overview page. Use the UUID, not either object ID. |
 | `GRAPH_MAIL_MAILBOX` | Primary email address of the Exchange mailbox scoped in step 1, such as `phpip@example.com`. |
+| `GRAPH_MAIL_USER_ID` | Entra object ID or user principal name (UPN) of the sending mailbox. Set this when its UPN differs from its primary SMTP address. Defaults to `GRAPH_MAIL_MAILBOX` when omitted. No directory-read permission is needed. |
 | `MAIL_FROM_ADDRESS` | The same address as `GRAPH_MAIL_MAILBOX`; this is Laravel's default From address. |
 | `MAIL_FROM_NAME` | Display name recipients should see, such as `"My Firm — phpIP"`. |
 | `GRAPH_MAIL_CERTIFICATE_PATH` / `GRAPH_MAIL_PRIVATE_KEY_PATH` | Local PEM file paths when using certificate authentication. |
@@ -146,9 +147,11 @@ required for either authentication method.
 
 ### Sender, recipients, and existing SMTP settings
 
-`GRAPH_MAIL_MAILBOX` chooses the mailbox in Graph's send request;
-`MAIL_FROM_ADDRESS` supplies the default sender to Laravel-generated emails.
-They must match. phpIP also rejects an individual email that sets a different
+`GRAPH_MAIL_USER_ID` chooses the mailbox in Graph's send request (falling back to
+`GRAPH_MAIL_MAILBOX` when unset). Use the Entra object ID or UPN here if it differs
+from the primary SMTP address. `GRAPH_MAIL_MAILBOX` remains the SMTP address used
+for sender validation. `MAIL_FROM_ADDRESS` supplies the default sender to
+Laravel-generated emails and must match `GRAPH_MAIL_MAILBOX`. phpIP also rejects an individual email that sets a different
 From, Sender, Return-Path, or envelope sender. Use Reply-To for staff replies.
 Sending as aliases or on behalf of other mailboxes is intentionally unsupported.
 

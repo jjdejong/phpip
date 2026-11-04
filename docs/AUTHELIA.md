@@ -62,7 +62,7 @@ matching Authelia's `preferred_username`, including case. Authelia's standard
 `profile` scope supplies this claim. If Authelia returns an email address as
 `preferred_username` instead (for example, when users sign in with their email),
 phpIP can link it to an existing account only when the `email` scope is enabled,
-Authelia marks the email as verified, and exactly one phpIP account has that email
+the preferred username matches that email (case-insensitive), Authelia marks the email as verified, and exactly one phpIP account has that email
 (case-insensitive). Missing, unverified, or duplicate email addresses are rejected.
 Email and group claims never create accounts or assign roles. The existing phpIP
 account's role and company determine its access as usual. Treat changes to

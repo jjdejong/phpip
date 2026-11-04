@@ -13,7 +13,7 @@ use Symfony\Component\Mime\Email;
 
 class GraphTransport extends AbstractTransport
 {
-    public function __construct(private readonly GraphTokenProvider $tokens, private readonly string $mailbox)
+    public function __construct(private readonly GraphTokenProvider $tokens, private readonly string $mailbox, private readonly ?string $userId = null)
     {
         parent::__construct();
         if (! filter_var($mailbox, FILTER_VALIDATE_EMAIL)) {
@@ -80,7 +80,7 @@ class GraphTransport extends AbstractTransport
             $response = Http::withToken($token)->connectTimeout(5)->timeout(30)
                 ->withoutRedirecting()->withOptions(['verify' => true])
                 ->withBody(base64_encode($mime), 'text/plain')
-                ->post('https://graph.microsoft.com/v1.0/users/'.rawurlencode($this->mailbox).'/sendMail');
+                ->post('https://graph.microsoft.com/v1.0/users/'.rawurlencode($this->userId ?: $this->mailbox).'/sendMail');
         } catch (ConnectionException|RequestException) {
             // A timeout may occur after acceptance; automatic retries could send duplicates.
             throw new TransportException('Graph mail request failed; delivery status is unknown.');

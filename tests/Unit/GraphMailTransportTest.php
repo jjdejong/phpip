@@ -220,6 +220,25 @@ class GraphMailTransportTest extends TestCase
         }
     }
 
+    public function test_graph_identifier_is_separate_from_the_smtp_sender(): void
+    {
+        $upn = 'service-user@tenant.onmicrosoft.com';
+        config(['mail.mailers.graph.user_id' => $upn]);
+        $endpoint = 'https://graph.microsoft.com/v1.0/users/'.rawurlencode($upn).'/sendMail';
+        Http::fake([
+            self::TOKEN_URL => Http::response([
+                'access_token' => 'token', 'token_type' => 'Bearer', 'expires_in' => 3600,
+            ]),
+            $endpoint => Http::response('', 202),
+        ]);
+        $this->transport()->send($this->email());
+        Http::assertSent(fn (Request $request) => $request->url() === $endpoint
+            && str_contains(base64_decode($request->body()), self::MAILBOX));
+
+        $this->expectException(TransportException::class);
+        $this->transport()->send($this->email()->from($upn));
+    }
+
     public function test_invalid_mailbox_is_rejected(): void
     {
         $this->expectException(InvalidArgumentException::class);

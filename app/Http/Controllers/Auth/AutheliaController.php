@@ -94,7 +94,8 @@ class AutheliaController extends Controller
             // uniquely identifies one pre-existing local account.
             $email = $profile->json('email');
             if ($profile->json('email_verified') !== true || ! is_string($email)
-                || filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+                || filter_var($email, FILTER_VALIDATE_EMAIL) === false
+                || strcasecmp($username, $email) !== 0) {
                 return $this->failed();
             }
 

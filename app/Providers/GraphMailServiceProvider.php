@@ -14,6 +14,7 @@ class GraphMailServiceProvider extends ServiceProvider
         Mail::extend('graph', fn (array $config) => new GraphTransport(
             new GraphTokenProvider($config),
             $config['mailbox'] ?? '',
+            $config['user_id'] ?? null,
         ));
     }
 }
